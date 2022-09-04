@@ -1,5 +1,7 @@
 import React, { FC, FormEventHandler } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Field, reduxForm, ConfigProps } from 'redux-form';
 import {
 	Avatar,
 	Button,
@@ -17,6 +19,7 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import Copyright from '../Copyright';
 import renderField from '../validate/TextField';
 import { defaultTheme } from '../../utils/theme';
+import { validateEmail } from '../../utils/validation';
 
 const theme = createTheme(defaultTheme);
 
@@ -58,6 +61,18 @@ const LoginForm: FC<LoginProp> = ({
 						</Avatar>
 						<Typography variant="h6">Log In</Typography>
 						<Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+							<Field
+								component={renderField}
+								type="email"
+								name="email"
+								label="Email Address"
+							/>
+							<Field
+								component={renderField}
+								type="password"
+								name="password"
+								label="Password"
+							/>
 							<Button
 								type="submit"
 								fullWidth
@@ -91,4 +106,45 @@ const LoginForm: FC<LoginProp> = ({
 	);
 };
 
-export default LoginForm;
+// FormEvent<HTMLFormElement> → any 타입핑
+const validateLogin = (values: any) => {
+	const errors: any = {};
+
+	const requiredFields = ['email', 'password'];
+
+	if (!validateEmail(values.email)) {
+		errors.email = 'Invalid email address.';
+	}
+
+	requiredFields.forEach((field: string) => {
+		if ((values as any)[field] === '') {
+			(errors as any)[field] = ['The', field, 'field is required.'].join(' ');
+		}
+	});
+
+	if (
+		Object.prototype.hasOwnProperty.call(values, 'email') &&
+		(values.email.length < 3 || values.email.length > 50)
+	) {
+		errors.email = 'email field must be between 3 and 50 in size';
+	}
+
+	if (
+		Object.prototype.hasOwnProperty.call(values, 'password') &&
+		(values.password.length < 8 || values.password.length > 100)
+	) {
+		errors.password = 'password field must be between 8 and 100 in size';
+	}
+
+	return errors;
+};
+
+const mapStateToProps = (state: ConfigProps, ownProps: any = {}) => ({
+	formState: (state.form as any).LoginForm,
+	ownProps: ownProps,
+});
+
+export default reduxForm({
+	form: 'LoginForm',
+	validate: validateLogin,
+})(connect(mapStateToProps, null)(LoginForm));

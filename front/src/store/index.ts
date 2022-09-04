@@ -1,4 +1,5 @@
 import { createSlice, combineReducers, PayloadAction } from '@reduxjs/toolkit';
+import { reducer as formReducer } from 'redux-form';
 import { AuthState } from './types';
 
 // 1.1. 인증 관련 State
@@ -34,6 +35,7 @@ const authSlice = createSlice({
 });
 
 const rootReducer = combineReducers({
+	form: formReducer, // <- redux-form
 	auth: authSlice.reducer,
 });
 
