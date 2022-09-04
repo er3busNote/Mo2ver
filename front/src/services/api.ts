@@ -9,7 +9,7 @@ import {
 import toastMessage from '../utils/toast';
 import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { setInterceptors } from './common/interceptors';
-import { LoginData, SignUpData, CSRFData } from './types';
+import { LoginData, SignUpData, TokenData, CSRFData } from './types';
 
 // 인스턴스 API 생성
 const createInstance = () => {
@@ -88,9 +88,9 @@ const auth = {
 				}
 			}),
 	// Access 토큰 재생성 API : <baseURL>/auth/refresh
-	refresh: () => (dispatch: Dispatch) =>
+	refresh: (tokenData: TokenData) => (dispatch: Dispatch) =>
 		instance
-			.get('auth/refresh')
+			.patch('auth/refresh', tokenData)
 			.then((response: AxiosResponse) => {
 				dispatch(response.data);
 				return response;
