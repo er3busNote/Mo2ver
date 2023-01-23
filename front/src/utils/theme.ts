@@ -7,12 +7,12 @@ const defaultTheme: ThemeOptions = {
 			secondary: '#fff', // Validation Text
 		},
 		action: {
-			disabled: '#fff', // Button Disabled Text
+			disabled: '#000', // Button Disabled Text
 			disabledBackground: '#34343B', // Button Disabled Background Color
 		},
 		background: {
-			default: '#1D1B22',
-			paper: '#26262E',
+			default: '#fff',
+			paper: '#000',
 		},
 		secondary: {
 			main: '#86868A', // LockOut Icon Background Color
@@ -24,19 +24,19 @@ const defaultTheme: ThemeOptions = {
 const contentTheme: ThemeOptions = {
 	palette: {
 		text: {
-			primary: '#fff', // Main Text
-			secondary: '#fff', // Validation Text
+			primary: '#000', // Main Text
+			secondary: '#000', // Validation Text
 		},
 		action: {
 			active: '#505056',
 			hover: '#34343B',
 			selected: '#505056',
-			disabled: '#fff', // Button Disabled Text
+			disabled: '#000', // Button Disabled Text
 			disabledBackground: '#34343B', // Button Disabled Background Color
 		},
 		background: {
-			default: '#1D1B22',
-			paper: '#26262E',
+			default: '#fff',
+			paper: '#fff',
 		},
 		primary: {
 			main: '#505056', // Border Color

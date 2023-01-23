@@ -1,62 +1,72 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
-import { Toolbar, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
+import { IconButton, Box, Grid, Paper, Typography } from '@mui/material';
 
-interface AppBarProps extends MuiAppBarProps {
-	open?: boolean;
-	width: number;
-}
+const headerFontSize = '12px';
 
-interface AppHeaderProps {
-	open?: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>;
-	width: number;
-}
-
-const AppBar = styled(MuiAppBar, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open, width }) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	transition: theme.transitions.create(['width', 'margin'], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	...(open && {
-		width: `calc(100% - ${width}px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	}),
-}));
-
-const AppHeader: FC<AppHeaderProps> = ({
-	open,
-	setOpen,
-	width,
-}): JSX.Element => {
-	const toggleDrawer = () => {
-		setOpen(!open);
-	};
+const AppHeader: FC = (): JSX.Element => {
 	return (
-		<AppBar open={open} width={width}>
-			<Toolbar variant="dense" sx={{ bgcolor: 'background.paper' }}>
-				<IconButton
-					edge="start"
-					color="inherit"
-					aria-label="open drawer"
-					onClick={toggleDrawer}
-					sx={{
-						ml: -2,
-						...(open && { display: 'none' }),
-					}}
-				>
-					<ArchiveIcon />
-				</IconButton>
-			</Toolbar>
-		</AppBar>
+		<Paper
+			sx={{ width: '100%', bgcolor: '#F3F3F3' }}
+			component="header"
+			square
+			variant="outlined"
+		>
+			<Box
+				sx={{
+					width: '950px',
+					display: 'inline-flex',
+					justifyContent: 'flex-end',
+				}}
+			>
+				<Grid container spacing={1} sx={{ width: 250 }}>
+					<Grid item>
+						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<Typography
+								color="#000"
+								align="center"
+								sx={{ fontSize: headerFontSize }}
+							>
+								로그인
+							</Typography>
+						</IconButton>
+					</Grid>
+					<Grid item>
+						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<Typography
+								color="#000"
+								align="center"
+								sx={{ fontSize: headerFontSize }}
+							>
+								회원가입
+							</Typography>
+						</IconButton>
+					</Grid>
+					<Grid item>
+						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<Typography
+								color="#000"
+								align="center"
+								sx={{ fontSize: headerFontSize }}
+							>
+								장바구니
+							</Typography>
+						</IconButton>
+					</Grid>
+					<Grid item>
+						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<Typography
+								color="#000"
+								align="center"
+								sx={{ fontSize: headerFontSize }}
+							>
+								주문/배송
+							</Typography>
+						</IconButton>
+					</Grid>
+				</Grid>
+			</Box>
+		</Paper>
 	);
 };
 

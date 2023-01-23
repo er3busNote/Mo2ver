@@ -26,11 +26,16 @@ const MainRoutes: FC = (): JSX.Element => {
 const RootRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
+			{/**
 			<Route path="/auth/*" element={<AuthRoutes />} />
 			<Route element={<PrivateRoute />}>
 				<Route element={<AppContent />}>
 					<Route path="/*" element={<MainRoutes />} />
 				</Route>
+			</Route>
+			 */}
+			<Route element={<AppContent />}>
+				<Route path="/*" element={<MainRoutes />} />
 			</Route>
 		</Routes>
 	);
