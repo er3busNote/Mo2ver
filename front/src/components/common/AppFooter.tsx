@@ -8,7 +8,7 @@ const AppFooter: FC = (): JSX.Element => {
 			sx={{
 				bottom: 0,
 				width: '100%',
-				position: 'absolute',
+				position: 'relative',
 				bgcolor: '#383838',
 			}}
 			component="footer"

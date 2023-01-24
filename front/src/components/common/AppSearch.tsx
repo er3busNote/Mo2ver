@@ -1,16 +1,12 @@
-import React, {
-	FC,
-	useState,
-	ChangeEvent,
-	KeyboardEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Box,
 	Grid,
 	Paper,
+	Divider,
 	SvgIcon,
+	Typography,
 	Popper,
 	Collapse,
 	InputBase,
@@ -18,31 +14,130 @@ import {
 	MenuList,
 	MenuItem,
 	ListItemText,
+	ListItemButton,
 } from '@mui/material';
+import ClickAwayListener from '@mui/base/ClickAwayListener';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import { ReactComponent as MainIcon } from '../../logo.svg';
 
-const AppSearchItems: FC = (): JSX.Element => {
+const searchFontSize = '12px';
+
+const searchDatas = [
+	{ id: 1, keyword: '삼성전자' },
+	{ id: 2, keyword: '모니터' },
+	{ id: 3, keyword: '3060' },
+	{ id: 4, keyword: 'b660m' },
+	{ id: 5, keyword: '노트북' },
+	{ id: 6, keyword: '애플' },
+	{ id: 7, keyword: 'b550' },
+	{ id: 8, keyword: 'cpu' },
+	{ id: 9, keyword: 'ddr5-4800' },
+	{ id: 10, keyword: 'h610m' },
+];
+
+const SearchDivider: FC = (): JSX.Element => {
 	return (
-		<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
-			<MenuItem
-				dense
+		<Box sx={{ lineHeight: '20px' }}>
+			<Divider
+				orientation="vertical"
+				variant="middle"
 				sx={{
-					px: 1,
-					minHeight: 20,
+					ml: '5px',
+					mr: '-2px',
+					mt: '10px',
+					mb: 0,
+					height: '0.6rem',
+					display: 'inline-flex',
+					borderColor: '#E1E3E3',
+				}}
+			/>
+		</Box>
+	);
+};
+
+const AppSearchItems: FC = (): JSX.Element => {
+	const [open, setOpen] = useState(false);
+	const recentClick = () => {
+		setOpen(false);
+	};
+	const popularClick = () => {
+		setOpen(true);
+	};
+	return (
+		<Box>
+			<Box sx={{ bgcolor: '#F7F8F9', display: 'inline-flex' }}>
+				<ListItemButton
+					selected={!open}
+					onClick={() => recentClick()}
+					sx={{ '&.Mui-selected': { backgroundColor: '#fff' } }}
+				>
+					<ListItemText
+						secondaryTypographyProps={{ px: 3, fontSize: '14px' }}
+						secondary={'최근검색어'}
+					/>
+				</ListItemButton>
+				<ListItemButton
+					selected={open}
+					onClick={() => popularClick()}
+					sx={{ '&.Mui-selected': { backgroundColor: '#fff' } }}
+				>
+					<ListItemText
+						secondaryTypographyProps={{ px: 3, fontSize: '14px' }}
+						secondary={'인기검색어'}
+					/>
+				</ListItemButton>
+			</Box>
+			<Box>
+				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
+					{open &&
+						searchDatas.map((data: any) => (
+							<MenuItem
+								key={data.id}
+								dense
+								sx={{
+									px: 2,
+									minHeight: 20,
+								}}
+							>
+								<ListItemText
+									primaryTypographyProps={{
+										style: { fontSize: 13 },
+									}}
+									primary={data.id + '. ' + data.keyword}
+								/>
+							</MenuItem>
+						))}
+				</MenuList>
+			</Box>
+			<Paper
+				sx={{
+					bgcolor: '#F7F8F9',
+					display: 'flex',
+					justifyContent: 'space-between',
 				}}
 			>
-				<ListItemText
-					primaryTypographyProps={{
-						style: { fontSize: 13 },
-					}}
-					primary={'ㅅㄷㄴㅅ'}
-				/>
-			</MenuItem>
-		</MenuList>
+				<IconButton sx={{ p: 0 }}>
+					<Typography
+						color="#000"
+						align="center"
+						sx={{ p: 1, fontSize: '14px' }}
+					>
+						최근검색어 전체 삭제
+					</Typography>
+				</IconButton>
+				<IconButton sx={{ p: 0 }}>
+					<Typography
+						color="#000"
+						align="center"
+						sx={{ p: 1, fontSize: '14px' }}
+					>
+						닫기
+					</Typography>
+				</IconButton>
+			</Paper>
+		</Box>
 	);
 };
 
@@ -93,15 +188,17 @@ const AppSearch: FC = (): JSX.Element => {
 
 	const icon: SxProps<Theme> = {
 		ml: 1,
-		fontSize: '1.2rem',
+		fontSize: '1.6rem',
+		color: '#5C0F8B',
 	};
 	const inputBase: SxProps<Theme> = {
 		ml: 1,
+		pt: 0.5,
 		flex: 1,
 		fontSize: '0.8rem',
-		height: '1.7rem',
+		height: '2rem',
 		'& input::placeholder': {
-			fontSize: '0.8rem',
+			fontSize: '15px',
 		},
 	};
 	return (
@@ -113,57 +210,140 @@ const AppSearch: FC = (): JSX.Element => {
 					justifyContent: 'space-between',
 				}}
 			>
-				<Grid container spacing={1}>
+				<Grid container spacing={10}>
 					<Grid item>
-						<SvgIcon
-							component={MainIcon}
-							color="primary"
-							sx={{ width: '8em', height: '5em' }}
-							inheritViewBox
-						/>
+						<IconButton component={Link} to="/" sx={{ p: 0 }}>
+							<SvgIcon
+								component={MainIcon}
+								color="primary"
+								sx={{ width: '8em', height: '5em' }}
+								inheritViewBox
+							/>
+						</IconButton>
 					</Grid>
 					<Grid item>
-						<Collapse orientation="horizontal" in={focus} collapsedSize={120}>
-							<Paper
-								component="form"
-								sx={{
-									mr: 2,
-									display: 'flex',
-									alignItems: 'center',
-									borderRadius: 3,
-								}}
-							>
-								{focus ? (
-									<SearchIcon sx={icon} />
-								) : (
-									<ManageSearchIcon sx={{ mt: -0.2, ...icon }} />
-								)}
-								<InputBase
-									sx={inputBase}
-									placeholder="Search"
-									value={keyword}
-									onChange={searchOnChange}
-									onKeyPress={searchOnKeyPress}
-								/>
-								{focus && (
-									<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-										<ClearIcon />
-									</IconButton>
-								)}
-							</Paper>
-							<Popper
-								open={open}
-								anchorEl={anchorEl}
-								placement="bottom-start"
-								sx={{ zIndex: 1201 }}
-							>
-								<Paper elevation={3}>
-									<AppSearchItems />
-								</Paper>
-							</Popper>
+						<Collapse
+							sx={{ pt: 6.5 }}
+							orientation="horizontal"
+							in={focus}
+							collapsedSize={320}
+						>
+							<ClickAwayListener onClickAway={cancelClick}>
+								<Box>
+									<Paper
+										component="form"
+										elevation={0}
+										sx={{
+											mr: 2,
+											px: '10px',
+											display: 'flex',
+											alignItems: 'center',
+											borderRadius: 5,
+											bgcolor: '#F3F2F4',
+											height: '40px',
+										}}
+									>
+										<InputBase
+											sx={inputBase}
+											placeholder="오늘 뭐 괜찮은 옷 있을까?"
+											value={keyword}
+											onChange={searchOnChange}
+											onKeyPress={searchOnKeyPress}
+										/>
+										{focus ? (
+											<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
+												<ClearIcon />
+											</IconButton>
+										) : (
+											<SearchIcon sx={icon} />
+										)}
+									</Paper>
+									<Popper
+										id={'search'}
+										open={open}
+										anchorEl={anchorEl}
+										placement="bottom-start"
+									>
+										<Paper
+											elevation={0}
+											sx={{ mt: -1, ml: 6, border: '#ddd 1px solid' }}
+										>
+											<AppSearchItems />
+										</Paper>
+									</Popper>
+								</Box>
+							</ClickAwayListener>
 						</Collapse>
+						<Box
+							sx={{
+								ml: '-20px',
+								width: '420px',
+								display: 'inline-flex',
+								justifyContent: 'flex-end',
+							}}
+						>
+							<Grid container spacing={1} sx={{ width: 400 }}>
+								<Grid item>
+									<Typography
+										color="#666"
+										align="center"
+										sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
+									>
+										추천검색어
+									</Typography>
+								</Grid>
+								<Grid item>
+									<Typography
+										color="#999"
+										align="center"
+										sx={{ fontSize: searchFontSize }}
+									>
+										설기획세트
+									</Typography>
+								</Grid>
+								<SearchDivider />
+								<Grid item>
+									<Typography
+										color="#999"
+										align="center"
+										sx={{ fontSize: searchFontSize }}
+									>
+										ddr5-4800
+									</Typography>
+								</Grid>
+								<SearchDivider />
+								<Grid item>
+									<Typography
+										color="#999"
+										align="center"
+										sx={{ fontSize: searchFontSize }}
+									>
+										HP Z 모니터
+									</Typography>
+								</Grid>
+								<SearchDivider />
+								<Grid item>
+									<Typography
+										color="#999"
+										align="center"
+										sx={{ fontSize: searchFontSize }}
+									>
+										rtx 3080ti
+									</Typography>
+								</Grid>
+								<SearchDivider />
+								<Grid item>
+									<Typography
+										color="#999"
+										align="center"
+										sx={{ fontSize: searchFontSize }}
+									>
+										6900xt
+									</Typography>
+								</Grid>
+							</Grid>
+						</Box>
 					</Grid>
-					<Grid item>테스트입니다.</Grid>
 				</Grid>
 			</Box>
 		</Paper>

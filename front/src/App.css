@@ -15,6 +15,40 @@
   fill: #5C0F8B;
 }
 
+/* 검색 Style */
+#search.MuiPopperUnstyled-root {
+  margin-top: 10px !important;
+  margin-left: -10px !important;
+}
+
+#search .MuiListItemButton-root:hover {
+  background-color: #fff !important; /* 모든검색어 Hover 배경색 조정 */
+}
+
+#search .MuiMenuItem-root:hover {
+  color: #9229d2 !important;
+  background-color: #fff !important; /* 인기검색어 Hover 배경색 조정 */
+}
+
+#search .MuiMenuItem-root:hover span {
+  font-weight: bold !important;
+}
+
+/* 메뉴 Style */
+#menu.MuiPopperUnstyled-root {
+  margin-top: 10px !important;
+  margin-left: -40px !important;
+}
+
+#menu .MuiMenuItem-root:hover {
+  color: #000 !important;
+  background-color: #fff !important; /* 카테고리 Hover 배경색 조정 */
+}
+
+.MuiCollapse-wrapperInner {
+  width: 400px !important; /* 검색바 최대 크기 조정 */
+}
+
 .MuiDrawer-paperAnchorRight .MuiGrid-item {
   padding-left: 8px !important;
 }
