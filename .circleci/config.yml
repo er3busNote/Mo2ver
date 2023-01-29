@@ -8,11 +8,11 @@ jobs:
   front_test:
     executor: node/default
 
-    working_directory: ~/frontend   # Root Path Workspace
+    working_directory: ~/frontend/front   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
-          path: ~/frontend/front
+          path: ~/frontend
 
       - run:
           name: Current WorkSpace Monitoring
@@ -47,11 +47,11 @@ jobs:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
 
-    working_directory: ~/backend   # Root Path Workspace
+    working_directory: ~/backend/back   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
-          path: ~/backend/back
+          path: ~/backend
       # Reuse the workspace from the build job
       - attach_workspace:
           at: ~/project
@@ -82,11 +82,11 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/backend   # Root Path Workspace
+    working_directory: ~/backend/back   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
-          path: ~/backend/back
+          path: ~/backend
 
       - run: ls -al ~/
       - run:
