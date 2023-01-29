@@ -8,10 +8,10 @@ jobs:
   front_test:
     executor: node/default
 
-    working_directory: ~/front
+    working_directory: ~/front/front
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      # - checkout
+      - checkout
     
       - run:
           name: Current WorkSpace Monitoring
@@ -26,7 +26,7 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/back
+    working_directory: ~/back/back
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
@@ -35,7 +35,7 @@ jobs:
     # Add steps to the job
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      # - checkout
+      - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
           at: /tmp
@@ -62,10 +62,10 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/back
+    working_directory: ~/back/back
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      # - checkout
+      - checkout
 
       - run:
           name: Current WorkSpace Monitoring
