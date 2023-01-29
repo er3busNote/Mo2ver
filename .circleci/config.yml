@@ -8,28 +8,28 @@ jobs:
   front_test:
     executor: node/default
 
-    working_directory: ~/front
+    working_directory: ~/frontend
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: ./front
     
-      - run: ls -al ~/
-      - run: ls -al ~/front
-      - run: ls -al ~/project
       - run:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
       
       - run: sudo npm install -g npm@latest
       - node/install-packages:
-          cache-path: ~/front/node_modules
+          cache-path: ./front/node_modules
           override-ci-command: npm install
 
   back_build:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/back
+    # working_directory: ~/back
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
@@ -38,10 +38,10 @@ jobs:
     # Add steps to the job
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
+      # - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
-          at: /tmp
+          at: /back
 
       # Download and cache dependencies
       # - restore_cache:
@@ -66,10 +66,13 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/back
+    working_directory: ~/backend
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: ./back
 
       - run: ls -al ~/
       - run:
