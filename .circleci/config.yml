@@ -47,9 +47,9 @@ jobs:
 
       # Workflow Job간 파일 공유: https://negabaro.github.io/archive/circleci_persist_to_workspace
       - persist_to_workspace:
-          root: ./dist
+          root: ~/
           paths:
-            - ~/project
+            - project
 
       - run:
           name: Build Check
