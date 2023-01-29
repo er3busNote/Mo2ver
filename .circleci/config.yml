@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/language-java/
 version: 2
 
+orbs:
+  node: circleci/node@5.1.0
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -17,7 +20,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo
+    working_directory: ~/back
 
     environment:
       # Customize the JVM maximum heap limit
@@ -44,3 +47,13 @@ jobs:
 
       # run tests!
       - run: gradle test
+
+workflows:
+    example-workflow:
+      jobs:
+        - node/test:
+            pkg-manager: npm 
+            resource_class: large 
+            test-results-for: other 
+            app-dir: ~/front 
+            override-ci-command: yarn 
