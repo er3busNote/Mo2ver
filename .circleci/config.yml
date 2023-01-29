@@ -16,7 +16,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al
+          command: ls -alR ./
       
       # - run: sudo npm install -g npm@latest
       # - node/install-packages:
@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al
+          command: ls -alR ./
 
       # Download and cache dependencies
       # - restore_cache:
@@ -91,7 +91,7 @@ jobs:
       - run: ls -al ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al
+          command: ls -alR ./
 
       # run tests!
       # - run: gradle test
