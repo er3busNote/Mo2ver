@@ -49,6 +49,10 @@ jobs:
           paths:
             - .
 
+      - run:
+          name: Build Check
+          command: ls -al ~/project
+
   front_deploy:
     executor: node/default
     steps:
@@ -56,6 +60,7 @@ jobs:
           at: ~/project
 
       - run: ls -al ~/
+      - run: ls -al ~/project
       - run:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
