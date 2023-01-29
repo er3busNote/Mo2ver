@@ -11,7 +11,7 @@ jobs:
     working_directory: ~/front
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
+      # - checkout
     
       - run:
           name: Current WorkSpace Monitoring
@@ -35,7 +35,7 @@ jobs:
     # Add steps to the job
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
+      # - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
           at: /tmp
@@ -65,7 +65,7 @@ jobs:
     working_directory: ~/back
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
+      # - checkout
 
       - run:
           name: Current WorkSpace Monitoring
