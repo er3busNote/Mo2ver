@@ -16,7 +16,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al ./
       
       # - run: sudo npm install -g npm@latest
       # - node/install-packages:
@@ -58,25 +58,21 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al ./
 
       # Download and cache dependencies
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "build.gradle" }}
-      #       # fallback to using the latest cache if no exact match is found
-      #       - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-      # - run: gradle dependencies
+      - run: gradle dependencies
 
-      # - save_cache:
-      #     paths:
-      #       - ~/.gradle
-      #     key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      - run:
-          name: Current WorkSpace Monitoring
-          command: ls -al
+      - save_cache:
+          paths:
+            - .gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
   back_test:
     docker:
@@ -91,14 +87,14 @@ jobs:
       - run: ls -al ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al ./
 
       # run tests!
-      # - run: gradle test
+      - run: gradle test
 
 workflows:
   version: 2
-  build_and_test:
+  DevOps_LifeCycle:
     jobs:
       - front_test
       - node/run:
