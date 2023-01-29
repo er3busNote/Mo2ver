@@ -53,14 +53,15 @@ jobs:
 
   front_deploy:
     executor: node/default
+
+    working_directory: ~/frontend/front   # Root Path Workspace
     steps:
       - attach_workspace:
-          at: ~/frontend/front
+          at: .  # Root Workspace Attach
 
-      - run: ls -alR ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -alR ~/
 
   back_build:
     docker:
