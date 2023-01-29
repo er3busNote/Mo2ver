@@ -57,7 +57,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al ./
+          command: ls -alR ./
 
   back_build:
     docker:
@@ -119,11 +119,11 @@ workflows:
   DevOps_LifeCycle:
     jobs:
       - front_test_build
-      - node/run:
-          requires:
-            - front_test_build
-          app-dir: ~/front
-          yarn-run: build
+      # - node/run:
+      #     requires:
+      #       - front_test_build
+      #     app-dir: ~/front
+      #     yarn-run: build
       - front_deploy:
           requires:
             - front_test_build
