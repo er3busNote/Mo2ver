@@ -1,6 +1,6 @@
 # Java Gradle CircleCI 2.0 configuration file
 # See: https://circleci.com/docs/2.0/language-java/
-version: 2
+version: 2.1
 
 orbs:
   node: circleci/node@5.1.0
@@ -49,11 +49,12 @@ jobs:
       - run: gradle test
 
 workflows:
-    example-workflow:
-      jobs:
-        - node/test:
-            pkg-manager: npm 
-            resource_class: large 
-            test-results-for: other 
-            app-dir: ~/front 
-            override-ci-command: yarn 
+  version: 2
+  build_and_test:
+    jobs:
+      - node/test:
+          pkg-manager: npm 
+          resource_class: large 
+          test-results-for: other 
+          app-dir: ~/front 
+          override-ci-command: yarn 
