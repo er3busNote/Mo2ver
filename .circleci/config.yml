@@ -57,7 +57,7 @@ jobs:
       - attach_workspace:
           at: ~/frontend/front
 
-      - run: ls -al ~/
+      - run: ls -alR ~/
       - run:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
