@@ -1,24 +1,12 @@
-# Java Gradle CircleCI 2.0 configuration file
-# See: https://circleci.com/docs/2.0/language-java/
 version: 2.1
 
 orbs:
   node: circleci/node@5.1.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
     working_directory: ~/back
 
@@ -26,8 +14,8 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
+
     # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
 
@@ -48,13 +36,29 @@ jobs:
       # run tests!
       - run: gradle test
 
+  test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: ~/back
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -al
+
 workflows:
   version: 2
   build_and_test:
     jobs:
+      - build
+      - test:
+          requires:
+            - build
       - node/test:
+          run-command: ls -al
           pkg-manager: npm 
           resource_class: large 
           test-results-for: other 
           app-dir: ~/front 
-          override-ci-command: yarn 
+          override-ci-command: npm run test 
