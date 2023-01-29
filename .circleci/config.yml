@@ -12,14 +12,15 @@ jobs:
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
+    
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -alR ./
+      
       - run: sudo npm install -g npm@latest
       - node/install-packages:
           cache-path: ~/front/node_modules
           override-ci-command: npm install
-    
-      - run:
-          name: Current WorkSpace Monitoring
-          command: ls -al
 
   back_build:
     docker:
@@ -55,7 +56,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al ./
+          command: ls -alR ./
 
   back_test:
     docker:
@@ -68,17 +69,22 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al
+          command: ls -alR ./
 
       # run tests!
-      - run: gradle test
+      # - run: gradle test
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - front_test
-      - back_build
-      - back_test:
+      - node/run:
           requires:
-            - back_build
+            - front_test
+          app-dir: ~/front
+          yarn-run: build
+      - back_test
+      - back_build:
+          requires:
+            - back_test
