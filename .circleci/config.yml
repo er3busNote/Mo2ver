@@ -6,11 +6,15 @@ orbs:
 jobs:
   front_test:
     executor: node/default
+
+    working_directory: ~/front
+
     steps:
       - checkout
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: ~/front
+      - run: sudo npm install -g npm@latest
+      - node/install-packages:
+          cache-path: ~/front/node_modules
+          override-ci-command: npm install
     
       - run:
           name: Current WorkSpace Monitoring
@@ -21,7 +25,6 @@ jobs:
       - image: circleci/openjdk:8-jdk
 
     working_directory: ~/back
-
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
@@ -30,6 +33,9 @@ jobs:
     # Add steps to the job
     steps:
       - checkout
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: /tmp
 
       # Download and cache dependencies
       # - restore_cache:
@@ -52,13 +58,15 @@ jobs:
   back_test:
     docker:
       - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/back
+
     steps:
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: ~/back
+      - checkout
+
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al ./
+          command: ls -al
 
       # run tests!
       - run: gradle test
