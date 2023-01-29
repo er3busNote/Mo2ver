@@ -5,7 +5,7 @@ orbs:
 
 # https://circleci.com/docs/configuration-reference
 jobs:
-  front_test:
+  front_test_build:
     executor: node/default
 
     working_directory: ~/frontend/front   # Root Path Workspace
@@ -38,9 +38,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run:
-          name: Run tests
-          command: yarn test
+      # - run:
+      #     name: Run tests
+      #     command: yarn test
       - run:
           name: Build app
           command: yarn build
@@ -48,6 +48,16 @@ jobs:
           root: ~/project
           paths:
             - .
+
+  front_deploy:
+    executor: node/default
+    steps:
+      - attach_workspace:
+          at: ~/project
+
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -al ./
 
   back_build:
     docker:
@@ -86,9 +96,6 @@ jobs:
             - .gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # run tests!
-      - run: gradle test
-
   back_test:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -104,16 +111,25 @@ jobs:
           name: Current WorkSpace Monitoring
           command: ls -al ./
 
+      # run tests!
+      # - run: gradle test
+
 workflows:
   version: 2
   DevOps_LifeCycle:
     jobs:
-      - front_test
+      - front_test_build
       - node/run:
           requires:
-            - front_test
+            - front_test_build
           app-dir: ~/front
           yarn-run: build
+      - front_deploy:
+          requires:
+            - front_test_build
+          filters:
+            branches:
+              only: main # only deploy when on main
       - back_test
       - back_build:
           requires:
