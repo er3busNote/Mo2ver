@@ -8,22 +8,29 @@ jobs:
   front_test:
     executor: node/default
 
-    working_directory: ~/frontend
+    working_directory: ~/frontend   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: ./front
-    
-      - run:
-          name: Current WorkSpace Monitoring
-          command: ls -alR ./
       
-      - run: sudo npm install -g npm@latest
+      # - run: sudo npm install -g npm@latest
+      # - node/install-packages:
+      #     cache-path: ./front/node_modules
+      #     override-ci-command: cd ./front && npm install
+
+      # https://circleci.com/docs/language-javascript/
       - node/install-packages:
-          cache-path: ./front/node_modules
-          override-ci-command: npm install
+          pkg-manager: yarn
+      - run:
+          name: Run tests
+          command: cd ./front && yarn test
+      - run:
+          name: Build app
+          command: cd ./front && yarn build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
 
   back_build:
     docker:
@@ -41,7 +48,7 @@ jobs:
       # - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
-          at: /back
+          at: ~/project
 
       # Download and cache dependencies
       # - restore_cache:
@@ -57,22 +64,18 @@ jobs:
       #       - ~/.gradle
       #     key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ls -al ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: cd ./back && ls -alR ./
 
   back_test:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/backend
+    working_directory: ~/backend   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: ./back
 
       - run: ls -al ~/
       - run:
