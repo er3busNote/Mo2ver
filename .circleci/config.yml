@@ -3,13 +3,14 @@ version: 2.1
 orbs:
   node: circleci/node@5.1.0
 
+# https://circleci.com/docs/configuration-reference
 jobs:
   front_test:
     executor: node/default
 
     working_directory: ~/front
-
     steps:
+      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
       - run: sudo npm install -g npm@latest
       - node/install-packages:
@@ -32,6 +33,7 @@ jobs:
 
     # Add steps to the job
     steps:
+      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
@@ -60,8 +62,8 @@ jobs:
       - image: circleci/openjdk:8-jdk
 
     working_directory: ~/back
-
     steps:
+      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
 
       - run:
