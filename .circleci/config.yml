@@ -11,14 +11,12 @@ jobs:
     working_directory: ~/frontend   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
+      - checkout:
+          path: ~/frontend/front
 
       - run:
-          name: Start Working Directory 
-          command: cd ./front
-      - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al
       
       # - run: sudo npm install -g npm@latest
       # - node/install-packages:
@@ -49,20 +47,18 @@ jobs:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
 
-    # Add steps to the job
+    working_directory: ~/backend   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      # - checkout
+      - checkout:
+          path: ~/backend/back
       # Reuse the workspace from the build job
       - attach_workspace:
           at: ~/project
 
       - run:
-          name: Start Working Directory 
-          command: cd ./back
-      - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al
 
       # Download and cache dependencies
       # - restore_cache:
@@ -80,7 +76,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al
 
   back_test:
     docker:
@@ -89,16 +85,13 @@ jobs:
     working_directory: ~/backend   # Root Path Workspace
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
-      - checkout
-
-      - run:
-          name: Start Working Directory 
-          command: cd ./back
+      - checkout:
+          path: ~/backend/back
 
       - run: ls -al ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ./
+          command: ls -al
 
       # run tests!
       # - run: gradle test
