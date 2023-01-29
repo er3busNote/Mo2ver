@@ -47,22 +47,17 @@ jobs:
 
       # Workflow Job간 파일 공유: https://negabaro.github.io/archive/circleci_persist_to_workspace
       - persist_to_workspace:
-          root: ~/project
+          root: ~/frontend/front
           paths:
             - ./dist
-
-      - run:
-          name: Build Check
-          command: ls -al ~/project
 
   front_deploy:
     executor: node/default
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/frontend/front
 
       - run: ls -al ~/
-      - run: ls -al ~/project
       - run:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
