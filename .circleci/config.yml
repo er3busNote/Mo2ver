@@ -12,21 +12,28 @@ jobs:
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
+
+      - run:
+          name: Start Working Directory 
+          command: cd ./front
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -alR ./
       
       # - run: sudo npm install -g npm@latest
       # - node/install-packages:
-      #     cache-path: ./front/node_modules
-      #     override-ci-command: cd ./front && npm install
+      #     cache-path: ./node_modules
+      #     override-ci-command: npm install
 
       # https://circleci.com/docs/language-javascript/
       - node/install-packages:
           pkg-manager: yarn
       - run:
           name: Run tests
-          command: cd ./front && yarn test
+          command: yarn test
       - run:
           name: Build app
-          command: cd ./front && yarn build
+          command: yarn build
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -50,6 +57,13 @@ jobs:
       - attach_workspace:
           at: ~/project
 
+      - run:
+          name: Start Working Directory 
+          command: cd ./back
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -alR ./
+
       # Download and cache dependencies
       # - restore_cache:
       #     keys:
@@ -66,7 +80,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: cd ./back && ls -alR ./
+          command: ls -alR ./
 
   back_test:
     docker:
@@ -76,6 +90,10 @@ jobs:
     steps:
       # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout
+
+      - run:
+          name: Start Working Directory 
+          command: cd ./back
 
       - run: ls -al ~/
       - run:
