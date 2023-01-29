@@ -61,7 +61,7 @@ jobs:
 
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -alR ~/
+          command: ls -alR ./
 
   back_build:
     docker:
