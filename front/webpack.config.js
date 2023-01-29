@@ -14,7 +14,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/', // → 상대경로 설정
+        publicPath: './', // → 상대경로 설정
         filename: 'js/[name].bundle.js',
     },
     module: {

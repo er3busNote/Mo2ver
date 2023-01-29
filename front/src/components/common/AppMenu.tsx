@@ -31,6 +31,19 @@ const menuDatas = [
 	{ id: 11, category: '뷰티' },
 ];
 
+const searchDatas = [
+	{ id: 1, keyword: '삼성전자' },
+	{ id: 2, keyword: '모니터' },
+	{ id: 3, keyword: '3060' },
+	{ id: 4, keyword: 'b660m' },
+	{ id: 5, keyword: '노트북' },
+	{ id: 6, keyword: '애플' },
+	{ id: 7, keyword: 'b550' },
+	{ id: 8, keyword: 'cpu' },
+	{ id: 9, keyword: 'ddr5-4800' },
+	{ id: 10, keyword: 'h610m' },
+];
+
 const MenuDivider: FC = (): JSX.Element => {
 	return (
 		<Box sx={{ lineHeight: '40px' }}>
@@ -80,33 +93,178 @@ const AppDetail: FC = (): JSX.Element => {
 				</IconButton>
 			</ClickAwayListener>
 			<Popper
-				id={'menu'}
+				id={'main-menu'}
 				open={open}
 				anchorEl={anchorEl}
 				placement="bottom-start"
 			>
-				<Paper
-					elevation={0}
+				<Box
 					sx={{
-						width: '210px',
-						color: '#fff',
-						bgcolor: '#333333',
-						borderRadius: 0,
+						mt: '1px',
+						width: '1050px',
+						display: 'inline-flex',
+						justifyContent: 'flex-start',
 					}}
 				>
-					<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-						{menuDatas.map((data: any) => (
-							<MenuItem key={data.id} dense sx={{ px: '24px', py: '11px' }}>
+					<Paper
+						elevation={0}
+						sx={{
+							width: '210px',
+							color: '#fff',
+							bgcolor: '#333333',
+							borderRadius: 0,
+						}}
+					>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							{menuDatas.map((data: any) => (
+								<MenuItem key={data.id} dense sx={{ px: '24px', py: '11px' }}>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 13, fontWeight: 'bold' },
+										}}
+										primary={data.category}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</Paper>
+					<Paper
+						id={'sub-menu'}
+						elevation={1}
+						sx={{ width: '210px', borderRadius: 0 }}
+					>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
 								<ListItemText
 									primaryTypographyProps={{
-										style: { fontSize: 13, fontWeight: 'bold' },
+										style: { fontSize: 14, fontWeight: 'bold' },
 									}}
-									primary={data.category}
+									primary={'브랜드'}
 								/>
 							</MenuItem>
-						))}
-					</MenuList>
-				</Paper>
+							{searchDatas.map((data: any) => (
+								<MenuItem
+									key={data.id}
+									dense
+									sx={{
+										px: '24px',
+										py: 0,
+										minHeight: 5,
+									}}
+								>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 13 },
+										}}
+										primary={data.keyword}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</Paper>
+					<Paper
+						id={'sub-menu'}
+						elevation={1}
+						sx={{ width: '210px', borderRadius: 0 }}
+					>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+								<ListItemText
+									primaryTypographyProps={{
+										style: { fontSize: 14, fontWeight: 'bold' },
+									}}
+									primary={'브랜드'}
+								/>
+							</MenuItem>
+							{searchDatas.map((data: any) => (
+								<MenuItem
+									key={data.id}
+									dense
+									sx={{
+										px: '24px',
+										py: 0,
+										minHeight: 5,
+									}}
+								>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 13 },
+										}}
+										primary={data.keyword}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</Paper>
+					<Paper
+						id={'sub-menu'}
+						elevation={1}
+						sx={{ width: '210px', borderRadius: 0 }}
+					>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+								<ListItemText
+									primaryTypographyProps={{
+										style: { fontSize: 14, fontWeight: 'bold' },
+									}}
+									primary={'브랜드'}
+								/>
+							</MenuItem>
+							{searchDatas.map((data: any) => (
+								<MenuItem
+									key={data.id}
+									dense
+									sx={{
+										px: '24px',
+										py: 0,
+										minHeight: 5,
+									}}
+								>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 13 },
+										}}
+										primary={data.keyword}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</Paper>
+					<Paper
+						id={'sub-menu'}
+						elevation={1}
+						sx={{ width: '210px', borderRadius: 0 }}
+					>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+								<ListItemText
+									primaryTypographyProps={{
+										style: { fontSize: 14, fontWeight: 'bold' },
+									}}
+									primary={'브랜드'}
+								/>
+							</MenuItem>
+							{searchDatas.map((data: any) => (
+								<MenuItem
+									key={data.id}
+									dense
+									sx={{
+										px: '24px',
+										py: 0,
+										minHeight: 5,
+									}}
+								>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 13 },
+										}}
+										primary={data.keyword}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</Paper>
+				</Box>
 			</Popper>
 		</Box>
 	);
