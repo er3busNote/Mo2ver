@@ -7,7 +7,7 @@ const headerFontSize = '12px';
 const AppHeader: FC = (): JSX.Element => {
 	return (
 		<Paper
-			sx={{ width: '100%', bgcolor: '#F3F3F3' }}
+			sx={{ width: '100%', bgcolor: '#F0F0F0' }}
 			component="header"
 			square
 			variant="outlined"

@@ -76,7 +76,7 @@ const AppDetail: FC = (): JSX.Element => {
 		setOpen(false);
 	};
 	return (
-		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#F3F2F4' }}>
+		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
 			<ClickAwayListener onClickAway={closeAnchorEl}>
 				<IconButton
 					onClick={showClick}

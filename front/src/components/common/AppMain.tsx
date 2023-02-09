@@ -15,6 +15,7 @@ const Main = styled('main', {
 	shouldForwardProp: (prop) => prop !== 'open',
 })<DrawerProps>(({ theme, open }) => ({
 	flexGrow: 1,
+	width: '100%',
 	padding: theme.spacing(0),
 	transition: theme.transitions.create('margin', {
 		easing: theme.transitions.easing.sharp,
@@ -35,8 +36,6 @@ const AppMain: FC<AppMainProps> = ({ open, children }): JSX.Element => {
 			<Box
 				component="main"
 				sx={{
-					pt: '60px',
-					width: '100%',
 					overflow: 'auto',
 					bgcolor: 'background.default',
 				}}

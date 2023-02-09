@@ -16,7 +16,6 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import Copyright from '../Copyright';
 import renderField from '../validate/TextField';
 import { defaultTheme } from '../../utils/theme';
 import {
@@ -119,7 +118,6 @@ const SignupForm: FC<SignupProp> = ({
 						</Box>
 					</Box>
 				</Paper>
-				<Copyright sx={{ mt: 5 }} />
 			</Container>
 		</ThemeProvider>
 	);

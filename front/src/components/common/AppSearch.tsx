@@ -189,7 +189,7 @@ const AppSearch: FC = (): JSX.Element => {
 	const icon: SxProps<Theme> = {
 		ml: 1,
 		fontSize: '1.6rem',
-		color: '#5C0F8B',
+		color: '#72BAF5',
 	};
 	const inputBase: SxProps<Theme> = {
 		ml: 1,
@@ -239,7 +239,7 @@ const AppSearch: FC = (): JSX.Element => {
 											display: 'flex',
 											alignItems: 'center',
 											borderRadius: 5,
-											bgcolor: '#F3F2F4',
+											bgcolor: '#F1F1F1',
 											height: '40px',
 										}}
 									>

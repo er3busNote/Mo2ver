@@ -1,4 +1,4 @@
-import React, { FC, useState, ReactElement } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import AppHeader from './AppHeader';
 import AppSearch from './AppSearch';
