@@ -1,23 +1,24 @@
 import React, { FC } from 'react';
 import { Paper, Typography, Link, Box } from '@mui/material';
 
-const AppFooter: FC = (): JSX.Element => {
+const AdminFooter: FC = (): JSX.Element => {
 	return (
 		<Paper
 			sx={{
 				bottom: 0,
 				width: '100%',
+				zIndex: 1200,
 				position: 'fixed',
-				bgcolor: '#383838',
+				bgcolor: '#F3F3F3',
 			}}
 			component="footer"
 			square
 			variant="outlined"
 		>
 			<Box>
-				<Typography variant="body2" color="#fff" align="center">
+				<Typography sx={{ fontWeight: 'bold' }} variant="body2" align="center">
 					{'Copyright © '}
-					<Link color="inherit" href="http://localhost:3000">
+					<Link color="inherit" href="http://localhost:3000/admin">
 						Er3busNote
 					</Link>{' '}
 					{new Date().getFullYear()}
@@ -28,4 +29,4 @@ const AppFooter: FC = (): JSX.Element => {
 	);
 };
 
-export default AppFooter;
+export default AdminFooter;

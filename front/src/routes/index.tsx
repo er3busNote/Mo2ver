@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppContent from '../components/common/AppContent';
+import AdminContent from '../components/admin/AdminContent';
 import { Home, Login, Signup, NotFound } from '../pages/index';
 import PrivateRoute from './auth';
 
@@ -23,6 +24,14 @@ const MainRoutes: FC = (): JSX.Element => {
 	);
 };
 
+const AdminRoutes: FC = (): JSX.Element => {
+	return (
+		<Routes>
+			<Route path="*" element={<NotFound />} />
+		</Routes>
+	);
+};
+
 const RootRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
@@ -34,6 +43,9 @@ const RootRoutes: FC = (): JSX.Element => {
 				</Route>
 			</Route>
 			 */}
+			<Route element={<AdminContent />}>
+				<Route path="/admin/*" element={<AdminRoutes />} />
+			</Route>
 			<Route element={<AppContent />}>
 				<Route path="/*" element={<MainRoutes />} />
 			</Route>
