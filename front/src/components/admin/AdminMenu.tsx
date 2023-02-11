@@ -1,27 +1,53 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, {
+	FC,
+	useState,
+	Dispatch,
+	SetStateAction,
+	SyntheticEvent,
+	ReactElement,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import { SubMenuInfo, MenuState } from '../../store/types';
+import { changeTitle, menuActive } from '../../store/index';
 import {
 	Box,
+	Grow, // Transitions
+	Slide, // Transitions
 	Drawer as MuiDrawer,
 	DrawerProps as MuiDrawerProps,
 	Toolbar,
 	Divider,
 	IconButton,
 	Typography,
+	ListItemButton,
+	ListItemIcon,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
-import MailIcon from '@mui/icons-material/Mail';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Label from '@mui/icons-material/Label';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import CategoryIcon from '@mui/icons-material/Category';
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
+
+import InfoIcon from '@mui/icons-material/Info';
+import ForumIcon from '@mui/icons-material/Forum';
+
+const AdminIcon = [
+	MenuOpenIcon,
+	ViewCarouselIcon,
+	CategoryIcon,
+	ViewInArIcon,
+	InfoIcon,
+	ForumIcon,
+];
 
 declare module 'react' {
 	interface CSSProperties {
@@ -31,14 +57,15 @@ declare module 'react' {
 }
 
 interface DrawerProps extends MuiDrawerProps {
-	open?: boolean;
+	open: boolean;
 	width: number;
 }
 
 interface AdminMenuProps {
-	open?: boolean;
+	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
+	menus?: Array<SubMenuInfo>;
 }
 
 const Drawer = styled(MuiDrawer, {
@@ -85,7 +112,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
 		color: theme.palette.text.secondary,
 		borderTopRightRadius: theme.spacing(2),
 		borderBottomRightRadius: theme.spacing(2),
-		paddingRight: theme.spacing(1),
+		paddingRight: theme.spacing(2), // 메인/서브 메뉴 Padding Left 간격 조정
 		fontWeight: theme.typography.fontWeightMedium,
 		'&.Mui-expanded': {
 			fontWeight: theme.typography.fontWeightRegular,
@@ -105,7 +132,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
 	[`& .${treeItemClasses.group}`]: {
 		marginLeft: 0,
 		[`& .${treeItemClasses.content}`]: {
-			paddingLeft: theme.spacing(2),
+			paddingLeft: theme.spacing(4), // 서브 메뉴 Padding Left 간격 조정
 		},
 	},
 }));
@@ -143,83 +170,174 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	);
 };
 
+interface SlideItemProps {
+	branch: boolean;
+	children?: ReactElement;
+}
+
+const SlideItem: FC<SlideItemProps> = ({ branch, children }): JSX.Element => {
+	return (
+		<Slide
+			direction="right"
+			in={branch}
+			appear={branch}
+			timeout={branch ? 200 : 0}
+			mountOnEnter
+			unmountOnExit
+		>
+			<Box>{children}</Box>
+		</Slide>
+	);
+};
+
 const AdminMenu: FC<AdminMenuProps> = ({
 	open,
 	setOpen,
 	width,
+	menus,
 }): JSX.Element => {
-	const [branch, setBranch] = useState(true);
-	const toggleDrawer = () => {
-		setOpen(!open);
-		setBranch(true); // Init 설정
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const [expanded, setExpanded] = useState<string[]>([]);
+	const [selected, setSelected] = useState<string[]>([]);
+
+	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
+		setExpanded(nodeIds);
 	};
 
+	const handleSelect = (event: SyntheticEvent, nodeIds: string[]) => {
+		setSelected(nodeIds);
+	};
+
+	const toggleDrawer = () => {
+		setOpen(!open);
+	};
+
+	const openMenuClick = (title: string, path: string, index: number) => {
+		dispatch(changeTitle(title));
+		dispatch(menuActive(path));
+		setExpanded([String(index)]);
+		setSelected([String(index)]);
+		setOpen(!open);
+	};
 	return (
 		<Drawer variant="permanent" open={open} width={width}>
 			<Toolbar
 				sx={{
-					display: 'flex',
+					position: 'fixed',
 					alignItems: 'center',
-					justifyContent: 'flex-end',
-					p: [1.2], // Toolbar Icon 간격 조정
+					transform: `translateX(${open ? width - 24 : 35}px)`,
+					transition: 'transform .2s ease-in-out',
 				}}
 			>
-				<IconButton onClick={toggleDrawer}>
-					<ChevronLeftIcon color="disabled" />
+				<IconButton
+					sx={{
+						bgcolor: '#363658',
+						borderRadius: 'inherit',
+						width: '18px',
+						'&:hover': {
+							bgcolor: '#757595',
+						},
+					}}
+					onClick={toggleDrawer}
+				>
+					{open ? (
+						<ChevronLeftIcon color="action" />
+					) : (
+						<ChevronRightIcon color="action" />
+					)}
 				</IconButton>
 			</Toolbar>
+			<Box sx={{ mt: 2, mb: 1 }}>
+				<SlideItem branch={!open}>
+					<ManageAccountsIcon />
+				</SlideItem>
+				<SlideItem branch={open}>
+					<Typography variant="h6" align="center" sx={{ fontWeight: 'bold' }}>
+						관리 메뉴
+					</Typography>
+				</SlideItem>
+			</Box>
 			<Divider
 				variant="middle"
-				sx={{ height: '2px', borderColor: 'primary.main' }}
+				sx={{ mb: 2, height: '2px', borderColor: 'primary.main' }}
 			/>
-			<TreeView
-				aria-label="gmail"
-				defaultExpanded={['3']}
-				defaultCollapseIcon={<ArrowDropDownIcon />}
-				defaultExpandIcon={<ArrowRightIcon />}
-				defaultEndIcon={<div style={{ width: 24 }} />}
-				sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-			>
-				<StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
-				<StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
-				<StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
-					<StyledTreeItem
-						nodeId="5"
-						labelText="Social"
-						labelIcon={SupervisorAccountIcon}
-						labelInfo="90"
-						color="#1a73e8"
-						bgColor="#e8f0fe"
-					/>
-					<StyledTreeItem
-						nodeId="6"
-						labelText="Updates"
-						labelIcon={InfoIcon}
-						labelInfo="2,294"
-						color="#e3742f"
-						bgColor="#fcefe3"
-					/>
-					<StyledTreeItem
-						nodeId="7"
-						labelText="Forums"
-						labelIcon={ForumIcon}
-						labelInfo="3,566"
-						color="#a250f5"
-						bgColor="#f3e8fd"
-					/>
-					<StyledTreeItem
-						nodeId="8"
-						labelText="Promotions"
-						labelIcon={LocalOfferIcon}
-						labelInfo="733"
-						color="#3c8039"
-						bgColor="#e6f4ea"
-					/>
-				</StyledTreeItem>
-				<StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
-			</TreeView>
+			<Box sx={{ display: open ? 'none' : 'block' }}>
+				{menus &&
+					menus.map((menu: SubMenuInfo) => {
+						const IconComponent = AdminIcon[menu.index - 1];
+						return (
+							<Grow
+								key={menu.index}
+								in={!open && menu.isShow}
+								appear={menu.isShow}
+								timeout={menu.index * 300}
+							>
+								<ListItemButton
+									selected={menu.isActive}
+									onClick={() =>
+										openMenuClick(menu.title, menu.path, menu.index)
+									}
+								>
+									<ListItemIcon>
+										<IconComponent fontSize="small" color="disabled" />
+									</ListItemIcon>
+								</ListItemButton>
+							</Grow>
+						);
+					})}
+			</Box>
+			<Box sx={{ display: open ? 'block' : 'none' }}>
+				<TreeView
+					aria-label="menu"
+					defaultExpanded={['1']}
+					defaultCollapseIcon={<ArrowDropDownIcon />}
+					defaultExpandIcon={<ArrowRightIcon />}
+					defaultEndIcon={<div style={{ width: 24 }} />}
+					sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+					expanded={expanded}
+					selected={selected}
+					onNodeToggle={handleToggle}
+					onNodeSelect={handleSelect}
+				>
+					{menus &&
+						menus.map((menu: SubMenuInfo) => {
+							return (
+								<StyledTreeItem
+									key={menu.index}
+									nodeId={String(menu.index)}
+									labelText={menu.description}
+									labelIcon={AdminIcon[menu.index - 1]}
+								>
+									{menu.subMenu &&
+										menu.subMenu.map((submenu: SubMenuInfo) => {
+											return (
+												<StyledTreeItem
+													key={submenu.index}
+													nodeId={String(submenu.index)}
+													labelText={submenu.description}
+													labelIcon={AdminIcon[submenu.index - 1]}
+													labelInfo={String(submenu.count).replace(
+														/(.)(?=(\d{3})+$)/g,
+														'$1,'
+													)}
+													color={submenu.color}
+													bgColor={submenu.bgColor}
+												/>
+											);
+										})}
+								</StyledTreeItem>
+							);
+						})}
+				</TreeView>
+			</Box>
 		</Drawer>
 	);
 };
 
-export default AdminMenu;
+const mapStateToProps = (state: any) => ({
+	menus: (state.menu as MenuState).menus,
+});
+
+export default connect(mapStateToProps, null)(AdminMenu);

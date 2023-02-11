@@ -6,4 +6,40 @@ interface AuthState {
 	errorMessage: string;
 }
 
-export type { AuthState };
+interface TokenState {
+	token: object;
+}
+
+// 2. 메뉴 관련 State
+interface TitleState {
+	title: string;
+}
+
+interface MenuInfo extends TitleState {
+	index: number;
+	name: string;
+	path: string;
+	description: string;
+	isActive: boolean;
+	isShow: boolean;
+	count?: number;
+	color?: string;
+	bgColor?: string;
+}
+
+interface SubMenuInfo extends MenuInfo {
+	subMenu?: Array<MenuInfo>;
+}
+
+interface MenuState {
+	menus: Array<SubMenuInfo>;
+}
+
+export type {
+	AuthState,
+	TokenState,
+	TitleState,
+	MenuInfo,
+	SubMenuInfo,
+	MenuState,
+};

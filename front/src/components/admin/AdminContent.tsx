@@ -6,11 +6,11 @@ import AdminMain from './AdminMain';
 import AdminFooter from './AdminFooter';
 import { CssBaseline, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { contentTheme } from '../../utils/theme';
+import { adminTheme } from '../../utils/theme';
 
-const mdTheme = createTheme(contentTheme);
+const mdTheme = createTheme(adminTheme);
 
-const drawerMenuWidth = 160;
+const drawerMenuWidth = 200;
 
 interface LayoutDefaultProps {
 	children?: ReactElement;
@@ -25,9 +25,7 @@ const AdminContent: FC<LayoutDefaultProps> = ({ children }): JSX.Element => {
 				<AdminHeader />
 				<Box sx={{ display: 'flex' }}>
 					<AdminMenu open={open} setOpen={setOpen} width={drawerMenuWidth} />
-					<AdminMain width={drawerMenuWidth}>
-						{children || <Outlet />}
-					</AdminMain>
+					<AdminMain>{children || <Outlet />}</AdminMain>
 				</Box>
 				<AdminFooter />
 			</Box>

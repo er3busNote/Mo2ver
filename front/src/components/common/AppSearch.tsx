@@ -187,7 +187,6 @@ const AppSearch: FC = (): JSX.Element => {
 	};
 
 	const icon: SxProps<Theme> = {
-		ml: 1,
 		fontSize: '1.6rem',
 		color: '#72BAF5',
 	};
@@ -252,7 +251,7 @@ const AppSearch: FC = (): JSX.Element => {
 										/>
 										{focus ? (
 											<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-												<ClearIcon />
+												<ClearIcon sx={icon} />
 											</IconButton>
 										) : (
 											<SearchIcon sx={icon} />

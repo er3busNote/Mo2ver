@@ -1,44 +1,22 @@
 import React, { FC, ReactElement } from 'react';
+import AdminSubHeader from './AdminSubHeader';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-interface DrawerProps {
-	open?: boolean;
-	width: number;
-}
-
 interface AppMainProps {
-	open?: boolean;
 	children?: ReactElement;
-	width: number;
 }
 
 const Main = styled('main', {
 	shouldForwardProp: (prop) => prop !== 'open',
-})<DrawerProps>(({ theme, open, width }) => ({
+})(({ theme }) => ({
 	flexGrow: 1,
 	padding: theme.spacing(0),
-	transition: theme.transitions.create('margin', {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	marginRight: -width,
-	...(open && {
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-		marginRight: 0,
-	}),
 }));
 
-const AdminMain: FC<AppMainProps> = ({
-	open,
-	children,
-	width,
-}): JSX.Element => {
+const AdminMain: FC<AppMainProps> = ({ children }): JSX.Element => {
 	return (
-		<Main open={open} width={width}>
+		<Main>
 			<Box
 				component="main"
 				sx={{
@@ -47,6 +25,7 @@ const AdminMain: FC<AppMainProps> = ({
 					bgcolor: 'background.default',
 				}}
 			>
+				<AdminSubHeader title="" />
 				{children}
 			</Box>
 		</Main>
