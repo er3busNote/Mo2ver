@@ -1,41 +1,43 @@
-import React, { FC, InputHTMLAttributes } from 'react';
+import React, { FC } from 'react';
+import {
+	ControllerRenderProps,
+	ControllerFieldState,
+	UseFormStateReturn,
+} from 'react-hook-form';
 import { TextField } from '@mui/material';
 
-interface RenderErrorProps {
-	error: string;
-}
-
-interface RenderFieldProps {
-	input: InputHTMLAttributes<HTMLInputElement>;
-	label: string;
+interface RenderTextFieldProps {
+	field: ControllerRenderProps<any, any>;
+	fieldState: ControllerFieldState;
+	formState: UseFormStateReturn<any>;
 	type: string;
-	meta: RenderErrorProps;
+	label: string;
 }
 
-const RenderField: FC<RenderFieldProps> = ({
-	input,
-	label,
+const RenderTextField: FC<RenderTextFieldProps> = ({
+	field: { onChange, value, name },
+	fieldState: { error },
 	type,
-	meta: { error },
+	label,
 }) => {
 	return (
 		<TextField
-			margin="normal"
+			margin="dense"
 			error={error ? true : false}
 			required
-			id={input.name}
+			id={name}
 			label={label}
 			type={type}
-			name={input.name}
-			defaultValue={input.value}
-			onChange={input.onChange}
-			autoComplete={input.name}
-			helperText={error}
+			name={name}
+			defaultValue={value}
+			onChange={onChange}
+			autoComplete={name}
+			helperText={error?.message}
 			style={{ width: '80%' }}
-			inputProps={{ style: { fontSize: 13 } }} // font size of input text
-			InputLabelProps={{ style: { fontSize: 14 } }} // font size of input label
+			inputProps={{ style: { fontSize: 13, height: 3 } }} // font size of input text
+			InputLabelProps={{ style: { fontSize: 13 } }} // font size of input label
 		/>
 	);
 };
 
-export default RenderField;
+export default RenderTextField;

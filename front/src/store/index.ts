@@ -1,5 +1,4 @@
 import { createSlice, combineReducers, PayloadAction } from '@reduxjs/toolkit';
-import { reducer as formReducer } from 'redux-form';
 import { AuthState, TokenState, TitleState, MenuState } from './types';
 
 // 1.1. 인증 관련 State
@@ -51,6 +50,7 @@ const tokenSlice = createSlice({
 // 2.1. 메뉴 관련 State
 const titleinitialState: TitleState = {
 	title: 'Home',
+	description: '',
 };
 
 // 2.2. titleSlice : action + reducer → slice
@@ -60,6 +60,9 @@ const titleSlice = createSlice({
 	reducers: {
 		changeTitle: (state: TitleState, action: PayloadAction<string>) => {
 			state.title = action.payload;
+		},
+		changeDescription: (state: TitleState, action: PayloadAction<string>) => {
+			state.description = action.payload;
 		},
 	},
 });
@@ -79,7 +82,7 @@ const menuinitialState: MenuState = {
 					path: '/item',
 					title: 'Item',
 					description: '상품 목록',
-					isActive: true,
+					isActive: false,
 					isShow: true,
 					count: 2,
 					color: '#1A73E8',
@@ -102,7 +105,7 @@ const menuinitialState: MenuState = {
 					path: '/main',
 					title: 'Main',
 					description: '메인 전시',
-					isActive: true,
+					isActive: false,
 					isShow: true,
 					count: 1,
 					color: '#3C8039',
@@ -114,7 +117,7 @@ const menuinitialState: MenuState = {
 					path: '/popular',
 					title: 'Popular',
 					description: '인기순',
-					isActive: true,
+					isActive: false,
 					isShow: true,
 					count: 2294,
 					color: '#E3742F',
@@ -126,7 +129,7 @@ const menuinitialState: MenuState = {
 					path: '/recommend',
 					title: 'Recommend',
 					description: '추천',
-					isActive: true,
+					isActive: false,
 					isShow: true,
 					count: 3566,
 					color: '#A250F5',
@@ -162,7 +165,6 @@ const menuSlice = createSlice({
 });
 
 const rootReducer = combineReducers({
-	form: formReducer, // <- redux-form
 	auth: authSlice.reducer,
 	token: tokenSlice.reducer,
 	title: titleSlice.reducer,
@@ -171,7 +173,7 @@ const rootReducer = combineReducers({
 
 const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
 const { tokenSuccess } = tokenSlice.actions;
-const { changeTitle } = titleSlice.actions;
+const { changeTitle, changeDescription } = titleSlice.actions;
 const { menuActive, menuSwitch } = menuSlice.actions;
 
 export {
@@ -180,6 +182,7 @@ export {
 	logoutSuccess,
 	tokenSuccess,
 	changeTitle,
+	changeDescription,
 	menuActive,
 	menuSwitch,
 };

@@ -35,13 +35,13 @@ const AdminHeader: FC = (): JSX.Element => {
 						justifyContent: 'flex-end',
 					}}
 				>
-					<Grid container spacing={1} sx={{ width: 350 }}>
+					<Grid container spacing={1} sx={{ width: 400 }}>
 						<Grid item sx={{ display: 'flex', alignItems: 'center' }}>
 							<AccountCircleIcon color="secondary" />
 							<Typography
 								color="#fff"
 								align="center"
-								sx={{ pl: 1, fontSize: headerFontSize }}
+								sx={{ px: 1, fontSize: headerFontSize }}
 							>
 								안녕하세요 Admin 님은 슈퍼유저입니다.
 							</Typography>
@@ -49,7 +49,8 @@ const AdminHeader: FC = (): JSX.Element => {
 						<Grid item>
 							<Button
 								sx={{
-									fontSize: '10px',
+									px: 4,
+									fontSize: '11px',
 									fontWeight: 'bold',
 									bgcolor: '#757595',
 									border: '1px solid #757595',

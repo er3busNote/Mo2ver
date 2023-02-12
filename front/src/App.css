@@ -55,3 +55,29 @@
   font-weight: bold !important;
   text-decoration: underline;
 }
+
+/* Admin - 카테고리 Form - Text Field */
+#category .MuiFormControl-root {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-left: -10px;
+}
+
+#category .MuiFormControl-root label {
+  top: -6px;
+}
+
+#category .MuiFormControl-root label[data-shrink='true'] {
+  top: 0;
+}
+
+/* Admin - 카테고리 Form - Radio Field */
+#category .MuiFormGroup-root {
+  margin-top: -4px;
+  margin-bottom: -4px;
+  margin-left: -3px;
+}
+
+#category .MuiFormControlLabel-label {
+  font-size: 14px;
+}

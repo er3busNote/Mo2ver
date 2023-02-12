@@ -1,13 +1,29 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { TitleState } from '../../store/types';
-import { Box, Link, Typography, Breadcrumbs } from '@mui/material';
+import { changeTitle, changeDescription } from '../../store/index';
+import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
 
 const menuFontSize = '13px';
 
-const AdminSubHeader: FC<TitleState> = ({ title }): JSX.Element => {
+interface AdminSubHeaderProps {
+	title?: string;
+	description?: string;
+}
+
+const AdminSubHeader: FC<AdminSubHeaderProps> = ({
+	title,
+	description,
+}): JSX.Element => {
+	const dispatch = useDispatch();
+
+	const dashboardClick = () => {
+		dispatch(changeTitle('대시보드'));
+		dispatch(changeDescription(''));
+	};
 	return (
 		<Box
 			sx={{ px: 10, py: 2, display: 'flex', justifyContent: 'space-between' }}
@@ -16,29 +32,43 @@ const AdminSubHeader: FC<TitleState> = ({ title }): JSX.Element => {
 				<Title>{title}</Title>
 			</Box>
 			<Breadcrumbs separator="›" aria-label="breadcrumb">
-				<Link
-					underline="hover"
-					sx={{ display: 'flex', alignItems: 'center' }}
-					color="inherit"
-					href="/admin"
+				<IconButton
+					component={Link}
+					to="/admin"
+					sx={{
+						px: 0.5,
+						color: 'black',
+						'&:hover': { color: 'gray', textDecoration: 'underline' },
+					}}
+					onClick={() => dashboardClick()}
 				>
 					<HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
 					<Typography sx={{ fontSize: menuFontSize }}>홈</Typography>
-				</Link>
-				<Link
-					underline="hover"
-					sx={{ display: 'flex', alignItems: 'center' }}
-					color="inherit"
-					href="/admin"
-				>
-					<Typography sx={{ fontSize: menuFontSize }}>카테고리 관리</Typography>
-				</Link>
-				<Typography
-					sx={{ display: 'flex', alignItems: 'center', fontSize: menuFontSize }}
-					color="text.primary"
-				>
-					상품 목록
-				</Typography>
+				</IconButton>
+				{description && description !== '' && (
+					<Typography
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							fontSize: menuFontSize,
+						}}
+						color="text.primary"
+					>
+						{description}
+					</Typography>
+				)}
+				{description && description !== '' && (
+					<Typography
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							fontSize: menuFontSize,
+						}}
+						color="text.primary"
+					>
+						{title}
+					</Typography>
+				)}
 			</Breadcrumbs>
 		</Box>
 	);
@@ -46,6 +76,7 @@ const AdminSubHeader: FC<TitleState> = ({ title }): JSX.Element => {
 
 const mapStateToProps = (state: any) => ({
 	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
 });
 
 export default connect(mapStateToProps, null)(AdminSubHeader);

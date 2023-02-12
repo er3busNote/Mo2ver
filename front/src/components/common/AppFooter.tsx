@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { Paper, Typography, Link, Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
+import Copyright from '../Copyright';
 
 const AppFooter: FC = (): JSX.Element => {
 	return (
@@ -15,14 +16,7 @@ const AppFooter: FC = (): JSX.Element => {
 			variant="outlined"
 		>
 			<Box>
-				<Typography variant="body2" color="#fff" align="center">
-					{'Copyright © '}
-					<Link color="inherit" href="http://localhost:3000">
-						Er3busNote
-					</Link>{' '}
-					{new Date().getFullYear()}
-					{'.'}
-				</Typography>
+				<Copyright color="#fff" />
 			</Box>
 		</Paper>
 	);

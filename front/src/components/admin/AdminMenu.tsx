@@ -1,15 +1,16 @@
 import React, {
 	FC,
 	useState,
+	useEffect,
 	Dispatch,
 	SetStateAction,
 	SyntheticEvent,
 	ReactElement,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { SubMenuInfo, MenuState } from '../../store/types';
-import { changeTitle, menuActive } from '../../store/index';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Grow, // Transitions
@@ -152,7 +153,12 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 					<Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
 					<Typography
 						variant="body2"
-						sx={{ fontWeight: 'inherit', flexGrow: 1 }}
+						sx={{
+							pl: 2,
+							fontWeight: 'inherit',
+							flexGrow: 1,
+							textAlign: 'left',
+						}}
 					>
 						{labelText}
 					</Typography>
@@ -197,10 +203,18 @@ const AdminMenu: FC<AdminMenuProps> = ({
 	menus,
 }): JSX.Element => {
 	const dispatch = useDispatch();
+	const location = useLocation();
 	const navigate = useNavigate();
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string[]>([]);
+
+	useEffect(() => {
+		if (location.pathname === '/admin') {
+			dispatch(changeTitle('대시보드'));
+			dispatch(changeDescription(''));
+		}
+	}, []);
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);
@@ -214,12 +228,22 @@ const AdminMenu: FC<AdminMenuProps> = ({
 		setOpen(!open);
 	};
 
-	const openMenuClick = (title: string, path: string, index: number) => {
-		dispatch(changeTitle(title));
-		dispatch(menuActive(path));
+	const openMenuClick = (path: string, index: number) => {
+		dispatch(menuActive(path)); // 1. close → open : 해당 Root 메뉴를 Active(활성화)
 		setExpanded([String(index)]);
 		setSelected([String(index)]);
 		setOpen(!open);
+	};
+
+	const activeMenuClick = (
+		title: string,
+		description: string,
+		path: string
+	) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(description));
+		dispatch(menuActive(path)); // 2. open → close : 해당 Root 메뉴를 Active(활성화)
+		navigate('/admin' + path);
 	};
 	return (
 		<Drawer variant="permanent" open={open} width={width}>
@@ -276,9 +300,7 @@ const AdminMenu: FC<AdminMenuProps> = ({
 							>
 								<ListItemButton
 									selected={menu.isActive}
-									onClick={() =>
-										openMenuClick(menu.title, menu.path, menu.index)
-									}
+									onClick={() => openMenuClick(menu.path, menu.index)}
 								>
 									<ListItemIcon>
 										<IconComponent fontSize="small" color="disabled" />
@@ -318,12 +340,19 @@ const AdminMenu: FC<AdminMenuProps> = ({
 													nodeId={String(submenu.index)}
 													labelText={submenu.description}
 													labelIcon={AdminIcon[submenu.index - 1]}
-													labelInfo={String(submenu.count).replace(
-														/(.)(?=(\d{3})+$)/g,
-														'$1,'
-													)}
+													// labelInfo={String(submenu.count).replace(
+													// 	/(.)(?=(\d{3})+$)/g,
+													// 	'$1,'
+													// )}
 													color={submenu.color}
 													bgColor={submenu.bgColor}
+													onClick={() =>
+														activeMenuClick(
+															menu.description,
+															submenu.description,
+															menu.path
+														)
+													}
 												/>
 											);
 										})}

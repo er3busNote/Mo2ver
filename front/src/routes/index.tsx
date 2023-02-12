@@ -2,7 +2,15 @@ import React, { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppContent from '../components/common/AppContent';
 import AdminContent from '../components/admin/AdminContent';
-import { Home, Login, Signup, NotFound } from '../pages/index';
+import {
+	Home,
+	Login,
+	Signup,
+	Banner,
+	Category,
+	Dashboard,
+	NotFound,
+} from '../pages/index';
 import PrivateRoute from './auth';
 
 const AuthRoutes: FC = (): JSX.Element => {
@@ -27,6 +35,9 @@ const MainRoutes: FC = (): JSX.Element => {
 const AdminRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
+			<Route path="/" element={<Dashboard />} />
+			<Route path="/cagetory" element={<Category />} />
+			<Route path="/banner" element={<Banner />} />
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);

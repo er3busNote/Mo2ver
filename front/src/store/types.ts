@@ -13,13 +13,13 @@ interface TokenState {
 // 2. 메뉴 관련 State
 interface TitleState {
 	title: string;
+	description: string;
 }
 
 interface MenuInfo extends TitleState {
 	index: number;
 	name: string;
 	path: string;
-	description: string;
 	isActive: boolean;
 	isShow: boolean;
 	count?: number;

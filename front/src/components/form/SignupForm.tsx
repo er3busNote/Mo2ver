@@ -1,182 +1,161 @@
-import React, { FC, FormEventHandler } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Field, reduxForm, ConfigProps } from 'redux-form';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import {
 	Avatar,
 	Button,
 	IconButton,
-	CssBaseline,
 	Grid,
 	Box,
 	Paper,
 	Typography,
-	Container,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import renderField from '../validate/TextField';
-import { defaultTheme } from '../../utils/theme';
-import {
-	validateEmail,
-	validateUpperCase,
-	validateLowerCase,
-	validateDigit,
-	validateSpecialChar,
-} from '../../utils/validation';
+import RenderTextField from '../validate/TextField';
+import { SignupFormValues } from './types';
+import { validateEmail, validatePassword } from '../../utils/validation';
 
-const theme = createTheme(defaultTheme);
+const schema = yup
+	.object({
+		email: yup
+			.string()
+			.required('이메일을 입력해주세요')
+			.matches(validateEmail, '유효하지 않은 이메일 주소입니다')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		password: yup
+			.string()
+			.required('비밀번호를 입력해주세요')
+			.matches(validatePassword, '특수문자 숫자와 대소문자가 필요합니다')
+			.min(8, '8자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		repeat_password: yup
+			.string()
+			.required('비밀번호를 입력해주세요')
+			.oneOf([yup.ref('password')], '패스워드가 일치하지 않습니다'),
+	})
+	.required();
 
 interface SignupProp {
-	onSubmit: FormEventHandler<HTMLFormElement>;
-	formState: any;
-	admin: boolean;
-	submitting: boolean;
+	onSubmit: (
+		data: SignupFormValues,
+		event?: BaseSyntheticEvent<object, any, any>
+	) => void;
 }
 
-const SignupForm: FC<SignupProp> = ({
-	onSubmit,
-	formState,
-	submitting,
-}): JSX.Element => {
+const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
+	const { control, handleSubmit, formState } = useForm<SignupFormValues>({
+		resolver: yupResolver(schema),
+	});
 	return (
-		<ThemeProvider theme={theme}>
-			<Container component="main" maxWidth="xs">
-				<CssBaseline />
-				<Paper
-					sx={{
-						mt: 10, // margin-top : 6 * 10 px
-						display: 'flex',
-						justifyContent: 'center',
-						bgcolor: 'background.default',
-					}}
+		<Paper
+			sx={{
+				mt: 10, // margin-top : 6 * 10 px
+				display: 'flex',
+				justifyContent: 'center',
+				bgcolor: 'background.default',
+			}}
+		>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center', // 가로 중앙
+					bgcolor: 'background.paper',
+					borderRadius: '16px',
+					width: 350,
+				}}
+			>
+				<Avatar sx={{ m: 1, mt: 3, bgcolor: 'secondary.main' }}>
+					<LockOutlinedIcon />
+				</Avatar>
+				<Typography variant="h6">Sign Up</Typography>
+				<Box
+					component="form"
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+					sx={{ mt: 0 }}
 				>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center', // 가로 중앙
-							bgcolor: 'background.paper',
-							borderRadius: '16px',
-							width: 350,
-						}}
-					>
-						<Avatar sx={{ m: 1, mt: 3, bgcolor: 'secondary.main' }}>
-							<LockOutlinedIcon />
-						</Avatar>
-						<Typography variant="h6">Sign Up</Typography>
-						<Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 0 }}>
-							<Field
-								component={renderField}
+					<Controller
+						name="email"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderTextField
 								type="email"
-								name="email"
 								label="Email Address"
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
 							/>
-							<Field
-								component={renderField}
+						)}
+					/>
+					<Controller
+						name="username"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderTextField
 								type="text"
-								name="username"
-								label="Username"
+								label="username"
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
 							/>
-							<Field
-								component={renderField}
+						)}
+					/>
+					<Controller
+						name="password"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderTextField
 								type="password"
-								name="password"
-								label="Password"
+								label="password"
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
 							/>
-							<Field
-								component={renderField}
+						)}
+					/>
+					<Controller
+						name="repeat_password"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderTextField
 								type="password"
-								name="repeat_password"
-								label="Repeat Password"
+								label="repeat_password"
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
 							/>
-							<Button
-								type="submit"
-								fullWidth
-								variant="contained"
-								disabled={
-									!submitting &&
-									Object.prototype.hasOwnProperty.call(formState, 'syncErrors')
-								}
-								sx={{ mt: 3, mb: 2 }}
-							>
-								Sign Up
-							</Button>
-							<Grid container justifyContent="center" sx={{ pb: 2 }}>
-								<Grid item>
-									<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
-										<ArrowCircleLeftIcon color="primary" />
-									</IconButton>
-								</Grid>
-								<Grid item xs={8}>
-									<Typography variant="subtitle2" sx={{ mt: 0.2 }}>
-										Already have an account? Sign in
-									</Typography>
-								</Grid>
-							</Grid>
-						</Box>
-					</Box>
-				</Paper>
-			</Container>
-		</ThemeProvider>
+						)}
+					/>
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						disabled={formState.isSubmitted && !formState.isValid}
+						sx={{ mt: 3, mb: 2 }}
+					>
+						Sign Up
+					</Button>
+					<Grid container justifyContent="center" sx={{ pb: 2 }}>
+						<Grid item>
+							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
+								<ArrowCircleLeftIcon color="primary" />
+							</IconButton>
+						</Grid>
+						<Grid item xs={8}>
+							<Typography variant="subtitle2" sx={{ mt: 0.2 }}>
+								Already have an account? Sign in
+							</Typography>
+						</Grid>
+					</Grid>
+				</Box>
+			</Box>
+		</Paper>
 	);
 };
 
-// FormEvent<HTMLFormElement> → any 타입핑
-const validateSignup = (values: any) => {
-	const errors: any = {};
-
-	const requiredFields = ['email', 'username', 'password', 'repeat_password'];
-
-	if (!validateEmail(values.email)) {
-		errors.email = 'Invalid email address.';
-	}
-
-	requiredFields.forEach((field: string) => {
-		if ((values as any)[field] === '') {
-			(errors as any)[field] = ['The', field, 'field is required.'].join(' ');
-		}
-	});
-
-	if (
-		Object.prototype.hasOwnProperty.call(values, 'email') &&
-		(values.email.length < 3 || values.email.length > 50)
-	) {
-		errors.email = 'email field must be between 3 and 50 in size';
-	}
-
-	if (Object.prototype.hasOwnProperty.call(values, 'password')) {
-		if (values.password.length < 8 || values.password.length > 100) {
-			errors.password = 'password field must be between 8 and 100 in size';
-		} else if (!validateUpperCase(values.password)) {
-			errors.password = 'password does not contain uppercase letters';
-		} else if (!validateLowerCase(values.password)) {
-			errors.password = 'password does not contain lowercase letters';
-		} else if (!validateDigit(values.password)) {
-			errors.password = 'password does not contain numbers';
-		} else if (!validateSpecialChar(values.password)) {
-			errors.password = 'password does not contain special characters';
-		}
-	}
-
-	if (
-		Object.prototype.hasOwnProperty.call(values, 'password') &&
-		Object.prototype.hasOwnProperty.call(values, 'repeat_password') &&
-		values.password !== values.repeat_password
-	) {
-		errors.repeat_password = 'Passwords do not match';
-	}
-
-	return errors;
-};
-
-const mapStateToProps = (state: ConfigProps, ownProps: any = {}) => ({
-	formState: (state.form as any).SignupForm,
-	ownProps: ownProps,
-});
-
-export default reduxForm({
-	form: 'SignupForm',
-	validate: validateSignup,
-})(connect(mapStateToProps, null)(SignupForm));
+export default SignupForm;

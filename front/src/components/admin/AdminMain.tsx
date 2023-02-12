@@ -25,7 +25,7 @@ const AdminMain: FC<AppMainProps> = ({ children }): JSX.Element => {
 					bgcolor: 'background.default',
 				}}
 			>
-				<AdminSubHeader title="" />
+				<AdminSubHeader />
 				{children}
 			</Box>
 		</Main>
