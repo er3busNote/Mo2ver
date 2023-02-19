@@ -4,4 +4,21 @@ interface CategoryFormValues {
 	level: number;
 }
 
-export type { CategoryFormValues };
+interface BannerDetailValues {
+	title: string;
+	bnnrText: string;
+	cnntUrl: string;
+	useyn: string;
+}
+
+interface BannerFormValues {
+	title: string;
+	startDate: Date;
+	endDate: Date;
+	position: string;
+	type: string;
+	useyn: string;
+	bnnrImg: Array<BannerDetailValues>;
+}
+
+export type { CategoryFormValues, BannerFormValues };

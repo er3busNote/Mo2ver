@@ -81,3 +81,34 @@
 #category .MuiFormControlLabel-label {
   font-size: 14px;
 }
+
+/* Admin - 배너 Form - Text Field */
+#banner .MuiFormControl-root {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+#banner .MuiFormControl-root label {
+  top: -6px;
+  font-size: 14px;
+}
+
+#banner .MuiFormControl-root label[data-shrink='true'] {
+  top: 0;
+}
+
+/* Admin - 배너 Form - Calendar Field */
+#banner .MuiInputBase-inputAdornedEnd {
+  font-size: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: 85px;
+}
+
+/* Admin - 배너 Form - Select Field */
+#banner .MuiSelect-select {
+  font-size: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: 85px;
+}

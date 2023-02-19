@@ -55,10 +55,10 @@ const adminTheme: ThemeOptions = {
 			secondary: '#000', // Validation Text
 		},
 		action: {
-			active: '#F1F2F3',
+			active: '#363658',
 			hover: '#F1F2F3',
 			selected: '#F1F2F3',
-			disabled: '#000', // Button Disabled Text
+			disabled: '#BDBDBD', // Button Disabled Text
 			disabledBackground: '#34343B', // Button Disabled Background Color
 		},
 		background: {

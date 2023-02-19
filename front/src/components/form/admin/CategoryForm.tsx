@@ -51,7 +51,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 	};
 
 	const thHeader: SxProps<Theme> = {
-		pl: 5,
+		px: 5,
 		py: 1.5,
 		width: 180,
 		bgcolor: '#EEEEEE',
@@ -59,7 +59,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 		fontWeight: 'bold',
 	};
 	const thBody: SxProps<Theme> = {
-		pl: 5,
+		px: 5,
 		border: '2px solid #d2d2d2',
 	};
 	return (
@@ -76,7 +76,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								구분
 							</TableCell>
-							<TableCell sx={thBody} align="left" component="th">
+							<TableCell sx={thBody} align="left">
 								소카테고리
 							</TableCell>
 						</TableRow>
@@ -84,7 +84,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								카테고리명
 							</TableCell>
-							<TableCell sx={thBody} align="left" component="th">
+							<TableCell sx={thBody} align="left">
 								<Controller
 									name="category"
 									control={control}
@@ -104,7 +104,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								노출여부
 							</TableCell>
-							<TableCell sx={thBody} align="left" component="th">
+							<TableCell sx={thBody} align="left">
 								<Controller
 									name="useyn"
 									control={control}
@@ -125,7 +125,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								노출순서
 							</TableCell>
-							<TableCell sx={thBody} align="left" component="th">
+							<TableCell sx={thBody} align="left">
 								<Controller
 									name="level"
 									control={control}
@@ -147,7 +147,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								코드명
 							</TableCell>
-							<TableCell sx={thBody} align="left" component="th">
+							<TableCell sx={thBody} align="left">
 								C001001002
 							</TableCell>
 						</TableRow>
