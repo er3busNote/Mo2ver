@@ -9,11 +9,10 @@
 - DB: 10.4.11-MariaDB
 
 ## User Page
+![User Page 01](./images/user01.png)
 <p align="center">
-	<img src="./images/user01.png" align="center" width="32%">
-	<img src="./images/user02.png" align="center" width="32%">
-	<img src="./images/user03.png" align="center" width="32%">
-	<figcaption align="center">User Page</figcaption>
+	<img src="./images/user02.png" align="center" width="50%">
+	<img src="./images/user03.png" align="center" width="50%">
 </p>
 
 ## Admin Page
