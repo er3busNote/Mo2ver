@@ -31,7 +31,7 @@ const contentTheme: ThemeOptions = {
 			active: '#505056',
 			hover: '#34343B',
 			selected: '#505056',
-			disabled: '#000', // Button Disabled Text
+			disabled: '#cdcdcd', // Button Disabled Text
 			disabledBackground: '#34343B', // Button Disabled Background Color
 		},
 		background: {
@@ -39,7 +39,7 @@ const contentTheme: ThemeOptions = {
 			paper: '#fff',
 		},
 		primary: {
-			main: '#505056', // Border Color
+			main: '#6A3DCB', // Border Color
 		},
 		secondary: {
 			main: '#86868A', // ListItemText Color

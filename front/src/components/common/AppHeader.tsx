@@ -21,7 +21,7 @@ const AppHeader: FC = (): JSX.Element => {
 			>
 				<Grid container spacing={1} sx={{ width: 250 }}>
 					<Grid item>
-						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+						<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
 							<Typography
 								color="#000"
 								align="center"
@@ -43,7 +43,7 @@ const AppHeader: FC = (): JSX.Element => {
 						</IconButton>
 					</Grid>
 					<Grid item>
-						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+						<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
 							<Typography
 								color="#000"
 								align="center"
@@ -54,7 +54,7 @@ const AppHeader: FC = (): JSX.Element => {
 						</IconButton>
 					</Grid>
 					<Grid item>
-						<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+						<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
 							<Typography
 								color="#000"
 								align="center"

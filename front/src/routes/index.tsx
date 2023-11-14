@@ -27,6 +27,12 @@ const MainRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
 			<Route path="/" element={<Home />} />
+			<Route path="/auth/*" element={<AuthRoutes />} />
+			<Route element={<PrivateRoute />}>
+				<Route element={<AppContent />}>
+					<Route path="/*" element={<MainRoutes />} />
+				</Route>
+			</Route>
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);
@@ -46,14 +52,6 @@ const AdminRoutes: FC = (): JSX.Element => {
 const RootRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
-			{/**
-			<Route path="/auth/*" element={<AuthRoutes />} />
-			<Route element={<PrivateRoute />}>
-				<Route element={<AppContent />}>
-					<Route path="/*" element={<MainRoutes />} />
-				</Route>
-			</Route>
-			 */}
 			<Route element={<AdminContent />}>
 				<Route path="/admin/*" element={<AdminRoutes />} />
 			</Route>
