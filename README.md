@@ -3,10 +3,10 @@
 
 ## User Page
 <p align="center">
-	<img src="./images/admin01.png" align="center" width="32%">
-	<img src="./images/admin02.png" align="center" width="32%">
-	<img src="./images/admin03.png" align="center" width="32%">
-	<figcaption align="center">User Page 01,02,03</figcaption>
+	<img src="./images/user01.png" align="center" width="32%">
+	<img src="./images/user02.png" align="center" width="32%">
+	<img src="./images/user03.png" align="center" width="32%">
+	<figcaption align="center">User Page</figcaption>
 </p>
 
 ## Admin Page
