@@ -10,7 +10,7 @@
 
 ### Demo Website Link
 Under construction of demo website.
-- url : [Demo](https://web-mo2ver-bkcl2bloy8m0h1.sel5.cloudtype.app/)
+- URL : [Demo](https://web-mo2ver-bkcl2bloy8m0h1.sel5.cloudtype.app/)
 
 ## User Page
 <p align="center">
