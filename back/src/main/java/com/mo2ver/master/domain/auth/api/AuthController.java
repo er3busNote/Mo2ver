@@ -1,16 +1,15 @@
-package com.mo2ver.master.domain.auth.presentation;
+package com.mo2ver.master.domain.auth.api;
 
-import com.mo2ver.master.domain.auth.application.AuthService;
+import com.mo2ver.master.domain.auth.service.AuthService;
 import com.mo2ver.master.domain.auth.dto.LoginDto;
 import com.mo2ver.master.domain.auth.dto.SignupDto;
 import com.mo2ver.master.domain.auth.validation.AuthValidator;
 import com.mo2ver.master.global.common.dto.ResponseDto;
-import com.mo2ver.master.global.error.application.ErrorService;
+import com.mo2ver.master.global.error.service.ErrorService;
 import com.mo2ver.master.global.error.domain.ErrorCode;
-import com.mo2ver.master.global.error.presentation.ErrorResponse;
+import com.mo2ver.master.global.error.api.ErrorResponse;
 import com.mo2ver.master.global.jwt.TokenProvider;
 import com.mo2ver.master.global.jwt.dto.TokenDto;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +29,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping(value = "/auth", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "/auth")
 public class AuthController {
 
     private final AuthService authService;

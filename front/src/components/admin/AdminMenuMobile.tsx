@@ -5,7 +5,6 @@ import React, {
 	Dispatch,
 	SetStateAction,
 	SyntheticEvent,
-	ReactElement,
 } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
@@ -14,9 +13,7 @@ import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Grow, // Transitions
-	Slide, // Transitions
-	Drawer as MuiDrawer,
-	DrawerProps as MuiDrawerProps,
+	Drawer,
 	Toolbar,
 	Divider,
 	IconButton,
@@ -28,11 +25,9 @@ import { styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import CategoryIcon from '@mui/icons-material/Category';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
@@ -57,47 +52,12 @@ declare module 'react' {
 	}
 }
 
-interface DrawerProps extends MuiDrawerProps {
-	open: boolean;
-	width: number;
-}
-
 interface AdminMenuProps {
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
 	menus?: Array<SubMenuInfo>;
 }
-
-const Drawer = styled(MuiDrawer, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})<DrawerProps>(({ theme, open, width }) => ({
-	'& .MuiDrawer-paper': {
-		paddingLeft: 5,
-		paddingRight: 5,
-		position: 'relative',
-		whiteSpace: 'nowrap',
-		width: width,
-		transition: theme.transitions.create('width', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-		boxSizing: 'border-box',
-		...(!open && {
-			paddingLeft: 0,
-			paddingRight: 0,
-			overflowX: 'hidden',
-			transition: theme.transitions.create('width', {
-				easing: theme.transitions.easing.sharp,
-				duration: theme.transitions.duration.leavingScreen,
-			}),
-			width: theme.spacing(9),
-			[theme.breakpoints.up('sm')]: {
-				width: theme.spacing(9),
-			},
-		}),
-	},
-}));
 
 interface StyledTreeItemProps extends TreeItemProps {
 	bgColor?: string;
@@ -176,27 +136,7 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	);
 };
 
-interface SlideItemProps {
-	branch: boolean;
-	children?: ReactElement;
-}
-
-const SlideItem: FC<SlideItemProps> = ({ branch, children }): JSX.Element => {
-	return (
-		<Slide
-			direction="right"
-			in={branch}
-			appear={branch}
-			timeout={branch ? 200 : 0}
-			mountOnEnter
-			unmountOnExit
-		>
-			<Box>{children}</Box>
-		</Slide>
-	);
-};
-
-const AdminMenu: FC<AdminMenuProps> = ({
+const AdminMenuMobile: FC<AdminMenuProps> = ({
 	open,
 	setOpen,
 	width,
@@ -246,12 +186,22 @@ const AdminMenu: FC<AdminMenuProps> = ({
 		navigate('/admin' + path);
 	};
 	return (
-		<Drawer variant="permanent" open={open} width={width}>
+		<Drawer
+			variant="temporary"
+			open={open}
+			onClose={toggleDrawer}
+			ModalProps={{
+				keepMounted: true, // Better open performance on mobile.
+			}}
+			sx={{
+				'& .MuiDrawer-paper': { boxSizing: 'border-box', width: width },
+			}}
+		>
 			<Toolbar
 				sx={{
 					position: 'fixed',
 					alignItems: 'center',
-					transform: `translateX(${open ? width - 24 : 35}px)`,
+					transform: `translateX(${width - 22}px)`,
 					transition: 'transform .2s ease-in-out',
 				}}
 			>
@@ -266,28 +216,21 @@ const AdminMenu: FC<AdminMenuProps> = ({
 					}}
 					onClick={toggleDrawer}
 				>
-					{open ? (
-						<ChevronLeftIcon color="action" />
-					) : (
-						<ChevronRightIcon color="action" />
-					)}
+					<ChevronLeftIcon color="disabled" />
 				</IconButton>
 			</Toolbar>
 			<Box sx={{ mt: 2, mb: 1 }}>
-				<SlideItem branch={!open}>
-					<ManageAccountsIcon />
-				</SlideItem>
-				<SlideItem branch={open}>
+				<Box>
 					<Typography variant="h6" align="center" sx={{ fontWeight: 'bold' }}>
 						관리 메뉴
 					</Typography>
-				</SlideItem>
+				</Box>
 			</Box>
 			<Divider
 				variant="middle"
 				sx={{ mb: 2, height: '2px', borderColor: 'primary.main' }}
 			/>
-			<Box sx={{ display: open ? 'none' : 'block' }}>
+			<Box sx={{ display: 'none' }}>
 				{menus &&
 					menus.map((menu: SubMenuInfo) => {
 						const IconComponent = AdminIcon[menu.index - 1];
@@ -310,7 +253,7 @@ const AdminMenu: FC<AdminMenuProps> = ({
 						);
 					})}
 			</Box>
-			<Box sx={{ display: open ? 'block' : 'none' }}>
+			<Box sx={{ display: 'block' }}>
 				<TreeView
 					aria-label="menu"
 					defaultExpanded={['1']}
@@ -369,4 +312,4 @@ const mapStateToProps = (state: any) => ({
 	menus: (state.menu as MenuState).menus,
 });
 
-export default connect(mapStateToProps, null)(AdminMenu);
+export default connect(mapStateToProps, null)(AdminMenuMobile);

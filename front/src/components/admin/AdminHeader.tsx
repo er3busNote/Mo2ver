@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Box,
@@ -11,12 +11,29 @@ import {
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ReactComponent as MainIcon } from '../../logo.svg';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const headerFontSize = '12px';
 
-const AdminHeader: FC = (): JSX.Element => {
+interface AdminHeaderProps {
+	isMobile: boolean;
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const AdminHeader: FC<AdminHeaderProps> = ({
+	isMobile,
+	open,
+	setOpen,
+}): JSX.Element => {
+	const justifyContent = isMobile ? 'space-between' : 'flex-end';
+
 	const logoutClick = () => {
 		console.log('logout');
+	};
+
+	const toggleDrawer = () => {
+		setOpen(!open);
 	};
 
 	return (
@@ -30,11 +47,16 @@ const AdminHeader: FC = (): JSX.Element => {
 				<Box
 					sx={{
 						pt: '4px',
-						width: '95%',
+						width: '100%',
 						display: 'inline-flex',
-						justifyContent: 'flex-end',
+						justifyContent: justifyContent,
 					}}
 				>
+					{isMobile && (
+						<IconButton sx={{ p: 0, ml: 3 }} onClick={toggleDrawer}>
+							<MenuIcon color="disabled" />
+						</IconButton>
+					)}
 					<Grid container spacing={1} sx={{ width: 400 }}>
 						<Grid item sx={{ display: 'flex', alignItems: 'center' }}>
 							<AccountCircleIcon color="secondary" />

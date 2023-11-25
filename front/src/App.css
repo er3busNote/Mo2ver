@@ -12,7 +12,7 @@
 }
 
 /* 검색 Style */
-.MuiCollapse-wrapperInner {
+#search.MuiCollapse-wrapperInner {
   width: 400px !important; /* 검색바 최대 크기 조정 */
 }
 
@@ -41,9 +41,23 @@
   position: absolute;
 }
 
+#main-menu .MuiMenuItem-root .MuiCollapse-wrapperInner {
+  width: 100%;
+}
+
 #main-menu .MuiMenuItem-root:hover {
   color: #000 !important;
   background-color: #fff !important; /* 카테고리 Hover 배경색 조정 */
+}
+
+#main-menu .MuiCollapse-root {
+  color: #000;
+  background-color: #fff;
+}
+
+#main-menu .MuiCollapse-root .MuiMenuItem-root:hover {
+  color: #fff !important;;
+  background-color: #333333 !important;;
 }
 
 #sub-menu .MuiMenuItem-root:nth-child(n+2) .MuiListItemText-root span {

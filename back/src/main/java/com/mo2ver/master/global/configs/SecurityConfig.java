@@ -1,6 +1,6 @@
 package com.mo2ver.master.global.configs;
 
-import com.mo2ver.master.domain.auth.application.AuthService;
+import com.mo2ver.master.domain.auth.service.AuthService;
 import com.mo2ver.master.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.master.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.master.global.jwt.JwtSecurityConfig;

@@ -1,4 +1,4 @@
-package com.mo2ver.master.domain.auth.presentation;
+package com.mo2ver.master.domain.auth.api;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

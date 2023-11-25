@@ -34,7 +34,7 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 	return (
 		<Card
 			sx={{
-				height: '450px',
+				height: { xs: '250px', sm: '300px' },
 				display: 'flex',
 				justifyContent: 'center',
 			}}
@@ -44,7 +44,7 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 	);
 };
 
-const Banner: FC = (): JSX.Element => {
+const BannerMobile: FC = (): JSX.Element => {
 	const [index, setIndex] = useState(0);
 	const content = SLIDE_INFO[index];
 	const numSlides = SLIDE_INFO.length;
@@ -101,4 +101,4 @@ const Banner: FC = (): JSX.Element => {
 	);
 };
 
-export default Banner;
+export default BannerMobile;

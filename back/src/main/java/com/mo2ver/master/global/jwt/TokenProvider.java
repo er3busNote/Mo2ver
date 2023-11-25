@@ -1,6 +1,6 @@
 package com.mo2ver.master.global.jwt;
 
-import com.mo2ver.master.domain.auth.application.AuthService;
+import com.mo2ver.master.domain.auth.service.AuthService;
 import com.mo2ver.master.global.common.properties.JwtProperties;
 import com.mo2ver.master.global.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
@@ -86,7 +86,7 @@ public class TokenProvider implements InitializingBean {
                 .collect(Collectors.joining(","));
 
         Claims claims = Jwts.claims();
-        claims.put("vendor", "f1security");
+        claims.put("vendor", "mo2ver");
         claims.put("username", authentication.getName());
         claims.put(tokenType, tokenType);
         claims.put(AUTHORITIES_KEY, authorities);  // USER, MANAGER, ADMIN

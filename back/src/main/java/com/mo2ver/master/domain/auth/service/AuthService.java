@@ -1,4 +1,4 @@
-package com.mo2ver.master.domain.auth.application;
+package com.mo2ver.master.domain.auth.service;
 
 import com.mo2ver.master.domain.auth.dao.AuthRepository;
 import com.mo2ver.master.domain.auth.domain.Auth;

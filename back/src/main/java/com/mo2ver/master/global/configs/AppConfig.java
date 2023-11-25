@@ -1,6 +1,6 @@
 package com.mo2ver.master.global.configs;
 
-import com.mo2ver.master.domain.auth.application.AuthService;
+import com.mo2ver.master.domain.auth.service.AuthService;
 import com.mo2ver.master.domain.auth.domain.Auth;
 import com.mo2ver.master.domain.auth.domain.AuthRole;
 import com.mo2ver.master.global.common.properties.AppProperties;

@@ -1,4 +1,4 @@
-package com.mo2ver.master.global.error.presentation;
+package com.mo2ver.master.global.error.api;
 
 import lombok.Builder;
 import lombok.Getter;

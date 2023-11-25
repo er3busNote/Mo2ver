@@ -40,7 +40,7 @@ const CarouselFade: FC<CarouselFadeProps> = ({ url }): JSX.Element => {
 	);
 };
 
-const Popular: FC = (): JSX.Element => {
+const PopularPC: FC = (): JSX.Element => {
 	const [index, setIndex] = useState(0);
 	const content = SLIDE_INFO[index];
 	const numSlides = SLIDE_INFO.length;
@@ -374,4 +374,4 @@ const Popular: FC = (): JSX.Element => {
 	);
 };
 
-export default Popular;
+export default PopularPC;

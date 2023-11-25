@@ -1,7 +1,7 @@
-package com.mo2ver.master.global.error.application;
+package com.mo2ver.master.global.error.service;
 
 import com.mo2ver.master.global.error.domain.ErrorCode;
-import com.mo2ver.master.global.error.presentation.ErrorResponse;
+import com.mo2ver.master.global.error.api.ErrorResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

@@ -93,6 +93,7 @@ const AppDetail: FC = (): JSX.Element => {
 				</IconButton>
 			</ClickAwayListener>
 			<Popper
+				sx={{ zIndex: 1 }}
 				id={'main-menu'}
 				open={open}
 				anchorEl={anchorEl}
@@ -270,7 +271,7 @@ const AppDetail: FC = (): JSX.Element => {
 	);
 };
 
-const AppMenu: FC = (): JSX.Element => {
+const AppMenuPC: FC = (): JSX.Element => {
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box
@@ -331,4 +332,4 @@ const AppMenu: FC = (): JSX.Element => {
 	);
 };
 
-export default AppMenu;
+export default AppMenuPC;

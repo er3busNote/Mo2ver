@@ -141,7 +141,7 @@ const AppSearchItems: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearch: FC = (): JSX.Element => {
+const AppSearchMobile: FC = (): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
@@ -202,15 +202,9 @@ const AppSearch: FC = (): JSX.Element => {
 	};
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
-			<Box
-				sx={{
-					width: '950px',
-					display: 'inline-flex',
-					justifyContent: 'space-between',
-				}}
-			>
+			<Box>
 				<Grid container spacing={10}>
-					<Grid item>
+					<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
 						<IconButton component={Link} to="/" sx={{ p: 0 }}>
 							<SvgIcon
 								component={MainIcon}
@@ -220,13 +214,16 @@ const AppSearch: FC = (): JSX.Element => {
 							/>
 						</IconButton>
 					</Grid>
-					<Grid item>
-						<Collapse
-							sx={{ pt: 6.5 }}
-							orientation="horizontal"
-							in={focus}
-							collapsedSize={320}
-						>
+					<Grid
+						item
+						sx={{
+							pb: 3,
+							display: 'grid',
+							justifyContent: 'center',
+							width: '100%',
+						}}
+					>
+						<Collapse orientation="horizontal" in={focus} collapsedSize={320}>
 							<ClickAwayListener onClickAway={cancelClick}>
 								<Box>
 									<Paper
@@ -349,4 +346,4 @@ const AppSearch: FC = (): JSX.Element => {
 	);
 };
 
-export default AppSearch;
+export default AppSearchMobile;
