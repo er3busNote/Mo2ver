@@ -19,8 +19,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-const menuFontSize = '15px';
-
 const menuDatas = [
 	{ id: 1, category: '상의/아우터/원피스' },
 	{ id: 2, category: '바지/스커트' },
@@ -50,12 +48,12 @@ const searchDatas = [
 
 const MenuDivider: FC = (): JSX.Element => {
 	return (
-		<Box sx={{ lineHeight: '40px' }}>
+		<Box sx={{ lineHeight: { xs: '34px', sm: '40px' } }}>
 			<Divider
 				orientation="vertical"
 				variant="middle"
 				sx={{
-					mt: '22px',
+					mt: { xs: '18px', sm: '22px' },
 					mb: 0,
 					height: '0.8rem',
 					display: 'inline-flex',
@@ -81,10 +79,13 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 	};
 	return (
 		<>
-			<MenuItem onClick={(event) => handleClick(event)}>
+			<MenuItem
+				sx={{ px: { xs: 3, sm: 4 }, py: { xs: 0, sm: 2 } }}
+				onClick={(event) => handleClick(event)}
+			>
 				<ListItemText
 					primaryTypographyProps={{
-						style: { fontSize: 13, fontWeight: 'bold' },
+						style: { fontSize: 12, fontWeight: 'bold' },
 					}}
 					primary={category}
 				/>
@@ -97,7 +98,7 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 							<MenuItem key={data.id} dense sx={{ px: 4, py: 2 }}>
 								<ListItemText
 									primaryTypographyProps={{
-										style: { fontSize: 13, fontWeight: 'bold' },
+										style: { fontSize: 12, fontWeight: 'bold' },
 									}}
 									primary={data.keyword}
 								/>
@@ -124,17 +125,35 @@ const AppDetail: FC = (): JSX.Element => {
 		setOpen(false);
 	};
 	return (
-		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
+		<Box
+			sx={{
+				px: { xs: '28px', sm: '40px' },
+				pt: { xs: '8px', sm: '12px' },
+				pb: { xs: '4px', sm: '8px' },
+				bgcolor: '#EBEBEB',
+			}}
+		>
 			<ClickAwayListener onClickAway={closeAnchorEl}>
 				<IconButton
 					onClick={showClick}
-					sx={{ p: 0, mt: -1, color: 'secondary.main' }}
+					sx={{ p: 0, mt: -1, ml: { xs: -1, sm: 0 }, color: 'secondary.main' }}
 				>
 					<MenuIcon />
+					<Typography
+						color="#000"
+						align="center"
+						sx={{
+							pl: { xs: '6px', sm: '10px' },
+							fontSize: { xs: '13px', sm: '14px' },
+							fontWeight: 'bold',
+						}}
+					>
+						전체
+					</Typography>
 				</IconButton>
 			</ClickAwayListener>
 			<Popper
-				sx={{ zIndex: 1 }}
+				sx={{ zIndex: 1, position: 'fixed !important' }}
 				id={'main-menu'}
 				open={open}
 				anchorEl={anchorEl}
@@ -142,7 +161,7 @@ const AppDetail: FC = (): JSX.Element => {
 			>
 				<Box
 					sx={{
-						mt: '1px',
+						mt: { xs: '-1px', sm: '1px' },
 						width: '1050px',
 						display: 'inline-flex',
 						justifyContent: 'flex-start',
@@ -158,7 +177,7 @@ const AppDetail: FC = (): JSX.Element => {
 						}}
 						component="nav"
 					>
-						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+						<MenuList sx={{ px: { xs: 3, sm: 0 }, py: 0.2 }}>
 							{menuDatas.map((data: any) => (
 								<AppMenu key={data.id} category={data.category} />
 							))}
@@ -173,24 +192,26 @@ const AppDetail: FC = (): JSX.Element => {
 const AppMenuMobile: FC = (): JSX.Element => {
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
-			<Box
-				sx={{
-					width: '950px',
-					display: 'inline-flex',
-					justifyContent: 'flex-start',
-				}}
-			>
+			<Box>
 				<Grid container spacing={1}>
 					<Grid item>
 						<AppDetail />
 					</Grid>
 					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
+						<Box
+							sx={{
+								px: { xs: '12px', sm: '20px' },
+								py: { xs: '6px', sm: '10px' },
+							}}
+						>
 							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
+									sx={{
+										fontSize: { xs: '13px', sm: '14px' },
+										fontWeight: 'bold',
+									}}
 								>
 									이벤트/기획전
 								</Typography>
@@ -199,12 +220,20 @@ const AppMenuMobile: FC = (): JSX.Element => {
 					</Grid>
 					<MenuDivider />
 					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
+						<Box
+							sx={{
+								px: { xs: '12px', sm: '20px' },
+								py: { xs: '6px', sm: '10px' },
+							}}
+						>
 							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
+									sx={{
+										fontSize: { xs: '13px', sm: '14px' },
+										fontWeight: 'bold',
+									}}
 								>
 									견적문의
 								</Typography>
@@ -213,12 +242,20 @@ const AppMenuMobile: FC = (): JSX.Element => {
 					</Grid>
 					<MenuDivider />
 					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
+						<Box
+							sx={{
+								px: { xs: '12px', sm: '20px' },
+								py: { xs: '6px', sm: '10px' },
+							}}
+						>
 							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
+									sx={{
+										fontSize: { xs: '13px', sm: '14px' },
+										fontWeight: 'bold',
+									}}
 								>
 									쿠폰존
 								</Typography>

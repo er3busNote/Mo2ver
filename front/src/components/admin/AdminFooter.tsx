@@ -8,7 +8,6 @@ const AdminFooter: FC = (): JSX.Element => {
 			sx={{
 				bottom: 0,
 				width: '100%',
-				zIndex: 1200,
 				position: 'fixed',
 				bgcolor: '#F3F3F3',
 			}}

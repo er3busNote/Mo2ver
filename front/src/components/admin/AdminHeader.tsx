@@ -53,7 +53,10 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 					}}
 				>
 					{isMobile && (
-						<IconButton sx={{ p: 0, ml: 3 }} onClick={toggleDrawer}>
+						<IconButton
+							sx={{ p: 0, pr: { xs: 1, sm: 0 }, ml: { xs: 1, sm: 3 } }}
+							onClick={toggleDrawer}
+						>
 							<MenuIcon color="disabled" />
 						</IconButton>
 					)}

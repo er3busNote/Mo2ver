@@ -225,7 +225,7 @@ const AppSearchPC: FC = (): JSX.Element => {
 							sx={{ pt: 6.5 }}
 							orientation="horizontal"
 							in={focus}
-							collapsedSize={320}
+							collapsedSize={420}
 						>
 							<ClickAwayListener onClickAway={cancelClick}>
 								<Box>
@@ -240,6 +240,7 @@ const AppSearchPC: FC = (): JSX.Element => {
 											borderRadius: 5,
 											bgcolor: '#F1F1F1',
 											height: '40px',
+											width: '420px',
 										}}
 									>
 										<InputBase
@@ -265,7 +266,7 @@ const AppSearchPC: FC = (): JSX.Element => {
 									>
 										<Paper
 											elevation={0}
-											sx={{ mt: -1, ml: 6, border: '#ddd 1px solid' }}
+											sx={{ mt: -1, ml: 8, border: '#ddd 1px solid' }}
 										>
 											<AppSearchItems />
 										</Paper>

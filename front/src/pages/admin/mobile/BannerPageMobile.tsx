@@ -79,7 +79,7 @@ const BannerPageMobile: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
 	};
 
 	const thHeader: SxProps<Theme> = {
-		px: 2,
+		px: { xs: 1, sm: 2 },
 		py: 1,
 		width: '12%',
 		bgcolor: '#EEEEEE',

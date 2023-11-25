@@ -26,12 +26,18 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 	};
 	return (
 		<Box
-			sx={{ px: 10, py: 2, display: 'flex', justifyContent: 'space-between' }}
+			sx={{
+				px: { xs: 4, sm: 10 },
+				pt: 2,
+				pb: 1,
+				display: 'flex',
+				justifyContent: 'space-between',
+			}}
 		>
 			<Box sx={{ pt: 2 }}>
 				<Title>{title}</Title>
 			</Box>
-			<Breadcrumbs separator="›" aria-label="breadcrumb">
+			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
 					component={Link}
 					to="/admin"

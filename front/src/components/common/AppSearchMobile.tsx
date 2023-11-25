@@ -74,7 +74,10 @@ const AppSearchItems: FC = (): JSX.Element => {
 					sx={{ '&.Mui-selected': { backgroundColor: '#fff' } }}
 				>
 					<ListItemText
-						secondaryTypographyProps={{ px: 3, fontSize: '14px' }}
+						secondaryTypographyProps={{
+							px: 3,
+							fontSize: { xs: '11px', sm: '13px' },
+						}}
 						secondary={'최근검색어'}
 					/>
 				</ListItemButton>
@@ -84,7 +87,10 @@ const AppSearchItems: FC = (): JSX.Element => {
 					sx={{ '&.Mui-selected': { backgroundColor: '#fff' } }}
 				>
 					<ListItemText
-						secondaryTypographyProps={{ px: 3, fontSize: '14px' }}
+						secondaryTypographyProps={{
+							px: 3,
+							fontSize: { xs: '11px', sm: '13px' },
+						}}
 						secondary={'인기검색어'}
 					/>
 				</ListItemButton>
@@ -103,7 +109,7 @@ const AppSearchItems: FC = (): JSX.Element => {
 							>
 								<ListItemText
 									primaryTypographyProps={{
-										style: { fontSize: 13 },
+										style: { fontSize: 12 },
 									}}
 									primary={data.id + '. ' + data.keyword}
 								/>
@@ -122,7 +128,7 @@ const AppSearchItems: FC = (): JSX.Element => {
 					<Typography
 						color="#000"
 						align="center"
-						sx={{ p: 1, fontSize: '14px' }}
+						sx={{ p: 1, fontSize: { xs: '12px', sm: '13px' } }}
 					>
 						최근검색어 전체 삭제
 					</Typography>
@@ -131,7 +137,7 @@ const AppSearchItems: FC = (): JSX.Element => {
 					<Typography
 						color="#000"
 						align="center"
-						sx={{ p: 1, fontSize: '14px' }}
+						sx={{ p: 1, fontSize: { xs: '12px', sm: '13px' } }}
 					>
 						닫기
 					</Typography>
@@ -195,15 +201,15 @@ const AppSearchMobile: FC = (): JSX.Element => {
 		pt: 0.5,
 		flex: 1,
 		fontSize: '0.8rem',
-		height: '2rem',
+		height: { xs: '1.5rem', sm: '2rem' },
 		'& input::placeholder': {
-			fontSize: '15px',
+			fontSize: { xs: '13px', sm: '14px' },
 		},
 	};
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box>
-				<Grid container spacing={10}>
+				<Grid container>
 					<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
 						<IconButton component={Link} to="/" sx={{ p: 0 }}>
 							<SvgIcon
@@ -223,56 +229,65 @@ const AppSearchMobile: FC = (): JSX.Element => {
 							width: '100%',
 						}}
 					>
-						<Collapse orientation="horizontal" in={focus} collapsedSize={320}>
-							<ClickAwayListener onClickAway={cancelClick}>
-								<Box>
-									<Paper
-										component="form"
-										elevation={0}
-										sx={{
-											mr: 2,
-											px: '10px',
-											display: 'flex',
-											alignItems: 'center',
-											borderRadius: 5,
-											bgcolor: '#F1F1F1',
-											height: '40px',
-										}}
-									>
-										<InputBase
-											sx={inputBase}
-											placeholder="오늘 뭐 괜찮은 옷 있을까?"
-											value={keyword}
-											onChange={searchOnChange}
-											onKeyPress={searchOnKeyPress}
-										/>
-										{focus ? (
-											<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-												<ClearIcon sx={icon} />
-											</IconButton>
-										) : (
-											<SearchIcon sx={icon} />
-										)}
-									</Paper>
-									<Popper
-										id={'search'}
-										open={open}
-										anchorEl={anchorEl}
-										placement="bottom-start"
-									>
-										<Paper
-											elevation={0}
-											sx={{ mt: -1, ml: 6, border: '#ddd 1px solid' }}
-										>
-											<AppSearchItems />
-										</Paper>
-									</Popper>
-								</Box>
-							</ClickAwayListener>
-						</Collapse>
 						<Box
 							sx={{
-								ml: '-20px',
+								width: '420px',
+								height: '55px',
+								display: 'inline-flex',
+								justifyContent: 'flex-end',
+							}}
+						>
+							<Collapse orientation="horizontal" in={focus} collapsedSize={320}>
+								<ClickAwayListener onClickAway={cancelClick}>
+									<Box>
+										<Paper
+											component="form"
+											elevation={0}
+											sx={{
+												mr: 2,
+												px: '10px',
+												display: 'flex',
+												alignItems: 'center',
+												borderRadius: 5,
+												bgcolor: '#F1F1F1',
+												height: { xs: '35px', sm: '40px' },
+											}}
+										>
+											<InputBase
+												sx={inputBase}
+												placeholder="오늘 뭐 괜찮은 옷 있을까?"
+												value={keyword}
+												onChange={searchOnChange}
+												onKeyPress={searchOnKeyPress}
+											/>
+											{focus ? (
+												<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
+													<ClearIcon sx={icon} />
+												</IconButton>
+											) : (
+												<SearchIcon sx={icon} />
+											)}
+										</Paper>
+										<Popper
+											id={'search'}
+											open={open}
+											anchorEl={anchorEl}
+											placement="bottom-start"
+										>
+											<Paper
+												elevation={0}
+												sx={{ mt: -1, ml: -5.5, border: '#ddd 1px solid' }}
+											>
+												<AppSearchItems />
+											</Paper>
+										</Popper>
+									</Box>
+								</ClickAwayListener>
+							</Collapse>
+						</Box>
+						<Box
+							sx={{
+								ml: '-10px',
 								width: '420px',
 								display: 'inline-flex',
 								justifyContent: 'flex-end',

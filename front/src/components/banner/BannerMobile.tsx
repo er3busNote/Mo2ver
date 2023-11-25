@@ -34,7 +34,7 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 	return (
 		<Card
 			sx={{
-				height: { xs: '250px', sm: '300px' },
+				height: { xs: '230px', sm: '300px' },
 				display: 'flex',
 				justifyContent: 'center',
 			}}

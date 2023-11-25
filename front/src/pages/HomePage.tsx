@@ -47,7 +47,7 @@ const HomeMobile: FC = (): JSX.Element => {
 					<Box
 						sx={{
 							p: 2,
-							width: '930px',
+							width: '100%',
 							display: 'inline-flex',
 							flexDirection: 'column',
 							justifyContent: 'flex-start',
@@ -64,7 +64,7 @@ const HomeMobile: FC = (): JSX.Element => {
 
 const HomePage: FC = (): JSX.Element => {
 	return (
-		<Paper sx={{ height: 1000 }} component="div" square variant="outlined">
+		<Paper sx={{ height: '100%' }} component="div" square variant="outlined">
 			<HomePC />
 			<HomeMobile />
 		</Paper>

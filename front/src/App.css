@@ -1,4 +1,7 @@
 .App {
+  position: fixed;
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
@@ -12,13 +15,13 @@
 }
 
 /* 검색 Style */
-#search.MuiCollapse-wrapperInner {
-  width: 400px !important; /* 검색바 최대 크기 조정 */
+#search .MuiCollapse-wrapperInner {
+  width: 400px; /* 검색바 최대 크기 조정 */
 }
 
-#search.MuiPopperUnstyled-root {
-  margin-top: 10px !important;
-  margin-left: -10px !important;
+#search .MuiPopperUnstyled-root {
+  margin-top: 10px;
+  margin-left: -10px;
 }
 
 #search .MuiListItemButton-root:hover {

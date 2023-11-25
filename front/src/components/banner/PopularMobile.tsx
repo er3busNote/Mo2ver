@@ -39,14 +39,14 @@ const PopularMobile: FC = (): JSX.Element => {
 		<React.Fragment>
 			<Typography
 				variant="subtitle2"
-				sx={{ textAlign: 'left', fontSize: '1.2rem' }}
+				sx={{ textAlign: 'left', fontSize: { xs: '1.0rem', sm: '1.2rem' } }}
 			>
 				Real-Time Ranking!
 			</Typography>
 			<Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
 				<Typography
 					variant="subtitle2"
-					sx={{ fontSize: '1.3rem', fontWeight: 'bold' }}
+					sx={{ fontSize: { xs: '1.1rem', sm: '1.3rem' }, fontWeight: 'bold' }}
 				>
 					카테고리별
 				</Typography>
@@ -54,7 +54,7 @@ const PopularMobile: FC = (): JSX.Element => {
 					variant="subtitle2"
 					sx={{
 						pl: 2,
-						fontSize: '1.3rem',
+						fontSize: { xs: '1.1rem', sm: '1.3rem' },
 						fontWeight: 'bold',
 						color: '#4583FF',
 					}}
@@ -71,13 +71,14 @@ const PopularMobile: FC = (): JSX.Element => {
 					height: '100%',
 				}}
 			>
-				<Box sx={{ width: { xs: '18%', sm: '20%' } }}>
+				<Box sx={{ width: { xs: '30%', sm: '20%' } }}>
 					<Box>
 						<Typography
 							variant="subtitle2"
 							sx={{
-								pt: 6,
-								fontSize: '1.3rem',
+								pl: { xs: 0, sm: 2 },
+								pt: { xs: 4, sm: 6 },
+								fontSize: { xs: '1.1rem', sm: '1.3rem' },
 								fontWeight: 'bold',
 								color: '#1992DF',
 							}}
@@ -85,13 +86,20 @@ const PopularMobile: FC = (): JSX.Element => {
 							남성패션
 						</Typography>
 					</Box>
-					<Box sx={{ pt: 6, px: { xs: 6, sm: 7 }, display: 'grid' }}>
+					<Box
+						sx={{
+							pt: { xs: 3, sm: 6 },
+							px: { xs: 2.5, sm: 7 },
+							display: 'grid',
+						}}
+					>
 						<Grid container spacing={1}>
 							<Grid item>
 								<Typography
 									variant="subtitle2"
 									sx={{
-										fontSize: '1.0rem',
+										pl: { xs: 1, sm: 0 },
+										fontSize: { xs: '0.8rem', sm: '1.0rem' },
 										fontWeight: 'bold',
 									}}
 								>
@@ -191,7 +199,7 @@ const PopularMobile: FC = (): JSX.Element => {
 						</Grid>
 					</Box>
 				</Box>
-				<Box sx={{ width: { xs: '35%', sm: '50%' } }}>
+				<Box sx={{ width: { xs: '70%', sm: '80%' } }}>
 					<Box sx={{ borderBottom: '1px solid #ddd' }}>
 						<Grid container spacing={1} justifyContent="center" sx={{ pt: 2 }}>
 							<Grid item>
@@ -201,7 +209,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"
@@ -224,7 +235,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"
@@ -247,7 +261,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"
@@ -274,7 +291,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"
@@ -297,7 +317,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"
@@ -320,7 +343,10 @@ const PopularMobile: FC = (): JSX.Element => {
 									to="/auth/signup"
 								>
 									<CardMedia
-										sx={{ width: '120px', height: '100px' }}
+										sx={{
+											width: { xs: '100px', sm: '120px' },
+											height: { xs: '80px', sm: '100px' },
+										}}
 										component="img"
 										image={content}
 										alt="Image"

@@ -51,9 +51,9 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 	};
 
 	const thHeader: SxProps<Theme> = {
-		px: 5,
+		px: { xs: 2, sm: 5 },
 		py: 1.5,
-		width: 180,
+		width: { xs: 100, sm: 180 },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
