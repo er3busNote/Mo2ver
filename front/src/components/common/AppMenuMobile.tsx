@@ -1,4 +1,4 @@
-import React, { FC, useState, MouseEvent } from 'react';
+import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Box,
@@ -37,13 +37,6 @@ const searchDatas = [
 	{ id: 1, keyword: '삼성전자' },
 	{ id: 2, keyword: '모니터' },
 	{ id: 3, keyword: '3060' },
-	{ id: 4, keyword: 'b660m' },
-	{ id: 5, keyword: '노트북' },
-	{ id: 6, keyword: '애플' },
-	{ id: 7, keyword: 'b550' },
-	{ id: 8, keyword: 'cpu' },
-	{ id: 9, keyword: 'ddr5-4800' },
-	{ id: 10, keyword: 'h610m' },
 ];
 
 const MenuDivider: FC = (): JSX.Element => {
@@ -76,12 +69,26 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 	) => {
 		setOpen(!open);
 		event.stopPropagation(); // 새로고침 방지
+		//event.nativeEvent.stopPropagation();
+		//event.nativeEvent.stopImmediatePropagation();
+	};
+
+	const handleTouchStart = (event: TouchEvent<HTMLLIElement>) => {
+		setOpen(!open);
+		event.stopPropagation(); // 새로고침 방지
+	};
+
+	const handleTouchEnd = (event: TouchEvent<HTMLLIElement>) => {
+		event.nativeEvent.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 	};
 	return (
 		<>
 			<MenuItem
 				sx={{ px: { xs: 3, sm: 4 }, py: { xs: 0, sm: 2 } }}
 				onClick={(event) => handleClick(event)}
+				onTouchStart={(event) => handleTouchStart(event)}
+				onTouchEnd={(event) => handleTouchEnd(event)}
 			>
 				<ListItemText
 					primaryTypographyProps={{
@@ -153,7 +160,7 @@ const AppDetail: FC = (): JSX.Element => {
 				</IconButton>
 			</ClickAwayListener>
 			<Popper
-				sx={{ zIndex: 1, position: 'fixed !important' }}
+				sx={{ zIndex: 1 }}
 				id={'main-menu'}
 				open={open}
 				anchorEl={anchorEl}
@@ -162,7 +169,7 @@ const AppDetail: FC = (): JSX.Element => {
 				<Box
 					sx={{
 						mt: { xs: '-1px', sm: '1px' },
-						width: '1050px',
+						width: '250px',
 						display: 'inline-flex',
 						justifyContent: 'flex-start',
 					}}
@@ -177,7 +184,7 @@ const AppDetail: FC = (): JSX.Element => {
 						}}
 						component="nav"
 					>
-						<MenuList sx={{ px: { xs: 3, sm: 0 }, py: 0.2 }}>
+						<MenuList sx={{ pl: { xs: 3, sm: 0 }, py: 0.2 }}>
 							{menuDatas.map((data: any) => (
 								<AppMenu key={data.id} category={data.category} />
 							))}
