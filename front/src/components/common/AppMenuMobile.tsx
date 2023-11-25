@@ -73,9 +73,12 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 		//event.nativeEvent.stopImmediatePropagation();
 	};
 
-	const handleTouchStart = (event: TouchEvent<HTMLLIElement>) => {
-		setOpen(!open);
-		event.stopPropagation(); // 새로고침 방지
+	const handleTouchStart = (
+		touch: boolean,
+		event: TouchEvent<HTMLLIElement>
+	) => {
+		event.preventDefault(); // 터치 이벤트의 기본 동작 막기
+		setOpen(touch);
 	};
 
 	const handleTouchEnd = (event: TouchEvent<HTMLLIElement>) => {
@@ -87,7 +90,7 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 			<MenuItem
 				sx={{ px: { xs: 3, sm: 4 }, py: { xs: 0, sm: 2 } }}
 				onClick={(event) => handleClick(event)}
-				onTouchStart={(event) => handleTouchStart(event)}
+				onTouchStart={(event) => handleTouchStart(open, event)}
 				onTouchEnd={(event) => handleTouchEnd(event)}
 			>
 				<ListItemText
