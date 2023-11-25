@@ -287,7 +287,7 @@ const AppSearchMobile: FC = (): JSX.Element => {
 						</Box>
 						<Box
 							sx={{
-								ml: '-10px',
+								ml: '-5px',
 								width: '420px',
 								display: 'inline-flex',
 								justifyContent: 'flex-end',
