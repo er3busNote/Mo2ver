@@ -1,8 +1,8 @@
 package com.mo2ver.master.global.configs;
 
-import com.mo2ver.master.domain.auth.service.AuthService;
-import com.mo2ver.master.domain.auth.domain.Auth;
-import com.mo2ver.master.domain.auth.domain.AuthRole;
+import com.mo2ver.master.domain.member.service.MemberService;
+import com.mo2ver.master.domain.member.domain.Member;
+import com.mo2ver.master.domain.member.domain.MemberRole;
 import com.mo2ver.master.global.common.properties.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,32 +39,40 @@ public class AppConfig {
         return new ApplicationRunner() {
 
             @Autowired
-            AuthService authService;
+            MemberService memberService;
 
             @Autowired
             AppProperties appProperties;
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Auth admin = Auth.builder()
-                        .username(appProperties.getAdminUsername())
+                Member admin = Member.builder()
+                        .memberNo("M000000001")
+                        .loginId(appProperties.getAdminLoginId())
+                        .memberName("ER3BUS")
                         .password(appProperties.getAdminPassword())
+                        .cellPhoneNumber("010XXXXXXXX")
                         .email(appProperties.getAdminEmail())
-                        .address(appProperties.getLocalAddress())
-                        .roles(Stream.of(AuthRole.ADMIN, AuthRole.MANAGER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))    // 참고 : https://blog.kingbbode.com/41
+                        .roles(Stream.of(MemberRole.ADMIN, MemberRole.MANAGER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
+                        .register("SYSTEM")
                         //.createdAt(LocalDateTime.now())
+                        .updater("SYSTEM")
                         .build();
-                authService.saveAuth(admin);
+                memberService.saveAuth(admin);
 
-                Auth user = Auth.builder()
-                        .username(appProperties.getUserUsername())
+                Member user = Member.builder()
+                        .memberNo("M000000002")
+                        .loginId(appProperties.getUserLoginId())
+                        .memberName("ER3BUS")
                         .password(appProperties.getUserPassword())
+                        .cellPhoneNumber("010XXXXXXXX")
                         .email(appProperties.getUserEmail())
-                        .address(appProperties.getLocalAddress())
-                        .roles(Stream.of(AuthRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))    // 참고 : https://blog.kingbbode.com/41
+                        .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
+                        .register("SYSTEM")
                         //.createdAt(LocalDateTime.now())
+                        .updater("SYSTEM")
                         .build();
-                authService.saveAuth(user);
+                memberService.saveAuth(user);
             }
         };
     }

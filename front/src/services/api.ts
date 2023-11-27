@@ -21,11 +21,11 @@ const createInstance = () => {
 };
 const instance = createInstance();
 
-const auth = {
-	// 로그인 API : <baseURL>/auth/login
+const member = {
+	// 로그인 API : <baseURL>/member/login
 	login: (userData: LoginData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 		instance
-			.post('auth/login', userData, {
+			.post('member/login', userData, {
 				headers: {
 					'CSRF-Token': csrfData.csrfToken,
 				},
@@ -63,10 +63,10 @@ const auth = {
 		dispatch(logoutSuccess());
 		window.location.replace('/');
 	},
-	// 회원가입 API : <baseURL>/auth/signup
+	// 회원가입 API : <baseURL>/member/signup
 	register: (userData: SignUpData, csrfData: CSRFData) => () =>
 		instance
-			.post('auth/signup', userData, {
+			.post('member/signup', userData, {
 				headers: {
 					'CSRF-Token': csrfData.csrfToken,
 				},
@@ -87,10 +87,10 @@ const auth = {
 					toastMessage(data, 'error');
 				}
 			}),
-	// Access 토큰 재생성 API : <baseURL>/auth/refresh
+	// Access 토큰 재생성 API : <baseURL>/member/refresh
 	refresh: (tokenData: TokenData) => (dispatch: Dispatch) =>
 		instance
-			.patch('auth/refresh', tokenData)
+			.patch('member/refresh', tokenData)
 			.then((response: AxiosResponse) => {
 				dispatch(response.data);
 				return response;
@@ -99,10 +99,10 @@ const auth = {
 				dispatch(loginFailure(error.message));
 				return error.response;
 			}),
-	// CSRF 토큰 생성 API : <baseURL>/auth/csrf-token
+	// CSRF 토큰 생성 API : <baseURL>/member/csrf-token
 	csrf: () => (dispatch: Dispatch) =>
 		instance
-			.get('auth/csrf-token')
+			.get('member/csrf-token')
 			.then((response: AxiosResponse) => {
 				dispatch(response.data);
 				return response;
@@ -113,7 +113,7 @@ const auth = {
 };
 
 const api = {
-	auth,
+	member,
 };
 
 export default { ...api };

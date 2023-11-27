@@ -21,7 +21,7 @@ interface BannerProps {
 }
 
 interface BannerDispatchProps {
-	auth: ActionCreatorsMapObject;
+	member: ActionCreatorsMapObject;
 }
 
 const BannerPC: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
@@ -38,8 +38,8 @@ const BannerMobile: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
 	return <>{isMobile && <BannerPageMobile onSubmit={onSubmit} />}</>;
 };
 
-const BannerPage: FC<BannerDispatchProps> = ({ auth }): JSX.Element => {
-	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ auth });
+const BannerPage: FC<BannerDispatchProps> = ({ member }): JSX.Element => {
+	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
 	const submitForm = (
 		data: BannerFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -67,7 +67,7 @@ const BannerPage: FC<BannerDispatchProps> = ({ auth }): JSX.Element => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-	auth: bindActionCreators(Api.auth, dispatch),
+	member: bindActionCreators(Api.member, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(BannerPage);

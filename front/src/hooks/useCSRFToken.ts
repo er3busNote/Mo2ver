@@ -3,16 +3,16 @@ import { ActionCreatorsMapObject } from 'redux';
 import { CSRFData } from '../services/types';
 
 interface CSRFTokenProps {
-	auth: ActionCreatorsMapObject;
+	member: ActionCreatorsMapObject;
 }
 
 const useCSRFToken = ({
-	auth,
+	member,
 }: CSRFTokenProps): [CSRFData, () => Promise<void>] => {
 	const [data, setData] = useState<CSRFData>({ csrfToken: '' });
 
 	const fetchAndSetData = useCallback(async () => {
-		const data = await auth.csrf();
+		const data = await member.csrf();
 		setData(data);
 	}, []);
 

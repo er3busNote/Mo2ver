@@ -23,7 +23,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 		(config: AxiosRequestConfig) => {
 			const url = config.url as string;
 			const headers = config.headers as AxiosRequestHeaders;
-			if (url.indexOf('auth/') === -1) {
+			if (url.indexOf('member/') === -1) {
 				headers.Authorization = ['Bearer', getAccessToken()].join(' ');
 			}
 			return config;
@@ -38,7 +38,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 			const url = config.url as string;
 			const headers = config.headers as AxiosResponseHeaders;
 			// -> Access Token 인증 실패 (UNAUTHORIZED : status === 401)
-			if (status === 401 && url.indexOf('auth/') === -1) {
+			if (status === 401 && url.indexOf('member/') === -1) {
 				const tokenData = {
 					username: getSessionStorage(JWT_USERNAME),
 					accesstoken: getSessionStorage(JWT_ACCESS_TOKEN),
@@ -46,7 +46,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 				};
 				clearSessionStorage(JWT_ACCESS_TOKEN);
 				const { status, data } = await axios.patch(
-					[config.baseURL, 'auth/refresh'].join('/'),
+					[config.baseURL, 'member/refresh'].join('/'),
 					tokenData
 				); // O
 				if (status === 200) {
@@ -60,7 +60,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 			}
 
 			// -> Refresh Token 인증 실패 (FORBIDDEN : status === 403)
-			if (status === 403 && config.url === 'auth/refresh') {
+			if (status === 403 && config.url === 'member/refresh') {
 				clearSessionStorage(JWT_USERNAME);
 				clearSessionStorage(JWT_ACCESS_TOKEN);
 				clearSessionStorage(JWT_REFRESH_TOKEN);

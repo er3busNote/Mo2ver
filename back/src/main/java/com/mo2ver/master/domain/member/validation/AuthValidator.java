@@ -1,6 +1,6 @@
-package com.mo2ver.master.domain.auth.validation;
+package com.mo2ver.master.domain.member.validation;
 
-import com.mo2ver.master.domain.auth.dto.SignupDto;
+import com.mo2ver.master.domain.member.dto.SignupDto;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 

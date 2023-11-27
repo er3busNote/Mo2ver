@@ -19,7 +19,7 @@ interface CategoryProps {
 }
 
 interface CategoryDispatchProps {
-	auth: ActionCreatorsMapObject;
+	member: ActionCreatorsMapObject;
 }
 
 const CategoryPC: FC<CategoryProps> = ({ onSubmit }): JSX.Element => {
@@ -36,8 +36,8 @@ const CategoryMobile: FC<CategoryProps> = ({ onSubmit }): JSX.Element => {
 	return <>{isMobile && <CategoryPageMobile onSubmit={onSubmit} />}</>;
 };
 
-const CategoryPage: FC<CategoryDispatchProps> = ({ auth }): JSX.Element => {
-	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ auth });
+const CategoryPage: FC<CategoryDispatchProps> = ({ member }): JSX.Element => {
+	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
 	const submitForm = (
 		data: CategoryFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -61,7 +61,7 @@ const CategoryPage: FC<CategoryDispatchProps> = ({ auth }): JSX.Element => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-	auth: bindActionCreators(Api.auth, dispatch),
+	member: bindActionCreators(Api.member, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(CategoryPage);

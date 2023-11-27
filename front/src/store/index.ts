@@ -1,8 +1,8 @@
 import { createSlice, combineReducers, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, TokenState, TitleState, MenuState } from './types';
+import { MemberState, TokenState, TitleState, MenuState } from './types';
 
 // 1.1. 인증 관련 State
-const authinitialState: AuthState = {
+const memberinitialState: MemberState = {
 	token: '',
 	isAuthenticated: false,
 	isLoading: false,
@@ -15,21 +15,21 @@ const tokeninitialState: TokenState = {
 
 // 1.2. authSlice : action + reducer → slice
 const authSlice = createSlice({
-	name: 'auth',
-	initialState: authinitialState,
+	name: 'member',
+	initialState: memberinitialState,
 	reducers: {
-		loginSuccess: (state: AuthState, action: PayloadAction<string>) => {
+		loginSuccess: (state: MemberState, action: PayloadAction<string>) => {
 			state.isAuthenticated = true;
 			state.isLoading = false;
 			state.token = action.payload;
 		},
-		loginFailure: (state: AuthState, action: PayloadAction<string>) => {
+		loginFailure: (state: MemberState, action: PayloadAction<string>) => {
 			state.isAuthenticated = false;
 			state.isLoading = false;
 			state.token = '';
 			state.errorMessage = action.payload || 'Something went wrong.';
 		},
-		logoutSuccess: (state: AuthState) => {
+		logoutSuccess: (state: MemberState) => {
 			state.isAuthenticated = false;
 			state.isLoading = true;
 			state.token = '';

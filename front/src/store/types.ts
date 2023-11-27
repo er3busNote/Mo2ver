@@ -1,5 +1,5 @@
 // 1. 인증 관련 State
-interface AuthState {
+interface MemberState {
 	token: string;
 	isAuthenticated: boolean;
 	isLoading: boolean;
@@ -36,7 +36,7 @@ interface MenuState {
 }
 
 export type {
-	AuthState,
+	MemberState,
 	TokenState,
 	TitleState,
 	MenuInfo,

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 
 @Component
-@ConfigurationProperties(prefix = "start-user")
+@ConfigurationProperties(prefix = "init-member")
 @Getter @Setter
 public class AppProperties {
 
     @NotEmpty
-    private String adminUsername;
+    private String adminLoginId;
 
     @NotEmpty
     private String adminPassword;
@@ -22,14 +22,11 @@ public class AppProperties {
     private String adminEmail;
 
     @NotEmpty
-    private String userUsername;
+    private String userLoginId;
 
     @NotEmpty
     private String userPassword;
 
     @NotEmpty
     private String userEmail;
-
-    @NotEmpty
-    private String localAddress;
 }

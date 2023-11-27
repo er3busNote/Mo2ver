@@ -1,9 +1,9 @@
-package com.mo2ver.master.domain.auth.service;
+package com.mo2ver.master.domain.member.service;
 
-import com.mo2ver.master.domain.auth.dao.AuthRepository;
-import com.mo2ver.master.domain.auth.domain.Auth;
-import com.mo2ver.master.domain.auth.domain.AuthRole;
-import com.mo2ver.master.domain.auth.dto.SignupDto;
+import com.mo2ver.master.domain.member.dao.MemberRepository;
+import com.mo2ver.master.domain.member.domain.Member;
+import com.mo2ver.master.domain.member.domain.MemberRole;
+import com.mo2ver.master.domain.member.dto.SignupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,41 +23,38 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
 @Service
-public class AuthService implements UserDetailsService {
+public class MemberService implements UserDetailsService {
 
     @Autowired
-    AuthRepository authRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public Auth saveAuth(Auth auth) {
-        auth.setPassword(this.passwordEncoder.encode(auth.getPassword()));
-        return this.authRepository.save(auth);
+    public Member saveAuth(Member member) {
+        member.setPassword(this.passwordEncoder.encode(member.getPassword()));
+        return this.memberRepository.save(member);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Auth auth = authRepository.findByEmail(username)
+        Member member = memberRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        return new AuthAdapter(auth);
+        return new MemberAdapter(member);
     }
 
     @Transactional
     public void signup(SignupDto signupDto) {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String ipaddress = request.getHeader("X-FORWARDED-FOR");
-        if (ipaddress == null) ipaddress = request.getRemoteAddr();
 
-        Auth auth = Auth.builder()
-                .username(signupDto.getUsername())
+        Member member = Member.builder()
+                .loginId(signupDto.getUsername())
                 .password(signupDto.getPassword())
                 .email(signupDto.getEmail())
-                .address(ipaddress)
-                .roles(Stream.of(AuthRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))    // 참고 : https://blog.kingbbode.com/41
+                .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))    // 참고 : https://blog.kingbbode.com/41
                 .build();
 
-        this.saveAuth(auth);
+        this.saveAuth(member);
     }
 }

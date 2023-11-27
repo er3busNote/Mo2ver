@@ -8,11 +8,11 @@ import SignupForm from '../components/form/SignupForm';
 import { SignupFormValues } from '../components/form/types';
 
 interface SignupDispatchProps {
-	auth: ActionCreatorsMapObject;
+	member: ActionCreatorsMapObject;
 }
 
-const UserSignupPage: FC<SignupDispatchProps> = ({ auth }): JSX.Element => {
-	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ auth });
+const UserSignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
+	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
 	const submitForm = (
 		data: SignupFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -23,14 +23,14 @@ const UserSignupPage: FC<SignupDispatchProps> = ({ auth }): JSX.Element => {
 			username: data.username,
 			password: data.password,
 		};
-		auth.register(userData, csrfData);
+		member.register(userData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
 	};
 	return <SignupForm onSubmit={submitForm} />;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-	auth: bindActionCreators(Api.auth, dispatch),
+	member: bindActionCreators(Api.member, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(UserSignupPage);

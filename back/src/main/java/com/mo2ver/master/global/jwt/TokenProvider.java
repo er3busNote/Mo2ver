@@ -1,6 +1,6 @@
 package com.mo2ver.master.global.jwt;
 
-import com.mo2ver.master.domain.auth.service.AuthService;
+import com.mo2ver.master.domain.member.service.MemberService;
 import com.mo2ver.master.global.common.properties.JwtProperties;
 import com.mo2ver.master.global.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
@@ -32,7 +32,7 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     @Autowired
-    AuthService authService;
+    MemberService memberService;
 
     @Autowired
     JwtProperties jwtProperties;
@@ -111,7 +111,7 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetailsService userDetailsService = (UserDetailsService)authService;
+        UserDetailsService userDetailsService = (UserDetailsService) memberService;
         UserDetails userDetails = userDetailsService.loadUserByUsername((String)claims.get("username"));
 
         return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);

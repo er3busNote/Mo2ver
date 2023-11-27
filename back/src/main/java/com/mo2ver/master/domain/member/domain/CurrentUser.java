@@ -1,4 +1,4 @@
-package com.mo2ver.master.domain.auth.domain;
+package com.mo2ver.master.domain.member.domain;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : auth")
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : member")
 public @interface CurrentUser {
 }

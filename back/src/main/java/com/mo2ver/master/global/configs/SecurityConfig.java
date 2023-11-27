@@ -1,6 +1,6 @@
 package com.mo2ver.master.global.configs;
 
-import com.mo2ver.master.domain.auth.service.AuthService;
+import com.mo2ver.master.domain.member.service.MemberService;
 import com.mo2ver.master.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.master.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.master.global.jwt.JwtSecurityConfig;
@@ -24,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    AuthService authService;
+    MemberService memberService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(authService)
+        auth.userDetailsService(memberService)
                 .passwordEncoder(passwordEncoder);
     }
 }

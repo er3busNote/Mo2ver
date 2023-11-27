@@ -1,9 +1,9 @@
-package com.mo2ver.master.domain.auth.api;
+package com.mo2ver.master.domain.member.api;
 
-import com.mo2ver.master.domain.auth.service.AuthService;
-import com.mo2ver.master.domain.auth.dto.LoginDto;
-import com.mo2ver.master.domain.auth.dto.SignupDto;
-import com.mo2ver.master.domain.auth.validation.AuthValidator;
+import com.mo2ver.master.domain.member.service.MemberService;
+import com.mo2ver.master.domain.member.dto.LoginDto;
+import com.mo2ver.master.domain.member.dto.SignupDto;
+import com.mo2ver.master.domain.member.validation.AuthValidator;
 import com.mo2ver.master.global.common.dto.ResponseDto;
 import com.mo2ver.master.global.error.service.ErrorService;
 import com.mo2ver.master.global.error.domain.ErrorCode;
@@ -29,17 +29,17 @@ import javax.validation.Valid;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping(value = "/auth")
-public class AuthController {
+@RequestMapping(value = "/member")
+public class MemberController {
 
-    private final AuthService authService;
+    private final MemberService memberService;
     private final ErrorService errorService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final AuthValidator authValidator;
 
-    public AuthController(AuthService authService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, AuthValidator authValidator, ErrorService errorService) {
-        this.authService = authService;
+    public MemberController(MemberService memberService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, AuthValidator authValidator, ErrorService errorService) {
+        this.memberService = memberService;
         this.errorService = errorService;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
@@ -100,7 +100,7 @@ public class AuthController {
             return badRequest(errorService.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
         }
 
-        UserDetailsService userDetailsService = (UserDetailsService)authService;
+        UserDetailsService userDetailsService = (UserDetailsService) memberService;
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(signupDto.getEmail());
 
@@ -120,7 +120,7 @@ public class AuthController {
                 return badRequest(errorService.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
             }
 
-            authService.signup(signupDto);  // 회원가입
+            memberService.signup(signupDto);  // 회원가입
 
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "회원가입이 완료되었습니다"), HttpStatus.OK);
         }
