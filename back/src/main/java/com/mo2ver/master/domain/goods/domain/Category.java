@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @EqualsAndHashCode(of = "goodsCategory")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class GoodsCategory {
+public class Category {
 
     @Id
-    @Column(name = "GD_CAT", columnDefinition = "CHAR(10) COMMENT '카테고리코드'")
+    @Column(name = "CAT_CD", columnDefinition = "CHAR(10) COMMENT '카테고리코드'")
     private String goodsCategory;
 
     @Column(name = "CAT_NM", columnDefinition = "VARCHAR(50) COMMENT '카테고리명'")

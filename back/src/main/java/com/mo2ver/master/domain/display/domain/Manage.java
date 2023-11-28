@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter @Setter
 @EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class DisplayBannerManage {
+public class Manage {
 
     @Id
     @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")

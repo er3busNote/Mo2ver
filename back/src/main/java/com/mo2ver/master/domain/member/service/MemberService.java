@@ -10,10 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import java.util.Collections;
@@ -36,6 +33,10 @@ public class MemberService implements UserDetailsService {
         return this.memberRepository.save(member);
     }
 
+    public Member memberNoForUpdate() {
+        return memberRepository.findFirstByOrderByMemberNoDesc();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(username)
@@ -46,15 +47,21 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public void signup(SignupDto signupDto) {
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        Member lastMember = this.memberNoForUpdate();
+        String memberNo = 'M' + String.format("%09d", Integer.parseInt(lastMember.getMemberNo().substring(1)) + 1);
 
-        Member member = Member.builder()
+        Member newMember = Member.builder()
+                .memberNo(memberNo)
                 .loginId(signupDto.getUsername())
+                .memberName("ANONYMOUS")
                 .password(signupDto.getPassword())
+                .cellPhoneNumber("010XXXXXXXX")
                 .email(signupDto.getEmail())
-                .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))    // 참고 : https://blog.kingbbode.com/41
+                .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
+                .register(memberNo)
+                .updater(memberNo)
                 .build();
 
-        this.saveAuth(member);
+        this.saveAuth(newMember);
     }
 }

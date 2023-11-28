@@ -1,4 +1,4 @@
-package com.mo2ver.master.domain.goods.domain;
+package com.mo2ver.master.domain.display.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -6,36 +6,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "GD_PRC")
+@Table(name = "DP_BNNR_DTL")
 @Getter @Setter
-@EqualsAndHashCode(of = {"goodsCode", "applyDate"})
+@EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class GoodsPrice implements Serializable {
+public class Detail {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
-    @JoinColumn(
-            name = "GD_CD",
-            nullable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_GD_TO_GD_PRC",
-                    foreignKeyDefinition = "FOREIGN KEY (GD_CD) REFERENCES GD(GD_CD) ON UPDATE RESTRICT ON DELETE RESTRICT"),
-            columnDefinition = "CHAR(10) COMMENT '상품코드'"
-    )
-    private Goods goodsCode;
+    @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
+    private Long bannerManageNo;
 
-    @Id
-    @Column(name = "APPL_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '적용일시'")
-    private LocalDateTime applyDate;
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
-    @Column(name = "GD_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '상품가격'")
-    private BigDecimal goodsPrice;
+    @Column(name = "IMG_ATT_FILE", columnDefinition = "VARCHAR(50) COMMENT '이미지첨부파일'")
+    private String imageAttachFile;
+
+    @Column(name = "CNNT_URL", columnDefinition = "VARCHAR(255) COMMENT '연결URL'")
+    private String connectUrl;
+
+    @Column(name = "BNNR_CONTS", columnDefinition = "VARCHAR(100) COMMENT '배너내용'")
+    private String bannerContents;
+
+    @Column(name= "SORT_SEQ", columnDefinition = "INT(11) COMMENT '정렬순서'")
+    private Integer sortSequence;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
