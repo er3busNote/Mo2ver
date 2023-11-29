@@ -81,10 +81,10 @@ public class Member {
     private String roadNameBasicAddress;
 
     @Column(name = "EMAIL_RCP_YN", columnDefinition = "CHAR(1) COMMENT '이메일수신여부'")
-    private String emailReceptionYesNo;
+    private Character emailReceptionYesNo;
 
-    @Column(name = "SMS_RCP_YN", columnDefinition = "DATE COMMENT '문자수신여부'")
-    private Date snsReceptionYesNo;
+    @Column(name = "SMS_RCP_YN", columnDefinition = "CHAR(1) COMMENT '문자수신여부'")
+    private Character snsReceptionYesNo;
 
     @Column(name = "ROAD_NM_DTL_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명상세주소'")
     private String roadNameDetailAddress;
@@ -99,13 +99,13 @@ public class Member {
     private LocalDateTime lastloginDate;
 
     @Column(name = "SLEEP_YN", columnDefinition = "CHAR(1) COMMENT '휴먼여부'")
-    private String sleepYesNo;
+    private Character sleepYesNo;
 
     @Column(name = "SLEEP_DE", columnDefinition = "DATE COMMENT '휴먼일자'")
     private Date sleepDate;
 
     @Column(name = "WTHD_YN", columnDefinition = "CHAR(1) COMMENT '탈퇴여부'")
-    private String withdrawalYesNo;
+    private Character withdrawalYesNo;
 
     @Column(name = "WTHD_DE", columnDefinition = "DATE COMMENT '탈퇴일자'")
     private Date withdrawalDate;

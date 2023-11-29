@@ -3,6 +3,7 @@ package com.mo2ver.master.member;
 import com.mo2ver.master.domain.member.domain.Member;
 import com.mo2ver.master.domain.member.dto.SignupDto;
 import com.mo2ver.master.domain.member.service.MemberService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class MemberServiceTest {
     MemberService memberService;
 
     @Test
+    @DisplayName("회원가입 등록 확인")
     public void signupTest() throws Exception {
         // Given (준비)
         int numOfExecute = 10;

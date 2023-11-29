@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "GD_CAT")
 @Getter @Setter
-@EqualsAndHashCode(of = "goodsCategory")
+@EqualsAndHashCode(of = "categoryCode")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Category {
 
     @Id
     @Column(name = "CAT_CD", columnDefinition = "CHAR(10) COMMENT '카테고리코드'")
-    private String goodsCategory;
+    private String categoryCode;
 
     @Column(name = "CAT_NM", columnDefinition = "VARCHAR(50) COMMENT '카테고리명'")
     private String categoryName;
@@ -32,7 +32,7 @@ public class Category {
     private Integer categoryLevel;
 
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
-    private String useYesNo;
+    private Character useYesNo;
 
     @Column(name= "SORT_SEQ", columnDefinition = "INT(11) COMMENT '정렬순서'")
     private Integer sortSequence;

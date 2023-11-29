@@ -29,7 +29,7 @@ public class GroupCode {
     private Integer sortSequence;
 
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
-    private String useYesNo;
+    private Character useYesNo;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

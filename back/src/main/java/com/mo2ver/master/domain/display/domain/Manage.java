@@ -31,7 +31,7 @@ public class Manage {
     private Date displayEndDate;
 
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
-    private String displayYesNo;
+    private Character displayYesNo;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

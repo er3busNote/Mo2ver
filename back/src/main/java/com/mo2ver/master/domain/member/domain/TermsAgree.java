@@ -54,7 +54,7 @@ public class TermsAgree implements Serializable {
 
     @Column(name = "AGR_YN", columnDefinition = "CHAR(1) COMMENT '동의여부'")
     @ColumnDefault("'N'")
-    private String agreeYesNo;
+    private Character agreeYesNo;
 
     @Column(name = "AGR_DE", columnDefinition = "DATE COMMENT '동의일자'")
     private Date agreeDate;

@@ -35,14 +35,14 @@ public class TermsManage {
 
     @Column(name = "DP_YN", nullable = false, columnDefinition = "CHAR(1) COMMENT '전시여부'")
     @NotBlank
-    private String displayYesNo;
+    private Character displayYesNo;
 
     @Column(name = "DP_START_DE", columnDefinition = "DATE COMMENT '전시시작일자'")
     private Date displayStartDate;
 
     @Column(name = "ESSN_AGR_YN", nullable = false, columnDefinition = "CHAR(1) COMMENT '필수동의여부'")
     @NotBlank
-    private String essentialAgreeYesNo;
+    private Character essentialAgreeYesNo;
 
     @Column(name = "UPD_CONTS", columnDefinition = "VARCHAR(200) COMMENT '수정내용'")
     private String updateContents;

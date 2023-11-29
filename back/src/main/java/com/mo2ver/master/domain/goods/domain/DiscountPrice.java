@@ -51,10 +51,10 @@ public class DiscountPrice {
     private BigDecimal discountPrice;
 
     @Column(name = "RATE_YN", columnDefinition = "CHAR(1) COMMENT '비율여부'")
-    private String rateYesNo;
+    private Character rateYesNo;
 
     @Column(name = "MAX_LIMIT_YN", columnDefinition = "CHAR(1) COMMENT '최대허용여부'")
-    private String maxLimitYesNo;
+    private Character maxLimitYesNo;
 
     @Column(name = "MAX_LIMIT_AMT", columnDefinition = "DECIMAL(10,0) COMMENT '최대허용금액'")
     private BigDecimal maxLimitAmount;
