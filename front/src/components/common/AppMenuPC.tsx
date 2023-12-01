@@ -1,19 +1,25 @@
-import React, { FC, useState, MouseEvent } from 'react';
+import React, { FC, useState, MouseEvent, CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Box,
 	Grid,
 	Paper,
-	Divider,
-	IconButton,
-	Typography,
 	Popper,
+	Divider,
 	MenuList,
 	MenuItem,
+	IconButton,
+	Typography,
 	ListItemText,
 } from '@mui/material';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import MenuIcon from '@mui/icons-material/Menu';
+import {
+	SxProps,
+	Theme,
+	createTheme,
+	ThemeProvider,
+} from '@mui/material/styles';
 
 const menuFontSize = '15px';
 
@@ -44,6 +50,12 @@ const searchDatas = [
 	{ id: 10, keyword: 'h610m' },
 ];
 
+const darkTheme = createTheme({ palette: { mode: 'dark' } });
+
+interface AppMenuItemProps {
+	category: string;
+}
+
 const MenuDivider: FC = (): JSX.Element => {
 	return (
 		<Box sx={{ lineHeight: '40px' }}>
@@ -59,6 +71,27 @@ const MenuDivider: FC = (): JSX.Element => {
 				}}
 			/>
 		</Box>
+	);
+};
+
+const AppMenuItem: FC<AppMenuItemProps> = ({ category }): JSX.Element => {
+	const item: SxProps<Theme> = {
+		px: '24px',
+		py: '11px',
+	};
+	const font: CSSProperties = {
+		fontSize: 13,
+		fontWeight: 'bold',
+	};
+	return (
+		<MenuItem dense sx={item}>
+			<ListItemText
+				primaryTypographyProps={{
+					style: font,
+				}}
+				primary={category}
+			/>
+		</MenuItem>
 	);
 };
 
@@ -102,7 +135,7 @@ const AppDetail: FC = (): JSX.Element => {
 				<Box
 					sx={{
 						mt: '1px',
-						width: '1050px',
+						width: '840px',
 						display: 'inline-flex',
 						justifyContent: 'flex-start',
 					}}
@@ -114,17 +147,46 @@ const AppDetail: FC = (): JSX.Element => {
 							color: '#fff',
 							bgcolor: '#333333',
 							borderRadius: 0,
-							opacity: 0.9,
+							textAlign: 'center',
 						}}
 					>
+						<ThemeProvider theme={darkTheme}>
+							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+								{menuDatas.map((data: any, index: number) => (
+									<AppMenuItem key={index} category={data.category} />
+								))}
+							</MenuList>
+						</ThemeProvider>
+					</Paper>
+					<Paper
+						id={'sub-menu'}
+						elevation={1}
+						sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
+					>
 						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-							{menuDatas.map((data: any) => (
-								<MenuItem key={data.id} dense sx={{ px: '24px', py: '11px' }}>
+							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+								<ListItemText
+									primaryTypographyProps={{
+										style: { fontSize: 14, fontWeight: 'bold' },
+									}}
+									primary={'브랜드'}
+								/>
+							</MenuItem>
+							{searchDatas.map((data: any, index: number) => (
+								<MenuItem
+									key={index}
+									dense
+									sx={{
+										px: '24px',
+										py: 0,
+										minHeight: 5,
+									}}
+								>
 									<ListItemText
 										primaryTypographyProps={{
-											style: { fontSize: 13, fontWeight: 'bold' },
+											style: { fontSize: 13 },
 										}}
-										primary={data.category}
+										primary={data.keyword}
 									/>
 								</MenuItem>
 							))}
@@ -133,7 +195,7 @@ const AppDetail: FC = (): JSX.Element => {
 					<Paper
 						id={'sub-menu'}
 						elevation={1}
-						sx={{ width: '210px', borderRadius: 0 }}
+						sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
 					>
 						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
 							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
@@ -167,75 +229,7 @@ const AppDetail: FC = (): JSX.Element => {
 					<Paper
 						id={'sub-menu'}
 						elevation={1}
-						sx={{ width: '210px', borderRadius: 0 }}
-					>
-						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
-								<ListItemText
-									primaryTypographyProps={{
-										style: { fontSize: 14, fontWeight: 'bold' },
-									}}
-									primary={'브랜드'}
-								/>
-							</MenuItem>
-							{searchDatas.map((data: any) => (
-								<MenuItem
-									key={data.id}
-									dense
-									sx={{
-										px: '24px',
-										py: 0,
-										minHeight: 5,
-									}}
-								>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 13 },
-										}}
-										primary={data.keyword}
-									/>
-								</MenuItem>
-							))}
-						</MenuList>
-					</Paper>
-					<Paper
-						id={'sub-menu'}
-						elevation={1}
-						sx={{ width: '210px', borderRadius: 0 }}
-					>
-						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-							<MenuItem dense sx={{ px: '24px', py: '11px' }}>
-								<ListItemText
-									primaryTypographyProps={{
-										style: { fontSize: 14, fontWeight: 'bold' },
-									}}
-									primary={'브랜드'}
-								/>
-							</MenuItem>
-							{searchDatas.map((data: any) => (
-								<MenuItem
-									key={data.id}
-									dense
-									sx={{
-										px: '24px',
-										py: 0,
-										minHeight: 5,
-									}}
-								>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 13 },
-										}}
-										primary={data.keyword}
-									/>
-								</MenuItem>
-							))}
-						</MenuList>
-					</Paper>
-					<Paper
-						id={'sub-menu'}
-						elevation={1}
-						sx={{ width: '210px', borderRadius: 0 }}
+						sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
 					>
 						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
 							<MenuItem dense sx={{ px: '24px', py: '11px' }}>

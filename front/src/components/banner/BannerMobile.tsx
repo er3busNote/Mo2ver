@@ -70,7 +70,7 @@ const ArrowBox: FC<ArrowBoxProps> = ({
 		<Paper
 			elevation={0}
 			sx={{
-				mr: 8,
+				mr: { xs: 4, sm: 8 },
 				mb: 3,
 				bgcolor: '#000',
 				opacity: 0.6,

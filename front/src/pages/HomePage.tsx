@@ -64,7 +64,12 @@ const HomeMobile: FC = (): JSX.Element => {
 
 const HomePage: FC = (): JSX.Element => {
 	return (
-		<Paper sx={{ height: '100%' }} component="div" square variant="outlined">
+		<Paper
+			sx={{ width: '100%', height: '100%', position: 'absolute' }}
+			component="div"
+			square
+			variant="outlined"
+		>
 			<HomePC />
 			<HomeMobile />
 		</Paper>

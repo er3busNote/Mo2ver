@@ -1,9 +1,11 @@
 import React, { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import AppHeader from './AppHeader';
 import AppSearchPC from './AppSearchPC';
 import AppSearchMobile from './AppSearchMobile';
 import AppMenuPC from './AppMenuPC';
+import AppMenuHomePC from './AppMenuHomePC';
 import AppMenuMobile from './AppMenuMobile';
 import AppMain from './AppMain';
 import AppFooter from './AppFooter';
@@ -24,12 +26,13 @@ const AppPC: FC = (): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
+	const location = useLocation();
 	return (
 		<>
 			{isPc && (
 				<>
 					<AppSearchPC />
-					<AppMenuPC />
+					{location.pathname === '/' ? <AppMenuHomePC /> : <AppMenuPC />}
 				</>
 			)}
 		</>

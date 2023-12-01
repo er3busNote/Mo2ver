@@ -70,8 +70,8 @@ const ArrowBox: FC<ArrowBoxProps> = ({
 		<Paper
 			elevation={0}
 			sx={{
-				mr: 20,
-				mb: 6,
+				mr: 0, // 조금 더 왼쪽에 두어야 할 때 수정..!
+				mb: 8,
 				bgcolor: '#000',
 				opacity: 0.6,
 				position: 'absolute',
@@ -177,7 +177,7 @@ const BannerPC: FC = (): JSX.Element => {
 					alignItems: 'center',
 					//display: 'inline-flex',
 					display: 'flex',
-					justifyContent: 'right',
+					justifyContent: 'center',
 				}}
 			>
 				{/*<Arrow direction="left" clickFunction={() => onArrowClick('left')} />*/}
