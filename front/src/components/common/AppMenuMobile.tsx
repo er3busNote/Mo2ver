@@ -184,6 +184,7 @@ const AppDetail: FC = (): JSX.Element => {
 							color: '#fff',
 							bgcolor: '#333333',
 							borderRadius: 0,
+							opacity: 0.9,
 						}}
 						component="nav"
 					>

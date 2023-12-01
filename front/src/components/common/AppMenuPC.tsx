@@ -114,6 +114,7 @@ const AppDetail: FC = (): JSX.Element => {
 							color: '#fff',
 							bgcolor: '#333333',
 							borderRadius: 0,
+							opacity: 0.9,
 						}}
 					>
 						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>

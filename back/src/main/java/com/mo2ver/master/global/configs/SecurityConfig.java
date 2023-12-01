@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/csrf-token").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**").permitAll()
-                .mvcMatchers(HttpMethod.POST, "/goods/create").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/goods/create").hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
