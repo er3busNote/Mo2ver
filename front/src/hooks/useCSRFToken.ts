@@ -13,7 +13,7 @@ const useCSRFToken = ({
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await member.csrf();
-		setData(data);
+		setData(data.data);
 	}, []);
 
 	useEffect(() => {

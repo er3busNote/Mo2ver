@@ -80,19 +80,6 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 					sx={{ mt: 0 }}
 				>
 					<Controller
-						name="email"
-						control={control}
-						render={({ field, fieldState, formState }) => (
-							<RenderTextField
-								type="email"
-								label="Email Address"
-								field={field}
-								fieldState={fieldState}
-								formState={formState}
-							/>
-						)}
-					/>
-					<Controller
 						name="username"
 						control={control}
 						render={({ field, fieldState, formState }) => (
@@ -124,7 +111,20 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 						render={({ field, fieldState, formState }) => (
 							<RenderTextField
 								type="password"
-								label="repeat_password"
+								label="repeat password"
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
+							/>
+						)}
+					/>
+					<Controller
+						name="email"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderTextField
+								type="email"
+								label="email address"
 								field={field}
 								fieldState={fieldState}
 								formState={formState}

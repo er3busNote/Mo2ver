@@ -11,7 +11,7 @@ interface SignupDispatchProps {
 	member: ActionCreatorsMapObject;
 }
 
-const UserSignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
+const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
 	const submitForm = (
 		data: SignupFormValues,
@@ -19,11 +19,11 @@ const UserSignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 	) => {
 		fetchCSRFTokenData();
 		const userData = {
-			email: data.email,
 			username: data.username,
 			password: data.password,
+			email: data.email,
 		};
-		member.register(userData, csrfData);
+		member.signup(userData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
 	};
 	return <SignupForm onSubmit={submitForm} />;
@@ -33,4 +33,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	member: bindActionCreators(Api.member, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(UserSignupPage);
+export default connect(null, mapDispatchToProps)(SignupPage);

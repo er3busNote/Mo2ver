@@ -1,13 +1,13 @@
 interface LoginFormValues {
-	email: string;
+	username: string;
 	password: string;
 }
 
 interface SignupFormValues {
-	email: string;
 	username: string;
 	password: string;
 	repeat_password: string;
+	email: string;
 }
 
 export type { LoginFormValues, SignupFormValues };

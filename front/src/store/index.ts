@@ -9,11 +9,7 @@ const memberinitialState: MemberState = {
 	errorMessage: '',
 };
 
-const tokeninitialState: TokenState = {
-	token: new Object(),
-};
-
-// 1.2. authSlice : action + reducer → slice
+// 1.1. authSlice : action + reducer → slice
 const authSlice = createSlice({
 	name: 'member',
 	initialState: memberinitialState,
@@ -37,6 +33,11 @@ const authSlice = createSlice({
 	},
 });
 
+// 1.2. Token 관련 State
+const tokeninitialState: TokenState = {
+	token: new Object(),
+};
+
 const tokenSlice = createSlice({
 	name: 'token',
 	initialState: tokeninitialState,
@@ -47,13 +48,13 @@ const tokenSlice = createSlice({
 	},
 });
 
-// 2.1. 메뉴 관련 State
+// 2.1. Title 관련 State
 const titleinitialState: TitleState = {
 	title: 'Home',
 	description: '',
 };
 
-// 2.2. titleSlice : action + reducer → slice
+// 2.1. titleSlice : action + reducer → slice
 const titleSlice = createSlice({
 	name: 'title',
 	initialState: titleinitialState,
@@ -67,6 +68,7 @@ const titleSlice = createSlice({
 	},
 });
 
+// 2.2. 메뉴 관련 State
 const menuinitialState: MenuState = {
 	menus: [
 		{
@@ -142,7 +144,7 @@ const menuinitialState: MenuState = {
 	],
 };
 
-// 2.3. menuSlice : action + reducer → slice
+// 2.2. menuSlice : action + reducer → slice
 const menuSlice = createSlice({
 	name: 'menu',
 	initialState: menuinitialState,

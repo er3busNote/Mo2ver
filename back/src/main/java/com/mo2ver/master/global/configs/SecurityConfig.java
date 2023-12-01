@@ -18,6 +18,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -51,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
                 .and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/csrf-token").permitAll()
@@ -64,6 +71,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+    }
+
+    //CORS 설정
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

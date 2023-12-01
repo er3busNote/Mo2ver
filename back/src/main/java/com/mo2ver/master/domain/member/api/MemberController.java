@@ -4,6 +4,7 @@ import com.mo2ver.master.domain.member.service.MemberService;
 import com.mo2ver.master.domain.member.dto.LoginDto;
 import com.mo2ver.master.domain.member.dto.SignupDto;
 import com.mo2ver.master.domain.member.validation.AuthValidator;
+import com.mo2ver.master.global.common.dto.CsrfDto;
 import com.mo2ver.master.global.common.dto.ResponseDto;
 import com.mo2ver.master.global.error.service.ErrorService;
 import com.mo2ver.master.global.error.domain.ErrorCode;
@@ -19,10 +20,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 
@@ -83,7 +88,7 @@ public class MemberController {
             Authentication authentication = tokenProvider.getAuthentication(tokenDto.getRefreshtoken());
             TokenDto refreshtokenDto = tokenProvider.refreshToken(authentication, tokenDto.getRefreshtoken());
 
-            return new ResponseEntity<>(refreshtokenDto, HttpStatus.OK);
+            return new ResponseEntity<>(refreshtokenDto, HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
@@ -125,7 +130,12 @@ public class MemberController {
     }
 
     @GetMapping("csrf-token")
-    public ResponseEntity<ResponseDto> csrtToken() { return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "CSRF Token이 생성되었습니다."), HttpStatus.CREATED); }
+    public ResponseEntity csrtToken() {
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrf != null) return ResponseEntity.ok(new CsrfDto(csrf.getToken()));
+        return new ResponseEntity(new ResponseDto(HttpStatus.NOT_FOUND.value(), "CSRF Token이 존재하지 않습니다."), HttpStatus.NOT_FOUND); }
 
     private ResponseEntity badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);

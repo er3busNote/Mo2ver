@@ -59,10 +59,5 @@ module.exports = {
             filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
             chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: 'public/mockServiceWorker.js', to: '' }
-            ]
-        })
     ],
 };

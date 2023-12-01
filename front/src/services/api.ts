@@ -1,6 +1,11 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { loginSuccess, loginFailure, logoutSuccess } from '../store/index';
+import {
+	loginSuccess,
+	loginFailure,
+	logoutSuccess,
+	tokenSuccess,
+} from '../store/index';
 import {
 	JWT_USERNAME,
 	JWT_ACCESS_TOKEN,
@@ -14,7 +19,9 @@ import { LoginData, SignUpData, TokenData, CSRFData } from './types';
 // 인스턴스 API 생성
 const createInstance = () => {
 	const instance = axios.create({
-		baseURL: '/api', // proxy: process.env.REACT_APP_API_URL
+		//baseURL: '/api', // proxy: process.env.REACT_APP_API_URL
+		baseURL: 'http://localhost:9080',
+		withCredentials: true,
 	});
 
 	return setInterceptors(instance);
@@ -64,7 +71,7 @@ const member = {
 		window.location.replace('/');
 	},
 	// 회원가입 API : <baseURL>/member/signup
-	register: (userData: SignUpData, csrfData: CSRFData) => () =>
+	signup: (userData: SignUpData, csrfData: CSRFData) => () =>
 		instance
 			.post('member/signup', userData, {
 				headers: {
@@ -92,7 +99,7 @@ const member = {
 		instance
 			.patch('member/refresh', tokenData)
 			.then((response: AxiosResponse) => {
-				dispatch(response.data);
+				dispatch(tokenSuccess(response.data));
 				return response;
 			})
 			.catch((error: AxiosError) => {
@@ -104,7 +111,21 @@ const member = {
 		instance
 			.get('member/csrf-token')
 			.then((response: AxiosResponse) => {
-				dispatch(response.data);
+				dispatch(tokenSuccess(response.data));
+				return response;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+};
+
+const category = {
+	// CSRF 토큰 생성 API : <baseURL>/category/list
+	list: () => (dispatch: Dispatch) =>
+		instance
+			.get('category/list')
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
 				return response;
 			})
 			.catch((error: AxiosError) => {
@@ -114,6 +135,7 @@ const member = {
 
 const api = {
 	member,
+	category,
 };
 
 export default { ...api };

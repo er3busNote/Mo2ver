@@ -16,20 +16,18 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import RenderTextField from '../validate/TextField';
 import { LoginFormValues } from './types';
-import { validateEmail } from '../../utils/validation';
 
 const schema = yup
 	.object({
-		email: yup
+		username: yup
 			.string()
-			.required('이메일을 입력해주세요')
-			.matches(validateEmail, '유효하지 않은 이메일 주소입니다')
-			.min(5, '5자 이상 입력해주세요!')
+			.required('아이디를 입력해주세요')
+			.min(3, '3자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
 		password: yup
 			.string()
 			.required('비밀번호를 입력해주세요')
-			.min(8, '8자 이상 입력해주세요!')
+			.min(3, '3자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
 	})
 	.required();
@@ -75,12 +73,12 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 					sx={{ mt: 1 }}
 				>
 					<Controller
-						name="email"
+						name="username"
 						control={control}
 						render={({ field, fieldState, formState }) => (
 							<RenderTextField
-								type="email"
-								label="Email Address"
+								type="text"
+								label="username"
 								field={field}
 								fieldState={fieldState}
 								formState={formState}

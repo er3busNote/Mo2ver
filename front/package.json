@@ -47,7 +47,6 @@
     "eslint-plugin-react": "^7.31.4",
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.6",
-    "msw": "^0.47.0",
     "prettier": "^2.7.1",
     "redux-logger": "^3.0.6",
     "style-loader": "^3.3.1",
@@ -65,8 +64,7 @@
     "eject": "react-scripts eject",
     "dev": "webpack --mode development",
     "serve": "webpack-dev-server --mode development --open --stats-error-details",
-    "lint": "eslint --ext .ts,.tsx ./src --fix",
-    "msw:init": "msw init public/ --save"
+    "lint": "eslint --ext .ts,.tsx ./src --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -85,8 +83,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }

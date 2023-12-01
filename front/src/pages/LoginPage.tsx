@@ -20,9 +20,11 @@ const LoginPage: FC<LoginDispatchProps> = ({ member }): JSX.Element => {
 	) => {
 		fetchCSRFTokenData();
 		const userData = {
-			username: data.email,
+			username: data.username,
 			password: data.password,
 		};
+		console.log(userData);
+		console.log(csrfData);
 		member.login(userData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
 	};
