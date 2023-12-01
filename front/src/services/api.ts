@@ -27,7 +27,7 @@ const member = {
 		instance
 			.post('member/login', userData, {
 				headers: {
-					'CSRF-Token': csrfData.csrfToken,
+					'X-XSRF-TOKEN': csrfData.csrfToken,
 				},
 			})
 			.then((response: AxiosResponse) => {
@@ -68,7 +68,7 @@ const member = {
 		instance
 			.post('member/signup', userData, {
 				headers: {
-					'CSRF-Token': csrfData.csrfToken,
+					'X-XSRF-TOKEN': csrfData.csrfToken,
 				},
 			})
 			.then((response: AxiosResponse) => {

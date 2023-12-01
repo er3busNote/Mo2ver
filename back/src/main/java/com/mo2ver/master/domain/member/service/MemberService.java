@@ -39,7 +39,7 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(username)
+        Member member = memberRepository.findByLoginId(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return new MemberAdapter(member);
     }

@@ -21,9 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -63,10 +61,10 @@ public class MemberController {
 
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        return new ResponseEntity<>(tokenDto, HttpStatus.CREATED);
     }
 
-    @PostMapping("/refresh")
+    @PatchMapping("/refresh")
     public ResponseEntity<TokenDto> authRefresh(@RequestBody @Valid TokenDto tokenDto,
                                                 Errors errors) {
         HashMap<String, Object> response = new HashMap<>();
@@ -125,6 +123,9 @@ public class MemberController {
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "회원가입이 완료되었습니다"), HttpStatus.OK);
         }
     }
+
+    @GetMapping("csrf-token")
+    public ResponseEntity<ResponseDto> csrtToken() { return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "CSRF Token이 생성되었습니다."), HttpStatus.CREATED); }
 
     private ResponseEntity badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);
