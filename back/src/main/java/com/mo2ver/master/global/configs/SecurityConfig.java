@@ -51,16 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                //.and()    // → 크롬브라우저에서 Deny 처리를 하여, HTTPS 설정 후 다시 시도 해야 함...
+                .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
                 .and()
-                .cors().configurationSource(corsConfigurationSource())
+                .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**").permitAll()
-                .mvcMatchers(HttpMethod.PATCH, "/member/csrf-token").permitAll()
+                .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/goods/create").hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest()
@@ -78,10 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
-        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "X-XSRF-TOKEN", "Content-Type"));
+        config.setAllowCredentials(true);   // 쿠키 요청을 허용하도록 true로 설정
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

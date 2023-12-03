@@ -39,12 +39,11 @@ const BannerMobile: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
 };
 
 const BannerPage: FC<BannerDispatchProps> = ({ member }): JSX.Element => {
-	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
+	const csrfData = useCSRFToken({ member });
 	const submitForm = (
 		data: BannerFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		fetchCSRFTokenData();
 		const bannerData = {
 			title: data.title,
 			startDate: moment(data.startDate).format('YYYY-MM-DD'),

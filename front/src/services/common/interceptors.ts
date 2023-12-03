@@ -1,6 +1,6 @@
 import axios, {
 	AxiosInstance,
-	AxiosRequestConfig,
+	InternalAxiosRequestConfig,
 	AxiosRequestHeaders,
 	AxiosResponseHeaders,
 	AxiosError,
@@ -11,6 +11,7 @@ import {
 	JWT_ACCESS_TOKEN,
 	JWT_REFRESH_TOKEN,
 	getAccessToken,
+	isAuthenticated,
 } from '../../utils/jwttoken';
 import {
 	setSessionStorage,
@@ -20,10 +21,9 @@ import {
 
 const setInterceptors = (instance: AxiosInstance) => {
 	instance.interceptors.request.use(
-		(config: AxiosRequestConfig) => {
-			const url = config.url as string;
+		(config: InternalAxiosRequestConfig) => {
 			const headers = config.headers as AxiosRequestHeaders;
-			if (url.indexOf('member/') === -1) {
+			if (isAuthenticated()) {
 				headers.Authorization = ['Bearer', getAccessToken()].join(' ');
 			}
 			return config;
@@ -35,10 +35,9 @@ const setInterceptors = (instance: AxiosInstance) => {
 		(response: AxiosResponse) => response,
 		async (error: AxiosError) => {
 			const { status, config } = error.response as AxiosResponse;
-			const url = config.url as string;
 			const headers = config.headers as AxiosResponseHeaders;
 			// -> Access Token 인증 실패 (UNAUTHORIZED : status === 401)
-			if (status === 401 && url.indexOf('member/') === -1) {
+			if (status === 401 && isAuthenticated()) {
 				const tokenData = {
 					username: getSessionStorage(JWT_USERNAME),
 					accesstoken: getSessionStorage(JWT_ACCESS_TOKEN),
@@ -49,7 +48,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 					[config.baseURL, 'member/refresh'].join('/'),
 					tokenData
 				); // O
-				if (status === 200) {
+				if (status === 201) {
 					setSessionStorage(JWT_ACCESS_TOKEN, data.accesstoken);
 					headers.Authorization = ['Bearer', getAccessToken()].join(' ');
 				} else {

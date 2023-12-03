@@ -87,6 +87,8 @@ logging:
             repository:
               query: DEBUG
         security: DEBUG
+        web:
+          filter: DEBUG
 
 init-member:
   admin-login-id: admin

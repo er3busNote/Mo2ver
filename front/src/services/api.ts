@@ -19,10 +19,11 @@ import { LoginData, SignUpData, TokenData, CSRFData } from './types';
 // 인스턴스 API 생성
 const createInstance = () => {
 	const instance = axios.create({
-		//baseURL: '/api', // proxy: process.env.REACT_APP_API_URL
-		baseURL: 'http://localhost:9080',
-		withCredentials: true,
+		//baseURL: '/api', // [Case 1] CRA Proxy → X
+		baseURL: process.env.REACT_APP_API_URL, // [Case 2.1] Server CORS Origin → O
+		withCredentials: true, // [Case 2.2] Client CORS 요청 시 쿠키 포함 여부 설정
 	});
+	//delete axios.defaults.headers.common['X-XSRF-TOKEN'];
 
 	return setInterceptors(instance);
 };
@@ -34,6 +35,7 @@ const member = {
 		instance
 			.post('member/login', userData, {
 				headers: {
+					Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
 					'X-XSRF-TOKEN': csrfData.csrfToken,
 				},
 			})
@@ -51,11 +53,15 @@ const member = {
 				window.location.replace('/');
 			})
 			.catch((error: AxiosError) => {
+				console.log(csrfData);
+				console.log(error.response);
 				const { status, data } = error.response as AxiosResponse;
 				if (status === 400) {
 					toastMessage('올바르지 않은 로그인 형식입니다', 'info');
 				} else if (status === 401) {
 					toastMessage(data.message, 'warn');
+				} else if (status === 403) {
+					toastMessage('CSRF Token이 유효하지 않습니다', 'warn');
 				} else if (status === 504) {
 					toastMessage('서버가 닫혀있습니다', 'error');
 				} else {
@@ -86,7 +92,9 @@ const member = {
 				const { status, data } = error.response as AxiosResponse;
 				if (status === 400) {
 					toastMessage('올바르지 않은 회원가입 형식입니다', 'info');
-				} else if (status === 409) {
+				} else if (status === 403) {
+					toastMessage('CSRF Token이 유효하지 않습니다', 'warn');
+				} else if (status === 422) {
 					toastMessage(data.message, 'warn');
 				} else if (status === 504) {
 					toastMessage('서버가 닫혀있습니다', 'error');
@@ -100,7 +108,7 @@ const member = {
 			.patch('member/refresh', tokenData)
 			.then((response: AxiosResponse) => {
 				dispatch(tokenSuccess(response.data));
-				return response;
+				return response.data;
 			})
 			.catch((error: AxiosError) => {
 				dispatch(loginFailure(error.message));
@@ -112,7 +120,7 @@ const member = {
 			.get('member/csrf-token')
 			.then((response: AxiosResponse) => {
 				dispatch(tokenSuccess(response.data));
-				return response;
+				return response.data;
 			})
 			.catch((error: AxiosError) => {
 				return error.response;
@@ -126,7 +134,7 @@ const category = {
 			.get('category/list')
 			.then((response: AxiosResponse) => {
 				dispatch(tokenSuccess(response.data));
-				return response;
+				return response.data;
 			})
 			.catch((error: AxiosError) => {
 				return error.response;

@@ -22,8 +22,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ReactComponent as MainIcon } from '../../logo.svg';
 
-const searchFontSize = '12px';
-
 const searchDatas = [
 	{ id: 1, keyword: '삼성전자' },
 	{ id: 2, keyword: '모니터' },
@@ -191,6 +189,8 @@ const AppSearchMobile: FC = (): JSX.Element => {
 		setFocus(false);
 		closeAnchorEl(); // → Popper 닫기
 	};
+
+	const searchFontSize = '12px';
 
 	const icon: SxProps<Theme> = {
 		fontSize: '1.6rem',

@@ -1,6 +1,7 @@
 import React, {
 	FC,
 	useState,
+	useEffect,
 	Dispatch,
 	SetStateAction,
 	CSSProperties,
@@ -24,42 +25,25 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
+import { CategoryData } from '../../services/types';
+import { divideArray } from '../../utils/divide';
 
 const menuFontSize = '15px';
 
-const menuDatas = [
-	{ id: 1, category: '상의/아우터/원피스' },
-	{ id: 2, category: '바지/스커트' },
-	{ id: 3, category: '스니커즈/신발' },
-	{ id: 4, category: '가방/여성 가방' },
-	{ id: 5, category: '스포츠/용품' },
-	{ id: 6, category: '모자' },
-	{ id: 7, category: '양말/레그웨어' },
-	{ id: 8, category: '속옷' },
-	{ id: 9, category: '선글라스/안경테' },
-	{ id: 10, category: '액세서리/시계/주얼리' },
-	{ id: 11, category: '뷰티' },
-];
-
-const searchDatas = [
-	{ id: 1, keyword: '삼성전자' },
-	{ id: 2, keyword: '모니터' },
-	{ id: 3, keyword: '3060' },
-	{ id: 4, keyword: 'b660m' },
-	{ id: 5, keyword: '노트북' },
-	{ id: 6, keyword: '애플' },
-	{ id: 7, keyword: 'b550' },
-	{ id: 8, keyword: 'cpu' },
-	{ id: 9, keyword: 'ddr5-4800' },
-	{ id: 10, keyword: 'h610m' },
-];
-
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
+interface AppMenuProps {
+	categoryData: Array<CategoryData>;
+}
+
 interface AppMenuItemProps {
-	index: number;
-	category: string;
-	setHover: Dispatch<SetStateAction<number>>;
+	categoryCode: string;
+	categoryName: string;
+	setHover: Dispatch<SetStateAction<string>>;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
 }
 
 const MenuDivider: FC = (): JSX.Element => {
@@ -81,14 +65,14 @@ const MenuDivider: FC = (): JSX.Element => {
 };
 
 const AppMenuItem: FC<AppMenuItemProps> = ({
-	index,
-	category,
+	categoryCode,
+	categoryName,
 	setHover,
 }): JSX.Element => {
 	const [isHover, setIsHover] = useState(false);
 
 	const onMouseEnter = () => {
-		setHover(index);
+		setHover(categoryCode);
 		setIsHover(true);
 	};
 
@@ -120,19 +104,70 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 					primaryTypographyProps={{
 						style: font,
 					}}
-					primary={category}
+					primary={categoryName}
 				/>
 			</MenuItem>
 		</Paper>
 	);
 };
 
-const AppDetail: FC = (): JSX.Element => {
-	const [hover, setHover] = useState(-1);
+const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+	const [hover, setHover] = useState<string>('');
+	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
+		[]
+	);
+	const [middleCategoyData, setMiddleCategoyData] =
+		useState<CategoryDataInfo>();
+	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
+
+	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
+	const treeCategoryData = () => {
+		// 대 카테고리
+		const largeCategoyData = categoryData.filter(
+			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
+		);
+		setLargeCategoyData(largeCategoyData);
+		// 중/소 카테고리
+		const middleCategoyData = new Object() as CategoryDataInfo;
+		const smallCategoyData = new Object() as CategoryDataInfo;
+		categoryData.forEach((data) => {
+			if (data.categoryLevel === 2) {
+				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
+					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				middleCategoyData[data.upperCategoryCode].push(data);
+			} else if (data.categoryLevel === 3) {
+				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
+					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				smallCategoyData[data.upperCategoryCode].push(data);
+			}
+		});
+		setMiddleCategoyData(middleCategoyData);
+		setSmallCategoyData(smallCategoyData);
+	};
+	useEffect(treeCategoryData, [categoryData]); // 처음 랜더링 될 때, 한번만 실행..!
+
+	// 중 카테고리 → 3등분
+	let divideData = new Array([
+		new Array<CategoryData>(),
+		new Array<CategoryData>(),
+		new Array<CategoryData>(),
+	]);
+	if (
+		hover !== '' &&
+		middleCategoyData &&
+		Object.keys(middleCategoyData).includes(hover)
+	) {
+		divideData = divideArray(middleCategoyData[hover]);
+	}
 
 	const onMouseLeave = () => {
-		setHover(-1);
+		setHover('');
 	};
+
+	const menuWidthSize = '630px';
+	const submenuWidthSize = '210px';
 
 	const menu: SxProps<Theme> = {
 		mt: '7px',
@@ -141,7 +176,31 @@ const AppDetail: FC = (): JSX.Element => {
 		zIndex: 1,
 	};
 	const submenu: SxProps<Theme> = {
-		display: hover == -1 ? 'none' : 'inline-flex',
+		display:
+			hover === '' || // → 처음 랜더링 시, 깜빡이는 현상 방지
+			(middleCategoyData && !Object.keys(middleCategoyData).includes(hover))
+				? 'none'
+				: 'inline-flex',
+	};
+	const overflowParent: SxProps<Theme> = {
+		overflow: 'hidden',
+		height: '100%',
+	};
+	const overflowChildren: SxProps<Theme> = {
+		overflowY: 'auto',
+		position: 'relative',
+	};
+	const overflowTable: SxProps<Theme> = {
+		display: 'grid',
+		gridTemplateColumns: 'repeat(3, 1fr)',
+		//gap: 2,
+		height: '100%',
+		position: 'absolute',
+	};
+	const overflowContents: SxProps<Theme> = {
+		textAlign: 'start',
+		borderRadius: 0,
+		paddingBottom: 2,
 	};
 	return (
 		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
@@ -155,130 +214,75 @@ const AppDetail: FC = (): JSX.Element => {
 					전체 카테고리
 				</Typography>
 			</IconButton>
-			<Box id={'main-menu'} sx={menu}>
+			<Box id={'main-menu'} sx={menu} onMouseLeave={onMouseLeave}>
 				<Box
 					sx={{
 						mt: '1px',
 						display: 'inline-flex',
 						justifyContent: 'flex-start',
+						...overflowParent,
 					}}
 				>
-					<Box sx={{ width: '210px' }} onMouseLeave={onMouseLeave}>
+					<Box sx={{ width: submenuWidthSize }}>
 						<ThemeProvider theme={darkTheme}>
 							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								{menuDatas.map((data: any, index: number) => (
+								{largeCategoyData.map((data: any, index: number) => (
 									<AppMenuItem
 										key={index}
-										index={index}
 										setHover={setHover}
-										category={data.category}
+										categoryCode={data.categoryCode}
+										categoryName={data.categoryName}
 									/>
 								))}
 							</MenuList>
 						</ThemeProvider>
 					</Box>
-					<Box sx={{ width: '630px', ...submenu }}>
-						<Paper
-							id={'sub-menu'}
-							elevation={1}
-							sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
-						>
-							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								<MenuItem dense sx={{ px: '24px', py: '11px' }}>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 14, fontWeight: 'bold' },
-										}}
-										primary={'브랜드'}
-									/>
-								</MenuItem>
-								{searchDatas.map((data: any, index: number) => (
-									<MenuItem
-										key={index}
-										dense
-										sx={{
-											px: '24px',
-											py: 0,
-											minHeight: 5,
-										}}
-									>
-										<ListItemText
-											primaryTypographyProps={{
-												style: { fontSize: 13 },
-											}}
-											primary={data.keyword}
-										/>
-									</MenuItem>
-								))}
-							</MenuList>
-						</Paper>
-						<Paper
-							id={'sub-menu'}
-							elevation={1}
-							sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
-						>
-							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								<MenuItem dense sx={{ px: '24px', py: '11px' }}>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 14, fontWeight: 'bold' },
-										}}
-										primary={'브랜드'}
-									/>
-								</MenuItem>
-								{searchDatas.map((data: any) => (
-									<MenuItem
-										key={data.id}
-										dense
-										sx={{
-											px: '24px',
-											py: 0,
-											minHeight: 5,
-										}}
-									>
-										<ListItemText
-											primaryTypographyProps={{
-												style: { fontSize: 13 },
-											}}
-											primary={data.keyword}
-										/>
-									</MenuItem>
-								))}
-							</MenuList>
-						</Paper>
-						<Paper
-							id={'sub-menu'}
-							elevation={1}
-							sx={{ width: '210px', textAlign: 'start', borderRadius: 0 }}
-						>
-							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								<MenuItem dense sx={{ px: '24px', py: '11px' }}>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 14, fontWeight: 'bold' },
-										}}
-										primary={'브랜드'}
-									/>
-								</MenuItem>
-								{searchDatas.map((data: any) => (
-									<MenuItem
-										key={data.id}
-										dense
-										sx={{
-											px: '24px',
-											py: 0,
-											minHeight: 5,
-										}}
-									>
-										<ListItemText
-											primaryTypographyProps={{
-												style: { fontSize: 13 },
-											}}
-											primary={data.keyword}
-										/>
-									</MenuItem>
-								))}
-							</MenuList>
+					<Box sx={{ width: menuWidthSize, ...submenu, ...overflowChildren }}>
+						<Paper sx={overflowTable}>
+							{divideData.map((divide: any, k: number) => (
+								<Paper
+									key={k}
+									id={'sub-menu'}
+									sx={{ width: submenuWidthSize, ...overflowContents }}
+								>
+									{divide.map((mdata: any, i: number) => (
+										<MenuList key={i} sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+											<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+												<ListItemText
+													primaryTypographyProps={{
+														style: { fontSize: 14, fontWeight: 'bold' },
+													}}
+													primary={mdata.categoryName}
+												/>
+											</MenuItem>
+											{smallCategoyData &&
+												Object.keys(smallCategoyData).includes(
+													mdata.categoryCode
+												) &&
+												smallCategoyData[mdata.categoryCode].map(
+													(sdata: any, j: number) => (
+														<MenuItem
+															key={j}
+															dense
+															sx={{
+																px: '24px',
+																py: 0,
+																minHeight: 5,
+															}}
+														>
+															<ListItemText
+																primaryTypographyProps={{
+																	style: { fontSize: 13 },
+																}}
+																primary={sdata.categoryName}
+															/>
+														</MenuItem>
+													)
+												)}
+										</MenuList>
+									))}
+								</Paper>
+							))}
 						</Paper>
 					</Box>
 				</Box>
@@ -287,7 +291,7 @@ const AppDetail: FC = (): JSX.Element => {
 	);
 };
 
-const AppMenuHomePC: FC = (): JSX.Element => {
+const AppMenuHomePC: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box
@@ -299,7 +303,7 @@ const AppMenuHomePC: FC = (): JSX.Element => {
 			>
 				<Grid container spacing={1}>
 					<Grid item>
-						<AppDetail />
+						<AppDetail categoryData={categoryData} />
 					</Grid>
 					<Grid item>
 						<Box sx={{ px: '20px', py: '10px' }}>

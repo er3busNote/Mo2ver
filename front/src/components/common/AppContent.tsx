@@ -1,6 +1,11 @@
 import React, { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { Dispatch } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../../services/api';
+import useCategoryList from '../../hooks/useCategoryList';
 import AppHeader from './AppHeader';
 import AppSearchPC from './AppSearchPC';
 import AppSearchMobile from './AppSearchMobile';
@@ -12,17 +17,23 @@ import AppFooter from './AppFooter';
 import { CssBaseline, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
+import { CategoryData } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
 
 const mdTheme = createTheme(contentTheme);
 
 const drawerMenuLimit = 768;
 
-interface LayoutDefaultProps {
-	children?: ReactElement;
+interface AppProps {
+	categoryData: Array<CategoryData>;
 }
 
-const AppPC: FC = (): JSX.Element => {
+interface LayoutDefaultProps {
+	children?: ReactElement;
+	category: ActionCreatorsMapObject;
+}
+
+const AppPC: FC<AppProps> = ({ categoryData }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -32,14 +43,18 @@ const AppPC: FC = (): JSX.Element => {
 			{isPc && (
 				<>
 					<AppSearchPC />
-					{location.pathname === '/' ? <AppMenuHomePC /> : <AppMenuPC />}
+					{location.pathname === '/' ? (
+						<AppMenuHomePC categoryData={categoryData} />
+					) : (
+						<AppMenuPC categoryData={categoryData} />
+					)}
 				</>
 			)}
 		</>
 	);
 };
 
-const AppMobile: FC = (): JSX.Element => {
+const AppMobile: FC<AppProps> = ({ categoryData }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -48,14 +63,18 @@ const AppMobile: FC = (): JSX.Element => {
 			{isMobile && (
 				<>
 					<AppSearchMobile />
-					<AppMenuMobile />
+					<AppMenuMobile categoryData={categoryData} />
 				</>
 			)}
 		</>
 	);
 };
 
-const AppContent: FC<LayoutDefaultProps> = ({ children }): JSX.Element => {
+const AppContent: FC<LayoutDefaultProps> = ({
+	children,
+	category,
+}): JSX.Element => {
+	const categoryData = useCategoryList({ category });
 	return (
 		<ThemeProvider theme={mdTheme}>
 			<Box
@@ -67,8 +86,8 @@ const AppContent: FC<LayoutDefaultProps> = ({ children }): JSX.Element => {
 			>
 				<CssBaseline />
 				<AppHeader />
-				<AppPC />
-				<AppMobile />
+				<AppPC categoryData={categoryData} />
+				<AppMobile categoryData={categoryData} />
 				<AppMain>{children || <Outlet />}</AppMain>
 				<AppFooter />
 			</Box>
@@ -76,4 +95,8 @@ const AppContent: FC<LayoutDefaultProps> = ({ children }): JSX.Element => {
 	);
 };
 
-export default AppContent;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	category: bindActionCreators(Api.category, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(AppContent);

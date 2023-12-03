@@ -1,4 +1,4 @@
-import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
+import React, { FC, useState, useEffect, MouseEvent, TouchEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Box,
@@ -18,26 +18,7 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-
-const menuDatas = [
-	{ id: 1, category: '상의/아우터/원피스' },
-	{ id: 2, category: '바지/스커트' },
-	{ id: 3, category: '스니커즈/신발' },
-	{ id: 4, category: '가방/여성 가방' },
-	{ id: 5, category: '스포츠/용품' },
-	{ id: 6, category: '모자' },
-	{ id: 7, category: '양말/레그웨어' },
-	{ id: 8, category: '속옷' },
-	{ id: 9, category: '선글라스/안경테' },
-	{ id: 10, category: '액세서리/시계/주얼리' },
-	{ id: 11, category: '뷰티' },
-];
-
-const searchDatas = [
-	{ id: 1, keyword: '삼성전자' },
-	{ id: 2, keyword: '모니터' },
-	{ id: 3, keyword: '3060' },
-];
+import { CategoryData } from '../../services/types';
 
 const MenuDivider: FC = (): JSX.Element => {
 	return (
@@ -58,11 +39,28 @@ const MenuDivider: FC = (): JSX.Element => {
 };
 
 interface AppMenuProps {
-	category: string;
+	categoryData: Array<CategoryData>;
 }
 
-const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
-	const [open, setOpen] = useState(false);
+interface AppMenuDetailProps {
+	largeCategory: CategoryData;
+	middleCategoyData?: CategoryDataInfo;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
+}
+
+const AppMenu: FC<AppMenuDetailProps> = ({
+	largeCategory,
+	middleCategoyData,
+}): JSX.Element => {
+	const [open, setOpen] = useState<boolean>(false);
+
+	const targetData =
+		middleCategoyData &&
+		Object.keys(middleCategoyData).includes(largeCategory.categoryCode) &&
+		middleCategoyData[largeCategory.categoryCode];
 
 	const handleClick = (
 		event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
@@ -97,33 +95,62 @@ const AppMenu: FC<AppMenuProps> = ({ category }): JSX.Element => {
 					primaryTypographyProps={{
 						style: { fontSize: 12, fontWeight: 'bold' },
 					}}
-					primary={category}
+					primary={largeCategory.categoryName}
 				/>
-				{open ? <ExpandLess /> : <ExpandMore />}
+				{targetData && <>{open ? <ExpandLess /> : <ExpandMore />}</>}
 			</MenuItem>
-			<Collapse in={open} timeout="auto">
-				<List component="div" disablePadding>
-					<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-						{searchDatas.map((data: any) => (
-							<MenuItem key={data.id} dense sx={{ px: 4, py: 2 }}>
-								<ListItemText
-									primaryTypographyProps={{
-										style: { fontSize: 12, fontWeight: 'bold' },
-									}}
-									primary={data.keyword}
-								/>
-							</MenuItem>
-						))}
-					</MenuList>
-				</List>
-			</Collapse>
+			{targetData && (
+				<Collapse in={open} timeout="auto">
+					<List component="div" disablePadding>
+						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
+							{targetData.map((data: CategoryData, index: number) => (
+								<MenuItem key={index} dense sx={{ px: 4, py: 2 }}>
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 12, fontWeight: 'bold' },
+										}}
+										primary={data.categoryName}
+									/>
+								</MenuItem>
+							))}
+						</MenuList>
+					</List>
+				</Collapse>
+			)}
 		</>
 	);
 };
 
-const AppDetail: FC = (): JSX.Element => {
-	const [open, setOpen] = useState(false);
+const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
+		[]
+	);
+	const [middleCategoyData, setMiddleCategoyData] =
+		useState<CategoryDataInfo>();
+
+	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
+	const treeCategoryData = () => {
+		// 대 카테고리
+		const largeCategoyData = categoryData.filter(
+			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
+		);
+		setLargeCategoyData(largeCategoyData);
+		// 중 카테고리
+		const middleCategoyData = new Object() as CategoryDataInfo;
+		categoryData.forEach((data) => {
+			if (data.categoryLevel === 2) {
+				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
+					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				middleCategoyData[data.upperCategoryCode].push(data);
+			}
+		});
+		setMiddleCategoyData(middleCategoyData);
+	};
+	useEffect(treeCategoryData, [categoryData]); // 처음 랜더링 될 때, 한번만 실행..!
 
 	const showClick = (event: MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(open ? null : event.currentTarget);
@@ -189,8 +216,12 @@ const AppDetail: FC = (): JSX.Element => {
 						component="nav"
 					>
 						<MenuList sx={{ pl: { xs: 3, sm: 0 }, py: 0.2 }}>
-							{menuDatas.map((data: any) => (
-								<AppMenu key={data.id} category={data.category} />
+							{largeCategoyData.map((data: any, index: number) => (
+								<AppMenu
+									key={index}
+									largeCategory={data}
+									middleCategoyData={middleCategoyData}
+								/>
 							))}
 						</MenuList>
 					</List>
@@ -200,13 +231,13 @@ const AppDetail: FC = (): JSX.Element => {
 	);
 };
 
-const AppMenuMobile: FC = (): JSX.Element => {
+const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box>
 				<Grid container spacing={1}>
 					<Grid item>
-						<AppDetail />
+						<AppDetail categoryData={categoryData} />
 					</Grid>
 					<Grid item>
 						<Box

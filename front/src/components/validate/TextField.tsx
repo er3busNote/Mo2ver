@@ -35,7 +35,7 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 			helperText={error?.message}
 			style={{ width: '80%' }}
 			inputProps={{ style: { fontSize: 13 } }} // font size of input text
-			InputLabelProps={{ style: { fontSize: 13 } }} // font size of input label
+			InputLabelProps={{ style: { fontSize: 13, zIndex: 0 } }} // font size of input label
 		/>
 	);
 };

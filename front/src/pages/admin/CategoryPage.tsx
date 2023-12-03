@@ -37,12 +37,11 @@ const CategoryMobile: FC<CategoryProps> = ({ onSubmit }): JSX.Element => {
 };
 
 const CategoryPage: FC<CategoryDispatchProps> = ({ member }): JSX.Element => {
-	const [csrfData, fetchCSRFTokenData] = useCSRFToken({ member });
+	const csrfData = useCSRFToken({ member });
 	const submitForm = (
 		data: CategoryFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		fetchCSRFTokenData();
 		const categoryData = {
 			category: data.category,
 			useyn: data.useyn,
