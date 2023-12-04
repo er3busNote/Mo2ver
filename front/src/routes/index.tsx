@@ -6,6 +6,9 @@ import {
 	Home,
 	Login,
 	Signup,
+	Event,
+	Register,
+	Discount,
 	Banner,
 	Category,
 	Dashboard,
@@ -28,10 +31,10 @@ const MainRoutes: FC = (): JSX.Element => {
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/auth/*" element={<AuthRoutes />} />
-			<Route element={<PrivateRoute />}>
-				<Route element={<AppContent />}>
-					<Route path="/*" element={<MainRoutes />} />
-				</Route>
+			<Route element={<PrivateRoute role={'user'} />}>
+				<Route path="/event" element={<Event />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/discount" element={<Discount />} />
 			</Route>
 			<Route path="*" element={<NotFound />} />
 		</Routes>
@@ -52,8 +55,10 @@ const AdminRoutes: FC = (): JSX.Element => {
 const RootRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
-			<Route element={<AdminContent />}>
-				<Route path="/admin/*" element={<AdminRoutes />} />
+			<Route element={<PrivateRoute role={'admin'} />}>
+				<Route element={<AdminContent />}>
+					<Route path="/admin/*" element={<AdminRoutes />} />
+				</Route>
 			</Route>
 			<Route element={<AppContent />}>
 				<Route path="/*" element={<MainRoutes />} />

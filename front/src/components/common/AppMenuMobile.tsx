@@ -246,7 +246,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 								py: { xs: '6px', sm: '10px' },
 							}}
 						>
-							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<IconButton component={Link} to="/event" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
@@ -255,7 +255,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 										fontWeight: 'bold',
 									}}
 								>
-									이벤트/기획전
+									이벤트
 								</Typography>
 							</IconButton>
 						</Box>
@@ -268,7 +268,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 								py: { xs: '6px', sm: '10px' },
 							}}
 						>
-							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<IconButton component={Link} to="/register" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
@@ -277,7 +277,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 										fontWeight: 'bold',
 									}}
 								>
-									견적문의
+									상품등록
 								</Typography>
 							</IconButton>
 						</Box>
@@ -290,7 +290,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 								py: { xs: '6px', sm: '10px' },
 							}}
 						>
-							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<IconButton component={Link} to="/discount" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
@@ -299,7 +299,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 										fontWeight: 'bold',
 									}}
 								>
-									쿠폰존
+									특가할인
 								</Typography>
 							</IconButton>
 						</Box>

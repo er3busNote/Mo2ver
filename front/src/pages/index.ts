@@ -2,9 +2,23 @@
 import Home from './HomePage';
 import Login from './LoginPage';
 import Signup from './SignupPage';
+import Event from './EventPage';
+import Register from './RegisterPage';
+import Discount from './DiscountPage';
 import Banner from './admin/BannerPage';
 import Category from './admin/CategoryPage';
 import Dashboard from './admin/DashboardPage';
 import NotFound from './NotFound';
 
-export { Home, Login, Signup, Banner, Category, Dashboard, NotFound };
+export {
+	Home,
+	Login,
+	Signup,
+	Event,
+	Register,
+	Discount,
+	Banner,
+	Category,
+	Dashboard,
+	NotFound,
+};

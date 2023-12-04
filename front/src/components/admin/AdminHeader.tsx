@@ -1,5 +1,9 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../../services/api';
 import {
 	Box,
 	Paper,
@@ -16,20 +20,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 const headerFontSize = '12px';
 
 interface AdminHeaderProps {
+	member: ActionCreatorsMapObject;
 	isMobile: boolean;
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const AdminHeader: FC<AdminHeaderProps> = ({
+	member,
 	isMobile,
 	open,
 	setOpen,
 }): JSX.Element => {
 	const justifyContent = isMobile ? 'space-between' : 'flex-end';
-
+	const navigate = useNavigate();
 	const logoutClick = () => {
-		console.log('logout');
+		member.logout();
+		navigate('/');
 	};
 
 	const toggleDrawer = () => {
@@ -118,4 +125,8 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 	);
 };
 
-export default AdminHeader;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(AdminHeader);

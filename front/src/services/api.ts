@@ -35,7 +35,7 @@ const member = {
 		instance
 			.post('member/login', userData, {
 				headers: {
-					Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
+					//Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
 					'X-XSRF-TOKEN': csrfData.csrfToken,
 				},
 			})
@@ -50,7 +50,6 @@ const member = {
 				setSessionStorage(JWT_USERNAME, tokenData.username);
 				setSessionStorage(JWT_ACCESS_TOKEN, tokenData.accesstoken);
 				setSessionStorage(JWT_REFRESH_TOKEN, tokenData.refreshtoken);
-				window.location.replace('/');
 			})
 			.catch((error: AxiosError) => {
 				console.log(csrfData);
@@ -74,19 +73,18 @@ const member = {
 		clearSessionStorage(JWT_ACCESS_TOKEN);
 		clearSessionStorage(JWT_REFRESH_TOKEN);
 		dispatch(logoutSuccess());
-		window.location.replace('/');
 	},
 	// 회원가입 API : <baseURL>/member/signup
 	signup: (userData: SignUpData, csrfData: CSRFData) => () =>
 		instance
 			.post('member/signup', userData, {
 				headers: {
+					//Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
 					'X-XSRF-TOKEN': csrfData.csrfToken,
 				},
 			})
 			.then((response: AxiosResponse) => {
 				toastMessage(response.data, 'success');
-				window.location.replace('/');
 			})
 			.catch((error: AxiosError) => {
 				const { status, data } = error.response as AxiosResponse;

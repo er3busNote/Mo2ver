@@ -1,12 +1,33 @@
 import React, { FC } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
-import { getAccessToken, isAuthenticated } from '../utils/jwttoken';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
+import { getAccessToken, isAuthenticated, isAdmin } from '../utils/jwttoken';
 
-const PrivateRoute: FC = (): JSX.Element => {
-	if (getAccessToken() && isAuthenticated()) {
+interface LocationState {
+	from: string;
+}
+
+interface PrivateRouteProps {
+	role: string;
+}
+
+const PrivateRoute: FC<PrivateRouteProps> = ({ role }): JSX.Element => {
+	const location = useLocation();
+	let redirectTo = location.pathname;
+	if (location.pathname.includes('/auth'))
+		redirectTo = (location.state as LocationState)?.from || '/';
+	if (role === 'admin' && getAccessToken() && isAuthenticated() && isAdmin())
+		return <Outlet />;
+	else if (role === 'user' && getAccessToken() && isAuthenticated()) {
 		return <Outlet />;
 	}
-	return <Navigate to={{ pathname: '/auth/login' }} replace />;
+	console.log(redirectTo);
+	return (
+		<Navigate
+			to={{ pathname: '/auth/login' }}
+			state={{ from: redirectTo }}
+			replace
+		/>
+	);
 };
 
 export default PrivateRoute;
