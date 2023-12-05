@@ -61,7 +61,7 @@ module.exports = {
             chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
         }),
         new webpack.DefinePlugin({  // → 배포 시, 환경설정 가져오기
-            'process.env': JSON.stringify(process.env),
+            REACT_APP_API_URL: JSON.stringify(process.env.REACT_APP_API_URL),
         }),
     ],
 };
