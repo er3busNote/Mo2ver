@@ -19,12 +19,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                //.allowedOrigins(corsProperties.getUrlClient())
-                .allowedOrigins("*")
+                .allowedOrigins(corsProperties.getUrlClient())
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
                 //.exposedHeaders("Set-Cookie")
-                .allowCredentials(true);
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 
     @Bean

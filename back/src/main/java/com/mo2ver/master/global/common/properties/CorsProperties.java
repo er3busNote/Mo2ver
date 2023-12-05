@@ -14,7 +14,4 @@ public class CorsProperties {
 
     @NotEmpty
     private String urlClient;
-
-    @NotEmpty
-    private String urlServer;
 }
