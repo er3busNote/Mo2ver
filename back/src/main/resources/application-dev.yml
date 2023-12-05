@@ -34,8 +34,8 @@ spring:
           auto: create
     hibernate:
       naming:
-        #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl  # → Hibernate 5.2 이상
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        #implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl  # 대문자 → 소문자 (Hibernate 5.2 이상)
     defer-datasource-initialization: true   # Hibernate 초기화 후 data.sql 실행
   sql:
     init:
