@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(corsProperties.getUrlClient())
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
-                .exposedHeaders("Set-Cookie")
+                //.exposedHeaders("Set-Cookie")
                 .allowCredentials(true);
     }
 
