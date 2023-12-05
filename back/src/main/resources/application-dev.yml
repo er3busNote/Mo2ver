@@ -68,6 +68,9 @@ init-member:
   user-password: bbj12345
   user-email: bbj@admin.co.kr
 
+cors-setting:
+  url-client: http://localhost:3000
+
 jwt-setting:
   jwt-secret: mo2ver-master-jwttoken-startapp!@  # 최소 32개의 문자열 (256bit)
   jwt-accesstoken-validation-second: 60   # 1분 (1 * 60)

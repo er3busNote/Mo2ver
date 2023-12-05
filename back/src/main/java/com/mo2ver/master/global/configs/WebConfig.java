@@ -1,5 +1,7 @@
 package com.mo2ver.master.global.configs;
 
+import com.mo2ver.master.global.common.properties.CorsProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
@@ -11,10 +13,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
 
+    @Autowired
+    CorsProperties corsProperties;
+
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins(corsProperties.getUrlClient())
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie")

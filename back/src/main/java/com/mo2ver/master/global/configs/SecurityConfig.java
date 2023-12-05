@@ -1,6 +1,7 @@
 package com.mo2ver.master.global.configs;
 
 import com.mo2ver.master.domain.member.service.MemberService;
+import com.mo2ver.master.global.common.properties.CorsProperties;
 import com.mo2ver.master.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.master.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.master.global.jwt.JwtSecurityConfig;
@@ -38,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    CorsProperties corsProperties;
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -96,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList(corsProperties.getUrlClient()));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "X-XSRF-TOKEN", "Content-Type"));
         config.setAllowCredentials(true);   // 쿠키 요청을 허용하도록 true로 설정
