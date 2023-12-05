@@ -1,10 +1,12 @@
 const path = require('path');
 const port = process.env.PORT || 3000;
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
+const baseURL = process.env.REACT_APP_API_URL;
 
 module.exports = {
     mode: process.env.NODE_ENV , // → development / production
@@ -39,7 +41,7 @@ module.exports = {
         port: port,
         proxy: {
             '/api': {
-                target: process.env.REACT_APP_API_URL,
+                target: baseURL,
                 pathRewrite: { 
                     "^/api": ""
                 },
@@ -51,6 +53,9 @@ module.exports = {
         },
     },
     plugins: [
+        new Dotenv({
+            path: './.env.production', // .env.production 파일의 경로 설정
+        }),
         new HtmlWebpackPlugin({
             template: './public/index.html', // public/index.html 파일을 읽음
             filename: 'index.html', // output으로 출력할 파일은 index.html
@@ -61,8 +66,7 @@ module.exports = {
             chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
         }),
         new webpack.DefinePlugin({  // → 배포 시, 환경설정 가져오기
-            'process.env': JSON.stringify(process.env),
-            'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+            REACT_APP_API_URL: JSON.stringify(baseURL),
         }),
     ],
 };
