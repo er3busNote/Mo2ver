@@ -20,11 +20,10 @@ import { validateEmail, validatePassword } from '../../utils/validation';
 
 const schema = yup
 	.object({
-		email: yup
+		username: yup
 			.string()
-			.required('이메일을 입력해주세요')
-			.matches(validateEmail, '유효하지 않은 이메일 주소입니다')
-			.min(5, '5자 이상 입력해주세요!')
+			.required('아이디를 입력해주세요')
+			.min(3, '3자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
 		password: yup
 			.string()
@@ -36,6 +35,12 @@ const schema = yup
 			.string()
 			.required('비밀번호를 입력해주세요')
 			.oneOf([yup.ref('password')], '패스워드가 일치하지 않습니다'),
+		email: yup
+			.string()
+			.required('이메일을 입력해주세요')
+			.matches(validateEmail, '유효하지 않은 이메일 주소입니다')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
 	})
 	.required();
 

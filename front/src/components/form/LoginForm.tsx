@@ -27,7 +27,7 @@ const schema = yup
 		password: yup
 			.string()
 			.required('비밀번호를 입력해주세요')
-			.min(3, '3자 이상 입력해주세요!')
+			.min(8, '8자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
 	})
 	.required();

@@ -12,8 +12,8 @@ spring:
   profiles:
     group:
       test: common, test
-      dev: common, development
-      prod: common, production
+      dev-local: common, development
+      prod-local: common, production
 ---
 spring:
   config:
@@ -92,10 +92,10 @@ logging:
 
 init-member:
   admin-login-id: admin
-  admin-password: admin
+  admin-password: admin123
   admin-email: admin@admin.co.kr
   user-login-id: bbj
-  user-password: bbj
+  user-password: bbj12345
   user-email: bbj@admin.co.kr
 
 jwt-setting:
