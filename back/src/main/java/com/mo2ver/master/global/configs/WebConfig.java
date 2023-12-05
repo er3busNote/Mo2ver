@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(corsProperties.getUrlClient())
+                .allowedOrigins(corsProperties.getUrlClient(), corsProperties.getUrlServer())
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
                 //.exposedHeaders("Set-Cookie")
