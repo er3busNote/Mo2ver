@@ -1,6 +1,4 @@
 server:
-  profiles:
-    active: ${PROFILE}
   host:
     mariadb: 127.0.0.1
   port: 9080
