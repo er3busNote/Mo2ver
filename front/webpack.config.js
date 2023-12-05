@@ -1,5 +1,6 @@
 const path = require('path');
 const port = process.env.PORT || 3000;
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -58,6 +59,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
             chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
+        }),
+        new webpack.DefinePlugin({  // → 배포 시, 환경설정 가져오기
+            'process.env': JSON.stringify(process.env),
         }),
     ],
 };
