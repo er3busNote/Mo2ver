@@ -8,6 +8,7 @@ import com.mo2ver.master.global.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,6 +31,9 @@ import java.util.Arrays;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    Environment environment;
+
+    @Autowired
     MemberService memberService;
 
     @Autowired
@@ -48,12 +52,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
+        if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {  // → HTTPS 서버 실 배포 시
+            configureForHTTPS(http);    // → CSRF Enabled
+        } else {
+            configureForHTTP(http);     // → CSRF Disabled
+        }
+        configureCommon(http);  // → 공통
+    }
+
+    private void configureForHTTP(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+    }
+
+    private void configureForHTTPS(HttpSecurity http) throws Exception {
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+    }
+
+    private void configureCommon(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                //.and()    // → 크롬브라우저에서 Deny 처리를 하여, HTTPS 설정 후 다시 시도 해야 함...
-                .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
                 .and()
@@ -76,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //CORS 설정
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
