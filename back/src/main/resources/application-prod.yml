@@ -1,52 +1,10 @@
 server:
-  profiles:
-    active: ${PROFILE}
-  host:
-    mariadb: 127.0.0.1
-  port: 9080
   error:
     include-exception: false      # Response 에 Exception 을 표시할지
     include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)
     include-stacktrace: on_param  # Response 에 Stack Trace 를 표시할지 (never | always | on_param) on_trace_params 은 deprecated
     whitelabel.enabled: true      # 에러 발생 시 Spring 기본 에러 페이지 노출 여부
 
-spring:
-  profiles:
-    group:
-      test: common, test
-      dev: common, development
-      prod: common, production
----
-spring:
-  config:
-    activate:
-      on-profile: development
-  jpa:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: create
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    defer-datasource-initialization: true   # Hibernate 초기화 후 data.sql 실행
-  sql:
-    init:
-      mode: always  # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정
-      continue-on-error: false  # 서버 시작시 sql문을 실행할 때 오류 무시하고 계속 진행
-      data-locations: classpath:data.sql  # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
----
-spring:
-  config:
-    activate:
-      on-profile: production, test
-  jpa:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: validate
----
-spring:
   config:
     activate:
       on-profile: common
@@ -61,9 +19,9 @@ spring:
     deserialization:
       fail-on-unknown-properties: true   # 속성이 없는 경우 오류 발생 (true) -> 무시 (false)
   datasource:
-    username: root
-    password: root
-    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
+    username: ${MYSQL_USER_NAME}
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mariadb://${MYSQL_HOST}:${MYSQL_PORT}/${DATA_BASE_NAME}
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
@@ -73,6 +31,8 @@ spring:
             non_contextual_creation: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        hbm2ddl:
+          auto: validate
 
 logging:
   level:
@@ -91,14 +51,6 @@ logging:
         security: DEBUG
         web:
           filter: DEBUG
-
-init-member:
-  admin-login-id: admin
-  admin-password: admin
-  admin-email: admin@admin.co.kr
-  user-login-id: bbj
-  user-password: bbj
-  user-email: bbj@admin.co.kr
 
 jwt-setting:
   jwt-secret: mo2ver-master-jwttoken-startapp!@  # 최소 32개의 문자열 (256bit)
