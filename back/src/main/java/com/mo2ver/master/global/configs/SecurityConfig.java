@@ -78,8 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
                 .and()
-                //.cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
-                //.and()
+                .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
+                .and()
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()
