@@ -54,7 +54,7 @@ module.exports = {
     },
     plugins: [
         new Dotenv({
-            path: './.env.production', // .env.production 파일의 경로 설정
+            path: devMode ? './.env.development' : './.env.production',
         }),
         new HtmlWebpackPlugin({
             template: './public/index.html', // public/index.html 파일을 읽음
