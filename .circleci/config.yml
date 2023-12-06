@@ -157,7 +157,7 @@ jobs:
             echo tenancy=$OCI_TENANCY >> ~/.oci/config
             echo region=$OCI_REGION >> ~/.oci/config
             echo key_file=~/.oci/oci_api_key.pem >> ~/.oci/config
-            echo $OCI_API_KEY >> ~/.oci/oci_api_key.pem
+            echo $($OCI_API_KEY_BASE64 | base64 -d) >> ~/.oci/oci_api_key.pem
             oci setup repair-file-permissions --file ~/.oci/config
             oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
             cat ~/.oci/config
