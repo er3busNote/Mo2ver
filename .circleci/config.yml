@@ -117,24 +117,25 @@ jobs:
 
       - run:
           name: Build gradle
-          command: ./gradlew
+          command: | 
+            ./gradlew
+            mkdir spring/app
+            cp -r ./build spring/app
 
       # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
       - persist_to_workspace:
-          root: ~/backend/back
+          root: spring
           paths:
-            - ./build
+            - app
 
   # [단계 2.3] : back deploy 준비
   back_deploy:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/backend/back
     steps:
       - attach_workspace:
-          at: .  # Root Workspace Attach
-          # at: ./build
+          at: spring  # Root Workspace Attach
 
       - run:
           name: Current WorkSpace Monitoring
