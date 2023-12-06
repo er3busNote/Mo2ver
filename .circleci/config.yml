@@ -112,30 +112,27 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run:
-          name: chmod permissions
-          command: chmod +x ./gradlew
-
-      - run:
           name: Build gradle
           command: | 
-            ./gradlew
-            pwd
-            ls -alR ./
+            chmod +x ./gradlew
+            ./gradlew bootJar
 
       # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
       - persist_to_workspace:
           root: ~/backend/back
           paths:
-            - build
+            - ./build
 
   # [단계 2.3] : back deploy 준비
   back_deploy:
     docker:
       - image: circleci/openjdk:8-jdk
 
+    working_directory: ~/backend/back
     steps:
       - attach_workspace:
-          at: spring  # Root Workspace Attach
+          at: .  # Root Workspace Attach
+          # at: ./build
 
       - run:
           name: Current WorkSpace Monitoring
