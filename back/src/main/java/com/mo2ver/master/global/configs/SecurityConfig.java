@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         config.setAllowedOrigins(Arrays.asList(corsProperties.getUrlClient()));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "X-XSRF-TOKEN", "Content-Type"));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Authorization", "X-XSRF-TOKEN", "Content-Type", "Accept"));
         config.setAllowCredentials(true);   // 쿠키 요청을 허용하도록 true로 설정
         config.setMaxAge(3600L);
 
