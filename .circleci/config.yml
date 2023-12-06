@@ -152,12 +152,12 @@ jobs:
           command: |
             mkdir -p ~/.oci
             echo [DEFAULT] >> ~/.oci/config
-            echo user="${{ secrets.OCI_USER }}" >> ~/.oci/config
-            echo fingerprint="${{ secrets.OCI_FINGERPRINT }}" >> ~/.oci/config
-            echo tenancy="${{ secrets.OCI_TENANCY }}" >> ~/.oci/config
-            echo region="${{ secrets.OCI_REGION }}" >> ~/.oci/config
+            echo user=$OCI_USER >> ~/.oci/config
+            echo fingerprint=$OCI_FINGERPRINT >> ~/.oci/config
+            echo tenancy=$OCI_TENANCY >> ~/.oci/config
+            echo region=$OCI_REGION >> ~/.oci/config
             echo key_file=~/.oci/oci_api_key.pem >> ~/.oci/config
-            echo "${{ secrets.OCI_API_KEY }}" >> ~/.oci/oci_api_key.pem
+            echo $OCI_API_KEY >> ~/.oci/oci_api_key.pem
             oci setup repair-file-permissions --file ~/.oci/config
             oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
 
@@ -165,7 +165,16 @@ jobs:
       - run:
           name: Check Existing Instance
           command: |
-            oci compute instance list --lifecycle-state RUNNING --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} --display-name ${{ secrets.OCI_INSTANCE_DISPLAY_NAME }} --query "data [0].id" --raw-output
+            oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
+
+    environment:
+      OCI_USER: $OCI_USER
+      OCI_FINGERPRINT: $OCI_FINGERPRINT
+      OCI_TENANCY: $OCI_TENANCY
+      OCI_REGION: $OCI_REGION
+      OCI_API_KEY: $OCI_API_KEY
+      OCI_COMPARTMENT_ID: $OCI_COMPARTMENT_ID
+      OCI_INSTANCE_DISPLAY_NAME: $OCI_INSTANCE_DISPLAY_NAME
 
 
 workflows:
