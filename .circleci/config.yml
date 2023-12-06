@@ -167,10 +167,6 @@ jobs:
       #     name: OCI CLI Check Existing Instance
       #     command: |
       #       oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
-      - run:
-          name: OCI CLI Check Existing Instance
-          command: |
-            oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --query "data[?\"display-name\"=='$OCI_INSTANCE_DISPLAY_NAME'] | [0].id" --raw-output
 
       # Oracle Cloud Budil Deploy
       - run:
