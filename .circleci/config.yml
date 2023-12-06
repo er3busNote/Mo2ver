@@ -168,21 +168,11 @@ jobs:
           command: |
             oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
 
-      # Oracle Cloud Instance - RUNNING 상태 확인
+      # Oracle Cloud Budil Deploy
       - run:
           name: OCI CLI Deploy Build
           command: |
             oci os object bulk-upload -bn $OCI_BUCKET --src-dir ./build
-
-    environment:
-      OCI_USER: $OCI_USER
-      OCI_FINGERPRINT: $OCI_FINGERPRINT
-      OCI_TENANCY: $OCI_TENANCY
-      OCI_REGION: $OCI_REGION
-      OCI_API_KEY: $OCI_API_KEY
-      OCI_COMPARTMENT_ID: $OCI_COMPARTMENT_ID
-      OCI_INSTANCE_DISPLAY_NAME: $OCI_INSTANCE_DISPLAY_NAME
-      OCI_BUCKET: $OCI_BUCKET
 
 
 workflows:
