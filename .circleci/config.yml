@@ -156,8 +156,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER mkdir -p /home/ubuntu/build
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build --strip-components 1
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -al ./build
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER pkill -f java
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER java -jar ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dfile.encoding=UTF-8 -DPORT=$PORT -DMYSQL_USER_NAME=$MYSQL_USER_NAME -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DMYSQL_HOST=$MYSQL_HOST -DMYSQL_PORT=$MYSQL_PORT -DDATA_BASE_NAME=$DATA_BASE_NAME
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER pkill -f java && java -jar ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dfile.encoding=UTF-8 -DPORT=$PORT -DMYSQL_USER_NAME=$MYSQL_USER_NAME -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DMYSQL_HOST=$MYSQL_HOST -DMYSQL_PORT=$MYSQL_PORT -DDATA_BASE_NAME=$DATA_BASE_NAME
 
 
 workflows:
