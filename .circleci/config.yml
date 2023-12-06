@@ -143,7 +143,8 @@ jobs:
           name: Install OCI CLI
           command: |
             wget https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
-            sudo bash install.sh --accept-all-defaults --exec-dir /usr/local/bin
+            chmod +x install.sh
+            ./install.sh --accept-all-defaults
             mkdir -p ~/.oci
             echo [DEFAULT] >> ~/.oci/config
             echo user="${{ secrets.OCI_USER }}" >> ~/.oci/config
@@ -159,7 +160,7 @@ jobs:
       - run:
           name: Deploy to Oracle Cloud
           command: |
-            oci compute instance list --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} --lifecycle-state RUNNING --query "data[?\"display-name\"=='${{ secrets.OCI_INSTANCE_DISPLAY_NAME }}'] | [0].id" --raw-output
+            oci compute instance list --lifecycle-state RUNNING --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} --display-name ${{ secrets.OCI_INSTANCE_DISPLAY_NAME }} --query "data [0].id" --raw-output
 
 
 workflows:
