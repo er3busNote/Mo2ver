@@ -176,8 +176,8 @@ jobs:
           name: OCI CLI Deploy Build
           command: |
             oci os object bulk-upload -bn $OCI_BUCKET --src-dir ./build
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER
-            oci os object bulk-download -bn $OCI_BUCKET --download-dir ./
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -alR ./
+            # oci os object bulk-download -bn $OCI_BUCKET --download-dir ./
 
 
 workflows:
