@@ -145,11 +145,10 @@ jobs:
             wget https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
             chmod +x install.sh
             ./install.sh --accept-all-defaults
-            exec -l $SHELL
 
       # Oracle Cloud APT Key 세팅
       - run:
-          name: Install OCI CLI
+          name: OCI CLI API Key Setting
           command: |
             mkdir -p ~/.oci
             echo [DEFAULT] >> ~/.oci/config
