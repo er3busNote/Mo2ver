@@ -41,7 +41,7 @@ jobs:
           name: Build app
           command: yarn build
 
-      # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
+      # 워크스페이스에 빌드된 결과물을 저장
       - persist_to_workspace:
           root: ~/frontend/front
           paths:
@@ -117,7 +117,7 @@ jobs:
             chmod +x ./gradlew
             ./gradlew bootJar
 
-      # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
+      # 워크스페이스에 빌드된 결과물을 저장
       - persist_to_workspace:
           root: ~/backend/back
           paths:
@@ -137,6 +137,13 @@ jobs:
       - run:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
+
+      # Oracle Cloud CLI 설치 및 설정
+      - run:
+          name: Install OCI CLI
+          command: |
+            curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash
+            oci -v configure
 
 
 workflows:
