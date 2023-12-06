@@ -3,14 +3,12 @@ version: 2.1
 orbs:
   node: circleci/node@5.1.0
 
-# https://circleci.com/docs/configuration-reference
 jobs:
   front_test_build:
     executor: node/default
 
-    working_directory: ~/frontend/front   # Root Path Workspace
+    working_directory: ~/frontend/front
     steps:
-      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
           path: ~/frontend
 
@@ -18,19 +16,16 @@ jobs:
           name: Current WorkSpace Monitoring
           command: ls -al ./
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-dependencies-  # 정확히 일치하는 항목이 없으면 최신 캐시를 사용하도록 대체
       
       # - run: sudo npm install -g npm@latest
       # - node/install-packages:
       #     cache-path: ./node_modules
       #     override-ci-command: npm install
 
-      # https://circleci.com/docs/language-javascript/
       - node/install-packages:
           pkg-manager: yarn
 
@@ -54,7 +49,7 @@ jobs:
   front_deploy:
     executor: node/default
 
-    working_directory: ~/frontend/front   # Root Path Workspace
+    working_directory: ~/frontend/front
     steps:
       - attach_workspace:
           at: .  # Root Workspace Attach
@@ -70,29 +65,24 @@ jobs:
 
     # working_directory: ~/back
     environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx3200m   # JVM 최대 힙 제한 사용자 정의
       TERM: dumb
 
-    working_directory: ~/backend/back   # Root Path Workspace
+    working_directory: ~/backend/back
     steps:
-      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
           path: ~/backend
-      # Reuse the workspace from the build job
       - attach_workspace:
-          at: ~/project
+          at: ~/project   # 빌드 작업에서 작업공간 재사용
 
       - run:
           name: Current WorkSpace Monitoring
           command: ls -al ./
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-dependencies-  # 정확히 일치하는 항목이 없으면 최신 캐시를 사용하도록 대체
 
       - run: gradle dependencies
 
@@ -105,9 +95,8 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/backend/back   # Root Path Workspace
+    working_directory: ~/backend/back
     steps:
-      # In this case, the 'checkout' step will checkout project source code into the job’s 'working_directory'
       - checkout:
           path: ~/backend
 
