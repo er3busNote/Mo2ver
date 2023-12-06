@@ -160,6 +160,7 @@ jobs:
             echo $OCI_API_KEY >> ~/.oci/oci_api_key.pem
             oci setup repair-file-permissions --file ~/.oci/config
             oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
+            cat ~/.oci/config
 
       # Oracle Cloud Instance - RUNNING 상태 확인
       - run:
