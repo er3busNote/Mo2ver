@@ -130,6 +130,9 @@ jobs:
 
     working_directory: ~/backend/back
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "e9:ef:11:34:46:82:c5:c5:90:f8:9f:0f:cd:78:2c:37"
       - attach_workspace:
           at: .  # Root Workspace Attach
           # at: ./build
@@ -168,23 +171,11 @@ jobs:
       #     command: |
       #       oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
 
-      # Oracle Cloud SSH Resigter
-      - run:
-          name: SSH Resigter
-          command: |
-            eval $(ssh-agent -s)
-            echo $OCI_PRIVATE_KEY_BASE64 | base64 --decode | tr -d '\r' | ssh-add - > /dev/null
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
-            ssh-keyscan -p $OCI_PORT $OCI_SERVER >> ~/.ssh/known_hosts
-            chmod 644 ~/.ssh/known_hosts
-
       # Oracle Cloud Budil Deploy
       - run:
           name: OCI CLI Deploy Build
           command: |
             oci os object bulk-upload -bn $OCI_BUCKET --src-dir ./build
-            echo $OCI_PRIVATE_KEY_BASE64 | base64 --decode >> ~/.oci/oci_private_key.pem
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER
             oci os object bulk-download -bn $OCI_BUCKET --download-dir ./
 
