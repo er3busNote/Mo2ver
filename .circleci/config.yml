@@ -121,7 +121,7 @@ jobs:
 
       # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
       - persist_to_workspace:
-          root: .
+          root: ~/backend/back
           paths:
             - ./build
 
