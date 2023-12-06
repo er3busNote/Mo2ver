@@ -1,7 +1,7 @@
 server:
   port: ${PORT}
   ssl:
-    key-store: classpath:keystore.p12
+    key-store: keystore.p12
     key-store-type: PKCS12
     key-store-password: ${KEY_STORE_PASSWORD}
   error:
