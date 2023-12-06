@@ -156,6 +156,7 @@ jobs:
             scp -r -o StrictHostKeyChecking=no -P $OCI_PORT -p app.tar.gz ubuntu@$OCI_SERVER:/tmp/
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER mkdir -p /home/ubuntu/build
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build --strip-components 1
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER rm ./build/resources/main/data.sql
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -al ./build/resources/main
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER chmod +x start.sh
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ./exec.sh
