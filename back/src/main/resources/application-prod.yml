@@ -1,5 +1,9 @@
 server:
   port: ${PORT}
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12
+    key-store-password: ${KEY_STORE_PASSWORD}
   error:
     include-exception: false      # Response 에 Exception 을 표시할지
     include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)

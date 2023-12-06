@@ -140,23 +140,23 @@ jobs:
           at: .  # Root Workspace Attach
           # at: ./build
 
-      - run:
-          name: Current WorkSpace Monitoring
-          command: ls -alR ./
-
-      # Oracle Cloud Budil Deploy
+      # Oracle Cloud Build Deploy
       - run:
           name: Oracle Cloud Deploy Build
           command: |
             ls -al build/
             tar -cpzf app.tar.gz build/*
+            echo "cp /etc/letsencrypt/live/api.mo2ver.p-e.kr/keystore.p12 /home/ubuntu/build/resources/main" >> start.sh
+            echo "pkill -f java" >> start.sh
+            echo "java -jar ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dfile.encoding=UTF-8 -DPORT=$PORT -DKEY_STORE_PASSWORD=$KEY_STORE_PASSWORD -DMYSQL_USER_NAME=$MYSQL_USER_NAME -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DMYSQL_HOST=$MYSQL_HOST -DMYSQL_PORT=$MYSQL_PORT -DDATA_BASE_NAME=$DATA_BASE_NAME" >> start.sh
+            scp -r -o StrictHostKeyChecking=no -P $OCI_PORT -p start.sh ubuntu@$OCI_SERVER:/home/ubuntu
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls /home/ubuntu
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER rm -fr /home/ubuntu/build
             scp -r -o StrictHostKeyChecking=no -P $OCI_PORT -p app.tar.gz ubuntu@$OCI_SERVER:/tmp/
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER mkdir -p /home/ubuntu/build
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build --strip-components 1
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -al ./build
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER pkill -f java && java -jar ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dfile.encoding=UTF-8 -DPORT=$PORT -DMYSQL_USER_NAME=$MYSQL_USER_NAME -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DMYSQL_HOST=$MYSQL_HOST -DMYSQL_PORT=$MYSQL_PORT -DDATA_BASE_NAME=$DATA_BASE_NAME
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ./start.sh
 
 
 workflows:

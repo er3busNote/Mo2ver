@@ -171,7 +171,7 @@ jobs:
       #     command: |
       #       oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
 
-      # Oracle Cloud Budil Deploy
+      # Oracle Cloud Build Deploy
       - run:
           name: OCI CLI Deploy Build
           command: |
