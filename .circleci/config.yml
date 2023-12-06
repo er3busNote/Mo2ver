@@ -4,6 +4,7 @@ orbs:
   node: circleci/node@5.1.0
 
 jobs:
+  # [단계 1.1] : front build test 확인
   front_test_build:
     executor: node/default
 
@@ -40,12 +41,13 @@ jobs:
           name: Build app
           command: yarn build
 
-      # Workflow Job간 파일 공유: https://negabaro.github.io/archive/circleci_persist_to_workspace
+      # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
       - persist_to_workspace:
           root: ~/frontend/front
           paths:
             - ./dist
 
+  # [단계 1.2] : front deploy 준비
   front_deploy:
     executor: node/default
 
@@ -59,6 +61,24 @@ jobs:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
 
+  # [단계 2.1] : back junit test 확인
+  back_test_junit:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/backend/back
+    steps:
+      - checkout:
+          path: ~/backend
+
+      - run:
+          name: Current WorkSpace Monitoring
+          command: ls -al ./
+
+      # run tests!
+      # - run: gradle test
+
+  # [단계 2.2] : back build gradle
   back_build:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -91,22 +111,31 @@ jobs:
             - .gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-  back_test:
+      - run:
+          name: Build gradle
+          command: ./gradlew
+
+      # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
+      - persist_to_workspace:
+          root: ~/backend/back
+          paths:
+            - ./build
+
+  # [단계 2.3] : back deploy 준비
+  back_deploy:
     docker:
       - image: circleci/openjdk:8-jdk
 
     working_directory: ~/backend/back
     steps:
-      - checkout:
-          path: ~/backend
+      - attach_workspace:
+          at: .  # Root Workspace Attach
+          # at: ./build
 
-      - run: ls -al ~/
       - run:
           name: Current WorkSpace Monitoring
-          command: ls -al ./
+          command: ls -alR ./
 
-      # run tests!
-      # - run: gradle test
 
 workflows:
   version: 2
@@ -124,7 +153,13 @@ workflows:
           filters:
             branches:
               only: main # only deploy when on main
-      - back_test
+      - back_test_junit
       - back_build:
           requires:
-            - back_test
+            - back_test_junit
+      - back_deploy:
+          requires:
+            - back_build
+          filters:
+            branches:
+              only: main # only deploy when on main
