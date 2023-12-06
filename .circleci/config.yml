@@ -157,7 +157,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build --strip-components 1
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -al ./build/resources/main
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER chmod +x start.sh
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tmux new-session -s 0
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tmux new-session -s 0 2>/dev/null
             ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tmux send-keys -t 0 './start.sh' C-m
 
 
