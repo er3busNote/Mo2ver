@@ -33,7 +33,7 @@ public class AppConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Profile({"default", "development"})    // → 배포환경(default), 개발환경(development)
+    @Profile("development")    // → 개발환경(development)
     @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {

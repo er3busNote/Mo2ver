@@ -7,6 +7,8 @@ server:
     whitelabel.enabled: true      # 에러 발생 시 Spring 기본 에러 페이지 노출 여부
 
 spring:
+  profiles:
+    default: development
   servlet:
     multipart:
       max-file-size: 256MB
