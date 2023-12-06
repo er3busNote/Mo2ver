@@ -142,8 +142,24 @@ jobs:
       - run:
           name: Install OCI CLI
           command: |
-            curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash
-            oci -v configure
+            wget https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+            sudo bash install.sh --accept-all-defaults --exec-dir /usr/local/bin
+            mkdir -p ~/.oci
+            echo [DEFAULT] >> ~/.oci/config
+            echo user="${{ secrets.OCI_USER }}" >> ~/.oci/config
+            echo fingerprint="${{ secrets.OCI_FINGERPRINT }}" >> ~/.oci/config
+            echo tenancy="${{ secrets.OCI_TENANCY }}" >> ~/.oci/config
+            echo region="${{ secrets.OCI_REGION }}" >> ~/.oci/config
+            echo key_file=~/.oci/oci_api_key.pem >> ~/.oci/config
+            echo "${{ secrets.OCI_API_KEY }}" >> ~/.oci/oci_api_key.pem
+            oci setup repair-file-permissions --file ~/.oci/config
+            oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
+
+      # 워크스페이스에서 빌드된 결과물을 가져와서 배포
+      - run:
+          name: Deploy to Oracle Cloud
+          command: |
+            oci compute instance list --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} --lifecycle-state RUNNING --query "data[?\"display-name\"=='${{ secrets.OCI_INSTANCE_DISPLAY_NAME }}'] | [0].id" --raw-output
 
 
 workflows:
