@@ -119,6 +119,12 @@ jobs:
           name: Build gradle
           command: ./gradlew
 
+      # Workflow Job간 파일 공유 (circleci_persist_to_workspace)
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./build
+
   # [단계 2.3] : back deploy 준비
   back_deploy:
     docker:
