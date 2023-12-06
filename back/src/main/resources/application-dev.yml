@@ -8,8 +8,7 @@ server:
 
 spring:
   profiles:
-    default: dev
-    #default: development
+    default: development
   servlet:
     multipart:
       max-file-size: 256MB

@@ -12,8 +12,7 @@ server:
 
 spring:
   profiles:
-    default: prod
-    #default: production
+    default: production
   servlet:
     multipart:
       max-file-size: 256MB
