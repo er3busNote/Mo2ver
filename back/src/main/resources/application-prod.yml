@@ -35,11 +35,12 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         hbm2ddl:
-          auto: none
+          auto: create
           #auto: validate
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true   # Hibernate 초기화 후 data.sql 실행
   sql:
     init:
       mode: always  # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정
