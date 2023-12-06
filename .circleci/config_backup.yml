@@ -53,9 +53,6 @@ jobs:
 
     working_directory: ~/frontend/front
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "e9:ef:11:34:46:82:c5:c5:90:f8:9f:0f:cd:78:2c:37"
       - attach_workspace:
           at: .  # Root Workspace Attach
           # at: ./dist
@@ -126,7 +123,7 @@ jobs:
           paths:
             - ./build
 
-  # [단계 2.3] : back deploy 준비 → 실행
+  # [단계 2.3] : back deploy 준비
   back_deploy:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -144,17 +141,44 @@ jobs:
           name: Current WorkSpace Monitoring
           command: ls -alR ./
 
+      # Oracle Cloud CLI 설치 및 설정
+      - run:
+          name: Install OCI CLI
+          command: |
+            wget https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+            chmod +x install.sh
+            ./install.sh --accept-all-defaults
+
+      # Oracle Cloud APT Key 세팅
+      - run:
+          name: OCI CLI API Key Setting
+          command: |
+            mkdir -p ~/.oci
+            echo [DEFAULT] >> ~/.oci/config
+            echo user=$OCI_USER >> ~/.oci/config
+            echo fingerprint=$OCI_FINGERPRINT >> ~/.oci/config
+            echo tenancy=$OCI_TENANCY >> ~/.oci/config
+            echo region=$OCI_REGION >> ~/.oci/config
+            echo key_file=~/.oci/oci_api_key.pem >> ~/.oci/config
+            echo $OCI_API_KEY_BASE64 | base64 --decode >> ~/.oci/oci_api_key.pem
+            oci setup repair-file-permissions --file ~/.oci/config
+            oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
+            cat ~/.oci/config
+
+      # Oracle Cloud Instance - RUNNING 상태 확인
+      # - run:
+      #     name: OCI CLI Check Existing Instance
+      #     command: |
+      #       oci compute instance list --lifecycle-state RUNNING --compartment-id $OCI_COMPARTMENT_ID --display-name $OCI_INSTANCE_DISPLAY_NAME --query "data [0].id" --raw-output
+
       # Oracle Cloud Budil Deploy
       - run:
-          name: Oracle Cloud Deploy Build
+          name: OCI CLI Deploy Build
           command: |
-            ls -al build/
-            tar -cpzf app.tar.gz build/*
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls /home/ubuntu | rm -fr /home/ubuntu/build
-            scp -r -o StrictHostKeyChecking=no -P $OCI_PORT -p app.tar.gz ubuntu@$OCI_SERVER:/tmp/
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build/ --strip-components 1
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER ls -alR ./ | pkill -f java
-            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER java -jar ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dfile.encoding=UTF-8 -DPORT=$PORT -DMYSQL_USER_NAME=$MYSQL_USER_NAME -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DMYSQL_HOST=$MYSQL_HOST -DMYSQL_PORT=$MYSQL_PORT -DDATA_BASE_NAME=$DATA_BASE_NAME
+            oci os object bulk-upload -bn $OCI_BUCKET --src-dir ./build
+            ssh -o StrictHostKeyChecking=no -p $OCI_PORT ubuntu@$OCI_SERVER
+            ls -alR ./
+            # oci os object bulk-download -bn $OCI_BUCKET --download-dir ./
 
 
 workflows:
