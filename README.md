@@ -13,7 +13,7 @@ Under construction of demo website.
 - URL : [Demo](https://web-mo2ver-bkcl2bloy8m0h1.sel5.cloudtype.app/)
 
 ## Infra & Concept
-![Infra & Concept](./images/인프라 및 콘셉트.png)
+![Infra & Concept](./images/INFRA&CONCEPT.png)
 
 ## User Page
 <p align="center">
@@ -23,7 +23,7 @@ Under construction of demo website.
 </p>
 
 ## Admin Page
-![Admin Page 01](./images/상품 목록.png)
+![Admin Page 01](./images/GOOD_LIST.png)
 
 ## Contact us
 - qudwn0768@naver.com
