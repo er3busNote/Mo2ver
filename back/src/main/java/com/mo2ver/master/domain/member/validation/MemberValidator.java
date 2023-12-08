@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class AuthValidator {
+public class MemberValidator {
 
     private final static Pattern PATTERN_UPPER_CASE = Pattern.compile("[A-Z]");     // 영어 대문자 정규식 패턴
     private final static Pattern PATTERN_LOWER_CASE = Pattern.compile("[a-z]");     // 영어 소문자 정규식 패턴

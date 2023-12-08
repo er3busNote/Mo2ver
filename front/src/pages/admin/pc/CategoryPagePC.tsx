@@ -1,10 +1,11 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { Box, Paper, SvgIcon, Collapse, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
 import CategoryForm from '../../../components/form/admin/CategoryForm';
+import { CategoryData } from '../../../services/types';
 import { CategoryFormValues } from '../../../components/form/admin/types';
 
 interface CategoryProps {
@@ -12,6 +13,11 @@ interface CategoryProps {
 		data: CategoryFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
 	) => void;
+	categoryData: Array<CategoryData>;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
 }
 
 interface StyledTreeItemProps extends TreeItemProps {
@@ -90,7 +96,45 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	);
 };
 
-const CategoryPagePC: FC<CategoryProps> = ({ onSubmit }): JSX.Element => {
+const CategoryPagePC: FC<CategoryProps> = ({
+	onSubmit,
+	categoryData,
+}): JSX.Element => {
+	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
+		[]
+	);
+	const [middleCategoyData, setMiddleCategoyData] =
+		useState<CategoryDataInfo>();
+	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
+
+	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
+	const treeCategoryData = () => {
+		// 대 카테고리
+		const largeCategoyData = categoryData.filter(
+			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
+		);
+		setLargeCategoyData(largeCategoyData);
+		// 중/소 카테고리
+		const middleCategoyData = new Object() as CategoryDataInfo;
+		const smallCategoyData = new Object() as CategoryDataInfo;
+		categoryData.forEach((data) => {
+			if (data.categoryLevel === 2) {
+				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
+					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				middleCategoyData[data.upperCategoryCode].push(data);
+			} else if (data.categoryLevel === 3) {
+				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
+					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				smallCategoyData[data.upperCategoryCode].push(data);
+			}
+		});
+		setMiddleCategoyData(middleCategoyData);
+		setSmallCategoyData(smallCategoyData);
+	};
+	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
+
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<Box sx={{ py: 2, pl: 4, pr: 2, width: '40%' }}>
@@ -120,22 +164,42 @@ const CategoryPagePC: FC<CategoryProps> = ({ onSubmit }): JSX.Element => {
 								overflowY: 'auto',
 							}}
 						>
-							<StyledTreeItem nodeId="1" labelText="모든 카테고리">
-								<StyledTreeItem nodeId="2" labelText="Hello" />
-								<StyledTreeItem nodeId="3" labelText="Subtree with children">
-									<StyledTreeItem nodeId="6" labelText="Hello" />
+							<StyledTreeItem nodeId="ALL" labelText="모든 카테고리">
+								{largeCategoyData.map((ldata: CategoryData, l: number) => (
 									<StyledTreeItem
-										nodeId="7"
-										labelText="Sub-subtree with children"
+										key={l}
+										nodeId={ldata.categoryCode}
+										labelText={ldata.categoryName}
 									>
-										<StyledTreeItem nodeId="9" labelText="Child 1" />
-										<StyledTreeItem nodeId="10" labelText="Child 2" />
-										<StyledTreeItem nodeId="11" labelText="Child 3" />
+										{middleCategoyData &&
+											Object.keys(middleCategoyData).includes(
+												ldata.categoryCode
+											) &&
+											middleCategoyData[ldata.categoryCode].map(
+												(mdata: CategoryData, m: number) => (
+													<StyledTreeItem
+														key={m}
+														nodeId={mdata.categoryCode}
+														labelText={mdata.categoryName}
+													>
+														{smallCategoyData &&
+															Object.keys(smallCategoyData).includes(
+																mdata.categoryCode
+															) &&
+															smallCategoyData[mdata.categoryCode].map(
+																(sdata: CategoryData, s: number) => (
+																	<StyledTreeItem
+																		key={s}
+																		nodeId={sdata.categoryCode}
+																		labelText={sdata.categoryName}
+																	></StyledTreeItem>
+																)
+															)}
+													</StyledTreeItem>
+												)
+											)}
 									</StyledTreeItem>
-									<StyledTreeItem nodeId="8" labelText="Hello" />
-								</StyledTreeItem>
-								<StyledTreeItem nodeId="4" labelText="World" />
-								<StyledTreeItem nodeId="5" labelText="Something something" />
+								))}
 							</StyledTreeItem>
 						</TreeView>
 					</Box>

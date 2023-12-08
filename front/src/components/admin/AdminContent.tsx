@@ -1,5 +1,7 @@
-import React, { FC, useState, ReactElement } from 'react';
+import React, { FC, useState, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { menuLotate } from '../../store/index';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
@@ -68,6 +70,12 @@ const AdminMobile: FC<AdminProps> = ({ children }): JSX.Element => {
 };
 
 const AdminContent: FC<AdminProps> = ({ children }): JSX.Element => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(menuLotate('admin'));
+	}, [dispatch]);
+
 	return (
 		<ThemeProvider theme={mdTheme}>
 			<Box sx={{ flexDirection: 'column' }}>

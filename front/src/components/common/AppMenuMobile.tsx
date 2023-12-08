@@ -1,5 +1,8 @@
 import React, { FC, useState, useEffect, MouseEvent, TouchEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import { SubMenuInfo, MenuState } from '../../store/types';
+import { menuActive } from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -20,6 +23,20 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { CategoryData } from '../../services/types';
 
+interface AppMenuProps {
+	categoryData: Array<CategoryData>;
+	menus?: Array<SubMenuInfo>;
+}
+
+interface AppMenuDetailProps {
+	largeCategory: CategoryData;
+	middleCategoyData?: CategoryDataInfo;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
+}
+
 const MenuDivider: FC = (): JSX.Element => {
 	return (
 		<Box sx={{ lineHeight: { xs: '34px', sm: '40px' } }}>
@@ -37,19 +54,6 @@ const MenuDivider: FC = (): JSX.Element => {
 		</Box>
 	);
 };
-
-interface AppMenuProps {
-	categoryData: Array<CategoryData>;
-}
-
-interface AppMenuDetailProps {
-	largeCategory: CategoryData;
-	middleCategoyData?: CategoryDataInfo;
-}
-
-interface CategoryDataInfo {
-	[key: string]: Array<CategoryData>;
-}
 
 const AppMenu: FC<AppMenuDetailProps> = ({
 	largeCategory,
@@ -150,7 +154,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		});
 		setMiddleCategoyData(middleCategoyData);
 	};
-	useEffect(treeCategoryData, [categoryData]); // 처음 랜더링 될 때, 한번만 실행..!
+	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	const showClick = (event: MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(open ? null : event.currentTarget);
@@ -231,7 +235,18 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	);
 };
 
-const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+const AppMenuMobile: FC<AppMenuProps> = ({
+	categoryData,
+	menus,
+}): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const activeMenuClick = (path: string) => {
+		dispatch(menuActive(path));
+		navigate(path);
+	};
+
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box>
@@ -239,75 +254,46 @@ const AppMenuMobile: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 					<Grid item>
 						<AppDetail categoryData={categoryData} />
 					</Grid>
-					<Grid item>
-						<Box
-							sx={{
-								px: { xs: '12px', sm: '20px' },
-								py: { xs: '6px', sm: '10px' },
-							}}
-						>
-							<IconButton component={Link} to="/event" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{
-										fontSize: { xs: '13px', sm: '14px' },
-										fontWeight: 'bold',
-									}}
-								>
-									이벤트
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
-					<MenuDivider />
-					<Grid item>
-						<Box
-							sx={{
-								px: { xs: '12px', sm: '20px' },
-								py: { xs: '6px', sm: '10px' },
-							}}
-						>
-							<IconButton component={Link} to="/register" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{
-										fontSize: { xs: '13px', sm: '14px' },
-										fontWeight: 'bold',
-									}}
-								>
-									상품등록
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
-					<MenuDivider />
-					<Grid item>
-						<Box
-							sx={{
-								px: { xs: '12px', sm: '20px' },
-								py: { xs: '6px', sm: '10px' },
-							}}
-						>
-							<IconButton component={Link} to="/discount" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{
-										fontSize: { xs: '13px', sm: '14px' },
-										fontWeight: 'bold',
-									}}
-								>
-									특가할인
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
+					{menus &&
+						menus.map((menu: SubMenuInfo) => (
+							<Grid item key={menu.index}>
+								<Grid container spacing={1}>
+									<Grid item>
+										<Box
+											sx={{
+												px: { xs: '12px', sm: '20px' },
+												py: { xs: '6px', sm: '10px' },
+											}}
+										>
+											<IconButton
+												onClick={() => activeMenuClick(menu.path)}
+												sx={{ p: 0 }}
+											>
+												<Typography
+													color="#000"
+													align="center"
+													sx={{
+														fontSize: { xs: '13px', sm: '14px' },
+														fontWeight: 'bold',
+													}}
+												>
+													{menu.description}
+												</Typography>
+											</IconButton>
+										</Box>
+									</Grid>
+									<MenuDivider />
+								</Grid>
+							</Grid>
+						))}
 				</Grid>
 			</Box>
 		</Paper>
 	);
 };
 
-export default AppMenuMobile;
+const mapStateToProps = (state: any) => ({
+	menus: (state.menu as MenuState).menus,
+});
+
+export default connect(mapStateToProps, null)(AppMenuMobile);

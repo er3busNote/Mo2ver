@@ -139,9 +139,24 @@ const category = {
 			}),
 };
 
+const banner = {
+	// CSRF 토큰 생성 API : <baseURL>/banner/list
+	list: () => (dispatch: Dispatch) =>
+		instance
+			.get('banner/list?page=0')
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+};
+
 const api = {
 	member,
 	category,
+	banner,
 };
 
 export default { ...api };

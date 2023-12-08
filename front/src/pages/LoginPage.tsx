@@ -26,11 +26,11 @@ const LoginPage: FC<LoginDispatchProps> = ({ member }): JSX.Element => {
 		data: LoginFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const userData = {
+		const userFormData = {
 			username: data.username,
 			password: data.password,
 		};
-		await member.login(userData, csrfData);
+		await member.login(userFormData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
 		navigate(redirectTo);
 	};

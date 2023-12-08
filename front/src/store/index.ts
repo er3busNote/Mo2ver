@@ -69,7 +69,42 @@ const titleSlice = createSlice({
 });
 
 // 2.2. 메뉴 관련 State
-const menuinitialState: MenuState = {
+const userMenuinitialState: MenuState = {
+	menus: [
+		{
+			index: 1,
+			name: 'EVENT',
+			path: '/event',
+			title: 'event',
+			description: '이벤트',
+			subMenu: [],
+			isActive: true,
+			isShow: true,
+		},
+		{
+			index: 2,
+			name: 'REGISTER',
+			path: '/register',
+			title: 'Register',
+			description: '상품등록',
+			subMenu: [],
+			isActive: false,
+			isShow: true,
+		},
+		{
+			index: 3,
+			name: 'DISCOUNT',
+			path: '/discount',
+			title: 'Discount',
+			description: '특가할인',
+			subMenu: [],
+			isActive: false,
+			isShow: true,
+		},
+	],
+};
+
+const adminMenuinitialState: MenuState = {
 	menus: [
 		{
 			index: 1,
@@ -98,7 +133,7 @@ const menuinitialState: MenuState = {
 			index: 2,
 			name: 'BANNER',
 			path: '/banner',
-			title: 'Recent File',
+			title: 'Banner',
 			description: '배너 관리',
 			subMenu: [
 				{
@@ -147,7 +182,7 @@ const menuinitialState: MenuState = {
 // 2.2. menuSlice : action + reducer → slice
 const menuSlice = createSlice({
 	name: 'menu',
-	initialState: menuinitialState,
+	initialState: userMenuinitialState,
 	reducers: {
 		menuActive: (state: MenuState, action: PayloadAction<string>) => {
 			state.menus.forEach((menu) => {
@@ -163,6 +198,13 @@ const menuSlice = createSlice({
 				menu.isActive = action.payload;
 			});
 		},
+		menuLotate: (state: MenuState, action: PayloadAction<string>) => {
+			if (action.payload === 'admin') {
+				state.menus = adminMenuinitialState.menus;
+			} else {
+				state.menus = userMenuinitialState.menus;
+			}
+		},
 	},
 });
 
@@ -176,7 +218,7 @@ const rootReducer = combineReducers({
 const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
 const { tokenSuccess } = tokenSlice.actions;
 const { changeTitle, changeDescription } = titleSlice.actions;
-const { menuActive, menuSwitch } = menuSlice.actions;
+const { menuActive, menuSwitch, menuLotate } = menuSlice.actions;
 
 export {
 	loginSuccess,
@@ -187,6 +229,7 @@ export {
 	changeDescription,
 	menuActive,
 	menuSwitch,
+	menuLotate,
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

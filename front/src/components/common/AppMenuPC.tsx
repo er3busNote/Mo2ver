@@ -7,7 +7,10 @@ import React, {
 	SetStateAction,
 	CSSProperties,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import { SubMenuInfo, MenuState } from '../../store/types';
+import { menuActive } from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -37,6 +40,7 @@ const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 interface AppMenuProps {
 	categoryData: Array<CategoryData>;
+	menus?: Array<SubMenuInfo>;
 }
 
 interface AppMenuItemProps {
@@ -136,7 +140,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		setMiddleCategoyData(middleCategoyData);
 		setSmallCategoyData(smallCategoyData);
 	};
-	useEffect(treeCategoryData, [categoryData]); // 처음 랜더링 될 때, 한번만 실행..!
+	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	// 중 카테고리 → 3등분
 	let divideData = new Array([
@@ -307,7 +311,15 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	);
 };
 
-const AppMenuPC: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+const AppMenuPC: FC<AppMenuProps> = ({ categoryData, menus }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const activeMenuClick = (path: string) => {
+		dispatch(menuActive(path));
+		navigate(path);
+	};
+
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box
@@ -321,51 +333,38 @@ const AppMenuPC: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 					<Grid item>
 						<AppDetail categoryData={categoryData} />
 					</Grid>
-					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
-							<IconButton component={Link} to="/event" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
-								>
-									이벤트
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
-					<MenuDivider />
-					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
-							<IconButton component={Link} to="/register" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
-								>
-									상품등록
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
-					<MenuDivider />
-					<Grid item>
-						<Box sx={{ px: '20px', py: '10px' }}>
-							<IconButton component={Link} to="/discount" sx={{ p: 0 }}>
-								<Typography
-									color="#000"
-									align="center"
-									sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
-								>
-									특가할인
-								</Typography>
-							</IconButton>
-						</Box>
-					</Grid>
+					{menus &&
+						menus.map((menu: SubMenuInfo) => (
+							<Grid item key={menu.index}>
+								<Grid container spacing={1}>
+									<Grid item>
+										<Box sx={{ px: '20px', py: '10px' }}>
+											<IconButton
+												onClick={() => activeMenuClick(menu.path)}
+												sx={{ p: 0 }}
+											>
+												<Typography
+													color="#000"
+													align="center"
+													sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
+												>
+													{menu.description}
+												</Typography>
+											</IconButton>
+										</Box>
+									</Grid>
+									<MenuDivider />
+								</Grid>
+							</Grid>
+						))}
 				</Grid>
 			</Box>
 		</Paper>
 	);
 };
 
-export default AppMenuPC;
+const mapStateToProps = (state: any) => ({
+	menus: (state.menu as MenuState).menus,
+});
+
+export default connect(mapStateToProps, null)(AppMenuPC);

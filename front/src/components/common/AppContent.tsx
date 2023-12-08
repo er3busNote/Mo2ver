@@ -1,9 +1,10 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { menuLotate } from '../../store/index';
 import Api from '../../services/api';
 import useCategoryList from '../../hooks/useCategoryList';
 import AppHeader from './AppHeader';
@@ -74,7 +75,13 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	children,
 	category,
 }): JSX.Element => {
+	const dispatch = useDispatch();
 	const categoryData = useCategoryList({ category });
+
+	useEffect(() => {
+		dispatch(menuLotate('user'));
+	}, [dispatch]);
+
 	return (
 		<ThemeProvider theme={mdTheme}>
 			<Box

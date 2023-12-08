@@ -31,6 +31,45 @@ interface CategoryData {
 	useYesNo: string;
 }
 
+// 3. Banner Type
+interface BannerData {
+	bannerManageNo: number;
+	subject: string;
+	displayStartDate: number;
+	displayEndDate: number;
+	displayYesNo: string;
+	register: string;
+	registerDate: number;
+}
+
+interface BannerPageData {
+	content: Array<BannerData>;
+	empty: boolean;
+	first: boolean;
+	last: boolean;
+	number: number;
+	numberOfElements: number;
+	pageable: {
+		offset: number;
+		pageNumber: number;
+		pageSize: number;
+		paged: boolean;
+		sort: {
+			empty: boolean;
+			sorted: boolean;
+			unsorted: boolean;
+		};
+	};
+	size: number;
+	sort: {
+		empty: boolean;
+		sorted: boolean;
+		unsorted: boolean;
+	};
+	totalElements: number;
+	totalPages: number;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -50,6 +89,8 @@ export type {
 	TokenData,
 	CSRFData,
 	CategoryData,
+	BannerData,
+	BannerPageData,
 	PageData,
 	KeywordData,
 };

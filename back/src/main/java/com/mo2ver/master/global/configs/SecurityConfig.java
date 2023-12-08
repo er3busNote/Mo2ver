@@ -90,6 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/goods/create").hasAnyRole("MANAGER", "ADMIN")
+                .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/banner/**").hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

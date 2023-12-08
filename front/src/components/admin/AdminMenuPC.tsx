@@ -214,7 +214,7 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 			dispatch(changeTitle('대시보드'));
 			dispatch(changeDescription(''));
 		}
-	}, []);
+	}, [location.pathname]);
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);

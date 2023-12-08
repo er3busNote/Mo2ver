@@ -25,12 +25,12 @@ const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 		data: SignupFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const userData = {
+		const userFormData = {
 			username: data.username,
 			password: data.password,
 			email: data.email,
 		};
-		await member.signup(userData, csrfData);
+		await member.signup(userFormData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
 		navigate(redirectTo);
 	};

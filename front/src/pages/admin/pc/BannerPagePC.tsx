@@ -28,6 +28,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import BannerForm from '../../../components/form/admin/BannerForm';
+import { BannerData, BannerPageData } from '../../../services/types';
 import { BannerFormValues } from '../../../components/form/admin/types';
 // import _ from 'lodash';
 import moment from 'moment';
@@ -37,12 +38,18 @@ interface BannerProps {
 		data: BannerFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
 	) => void;
+	bannerPageData: BannerPageData;
 }
 
-const BannerPagePC: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
+const BannerPagePC: FC<BannerProps> = ({
+	onSubmit,
+	bannerPageData,
+}): JSX.Element => {
 	const [open, setOpen] = useState(true);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [page, setPage] = useState(bannerPageData.number);
+	const [rowsPerPage, setRowsPerPage] = useState(
+		bannerPageData.numberOfElements
+	);
 	const [keyword, setKeyword] = useState('');
 	const [useyn, setUseyn] = useState('');
 	const [startDate, setStartDate] = useState(moment().format('YYYY-MM-DD'));
@@ -251,38 +258,44 @@ const BannerPagePC: FC<BannerProps> = ({ onSubmit }): JSX.Element => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								<TableRow>
-									<TableCell sx={thBody} align="center">
-										메인
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										배경이미지
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										2019-08-25 ~ 2019-08-26
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										마감
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										Y
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										Y
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										관리자
-									</TableCell>
-									<TableCell sx={thBody} align="center">
-										2019.08.25
-									</TableCell>
-								</TableRow>
+								{bannerPageData.content &&
+									bannerPageData.content.map(
+										(data: BannerData, index: number) => (
+											<TableRow key={index}>
+												<TableCell sx={thBody} align="center">
+													{data.bannerManageNo}
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													배경이미지
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
+													{moment(data.displayEndDate).format('YYYY-MM-DD')}
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													마감
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													{data.displayYesNo}
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													Y
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													{data.register}
+												</TableCell>
+												<TableCell sx={thBody} align="center">
+													{moment(data.registerDate).format('YYYY-MM-DD')}
+												</TableCell>
+											</TableRow>
+										)
+									)}
 							</TableBody>
 							<TableFooter>
 								<TableRow>
 									<TablePagination
-										rowsPerPageOptions={[5, 10, 25]}
-										count={10}
+										rowsPerPageOptions={[10, 25, 50, 100]}
+										count={bannerPageData.totalElements}
 										rowsPerPage={rowsPerPage}
 										page={page}
 										SelectProps={{

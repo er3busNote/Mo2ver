@@ -3,7 +3,7 @@ package com.mo2ver.master.domain.member.api;
 import com.mo2ver.master.domain.member.service.MemberService;
 import com.mo2ver.master.domain.member.dto.LoginDto;
 import com.mo2ver.master.domain.member.dto.SignupDto;
-import com.mo2ver.master.domain.member.validation.AuthValidator;
+import com.mo2ver.master.domain.member.validation.MemberValidator;
 import com.mo2ver.master.global.common.dto.CsrfDto;
 import com.mo2ver.master.global.common.dto.ResponseDto;
 import com.mo2ver.master.global.error.service.ErrorService;
@@ -39,14 +39,14 @@ public class MemberController {
     private final ErrorService errorService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final AuthValidator authValidator;
+    private final MemberValidator memberValidator;
 
-    public MemberController(MemberService memberService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, AuthValidator authValidator, ErrorService errorService) {
+    public MemberController(MemberService memberService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, MemberValidator memberValidator, ErrorService errorService) {
         this.memberService = memberService;
         this.errorService = errorService;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.authValidator = authValidator;
+        this.memberValidator = memberValidator;
     }
 
     @PostMapping("/login")
@@ -117,7 +117,7 @@ public class MemberController {
 
         } catch (UsernameNotFoundException e) {
 
-            authValidator.validate(signupDto, errors);
+            memberValidator.validate(signupDto, errors);
             if (errors.hasErrors()) {
                 response.put("required", errors);
                 return badRequest(errorService.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
