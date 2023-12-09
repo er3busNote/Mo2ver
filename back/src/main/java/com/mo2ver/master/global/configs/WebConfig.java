@@ -1,7 +1,10 @@
 package com.mo2ver.master.global.configs;
 
 import com.mo2ver.master.global.common.properties.CorsProperties;
+import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -11,6 +14,8 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -46,9 +51,27 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public ServletWebServerFactory serverFactory() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
+            @Override
+            protected void postProcessContext(Context context) {    // HTTP → HTTPS Rewrite
+                if (isSSLApplied(context)) {    // SSL이 적용되었는지 확인
+                    SecurityConstraint securityConstraint = new SecurityConstraint();
+                    securityConstraint.setUserConstraint("CONFIDENTIAL");
+                    SecurityCollection collection = new SecurityCollection();
+                    collection.addPattern("/*");
+                    securityConstraint.addCollection(collection);
+                    context.addConstraint(securityConstraint);
+                }
+            }
+        };
         tomcat.addAdditionalTomcatConnectors(createSslConnector());
         return tomcat;
+    }
+
+    private boolean isSSLApplied(Context context) {
+        SecurityConstraint[] constraints = context.findConstraints();
+        return constraints != null && Arrays.stream(constraints)
+                .anyMatch(constraint -> "CONFIDENTIAL".equals(constraint.getUserConstraint()));
     }
 
     private Connector createSslConnector() {    // HTTP/1.1 Connector

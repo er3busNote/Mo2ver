@@ -12,6 +12,7 @@ import com.mo2ver.master.global.error.api.ErrorResponse;
 import com.mo2ver.master.global.jwt.TokenProvider;
 import com.mo2ver.master.global.jwt.dto.TokenDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +29,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 
@@ -130,11 +132,17 @@ public class MemberController {
     }
 
     @GetMapping("csrf-token")
-    public ResponseEntity csrtToken() {
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    public ResponseEntity csrtToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        if (csrf != null) return ResponseEntity.ok(new CsrfDto(csrf.getToken()));
+        if (csrf != null) {
+            ResponseCookie csrfCookie = ResponseCookie.from("XSRF-TOKEN", csrf.getToken())
+                    .path("/")
+                    .secure(true)
+                    .sameSite("None")
+                    .build();
+            response.setHeader("Set-Cookie", csrfCookie.toString());
+            return ResponseEntity.ok(new CsrfDto(csrf.getToken()));
+        }
         return new ResponseEntity(new ResponseDto(HttpStatus.NOT_FOUND.value(), "CSRF Token이 존재하지 않습니다."), HttpStatus.NOT_FOUND); }
 
     private ResponseEntity badRequest(ErrorResponse response) {
