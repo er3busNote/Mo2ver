@@ -6,8 +6,12 @@ import com.mo2ver.master.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.master.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.master.global.jwt.JwtSecurityConfig;
 import com.mo2ver.master.global.jwt.TokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.context.WebServerApplicationContext;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -26,26 +30,26 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    Environment environment;
-
-    @Autowired
     MemberService memberService;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @Autowired
     CorsProperties corsProperties;
-
     @Autowired
-    private WebServerApplicationContext applicationContext;
+    private Environment environment;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -61,13 +65,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        int port = applicationContext.getWebServer().getPort();
-        if (Arrays.asList(environment.getActiveProfiles()).contains("production") && port == 443) {  // → HTTPS 서버 실 배포 시
+        if (Arrays.asList(environment.getActiveProfiles()).contains("production") && getServerPorts().contains(443)) {  // → HTTPS 서버 실 배포 시
             configureForHTTPS(http);    // → CSRF Enabled
         } else {
             configureForHTTP(http);     // → CSRF Disabled
         }
         configureCommon(http);  // → 공통
+        //configureForPort(http);  // → 포트포워딩
+    }
+
+    private List<Integer> getServerPorts() {
+        Map<String, TomcatServletWebServerFactory> serverBeans = applicationContext.getBeansOfType(TomcatServletWebServerFactory.class);
+        return serverBeans.values().stream()
+                .map(TomcatServletWebServerFactory::getPort)
+                .collect(Collectors.toList());
+    }
+
+    private void configureForPort(HttpSecurity http) throws Exception {
+        http.portMapper()
+                .http(80)
+                .mapsTo(443);
     }
 
     private void configureForHTTP(HttpSecurity http) throws Exception {

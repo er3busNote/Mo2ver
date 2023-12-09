@@ -1,16 +1,17 @@
 package com.mo2ver.master.global.configs;
 
 import com.mo2ver.master.global.common.properties.CorsProperties;
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc // Spring Boot의 자동 구성을 비활성화 ( → 8080 포트가 추가적으로 띄워지는 문제...)
 public class WebConfig implements WebMvcConfigurer {
 
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
@@ -38,5 +39,21 @@ public class WebConfig implements WebMvcConfigurer {
         filter.setIncludePayload(true); //body request 내용을 로그에 출력
         filter.setMaxPayloadLength(1000);	//로그에 포함할 body request 사이즈 제한
         return filter;
+    }
+
+    @Bean
+    public ServletWebServerFactory serverFactory() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        tomcat.addAdditionalTomcatConnectors(createSslConnector());
+        return tomcat;
+    }
+
+    private Connector createSslConnector() {    // HTTP/1.1 Connector
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setScheme("http");
+        connector.setSecure(false);
+        connector.setPort(80);
+        connector.setRedirectPort(443);
+        return connector;
     }
 }
