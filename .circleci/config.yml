@@ -55,7 +55,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "e9:ef:11:34:46:82:c5:c5:90:f8:9f:0f:cd:78:2c:37"
+            - "7f:7d:db:39:12:c9:e8:a6:cb:6f:4b:af:a3:f3:90:58"
       - attach_workspace:
           at: .  # Root Workspace Attach
           # at: ./dist
@@ -135,7 +135,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "e9:ef:11:34:46:82:c5:c5:90:f8:9f:0f:cd:78:2c:37"
+            - "7f:7d:db:39:12:c9:e8:a6:cb:6f:4b:af:a3:f3:90:58"
       - attach_workspace:
           at: .  # Root Workspace Attach
           # at: ./build

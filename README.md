@@ -2,7 +2,7 @@
 사용자 맞춤형 의류 쇼핑몰 사이트
 
 ## Infra & Concept
-![Infra & Concept](./images/INFRA&CONCEPT.PNG)
+![Infra & Concept](./images/INFRA&CONCEPT_v2.PNG)
 
 ## Init Setting
 - [Spring Initilaizr](https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.7.3&packaging=jar&jvmVersion=1.8&groupId=com.mo2ver&artifactId=master&name=master&description=Mo2ver%20project%20for%20Spring%20Boot&packageName=com.mo2ver.master&dependencies=data-jpa,validation,security,mail,devtools,mariadb,lombok)
@@ -13,7 +13,7 @@
 
 ### Demo Website Link
 Under construction of demo website.
-- URL : [Demo](https://web-mo2ver-bkcl2bloy8m0h1.sel5.cloudtype.app/)
+- URL : [Demo](https://mo2ver.vercel.app/)
 
 ## User Page
 <p align="center">
