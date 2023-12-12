@@ -33,6 +33,7 @@ const MainRoutes: FC = (): JSX.Element => {
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/auth/*" element={<AuthRoutes />} />
+			<Route path="/goods" element={<Goods />} />
 			<Route element={<PrivateRoute role={'user'} />}>
 				<Route path="/goods/detail" element={<GoodDetail />} />
 				<Route path="/event" element={<Event />} />

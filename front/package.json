@@ -61,8 +61,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:webpack": "webpack --mode production --config webpack.config.js",
+    "build": "webpack --mode production --env production --config webpack.config.js",
+    "build:react": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "webpack --mode development",
