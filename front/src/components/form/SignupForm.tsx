@@ -23,14 +23,14 @@ const schema = yup
 		username: yup
 			.string()
 			.required('아이디를 입력해주세요')
-			.min(3, '3자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
+			.min(3, '3자 이상 입력해주세요!'),
 		password: yup
 			.string()
 			.required('비밀번호를 입력해주세요')
-			.matches(validatePassword, '특수문자 숫자와 대소문자가 필요합니다')
-			.min(8, '8자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
+			.matches(
+				validatePassword,
+				'비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.'
+			),
 		repeat_password: yup
 			.string()
 			.required('비밀번호를 입력해주세요')

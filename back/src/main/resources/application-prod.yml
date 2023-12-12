@@ -63,7 +63,7 @@ logging:
           filter: DEBUG
 
 cors-setting:
-  url-client: https://web-mo2ver-bkcl2bloy8m0h1.sel5.cloudtype.app
+  url-client: https://mo2ver.vercel.app
 
 jwt-setting:
   jwt-secret: mo2ver-master-jwttoken-startapp!@  # 최소 32개의 문자열 (256bit)

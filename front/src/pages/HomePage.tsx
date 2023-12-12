@@ -65,7 +65,7 @@ const HomeMobile: FC = (): JSX.Element => {
 const HomePage: FC = (): JSX.Element => {
 	return (
 		<Paper
-			sx={{ width: '100%', height: '100%', position: 'absolute' }}
+			sx={{ width: '100%', height: '105%', position: 'absolute' }}
 			component="div"
 			square
 			variant="outlined"

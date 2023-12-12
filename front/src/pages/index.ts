@@ -2,6 +2,8 @@
 import Home from './HomePage';
 import Login from './LoginPage';
 import Signup from './SignupPage';
+import Goods from './GoodsPage';
+import GoodDetail from './GoodDetailPage';
 import Event from './EventPage';
 import Register from './RegisterPage';
 import Discount from './DiscountPage';
@@ -14,6 +16,8 @@ export {
 	Home,
 	Login,
 	Signup,
+	Goods,
+	GoodDetail,
 	Event,
 	Register,
 	Discount,

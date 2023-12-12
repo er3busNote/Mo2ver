@@ -10,13 +10,13 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
-
 
 @Configuration
 @EnableWebMvc // Spring Boot의 자동 구성을 비활성화 ( → 수동 설정)
@@ -26,6 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     CorsProperties corsProperties;
+    @Autowired
+    private Environment environment;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -54,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
             protected void postProcessContext(Context context) {    // HTTP → HTTPS Rewrite
-                if (isSSLApplied(context)) {    // SSL이 적용되었는지 확인
+                if (Arrays.asList(environment.getActiveProfiles()).contains("production") && isSSLApplied(context)) {    // SSL이 적용되었는지 확인
                     SecurityConstraint securityConstraint = new SecurityConstraint();
                     securityConstraint.setUserConstraint("CONFIDENTIAL");
                     SecurityCollection collection = new SecurityCollection();

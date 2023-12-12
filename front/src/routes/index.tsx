@@ -6,6 +6,8 @@ import {
 	Home,
 	Login,
 	Signup,
+	Goods,
+	GoodDetail,
 	Event,
 	Register,
 	Discount,
@@ -32,6 +34,7 @@ const MainRoutes: FC = (): JSX.Element => {
 			<Route path="/" element={<Home />} />
 			<Route path="/auth/*" element={<AuthRoutes />} />
 			<Route element={<PrivateRoute role={'user'} />}>
+				<Route path="/goods/detail" element={<GoodDetail />} />
 				<Route path="/event" element={<Event />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/discount" element={<Discount />} />

@@ -11,6 +11,7 @@ import com.mo2ver.master.global.error.domain.ErrorCode;
 import com.mo2ver.master.global.error.api.ErrorResponse;
 import com.mo2ver.master.global.jwt.TokenProvider;
 import com.mo2ver.master.global.jwt.dto.TokenDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 
+@Slf4j
 @Controller
 @RequestMapping(value = "/member")
 public class MemberController {
