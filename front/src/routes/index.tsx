@@ -7,9 +7,9 @@ import {
 	Login,
 	Signup,
 	Goods,
-	GoodDetail,
+	GoodsDetail,
+	GoodsRegister,
 	Event,
-	Register,
 	Discount,
 	Banner,
 	Category,
@@ -33,11 +33,11 @@ const MainRoutes: FC = (): JSX.Element => {
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/auth/*" element={<AuthRoutes />} />
-			<Route path="/goods" element={<Goods />} />
 			<Route element={<PrivateRoute role={'user'} />}>
-				<Route path="/goods/detail" element={<GoodDetail />} />
+				<Route path="/goods/:id" element={<Goods />} />
+				<Route path="/goods/:id/detail" element={<GoodsDetail />} />
 				<Route path="/event" element={<Event />} />
-				<Route path="/register" element={<Register />} />
+				<Route path="/register" element={<GoodsRegister />} />
 				<Route path="/discount" element={<Discount />} />
 			</Route>
 			<Route path="*" element={<NotFound />} />

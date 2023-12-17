@@ -9,7 +9,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { SubMenuInfo, MenuState } from '../../store/types';
-import { menuActive } from '../../store/index';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -44,6 +44,7 @@ interface AppMenuItemProps {
 	categoryCode: string;
 	categoryName: string;
 	setHover: Dispatch<SetStateAction<string>>;
+	menuClick: (title: string, code: string) => void;
 }
 
 interface CategoryDataInfo {
@@ -72,6 +73,7 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 	categoryCode,
 	categoryName,
 	setHover,
+	menuClick,
 }): JSX.Element => {
 	const [isHover, setIsHover] = useState(false);
 
@@ -103,7 +105,11 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
 		>
-			<MenuItem dense sx={item}>
+			<MenuItem
+				dense
+				onClick={() => menuClick(categoryName, categoryCode)}
+				sx={item}
+			>
 				<ListItemText
 					primaryTypographyProps={{
 						style: font,
@@ -116,6 +122,8 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 };
 
 const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [hover, setHover] = useState<string>('');
 	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
 		[]
@@ -168,6 +176,13 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 
 	const onMouseLeave = () => {
 		setHover('');
+	};
+
+	const menuClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/goods/' + code));
+		navigate('/goods/' + code);
 	};
 
 	const menuWidthSize = '630px';
@@ -234,6 +249,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 									<AppMenuItem
 										key={index}
 										setHover={setHover}
+										menuClick={menuClick}
 										categoryCode={data.categoryCode}
 										categoryName={data.categoryName}
 									/>
@@ -251,7 +267,13 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 								>
 									{divide.map((mdata: any, i: number) => (
 										<MenuList key={i} sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-											<MenuItem dense sx={{ px: '24px', py: '11px' }}>
+											<MenuItem
+												dense
+												onClick={() =>
+													menuClick(mdata.categoryName, mdata.categoryCode)
+												}
+												sx={{ px: '24px', py: '11px' }}
+											>
 												<ListItemText
 													primaryTypographyProps={{
 														style: { fontSize: 14, fontWeight: 'bold' },
@@ -268,6 +290,12 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 														<MenuItem
 															key={j}
 															dense
+															onClick={() =>
+																menuClick(
+																	sdata.categoryName,
+																	sdata.categoryCode
+																)
+															}
 															sx={{
 																px: '24px',
 																py: 0,
@@ -302,7 +330,13 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const activeMenuClick = (path: string) => {
+	const activeMenuClick = (
+		title: string,
+		description: string,
+		path: string
+	) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(description));
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -327,7 +361,13 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 									<Grid item>
 										<Box sx={{ px: '20px', py: '10px' }}>
 											<IconButton
-												onClick={() => activeMenuClick(menu.path)}
+												onClick={() =>
+													activeMenuClick(
+														menu.title,
+														menu.description,
+														menu.path
+													)
+												}
 												sx={{ p: 0 }}
 											>
 												<Typography

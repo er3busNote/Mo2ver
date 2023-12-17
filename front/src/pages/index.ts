@@ -3,9 +3,9 @@ import Home from './HomePage';
 import Login from './LoginPage';
 import Signup from './SignupPage';
 import Goods from './GoodsPage';
-import GoodDetail from './GoodDetailPage';
+import GoodsDetail from './GoodsDetailPage';
+import GoodsRegister from './GoodsRegisterPage';
 import Event from './EventPage';
-import Register from './RegisterPage';
 import Discount from './DiscountPage';
 import Banner from './admin/BannerPage';
 import Category from './admin/CategoryPage';
@@ -17,9 +17,9 @@ export {
 	Login,
 	Signup,
 	Goods,
-	GoodDetail,
+	GoodsDetail,
+	GoodsRegister,
 	Event,
-	Register,
 	Discount,
 	Banner,
 	Category,

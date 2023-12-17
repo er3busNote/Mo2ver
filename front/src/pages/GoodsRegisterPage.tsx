@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import GoodsList from '../components/goods/GoodsList';
+import GoodsRegister from '../components/goods/GoodsRegister';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
-const GoodsPC: FC = (): JSX.Element => {
+const GoodsRegisterPC: FC = (): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -18,14 +18,14 @@ const GoodsPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<GoodsRegister />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsMobile: FC = (): JSX.Element => {
+const GoodsRegisterMobile: FC = (): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -38,20 +38,20 @@ const GoodsMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<GoodsRegister />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsPage: FC = (): JSX.Element => {
+const GoodsRegisterPage: FC = (): JSX.Element => {
 	return (
 		<>
-			<GoodsPC />
-			<GoodsMobile />
+			<GoodsRegisterPC />
+			<GoodsRegisterMobile />
 		</>
 	);
 };
 
-export default GoodsPage;
+export default GoodsRegisterPage;

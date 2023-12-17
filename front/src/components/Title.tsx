@@ -7,7 +7,10 @@ const Title: FC<TypographyProps> = ({ children }): JSX.Element => {
 			component="h1"
 			variant="h5"
 			color="inherit"
-			sx={{ fontWeight: 'bold' }}
+			sx={{
+				fontWeight: 'bold',
+				fontSize: { xs: '16px', sm: '18px', lg: '20px' },
+			}}
 		>
 			{children}
 		</Typography>

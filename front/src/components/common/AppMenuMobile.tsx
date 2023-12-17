@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { SubMenuInfo, MenuState } from '../../store/types';
-import { menuActive } from '../../store/index';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -31,6 +31,7 @@ interface AppMenuProps {
 interface AppMenuDetailProps {
 	largeCategory: CategoryData;
 	middleCategoyData?: CategoryDataInfo;
+	menuClick: (title: string, code: string) => void;
 }
 
 interface CategoryDataInfo {
@@ -58,6 +59,7 @@ const MenuDivider: FC = (): JSX.Element => {
 const AppMenu: FC<AppMenuDetailProps> = ({
 	largeCategory,
 	middleCategoyData,
+	menuClick,
 }): JSX.Element => {
 	const [open, setOpen] = useState<boolean>(false);
 
@@ -69,6 +71,8 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 	const handleClick = (
 		event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
 	) => {
+		if (!targetData)
+			menuClick(largeCategory.categoryName, largeCategory.categoryCode);
 		setOpen(!open);
 		event.stopPropagation(); // 새로고침 방지
 		//event.nativeEvent.stopPropagation();
@@ -79,6 +83,8 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 		touch: boolean,
 		event: TouchEvent<HTMLLIElement>
 	) => {
+		if (!targetData)
+			menuClick(largeCategory.categoryName, largeCategory.categoryCode);
 		event.preventDefault(); // 터치 이벤트의 기본 동작 막기
 		setOpen(touch);
 	};
@@ -108,7 +114,14 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 					<List component="div" disablePadding>
 						<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
 							{targetData.map((data: CategoryData, index: number) => (
-								<MenuItem key={index} dense sx={{ px: 4, py: 2 }}>
+								<MenuItem
+									key={index}
+									dense
+									onClick={() =>
+										menuClick(data.categoryName, data.categoryCode)
+									}
+									sx={{ px: 4, py: 2 }}
+								>
 									<ListItemText
 										primaryTypographyProps={{
 											style: { fontSize: 12, fontWeight: 'bold' },
@@ -126,6 +139,8 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 };
 
 const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -165,6 +180,14 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		setAnchorEl(null);
 		setOpen(false);
 	};
+
+	const menuClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/goods/' + code));
+		navigate('/goods/' + code);
+	};
+
 	return (
 		<Box
 			sx={{
@@ -225,6 +248,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 									key={index}
 									largeCategory={data}
 									middleCategoyData={middleCategoyData}
+									menuClick={menuClick}
 								/>
 							))}
 						</MenuList>
@@ -242,7 +266,13 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const activeMenuClick = (path: string) => {
+	const activeMenuClick = (
+		title: string,
+		description: string,
+		path: string
+	) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(description));
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -266,7 +296,13 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 											}}
 										>
 											<IconButton
-												onClick={() => activeMenuClick(menu.path)}
+												onClick={() =>
+													activeMenuClick(
+														menu.title,
+														menu.description,
+														menu.path
+													)
+												}
 												sx={{ p: 0 }}
 											>
 												<Typography

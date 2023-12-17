@@ -7,19 +7,19 @@ import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
 
-interface AdminSubHeaderProps {
+interface AppSubHeaderProps {
 	title?: string;
 	description?: string;
 }
 
-const AdminSubHeader: FC<AdminSubHeaderProps> = ({
+const AppSubHeader: FC<AppSubHeaderProps> = ({
 	title,
 	description,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 
 	const dashboardClick = () => {
-		dispatch(changeTitle('대시보드'));
+		dispatch(changeTitle('홈'));
 		dispatch(changeDescription(''));
 	};
 	return (
@@ -30,6 +30,7 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 				pb: 1,
 				display: 'flex',
 				justifyContent: 'space-between',
+				borderBottom: '2px #F0F0F0 solid',
 			}}
 		>
 			<Box sx={{ pt: 2 }}>
@@ -38,7 +39,7 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
 					component={Link}
-					to="/admin"
+					to="/"
 					sx={{
 						px: 0.5,
 						color: 'black',
@@ -46,23 +47,11 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 					}}
 					onClick={() => dashboardClick()}
 				>
-					<HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+					<HomeIcon sx={{ mr: 0.5 }} color="secondary" fontSize="inherit" />
 					<Typography sx={{ fontSize: { xs: '11px', sm: '12px', lg: '14px' } }}>
 						홈
 					</Typography>
 				</IconButton>
-				{description && description !== '' && (
-					<Typography
-						sx={{
-							display: 'flex',
-							alignItems: 'center',
-							fontSize: { xs: '11px', sm: '12px', lg: '14px' },
-						}}
-						color="text.primary"
-					>
-						{description}
-					</Typography>
-				)}
 				{description && description !== '' && (
 					<Typography
 						sx={{
@@ -85,4 +74,4 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-export default connect(mapStateToProps, null)(AdminSubHeader);
+export default connect(mapStateToProps, null)(AppSubHeader);
