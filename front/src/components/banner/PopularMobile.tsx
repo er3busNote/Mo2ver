@@ -8,6 +8,7 @@ import {
 	CardMedia,
 	Typography,
 } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -34,6 +35,18 @@ const PopularMobile: FC = (): JSX.Element => {
 		}, 5000);
 		return () => clearInterval(rotation);
 	}, [index, setIndex, onAutoFadeIn]);
+
+	const infoTag: SxProps<Theme> = {
+		fontSize: '10px',
+		border: '1px solid #ccc',
+		color: '#1992DF',
+		'&:hover': {
+			color: '#fff',
+			bgcolor: '#1992DF',
+			border: '1px solid #1992DF',
+		},
+		width: { xs: 'max-content' },
+	};
 
 	return (
 		<React.Fragment>
@@ -107,92 +120,27 @@ const PopularMobile: FC = (): JSX.Element => {
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Button
-									sx={{
-										fontSize: '10px',
-										border: '1px solid #ccc',
-										color: '#1992DF',
-										'&:hover': {
-											color: '#fff',
-											bgcolor: '#1992DF',
-											border: '1px solid #1992DF',
-										},
-										width: { xs: 'max-content' },
-									}}
-									variant="outlined"
-								>
+								<Button sx={infoTag} variant="outlined">
 									#반팔 티셔츠
 								</Button>
 							</Grid>
 							<Grid item>
-								<Button
-									sx={{
-										fontSize: '10px',
-										border: '1px solid #ccc',
-										color: '#1992DF',
-										'&:hover': {
-											color: '#fff',
-											bgcolor: '#1992DF',
-											border: '1px solid #1992DF',
-										},
-										width: { xs: 'max-content' },
-									}}
-									variant="outlined"
-								>
+								<Button sx={infoTag} variant="outlined">
 									#반바지
 								</Button>
 							</Grid>
 							<Grid item>
-								<Button
-									sx={{
-										fontSize: '10px',
-										border: '1px solid #ccc',
-										color: '#1992DF',
-										'&:hover': {
-											color: '#fff',
-											bgcolor: '#1992DF',
-											border: '1px solid #1992DF',
-										},
-										width: { xs: 'max-content' },
-									}}
-									variant="outlined"
-								>
+								<Button sx={infoTag} variant="outlined">
 									#리넨 팬츠
 								</Button>
 							</Grid>
 							<Grid item>
-								<Button
-									sx={{
-										fontSize: '10px',
-										border: '1px solid #ccc',
-										color: '#1992DF',
-										'&:hover': {
-											color: '#fff',
-											bgcolor: '#1992DF',
-											border: '1px solid #1992DF',
-										},
-										width: { xs: 'max-content' },
-									}}
-									variant="outlined"
-								>
+								<Button sx={infoTag} variant="outlined">
 									#슬리퍼
 								</Button>
 							</Grid>
 							<Grid item>
-								<Button
-									sx={{
-										fontSize: '10px',
-										border: '1px solid #ccc',
-										color: '#1992DF',
-										'&:hover': {
-											color: '#fff',
-											bgcolor: '#1992DF',
-											border: '1px solid #1992DF',
-										},
-										width: { xs: 'max-content' },
-									}}
-									variant="outlined"
-								>
+								<Button sx={infoTag} variant="outlined">
 									#카드지갑
 								</Button>
 							</Grid>

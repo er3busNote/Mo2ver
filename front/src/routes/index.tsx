@@ -10,6 +10,7 @@ import {
 	GoodsDetail,
 	GoodsRegister,
 	Event,
+	EventDetail,
 	Discount,
 	Banner,
 	Category,
@@ -37,6 +38,7 @@ const MainRoutes: FC = (): JSX.Element => {
 				<Route path="/goods/:id" element={<Goods />} />
 				<Route path="/goods/:id/detail" element={<GoodsDetail />} />
 				<Route path="/event" element={<Event />} />
+				<Route path="/event/:id/detail" element={<EventDetail />} />
 				<Route path="/register" element={<GoodsRegister />} />
 				<Route path="/discount" element={<Discount />} />
 			</Route>

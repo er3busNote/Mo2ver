@@ -1,4 +1,7 @@
 import React, { FC, useState, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import AppSubHeader from '../common/AppSubHeader';
 import {
 	Box,
@@ -20,12 +23,23 @@ const IMAGE_INFO = [
 ];
 
 const GoodsGrid: FC = (): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const goodsClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
+	};
+
 	return (
 		<Grid container spacing={3}>
 			<Grid item xs={6} md={3} lg={3}>
 				<Card
 					elevation={0}
 					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+					onClick={() => goodsClick('스파오', '0')}
 				>
 					<CardActionArea>
 						<CardMedia
@@ -88,6 +102,7 @@ const GoodsGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+					onClick={() => goodsClick('코드그라피', '1')}
 				>
 					<CardActionArea>
 						<CardMedia
@@ -150,6 +165,7 @@ const GoodsGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+					onClick={() => goodsClick('집시', '2')}
 				>
 					<CardActionArea>
 						<CardMedia
@@ -212,6 +228,7 @@ const GoodsGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+					onClick={() => goodsClick('키뮤어', '3')}
 				>
 					<CardActionArea>
 						<CardMedia

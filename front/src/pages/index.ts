@@ -6,6 +6,7 @@ import Goods from './GoodsPage';
 import GoodsDetail from './GoodsDetailPage';
 import GoodsRegister from './GoodsRegisterPage';
 import Event from './EventPage';
+import EventDetail from './EventDetailPage';
 import Discount from './DiscountPage';
 import Banner from './admin/BannerPage';
 import Category from './admin/CategoryPage';
@@ -20,6 +21,7 @@ export {
 	GoodsDetail,
 	GoodsRegister,
 	Event,
+	EventDetail,
 	Discount,
 	Banner,
 	Category,

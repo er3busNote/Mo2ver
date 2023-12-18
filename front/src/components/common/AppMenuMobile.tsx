@@ -120,6 +120,9 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 									onClick={() =>
 										menuClick(data.categoryName, data.categoryCode)
 									}
+									onTouchStart={() =>
+										menuClick(data.categoryName, data.categoryCode)
+									}
 									sx={{ px: 4, py: 2 }}
 								>
 									<ListItemText

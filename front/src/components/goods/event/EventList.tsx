@@ -1,4 +1,11 @@
 import React, { FC, useState, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+	changeTitle,
+	changeDescription,
+	menuActive,
+} from '../../../store/index';
 import AppSubHeader from '../../common/AppSubHeader';
 import {
 	Box,
@@ -16,10 +23,24 @@ const IMAGE_INFO = [
 ];
 
 const EventGrid: FC = (): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const eventClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/event/' + code + '/detail'));
+		navigate('/event/' + code + '/detail');
+	};
+
 	return (
 		<Grid container spacing={3}>
 			<Grid item xs={12} md={6} lg={4}>
-				<Card elevation={0} sx={{ border: '2px #f0f0f0f0 solid' }}>
+				<Card
+					elevation={0}
+					sx={{ border: '2px #f0f0f0f0 solid' }}
+					onClick={() => eventClick('Live From Space', '1000000001')}
+				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 							<CardContent sx={{ flex: '1 0 auto' }}>
@@ -49,7 +70,11 @@ const EventGrid: FC = (): JSX.Element => {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} lg={4}>
-				<Card elevation={0} sx={{ border: '2px #f0f0f0f0 solid' }}>
+				<Card
+					elevation={0}
+					sx={{ border: '2px #f0f0f0f0 solid' }}
+					onClick={() => eventClick('Live From Space', '1000000001')}
+				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 							<CardContent sx={{ flex: '1 0 auto' }}>
@@ -79,7 +104,11 @@ const EventGrid: FC = (): JSX.Element => {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} lg={4}>
-				<Card elevation={0} sx={{ border: '2px #f0f0f0f0 solid' }}>
+				<Card
+					elevation={0}
+					sx={{ border: '2px #f0f0f0f0 solid' }}
+					onClick={() => eventClick('Live From Space', '1000000001')}
+				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 							<CardContent sx={{ flex: '1 0 auto' }}>
@@ -109,7 +138,11 @@ const EventGrid: FC = (): JSX.Element => {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} lg={4}>
-				<Card elevation={0} sx={{ border: '2px #f0f0f0f0 solid' }}>
+				<Card
+					elevation={0}
+					sx={{ border: '2px #f0f0f0f0 solid' }}
+					onClick={() => eventClick('Live From Space', '1000000001')}
+				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 							<CardContent sx={{ flex: '1 0 auto' }}>
