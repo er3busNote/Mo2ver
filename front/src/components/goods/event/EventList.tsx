@@ -39,7 +39,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '1000000001')}
+					onClick={() => eventClick('Live From Space', '0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -73,7 +73,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '1000000001')}
+					onClick={() => eventClick('Live From Space', '0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -107,7 +107,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '1000000001')}
+					onClick={() => eventClick('Live From Space', '0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -141,7 +141,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '1000000001')}
+					onClick={() => eventClick('Live From Space', '0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
