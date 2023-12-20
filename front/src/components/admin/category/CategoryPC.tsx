@@ -96,7 +96,7 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	);
 };
 
-const CategoryPageMobile: FC<CategoryProps> = ({
+const CategoryPC: FC<CategoryProps> = ({
 	onSubmit,
 	categoryData,
 }): JSX.Element => {
@@ -136,8 +136,8 @@ const CategoryPageMobile: FC<CategoryProps> = ({
 	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	return (
-		<Box>
-			<Box sx={{ py: 2, pl: 4, pr: 2 }}>
+		<Box sx={{ display: 'flex' }}>
+			<Box sx={{ py: 2, pl: 4, pr: 2, width: '40%' }}>
 				<Paper component="div" square variant="outlined">
 					<Box
 						sx={{
@@ -158,7 +158,7 @@ const CategoryPageMobile: FC<CategoryProps> = ({
 							defaultExpandIcon={<PlusSquare />}
 							defaultEndIcon={<CloseSquare />}
 							sx={{
-								height: 200,
+								height: 400,
 								flexGrow: 1,
 								maxWidth: 400,
 								overflowY: 'auto',
@@ -205,7 +205,7 @@ const CategoryPageMobile: FC<CategoryProps> = ({
 					</Box>
 				</Paper>
 			</Box>
-			<Box sx={{ py: 2, pl: 2, pr: 4 }}>
+			<Box sx={{ py: 2, pl: 2, pr: 4, width: '60%' }}>
 				<Paper component="div" square variant="outlined">
 					<Box
 						sx={{
@@ -227,4 +227,4 @@ const CategoryPageMobile: FC<CategoryProps> = ({
 	);
 };
 
-export default CategoryPageMobile;
+export default CategoryPC;

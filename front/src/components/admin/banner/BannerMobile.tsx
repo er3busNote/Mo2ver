@@ -41,7 +41,7 @@ interface BannerProps {
 	bannerPageData: BannerPageData;
 }
 
-const BannerPageMobile: FC<BannerProps> = ({
+const BannerMobile: FC<BannerProps> = ({
 	onSubmit,
 	bannerPageData,
 }): JSX.Element => {
@@ -93,7 +93,7 @@ const BannerPageMobile: FC<BannerProps> = ({
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
-	const thBody: SxProps<Theme> = {
+	const tdHeader: SxProps<Theme> = {
 		border: '2px solid #d2d2d2',
 	};
 	const menuStyle: SxProps<Theme> = {
@@ -110,7 +110,7 @@ const BannerPageMobile: FC<BannerProps> = ({
 									<TableCell sx={thHeader} align="center" component="th">
 										키워드 검색
 									</TableCell>
-									<TableCell sx={thBody} align="left">
+									<TableCell sx={tdHeader} align="left">
 										<FormControl>
 											<InputLabel id="title-select-label">제목</InputLabel>
 											<Select
@@ -136,7 +136,7 @@ const BannerPageMobile: FC<BannerProps> = ({
 									<TableCell sx={thHeader} align="center" component="th">
 										전시기간
 									</TableCell>
-									<TableCell sx={{ ...thBody, width: '35%' }} align="left">
+									<TableCell sx={{ ...tdHeader, width: '35%' }} align="left">
 										<LocalizationProvider dateAdapter={AdapterMoment}>
 											<DesktopDatePicker
 												label="시작날짜"
@@ -164,7 +164,7 @@ const BannerPageMobile: FC<BannerProps> = ({
 									<TableCell sx={thHeader} align="center" component="th">
 										전시여부
 									</TableCell>
-									<TableCell sx={thBody} align="left">
+									<TableCell sx={tdHeader} align="left">
 										<FormControl>
 											<InputLabel id="useyn-select-label">전시여부</InputLabel>
 											<Select
@@ -255,20 +255,20 @@ const BannerPageMobile: FC<BannerProps> = ({
 									bannerPageData.content.map(
 										(data: BannerData, index: number) => (
 											<TableRow key={index}>
-												<TableCell sx={thBody} align="center">
+												<TableCell sx={tdHeader} align="center">
 													{data.bannerManageNo}
 												</TableCell>
-												<TableCell sx={thBody} align="center">
+												<TableCell sx={tdHeader} align="center">
 													배경이미지
 												</TableCell>
-												<TableCell sx={thBody} align="center">
+												<TableCell sx={tdHeader} align="center">
 													{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
 													{moment(data.displayEndDate).format('YYYY-MM-DD')}
 												</TableCell>
-												<TableCell sx={thBody} align="center">
+												<TableCell sx={tdHeader} align="center">
 													마감
 												</TableCell>
-												<TableCell sx={thBody} align="center">
+												<TableCell sx={tdHeader} align="center">
 													{data.displayYesNo}
 												</TableCell>
 											</TableRow>
@@ -303,4 +303,4 @@ const BannerPageMobile: FC<BannerProps> = ({
 	);
 };
 
-export default BannerPageMobile;
+export default BannerMobile;

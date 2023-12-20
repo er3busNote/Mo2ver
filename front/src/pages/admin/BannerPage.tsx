@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Api from '../../services/api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useBannerPageList from '../../hooks/useBannerPageList';
-import BannerPagePC from './pc/BannerPagePC';
-import BannerPageMobile from './mobile/BannerPageMobile';
+import BannerPC from '../../components/admin/banner/BannerPC';
+import BannerMobile from '../../components/admin/banner/BannerMobile';
 import { BannerPageData } from '../../services/types';
 import { BannerFormValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
@@ -28,7 +28,7 @@ interface BannerDispatchProps {
 	banner: ActionCreatorsMapObject;
 }
 
-const BannerPC: FC<BannerProps> = ({
+const BannerPagePC: FC<BannerProps> = ({
 	onSubmit,
 	bannerPageData,
 }): JSX.Element => {
@@ -37,14 +37,12 @@ const BannerPC: FC<BannerProps> = ({
 	});
 	return (
 		<>
-			{isPc && (
-				<BannerPagePC onSubmit={onSubmit} bannerPageData={bannerPageData} />
-			)}
+			{isPc && <BannerPC onSubmit={onSubmit} bannerPageData={bannerPageData} />}
 		</>
 	);
 };
 
-const BannerMobile: FC<BannerProps> = ({
+const BannerPageMobile: FC<BannerProps> = ({
 	onSubmit,
 	bannerPageData,
 }): JSX.Element => {
@@ -54,7 +52,7 @@ const BannerMobile: FC<BannerProps> = ({
 	return (
 		<>
 			{isMobile && (
-				<BannerPageMobile onSubmit={onSubmit} bannerPageData={bannerPageData} />
+				<BannerMobile onSubmit={onSubmit} bannerPageData={bannerPageData} />
 			)}
 		</>
 	);
@@ -85,8 +83,8 @@ const BannerPage: FC<BannerDispatchProps> = ({
 	};
 	return (
 		<>
-			<BannerPC onSubmit={submitForm} bannerPageData={bannerPageData} />
-			<BannerMobile onSubmit={submitForm} bannerPageData={bannerPageData} />
+			<BannerPagePC onSubmit={submitForm} bannerPageData={bannerPageData} />
+			<BannerPageMobile onSubmit={submitForm} bannerPageData={bannerPageData} />
 		</>
 	);
 };

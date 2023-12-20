@@ -1523,7 +1523,7 @@ const EventDetail: FC = (): JSX.Element => {
 	};
 
 	return (
-		<Box sx={{ mb: 8 }}>
+		<Box sx={{ mb: 10 }}>
 			<EventSubHeader change={false} branch={branch} setSwitch={setSwitch} />
 			<Box sx={{ m: 3 }}>
 				<CardMedia

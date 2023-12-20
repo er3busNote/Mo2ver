@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Api from '../../services/api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useCategoryList from '../../hooks/useCategoryList';
-import CategoryPagePC from './pc/CategoryPagePC';
-import CategoryPageMobile from './mobile/CategoryPageMobile';
+import CategoryPC from '../../components/admin/category/CategoryPC';
+import CategoryMobile from '../../components/admin/category/CategoryMobile';
 import { CategoryData } from '../../services/types';
 import { CategoryFormValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
@@ -26,7 +26,7 @@ interface CategoryDispatchProps {
 	category: ActionCreatorsMapObject;
 }
 
-const CategoryPC: FC<CategoryProps> = ({
+const CategoryPagePC: FC<CategoryProps> = ({
 	onSubmit,
 	categoryData,
 }): JSX.Element => {
@@ -35,14 +35,12 @@ const CategoryPC: FC<CategoryProps> = ({
 	});
 	return (
 		<>
-			{isPc && (
-				<CategoryPagePC onSubmit={onSubmit} categoryData={categoryData} />
-			)}
+			{isPc && <CategoryPC onSubmit={onSubmit} categoryData={categoryData} />}
 		</>
 	);
 };
 
-const CategoryMobile: FC<CategoryProps> = ({
+const CategoryPageMobile: FC<CategoryProps> = ({
 	onSubmit,
 	categoryData,
 }): JSX.Element => {
@@ -52,7 +50,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 	return (
 		<>
 			{isMobile && (
-				<CategoryPageMobile onSubmit={onSubmit} categoryData={categoryData} />
+				<CategoryMobile onSubmit={onSubmit} categoryData={categoryData} />
 			)}
 		</>
 	);
@@ -79,8 +77,8 @@ const CategoryPage: FC<CategoryDispatchProps> = ({
 	};
 	return (
 		<>
-			<CategoryPC onSubmit={submitForm} categoryData={categoryData} />
-			<CategoryMobile onSubmit={submitForm} categoryData={categoryData} />
+			<CategoryPagePC onSubmit={submitForm} categoryData={categoryData} />
+			<CategoryPageMobile onSubmit={submitForm} categoryData={categoryData} />
 		</>
 	);
 };
