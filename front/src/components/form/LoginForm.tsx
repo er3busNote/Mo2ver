@@ -53,6 +53,7 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 			}}
 		>
 			<Box
+				id={'login'}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',

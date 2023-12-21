@@ -65,6 +65,7 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 			}}
 		>
 			<Box
+				id={'signup'}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',

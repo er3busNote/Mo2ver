@@ -14,6 +14,19 @@
   fill: #4583FF;
 }
 
+/* 로그인, 회원가입 Style */
+#login .MuiFormControl-root label[data-shrink='true'] {
+  top: 4px;
+  left: 6px;
+  position: absolute;
+}
+
+#signup .MuiFormControl-root label[data-shrink='true'] {
+  top: 4px;
+  left: 6px;
+  position: absolute;
+}
+
 /* 검색 Style */
 #search .MuiCollapse-wrapperInner {
   width: 400px; /* 검색바 최대 크기 조정 */
@@ -38,12 +51,6 @@
 }
 
 /* 메뉴 Style */
-#main-menu.MuiPopperUnstyled-root .MuiBox-root {
-  top: 10px;
-  left: -41px;
-  position: absolute;
-}
-
 #main-menu .MuiMenuItem-root .MuiCollapse-wrapperInner {
   width: 100%;
 }
@@ -85,7 +92,9 @@
 }
 
 #category .MuiFormControl-root label[data-shrink='true'] {
-  top: 0;
+  top: 22px;
+  position: relative;
+  margin-top: -14px;
 }
 
 /* Admin - 카테고리 Form - Radio Field */
@@ -111,7 +120,15 @@
 }
 
 #banner .MuiFormControl-root label[data-shrink='true'] {
-  top: 0;
+  top: 22px;
+  position: relative;
+  margin-top: -14px;
+}
+
+#banner .MuiFormControl-root .MuiInputAdornment-root {
+  height: 2.01em;
+  margin-left: 0px;
+  padding-right: 12px;
 }
 
 /* Admin - 배너 Form - Calendar Field */
@@ -132,7 +149,7 @@
 
 /* User - 상품등록 Form - Text Field */
 #register .MuiFormControl-root {
-  margin-top: 4px;
+  margin-top: 0px;
   margin-bottom: 4px;
 }
 
@@ -142,7 +159,15 @@
 }
 
 #register .MuiFormControl-root label[data-shrink='true'] {
-  top: 0;
+  top: 22px;
+  position: relative;
+  margin-top: -14px;
+}
+
+#register .MuiFormControl-root .MuiInputAdornment-root {
+  height: 2.01em;
+  margin-left: 0px;
+  padding-right: 12px;
 }
 
 /* User - 상품등록 Form - Calendar Field */

@@ -20,6 +20,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
 import { CategoryData } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
+import { isDesktop } from 'react-device-detect';
 
 const mdTheme = createTheme(contentTheme);
 
@@ -92,7 +93,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 				}}
 			>
 				<CssBaseline />
-				<AppHeader />
+				{isDesktop && <AppHeader />}
 				<AppPC categoryData={categoryData} />
 				<AppMobile categoryData={categoryData} />
 				<AppMain>{children || <Outlet />}</AppMain>

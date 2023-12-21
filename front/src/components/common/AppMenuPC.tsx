@@ -188,10 +188,12 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	const menuWidthSize = '630px';
 	const submenuWidthSize = '210px';
 
+	const tooltip: SxProps<Theme> = {
+		ml: '-41px !important',
+	};
 	const menu: SxProps<Theme> = {
 		mt: '7px',
-		ml: '-41px',
-		position: 'absolute',
+		position: 'relative',
 		zIndex: 1,
 	};
 	const submenu: SxProps<Theme> = {
@@ -237,7 +239,12 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 					</Typography>
 				</IconButton>
 			</ClickAwayListener>
-			<Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+			<Popper
+				open={open}
+				anchorEl={anchorEl}
+				sx={tooltip}
+				placement="bottom-start"
+			>
 				<Box id={'main-menu'} sx={menu} onMouseLeave={onMouseLeave}>
 					<Box
 						sx={{

@@ -20,6 +20,7 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { BrowserView, MobileView } from 'react-device-detect';
 import { ReactComponent as MainIcon } from '../../logo.svg';
 
 const searchDatas = [
@@ -192,6 +193,9 @@ const AppSearchMobile: FC = (): JSX.Element => {
 
 	const searchFontSize = '12px';
 
+	const tooltip: SxProps<Theme> = {
+		ml: '-41px !important',
+	};
 	const icon: SxProps<Theme> = {
 		fontSize: '1.6rem',
 		color: '#72BAF5',
@@ -209,36 +213,43 @@ const AppSearchMobile: FC = (): JSX.Element => {
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box>
-				<Grid container>
-					<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
-						<IconButton component={Link} to="/" sx={{ p: 0 }}>
-							<SvgIcon
-								component={MainIcon}
-								color="primary"
-								sx={{ width: '8em', height: '5em' }}
-								inheritViewBox
-							/>
-						</IconButton>
-					</Grid>
-					<Grid
-						item
-						sx={{
-							pb: 3,
-							display: 'grid',
-							justifyContent: 'center',
-							width: '100%',
-						}}
-					>
-						<Box
+				<MobileView>
+					<Grid container>
+						<Grid item sx={{ mt: -2.5, width: '60%', height: '100px' }}>
+							<IconButton component={Link} to="/" sx={{ p: 0 }}>
+								<SvgIcon
+									component={MainIcon}
+									color="primary"
+									sx={{ width: '8em', height: '5em' }}
+									inheritViewBox
+								/>
+							</IconButton>
+						</Grid>
+						<Grid
+							item
 							sx={{
-								width: '420px',
-								height: '55px',
-								display: 'inline-flex',
-								justifyContent: 'flex-end',
+								pb: 3,
+								display: 'grid',
+								justifyContent: 'center',
+								width: '40%',
 							}}
 						>
-							<Collapse orientation="horizontal" in={focus} collapsedSize={320}>
-								<ClickAwayListener onClickAway={cancelClick}>
+							<Box
+								sx={{
+									mt: 3,
+									mb: -1,
+									width: '160px',
+									height: '55px',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<Collapse
+									orientation="horizontal"
+									in={focus}
+									collapsedSize={150}
+								>
 									<Box>
 										<Paper
 											component="form"
@@ -255,7 +266,7 @@ const AppSearchMobile: FC = (): JSX.Element => {
 										>
 											<InputBase
 												sx={inputBase}
-												placeholder="오늘 뭐 괜찮은 옷 있을까?"
+												placeholder="무슨 옷 입을까?"
 												value={keyword}
 												onChange={searchOnChange}
 												onKeyPress={searchOnKeyPress}
@@ -268,94 +279,169 @@ const AppSearchMobile: FC = (): JSX.Element => {
 												<SearchIcon sx={icon} />
 											)}
 										</Paper>
-										<Popper
-											id={'search'}
-											open={open}
-											anchorEl={anchorEl}
-											placement="bottom-start"
-										>
-											<Paper
-												elevation={0}
-												sx={{ mt: -1, ml: -5.5, border: '#ddd 1px solid' }}
-											>
-												<AppSearchItems />
-											</Paper>
-										</Popper>
 									</Box>
-								</ClickAwayListener>
-							</Collapse>
-						</Box>
-						<Box
+								</Collapse>
+							</Box>
+						</Grid>
+					</Grid>
+				</MobileView>
+				<BrowserView>
+					<Grid container>
+						<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
+							<IconButton component={Link} to="/" sx={{ p: 0 }}>
+								<SvgIcon
+									component={MainIcon}
+									color="primary"
+									sx={{ width: '8em', height: '5em' }}
+									inheritViewBox
+								/>
+							</IconButton>
+						</Grid>
+						<Grid
+							item
 							sx={{
-								ml: '-5px',
-								width: '420px',
-								display: 'inline-flex',
-								justifyContent: 'flex-end',
+								display: 'grid',
+								justifyContent: 'center',
+								width: '100%',
 							}}
 						>
-							<Grid container spacing={1} sx={{ width: 400 }}>
-								<Grid item>
-									<Typography
-										color="#666"
-										align="center"
-										sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
-									>
-										추천검색어
-									</Typography>
-								</Grid>
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										설기획세트
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										ddr5-4800
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										HP Z 모니터
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										rtx 3080ti
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										6900xt
-									</Typography>
-								</Grid>
-							</Grid>
-						</Box>
+							<Box
+								sx={{
+									width: '420px',
+									height: '40px',
+									display: 'inline-flex',
+									justifyContent: 'flex-end',
+								}}
+							>
+								<Collapse
+									orientation="horizontal"
+									in={focus}
+									collapsedSize={320}
+								>
+									<ClickAwayListener onClickAway={cancelClick}>
+										<Box>
+											<Paper
+												component="form"
+												elevation={0}
+												sx={{
+													mr: 2,
+													px: '10px',
+													display: 'flex',
+													alignItems: 'center',
+													borderRadius: 5,
+													bgcolor: '#F1F1F1',
+													height: { xs: '35px', sm: '40px' },
+												}}
+											>
+												<InputBase
+													sx={inputBase}
+													placeholder="오늘 뭐 괜찮은 옷 있을까?"
+													value={keyword}
+													onChange={searchOnChange}
+													onKeyPress={searchOnKeyPress}
+												/>
+												{focus ? (
+													<IconButton
+														onClick={cancelClick}
+														sx={{ p: 0, mr: 1 }}
+													>
+														<ClearIcon sx={icon} />
+													</IconButton>
+												) : (
+													<SearchIcon sx={icon} />
+												)}
+											</Paper>
+											<Popper
+												id={'search'}
+												open={open}
+												anchorEl={anchorEl}
+												sx={tooltip}
+												placement="bottom-start"
+											>
+												<Paper
+													elevation={0}
+													sx={{ mt: -1, border: '#ddd 1px solid' }}
+												>
+													<AppSearchItems />
+												</Paper>
+											</Popper>
+										</Box>
+									</ClickAwayListener>
+								</Collapse>
+							</Box>
+						</Grid>
 					</Grid>
-				</Grid>
+				</BrowserView>
+				<Box
+					sx={{
+						ml: '-5px',
+						pb: '10px',
+						width: '420px',
+						display: 'inline-flex',
+						justifyContent: 'flex-end',
+					}}
+				>
+					<Grid container spacing={1} sx={{ width: 400 }}>
+						<Grid item>
+							<Typography
+								color="#666"
+								align="center"
+								sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
+							>
+								추천검색어
+							</Typography>
+						</Grid>
+						<Grid item>
+							<Typography
+								color="#999"
+								align="center"
+								sx={{ fontSize: searchFontSize }}
+							>
+								설기획세트
+							</Typography>
+						</Grid>
+						<SearchDivider />
+						<Grid item>
+							<Typography
+								color="#999"
+								align="center"
+								sx={{ fontSize: searchFontSize }}
+							>
+								ddr5-4800
+							</Typography>
+						</Grid>
+						<SearchDivider />
+						<Grid item>
+							<Typography
+								color="#999"
+								align="center"
+								sx={{ fontSize: searchFontSize }}
+							>
+								HP Z 모니터
+							</Typography>
+						</Grid>
+						<SearchDivider />
+						<Grid item>
+							<Typography
+								color="#999"
+								align="center"
+								sx={{ fontSize: searchFontSize }}
+							>
+								rtx 3080ti
+							</Typography>
+						</Grid>
+						<SearchDivider />
+						<Grid item>
+							<Typography
+								color="#999"
+								align="center"
+								sx={{ fontSize: searchFontSize }}
+							>
+								6900xt
+							</Typography>
+						</Grid>
+					</Grid>
+				</Box>
 			</Box>
 		</Paper>
 	);

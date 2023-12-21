@@ -1,5 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -10,6 +12,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
+const PRODUCT_INFO = ['스파오', '코드그라피', '집시', '키뮤어'];
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -18,6 +21,8 @@ const SLIDE_INFO = [
 ];
 
 const PopularMobile: FC = (): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [index, setIndex] = useState(0);
 	const content = SLIDE_INFO[index];
 	const numSlides = SLIDE_INFO.length;
@@ -36,6 +41,20 @@ const PopularMobile: FC = (): JSX.Element => {
 		return () => clearInterval(rotation);
 	}, [index, setIndex, onAutoFadeIn]);
 
+	const goodsClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
+	};
+
+	const label: SxProps<Theme> = {
+		fontSize: '0.8rem',
+	};
+	const info: SxProps<Theme> = {
+		fontSize: '0.9rem',
+		fontWeight: 'bold',
+	};
 	const infoTag: SxProps<Theme> = {
 		fontSize: '10px',
 		border: '1px solid #ccc',
@@ -47,15 +66,13 @@ const PopularMobile: FC = (): JSX.Element => {
 		},
 		width: { xs: 'max-content' },
 	};
+	const infoImage: SxProps<Theme> = {
+		width: { xs: '90px', sm: '120px' },
+		height: { xs: '80px', sm: '100px' },
+	};
 
 	return (
 		<React.Fragment>
-			<Typography
-				variant="subtitle2"
-				sx={{ textAlign: 'left', fontSize: { xs: '1.0rem', sm: '1.2rem' } }}
-			>
-				Real-Time Ranking!
-			</Typography>
 			<Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
 				<Typography
 					variant="subtitle2"
@@ -81,7 +98,7 @@ const PopularMobile: FC = (): JSX.Element => {
 					justifyContent: 'flex-start',
 					borderTop: '2px solid #5868be',
 					borderBottom: '1px solid #ddd',
-					height: '100%',
+					height: '75%',
 				}}
 			>
 				<Box sx={{ width: { xs: '30%', sm: '20%' } }}>
@@ -101,8 +118,8 @@ const PopularMobile: FC = (): JSX.Element => {
 					</Box>
 					<Box
 						sx={{
-							pt: { xs: 3, sm: 6 },
-							px: { xs: 2.5, sm: 7 },
+							pt: { xs: 3, sm: 3 },
+							px: { xs: 2.5, sm: 3 },
 							display: 'grid',
 						}}
 					>
@@ -112,7 +129,7 @@ const PopularMobile: FC = (): JSX.Element => {
 									variant="subtitle2"
 									sx={{
 										pl: { xs: 1, sm: 0 },
-										fontSize: { xs: '0.8rem', sm: '1.0rem' },
+										fontSize: { xs: '0.8rem', sm: '0.9rem' },
 										fontWeight: 'bold',
 									}}
 								>
@@ -153,25 +170,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -179,25 +189,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -205,25 +208,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -235,25 +231,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -261,25 +250,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -287,25 +269,18 @@ const PopularMobile: FC = (): JSX.Element => {
 							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
-										sx={{
-											width: { xs: '100px', sm: '120px' },
-											height: { xs: '80px', sm: '100px' },
-										}}
+										sx={infoImage}
 										component="img"
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>

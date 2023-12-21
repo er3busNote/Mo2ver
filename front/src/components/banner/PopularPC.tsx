@@ -1,5 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
 	Card,
@@ -12,6 +14,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
+const PRODUCT_INFO = ['스파오', '코드그라피', '집시', '키뮤어'];
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -42,11 +45,12 @@ const CarouselFade: FC<CarouselFadeProps> = ({ url }): JSX.Element => {
 };
 
 const PopularPC: FC = (): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [index, setIndex] = useState(0);
+	const [fadeIn, setFadeIn] = useState(true);
 	const content = SLIDE_INFO[index];
 	const numSlides = SLIDE_INFO.length;
-
-	const [fadeIn, setFadeIn] = useState(true);
 
 	const onAutoFadeIn = (newIndex: number) => {
 		setTimeout(() => {
@@ -64,6 +68,20 @@ const PopularPC: FC = (): JSX.Element => {
 		return () => clearInterval(rotation);
 	}, [index, setIndex, setFadeIn, onAutoFadeIn]);
 
+	const goodsClick = (title: string, code: string) => {
+		dispatch(changeDescription(title));
+		dispatch(changeTitle(title));
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
+	};
+
+	const label: SxProps<Theme> = {
+		fontSize: '0.8rem',
+	};
+	const info: SxProps<Theme> = {
+		fontSize: '0.9rem',
+		fontWeight: 'bold',
+	};
 	const infoTag: SxProps<Theme> = {
 		fontSize: '10px',
 		border: '1px solid #ccc',
@@ -77,12 +95,6 @@ const PopularPC: FC = (): JSX.Element => {
 
 	return (
 		<React.Fragment>
-			<Typography
-				variant="subtitle2"
-				sx={{ textAlign: 'left', fontSize: '1.2rem' }}
-			>
-				Real-Time Ranking!
-			</Typography>
 			<Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
 				<Typography
 					variant="subtitle2"
@@ -179,8 +191,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -188,13 +199,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -202,8 +210,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -211,13 +218,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -225,8 +229,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -234,13 +237,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -252,8 +252,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -261,13 +260,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -275,8 +271,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -284,13 +279,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>
@@ -298,8 +290,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									component={Link}
-									to="/auth/signup"
+									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -307,13 +298,10 @@ const PopularPC: FC = (): JSX.Element => {
 										image={content}
 										alt="Image"
 									/>
-									<Typography variant="subtitle2" sx={{ fontSize: '0.8rem' }}>
+									<Typography variant="subtitle2" sx={label}>
 										남성상의
 									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
-									>
+									<Typography variant="subtitle2" sx={info}>
 										29,900원
 									</Typography>
 								</IconButton>

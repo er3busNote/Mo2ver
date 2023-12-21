@@ -21,6 +21,7 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData } from '../../services/types';
 
 interface AppMenuProps {
@@ -191,6 +192,20 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		navigate('/goods/' + code);
 	};
 
+	const tooltip: SxProps<Theme> = {
+		ml: { xs: '-23px !important', sm: '-41px !important' },
+		zIndex: 1,
+	};
+	const menu: SxProps<Theme> = {
+		top: '10px',
+		position: 'relative',
+		mt: { xs: '-3px', sm: '1px' },
+		mb: '10px',
+		width: '250px',
+		display: 'inline-flex',
+		justifyContent: 'flex-start',
+	};
+
 	return (
 		<Box
 			sx={{
@@ -220,20 +235,13 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 				</IconButton>
 			</ClickAwayListener>
 			<Popper
-				sx={{ zIndex: 1 }}
 				id={'main-menu'}
 				open={open}
 				anchorEl={anchorEl}
+				sx={tooltip}
 				placement="bottom-start"
 			>
-				<Box
-					sx={{
-						mt: { xs: '-1px', sm: '1px' },
-						width: '250px',
-						display: 'inline-flex',
-						justifyContent: 'flex-start',
-					}}
-				>
+				<Box sx={menu}>
 					<List
 						sx={{
 							p: 0,
@@ -245,7 +253,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 						}}
 						component="nav"
 					>
-						<MenuList sx={{ pl: { xs: 3, sm: 0 }, py: 0.2 }}>
+						<MenuList sx={{ pl: { xs: 0, sm: 0 }, py: 0.2 }}>
 							{largeCategoyData.map((data: any, index: number) => (
 								<AppMenu
 									key={index}
