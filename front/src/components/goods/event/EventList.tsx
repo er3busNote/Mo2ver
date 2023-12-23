@@ -186,7 +186,7 @@ const EventList: FC = (): JSX.Element => {
 	return (
 		<Box>
 			<AppSubHeader />
-			<Box sx={{ my: 2 }}>
+			<Box sx={{ mx: 3, my: 2 }}>
 				<EventGrid />
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>

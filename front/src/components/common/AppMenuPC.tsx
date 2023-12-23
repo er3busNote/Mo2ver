@@ -190,11 +190,11 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 
 	const tooltip: SxProps<Theme> = {
 		ml: '-41px !important',
+		zIndex: 2,
 	};
 	const menu: SxProps<Theme> = {
 		mt: '7px',
 		position: 'relative',
-		zIndex: 1,
 	};
 	const submenu: SxProps<Theme> = {
 		display:

@@ -157,6 +157,7 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 		px: 5,
 		py: 1.5,
 		width: 180,
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#f9f9f9',
 		borderBlock: 'none',
 		fontWeight: 'bold',
@@ -165,7 +166,7 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 		borderBlock: 'none',
 	};
 	const menuStyle: SxProps<Theme> = {
-		fontSize: 14,
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 
 	return (
@@ -261,6 +262,7 @@ const GoodsRegister: FC = (): JSX.Element => {
 		px: 1.5,
 		py: 1.5,
 		width: 180,
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#f9f9f9',
 		borderBottom: '1px #F0F0F0 solid',
 		fontWeight: 'bold',
@@ -269,6 +271,7 @@ const GoodsRegister: FC = (): JSX.Element => {
 		px: 1.5,
 		py: 1.5,
 		width: 180,
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#f9f9f9',
 		borderBottom: '1px #F0F0F0 solid',
 		fontWeight: 'bold',
@@ -276,9 +279,11 @@ const GoodsRegister: FC = (): JSX.Element => {
 	};
 	const tdHeaderPC: SxProps<Theme> = {
 		borderBlock: 'none',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 	const tdHeaderMobile: SxProps<Theme> = {
 		borderBlock: 'none',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		display: { xs: 'none', sm: 'none', md: 'table-cell', lg: 'table-cell' },
 	};
 	const pagination: SxProps<Theme> = {
