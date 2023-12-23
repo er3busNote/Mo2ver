@@ -1,6 +1,4 @@
 import React, { FC, useState, useEffect /*, MouseEventHandler*/ } from 'react';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
 	Box,
 	Grid,
@@ -18,6 +16,10 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
 
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -26,24 +28,7 @@ const SLIDE_INFO = [
 	'https://images.pexels.com/photos/733745/pexels-photo-733745.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
-/*
-interface ArrowProps {
-	direction: string; // enum → (left / right)
-	clickFunction: MouseEventHandler<HTMLDivElement>;
-}
-
-const Arrow: FC<ArrowProps> = ({ direction, clickFunction }): JSX.Element => {
-	const icon =
-		direction === 'left' ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />;
-
-	return (
-		<Box sx={{ width: '2.5%' }} onClick={clickFunction}>
-			{icon}
-		</Box>
-	);
-};
-*/
-
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 interface ArrowBoxProps {
@@ -118,8 +103,8 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 		<Card
 			sx={{
 				height: '450px',
-				display: 'flex',
-				justifyContent: 'center',
+				display: 'block',
+				overflow: 'hidden',
 			}}
 		>
 			<CardMedia component="img" image={url} alt="Image" />
@@ -128,14 +113,8 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 };
 
 const BannerPC: FC = (): JSX.Element => {
-	const [index, setIndex] = useState(0);
-	const content = SLIDE_INFO[index];
+	const [activeStep, setActiveStep] = useState(0);
 	const numSlides = SLIDE_INFO.length;
-
-	const [slideIn, setSlideIn] = useState(true);
-	const [slideDirection, setSlideDirection] = useState<
-		'left' | 'right' | 'down' | 'up'
-	>('down');
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -156,17 +135,12 @@ const BannerPC: FC = (): JSX.Element => {
 
 	const onArrowClick = (direction: 'left' | 'right' | 'down' | 'up') => {
 		const increment = direction === 'left' ? -1 : 1;
-		const newIndex = (index + increment + numSlides) % numSlides;
+		const newIndex = (activeStep + increment + numSlides) % numSlides;
+		setActiveStep(newIndex);
+	};
 
-		const oppDirection = direction === 'left' ? 'right' : 'left';
-		setSlideDirection(direction);
-		setSlideIn(false);
-
-		setTimeout(() => {
-			setIndex(newIndex);
-			setSlideDirection(oppDirection);
-			setSlideIn(true);
-		}, 300);
+	const handleStepChange = (step: number) => {
+		setActiveStep(step);
 	};
 
 	return (
@@ -180,14 +154,22 @@ const BannerPC: FC = (): JSX.Element => {
 					justifyContent: 'center',
 				}}
 			>
-				{/*<Arrow direction="left" clickFunction={() => onArrowClick('left')} />*/}
-				<Slide in={slideIn} direction={slideDirection}>
-					<Box sx={{ width: '100%' }}>
-						<CarouselSlide url={content} />
-					</Box>
-				</Slide>
-				{/*<Arrow direction="right" clickFunction={() => onArrowClick('right')} />*/}
-				<ArrowBox index={index} total={numSlides} onArrowClick={onArrowClick} />
+				<AutoPlaySwipeableViews
+					index={activeStep}
+					onChangeIndex={handleStepChange}
+					enableMouseEvents
+				>
+					{SLIDE_INFO.map((image: string, index: number) => (
+						<Box key={index} sx={{ width: '100%' }}>
+							<CarouselSlide url={image} />
+						</Box>
+					))}
+				</AutoPlaySwipeableViews>
+				<ArrowBox
+					index={activeStep}
+					total={numSlides}
+					onArrowClick={onArrowClick}
+				/>
 			</Box>
 		</React.Fragment>
 	);
