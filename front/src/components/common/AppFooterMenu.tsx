@@ -6,43 +6,24 @@ import React, {
 	SetStateAction,
 	SyntheticEvent,
 } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '../../store/types';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
-	Grow, // Transitions
 	Drawer,
 	Toolbar,
 	Divider,
 	IconButton,
 	Typography,
-	ListItemButton,
-	ListItemIcon,
 } from '@mui/material';
+import { CategoryData } from '../../services/types';
 import { styled } from '@mui/material/styles';
-import { SvgIconProps } from '@mui/material/SvgIcon';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import CategoryIcon from '@mui/icons-material/Category';
-import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-
-const AdminIcon = [
-	MenuOpenIcon,
-	ViewCarouselIcon,
-	CategoryIcon,
-	ViewInArIcon,
-	InfoIcon,
-	ForumIcon,
-];
 
 declare module 'react' {
 	interface CSSProperties {
@@ -51,17 +32,20 @@ declare module 'react' {
 	}
 }
 
-interface AdminMenuProps {
+interface AppFooterMenuProps {
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
-	menus?: Array<SubMenuInfo>;
+	categoryData: Array<CategoryData>;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
 }
 
 interface StyledTreeItemProps extends TreeItemProps {
 	bgColor?: string;
 	color?: string;
-	labelIcon: React.ElementType<SvgIconProps>;
 	labelInfo?: string;
 	labelText: string;
 }
@@ -100,7 +84,6 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
 const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	bgColor,
 	color,
-	labelIcon: LabelIcon,
 	labelInfo,
 	labelText,
 	...other
@@ -109,7 +92,6 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 		<StyledTreeItemRoot
 			label={
 				<Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-					<Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
 					<Typography
 						variant="body2"
 						sx={{
@@ -135,25 +117,52 @@ const StyledTreeItem: FC<StyledTreeItemProps> = ({
 	);
 };
 
-const AdminMenuMobile: FC<AdminMenuProps> = ({
+const AppFooterMenu: FC<AppFooterMenuProps> = ({
 	open,
 	setOpen,
 	width,
-	menus,
+	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
-	const location = useLocation();
 	const navigate = useNavigate();
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string[]>([]);
 
-	useEffect(() => {
-		if (location.pathname === '/admin') {
-			dispatch(changeTitle('대시보드'));
-			dispatch(changeDescription(''));
-		}
-	}, [location.pathname]);
+	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
+		[]
+	);
+	const [middleCategoyData, setMiddleCategoyData] =
+		useState<CategoryDataInfo>();
+	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
+
+	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
+	const treeCategoryData = () => {
+		// 대 카테고리
+		const largeCategoyData = categoryData.filter(
+			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
+		);
+		setLargeCategoyData(largeCategoyData);
+		// 중/소 카테고리
+		const middleCategoyData = new Object() as CategoryDataInfo;
+		const smallCategoyData = new Object() as CategoryDataInfo;
+		categoryData.forEach((data) => {
+			if (data.categoryLevel === 2) {
+				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
+					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				middleCategoyData[data.upperCategoryCode].push(data);
+			} else if (data.categoryLevel === 3) {
+				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
+					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
+				}
+				smallCategoyData[data.upperCategoryCode].push(data);
+			}
+		});
+		setMiddleCategoyData(middleCategoyData);
+		setSmallCategoyData(smallCategoyData);
+	};
+	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);
@@ -167,23 +176,19 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 		setOpen(!open);
 	};
 
-	const openMenuClick = (path: string, index: number) => {
-		dispatch(menuActive(path)); // 1. close → open : 해당 Root 메뉴를 Active(활성화)
-		setExpanded([String(index)]);
-		setSelected([String(index)]);
-		setOpen(!open);
-	};
-
 	const activeMenuClick = (
 		title: string,
-		description: string,
-		path: string
+		code: string,
+		check: boolean | undefined
 	) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(description));
-		dispatch(menuActive(path)); // 2. open → close : 해당 Root 메뉴를 Active(활성화)
-		navigate('/admin' + path);
+		if (!check) {
+			dispatch(changeDescription(title));
+			dispatch(changeTitle(title));
+			dispatch(menuActive('/goods/' + code));
+			navigate('/goods/' + code);
+		}
 	};
+
 	return (
 		<Drawer
 			variant="temporary"
@@ -221,7 +226,7 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 			<Box sx={{ mt: 2, mb: 1 }}>
 				<Box>
 					<Typography variant="h6" align="center" sx={{ fontWeight: 'bold' }}>
-						관리 메뉴
+						카테고리
 					</Typography>
 				</Box>
 			</Box>
@@ -229,30 +234,7 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 				variant="middle"
 				sx={{ mb: 2, height: '2px', borderColor: 'primary.main' }}
 			/>
-			<Box sx={{ display: 'none' }}>
-				{menus &&
-					menus.map((menu: SubMenuInfo) => {
-						const IconComponent = AdminIcon[menu.index - 1];
-						return (
-							<Grow
-								key={menu.index}
-								in={!open && menu.isShow}
-								appear={menu.isShow}
-								timeout={menu.index * 300}
-							>
-								<ListItemButton
-									selected={menu.isActive}
-									onClick={() => openMenuClick(menu.path, menu.index)}
-								>
-									<ListItemIcon>
-										<IconComponent fontSize="small" color="disabled" />
-									</ListItemIcon>
-								</ListItemButton>
-							</Grow>
-						);
-					})}
-			</Box>
-			<Box sx={{ display: 'block' }}>
+			<Box>
 				<TreeView
 					aria-label="menu"
 					defaultExpanded={['1']}
@@ -265,50 +247,79 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 					onNodeToggle={handleToggle}
 					onNodeSelect={handleSelect}
 				>
-					{menus &&
-						menus.map((menu: SubMenuInfo) => {
-							return (
-								<StyledTreeItem
-									key={menu.index}
-									nodeId={String(menu.index)}
-									labelText={menu.description}
-									labelIcon={AdminIcon[menu.index - 1]}
-								>
-									{menu.subMenu &&
-										menu.subMenu.map((submenu: SubMenuInfo) => {
+					{largeCategoyData.map((ldata: any, index: number) => {
+						return (
+							<StyledTreeItem
+								key={index}
+								nodeId={ldata.categoryCode}
+								labelText={ldata.categoryName}
+								bgColor={'#fafafa'}
+								onClick={() =>
+									activeMenuClick(
+										ldata.categoryName,
+										ldata.categoryCode,
+										middleCategoyData &&
+											Object.keys(middleCategoyData).includes(
+												ldata.categoryCode
+											)
+									)
+								}
+							>
+								{middleCategoyData &&
+									Object.keys(middleCategoyData).includes(ldata.categoryCode) &&
+									middleCategoyData[ldata.categoryCode].map(
+										(mdata: any, i: number) => {
 											return (
 												<StyledTreeItem
-													key={submenu.index}
-													nodeId={String(submenu.index)}
-													labelText={submenu.description}
-													labelIcon={AdminIcon[submenu.index - 1]}
-													// labelInfo={String(submenu.count).replace(
-													// 	/(.)(?=(\d{3})+$)/g,
-													// 	'$1,'
-													// )}
-													color={submenu.color}
-													bgColor={submenu.bgColor}
+													key={i}
+													nodeId={mdata.categoryCode}
+													labelText={mdata.categoryName}
+													bgColor={'#fafafa'}
 													onClick={() =>
 														activeMenuClick(
-															menu.description,
-															submenu.description,
-															menu.path
+															mdata.categoryName,
+															mdata.categoryCode,
+															smallCategoyData &&
+																Object.keys(smallCategoyData).includes(
+																	mdata.categoryCode
+																)
 														)
 													}
-												/>
+												>
+													{smallCategoyData &&
+														Object.keys(smallCategoyData).includes(
+															mdata.categoryCode
+														) &&
+														smallCategoyData[mdata.categoryCode].map(
+															(sdata: any, j: number) => {
+																return (
+																	<StyledTreeItem
+																		key={j}
+																		nodeId={sdata.categoryCode}
+																		labelText={sdata.categoryName}
+																		bgColor={'#fafafa'}
+																		onClick={() =>
+																			activeMenuClick(
+																				sdata.categoryName,
+																				sdata.categoryCode,
+																				false
+																			)
+																		}
+																	/>
+																);
+															}
+														)}
+												</StyledTreeItem>
 											);
-										})}
-								</StyledTreeItem>
-							);
-						})}
+										}
+									)}
+							</StyledTreeItem>
+						);
+					})}
 				</TreeView>
 			</Box>
 		</Drawer>
 	);
 };
 
-const mapStateToProps = (state: any) => ({
-	menus: (state.menu as MenuState).menus,
-});
-
-export default connect(mapStateToProps, null)(AdminMenuMobile);
+export default AppFooterMenu;

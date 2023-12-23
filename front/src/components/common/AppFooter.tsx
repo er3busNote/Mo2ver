@@ -8,18 +8,29 @@ import {
 	BottomNavigation,
 	BottomNavigationAction,
 } from '@mui/material';
+import AppFooterMenu from './AppFooterMenu';
 import Copyright from '../Copyright';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
+import { CategoryData } from '../../services/types';
 import { isAdmin } from '../../utils/jwttoken';
 import { isMobile, BrowserView, MobileView } from 'react-device-detect';
 
-const AppFooter: FC = (): JSX.Element => {
+interface AppFooterProps {
+	width: number;
+	categoryData: Array<CategoryData>;
+}
+
+const AppFooter: FC<AppFooterProps> = ({
+	width,
+	categoryData,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [open, setOpen] = useState<boolean>(false);
 	const [value, setValue] = useState('home');
 
 	const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -46,6 +57,10 @@ const AppFooter: FC = (): JSX.Element => {
 		}
 	};
 
+	const toggleDrawer = () => {
+		setOpen(!open);
+	};
+
 	return (
 		<Box
 			component="footer"
@@ -58,10 +73,17 @@ const AppFooter: FC = (): JSX.Element => {
 		>
 			<MobileView>
 				<Paper square>
+					<AppFooterMenu
+						open={open}
+						setOpen={setOpen}
+						width={width}
+						categoryData={categoryData}
+					/>
 					<BottomNavigation value={value} onChange={handleChange}>
 						<BottomNavigationAction
 							label="카테고리"
 							value="category"
+							onClick={() => toggleDrawer()}
 							sx={{
 								px: 0,
 								minWidth: '10px',

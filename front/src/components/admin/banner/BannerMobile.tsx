@@ -89,15 +89,17 @@ const BannerMobile: FC<BannerProps> = ({
 		px: { xs: 1, sm: 2 },
 		py: 1,
 		width: '12%',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
 	const tdHeader: SxProps<Theme> = {
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		border: '2px solid #d2d2d2',
 	};
 	const menuStyle: SxProps<Theme> = {
-		fontSize: 14,
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 	return (
 		<Box id="banner" sx={{ py: 2, pl: 4, pr: 4 }}>

@@ -73,15 +73,17 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 	};
 
 	const thHeader: SxProps<Theme> = {
-		px: 5,
-		py: 1.5,
-		width: 180,
+		px: { xs: 1, sm: 2 },
+		py: 1,
+		width: '12%',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
-	const thBody: SxProps<Theme> = {
+	const tdHeader: SxProps<Theme> = {
 		border: '2px solid #d2d2d2',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 	return (
 		<Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -89,10 +91,10 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
 					<TableBody>
 						<TableRow>
-							<TableCell sx={thHeader} align="left" component="th">
+							<TableCell sx={thHeader} align="center" component="th">
 								키워드 검색
 							</TableCell>
-							<TableCell colSpan={3} sx={thBody} align="left">
+							<TableCell colSpan={3} sx={tdHeader} align="left">
 								<Controller
 									name="title"
 									control={control}
@@ -109,10 +111,10 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell sx={thHeader} align="left" component="th">
+							<TableCell sx={thHeader} align="center" component="th">
 								전시기간
 							</TableCell>
-							<TableCell colSpan={3} sx={thBody} align="left">
+							<TableCell colSpan={3} sx={tdHeader} align="left">
 								<LocalizationProvider dateAdapter={AdapterMoment}>
 									<Controller
 										name="startDate"
@@ -143,10 +145,10 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell sx={thHeader} align="left" component="th">
+							<TableCell sx={thHeader} align="center" component="th">
 								노출 위치
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								<Controller
 									name="position"
 									control={control}
@@ -168,10 +170,10 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 									)}
 								/>
 							</TableCell>
-							<TableCell sx={thHeader} align="left" component="th">
+							<TableCell sx={thHeader} align="center" component="th">
 								템플릿 유형
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								<Controller
 									name="type"
 									control={control}
@@ -191,10 +193,10 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell sx={thHeader} align="left" component="th">
+							<TableCell sx={thHeader} align="center" component="th">
 								전시여부
 							</TableCell>
-							<TableCell colSpan={3} sx={thBody} align="left">
+							<TableCell colSpan={3} sx={tdHeader} align="left">
 								<Controller
 									name="useyn"
 									control={control}
@@ -333,7 +335,7 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 					<TableBody>
 						{fields.map((field, index) => (
 							<TableRow key={field.id}>
-								<TableCell sx={thBody} align="center">
+								<TableCell sx={tdHeader} align="center">
 									<Controller
 										name={`bnnrImg.${index}.title`}
 										control={control}
@@ -348,7 +350,7 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 										)}
 									/>
 								</TableCell>
-								<TableCell sx={thBody} align="center">
+								<TableCell sx={tdHeader} align="center">
 									<Controller
 										name={`bnnrImg.${index}.bnnrText`}
 										control={control}
@@ -363,7 +365,7 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 										)}
 									/>
 								</TableCell>
-								<TableCell sx={thBody} align="center">
+								<TableCell sx={tdHeader} align="center">
 									<Controller
 										name={`bnnrImg.${index}.cnntUrl`}
 										control={control}
@@ -378,7 +380,7 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 										)}
 									/>
 								</TableCell>
-								<TableCell sx={thBody} align="center">
+								<TableCell sx={tdHeader} align="center">
 									<Controller
 										name={`bnnrImg.${index}.useyn`}
 										control={control}

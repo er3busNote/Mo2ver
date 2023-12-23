@@ -1,5 +1,5 @@
 # Mo2ver - wearhouse
-사용자 맞춤형 의류 쇼핑몰 사이트
+사용자 맞춤형 의류 중고거래 사이트
 
 ## Infra & Concept
 ![Infra & Concept](./images/INFRA&CONCEPT_v2.PNG)

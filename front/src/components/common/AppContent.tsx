@@ -25,6 +25,7 @@ import { isDesktop } from 'react-device-detect';
 const mdTheme = createTheme(contentTheme);
 
 const drawerMenuLimit = 768;
+const drawerMenuWidth = 200;
 
 interface AppProps {
 	categoryData: Array<CategoryData>;
@@ -97,7 +98,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 				<AppPC categoryData={categoryData} />
 				<AppMobile categoryData={categoryData} />
 				<AppMain>{children || <Outlet />}</AppMain>
-				<AppFooter />
+				<AppFooter width={drawerMenuWidth} categoryData={categoryData} />
 			</Box>
 		</ThemeProvider>
 	);

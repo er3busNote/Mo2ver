@@ -54,13 +54,14 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 		px: { xs: 2, sm: 5 },
 		py: 1.5,
 		width: { xs: 100, sm: 180 },
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
-	const thBody: SxProps<Theme> = {
-		px: 5,
+	const tdHeader: SxProps<Theme> = {
 		border: '2px solid #d2d2d2',
+		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 	return (
 		<Box
@@ -76,7 +77,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								구분
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								소카테고리
 							</TableCell>
 						</TableRow>
@@ -84,7 +85,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								카테고리명
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								<Controller
 									name="category"
 									control={control}
@@ -104,7 +105,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								노출여부
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								<Controller
 									name="useyn"
 									control={control}
@@ -125,7 +126,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								노출순서
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								<Controller
 									name="level"
 									control={control}
@@ -147,7 +148,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 							<TableCell sx={thHeader} align="left" component="th">
 								코드명
 							</TableCell>
-							<TableCell sx={thBody} align="left">
+							<TableCell sx={tdHeader} align="left">
 								C001001002
 							</TableCell>
 						</TableRow>
