@@ -21,12 +21,7 @@ const AppHeader: FC<AppHeaderProps> = ({ member }): JSX.Element => {
 	};
 	return (
 		<Paper sx={{ width: '100%' }}>
-			<Paper
-				sx={{ bgcolor: '#F0F0F0' }}
-				component="header"
-				square
-				variant="outlined"
-			>
+			<Paper sx={{ bgcolor: '#F0F0F0' }} square variant="outlined">
 				<Box
 					sx={{
 						width: '100%',

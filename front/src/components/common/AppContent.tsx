@@ -1,4 +1,4 @@
-import React, { FC, useEffect, ReactElement } from 'react';
+import React, { FC, useState, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
@@ -8,6 +8,7 @@ import { menuLotate } from '../../store/index';
 import Api from '../../services/api';
 import useCategoryList from '../../hooks/useCategoryList';
 import AppHeader from './AppHeader';
+import AppHeaderMenu from './AppHeaderMenu';
 import AppSearchPC from './AppSearchPC';
 import AppSearchMobile from './AppSearchMobile';
 import AppMenuPC from './AppMenuPC';
@@ -41,11 +42,38 @@ const AppPC: FC<AppProps> = ({ categoryData }): JSX.Element => {
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
 	const location = useLocation();
+	const [scrolled, setScrolled] = useState(false);
+
+	const handleScroll = () => {
+		const isScrolled = window.scrollY > 100;
+		setScrolled(isScrolled);
+	};
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			window.addEventListener('scroll', handleScroll);
+		}, 100);
+		return () => {
+			clearInterval(timer);
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
 	return (
 		<>
 			{isPc && (
 				<>
-					<AppSearchPC />
+					<Box
+						component="header"
+						sx={{
+							width: '100%',
+							display: 'block',
+						}}
+					>
+						{isDesktop && <AppHeader />}
+						<AppSearchPC />
+					</Box>
+					<AppHeaderMenu scrolled={scrolled} categoryData={categoryData} />
 					{location.pathname === '/' ? (
 						<AppMenuHomePC categoryData={categoryData} />
 					) : (
@@ -65,6 +93,7 @@ const AppMobile: FC<AppProps> = ({ categoryData }): JSX.Element => {
 		<>
 			{isMobile && (
 				<>
+					{isDesktop && <AppHeader />}
 					<AppSearchMobile />
 					<AppMenuMobile categoryData={categoryData} />
 				</>
@@ -94,7 +123,6 @@ const AppContent: FC<LayoutDefaultProps> = ({
 				}}
 			>
 				<CssBaseline />
-				{isDesktop && <AppHeader />}
 				<AppPC categoryData={categoryData} />
 				<AppMobile categoryData={categoryData} />
 				<AppMain>{children || <Outlet />}</AppMain>

@@ -3,7 +3,6 @@ import {
 	Box,
 	Grid,
 	Card,
-	Slide,
 	Paper,
 	IconButton,
 	Typography,

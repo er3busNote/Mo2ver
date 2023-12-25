@@ -14,6 +14,11 @@
   fill: #4583FF;
 }
 
+/* HorizontalScroll */
+.react-horizontal-scrolling-menu--item {
+  display: inline-table;
+}
+
 /* Home : Carousel Slide */
 .react-swipeable-view-container {
   overflow-x: visible;

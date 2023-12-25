@@ -98,7 +98,7 @@ const PopularMobile: FC = (): JSX.Element => {
 					justifyContent: 'flex-start',
 					borderTop: '2px solid #5868be',
 					borderBottom: '1px solid #ddd',
-					height: '75%',
+					height: '100%',
 				}}
 			>
 				<Box sx={{ width: { xs: '30%', sm: '20%' } }}>
