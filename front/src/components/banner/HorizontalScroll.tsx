@@ -1,9 +1,10 @@
-import React, { FC, ContextType, WheelEvent } from 'react';
-import useSwipe from '../../hooks/useSwipe';
-import usePreventBodyScroll from '../../hooks/usePreventBodyScroll';
+import React, { FC } from 'react';
 import { Box, Card, CardMedia, CardActionArea } from '@mui/material';
-import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import 'react-horizontal-scrolling-menu/dist/styles.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -16,57 +17,57 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
-type scrollVisibilityApiType = ContextType<typeof VisibilityContext>;
-
 interface CarouselSlideProps {
 	url: string;
 }
 
+interface HorizontalScrollProps {
+	slidesPerView: number;
+}
+
 const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 	return (
-		<Card sx={{ m: 2, width: 100, border: '2px #f0f0f0f0 solid' }}>
+		<Card
+			elevation={0}
+			sx={{
+				m: 1,
+				width: { xs: 140, sm: 160, md: 160, lg: 180 },
+				border: '2px #f0f0f0f0 solid',
+			}}
+		>
 			<CardActionArea>
-				<CardMedia component="img" height="100" image={url} alt="Image" />
+				<CardMedia
+					component="img"
+					sx={{ height: { xs: 120, sm: 140, md: 140, lg: 160 } }}
+					image={url}
+					alt="Image"
+				/>
 			</CardActionArea>
 		</Card>
 	);
 };
 
-const HorizontalScrollMobile: FC = (): JSX.Element => {
-	const { onTouchEnd, onTouchMove, onTouchStart } = useSwipe();
-	const { disableScroll, enableScroll } = usePreventBodyScroll();
-
-	const onWheel = (apiObj: scrollVisibilityApiType, ev: WheelEvent): void => {
-		const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
-
-		if (isThouchpad) {
-			ev.stopPropagation();
-			return;
-		}
-
-		if (ev.deltaY < 0) {
-			apiObj.scrollNext();
-		} else if (ev.deltaY > 0) {
-			apiObj.scrollPrev();
-		}
-	};
-
+const HorizontalScroll: FC<HorizontalScrollProps> = ({
+	slidesPerView,
+}): JSX.Element => {
 	return (
-		<Box onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
-			<ScrollMenu
-				onWheel={onWheel}
-				onTouchEnd={onTouchEnd}
-				onTouchMove={onTouchMove}
-				onTouchStart={onTouchStart}
+		<Box>
+			<Swiper
+				slidesPerView={slidesPerView}
+				spaceBetween={30}
+				freeMode={true}
+				pagination={{ clickable: true }}
+				modules={[FreeMode, Pagination]}
+				className="mySwiper"
 			>
 				{IMAGE_INFO.map((image: string, index: number) => (
-					<Box key={index}>
+					<SwiperSlide key={index}>
 						<CarouselSlide url={image} />
-					</Box>
+					</SwiperSlide>
 				))}
-			</ScrollMenu>
+			</Swiper>
 		</Box>
 	);
 };
 
-export default HorizontalScrollMobile;
+export default HorizontalScroll;

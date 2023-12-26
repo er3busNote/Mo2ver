@@ -4,8 +4,7 @@ import BannerPC from '../components/banner/BannerPC';
 import BannerMobile from '../components/banner/BannerMobile';
 import PopularPC from '../components/banner/PopularPC';
 import PopularMobile from '../components/banner/PopularMobile';
-import HorizontalScrollPC from '../components/banner/HorizontalScrollPC';
-import HorizontalScrollMobile from '../components/banner/HorizontalScrollMobile';
+import HorizontalScroll from '../components/banner/HorizontalScroll';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { useMediaQuery } from 'react-responsive';
 
@@ -32,19 +31,18 @@ const HomePC: FC = (): JSX.Element => {
 					>
 						<PopularPC />
 					</Box>
-					<Box sx={{ width: '100%' }}>
+					<Box
+						sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+					>
 						<Box
 							sx={{
 								p: 2,
 								pb: 8,
 								width: '930px',
-								left: '50%',
-								position: 'relative',
-								transform: 'translate(-50%, 0%)',
 								bgcolor: '#fafafa',
 							}}
 						>
-							<HorizontalScrollPC />
+							<HorizontalScroll slidesPerView={5} />
 						</Box>
 					</Box>
 				</>
@@ -75,13 +73,13 @@ const HomeMobile: FC = (): JSX.Element => {
 						<PopularMobile />
 					</Box>
 					<MobileView>
-						<Box sx={{ px: 3, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
-							<HorizontalScrollMobile />
+						<Box sx={{ px: 4, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
+							<HorizontalScroll slidesPerView={2} />
 						</Box>
 					</MobileView>
 					<BrowserView>
 						<Box sx={{ p: 2, pb: 8, width: '100%', bgcolor: '#fafafa' }}>
-							<HorizontalScrollPC />
+							<HorizontalScroll slidesPerView={3} />
 						</Box>
 					</BrowserView>
 				</>
