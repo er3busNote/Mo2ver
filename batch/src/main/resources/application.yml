@@ -3,6 +3,43 @@ server:
     mariadb: 127.0.0.1
 
 spring:
+  profiles:
+    group:
+      test: common, test
+      dev-local: common, development
+      prod-local: common, production
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+  datasource:
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+---
+spring:
+  config:
+    activate:
+      on-profile: production, test
+  datasource:
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: validate
+---
+spring:
+  config:
+    activate:
+      on-profile: common
   batch:
     jdbc:
       initialize-schema: always
@@ -11,25 +48,25 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
       hibernate:
-        hbm2ddl:
-          auto: validate
         jdbc:
           lob:
             non_contextual_creation: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
+
+csv-setting:
+  filepath: ../data/styles.csv

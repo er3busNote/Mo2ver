@@ -26,16 +26,25 @@ public class Goods {
     private String goodsName;
 
     @Column(name = "L_CAT_CD", columnDefinition = "CHAR(10) COMMENT '대카테고리코드'")
-    private String LargeCategoryCode;
+    private String largeCategoryCode;
 
     @Column(name = "M_CAT_CD", columnDefinition = "CHAR(10) COMMENT '중카테고리코드'")
-    private String MediumCategoryCode;
+    private String mediumCategoryCode;
 
     @Column(name = "S_CAT_CD", columnDefinition = "CHAR(10) COMMENT '소카테고리코드'")
-    private String SmallCategoryCode;
+    private String smallCategoryCode;
 
     @Column(name = "GD_CND", columnDefinition = "CHAR(10) COMMENT '상품상태'")
-    private String GoodsCondition;
+    private String goodsCondition;
+
+    @Column(name = "GD_GENDER", columnDefinition = "VARCHAR(12) COMMENT '성별'")
+    private String goodsGender;
+
+    @Column(name = "GD_BRAND", columnDefinition = "VARCHAR(100) COMMENT '브랜드'")
+    private String goodsBrand;
+
+    @Column(name = "GD_YEAR", columnDefinition = "VARCHAR(5) COMMENT '제조일자'")
+    private String goodsYear;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

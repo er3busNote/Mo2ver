@@ -105,3 +105,6 @@ jwt-setting:
   jwt-secret: mo2ver-master-jwttoken-startapp!@  # 최소 32개의 문자열 (256bit)
   jwt-accesstoken-validation-second: 60   # 1분 (1 * 60)
   jwt-refreshtoken-validation-second: 3600   # 1시간 (60 * 60)
+
+images-setting:
+  filepath: ../../../../data/images
