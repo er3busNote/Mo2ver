@@ -79,7 +79,6 @@ public class GoodsConfig {
     @Bean
     @StepScope
     public ItemProcessor<DataDto, Goods> itemProcessor() {
-        // 필요한 로직이 있을 경우 구현
         return dataDto -> modelMapper.map(GoodsDto.toDto(
                 dataDto,
                 goodsUtils.goodsName(dataDto.getProductDisplayName()),
@@ -95,7 +94,6 @@ public class GoodsConfig {
         return new ChunkListenerSupport() {
             @Override
             public void beforeChunk(ChunkContext context) {
-                // 전체 아이템 수를 ExecutionContext에 저장
                 context.getStepContext().getStepExecution().getExecutionContext().putInt("totalItemCount", 44446);
             }
 
