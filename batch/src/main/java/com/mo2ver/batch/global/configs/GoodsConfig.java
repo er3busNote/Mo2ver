@@ -33,14 +33,13 @@ import static com.mo2ver.batch.global.configs.GoodsConfig.JOB_NAME;
 
 @Slf4j
 @Configuration
-@Profile("development")    // → 개발환경(development)
 @ConditionalOnProperty(name = "job.name", havingValue = JOB_NAME)
 public class GoodsConfig {
 
     public static final String JOB_NAME = "goodsJob";
     public static final String STEP_NAME = "goodsStep";
-    public static final Integer CHUCK_SIZE = 100;
-    public static final Integer TOTAL_SIZE = 44446;
+    private static final Integer CHUCK_SIZE = 100;
+    private static final Integer TOTAL_SIZE = 44446;
 
     @Autowired
     CsvProperties csvProperties;
@@ -92,6 +91,7 @@ public class GoodsConfig {
     }
 
     @Bean
+    @StepScope
     public ChunkListener chunkListener() {
         return new ChunkListenerSupport() {
             @Override
@@ -117,6 +117,7 @@ public class GoodsConfig {
     }
 
     @Bean
+    @Profile("development")    // → 개발환경(development)
     public Job goodsJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .start(goodsStep())
@@ -131,6 +132,7 @@ public class GoodsConfig {
                 .processor(itemProcessor())
                 .writer(itemWriter())
                 .listener(chunkListener())
+                .allowStartIfComplete(true)
                 .build();
     }
 }

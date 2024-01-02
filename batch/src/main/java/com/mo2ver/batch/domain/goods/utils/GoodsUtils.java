@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 @Service
 public class GoodsUtils {
 
-    private static final String GOODSNAME = "(Men|Women|Unisex|Boys|Girls)(s|'s)?(.+)";
-    private static final String BRANDNAME = "(.+?)(Men|Women|Unisex|Boys|Girls)(s|'s)?";
+    private static final Pattern GOODSNAME = Pattern.compile("(Men|Women|Unisex|Boys|Girls)(s|'s)?(.+)");
+    private static final Pattern BRANDNAME = Pattern.compile("(.+?)(Men|Women|Unisex|Boys|Girls)(s|'s)?");
 
     private static final HashMap<String, String> LARGE_CATEGORY_CODE = new HashMap<String, String>() {{
         put("Apparel", "C001000000"); put("Accessories", "C010000000"); put("Footwear", "C003000000");
@@ -88,17 +88,15 @@ public class GoodsUtils {
     }};
 
     public String goodsName(String productDisplayName) {
-        Pattern pattern = Pattern.compile(GOODSNAME);
-        Matcher match = pattern.matcher(productDisplayName);
+        Matcher match = GOODSNAME.matcher(productDisplayName);
         while (match.find()) { return match.group(3).trim(); }
-        return "";
+        return productDisplayName;
     }
 
     public String brandName(String productDisplayName) {
-        Pattern pattern = Pattern.compile(BRANDNAME);
-        Matcher match = pattern.matcher(productDisplayName);
+        Matcher match = BRANDNAME.matcher(productDisplayName);
         while (match.find()) { return match.group(1).trim(); }
-        return "";
+        return productDisplayName.split(" ")[0];
     }
 
     public String largeCategoryCode(String masterCategory) {
