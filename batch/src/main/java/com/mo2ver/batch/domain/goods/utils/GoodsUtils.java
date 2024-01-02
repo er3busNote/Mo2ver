@@ -11,6 +11,7 @@ public class GoodsUtils {
 
     private static final String GOODSNAME = "(Men|Women|Unisex|Boys|Girls)(s|'s)?(.+)";
     private static final String BRANDNAME = "(.+?)(Men|Women|Unisex|Boys|Girls)(s|'s)?";
+
     private static final HashMap<String, String> LARGE_CATEGORY_CODE = new HashMap<String, String>() {{
         put("Apparel", "C001000000"); put("Accessories", "C010000000"); put("Footwear", "C003000000");
         put("Personal Care", "C011000000"); put("Free Items", "C010000000"); put("Sporting Goods", "C005000000");

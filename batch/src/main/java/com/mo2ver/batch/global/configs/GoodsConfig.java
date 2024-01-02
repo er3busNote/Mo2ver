@@ -39,6 +39,8 @@ public class GoodsConfig {
 
     public static final String JOB_NAME = "goodsJob";
     public static final String STEP_NAME = "goodsStep";
+    public static final Integer CHUCK_SIZE = 100;
+    public static final Integer TOTAL_SIZE = 44446;
 
     @Autowired
     CsvProperties csvProperties;
@@ -94,7 +96,7 @@ public class GoodsConfig {
         return new ChunkListenerSupport() {
             @Override
             public void beforeChunk(ChunkContext context) {
-                context.getStepContext().getStepExecution().getExecutionContext().putInt("totalItemCount", 44446);
+                context.getStepContext().getStepExecution().getExecutionContext().putInt("totalItemCount", TOTAL_SIZE);
             }
 
             @Override
@@ -124,7 +126,7 @@ public class GoodsConfig {
     @Bean
     public Step goodsStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<DataDto, Goods>chunk(100)
+                .<DataDto, Goods>chunk(CHUCK_SIZE)
                 .reader(itemReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
