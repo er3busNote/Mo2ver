@@ -43,6 +43,9 @@ public class Image {
     @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "INT(11) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
 
+    @Column(name = "GD_IMG_EXT", columnDefinition = "CHAR(20) COMMENT '상품이미지확장자'")
+    private String goodsImageExtension;
+
     @Column(name = "BSC_IMG_YN", columnDefinition = "CHAR(1) COMMENT '기본이미지여부'")
     private Character basicImageYesNo;
 

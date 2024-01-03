@@ -1,10 +1,10 @@
 package com.mo2ver.batch.global.configs;
 
+import com.mo2ver.batch.domain.goods.dao.DiscountRepository;
 import com.mo2ver.batch.domain.goods.dao.GoodsRepository;
-import com.mo2ver.batch.domain.goods.dao.PriceRepository;
+import com.mo2ver.batch.domain.goods.domain.Discount;
 import com.mo2ver.batch.domain.goods.domain.Goods;
-import com.mo2ver.batch.domain.goods.domain.Price;
-import com.mo2ver.batch.domain.goods.dto.PriceDto;
+import com.mo2ver.batch.domain.goods.dto.DiscountDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,30 +30,31 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 
 import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Collections;
 
-import static com.mo2ver.batch.global.configs.PriceConfig.JOB_NAME;
+import static com.mo2ver.batch.global.configs.DiscountConfig.JOB_NAME;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "job.name", havingValue = JOB_NAME)
-public class PriceConfig {
+public class DiscountConfig {
 
-    public static final String JOB_NAME = "priceJob";
-    public static final String STEP_NAME = "priceStep";
+    public static final String JOB_NAME = "discountJob";
+    public static final String STEP_NAME = "discountStep";
     private static final Integer CHUNK_SIZE = 100;
     private static final Integer TOTAL_SIZE = 44446;
-    private static final String TABLE_NAME = "GD_PRC";
+    private static final String TABLE_NAME = "GD_DIS_PRC";
 
     @Autowired
     protected ModelMapper modelMapper;
     @Autowired
     protected GoodsRepository goodsRepository;
     @Autowired
-    protected PriceRepository priceRepository;
+    protected DiscountRepository discountRepository;
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -73,8 +74,8 @@ public class PriceConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<Goods, Price> itemProcessor() {
-        return goods -> modelMapper.map(PriceDto.toDto(goods), Price.class);
+    public ItemProcessor<Goods, Discount> itemProcessor() {
+        return goods -> modelMapper.map(DiscountDto.toDto(goods), Discount.class);
     }
 
     @Bean
@@ -99,8 +100,8 @@ public class PriceConfig {
 
     @Bean
     @StepScope
-    public ItemWriter<Price> itemWriter() {
-        return items -> priceRepository.saveAll(items);
+    public ItemWriter<Discount> itemWriter() {
+        return items -> discountRepository.saveAll(items);
     }
 
     @Bean
@@ -116,10 +117,10 @@ public class PriceConfig {
     }
 
     @Bean
-    public Job priceJob() {
+    public Job discountJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .start(truncateStep())
-                .next(priceStep())
+                .next(discountStep())
                 .build();
     }
 
@@ -133,9 +134,9 @@ public class PriceConfig {
 
     @Bean
     @JobScope
-    public Step priceStep() {
+    public Step discountStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<Goods, Price>chunk(CHUNK_SIZE)
+                .<Goods, Discount>chunk(CHUNK_SIZE)
                 .reader(goodsPagingReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())

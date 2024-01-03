@@ -1,4 +1,4 @@
-package com.mo2ver.batch.domain.goods.domain;
+package com.mo2ver.master.domain.goods.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,11 +19,10 @@ import java.time.LocalDateTime;
                 )
         }
 )
-@Getter
-@Setter
+@Getter @Setter
 @EqualsAndHashCode(of = "goodsPriceId")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class DiscountPrice {
+public class Discount {
 
     @Id
     @Column(name = "GD_PRC_ID", columnDefinition = "BIGINT(20) COMMENT '상품가격ID'")

@@ -46,6 +46,15 @@ public class Goods {
     @Column(name = "GD_YEAR", columnDefinition = "VARCHAR(5) COMMENT '제조일자'")
     private String goodsYear;
 
+    @Column(name = "KWD", columnDefinition = "VARCHAR(200) COMMENT '키워드'")
+    private String keyword;
+
+    @Column(name = "SUMM_INFO", columnDefinition = "VARCHAR(200) COMMENT '요약정보'")
+    private String summaryInfo;
+
+    @Column(name = "REVW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
+    private Integer reviewCount;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;

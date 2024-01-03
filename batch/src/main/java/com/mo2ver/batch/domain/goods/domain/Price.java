@@ -6,16 +6,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
+@IdClass(PriceCompositeKey.class)
 @Table(name = "GD_PRC")
 @Getter @Setter
 @EqualsAndHashCode(of = {"goodsCode", "applyDate"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Price implements Serializable {
+public class Price {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
@@ -34,8 +35,32 @@ public class Price implements Serializable {
     @Column(name = "APPL_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '적용일시'")
     private LocalDateTime applyDate;
 
-    @Column(name = "GD_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '상품가격'")
-    private BigDecimal goodsPrice;
+    @Column(name = "SUPP_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '공급가'")
+    private BigDecimal supplyPrice;
+
+    @Column(name = "SALE_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '판매가'")
+    private BigDecimal salePrice;
+
+    @Column(name = "MAX_BUY_QTY", columnDefinition = "INT(11) COMMENT '최대구매수량'")
+    private Integer maxBuyQuantity;
+
+    @Column(name = "BUY_LMT_YN", columnDefinition = "CHAR(1) COMMENT '구매제한여부'")
+    private Character buyLimitYesNo;
+
+    @Column(name = "BUY_LMT_COND", columnDefinition = "CHAR(10) COMMENT '구매제한조건'")
+    private String buyLimitCondition;
+
+    @Column(name = "SALE_PERD_YN", columnDefinition = "CHAR(1) COMMENT '판매기간여부'")
+    private Character salePeriodYesNo;
+
+    @Column(name = "SALE_STRT_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '판매시작일시'")
+    private Date saleStartDate;
+
+    @Column(name = "SALE_END_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '판매종료일시'")
+    private Date saleEndDate;
+
+    @Column(name = "SALE_CND_CD", columnDefinition = "CHAR(10) COMMENT '판매상태코드'")
+    private String saleConditionCode;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

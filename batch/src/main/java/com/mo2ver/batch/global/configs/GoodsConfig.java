@@ -38,7 +38,7 @@ public class GoodsConfig {
 
     public static final String JOB_NAME = "goodsJob";
     public static final String STEP_NAME = "goodsStep";
-    private static final Integer CHUCK_SIZE = 100;
+    private static final Integer CHUNK_SIZE = 100;
     private static final Integer TOTAL_SIZE = 44446;
 
     @Autowired
@@ -127,7 +127,7 @@ public class GoodsConfig {
     @Bean
     public Step goodsStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<DataDto, Goods>chunk(CHUCK_SIZE)
+                .<DataDto, Goods>chunk(CHUNK_SIZE)
                 .reader(itemReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
