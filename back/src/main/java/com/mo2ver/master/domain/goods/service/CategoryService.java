@@ -15,7 +15,7 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     @Transactional
-    public List<CategoryDto> findCategory() {
+    public List<CategoryDto> findCategorylist() {
         return categoryRepository.findCategory();
     }
 }

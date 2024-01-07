@@ -23,8 +23,8 @@ public class CategoryTest extends CsrfConfigTest {
     CategoryService categoryService;
 
     @Test
-    @DisplayName("카테고리 정보 확인")
-    public void findCategoryTest() throws Exception {
+    @DisplayName("카테고리 리스트 정보 확인")
+    public void findCategorylistTest() throws Exception {
 
         mockMvc.perform(get("/category/list"))
                 .andDo(print())

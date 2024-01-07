@@ -19,6 +19,11 @@ spring:
   config:
     activate:
       on-profile: development
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver_test
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
       hibernate:
@@ -38,6 +43,11 @@ spring:
   config:
     activate:
       on-profile: production, test
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
       hibernate:
@@ -58,11 +68,6 @@ spring:
       fail-on-empty-beans: false
     deserialization:
       fail-on-unknown-properties: true   # 속성이 없는 경우 오류 발생 (true) -> 무시 (false)
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
-    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
       hibernate:

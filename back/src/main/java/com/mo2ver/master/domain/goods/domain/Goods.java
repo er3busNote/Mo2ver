@@ -4,12 +4,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "GD")
@@ -54,6 +52,22 @@ public class Goods {
 
     @Column(name = "REVW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
     private Integer reviewCount;
+
+//    @OneToOne(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Price priceCode;
+//
+//    @OneToOne(mappedBy = "applyDate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Price priceDate;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
+            @JoinColumn(name = "UPD_DT", referencedColumnName = "APPL_DT", insertable = false, updatable = false)
+    })
+    private Price price;
+
+    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Image> imageList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

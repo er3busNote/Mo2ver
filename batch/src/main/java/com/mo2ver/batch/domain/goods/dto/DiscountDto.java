@@ -69,7 +69,7 @@ public class DiscountDto {
         return new BigDecimal(new Random().nextInt(MAX_SALE_RATIO + 1));
     }
 
-    public static Character getRandomYesNo() {
+    private static Character getRandomYesNo() {
         Random random = new Random();
 
         // 0 또는 1을 랜덤하게 생성

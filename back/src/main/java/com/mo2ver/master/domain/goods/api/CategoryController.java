@@ -18,6 +18,6 @@ public class CategoryController {
 
     @GetMapping("/list")
     public ResponseEntity listCategory() {
-        return ResponseEntity.ok(categoryService.findCategory());
+        return ResponseEntity.ok(categoryService.findCategorylist());
     }
 }

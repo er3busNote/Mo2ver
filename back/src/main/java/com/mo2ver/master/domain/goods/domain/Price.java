@@ -1,40 +1,56 @@
 package com.mo2ver.master.domain.goods.domain;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@IdClass(PriceCompositeKey.class)
-@Table(name = "GD_PRC")
+@Table(
+        name = "GD_PRC",
+        indexes={
+                @Index(
+                        name="FK_GD_TO_GD_PRC_CD",
+                        columnList="GD_CD",
+                        unique = true
+                ),
+                @Index(
+                        name="FK_GD_TO_GD_PRC_DT",
+                        columnList="APPL_DT",
+                        unique = true
+                )
+        }
+)
 @Getter @Setter
-@EqualsAndHashCode(of = {"goodsCode", "applyDate"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Price {
+public class Price implements Persistable<PriceId> {
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @EmbeddedId
+    private PriceId priceId;
+
+    @MapsId("goodsCode")
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_GD_TO_GD_PRC",
-                    foreignKeyDefinition = "FOREIGN KEY (GD_CD) REFERENCES GD(GD_CD) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_GD_TO_GD_PRC_CD"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
     private Goods goodsCode;
 
-    @Id
-    @Column(name = "APPL_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '적용일시'")
-    private LocalDateTime applyDate;
+    @MapsId("applyDate")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "APPL_DT",
+            nullable = false,
+            updatable = false,
+            columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '적용일시'"
+    )
+    private Goods applyDate;
 
     @Column(name = "SUPP_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '공급가'")
     private BigDecimal supplyPrice;
@@ -67,17 +83,14 @@ public class Price {
     @NotBlank
     private String register;
 
-    @Builder.Default
-    @Column(name = "REG_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '등록일시'")
-    @CreationTimestamp  // INSERT 시 자동으로 값을 채워줌
-    private LocalDateTime registerDate = LocalDateTime.now();
+    @Override
+    public PriceId getId() {
+        return priceId;
+    }
 
-    @Column(name = "UPDR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '수정자'")
-    @NotBlank
-    private String updater;
-
-    @Builder.Default
-    @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
-    @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
-    private LocalDateTime updateDate = LocalDateTime.now();
+    // 새로운 엔티티 판단 전략 재정의
+    @Override
+    public boolean isNew() {
+        return applyDate == null;
+    }
 }
