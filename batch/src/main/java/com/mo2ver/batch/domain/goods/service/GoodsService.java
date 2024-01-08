@@ -1,4 +1,4 @@
-package com.mo2ver.batch.domain.goods.utils;
+package com.mo2ver.batch.domain.goods.service;
 
 import org.springframework.stereotype.Service;
 
@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class GoodsUtils {
+public class GoodsService {
 
     private static final Pattern GOODSNAME = Pattern.compile("(Men|Women|Unisex|Boys|Girls)(s|'s)?(.+)");
     private static final Pattern BRANDNAME = Pattern.compile("(.+?)(Men|Women|Unisex|Boys|Girls)(s|'s)?");

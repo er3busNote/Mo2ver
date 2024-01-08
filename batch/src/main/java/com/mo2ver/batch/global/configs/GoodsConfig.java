@@ -4,7 +4,7 @@ import com.mo2ver.batch.domain.goods.dao.GoodsRepository;
 import com.mo2ver.batch.domain.goods.domain.Goods;
 import com.mo2ver.batch.domain.goods.dto.DataDto;
 import com.mo2ver.batch.domain.goods.dto.GoodsDto;
-import com.mo2ver.batch.domain.goods.utils.GoodsUtils;
+import com.mo2ver.batch.domain.goods.service.GoodsService;
 import com.mo2ver.batch.global.common.properties.CsvProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -50,12 +50,12 @@ public class GoodsConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private final GoodsUtils goodsUtils;
+    private final GoodsService goodsService;
 
-    public GoodsConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, GoodsUtils goodsUtils) {
+    public GoodsConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, GoodsService goodsService) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
-        this.goodsUtils = goodsUtils;
+        this.goodsService = goodsService;
     }
 
     @Bean
@@ -82,11 +82,11 @@ public class GoodsConfig {
     public ItemProcessor<DataDto, Goods> itemProcessor() {
         return dataDto -> modelMapper.map(GoodsDto.toDto(
                 dataDto,
-                goodsUtils.goodsName(dataDto.getProductDisplayName()),
-                goodsUtils.brandName(dataDto.getProductDisplayName()),
-                goodsUtils.largeCategoryCode(dataDto.getMasterCategory()),
-                goodsUtils.mediumCategoryCode(dataDto.getSubCategory()),
-                goodsUtils.smallCategoryCode(dataDto.getArticleType())
+                goodsService.goodsName(dataDto.getProductDisplayName()),
+                goodsService.brandName(dataDto.getProductDisplayName()),
+                goodsService.largeCategoryCode(dataDto.getMasterCategory()),
+                goodsService.mediumCategoryCode(dataDto.getSubCategory()),
+                goodsService.smallCategoryCode(dataDto.getArticleType())
         ), Goods.class);
     }
 
