@@ -81,4 +81,4 @@ jwt-setting:
   jwt-refreshtoken-validation-second: 3600   # 1시간 (60 * 60)
 
 images-setting:
-  filepath: ./images
+  filepath: images
