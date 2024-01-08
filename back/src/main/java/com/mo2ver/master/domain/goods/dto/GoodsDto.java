@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -30,9 +31,9 @@ public class GoodsDto {
 
     private BigDecimal salePrice;
 
-    private List<Image> imageList;
+    private List<ImageDto> imageList;
 
-    public static GoodsDto toDTO(Goods goods) {
+    public static GoodsDto toDTO(Goods goods, String filepath) {
         return GoodsDto.builder()
                 .goodsCode(goods.getGoodsCode())
                 .goodsName(goods.getGoodsName())
@@ -41,7 +42,10 @@ public class GoodsDto {
                 .goodsYear(goods.getGoodsYear())
                 .supplyPrice(goods.getPrice().getSupplyPrice())
                 .salePrice(goods.getPrice().getSalePrice())
-                .imageList(goods.getImageList())
+                .imageList(goods.getImageList().stream()
+                        .filter(image -> image.getBasicImageYesNo() == 'Y')
+                        .map(image -> ImageDto.toDTO(image, filepath))
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

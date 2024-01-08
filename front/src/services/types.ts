@@ -21,6 +21,31 @@ interface CSRFData {
 }
 
 // 2. Category Type
+interface ImageData {
+	base64Image: string;
+	basicImageYesNo: string;
+	sortSequence: number;
+	useYesNo: string;
+}
+
+interface GoodsData {
+	goodsCode: string;
+	goodsName: string;
+	goodsBrand: string;
+	goodsGender: string;
+	goodsYear: string;
+	supplyPrice: number;
+	salePrice: number;
+	imageList: Array<ImageData>;
+}
+
+interface GoodsPage {
+	page: number;
+	size: number;
+	categoryCode: string;
+	categoryType: string;
+}
+
 interface CategoryData {
 	categoryCode: string;
 	categoryName: string;
@@ -29,6 +54,44 @@ interface CategoryData {
 	categoryLevel: number;
 	sortOrdinal: string;
 	useYesNo: string;
+}
+
+interface CategoryPageData {
+	content: Array<GoodsData>;
+	empty: boolean;
+	first: boolean;
+	last: boolean;
+	number: number;
+	numberOfElements: number;
+	pageable: {
+		offset: number;
+		pageNumber: number;
+		pageSize: number;
+		paged: boolean;
+		sort: {
+			empty: boolean;
+			sorted: boolean;
+			unsorted: boolean;
+		};
+	};
+	size: number;
+	sort: {
+		empty: boolean;
+		sorted: boolean;
+		unsorted: boolean;
+	};
+	totalElements: number;
+	totalPages: number;
+}
+
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
+}
+
+interface CategoryDataGroup {
+	largeCategoyData: Array<CategoryData>;
+	middleCategoyData: CategoryDataInfo;
+	smallCategoyData: CategoryDataInfo;
 }
 
 // 3. Banner Type
@@ -88,7 +151,12 @@ export type {
 	SignUpData,
 	TokenData,
 	CSRFData,
+	GoodsData,
+	GoodsPage,
 	CategoryData,
+	CategoryPageData,
+	CategoryDataInfo,
+	CategoryDataGroup,
 	BannerData,
 	BannerPageData,
 	PageData,

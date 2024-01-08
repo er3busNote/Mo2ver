@@ -17,7 +17,7 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { CategoryData } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../services/types';
 import { styled } from '@mui/material/styles';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
@@ -36,11 +36,7 @@ interface AppFooterMenuProps {
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
-	categoryData: Array<CategoryData>;
-}
-
-interface CategoryDataInfo {
-	[key: string]: Array<CategoryData>;
+	categoryData: CategoryDataGroup;
 }
 
 interface StyledTreeItemProps extends TreeItemProps {
@@ -125,44 +121,12 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const largeCategoyData = categoryData.largeCategoyData;
+	const middleCategoyData = categoryData.middleCategoyData;
+	const smallCategoyData = categoryData.smallCategoyData;
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string[]>([]);
-
-	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
-		[]
-	);
-	const [middleCategoyData, setMiddleCategoyData] =
-		useState<CategoryDataInfo>();
-	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
-
-	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
-	const treeCategoryData = () => {
-		// 대 카테고리
-		const largeCategoyData = categoryData.filter(
-			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
-		);
-		setLargeCategoyData(largeCategoyData);
-		// 중/소 카테고리
-		const middleCategoyData = new Object() as CategoryDataInfo;
-		const smallCategoyData = new Object() as CategoryDataInfo;
-		categoryData.forEach((data) => {
-			if (data.categoryLevel === 2) {
-				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
-					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				middleCategoyData[data.upperCategoryCode].push(data);
-			} else if (data.categoryLevel === 3) {
-				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
-					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				smallCategoyData[data.upperCategoryCode].push(data);
-			}
-		});
-		setMiddleCategoyData(middleCategoyData);
-		setSmallCategoyData(smallCategoyData);
-	};
-	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);
@@ -179,13 +143,14 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 	const activeMenuClick = (
 		title: string,
 		code: string,
+		type: string,
 		check: boolean | undefined
 	) => {
 		if (!check) {
 			dispatch(changeDescription(title));
 			dispatch(changeTitle(title));
-			dispatch(menuActive('/goods/' + code));
-			navigate('/goods/' + code);
+			dispatch(menuActive(`/goods/${type}/${code}`));
+			navigate(`/goods/${type}/${code}`);
 		}
 	};
 
@@ -247,7 +212,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 					onNodeToggle={handleToggle}
 					onNodeSelect={handleSelect}
 				>
-					{largeCategoyData.map((ldata: any, index: number) => {
+					{largeCategoyData.map((ldata: CategoryData, index: number) => {
 						return (
 							<StyledTreeItem
 								key={index}
@@ -258,6 +223,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 									activeMenuClick(
 										ldata.categoryName,
 										ldata.categoryCode,
+										'L',
 										middleCategoyData &&
 											Object.keys(middleCategoyData).includes(
 												ldata.categoryCode
@@ -268,7 +234,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 								{middleCategoyData &&
 									Object.keys(middleCategoyData).includes(ldata.categoryCode) &&
 									middleCategoyData[ldata.categoryCode].map(
-										(mdata: any, i: number) => {
+										(mdata: CategoryData, i: number) => {
 											return (
 												<StyledTreeItem
 													key={i}
@@ -279,6 +245,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 														activeMenuClick(
 															mdata.categoryName,
 															mdata.categoryCode,
+															'M',
 															smallCategoyData &&
 																Object.keys(smallCategoyData).includes(
 																	mdata.categoryCode
@@ -291,7 +258,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 															mdata.categoryCode
 														) &&
 														smallCategoyData[mdata.categoryCode].map(
-															(sdata: any, j: number) => {
+															(sdata: CategoryData, j: number) => {
 																return (
 																	<StyledTreeItem
 																		key={j}
@@ -302,6 +269,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 																			activeMenuClick(
 																				sdata.categoryName,
 																				sdata.categoryCode,
+																				'S',
 																				false
 																			)
 																		}

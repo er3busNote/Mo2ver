@@ -1,5 +1,6 @@
 package com.mo2ver.master.domain.goods.api;
 
+import com.mo2ver.master.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.master.domain.goods.dto.GoodsDto;
 import com.mo2ver.master.domain.goods.service.GoodsService;
 import com.mo2ver.master.domain.member.domain.CurrentUser;
@@ -32,9 +33,10 @@ public class GoodsController {
 
     @GetMapping("/list")
     public ResponseEntity listGoods(@Valid PageDto pageDto,
+                                    @Valid CategoryPageDto categoryPageDto,
                                     @CurrentUser Member currentUser) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), 10, Sort.Direction.DESC, "goodsCode");
-        Page<GoodsDto> pages = goodsService.findGoodslist(pageable);
+        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
+        Page<GoodsDto> pages = goodsService.findGoodslist(pageable, categoryPageDto);
         return ResponseEntity.ok(pages);
     }
 

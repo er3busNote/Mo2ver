@@ -47,30 +47,22 @@ public class AppConfig {
             @Override
             public void run(ApplicationArguments args) throws Exception {
                 Member admin = Member.builder()
-                        .memberNo("M000000001")
                         .loginId(appProperties.getAdminLoginId())
                         .memberName("ER3BUS")
                         .password(appProperties.getAdminPassword())
                         .cellPhoneNumber("010XXXXXXXX")
                         .email(appProperties.getAdminEmail())
                         .roles(Stream.of(MemberRole.ADMIN, MemberRole.MANAGER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
-                        .register("SYSTEM")
-                        //.createdAt(LocalDateTime.now())
-                        .updater("SYSTEM")
                         .build();
                 memberService.saveAuth(admin);
 
                 Member user = Member.builder()
-                        .memberNo("M000000002")
                         .loginId(appProperties.getUserLoginId())
                         .memberName("ER3BUS")
                         .password(appProperties.getUserPassword())
                         .cellPhoneNumber("010XXXXXXXX")
                         .email(appProperties.getUserEmail())
                         .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
-                        .register("SYSTEM")
-                        //.createdAt(LocalDateTime.now())
-                        .updater("SYSTEM")
                         .build();
                 memberService.saveAuth(user);
             }

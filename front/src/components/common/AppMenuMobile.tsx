@@ -22,17 +22,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
-import { CategoryData } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../services/types';
 
 interface AppMenuProps {
-	categoryData: Array<CategoryData>;
+	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
 
 interface AppMenuDetailProps {
 	largeCategory: CategoryData;
 	middleCategoyData?: CategoryDataInfo;
-	menuClick: (title: string, code: string) => void;
+	menuClick: (title: string, code: string, type: string) => void;
 }
 
 interface CategoryDataInfo {
@@ -73,7 +73,7 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 		event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
 	) => {
 		if (!targetData)
-			menuClick(largeCategory.categoryName, largeCategory.categoryCode);
+			menuClick(largeCategory.categoryName, largeCategory.categoryCode, 'L');
 		setOpen(!open);
 		event.stopPropagation(); // 새로고침 방지
 		//event.nativeEvent.stopPropagation();
@@ -85,7 +85,7 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 		event: TouchEvent<HTMLLIElement>
 	) => {
 		if (!targetData)
-			menuClick(largeCategory.categoryName, largeCategory.categoryCode);
+			menuClick(largeCategory.categoryName, largeCategory.categoryCode, 'L');
 		event.preventDefault(); // 터치 이벤트의 기본 동작 막기
 		setOpen(touch);
 	};
@@ -119,10 +119,10 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 									key={index}
 									dense
 									onClick={() =>
-										menuClick(data.categoryName, data.categoryCode)
+										menuClick(data.categoryName, data.categoryCode, 'M')
 									}
 									onTouchStart={() =>
-										menuClick(data.categoryName, data.categoryCode)
+										menuClick(data.categoryName, data.categoryCode, 'M')
 									}
 									sx={{ px: 4, py: 2 }}
 								>
@@ -145,35 +145,10 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const largeCategoyData = categoryData.largeCategoyData;
+	const middleCategoyData = categoryData.middleCategoyData;
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
-		[]
-	);
-	const [middleCategoyData, setMiddleCategoyData] =
-		useState<CategoryDataInfo>();
-
-	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
-	const treeCategoryData = () => {
-		// 대 카테고리
-		const largeCategoyData = categoryData.filter(
-			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
-		);
-		setLargeCategoyData(largeCategoyData);
-		// 중 카테고리
-		const middleCategoyData = new Object() as CategoryDataInfo;
-		categoryData.forEach((data) => {
-			if (data.categoryLevel === 2) {
-				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
-					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				middleCategoyData[data.upperCategoryCode].push(data);
-			}
-		});
-		setMiddleCategoyData(middleCategoyData);
-	};
-	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	const showClick = (event: MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(open ? null : event.currentTarget);
@@ -185,11 +160,11 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		setOpen(false);
 	};
 
-	const menuClick = (title: string, code: string) => {
+	const menuClick = (title: string, code: string, type: string) => {
 		dispatch(changeDescription(title));
 		dispatch(changeTitle(title));
-		dispatch(menuActive('/goods/' + code));
-		navigate('/goods/' + code);
+		dispatch(menuActive(`/goods/${type}/${code}`));
+		navigate(`/goods/${type}/${code}`);
 	};
 
 	const tooltip: SxProps<Theme> = {
@@ -254,7 +229,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 						component="nav"
 					>
 						<MenuList sx={{ pl: { xs: 0, sm: 0 }, py: 0.2 }}>
-							{largeCategoyData.map((data: any, index: number) => (
+							{largeCategoyData.map((data: CategoryData, index: number) => (
 								<AppMenu
 									key={index}
 									largeCategory={data}

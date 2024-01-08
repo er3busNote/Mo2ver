@@ -46,22 +46,14 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public void signup(SignupDto signupDto) {
-
-        Member lastMember = this.memberNoForUpdate();
-        String memberNo = 'M' + String.format("%09d", Integer.parseInt(lastMember.getMemberNo().substring(1)) + 1);
-
         Member newMember = Member.builder()
-                .memberNo(memberNo)
                 .loginId(signupDto.getUsername())
                 .memberName("ANONYMOUS")
                 .password(signupDto.getPassword())
                 .cellPhoneNumber("010XXXXXXXX")
                 .email(signupDto.getEmail())
                 .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
-                .register(memberNo)
-                .updater(memberNo)
                 .build();
-
         this.saveAuth(newMember);
     }
 }

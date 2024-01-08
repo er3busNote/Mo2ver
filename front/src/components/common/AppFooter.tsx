@@ -15,13 +15,13 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
-import { CategoryData } from '../../services/types';
+import { CategoryDataGroup } from '../../services/types';
 import { isAdmin } from '../../utils/jwttoken';
 import { isMobile, BrowserView, MobileView } from 'react-device-detect';
 
 interface AppFooterProps {
 	width: number;
-	categoryData: Array<CategoryData>;
+	categoryData: CategoryDataGroup;
 }
 
 const AppFooter: FC<AppFooterProps> = ({

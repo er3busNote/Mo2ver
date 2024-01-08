@@ -9,4 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface GoodsRepository extends JpaRepository<Goods, String> {
     @EntityGraph(attributePaths = {"price", "imageList"})
     Page<Goods> findAll(Pageable paging);
+    @EntityGraph(attributePaths = {"price", "imageList"})
+    Page<Goods> findByLargeCategoryCode(Pageable paging, String largeCategoryCode);
+    @EntityGraph(attributePaths = {"price", "imageList"})
+    Page<Goods> findByMediumCategoryCode(Pageable paging, String mediumCategoryCode);
+    @EntityGraph(attributePaths = {"price", "imageList"})
+    Page<Goods> findBySmallCategoryCode(Pageable paging, String smallCategoryCode);
 }

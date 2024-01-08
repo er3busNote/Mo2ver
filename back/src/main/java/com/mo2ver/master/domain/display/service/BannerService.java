@@ -24,6 +24,6 @@ public class BannerService {
     public Page<BannerDto> findBannerlist(Pageable pageable) {
         Page<Manage> manage = this.manageRepository.findAll(pageable);
         //return manage.map(data -> modelMapper.map(data, BannerDto.class));    // LocalDateTime -> Date (Error)
-        return manage.map(data -> BannerDto.toDTO(data));
+        return manage.map(BannerDto::toDTO);
     }
 }

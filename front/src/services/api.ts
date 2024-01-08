@@ -14,7 +14,7 @@ import {
 import toastMessage from '../utils/toast';
 import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { setInterceptors } from './common/interceptors';
-import { LoginData, SignUpData, TokenData, CSRFData } from './types';
+import { LoginData, SignUpData, TokenData, CSRFData, GoodsPage } from './types';
 
 // 인스턴스 API 생성
 const createInstance = () => {
@@ -125,8 +125,24 @@ const member = {
 			}),
 };
 
+const goods = {
+	// 상품 리스트 API : <baseURL>/banner/list
+	list: (goodsPage: GoodsPage) => (dispatch: Dispatch) =>
+		instance
+			.get(
+				`goods/list?page=${goodsPage.page}&size=${goodsPage.size}&categoryCode=${goodsPage.categoryCode}&categoryType=${goodsPage.categoryType}`
+			)
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+};
+
 const category = {
-	// CSRF 토큰 생성 API : <baseURL>/category/list
+	// 카테고리 리스트 API : <baseURL>/category/list
 	list: () => (dispatch: Dispatch) =>
 		instance
 			.get('category/list')
@@ -140,10 +156,10 @@ const category = {
 };
 
 const banner = {
-	// CSRF 토큰 생성 API : <baseURL>/banner/list
+	// 배너 리스트 API : <baseURL>/banner/list
 	list: () => (dispatch: Dispatch) =>
 		instance
-			.get('banner/list?page=0')
+			.get('banner/list?page=0&size=12')
 			.then((response: AxiosResponse) => {
 				dispatch(tokenSuccess(response.data));
 				return response.data;
@@ -155,6 +171,7 @@ const banner = {
 
 const api = {
 	member,
+	goods,
 	category,
 	banner,
 };

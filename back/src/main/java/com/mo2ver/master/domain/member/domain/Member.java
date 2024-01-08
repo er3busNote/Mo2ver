@@ -2,6 +2,7 @@ package com.mo2ver.master.domain.member.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -27,6 +28,8 @@ import java.util.Set;
 public class Member {
 
     @Id
+    @GeneratedValue(generator = "memberNo")
+    @GenericGenerator(name = "memberNo", strategy = "com.mo2ver.master.domain.member.domain.MemberGenerator")
     @Column(name = "MBR_NO", columnDefinition = "CHAR(10) COMMENT '회원번호'")
     private String memberNo;
 

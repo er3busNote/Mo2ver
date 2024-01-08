@@ -1,7 +1,6 @@
 import React, {
 	FC,
 	useState,
-	useEffect,
 	Dispatch,
 	SetStateAction,
 	CSSProperties,
@@ -28,7 +27,7 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
-import { CategoryData } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../services/types';
 import { divideArray } from '../../utils/divide';
 
 const menuFontSize = '15px';
@@ -36,7 +35,7 @@ const menuFontSize = '15px';
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 interface AppMenuProps {
-	categoryData: Array<CategoryData>;
+	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
 
@@ -44,11 +43,7 @@ interface AppMenuItemProps {
 	categoryCode: string;
 	categoryName: string;
 	setHover: Dispatch<SetStateAction<string>>;
-	menuClick: (title: string, code: string) => void;
-}
-
-interface CategoryDataInfo {
-	[key: string]: Array<CategoryData>;
+	menuClick: (title: string, code: string, type: string) => void;
 }
 
 const MenuDivider: FC = (): JSX.Element => {
@@ -107,7 +102,7 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 		>
 			<MenuItem
 				dense
-				onClick={() => menuClick(categoryName, categoryCode)}
+				onClick={() => menuClick(categoryName, categoryCode, 'L')}
 				sx={item}
 			>
 				<ListItemText
@@ -124,41 +119,10 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const largeCategoyData = categoryData.largeCategoyData;
+	const middleCategoyData = categoryData.middleCategoyData;
+	const smallCategoyData = categoryData.smallCategoyData;
 	const [hover, setHover] = useState<string>('');
-	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
-		[]
-	);
-	const [middleCategoyData, setMiddleCategoyData] =
-		useState<CategoryDataInfo>();
-	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
-
-	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
-	const treeCategoryData = () => {
-		// 대 카테고리
-		const largeCategoyData = categoryData.filter(
-			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
-		);
-		setLargeCategoyData(largeCategoyData);
-		// 중/소 카테고리
-		const middleCategoyData = new Object() as CategoryDataInfo;
-		const smallCategoyData = new Object() as CategoryDataInfo;
-		categoryData.forEach((data) => {
-			if (data.categoryLevel === 2) {
-				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
-					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				middleCategoyData[data.upperCategoryCode].push(data);
-			} else if (data.categoryLevel === 3) {
-				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
-					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				smallCategoyData[data.upperCategoryCode].push(data);
-			}
-		});
-		setMiddleCategoyData(middleCategoyData);
-		setSmallCategoyData(smallCategoyData);
-	};
-	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
 
 	// 중 카테고리 → 3등분
 	let divideData = new Array([
@@ -178,11 +142,11 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 		setHover('');
 	};
 
-	const menuClick = (title: string, code: string) => {
+	const menuClick = (title: string, code: string, type: string) => {
 		dispatch(changeDescription(title));
 		dispatch(changeTitle(title));
-		dispatch(menuActive('/goods/' + code));
-		navigate('/goods/' + code);
+		dispatch(menuActive(`/goods/${type}/${code}`));
+		navigate(`/goods/${type}/${code}`);
 	};
 
 	const menuWidthSize = '630px';
@@ -245,7 +209,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 					<Box sx={{ width: submenuWidthSize }}>
 						<ThemeProvider theme={darkTheme}>
 							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								{largeCategoyData.map((data: any, index: number) => (
+								{largeCategoyData.map((data: CategoryData, index: number) => (
 									<AppMenuItem
 										key={index}
 										setHover={setHover}
@@ -265,12 +229,12 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 									id={'sub-menu'}
 									sx={{ width: submenuWidthSize, ...overflowContents }}
 								>
-									{divide.map((mdata: any, i: number) => (
+									{divide.map((mdata: CategoryData, i: number) => (
 										<MenuList key={i} sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
 											<MenuItem
 												dense
 												onClick={() =>
-													menuClick(mdata.categoryName, mdata.categoryCode)
+													menuClick(mdata.categoryName, mdata.categoryCode, 'M')
 												}
 												sx={{ px: '24px', py: '11px' }}
 											>
@@ -286,14 +250,15 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 													mdata.categoryCode
 												) &&
 												smallCategoyData[mdata.categoryCode].map(
-													(sdata: any, j: number) => (
+													(sdata: CategoryData, j: number) => (
 														<MenuItem
 															key={j}
 															dense
 															onClick={() =>
 																menuClick(
 																	sdata.categoryName,
-																	sdata.categoryCode
+																	sdata.categoryCode,
+																	'S'
 																)
 															}
 															sx={{

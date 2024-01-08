@@ -15,4 +15,7 @@ public class PageDto {
 
     @NotNull
     private int page;
+
+    @NotNull
+    private int size;
 }

@@ -2,6 +2,7 @@ package com.mo2ver.master.domain.goods.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -17,6 +18,8 @@ import java.util.List;
 public class Goods {
 
     @Id
+    @GeneratedValue(generator = "goodsCode")
+    @GenericGenerator(name = "goodsCode", strategy = "com.mo2ver.master.domain.goods.domain.GoodsGenerator")
     @Column(name = "GD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String goodsCode;
 

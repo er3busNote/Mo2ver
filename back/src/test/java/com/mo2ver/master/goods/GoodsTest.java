@@ -12,15 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class GoodsTest extends CsrfConfigTest {
 
-    @Autowired
-    GoodsService goodsService;
-
     @Test
     @DisplayName("상품 리스트 정보 확인")
     public void findGoodslistTest() throws Exception {
 
         mockMvc.perform(get("/goods/list")
-                        .param("page", "1"))
+                        .param("page", "1")
+                        .param("categoryCode", "C001000000")
+                        .param("categoryType", "L"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

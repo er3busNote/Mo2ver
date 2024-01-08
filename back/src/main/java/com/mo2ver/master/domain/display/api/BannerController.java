@@ -33,7 +33,7 @@ public class BannerController {
     @GetMapping("/list")
     public ResponseEntity listBanner(@Valid PageDto pageDto,
                                     @CurrentUser Member currentUser) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), 10, Sort.Direction.DESC, "bannerManageNo");
+        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "bannerManageNo");
         Page<BannerDto> pages = bannerService.findBannerlist(pageable);
         return ResponseEntity.ok(pages);
     }

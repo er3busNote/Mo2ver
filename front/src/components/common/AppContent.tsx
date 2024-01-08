@@ -6,7 +6,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { menuLotate } from '../../store/index';
 import Api from '../../services/api';
-import useCategoryList from '../../hooks/useCategoryList';
+import useCategoryGroupList from '../../hooks/useCategoryGroupList';
 import AppHeader from './AppHeader';
 import AppHeaderMenu from './AppHeaderMenu';
 import AppSearchPC from './AppSearchPC';
@@ -19,7 +19,7 @@ import AppFooter from './AppFooter';
 import { CssBaseline, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
-import { CategoryData } from '../../services/types';
+import { CategoryDataGroup } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
 import { isDesktop } from 'react-device-detect';
 
@@ -29,7 +29,7 @@ const drawerMenuLimit = 768;
 const drawerMenuWidth = 200;
 
 interface AppProps {
-	categoryData: Array<CategoryData>;
+	categoryData: CategoryDataGroup;
 }
 
 interface LayoutDefaultProps {
@@ -107,7 +107,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	category,
 }): JSX.Element => {
 	const dispatch = useDispatch();
-	const categoryData = useCategoryList({ category });
+	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
 		dispatch(menuLotate('user'));
