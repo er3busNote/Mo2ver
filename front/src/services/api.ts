@@ -12,6 +12,7 @@ import {
 	JWT_REFRESH_TOKEN,
 } from '../utils/jwttoken';
 import toastMessage from '../utils/toast';
+import { urlFormat } from '../utils/format';
 import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { setInterceptors } from './common/interceptors';
 import { LoginData, SignUpData, TokenData, CSRFData, GoodsPage } from './types';
@@ -183,7 +184,7 @@ const banner = {
 const image = {
 	// 이미지 매핑 API : <baseURL>/images/*.*
 	info: (imagefile: string) => () =>
-		instance.defaults.baseURL + '/images/' + imagefile,
+		urlFormat(instance.defaults.baseURL ?? '') + 'images/' + imagefile,
 };
 
 const api = {
