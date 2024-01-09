@@ -5,8 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface GoodsRepository extends JpaRepository<Goods, String> {
+public interface GoodsRepository extends JpaRepository<Goods, String>, GoodsRepositoryCustom {
     @EntityGraph(attributePaths = {"price", "imageList"})
     Goods findByGoodsCode(String goodsCode);
     @EntityGraph(attributePaths = {"price", "imageList"})

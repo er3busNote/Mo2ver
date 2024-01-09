@@ -1,6 +1,7 @@
 package com.mo2ver.master.domain.goods.service;
 
 import com.mo2ver.master.domain.goods.dao.GoodsRepository;
+import com.mo2ver.master.domain.goods.dao.GoodsRepositoryImpl;
 import com.mo2ver.master.domain.goods.domain.Goods;
 import com.mo2ver.master.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.master.domain.goods.dto.GoodsDto;
@@ -18,6 +19,9 @@ public class GoodsService {
     @Autowired
     GoodsRepository goodsRepository;
 
+    @Autowired
+    GoodsRepositoryImpl goodsCustomRepository;
+
     @Transactional
     public GoodsDto selectGoods(String id) {
         Goods goods = this.goodsRepository.findByGoodsCode(id);
@@ -26,37 +30,26 @@ public class GoodsService {
 
     @Transactional
     public Page<GoodsDto> findGoodslist(Pageable pageable, CategoryPageDto categoryPageDto) {
-        Page<Goods> goods;
-        switch(categoryPageDto.getCategoryType()) {
-            case 'L':
-                goods = this.getLargeCategoryCode(pageable, categoryPageDto.getCategoryCode());
-                break;
-            case 'M':
-                goods = this.getMediumCategoryCode(pageable, categoryPageDto.getCategoryCode());
-                break;
-            case 'S':
-                goods = this.getSmallCategoryCode(pageable, categoryPageDto.getCategoryCode());
-                break;
-            default:
-                goods = this.getAllCategoryCode(pageable);
-                break;
-        }
+        //Page<Goods> goods = useJpaRepository(pageable, categoryPageDto.getCategoryCode(), categoryPageDto.getCategoryType());
+        Page<Goods> goods = useQueryDsl(pageable, categoryPageDto.getCategoryCode(), categoryPageDto.getCategoryType());
         return goods.map(GoodsDto::toDTO);
     }
 
-    private Page<Goods> getLargeCategoryCode(Pageable pageable, String largeCategoryCode) {
-        return this.goodsRepository.findByLargeCategoryCode(pageable, largeCategoryCode);
+    // @EntityGraph → 복잡한 연관 관계일수록 속도가 느려짐... → QueryDSL 구성 요소인 QuerydslRepositorySupport으로 해결함
+    private Page<Goods> useJpaRepository(Pageable pageable, String categoryCode, Character categoryType) {
+        switch(categoryType) {
+            case 'L':
+                return this.goodsRepository.findByLargeCategoryCode(pageable, categoryCode);
+            case 'M':
+                return this.goodsRepository.findByMediumCategoryCode(pageable, categoryCode);
+            case 'S':
+                return this.goodsRepository.findBySmallCategoryCode(pageable, categoryCode);
+            default:
+                return this.goodsRepository.findAll(pageable);
+        }
     }
 
-    private Page<Goods> getMediumCategoryCode(Pageable pageable, String mediumCategoryCode) {
-        return this.goodsRepository.findByMediumCategoryCode(pageable, mediumCategoryCode);
-    }
-
-    private Page<Goods> getSmallCategoryCode(Pageable pageable, String smallCategoryCode) {
-        return this.goodsRepository.findBySmallCategoryCode(pageable, smallCategoryCode);
-    }
-
-    private Page<Goods> getAllCategoryCode(Pageable pageable) {
-        return this.goodsRepository.findAll(pageable);
+    private Page<Goods> useQueryDsl(Pageable pageable, String categoryCode, Character categoryType) {
+        return this.goodsCustomRepository.findByCategoryCode(pageable, categoryCode, categoryType);
     }
 }

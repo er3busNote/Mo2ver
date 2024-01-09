@@ -18,6 +18,7 @@ public class GoodsTest extends CsrfConfigTest {
 
         mockMvc.perform(get("/goods/list")
                         .param("page", "1")
+                        .param("size", "12")
                         .param("categoryCode", "C001000000")
                         .param("categoryType", "L"))
                 .andDo(print())
