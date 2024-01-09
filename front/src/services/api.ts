@@ -126,7 +126,18 @@ const member = {
 };
 
 const goods = {
-	// 상품 리스트 API : <baseURL>/banner/list
+	// 상품 상세정보 API : <baseURL>/goods/info
+	info: (goodsCode: string) => (dispatch: Dispatch) =>
+		instance
+			.get('goods/info/' + goodsCode)
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+	// 상품 리스트 API : <baseURL>/goods/list
 	list: (goodsPage: GoodsPage) => (dispatch: Dispatch) =>
 		instance
 			.get(
@@ -169,11 +180,18 @@ const banner = {
 			}),
 };
 
+const image = {
+	// 이미지 매핑 API : <baseURL>/images/*.*
+	info: (imagefile: string) => () =>
+		instance.defaults.baseURL + '/images/' + imagefile,
+};
+
 const api = {
 	member,
 	goods,
 	category,
 	banner,
+	image,
 };
 
 export default { ...api };

@@ -22,11 +22,25 @@ public class ImageDto {
 
     private String base64Image;
 
+    private Integer goodsImageAttachFile;
+
+    private String goodsImageExtension;
+
     private Character basicImageYesNo;
 
     private Integer sortSequence;
 
     private Character useYesNo;
+
+    public static ImageDto toDTO(Image image) {
+        return ImageDto.builder()
+                .goodsImageAttachFile(image.getGoodsImageAttachFile())
+                .goodsImageExtension(image.getGoodsImageExtension())
+                .basicImageYesNo(image.getBasicImageYesNo())
+                .sortSequence(image.getSortSequence())
+                .useYesNo(image.getUseYesNo())
+                .build();
+    }
 
     public static ImageDto toDTO(Image image, String filepath) {
 

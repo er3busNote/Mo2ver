@@ -23,6 +23,8 @@ interface CSRFData {
 // 2. Category Type
 interface ImageData {
 	base64Image: string;
+	goodsImageAttachFile: number;
+	goodsImageExtension: string;
 	basicImageYesNo: string;
 	sortSequence: number;
 	useYesNo: string;

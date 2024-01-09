@@ -1,5 +1,11 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
+import { Dispatch } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../../services/api';
+import useImageUrl from '../../hooks/useImageUrl';
+import useGoodsDetail from '../../hooks/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
 import {
 	Box,
@@ -21,15 +27,21 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
 
-const IMAGE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
+interface GoodsProps {
+	goods: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
+}
 
-const GoodsDetail: FC = (): JSX.Element => {
+const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 	const { id } = useParams();
+	const code = id ?? '';
+	const data = useGoodsDetail({ goods, code });
+	const file =
+		data.imageList.length > 0
+			? String(data.imageList[0].goodsImageAttachFile) +
+			  '.' +
+			  data.imageList[0].goodsImageExtension
+			: '';
 
 	const gridItem: SxProps<Theme> = {
 		py: 0.5,
@@ -152,7 +164,7 @@ const GoodsDetail: FC = (): JSX.Element => {
 							component="img"
 							width="100%"
 							height="556"
-							image={IMAGE_INFO[Number(id)]}
+							image={useImageUrl({ image, file })}
 							sx={{ p: 1.5 }}
 							alt="green iguana"
 						/>
@@ -210,7 +222,7 @@ const GoodsDetail: FC = (): JSX.Element => {
 														aria-label="breadcrumb"
 													>
 														<Typography component="span" sx={label}>
-															Publisher
+															브랜드
 														</Typography>
 														<Typography component="span" sx={label}>
 															품번
@@ -223,10 +235,10 @@ const GoodsDetail: FC = (): JSX.Element => {
 														aria-label="breadcrumb"
 													>
 														<Typography component="span" sx={info}>
-															Mo2ver
+															{data.goodsBrand}
 														</Typography>
 														<Typography component="span" sx={info}>
-															10000010
+															{data.goodsCode}
 														</Typography>
 													</Breadcrumbs>
 												</TableCell>
@@ -251,10 +263,10 @@ const GoodsDetail: FC = (): JSX.Element => {
 														aria-label="breadcrumb"
 													>
 														<Typography component="span" sx={info}>
-															2023
+															{data.goodsYear}
 														</Typography>
 														<Typography component="span" sx={info}>
-															남
+															{data.goodsGender}
 														</Typography>
 													</Breadcrumbs>
 												</TableCell>
@@ -429,7 +441,7 @@ const GoodsDetail: FC = (): JSX.Element => {
 												</TableCell>
 												<TableCell sx={infoCell}>
 													<Typography component="span" sx={infoOriginPrice}>
-														69,900원
+														{data.supplyPrice.toLocaleString()}원
 													</Typography>
 												</TableCell>
 											</TableRow>
@@ -440,7 +452,7 @@ const GoodsDetail: FC = (): JSX.Element => {
 													</Typography>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													<Breadcrumbs
+													{/*<Breadcrumbs
 														sx={infoBreadcrumbs}
 														separator="~"
 														aria-label="breadcrumb"
@@ -451,7 +463,10 @@ const GoodsDetail: FC = (): JSX.Element => {
 														<Typography component="span" sx={infoDiscountPrice}>
 															59,390원
 														</Typography>
-													</Breadcrumbs>
+													</Breadcrumbs>*/}
+													<Typography component="span" sx={infoDiscountPrice}>
+														{data.salePrice.toLocaleString()}원
+													</Typography>
 												</TableCell>
 											</TableRow>
 										</TableBody>
@@ -488,4 +503,9 @@ const GoodsDetail: FC = (): JSX.Element => {
 	);
 };
 
-export default GoodsDetail;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	goods: bindActionCreators(Api.goods, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(GoodsDetail);

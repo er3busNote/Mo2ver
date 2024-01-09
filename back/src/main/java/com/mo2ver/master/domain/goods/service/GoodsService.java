@@ -16,10 +16,13 @@ import javax.transaction.Transactional;
 public class GoodsService {
 
     @Autowired
-    ImagesProperties imagesProperties;
-
-    @Autowired
     GoodsRepository goodsRepository;
+
+    @Transactional
+    public GoodsDto selectGoods(String id) {
+        Goods goods = this.goodsRepository.findByGoodsCode(id);
+        return GoodsDto.toDTO(goods);
+    }
 
     @Transactional
     public Page<GoodsDto> findGoodslist(Pageable pageable, CategoryPageDto categoryPageDto) {
@@ -38,7 +41,7 @@ public class GoodsService {
                 goods = this.getAllCategoryCode(pageable);
                 break;
         }
-        return goods.map(item -> GoodsDto.toDTO(item, imagesProperties.getFilepath()));
+        return goods.map(GoodsDto::toDTO);
     }
 
     private Page<Goods> getLargeCategoryCode(Pageable pageable, String largeCategoryCode) {

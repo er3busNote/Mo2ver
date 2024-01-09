@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
@@ -29,6 +30,13 @@ public class GoodsController {
     public GoodsController(GoodsService goodsService, ErrorService errorService) {
         this.goodsService = goodsService;
         this.errorService = errorService;
+    }
+
+    @GetMapping("/info/{id}")
+    public ResponseEntity infoGoods(@PathVariable String id,
+                                    @CurrentUser Member currentUser) {
+        GoodsDto goodsDto = goodsService.selectGoods(id);
+        return ResponseEntity.ok(goodsDto);
     }
 
     @GetMapping("/list")

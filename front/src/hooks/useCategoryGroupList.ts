@@ -13,7 +13,6 @@ interface CategoryListProps {
 const useCategoryGroupList = ({
 	category,
 }: CategoryListProps): CategoryDataGroup => {
-	const [data, setData] = useState<Array<CategoryData>>([]);
 	const [largeCategoyData, setLargeCategoyData] = useState<Array<CategoryData>>(
 		[]
 	);
@@ -54,7 +53,6 @@ const useCategoryGroupList = ({
 		});
 		setMiddleCategoyData(middleCategoyData);
 		setSmallCategoyData(smallCategoyData);
-		setData(categoryData);
 	}, []);
 
 	useEffect(() => {

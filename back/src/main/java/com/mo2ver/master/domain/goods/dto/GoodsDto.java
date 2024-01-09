@@ -33,7 +33,7 @@ public class GoodsDto {
 
     private List<ImageDto> imageList;
 
-    public static GoodsDto toDTO(Goods goods, String filepath) {
+    public static GoodsDto toDTO(Goods goods) {
         return GoodsDto.builder()
                 .goodsCode(goods.getGoodsCode())
                 .goodsName(goods.getGoodsName())
@@ -44,7 +44,7 @@ public class GoodsDto {
                 .salePrice(goods.getPrice().getSalePrice())
                 .imageList(goods.getImageList().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')
-                        .map(image -> ImageDto.toDTO(image, filepath))
+                        .map(ImageDto::toDTO)
                         .collect(Collectors.toList()))
                 .build();
     }

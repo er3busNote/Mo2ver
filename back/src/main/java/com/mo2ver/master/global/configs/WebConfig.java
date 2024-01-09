@@ -1,6 +1,7 @@
 package com.mo2ver.master.global.configs;
 
 import com.mo2ver.master.global.common.properties.CorsProperties;
+import com.mo2ver.master.global.common.properties.ImagesProperties;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -14,6 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -27,6 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     CorsProperties corsProperties;
     @Autowired
+    ImagesProperties imagesProperties;
+    @Autowired
     private Environment environment;
 
     @Override
@@ -38,6 +42,13 @@ public class WebConfig implements WebMvcConfigurer {
                 //.exposedHeaders("Set-Cookie")
                 .allowCredentials(true)
                 .maxAge(3600);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:" + imagesProperties.getFilepath() + "/")
+                .setCachePeriod(60 * 60 * 24 * 365);
     }
 
     @Bean
