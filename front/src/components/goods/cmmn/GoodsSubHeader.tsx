@@ -8,7 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Title from '../../Title';
 
 interface GoodsSubHeaderProps {
-	title?: string;
+	title: string;
 	description?: string;
 }
 
@@ -52,13 +52,24 @@ const GoodsSubHeader: FC<GoodsSubHeaderProps> = ({
 						홈
 					</Typography>
 				</IconButton>
+				{description && description !== '' && (
+					<Typography
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							fontSize: { xs: '11px', sm: '12px', lg: '14px' },
+						}}
+						color="text.primary"
+					>
+						{description}
+					</Typography>
+				)}
 			</Breadcrumbs>
 		</Box>
 	);
 };
 
 const mapStateToProps = (state: any) => ({
-	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 

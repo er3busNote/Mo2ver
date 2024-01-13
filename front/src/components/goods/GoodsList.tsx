@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import { menuActive } from '../../store/index';
 import Api from '../../services/api';
 import useImageUrl from '../../hooks/useImageUrl';
 import useCategoryPageList from '../../hooks/useCategoryPageList';
@@ -17,6 +17,7 @@ import {
 	CardMedia,
 	CardActionArea,
 	Typography,
+	Skeleton,
 } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { GoodsData } from '../../services/types';
@@ -36,90 +37,105 @@ const GoodsGrid: FC<GoodsGridProps> = ({ image, goodsData }): JSX.Element => {
 	const navigate = useNavigate();
 
 	const goodsClick = (title: string, code: string) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(title));
 		dispatch(menuActive('/goods/detail/' + code));
 		navigate('/goods/detail/' + code);
 	};
 
 	return (
 		<Grid container spacing={3}>
-			{goodsData &&
-				goodsData.map((data: GoodsData, index: number) => {
-					const file =
-						data.imageList.length > 0
-							? String(data.imageList[0].goodsImageAttachFile) +
-							  '.' +
-							  data.imageList[0].goodsImageExtension
-							: '';
-					//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
-					return (
+			{goodsData
+				? goodsData.map((data: GoodsData, index: number) => {
+						const file =
+							data.imageList.length > 0
+								? String(data.imageList[0].goodsImageAttachFile) +
+								  '.' +
+								  data.imageList[0].goodsImageExtension
+								: '';
+						//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
+						return (
+							<Grid key={index} item xs={6} md={3} lg={3}>
+								<Card
+									elevation={0}
+									sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+									onClick={() => goodsClick(data.goodsName, data.goodsCode)}
+								>
+									<CardActionArea>
+										<CardMedia
+											component="img"
+											height="140"
+											image={useImageUrl({ image, file })}
+											//src={`data:image/png;base64, ${base64}`}
+										/>
+										<CardContent>
+											<Typography
+												component="div"
+												sx={{
+													fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+													fontWeight: 'bold',
+												}}
+											>
+												{data.goodsName}
+											</Typography>
+											<Typography
+												component="div"
+												sx={{
+													fontSize: { xs: '10px', sm: '11px', lg: '12px' },
+													fontWeight: 'bold',
+												}}
+											>
+												{data.goodsBrand}
+											</Typography>
+											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+												<Breadcrumbs
+													sx={{ pt: 1 }}
+													separator="›"
+													aria-label="breadcrumb"
+												>
+													<Typography
+														color="text.secondary"
+														sx={{
+															color: '#b2b2b2',
+															fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+															textDecoration: 'line-through',
+														}}
+													>
+														{data.supplyPrice.toLocaleString()}원
+													</Typography>
+													<Typography
+														color="text.secondary"
+														sx={{
+															fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+															fontWeight: 'bold',
+														}}
+													>
+														{data.salePrice.toLocaleString()}원
+													</Typography>
+												</Breadcrumbs>
+											</Box>
+										</CardContent>
+									</CardActionArea>
+								</Card>
+							</Grid>
+						);
+				  })
+				: Array.from(new Array(12)).map((_, index) => (
 						<Grid key={index} item xs={6} md={3} lg={3}>
 							<Card
 								elevation={0}
 								sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-								onClick={() => goodsClick(data.goodsName, data.goodsCode)}
 							>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										height="140"
-										image={useImageUrl({ image, file })}
-										//src={`data:image/png;base64, ${base64}`}
-										alt="green iguana"
+								<Skeleton sx={{ height: 140 }} variant="rectangular" />
+								<CardContent>
+									<Skeleton
+										animation="wave"
+										height={10}
+										style={{ marginBottom: 6 }}
 									/>
-									<CardContent>
-										<Typography
-											component="div"
-											sx={{
-												fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-												fontWeight: 'bold',
-											}}
-										>
-											{data.goodsName}
-										</Typography>
-										<Typography
-											component="div"
-											sx={{
-												fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-												fontWeight: 'bold',
-											}}
-										>
-											{data.goodsBrand}
-										</Typography>
-										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-											<Breadcrumbs
-												sx={{ pt: 1 }}
-												separator="›"
-												aria-label="breadcrumb"
-											>
-												<Typography
-													color="text.secondary"
-													sx={{
-														color: '#b2b2b2',
-														fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-														textDecoration: 'line-through',
-													}}
-												>
-													{data.supplyPrice.toLocaleString()}원
-												</Typography>
-												<Typography
-													color="text.secondary"
-													sx={{
-														fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-														fontWeight: 'bold',
-													}}
-												>
-													{data.salePrice.toLocaleString()}원
-												</Typography>
-											</Breadcrumbs>
-										</Box>
-									</CardContent>
-								</CardActionArea>
+									<Skeleton height={10} width="80%" />
+								</CardContent>
 							</Card>
 						</Grid>
-					);
-				})}
+				  ))}
 		</Grid>
 	);
 };

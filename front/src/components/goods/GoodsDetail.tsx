@@ -22,6 +22,7 @@ import {
 	TableRow,
 	TableCell,
 	TableContainer,
+	Skeleton,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -156,18 +157,21 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 
 	return (
 		<Box>
-			<GoodsSubHeader />
+			<GoodsSubHeader title={data.goodsName} />
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={6} lg={6}>
 					<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
-						<CardMedia
-							component="img"
-							width="100%"
-							height="556"
-							image={useImageUrl({ image, file })}
-							sx={{ p: 1.5 }}
-							alt="green iguana"
-						/>
+						{file !== '' ? (
+							<CardMedia
+								component="img"
+								width="100%"
+								height="556"
+								image={useImageUrl({ image, file })}
+								sx={{ p: 1.5 }}
+							/>
+						) : (
+							<Skeleton variant="rectangular" height={556} />
+						)}
 					</Box>
 				</Grid>
 				<Grid item xs={12} md={6} lg={6}>
@@ -230,17 +234,21 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 													</Breadcrumbs>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													<Breadcrumbs
-														sx={infoBreadcrumbs}
-														aria-label="breadcrumb"
-													>
-														<Typography component="span" sx={info}>
-															{data.goodsBrand}
-														</Typography>
-														<Typography component="span" sx={info}>
-															{data.goodsCode}
-														</Typography>
-													</Breadcrumbs>
+													{data ? (
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={info}>
+																{data.goodsBrand}
+															</Typography>
+															<Typography component="span" sx={info}>
+																{data.goodsCode}
+															</Typography>
+														</Breadcrumbs>
+													) : (
+														<Skeleton />
+													)}
 												</TableCell>
 											</TableRow>
 											<TableRow>
@@ -258,17 +266,21 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 													</Breadcrumbs>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													<Breadcrumbs
-														sx={infoBreadcrumbs}
-														aria-label="breadcrumb"
-													>
-														<Typography component="span" sx={info}>
-															{data.goodsYear}
-														</Typography>
-														<Typography component="span" sx={info}>
-															{data.goodsGender}
-														</Typography>
-													</Breadcrumbs>
+													{data ? (
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={info}>
+																{data.goodsYear}
+															</Typography>
+															<Typography component="span" sx={info}>
+																{data.goodsGender}
+															</Typography>
+														</Breadcrumbs>
+													) : (
+														<Skeleton />
+													)}
 												</TableCell>
 											</TableRow>
 											<TableRow>
@@ -440,9 +452,13 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 													</Typography>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													<Typography component="span" sx={infoOriginPrice}>
-														{data.supplyPrice.toLocaleString()}원
-													</Typography>
+													{data ? (
+														<Typography component="span" sx={infoOriginPrice}>
+															{data.supplyPrice.toLocaleString()}원
+														</Typography>
+													) : (
+														<Skeleton />
+													)}
 												</TableCell>
 											</TableRow>
 											<TableRow>
@@ -464,9 +480,13 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 															59,390원
 														</Typography>
 													</Breadcrumbs>*/}
-													<Typography component="span" sx={infoDiscountPrice}>
-														{data.salePrice.toLocaleString()}원
-													</Typography>
+													{data ? (
+														<Typography component="span" sx={infoDiscountPrice}>
+															{data.salePrice.toLocaleString()}원
+														</Typography>
+													) : (
+														<Skeleton />
+													)}
 												</TableCell>
 											</TableRow>
 										</TableBody>
