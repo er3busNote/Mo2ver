@@ -152,7 +152,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	const submenuWidthSize = '210px';
 
 	const tooltip: SxProps<Theme> = {
-		ml: '-41px !important',
+		//ml: '-41px !important',
 		zIndex: 2,
 	};
 	const menu: SxProps<Theme> = {
@@ -207,6 +207,14 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 				anchorEl={anchorEl}
 				sx={tooltip}
 				placement="bottom-start"
+				modifiers={[
+					{
+						name: 'offset',
+						options: {
+							offset: [-40, 2],
+						},
+					},
+				]}
 			>
 				<Box id={'main-menu'} sx={menu} onMouseLeave={onMouseLeave}>
 					<Box

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, MouseEvent, TouchEvent } from 'react';
+import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { SubMenuInfo, MenuState } from '../../store/types';
@@ -23,6 +23,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '../../services/types';
+import { isMobile } from 'react-device-detect';
 
 interface AppMenuProps {
 	categoryData: CategoryDataGroup;
@@ -168,7 +169,13 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	};
 
 	const tooltip: SxProps<Theme> = {
-		ml: { xs: '-23px !important', sm: '-41px !important' },
+		//ml: { xs: '-23px !important', sm: '-41px !important' },
+		transform: isMobile
+			? 'translate(0px, 152px) !important'
+			: {
+					xs: 'translate(0px, 217px) !important',
+					sm: 'translate(0px, 220px) !important',
+			  },
 		zIndex: 1,
 	};
 	const menu: SxProps<Theme> = {
