@@ -93,10 +93,12 @@ const SearchRecent: FC<SearchProps> = ({ base, header }): JSX.Element => {
 				</Typography>
 				<Box
 					sx={{
+						width: drawerSearchWidth - 30,
 						bottom: 0,
 						position: 'absolute',
 						padding: '10px',
-						right: '30px',
+						display: 'flex',
+						justifyContent: 'center',
 					}}
 				>
 					<IconButton>
