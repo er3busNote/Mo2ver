@@ -24,6 +24,16 @@
   overflow-x: visible;
 }
 
+.searchSwiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.searchSwiper .swiper-pagination {
+  position: relative;
+  padding-top: 18px;
+}
+
 /* 로그인, 회원가입 Style */
 #login .MuiFormControl-root label[data-shrink='true'] {
   top: 4px;

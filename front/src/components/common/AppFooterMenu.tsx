@@ -1,7 +1,6 @@
 import React, {
 	FC,
 	useState,
-	useEffect,
 	Dispatch,
 	SetStateAction,
 	SyntheticEvent,

@@ -1,5 +1,6 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
+import AppSearchItemsMobile from './AppSearchItemsMobile';
 import {
 	Box,
 	Grid,
@@ -56,7 +57,7 @@ const SearchDivider: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearchItems: FC = (): JSX.Element => {
+const AppSearchItemsPC: FC = (): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const recentClick = () => {
 		setOpen(false);
@@ -150,6 +151,7 @@ const AppSearchMobile: FC = (): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
+	const [openSearch, setSearchOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
 	// (Diff) focus는 focusing하는 boolean값 ↔ open은 list를 출력하는 boolean값
@@ -191,11 +193,12 @@ const AppSearchMobile: FC = (): JSX.Element => {
 		closeAnchorEl(); // → Popper 닫기
 	};
 
+	const toggleSearch = () => {
+		setSearchOpen(!openSearch);
+	};
+
 	const searchFontSize = '12px';
 
-	const tooltip: SxProps<Theme> = {
-		ml: '-41px !important',
-	};
 	const icon: SxProps<Theme> = {
 		fontSize: '1.6rem',
 		color: '#72BAF5',
@@ -250,6 +253,10 @@ const AppSearchMobile: FC = (): JSX.Element => {
 									in={focus}
 									collapsedSize={150}
 								>
+									<AppSearchItemsMobile
+										openSearch={openSearch}
+										setSearchOpen={setSearchOpen}
+									/>
 									<Box>
 										<Paper
 											component="form"
@@ -267,17 +274,10 @@ const AppSearchMobile: FC = (): JSX.Element => {
 											<InputBase
 												sx={inputBase}
 												placeholder="무슨 옷 입을까?"
-												value={keyword}
-												onChange={searchOnChange}
-												onKeyPress={searchOnKeyPress}
+												onClick={toggleSearch}
+												readOnly={true}
 											/>
-											{focus ? (
-												<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-													<ClearIcon sx={icon} />
-												</IconButton>
-											) : (
-												<SearchIcon sx={icon} />
-											)}
+											<SearchIcon sx={icon} />
 										</Paper>
 									</Box>
 								</Collapse>
@@ -355,14 +355,21 @@ const AppSearchMobile: FC = (): JSX.Element => {
 												id={'search'}
 												open={open}
 												anchorEl={anchorEl}
-												sx={tooltip}
 												placement="bottom-start"
+												modifiers={[
+													{
+														name: 'offset',
+														options: {
+															offset: [-38, 3],
+														},
+													},
+												]}
 											>
 												<Paper
 													elevation={0}
 													sx={{ mt: -1, border: '#ddd 1px solid' }}
 												>
-													<AppSearchItems />
+													<AppSearchItemsPC />
 												</Paper>
 											</Popper>
 										</Box>

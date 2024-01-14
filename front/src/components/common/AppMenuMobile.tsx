@@ -23,7 +23,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '../../services/types';
-import { isMobile } from 'react-device-detect';
+import { isDesktop, isMobile } from 'react-device-detect';
 
 interface AppMenuProps {
 	categoryData: CategoryDataGroup;
@@ -76,9 +76,8 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 		if (!targetData)
 			menuClick(largeCategory.categoryName, largeCategory.categoryCode, 'L');
 		setOpen(!open);
-		event.stopPropagation(); // 새로고침 방지
-		//event.nativeEvent.stopPropagation();
-		//event.nativeEvent.stopImmediatePropagation();
+		if (isDesktop) event.stopPropagation(); // 새로고침 방지
+		else event.nativeEvent.stopPropagation();
 	};
 
 	const handleTouchStart = (
@@ -87,7 +86,8 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 	) => {
 		if (!targetData)
 			menuClick(largeCategory.categoryName, largeCategory.categoryCode, 'L');
-		event.preventDefault(); // 터치 이벤트의 기본 동작 막기
+		if (isDesktop) event.preventDefault(); // 터치 이벤트의 기본 동작 막기
+		else event.nativeEvent.stopPropagation();
 		setOpen(touch);
 	};
 

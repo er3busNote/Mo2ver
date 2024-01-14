@@ -1,6 +1,8 @@
 import React, { FC, useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import AppFooterMenu from './AppFooterMenu';
+import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { changeTitle, changeDescription, menuActive } from '../../store/index';
 import {
 	Box,
@@ -8,7 +10,6 @@ import {
 	BottomNavigation,
 	BottomNavigationAction,
 } from '@mui/material';
-import AppFooterMenu from './AppFooterMenu';
 import Copyright from '../Copyright';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -30,8 +31,9 @@ const AppFooter: FC<AppFooterProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [open, setOpen] = useState<boolean>(false);
 	const [value, setValue] = useState('home');
+	const [openMenu, setMenuOpen] = useState<boolean>(false);
+	const [openSearch, setSearchOpen] = useState<boolean>(false);
 
 	const handleChange = (event: SyntheticEvent, newValue: string) => {
 		setValue(newValue);
@@ -57,8 +59,12 @@ const AppFooter: FC<AppFooterProps> = ({
 		}
 	};
 
-	const toggleDrawer = () => {
-		setOpen(!open);
+	const toggleMenu = () => {
+		setMenuOpen(!openMenu);
+	};
+
+	const toggleSearch = () => {
+		setSearchOpen(!openSearch);
 	};
 
 	return (
@@ -75,16 +81,20 @@ const AppFooter: FC<AppFooterProps> = ({
 			<MobileView>
 				<Paper square>
 					<AppFooterMenu
-						open={open}
-						setOpen={setOpen}
+						open={openMenu}
+						setOpen={setMenuOpen}
 						width={width}
 						categoryData={categoryData}
+					/>
+					<AppSearchItemsMobile
+						openSearch={openSearch}
+						setSearchOpen={setSearchOpen}
 					/>
 					<BottomNavigation value={value} onChange={handleChange}>
 						<BottomNavigationAction
 							label="카테고리"
 							value="category"
-							onClick={() => toggleDrawer()}
+							onClick={() => toggleMenu()}
 							sx={{
 								px: 0,
 								minWidth: '10px',
@@ -96,6 +106,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						<BottomNavigationAction
 							label="검색"
 							value="search"
+							onClick={() => toggleSearch()}
 							sx={{
 								px: 0,
 								minWidth: '10px',

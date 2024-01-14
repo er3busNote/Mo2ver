@@ -170,7 +170,7 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 								sx={{ p: 1.5 }}
 							/>
 						) : (
-							<Skeleton variant="rectangular" height={556} />
+							<Skeleton animation="wave" variant="rectangular" height={556} />
 						)}
 					</Box>
 				</Grid>
@@ -247,7 +247,7 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 															</Typography>
 														</Breadcrumbs>
 													) : (
-														<Skeleton />
+														<Skeleton animation="wave" />
 													)}
 												</TableCell>
 											</TableRow>
@@ -279,7 +279,7 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 															</Typography>
 														</Breadcrumbs>
 													) : (
-														<Skeleton />
+														<Skeleton animation="wave" />
 													)}
 												</TableCell>
 											</TableRow>
@@ -457,7 +457,7 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 															{data.supplyPrice.toLocaleString()}원
 														</Typography>
 													) : (
-														<Skeleton />
+														<Skeleton animation="wave" />
 													)}
 												</TableCell>
 											</TableRow>
@@ -485,7 +485,7 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 															{data.salePrice.toLocaleString()}원
 														</Typography>
 													) : (
-														<Skeleton />
+														<Skeleton animation="wave" />
 													)}
 												</TableCell>
 											</TableRow>

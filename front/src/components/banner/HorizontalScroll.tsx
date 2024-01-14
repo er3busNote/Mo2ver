@@ -58,7 +58,7 @@ const HorizontalScroll: FC<HorizontalScrollProps> = ({
 				freeMode={true}
 				pagination={{ clickable: true }}
 				modules={[FreeMode, Pagination]}
-				className="mySwiper"
+				className="bannerSwiper"
 			>
 				{IMAGE_INFO.map((image: string, index: number) => (
 					<SwiperSlide key={index}>
