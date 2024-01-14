@@ -27,7 +27,7 @@
 .searchSwiper .swiper-slide {
   display: flex;
   justify-content: center;
-  width: 75%;
+  width: 80%;
 }
 
 .searchSwiper .swiper-pagination {
