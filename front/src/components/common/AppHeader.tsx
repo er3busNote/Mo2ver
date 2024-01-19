@@ -4,16 +4,17 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '../../services/api';
-import { IconButton, Box, Grid, Paper, Typography } from '@mui/material';
+import { IconButton, Box, Paper, Typography, Breadcrumbs } from '@mui/material';
 import { isAuthenticated, isAdmin } from '../../utils/jwttoken';
 
 const headerFontSize = '12px';
 
 interface AppHeaderProps {
+	width: string;
 	member: ActionCreatorsMapObject;
 }
 
-const AppHeader: FC<AppHeaderProps> = ({ member }): JSX.Element => {
+const AppHeader: FC<AppHeaderProps> = ({ width, member }): JSX.Element => {
 	const navigate = useNavigate();
 	const logoutClick = () => {
 		member.logout();
@@ -24,66 +25,48 @@ const AppHeader: FC<AppHeaderProps> = ({ member }): JSX.Element => {
 			<Paper sx={{ bgcolor: '#F0F0F0' }} square variant="outlined">
 				<Box
 					sx={{
-						width: '100%',
+						pr: 2,
+						width: width,
 						display: 'inline-flex',
-						justifyContent: 'flex-end',
+						justifyContent: 'end',
 					}}
 				>
-					<Grid container spacing={1} sx={{ width: 250 }}>
+					<Breadcrumbs aria-label="breadcrumb">
 						{!isAuthenticated() && (
-							<Grid item>
-								<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
-									<Typography
-										color="#000"
-										align="center"
-										sx={{ fontSize: headerFontSize }}
-									>
-										로그인
-									</Typography>
-								</IconButton>
-							</Grid>
+							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
+								<Typography
+									color="#000"
+									align="center"
+									sx={{ fontSize: headerFontSize }}
+								>
+									로그인
+								</Typography>
+							</IconButton>
 						)}
 						{!isAuthenticated() && (
-							<Grid item>
-								<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
-									<Typography
-										color="#000"
-										align="center"
-										sx={{ fontSize: headerFontSize }}
-									>
-										회원가입
-									</Typography>
-								</IconButton>
-							</Grid>
+							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+								<Typography
+									color="#000"
+									align="center"
+									sx={{ fontSize: headerFontSize }}
+								>
+									회원가입
+								</Typography>
+							</IconButton>
 						)}
 						{isAuthenticated() && (
-							<Grid item>
-								<IconButton onClick={logoutClick} sx={{ p: 0 }}>
-									<Typography
-										color="#000"
-										align="center"
-										sx={{ fontSize: headerFontSize }}
-									>
-										로그아웃
-									</Typography>
-								</IconButton>
-							</Grid>
+							<IconButton component={Link} to="/profile" sx={{ p: 0 }}>
+								<Typography
+									color="#000"
+									align="center"
+									sx={{ fontSize: headerFontSize }}
+								>
+									My 프로파일
+								</Typography>
+							</IconButton>
 						)}
-						{isAdmin() && (
-							<Grid item>
-								<IconButton component={Link} to="/admin" sx={{ p: 0 }}>
-									<Typography
-										color="#000"
-										align="center"
-										sx={{ fontSize: headerFontSize }}
-									>
-										관리자 페이지
-									</Typography>
-								</IconButton>
-							</Grid>
-						)}
-						{/*<Grid item>
-							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
+						{isAuthenticated() && (
+							<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
@@ -92,19 +75,30 @@ const AppHeader: FC<AppHeaderProps> = ({ member }): JSX.Element => {
 									장바구니
 								</Typography>
 							</IconButton>
-						</Grid>
-						<Grid item>
-							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
+						)}
+						{isAuthenticated() && (
+							<IconButton onClick={logoutClick} sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
 									sx={{ fontSize: headerFontSize }}
 								>
-									주문/배송
+									로그아웃
 								</Typography>
 							</IconButton>
-						</Grid>*/}
-					</Grid>
+						)}
+						{isAdmin() && (
+							<IconButton component={Link} to="/admin" sx={{ p: 0 }}>
+								<Typography
+									color="#000"
+									align="center"
+									sx={{ fontSize: headerFontSize }}
+								>
+									관리자 페이지
+								</Typography>
+							</IconButton>
+						)}
+					</Breadcrumbs>
 				</Box>
 			</Paper>
 		</Paper>

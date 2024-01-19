@@ -70,7 +70,7 @@ const AppPC: FC<AppProps> = ({ categoryData }): JSX.Element => {
 							display: 'block',
 						}}
 					>
-						{isDesktop && <AppHeader />}
+						{isDesktop && <AppHeader width={'940px'} />}
 						<AppSearchPC />
 					</Box>
 					<AppHeaderMenu scrolled={scrolled} categoryData={categoryData} />
@@ -93,7 +93,7 @@ const AppMobile: FC<AppProps> = ({ categoryData }): JSX.Element => {
 		<>
 			{isMobile && (
 				<>
-					{isDesktop && <AppHeader />}
+					{isDesktop && <AppHeader width={'100%'} />}
 					<AppSearchMobile />
 					<AppMenuMobile categoryData={categoryData} />
 				</>

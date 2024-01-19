@@ -66,6 +66,18 @@ const EventSubHeader: FC<EventSubHeaderProps> = ({
 							홈
 						</Typography>
 					</IconButton>
+					{description && description !== '' && (
+						<Typography
+							sx={{
+								display: 'flex',
+								alignItems: 'center',
+								fontSize: { xs: '11px', sm: '12px', lg: '14px' },
+							}}
+							color="text.primary"
+						>
+							{description}
+						</Typography>
+					)}
 				</Breadcrumbs>
 			)}
 		</Box>
@@ -73,7 +85,6 @@ const EventSubHeader: FC<EventSubHeaderProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 

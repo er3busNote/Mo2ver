@@ -1,21 +1,20 @@
-import React, { FC, useState, ChangeEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { menuActive } from '../../../store/index';
-import EventSubHeader from '../cmmn/EventSubHeader';
+import { menuActive } from '../../store/index';
+import UserSubHeader from './cmmn/UserSubHeader';
 import {
 	Box,
-	Grid,
 	Link,
 	Card,
 	Button,
 	Rating,
 	Breadcrumbs,
-	CardContent,
 	CardMedia,
 	CardActionArea,
 	Typography,
 	Table,
+	TableHead,
 	TableBody,
 	TableRow,
 	TableCell,
@@ -23,12 +22,7 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import Pagination from '@mui/material/Pagination';
 import StarsIcon from '@mui/icons-material/Stars';
-
-const EVENT_INFO = [
-	'https://upload.wikimedia.org/wikipedia/en/5/5f/Mac_Miller_Live_from_Space.jpg',
-];
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -37,7 +31,7 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
-const GoodsGrid: FC = (): JSX.Element => {
+const CartList: FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -46,279 +40,18 @@ const GoodsGrid: FC = (): JSX.Element => {
 		//navigate('/goods/' + code + '/detail');
 	};
 
-	return (
-		<Grid container spacing={3}>
-			<Grid item xs={6} md={3} lg={3}>
-				<Card
-					elevation={0}
-					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-					onClick={() => goodsClick('0')}
-				>
-					<CardActionArea>
-						<CardMedia
-							component="img"
-							height="140"
-							image={IMAGE_INFO[0]}
-							alt="green iguana"
-						/>
-						<CardContent>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-									fontWeight: 'bold',
-								}}
-							>
-								스파오
-							</Typography>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-									fontWeight: 'bold',
-								}}
-							>
-								베이직
-							</Typography>
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<Breadcrumbs
-									sx={{ pt: 1 }}
-									separator="›"
-									aria-label="breadcrumb"
-								>
-									<Typography
-										color="text.secondary"
-										sx={{
-											color: '#b2b2b2',
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											textDecoration: 'line-through',
-										}}
-									>
-										69,900원
-									</Typography>
-									<Typography
-										color="text.secondary"
-										sx={{
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											fontWeight: 'bold',
-										}}
-									>
-										64,900원
-									</Typography>
-								</Breadcrumbs>
-							</Box>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-			</Grid>
-			<Grid item xs={6} md={3} lg={3}>
-				<Card
-					elevation={0}
-					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-					onClick={() => goodsClick('1')}
-				>
-					<CardActionArea>
-						<CardMedia
-							component="img"
-							height="140"
-							image={IMAGE_INFO[1]}
-							alt="green iguana"
-						/>
-						<CardContent>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-									fontWeight: 'bold',
-								}}
-							>
-								코드그라피
-							</Typography>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-									fontWeight: 'bold',
-								}}
-							>
-								내피분리형
-							</Typography>
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<Breadcrumbs
-									sx={{ pt: 1 }}
-									separator="›"
-									aria-label="breadcrumb"
-								>
-									<Typography
-										color="text.secondary"
-										sx={{
-											color: '#b2b2b2',
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											textDecoration: 'line-through',
-										}}
-									>
-										139,000원
-									</Typography>
-									<Typography
-										color="text.secondary"
-										sx={{
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											fontWeight: 'bold',
-										}}
-									>
-										79,900원
-									</Typography>
-								</Breadcrumbs>
-							</Box>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-			</Grid>
-			<Grid item xs={6} md={3} lg={3}>
-				<Card
-					elevation={0}
-					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-					onClick={() => goodsClick('2')}
-				>
-					<CardActionArea>
-						<CardMedia
-							component="img"
-							height="140"
-							image={IMAGE_INFO[2]}
-							alt="green iguana"
-						/>
-						<CardContent>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-									fontWeight: 'bold',
-								}}
-							>
-								집시
-							</Typography>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-									fontWeight: 'bold',
-								}}
-							>
-								마스터 구스다운 숏패딩
-							</Typography>
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<Breadcrumbs
-									sx={{ pt: 1 }}
-									separator="›"
-									aria-label="breadcrumb"
-								>
-									<Typography
-										color="text.secondary"
-										sx={{
-											color: '#b2b2b2',
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											textDecoration: 'line-through',
-										}}
-									>
-										349,900원
-									</Typography>
-									<Typography
-										color="text.secondary"
-										sx={{
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											fontWeight: 'bold',
-										}}
-									>
-										199,000원
-									</Typography>
-								</Breadcrumbs>
-							</Box>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-			</Grid>
-			<Grid item xs={6} md={3} lg={3}>
-				<Card
-					elevation={0}
-					sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-					onClick={() => goodsClick('3')}
-				>
-					<CardActionArea>
-						<CardMedia
-							component="img"
-							height="140"
-							image={IMAGE_INFO[3]}
-							alt="green iguana"
-						/>
-						<CardContent>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-									fontWeight: 'bold',
-								}}
-							>
-								키뮤어
-							</Typography>
-							<Typography
-								component="div"
-								sx={{
-									fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-									fontWeight: 'bold',
-								}}
-							>
-								서플러스 울 (WOOL)
-							</Typography>
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<Breadcrumbs
-									sx={{ pt: 1 }}
-									separator="›"
-									aria-label="breadcrumb"
-								>
-									<Typography
-										color="text.secondary"
-										sx={{
-											color: '#b2b2b2',
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											textDecoration: 'line-through',
-										}}
-									>
-										159,000원
-									</Typography>
-									<Typography
-										color="text.secondary"
-										sx={{
-											fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-											fontWeight: 'bold',
-										}}
-									>
-										82,240원
-									</Typography>
-								</Breadcrumbs>
-							</Box>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-			</Grid>
-		</Grid>
-	);
-};
-
-const GoodsRow: FC = (): JSX.Element => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-
-	const goodsClick = (code: string) => {
-		//dispatch(menuActive('/goods/' + code + '/detail'));
-		//navigate('/goods/' + code + '/detail');
+	const thHeader: SxProps<Theme> = {
+		px: 5,
+		py: 1.5,
+		width: 180,
+		bgcolor: '#f9f9f9',
+		borderBlock: 'none',
+		fontWeight: 'bold',
 	};
-
 	const rowItem: SxProps<Theme> = {
 		py: 0.5,
-		width: '100%',
-		display: 'flex',
+		display: 'table-row',
 		borderBottom: '1px #F0F0F0 solid',
-		flexDirection: 'row',
 	};
 	const subItem: SxProps<Theme> = {
 		py: 0.5,
@@ -327,19 +60,19 @@ const GoodsRow: FC = (): JSX.Element => {
 		textAlign: 'left',
 	};
 	const title: SxProps<Theme> = {
-		fontSize: { xs: '14px', sm: '15px', lg: '17px' },
+		fontSize: { sm: '15px', lg: '17px' },
 		fontWeight: 'bold',
 	};
 	const description: SxProps<Theme> = {
 		px: 1.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
-		display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline' },
+		display: 'inline',
 		color: '#b2b2b2',
 	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
 		color: '#000',
 	};
@@ -351,16 +84,16 @@ const GoodsRow: FC = (): JSX.Element => {
 	};
 	const info: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
 		color: '#000',
 	};
 	const infoSub: SxProps<Theme> = {
 		px: 0.5,
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
-		display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
+		display: 'block',
 		color: '#b2b2b2',
 	};
 	const infoBreadcrumbs: SxProps<Theme> = {
@@ -370,25 +103,25 @@ const GoodsRow: FC = (): JSX.Element => {
 		},
 	};
 	const infoLikeIcon: SxProps<Theme> = {
-		mb: { xs: '-4px', sm: '-4px', lg: '-5px' },
+		mb: { sm: '-4px', lg: '-5px' },
 		color: red[500],
-		fontSize: { xs: '0.9rem', sm: '1.0rem', lg: '1.1rem' },
+		fontSize: { sm: '1.0rem', lg: '1.1rem' },
 	};
 	const infoRating: SxProps<Theme> = {
-		mb: { xs: '-5px', sm: '-5px', lg: '-5px' },
-		fontSize: { xs: '0.9rem', sm: '1.0rem', lg: '1.1rem' },
+		mb: { sm: '-5px', lg: '-5px' },
+		fontSize: { sm: '1.0rem', lg: '1.1rem' },
 	};
 	const infoLike: SxProps<Theme> = {
 		px: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
 		color: 'red',
 	};
 	const infoShow: SxProps<Theme> = {
 		px: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
-		display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
+		display: 'block',
 		color: 'blue',
 	};
 	const infoTag: SxProps<Theme> = {
@@ -407,13 +140,13 @@ const GoodsRow: FC = (): JSX.Element => {
 		},
 	};
 	const infoOriginPrice: SxProps<Theme> = {
-		fontSize: { xs: '14px', sm: '15px', lg: '16px' },
+		fontSize: { sm: '15px', lg: '16px' },
 		fontWeight: 'bold',
 		textDecoration: 'line-through',
 		color: '#aaa',
 	};
 	const infoDiscountPrice: SxProps<Theme> = {
-		fontSize: { xs: '14px', sm: '15px', lg: '16px' },
+		fontSize: { sm: '15px', lg: '16px' },
 		fontWeight: 'bold',
 		color: '#000',
 	};
@@ -429,18 +162,28 @@ const GoodsRow: FC = (): JSX.Element => {
 		borderBlock: 'none',
 	};
 	const cardBox: SxProps<Theme> = {
-		width: { xs: '50%', sm: '30%', md: '30%', lg: '30%' },
+		width: '30%',
 	};
 	const productBox: SxProps<Theme> = {
-		display: { xs: 'none', sm: 'block', md: 'block', lg: 'block' },
+		display: 'block',
 	};
 
 	return (
 		<TableContainer>
 			<Table size="small">
+				<TableHead>
+					<TableRow>
+						<TableCell colSpan={2} sx={thHeader} align="center">
+							상품명
+						</TableCell>
+						<TableCell sx={thHeader} align="center">
+							가격
+						</TableCell>
+					</TableRow>
+				</TableHead>
 				<TableBody>
 					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox}>
+						<TableCell sx={cardBox} component="th" scope="row">
 							<Card elevation={0} onClick={() => goodsClick('0')}>
 								<CardActionArea>
 									<CardMedia
@@ -705,7 +448,7 @@ const GoodsRow: FC = (): JSX.Element => {
 						</TableCell>
 					</TableRow>
 					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox}>
+						<TableCell sx={cardBox} component="th" scope="row">
 							<Card elevation={0} onClick={() => goodsClick('1')}>
 								<CardActionArea>
 									<CardMedia
@@ -970,7 +713,7 @@ const GoodsRow: FC = (): JSX.Element => {
 						</TableCell>
 					</TableRow>
 					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox}>
+						<TableCell sx={cardBox} component="th" scope="row">
 							<Card elevation={0} onClick={() => goodsClick('2')}>
 								<CardActionArea>
 									<CardMedia
@@ -1235,7 +978,7 @@ const GoodsRow: FC = (): JSX.Element => {
 						</TableCell>
 					</TableRow>
 					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox}>
+						<TableCell sx={cardBox} component="th" scope="row">
 							<Card elevation={0} onClick={() => goodsClick('3')}>
 								<CardActionArea>
 									<CardMedia
@@ -1505,57 +1248,15 @@ const GoodsRow: FC = (): JSX.Element => {
 	);
 };
 
-const EventDetail: FC = (): JSX.Element => {
-	const { id } = useParams();
-	const [page, setPage] = useState(0);
-	const [branch, setSwitch] = useState(true);
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
-
+const CartListPC: FC = (): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
-			<EventSubHeader
-				title={'Live From Space'}
-				change={false}
-				branch={branch}
-				setSwitch={setSwitch}
-			/>
-			<Box sx={{ m: 3 }}>
-				<CardMedia
-					component="img"
-					width="100%"
-					image={EVENT_INFO[Number(id)]}
-					sx={{ p: 1.5 }}
-					alt="Live from space album cover"
-				/>
-			</Box>
-			<EventSubHeader
-				subtitle={'전체상품'}
-				change={true}
-				branch={branch}
-				setSwitch={setSwitch}
-			/>
-			<Box sx={{ m: 3 }}>
-				<Box sx={{ my: 2 }}>{branch ? <GoodsGrid /> : <GoodsRow />}</Box>
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<Pagination
-						count={1}
-						variant="outlined"
-						color="primary"
-						siblingCount={0}
-						boundaryCount={1}
-						hidePrevButton
-						hideNextButton
-						onChange={pageChange}
-						size="small"
-					/>
-				</Box>
+			<UserSubHeader title={'장바구니'} />
+			<Box sx={{ mx: 3, my: 2 }}>
+				<CartList />
 			</Box>
 		</Box>
 	);
 };
 
-export default EventDetail;
+export default CartListPC;

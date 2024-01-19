@@ -1,4 +1,5 @@
 import { ThemeOptions } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 
 const defaultTheme: ThemeOptions = {
 	palette: {
@@ -30,7 +31,7 @@ const contentTheme: ThemeOptions = {
 		action: {
 			active: '#505056',
 			hover: '#34343B',
-			selected: '#505056',
+			selected: purple[700],
 			disabled: '#cdcdcd', // Button Disabled Text
 			disabledBackground: '#34343B', // Button Disabled Background Color
 		},

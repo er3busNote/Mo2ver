@@ -162,20 +162,20 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	};
 
 	const menuClick = (title: string, code: string, type: string) => {
-		dispatch(changeDescription(title));
 		dispatch(changeTitle(title));
+		dispatch(changeDescription(title));
 		dispatch(menuActive(`/goods/${type}/${code}`));
 		navigate(`/goods/${type}/${code}`);
 	};
 
 	const tooltip: SxProps<Theme> = {
 		//ml: { xs: '-23px !important', sm: '-41px !important' },
-		transform: isMobile
-			? 'translate(0px, 152px) !important'
-			: {
-					xs: 'translate(0px, 217px) !important',
-					sm: 'translate(0px, 220px) !important',
-			  },
+		// transform: isMobile
+		// 	? 'translate(0px, 152px) !important'
+		// 	: {
+		// 			xs: 'translate(0px, 217px) !important',
+		// 			sm: 'translate(0px, 220px) !important',
+		// 	  },
 		zIndex: 1,
 	};
 	const menu: SxProps<Theme> = {
@@ -222,6 +222,14 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 				anchorEl={anchorEl}
 				sx={tooltip}
 				placement="bottom-start"
+				modifiers={[
+					{
+						name: 'offset',
+						options: {
+							offset: [-40, 2],
+						},
+					},
+				]}
 			>
 				<Box sx={menu}>
 					<List
@@ -264,8 +272,8 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 		description: string,
 		path: string
 	) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(description));
+		dispatch(changeTitle(title));
+		dispatch(changeDescription(description));
 		dispatch(menuActive(path));
 		navigate(path);
 	};

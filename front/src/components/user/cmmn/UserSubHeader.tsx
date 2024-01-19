@@ -1,17 +1,16 @@
 import React, { FC } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { TitleState } from '../../store/types';
-import { changeTitle, changeDescription } from '../../store/index';
+import { changeTitle, changeDescription } from '../../../store/index';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import Title from '../Title';
+import Title from '../../Title';
 
-interface AppSubHeaderProps {
-	description?: string;
+interface GoodsSubHeaderProps {
+	title: string;
 }
 
-const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
+const UserSubHeader: FC<GoodsSubHeaderProps> = ({ title }): JSX.Element => {
 	const dispatch = useDispatch();
 
 	const dashboardClick = () => {
@@ -30,7 +29,7 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
 			}}
 		>
 			<Box sx={{ pt: 2 }}>
-				<Title>{description}</Title>
+				<Title>{title}</Title>
 			</Box>
 			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
@@ -48,25 +47,9 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
 						홈
 					</Typography>
 				</IconButton>
-				{description && description !== '' && (
-					<Typography
-						sx={{
-							display: 'flex',
-							alignItems: 'center',
-							fontSize: { xs: '11px', sm: '12px', lg: '14px' },
-						}}
-						color="text.primary"
-					>
-						{description}
-					</Typography>
-				)}
 			</Breadcrumbs>
 		</Box>
 	);
 };
 
-const mapStateToProps = (state: any) => ({
-	description: (state.title as TitleState).description,
-});
-
-export default connect(mapStateToProps, null)(AppSubHeader);
+export default UserSubHeader;

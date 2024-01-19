@@ -36,9 +36,9 @@ const GoodsGrid: FC<GoodsGridProps> = ({ image, goodsData }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const goodsClick = (title: string, code: string) => {
-		dispatch(menuActive('/goods/detail/' + code));
-		navigate('/goods/detail/' + code);
+	const goodsClick = (code: string) => {
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
 	};
 
 	return (
@@ -57,7 +57,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({ image, goodsData }): JSX.Element => {
 								<Card
 									elevation={0}
 									sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-									onClick={() => goodsClick(data.goodsName, data.goodsCode)}
+									onClick={() => goodsClick(data.goodsCode)}
 								>
 									<CardActionArea>
 										<CardMedia
@@ -163,7 +163,7 @@ const GoodsList: FC<GoodsListProps> = ({ goods, image }): JSX.Element => {
 			</Box>
 			<Box sx={{ mb: 10, display: 'flex', justifyContent: 'center' }}>
 				<Pagination
-					count={goodsData.totalPages}
+					count={goodsData.totalPages - 1}
 					variant="outlined"
 					color="primary"
 					siblingCount={2}

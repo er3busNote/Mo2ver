@@ -1,11 +1,7 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	menuActive,
-} from '../../../store/index';
+import { menuActive } from '../../../store/index';
 import AppSubHeader from '../../common/AppSubHeader';
 import {
 	Box,
@@ -26,9 +22,7 @@ const EventGrid: FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const eventClick = (title: string, code: string) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(title));
+	const eventClick = (code: string) => {
 		dispatch(menuActive('/event/' + code + '/detail'));
 		navigate('/event/' + code + '/detail');
 	};
@@ -39,7 +33,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '0')}
+					onClick={() => eventClick('0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -73,7 +67,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '0')}
+					onClick={() => eventClick('0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -107,7 +101,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '0')}
+					onClick={() => eventClick('0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -141,7 +135,7 @@ const EventGrid: FC = (): JSX.Element => {
 				<Card
 					elevation={0}
 					sx={{ border: '2px #f0f0f0f0 solid' }}
-					onClick={() => eventClick('Live From Space', '0')}
+					onClick={() => eventClick('0')}
 				>
 					<CardActionArea sx={{ display: 'flex' }}>
 						<Box sx={{ display: 'flex', flexDirection: 'column' }}>

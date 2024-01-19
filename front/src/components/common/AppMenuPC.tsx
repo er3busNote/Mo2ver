@@ -142,8 +142,8 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	};
 
 	const menuClick = (title: string, code: string, type: string) => {
-		dispatch(changeDescription(title));
 		dispatch(changeTitle(title));
+		dispatch(changeDescription(title));
 		dispatch(menuActive(`/goods/${type}/${code}`));
 		navigate(`/goods/${type}/${code}`);
 	};
@@ -331,8 +331,8 @@ const AppMenuPC: FC<AppMenuProps> = ({ categoryData, menus }): JSX.Element => {
 		description: string,
 		path: string
 	) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(description));
+		dispatch(changeTitle(title));
+		dispatch(changeDescription(description));
 		dispatch(menuActive(path));
 		navigate(path);
 	};

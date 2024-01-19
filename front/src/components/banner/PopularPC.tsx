@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import { menuActive } from '../../store/index';
 import {
 	Box,
 	Card,
@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
-const PRODUCT_INFO = ['스파오', '코드그라피', '집시', '키뮤어'];
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -68,11 +67,9 @@ const PopularPC: FC = (): JSX.Element => {
 		return () => clearInterval(rotation);
 	}, [index, setIndex, setFadeIn, onAutoFadeIn]);
 
-	const goodsClick = (title: string, code: string) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(title));
-		dispatch(menuActive('/goods/' + code + '/detail'));
-		navigate('/goods/' + code + '/detail');
+	const goodsClick = (code: string) => {
+		//dispatch(menuActive('/goods/' + code + '/detail'));
+		//navigate('/goods/' + code + '/detail');
 	};
 
 	const label: SxProps<Theme> = {
@@ -191,7 +188,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -210,7 +207,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -229,7 +226,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -252,7 +249,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -271,7 +268,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -290,7 +287,7 @@ const PopularPC: FC = (): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(PRODUCT_INFO[index], String(index))}
+									onClick={() => goodsClick(String(index))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}

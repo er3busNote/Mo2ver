@@ -2,6 +2,8 @@
 import Home from './HomePage';
 import Login from './LoginPage';
 import Signup from './SignupPage';
+import User from './UserPage';
+import Cart from './CartPage';
 import Goods from './GoodsPage';
 import GoodsDetail from './GoodsDetailPage';
 import GoodsRegister from './GoodsRegisterPage';
@@ -17,6 +19,8 @@ export {
 	Home,
 	Login,
 	Signup,
+	User,
+	Cart,
 	Goods,
 	GoodsDetail,
 	GoodsRegister,

@@ -146,8 +146,8 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 		check: boolean | undefined
 	) => {
 		if (!check) {
-			dispatch(changeDescription(title));
 			dispatch(changeTitle(title));
+			dispatch(changeDescription(title));
 			dispatch(menuActive(`/goods/${type}/${code}`));
 			navigate(`/goods/${type}/${code}`);
 		}
