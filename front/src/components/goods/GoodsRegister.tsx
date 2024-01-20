@@ -4,7 +4,6 @@ import RegisterForm from '../form/RegisterForm';
 import {
 	Box,
 	Button,
-	TextField,
 	MenuItem,
 	InputLabel,
 	FormControl,
@@ -18,14 +17,14 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
-import moment from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 
 const drawerMenuLimit = 768;
 
@@ -34,17 +33,17 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
 	const [progress, setProgress] = useState('');
-	const [startDate, setStartDate] = useState(moment().format('YYYY-MM-DD'));
-	const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
+	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const handleProgressChange = (event: SelectChangeEvent) => {
 		setProgress(event.target.value as string);
 	};
 
-	const handleStartChange = (newValue: string) => {
+	const handleStartChange = (newValue: Dayjs | null) => {
 		setStartDate(newValue);
 	};
-	const handleEndChange = (newValue: string) => {
+	const handleEndChange = (newValue: Dayjs | null) => {
 		setEndDate(newValue);
 	};
 
@@ -72,25 +71,17 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 							등록기간
 						</TableCell>
 						<TableCell sx={tdHeader} align="left">
-							<LocalizationProvider dateAdapter={AdapterMoment}>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<DesktopDatePicker
 									label="시작날짜"
-									inputFormat="MM/DD/YYYY"
 									value={startDate}
-									onChange={(value) =>
-										handleStartChange(moment(value).format('YYYY-MM-DD'))
-									}
-									renderInput={(params) => <TextField {...params} />}
+									onChange={(value) => handleStartChange(value)}
 								/>
 								<HorizontalRuleIcon />
 								<DesktopDatePicker
 									label="만료날짜"
-									inputFormat="MM/DD/YYYY"
-									value={endDate}
-									onChange={(value) =>
-										handleEndChange(moment(value).format('YYYY-MM-DD'))
-									}
-									renderInput={(params) => <TextField {...params} />}
+									value={dayjs(endDate)}
+									onChange={(value) => handleEndChange(value)}
 								/>
 							</LocalizationProvider>
 						</TableCell>
@@ -139,17 +130,17 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
 	const [progress, setProgress] = useState('');
-	const [startDate, setStartDate] = useState(moment().format('YYYY-MM-DD'));
-	const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
+	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const handleProgressChange = (event: SelectChangeEvent) => {
 		setProgress(event.target.value as string);
 	};
 
-	const handleStartChange = (newValue: string) => {
+	const handleStartChange = (newValue: Dayjs | null) => {
 		setStartDate(newValue);
 	};
-	const handleEndChange = (newValue: string) => {
+	const handleEndChange = (newValue: Dayjs | null) => {
 		setEndDate(newValue);
 	};
 
@@ -178,25 +169,17 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 							등록기간
 						</TableCell>
 						<TableCell colSpan={3} sx={tdHeader} align="left">
-							<LocalizationProvider dateAdapter={AdapterMoment}>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<DesktopDatePicker
 									label="시작날짜"
-									inputFormat="MM/DD/YYYY"
 									value={startDate}
-									onChange={(value) =>
-										handleStartChange(moment(value).format('YYYY-MM-DD'))
-									}
-									renderInput={(params) => <TextField {...params} />}
+									onChange={(value) => handleStartChange(value)}
 								/>
 								<HorizontalRuleIcon />
 								<DesktopDatePicker
 									label="만료날짜"
-									inputFormat="MM/DD/YYYY"
-									value={endDate}
-									onChange={(value) =>
-										handleEndChange(moment(value).format('YYYY-MM-DD'))
-									}
-									renderInput={(params) => <TextField {...params} />}
+									value={dayjs(endDate)}
+									onChange={(value) => handleEndChange(value)}
 								/>
 							</LocalizationProvider>
 						</TableCell>

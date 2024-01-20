@@ -11,7 +11,6 @@ import { BannerPageData } from '../../services/types';
 import { BannerFormValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
-import moment from 'moment';
 
 const drawerMenuLimit = 768;
 
@@ -70,8 +69,8 @@ const BannerPage: FC<BannerDispatchProps> = ({
 	) => {
 		const bannerFormData = {
 			title: data.title,
-			startDate: moment(data.startDate).format('YYYY-MM-DD'),
-			endDate: moment(data.endDate).format('YYYY-MM-DD'),
+			startDate: data.startDate.format('YYYY-MM-DD'),
+			endDate: data.endDate.format('YYYY-MM-DD'),
 			position: data.position,
 			type: data.type,
 			useyn: data.useyn,

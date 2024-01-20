@@ -4,9 +4,7 @@ import {
 	ControllerFieldState,
 	UseFormStateReturn,
 } from 'react-hook-form';
-import { TextField } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import moment from 'moment';
 
 interface RenderDatePickerFieldProps {
 	field: ControllerRenderProps<any, any>;
@@ -16,8 +14,7 @@ interface RenderDatePickerFieldProps {
 }
 
 const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
-	field: { onChange, value, name },
-	fieldState: { error },
+	field: { onChange, value },
 	label,
 }) => {
 	const handleChange = (newValue: Date) => {
@@ -31,19 +28,8 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 	return (
 		<DesktopDatePicker
 			label={label}
-			inputFormat="MM/DD/YYYY"
 			value={value}
-			onChange={(value) => handleChange(moment(value).toDate())}
-			renderInput={(params) => (
-				<TextField
-					error={error ? true : false}
-					required
-					id={name}
-					name={name}
-					// helperText={error?.message}
-					{...params}
-				/>
-			)}
+			onChange={(value) => handleChange(value)}
 		/>
 	);
 };

@@ -44,19 +44,10 @@ const AppFooter: FC<AppFooterProps> = ({
 		description: string,
 		path: string
 	) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(description));
+		dispatch(changeTitle(title));
+		dispatch(changeDescription(description));
 		dispatch(menuActive(path));
 		navigate(path);
-	};
-
-	const adminPageClick = (title: string, description: string, path: string) => {
-		if (isAdmin()) {
-			dispatch(changeDescription(title));
-			dispatch(changeTitle(description));
-			dispatch(menuActive(path));
-			navigate(path);
-		}
 	};
 
 	const toggleMenu = () => {
@@ -130,7 +121,13 @@ const AppFooter: FC<AppFooterProps> = ({
 						<BottomNavigationAction
 							label="유저"
 							value="user"
-							onClick={() => adminPageClick('관리자', '어드민페이지', '/admin')}
+							onClick={() =>
+								activeMenuClick(
+									isAdmin() ? '관리자' : '유저',
+									isAdmin() ? '어드민페이지' : 'My 프로파일',
+									isAdmin() ? '/admin' : '/profile'
+								)
+							}
 							sx={{
 								px: 0,
 								minWidth: '10px',
@@ -141,6 +138,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						/>
 						<BottomNavigationAction
 							label="최근본상품"
+							onClick={() => activeMenuClick('카트', '장바구니', '/cart')}
 							value="recent"
 							sx={{
 								px: 0,

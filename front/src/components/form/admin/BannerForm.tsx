@@ -15,30 +15,62 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { BannerFormValues } from './types';
 // import _ from 'lodash';
-import moment from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 
 const schema = yup
-	.object({
+	.object()
+	.shape({
 		title: yup
 			.string()
 			.required('제목을 입력해주세요')
 			.min(5, '5자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
-		startDate: yup.date().required('시작날짜가 존재하질 않습니다'),
+		startDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue, _) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.nullable()
+			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup
-			.date()
+			.mixed<Dayjs>()
+			.transform((originalValue, _) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
 			.when(
 				'startDate',
-				(startDate, schema) => startDate && schema.min(startDate)
-			),
+				(startDate, schema) =>
+					startDate &&
+					schema.test({
+						test: (endDate) =>
+							endDate && endDate.isAfter(startDate.toLocaleString()),
+						message: '시작날짜 이후여야 합니다',
+					})
+			)
+			.nullable()
+			.required('마지막날짜가 존재하질 않습니다'),
+		position: yup.string().required(),
+		type: yup.string().required(),
+		useyn: yup.string().required(),
+		bnnrImg: yup
+			.array()
+			.of(
+				yup.object().shape({
+					title: yup.string().required(),
+					bnnrText: yup.string().required(),
+					cnntUrl: yup.string().required(),
+					useyn: yup.string().required(),
+				})
+			)
+			.required('이미지 정보를 입력해주세요'),
 	})
 	.required();
 
@@ -52,8 +84,8 @@ interface BannerProp {
 
 const defaultValues = {
 	title: '',
-	startDate: moment().toDate(),
-	endDate: moment().toDate(),
+	startDate: dayjs(),
+	endDate: dayjs(),
 	position: '',
 	type: 'BN',
 	useyn: 'Y',
@@ -115,7 +147,7 @@ const BannerForm: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 								전시기간
 							</TableCell>
 							<TableCell colSpan={3} sx={tdHeader} align="left">
-								<LocalizationProvider dateAdapter={AdapterMoment}>
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
 									<Controller
 										name="startDate"
 										control={control}

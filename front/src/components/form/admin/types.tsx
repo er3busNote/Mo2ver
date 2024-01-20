@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 interface CategoryFormValues {
 	category: string;
 	useyn: string;
@@ -13,8 +15,8 @@ interface BannerDetailValues {
 
 interface BannerFormValues {
 	title: string;
-	startDate: Date;
-	endDate: Date;
+	startDate: Dayjs;
+	endDate: Dayjs;
 	position: string;
 	type: string;
 	useyn: string;

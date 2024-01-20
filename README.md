@@ -11,6 +11,7 @@
 ## Compatible
 - JAVA: OpenJDK 1.8.0_282
 - DB: 10.4.11-MariaDB
+- Node: 16.14.2 → 20.11.0 (dependency issue..!)
 
 ### Demo Website Link
 Under construction of demo website.

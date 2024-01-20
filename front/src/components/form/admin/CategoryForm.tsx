@@ -17,12 +17,15 @@ import RenderRadioField from '../../validate/RadioField';
 import { CategoryFormValues } from './types';
 
 const schema = yup
-	.object({
+	.object()
+	.shape({
 		category: yup
 			.string()
 			.required('카테고리를 입력해주세요')
 			.min(5, '5자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
+		useyn: yup.string().required(),
+		level: yup.number().required(),
 	})
 	.required();
 

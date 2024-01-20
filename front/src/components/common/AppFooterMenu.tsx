@@ -18,8 +18,12 @@ import {
 } from '@mui/material';
 import { CategoryData, CategoryDataGroup } from '../../services/types';
 import { styled } from '@mui/material/styles';
-import TreeView from '@mui/lab/TreeView';
-import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import {
+	TreeItem,
+	TreeItemProps,
+	treeItemClasses,
+} from '@mui/x-tree-view/TreeItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -125,13 +129,13 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 	const smallCategoyData = categoryData.smallCategoyData;
 
 	const [expanded, setExpanded] = useState<string[]>([]);
-	const [selected, setSelected] = useState<string[]>([]);
+	const [selected, setSelected] = useState<string>('');
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);
 	};
 
-	const handleSelect = (event: SyntheticEvent, nodeIds: string[]) => {
+	const handleSelect = (event: SyntheticEvent, nodeIds: string) => {
 		setSelected(nodeIds);
 	};
 

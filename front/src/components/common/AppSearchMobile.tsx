@@ -17,7 +17,7 @@ import {
 	ListItemText,
 	ListItemButton,
 } from '@mui/material';
-import ClickAwayListener from '@mui/base/ClickAwayListener';
+import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';

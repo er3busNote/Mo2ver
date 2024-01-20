@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, forwardRef, ForwardedRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
@@ -20,9 +20,16 @@ import {
 	TableCell,
 	TableContainer,
 } from '@mui/material';
-import { red } from '@mui/material/colors';
+import {
+	Unstable_NumberInput as BaseNumberInput,
+	NumberInputProps,
+} from '@mui/base/Unstable_NumberInput';
+import { styled } from '@mui/system';
+import { red, blue, grey } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -30,6 +37,120 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
+
+const StyledInputRoot = styled('div')(
+	({ theme }) => `
+	font-family: 'IBM Plex Sans', sans-serif;
+	font-weight: 400;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[500]};
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+  `
+);
+
+const StyledInput = styled('input')(
+	({ theme }) => `
+	font-size: 0.875rem;
+	font-family: inherit;
+	font-weight: 400;
+	line-height: 1.375;
+	color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+	background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+	border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+	box-shadow: 0px 2px 4px ${
+		theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
+	};
+	border-radius: 8px;
+	margin: 0 8px;
+	padding: 10px 12px;
+	outline: 0;
+	min-width: 0;
+	width: 4rem;
+	text-align: center;
+  
+	&:hover {
+	  border-color: ${blue[400]};
+	}
+  
+	&:focus {
+	  border-color: ${blue[400]};
+	  box-shadow: 0 0 0 3px ${
+			theme.palette.mode === 'dark' ? blue[700] : blue[200]
+		};
+	}
+  
+	&:focus-visible {
+	  outline: 0;
+	}
+  `
+);
+
+const StyledButton = styled('button')(
+	({ theme }) => `
+	font-family: 'IBM Plex Sans', sans-serif;
+	font-size: 0.875rem;
+	box-sizing: border-box;
+	line-height: 1.5;
+	border: 1px solid;
+	border-radius: 999px;
+	border-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
+	background: ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+	color: ${theme.palette.mode === 'dark' ? grey[200] : grey[900]};
+	width: 32px;
+	height: 32px;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 120ms;
+  
+	&:hover {
+	  cursor: pointer;
+	  background: ${theme.palette.mode === 'dark' ? blue[700] : blue[500]};
+	  border-color: ${theme.palette.mode === 'dark' ? blue[500] : blue[400]};
+	  color: ${grey[50]};
+	}
+  
+	&:focus-visible {
+	  outline: 0;
+	}
+  
+	&.increment {
+	  order: 1;
+	}
+  `
+);
+
+const NumberInput = forwardRef(function CustomNumberInput(
+	props: NumberInputProps,
+	ref: ForwardedRef<HTMLDivElement>
+) {
+	return (
+		<BaseNumberInput
+			slots={{
+				root: StyledInputRoot,
+				input: StyledInput,
+				incrementButton: StyledButton,
+				decrementButton: StyledButton,
+			}}
+			slotProps={{
+				incrementButton: {
+					children: <AddIcon fontSize="small" />,
+					className: 'increment',
+				},
+				decrementButton: {
+					children: <RemoveIcon fontSize="small" />,
+				},
+			}}
+			{...props}
+			ref={ref}
+		/>
+	);
+});
 
 const CartList: FC = (): JSX.Element => {
 	const dispatch = useDispatch();
@@ -58,17 +179,6 @@ const CartList: FC = (): JSX.Element => {
 		display: 'grid',
 		justifyContent: 'center',
 		textAlign: 'left',
-	};
-	const title: SxProps<Theme> = {
-		fontSize: { sm: '15px', lg: '17px' },
-		fontWeight: 'bold',
-	};
-	const description: SxProps<Theme> = {
-		px: 1.5,
-		fontSize: { sm: '12px', lg: '13px' },
-		fontWeight: 'bold',
-		display: 'inline',
-		color: '#b2b2b2',
 	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
@@ -124,21 +234,6 @@ const CartList: FC = (): JSX.Element => {
 		display: 'block',
 		color: 'blue',
 	};
-	const infoTag: SxProps<Theme> = {
-		mr: 1,
-		px: 1.5,
-		py: 0.5,
-		minWidth: 10,
-		fontSize: '10px',
-		fontWeight: 'bold',
-		border: '1px solid #e8e8e8',
-		color: '#b2b2b2',
-		'&:hover': {
-			color: '#b2b2b2',
-			bgcolor: '#f3f3f3',
-			border: '1px solid #e8e8e8',
-		},
-	};
 	const infoOriginPrice: SxProps<Theme> = {
 		fontSize: { sm: '15px', lg: '16px' },
 		fontWeight: 'bold',
@@ -162,7 +257,7 @@ const CartList: FC = (): JSX.Element => {
 		borderBlock: 'none',
 	};
 	const cardBox: SxProps<Theme> = {
-		width: '30%',
+		width: '20%',
 	};
 	const productBox: SxProps<Theme> = {
 		display: 'block',
@@ -179,6 +274,9 @@ const CartList: FC = (): JSX.Element => {
 						<TableCell sx={thHeader} align="center">
 							가격
 						</TableCell>
+						<TableCell sx={thHeader} align="center">
+							수량
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -189,29 +287,13 @@ const CartList: FC = (): JSX.Element => {
 									<CardMedia
 										component="img"
 										image={IMAGE_INFO[0]}
-										sx={{
-											height: {
-												xs: '200px',
-												sm: '200px',
-												md: '230px',
-												lg: '230px',
-											},
-										}}
-										alt="green iguana"
+										height="170"
 									/>
 								</CardActionArea>
 							</Card>
 						</TableCell>
 						<TableCell sx={productBox}>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Product Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										제품정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -340,49 +422,11 @@ const CartList: FC = (): JSX.Element => {
 											</TableRow>
 										</TableBody>
 									</Table>
-									<Box
-										sx={{
-											py: 1,
-											display: {
-												xs: 'none',
-												sm: 'none',
-												md: 'flex',
-												lg: 'flex',
-											},
-										}}
-									>
-										<Button sx={infoTag} variant="outlined">
-											#방한
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#보온
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#숏패딩
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#파카
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#점퍼
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#패딩
-										</Button>
-									</Box>
 								</Box>
 							</Box>
 						</TableCell>
 						<TableCell>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Price Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										가격정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -423,11 +467,13 @@ const CartList: FC = (): JSX.Element => {
 									</Table>
 								</Box>
 							</Box>
+						</TableCell>
+						<TableCell>
+							<NumberInput defaultValue={1} min={1} max={99} />
 							<Box>
 								<Button
 									sx={{
 										mt: 2,
-										px: { xs: 3, sm: 4, md: 5, lg: 6 },
 										py: 1,
 										width: '100%',
 										fontSize: '14px',
@@ -443,6 +489,25 @@ const CartList: FC = (): JSX.Element => {
 									variant="outlined"
 								>
 									바로 구매
+								</Button>
+								<Button
+									sx={{
+										mt: 0.5,
+										py: 1,
+										width: '100%',
+										fontSize: '14px',
+										fontWeight: 'bold',
+										bgcolor: '#7940B6',
+										border: '1px solid #757595',
+										borderRadius: 0,
+										color: '#fff',
+										'&:hover': {
+											bgcolor: '#9373B5',
+										},
+									}}
+									variant="outlined"
+								>
+									장바구니 삭제
 								</Button>
 							</Box>
 						</TableCell>
@@ -454,29 +519,13 @@ const CartList: FC = (): JSX.Element => {
 									<CardMedia
 										component="img"
 										image={IMAGE_INFO[1]}
-										sx={{
-											height: {
-												xs: '200px',
-												sm: '200px',
-												md: '230px',
-												lg: '230px',
-											},
-										}}
-										alt="green iguana"
+										height="170"
 									/>
 								</CardActionArea>
 							</Card>
 						</TableCell>
 						<TableCell sx={productBox}>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Product Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										제품정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -605,49 +654,11 @@ const CartList: FC = (): JSX.Element => {
 											</TableRow>
 										</TableBody>
 									</Table>
-									<Box
-										sx={{
-											py: 1,
-											display: {
-												xs: 'none',
-												sm: 'none',
-												md: 'flex',
-												lg: 'flex',
-											},
-										}}
-									>
-										<Button sx={infoTag} variant="outlined">
-											#방한
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#보온
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#숏패딩
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#파카
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#점퍼
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#패딩
-										</Button>
-									</Box>
 								</Box>
 							</Box>
 						</TableCell>
 						<TableCell>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Price Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										가격정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -688,6 +699,9 @@ const CartList: FC = (): JSX.Element => {
 									</Table>
 								</Box>
 							</Box>
+						</TableCell>
+						<TableCell>
+							<NumberInput defaultValue={1} min={1} max={99} />
 							<Box>
 								<Button
 									sx={{
@@ -708,6 +722,25 @@ const CartList: FC = (): JSX.Element => {
 									variant="outlined"
 								>
 									바로 구매
+								</Button>
+								<Button
+									sx={{
+										mt: 0.5,
+										py: 1,
+										width: '100%',
+										fontSize: '14px',
+										fontWeight: 'bold',
+										bgcolor: '#7940B6',
+										border: '1px solid #757595',
+										borderRadius: 0,
+										color: '#fff',
+										'&:hover': {
+											bgcolor: '#9373B5',
+										},
+									}}
+									variant="outlined"
+								>
+									장바구니 삭제
 								</Button>
 							</Box>
 						</TableCell>
@@ -719,29 +752,13 @@ const CartList: FC = (): JSX.Element => {
 									<CardMedia
 										component="img"
 										image={IMAGE_INFO[2]}
-										sx={{
-											height: {
-												xs: '200px',
-												sm: '200px',
-												md: '230px',
-												lg: '230px',
-											},
-										}}
-										alt="green iguana"
+										height="170"
 									/>
 								</CardActionArea>
 							</Card>
 						</TableCell>
 						<TableCell sx={productBox}>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Product Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										제품정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -870,49 +887,11 @@ const CartList: FC = (): JSX.Element => {
 											</TableRow>
 										</TableBody>
 									</Table>
-									<Box
-										sx={{
-											py: 1,
-											display: {
-												xs: 'none',
-												sm: 'none',
-												md: 'flex',
-												lg: 'flex',
-											},
-										}}
-									>
-										<Button sx={infoTag} variant="outlined">
-											#방한
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#보온
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#숏패딩
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#파카
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#점퍼
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#패딩
-										</Button>
-									</Box>
 								</Box>
 							</Box>
 						</TableCell>
 						<TableCell>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Price Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										가격정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -953,6 +932,9 @@ const CartList: FC = (): JSX.Element => {
 									</Table>
 								</Box>
 							</Box>
+						</TableCell>
+						<TableCell>
+							<NumberInput defaultValue={1} min={1} max={99} />
 							<Box>
 								<Button
 									sx={{
@@ -974,6 +956,25 @@ const CartList: FC = (): JSX.Element => {
 								>
 									바로 구매
 								</Button>
+								<Button
+									sx={{
+										mt: 0.5,
+										py: 1,
+										width: '100%',
+										fontSize: '14px',
+										fontWeight: 'bold',
+										bgcolor: '#7940B6',
+										border: '1px solid #757595',
+										borderRadius: 0,
+										color: '#fff',
+										'&:hover': {
+											bgcolor: '#9373B5',
+										},
+									}}
+									variant="outlined"
+								>
+									장바구니 삭제
+								</Button>
 							</Box>
 						</TableCell>
 					</TableRow>
@@ -984,29 +985,13 @@ const CartList: FC = (): JSX.Element => {
 									<CardMedia
 										component="img"
 										image={IMAGE_INFO[3]}
-										sx={{
-											height: {
-												xs: '200px',
-												sm: '200px',
-												md: '230px',
-												lg: '230px',
-											},
-										}}
-										alt="green iguana"
+										height="170"
 									/>
 								</CardActionArea>
 							</Card>
 						</TableCell>
 						<TableCell sx={productBox}>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Product Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										제품정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -1135,49 +1120,11 @@ const CartList: FC = (): JSX.Element => {
 											</TableRow>
 										</TableBody>
 									</Table>
-									<Box
-										sx={{
-											py: 1,
-											display: {
-												xs: 'none',
-												sm: 'none',
-												md: 'flex',
-												lg: 'flex',
-											},
-										}}
-									>
-										<Button sx={infoTag} variant="outlined">
-											#방한
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#보온
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#숏패딩
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#파카
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#점퍼
-										</Button>
-										<Button sx={infoTag} variant="outlined">
-											#패딩
-										</Button>
-									</Box>
 								</Box>
 							</Box>
 						</TableCell>
 						<TableCell>
 							<Box sx={subItem}>
-								<Box sx={{ py: 1 }}>
-									<Typography component="span" sx={title}>
-										Price Info
-									</Typography>
-									<Typography component="span" sx={description}>
-										가격정보
-									</Typography>
-								</Box>
 								<Box>
 									<Table size="small">
 										<TableBody>
@@ -1218,6 +1165,9 @@ const CartList: FC = (): JSX.Element => {
 									</Table>
 								</Box>
 							</Box>
+						</TableCell>
+						<TableCell>
+							<NumberInput defaultValue={1} min={1} max={99} />
 							<Box>
 								<Button
 									sx={{
@@ -1238,6 +1188,25 @@ const CartList: FC = (): JSX.Element => {
 									variant="outlined"
 								>
 									바로 구매
+								</Button>
+								<Button
+									sx={{
+										mt: 0.5,
+										py: 1,
+										width: '100%',
+										fontSize: '14px',
+										fontWeight: 'bold',
+										bgcolor: '#7940B6',
+										border: '1px solid #757595',
+										borderRadius: 0,
+										color: '#fff',
+										'&:hover': {
+											bgcolor: '#9373B5',
+										},
+									}}
+									variant="outlined"
+								>
+									장바구니 삭제
 								</Button>
 							</Box>
 						</TableCell>

@@ -2,8 +2,12 @@ import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { Box, Paper, SvgIcon, Collapse, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
-import TreeView from '@mui/lab/TreeView';
-import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import {
+	TreeItem,
+	TreeItemProps,
+	treeItemClasses,
+} from '@mui/x-tree-view/TreeItem';
 import CategoryForm from '../../../components/form/admin/CategoryForm';
 import { CategoryData } from '../../../services/types';
 import { CategoryFormValues } from '../../../components/form/admin/types';

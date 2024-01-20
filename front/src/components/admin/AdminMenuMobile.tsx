@@ -23,8 +23,12 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
-import TreeView from '@mui/lab/TreeView';
-import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import {
+	TreeItem,
+	TreeItemProps,
+	treeItemClasses,
+} from '@mui/x-tree-view/TreeItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -146,7 +150,7 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 	const navigate = useNavigate();
 
 	const [expanded, setExpanded] = useState<string[]>([]);
-	const [selected, setSelected] = useState<string[]>([]);
+	const [selected, setSelected] = useState<string>('');
 
 	useEffect(() => {
 		if (location.pathname === '/admin') {
@@ -159,7 +163,7 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 		setExpanded(nodeIds);
 	};
 
-	const handleSelect = (event: SyntheticEvent, nodeIds: string[]) => {
+	const handleSelect = (event: SyntheticEvent, nodeIds: string) => {
 		setSelected(nodeIds);
 	};
 
@@ -170,7 +174,7 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 	const openMenuClick = (path: string, index: number) => {
 		dispatch(menuActive(path)); // 1. close → open : 해당 Root 메뉴를 Active(활성화)
 		setExpanded([String(index)]);
-		setSelected([String(index)]);
+		setSelected(String(index));
 		setOpen(!open);
 	};
 

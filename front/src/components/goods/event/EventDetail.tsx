@@ -315,10 +315,8 @@ const GoodsRow: FC = (): JSX.Element => {
 
 	const rowItem: SxProps<Theme> = {
 		py: 0.5,
-		width: '100%',
-		display: 'flex',
+		display: 'table-row',
 		borderBottom: '1px #F0F0F0 solid',
-		flexDirection: 'row',
 	};
 	const subItem: SxProps<Theme> = {
 		py: 0.5,
