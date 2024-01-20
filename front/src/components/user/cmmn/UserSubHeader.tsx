@@ -6,11 +6,11 @@ import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../../Title';
 
-interface GoodsSubHeaderProps {
+interface UserSubHeaderProps {
 	title: string;
 }
 
-const UserSubHeader: FC<GoodsSubHeaderProps> = ({ title }): JSX.Element => {
+const UserSubHeader: FC<UserSubHeaderProps> = ({ title }): JSX.Element => {
 	const dispatch = useDispatch();
 
 	const dashboardClick = () => {
