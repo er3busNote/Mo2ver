@@ -24,9 +24,8 @@ import {
 	Unstable_NumberInput as BaseNumberInput,
 	NumberInputProps,
 } from '@mui/base/Unstable_NumberInput';
-import { styled } from '@mui/system';
 import { red, blue, grey, pink } from '@mui/material/colors';
-import { SxProps, Theme } from '@mui/material/styles';
+import { SxProps, Theme, styled } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -1350,7 +1349,7 @@ const CartListPC: FC = (): JSX.Element => {
 						}}
 						variant="outlined"
 					>
-						전체 주문하기
+						전체상품구매
 					</Button>
 				</Box>
 			</Box>

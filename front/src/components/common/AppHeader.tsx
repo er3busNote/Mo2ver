@@ -4,7 +4,14 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '../../services/api';
-import { IconButton, Box, Paper, Typography, Breadcrumbs } from '@mui/material';
+import {
+	Box,
+	Paper,
+	Stack,
+	Divider,
+	IconButton,
+	Typography,
+} from '@mui/material';
 import { isAuthenticated, isAdmin } from '../../utils/jwttoken';
 
 const headerFontSize = '12px';
@@ -31,7 +38,11 @@ const AppHeader: FC<AppHeaderProps> = ({ width, member }): JSX.Element => {
 						justifyContent: 'end',
 					}}
 				>
-					<Breadcrumbs aria-label="breadcrumb">
+					<Stack
+						direction="row"
+						divider={<Divider orientation="vertical" flexItem />}
+						spacing={1}
+					>
 						{!isAuthenticated() && (
 							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
 								<Typography
@@ -98,7 +109,7 @@ const AppHeader: FC<AppHeaderProps> = ({ width, member }): JSX.Element => {
 								</Typography>
 							</IconButton>
 						)}
-					</Breadcrumbs>
+					</Stack>
 				</Box>
 			</Paper>
 		</Paper>

@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
-const DiscountPC: FC = (): JSX.Element => {
+const NoticePC: FC = (): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -25,7 +25,7 @@ const DiscountPC: FC = (): JSX.Element => {
 	);
 };
 
-const DiscountMobile: FC = (): JSX.Element => {
+const NoticeMobile: FC = (): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -45,13 +45,13 @@ const DiscountMobile: FC = (): JSX.Element => {
 	);
 };
 
-const DiscountPage: FC = (): JSX.Element => {
+const NoticePage: FC = (): JSX.Element => {
 	return (
 		<>
-			<DiscountPC />
-			<DiscountMobile />
+			<NoticePC />
+			<NoticeMobile />
 		</>
 	);
 };
 
-export default DiscountPage;
+export default NoticePage;

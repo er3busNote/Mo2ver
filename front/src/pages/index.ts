@@ -9,7 +9,7 @@ import GoodsDetail from './GoodsDetailPage';
 import GoodsRegister from './GoodsRegisterPage';
 import Event from './EventPage';
 import EventDetail from './EventDetailPage';
-import Discount from './DiscountPage';
+import Notice from './NoticePage';
 import Banner from './admin/BannerPage';
 import Category from './admin/CategoryPage';
 import Dashboard from './admin/DashboardPage';
@@ -26,7 +26,7 @@ export {
 	GoodsRegister,
 	Event,
 	EventDetail,
-	Discount,
+	Notice,
 	Banner,
 	Category,
 	Dashboard,

@@ -240,7 +240,7 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 		fontSize: '0.9rem',
 		fontWeight: 'bold',
 		lineHeight: '38px',
-		backgroundColor: '#F8F8F8',
+		bgcolor: '#F8F8F8',
 	};
 
 	return (

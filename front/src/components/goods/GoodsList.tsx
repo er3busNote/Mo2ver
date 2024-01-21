@@ -16,10 +16,10 @@ import {
 	CardContent,
 	CardMedia,
 	CardActionArea,
+	Pagination,
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
 import { GoodsData } from '../../services/types';
 
 interface GoodsListProps {
