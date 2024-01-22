@@ -30,10 +30,10 @@ const contentTheme: ThemeOptions = {
 		},
 		action: {
 			active: '#505056',
-			hover: '#34343B',
+			hover: 'rgba(0, 0, 0, 0.04)',
 			selected: purple[700],
 			disabled: '#cdcdcd', // Button Disabled Text
-			disabledBackground: '#34343B', // Button Disabled Background Color
+			disabledBackground: 'rgba(0, 0, 0, 0.12)', // Button Disabled Background Color
 		},
 		background: {
 			default: '#fff',

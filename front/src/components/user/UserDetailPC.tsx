@@ -36,6 +36,11 @@ import StarsIcon from '@mui/icons-material/Stars';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
+import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import RestoreIcon from '@mui/icons-material/Restore';
+import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -526,21 +531,79 @@ const UserDetailPC: FC = (): JSX.Element => {
 		color: '#bdbdbd',
 		boxShadow: '2px 3px 4px 0px',
 	};
+	const avatarPreview: SxProps<Theme> = {
+		pt: 1,
+		display: 'flex',
+		justifyContent: 'center',
+	};
+	const avatarName: SxProps<Theme> = {
+		fontSize: { sm: '14px', lg: '15px' },
+		fontWeight: 'bold',
+	};
+	const avatarArrow: SxProps<Theme> = {
+		pb: 0.5,
+		fontSize: { sm: '14px', lg: '15px' },
+		color: '#6b6b6b',
+	};
+	const avatarTier: SxProps<Theme> = {
+		pr: 1,
+		display: 'flex',
+		justifyContent: 'center',
+	};
+	const avatarInfo: SxProps<Theme> = {
+		fontSize: { sm: '13px', lg: '14px' },
+		color: '#6b6b6b',
+		fontWeight: 'bold',
+	};
+	const avatarTag: SxProps<Theme> = {
+		pt: 3,
+		pr: 1,
+	};
+	const avatarStack: SxProps<Theme> = {
+		alignItems: 'center',
+		justifyContent: 'center',
+	};
+	const avatarChip: SxProps<Theme> = {
+		height: '22px',
+		fontSize: { sm: '11px', lg: '12px' },
+		color: '#b2b2b2',
+		border: '1px solid #b2b2b2',
+	};
+	const avatarDivider: SxProps<Theme> = {
+		my: 3,
+		mr: 1,
+		borderWidth: 0.5,
+	};
+	const avatarLogout: SxProps<Theme> = {
+		mr: 1,
+	};
 	const orderPreview: SxProps<Theme> = {
-		py: 2,
+		pt: 3,
+		pb: 1,
 		fontSize: { sm: '14px', lg: '15px' },
 		color: '#adadad',
 		fontWeight: 'bold',
 	};
-	const orderDetail: SxProps<Theme> = {
-		py: 1,
-		fontSize: { sm: '14px', lg: '15px' },
-		bgcolor: '#F8F8F8',
+	const orderCount: SxProps<Theme> = {
+		pb: 3,
+		display: 'flex',
+		justifyContent: 'center',
+	};
+	const orderText: SxProps<Theme> = {
+		alignItems: 'center',
+	};
+	const orderInfo: SxProps<Theme> = {
+		fontSize: { sm: '24px', lg: '28px' },
 		fontWeight: 'bold',
 	};
-	const orderButton: SxProps<Theme> = {
-		fontSize: { sm: '14px', lg: '15px' },
+	const orderDetail: SxProps<Theme> = {
+		py: 1,
 		bgcolor: '#F8F8F8',
+	};
+	const orderButton: SxProps<Theme> = {
+		pt: '2px',
+		px: 1,
+		fontSize: { sm: '14px', lg: '15px' },
 		fontWeight: 'bold',
 	};
 	const labelChip: SxProps<Theme> = {
@@ -555,11 +618,13 @@ const UserDetailPC: FC = (): JSX.Element => {
 		fontWeight: 'bold',
 	};
 	const profileBox: SxProps<Theme> = {
-		p: 2,
+		pl: 2,
+		py: 2,
 		width: '20%',
 	};
 	const avatarBox: SxProps<Theme> = {
-		p: 2,
+		py: 2,
+		pr: 1,
 		mt: 3,
 	};
 	const statusBox: SxProps<Theme> = {
@@ -606,6 +671,54 @@ const UserDetailPC: FC = (): JSX.Element => {
 								</Avatar>
 							</Badge>
 						</Box>
+						<Box sx={avatarPreview}>
+							<Stack direction="row" spacing={0.5} sx={avatarStack}>
+								<Typography component="span" sx={avatarName}>
+									Mo2ver님
+								</Typography>
+								<ArrowForwardIosIcon fontSize="small" sx={avatarArrow} />
+							</Stack>
+						</Box>
+						<Box sx={avatarTier}>
+							<Breadcrumbs aria-label="breadcrumb">
+								<Typography component="span" sx={avatarInfo}>
+									브론즈
+								</Typography>
+								<Typography component="span" sx={avatarInfo}>
+									일반회원
+								</Typography>
+							</Breadcrumbs>
+						</Box>
+						<Box sx={avatarTag}>
+							<Stack
+								direction="row"
+								spacing={1}
+								useFlexGap
+								flexWrap="wrap"
+								sx={avatarStack}
+							>
+								<Chip label="스웨터" variant="outlined" sx={avatarChip} />
+								<Chip label="티셔츠" variant="outlined" sx={avatarChip} />
+								<Chip label="스니커즈" variant="outlined" sx={avatarChip} />
+								<Chip label="악세서리" variant="outlined" sx={avatarChip} />
+							</Stack>
+						</Box>
+						<Divider sx={avatarDivider} />
+						<Box sx={avatarLogout}>
+							<Button
+								sx={{
+									py: 0.5,
+									width: '100%',
+									fontSize: '14px',
+									fontWeight: 'bold',
+									borderRadius: 3,
+								}}
+								color="primary"
+								variant="outlined"
+							>
+								로그아웃
+							</Button>
+						</Box>
 					</Box>
 					<Box sx={statusBox}>
 						<Box sx={{ display: 'flex' }}>
@@ -617,16 +730,55 @@ const UserDetailPC: FC = (): JSX.Element => {
 							<Grid container rowSpacing={1}>
 								<Grid item xs={3}>
 									<Box sx={orderPreview}>구매후기</Box>
-									<Box sx={orderDetail}>구매후기</Box>
+									<Box sx={orderCount}>
+										<Stack direction="row" spacing={1} sx={orderText}>
+											<Typography component="span" sx={orderInfo}>
+												8
+											</Typography>
+											<Typography component="span">건</Typography>
+										</Stack>
+									</Box>
+									<Box sx={orderDetail}>
+										<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+											<GradingOutlinedIcon fontSize="small" />
+											<Typography component="span" sx={orderButton}>
+												구매후기
+											</Typography>
+										</IconButton>
+									</Box>
 								</Grid>
 								<Grid item xs={3}>
 									<Box sx={orderPreview}>배송중</Box>
-									<Box sx={orderDetail}>배송중</Box>
+									<Box sx={orderCount}>
+										<Stack direction="row" spacing={1} sx={orderText}>
+											<Typography component="span" sx={orderInfo}>
+												4
+											</Typography>
+											<Typography component="span">건</Typography>
+										</Stack>
+									</Box>
+									<Box sx={orderDetail}>
+										<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+											<LocalShippingOutlinedIcon fontSize="small" />
+											<Typography component="span" sx={orderButton}>
+												배송중
+											</Typography>
+										</IconButton>
+									</Box>
 								</Grid>
 								<Grid item xs={3}>
 									<Box sx={orderPreview}>최근본상품</Box>
+									<Box sx={orderCount}>
+										<Stack direction="row" spacing={1} sx={orderText}>
+											<Typography component="span" sx={orderInfo}>
+												4
+											</Typography>
+											<Typography component="span">건</Typography>
+										</Stack>
+									</Box>
 									<Box sx={orderDetail}>
 										<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+											<RestoreIcon fontSize="small" />
 											<Typography component="span" sx={orderButton}>
 												최근본상품
 											</Typography>
@@ -635,7 +787,22 @@ const UserDetailPC: FC = (): JSX.Element => {
 								</Grid>
 								<Grid item xs={3}>
 									<Box sx={orderPreview}>결재내역</Box>
-									<Box sx={orderDetail}>결재내역</Box>
+									<Box sx={orderCount}>
+										<Stack direction="row" spacing={1} sx={orderText}>
+											<Typography component="span" sx={orderInfo}>
+												2
+											</Typography>
+											<Typography component="span">건</Typography>
+										</Stack>
+									</Box>
+									<Box sx={orderDetail}>
+										<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+											<CreditCardOutlinedIcon fontSize="small" />
+											<Typography component="span" sx={orderButton}>
+												결제내역
+											</Typography>
+										</IconButton>
+									</Box>
 								</Grid>
 							</Grid>
 						</Box>
