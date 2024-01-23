@@ -5,6 +5,8 @@ import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
+const steps = ['상품등록', '등록완료'];
+
 const GoodsRegisterPC: FC = (): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
@@ -18,7 +20,7 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsRegister />
+					<GoodsRegister steps={steps} />
 				</Box>
 			)}
 		</>
@@ -38,7 +40,7 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsRegister />
+					<GoodsRegister steps={steps} />
 				</Box>
 			)}
 		</>

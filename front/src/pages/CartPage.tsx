@@ -6,6 +6,8 @@ import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
+const steps = ['장바구니', '주문/결제', '주문완료'];
+
 const CartPC: FC = (): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
@@ -19,7 +21,7 @@ const CartPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<CartListPC />
+					<CartListPC steps={steps} />
 				</Box>
 			)}
 		</>
@@ -39,7 +41,7 @@ const CartMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<CartListMobile />
+					<CartListMobile steps={steps} />
 				</Box>
 			)}
 		</>

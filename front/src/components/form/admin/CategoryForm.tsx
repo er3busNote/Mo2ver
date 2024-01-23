@@ -66,12 +66,25 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 		border: '2px solid #d2d2d2',
 		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
+	const categoryForm: SxProps<Theme> = {
+		'.MuiFormControl-root': {
+			overflowX: 'visible',
+		},
+		'.MuiFormLabel-root': {
+			ml: 1,
+		},
+		'.MuiInputLabel-shrink': {
+			mt: 0.5,
+			ml: 1.5,
+		},
+	};
 	return (
 		<Box
 			id="category"
 			component="form"
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
+			sx={categoryForm}
 		>
 			<TableContainer>
 				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>

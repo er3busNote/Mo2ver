@@ -2,7 +2,7 @@ import React, { FC, forwardRef, ForwardedRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
-import CartSubHeader from './cmmn/CartSubHeader';
+import AppSubStepHeader from '../common/AppSubStepHeader';
 import {
 	Box,
 	Card,
@@ -150,6 +150,10 @@ const NumberInput = forwardRef(function CustomNumberInput(
 		/>
 	);
 });
+
+interface CartListProps {
+	steps: string[];
+}
 
 const CartList: FC = (): JSX.Element => {
 	const dispatch = useDispatch();
@@ -1321,10 +1325,10 @@ const CartTotal: FC = (): JSX.Element => {
 	);
 };
 
-const CartListPC: FC = (): JSX.Element => {
+const CartListPC: FC<CartListProps> = ({ steps }): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
-			<CartSubHeader title={'장바구니'} />
+			<AppSubStepHeader steps={steps} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<CartList />
 			</Box>

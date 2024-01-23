@@ -35,40 +35,10 @@
   padding-top: 18px;
 }
 
-/* 로그인, 회원가입 Style */
-#login .MuiFormControl-root label[data-shrink='true'] {
-  top: 4px;
-  left: 6px;
-  position: absolute;
-}
-
-#signup .MuiFormControl-root label[data-shrink='true'] {
-  top: 4px;
-  left: 6px;
-  position: absolute;
-}
-
-/* 검색 Style */
-#search .MuiCollapse-wrapperInner {
-  width: 400px; /* 검색바 최대 크기 조정 */
-}
-
-#search .MuiPopperUnstyled-root {
-  margin-top: 10px;
-  margin-left: -10px;
-}
-
-#search .MuiListItemButton-root:hover {
-  background-color: #fff !important; /* 모든검색어 Hover 배경색 조정 */
-}
-
-#search .MuiMenuItem-root:hover {
-  color: #9229d2 !important;
-  background-color: #fff !important; /* 인기검색어 Hover 배경색 조정 */
-}
-
-#search .MuiMenuItem-root:hover span {
-  font-weight: bold !important;
+/* Calendar : Date Picker Style */
+.MuiPickersPopper-root .MuiPickersYear-yearButton {
+  margin: 0;
+  font-size: 14px;
 }
 
 /* 메뉴 Style */
@@ -99,110 +69,4 @@
   color: #9229d2 !important;
   font-weight: bold !important;
   text-decoration: underline;
-}
-
-/* Admin - 카테고리 Form - Text Field */
-#category .MuiFormControl-root {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  margin-left: -10px;
-}
-
-#category .MuiFormControl-root label {
-  top: -6px;
-}
-
-#category .MuiFormControl-root label[data-shrink='true'] {
-  top: 22px;
-  position: relative;
-  margin-top: -14px;
-}
-
-/* Admin - 카테고리 Form - Radio Field */
-#category .MuiFormGroup-root {
-  margin-top: -4px;
-  margin-bottom: -4px;
-  margin-left: -3px;
-}
-
-#category .MuiFormControlLabel-label {
-  font-size: 14px;
-}
-
-/* Admin - 배너 Form - Text Field */
-#banner .MuiFormControl-root {
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-
-#banner .MuiFormControl-root label {
-  top: -6px;
-  font-size: 14px;
-}
-
-#banner .MuiFormControl-root label[data-shrink='true'] {
-  top: 22px;
-  position: relative;
-  margin-top: -14px;
-}
-
-#banner .MuiFormControl-root .MuiInputAdornment-root {
-  height: 2.01em;
-  margin-left: 0px;
-  padding-right: 12px;
-}
-
-/* Admin - 배너 Form - Calendar Field */
-#banner .MuiInputBase-inputAdornedEnd {
-  font-size: 14px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width: 85px;
-}
-
-/* Admin - 배너 Form - Select Field */
-#banner .MuiSelect-select {
-  font-size: 14px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width: 85px;
-}
-
-/* User - 상품등록 Form - Text Field */
-#register .MuiFormControl-root {
-  margin-top: 0px;
-  margin-bottom: 4px;
-}
-
-#register .MuiFormControl-root label {
-  top: -6px;
-  font-size: 14px;
-}
-
-#register .MuiFormControl-root label[data-shrink='true'] {
-  top: 22px;
-  position: relative;
-  margin-top: -14px;
-}
-
-#register .MuiFormControl-root .MuiInputAdornment-root {
-  height: 2.01em;
-  margin-left: 0px;
-  padding-right: 12px;
-}
-
-/* User - 상품등록 Form - Calendar Field */
-#register .MuiInputBase-inputAdornedEnd {
-  font-size: 14px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width: 85px;
-}
-
-/* User - 상품등록 Form - Select Field */
-#register .MuiSelect-outlined {
-  font-size: 14px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width: 85px;
 }

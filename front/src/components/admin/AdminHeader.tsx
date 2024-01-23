@@ -17,7 +17,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ReactComponent as MainIcon } from '../../logo.svg';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const headerFontSize = '12px';
+const headerFontSize = { xs: '11px', sm: '12px' };
 
 interface AdminHeaderProps {
 	member: ActionCreatorsMapObject;
@@ -81,7 +81,7 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 						<Grid item>
 							<Button
 								sx={{
-									px: 4,
+									px: { xs: 2, sm: 4 },
 									fontSize: '11px',
 									fontWeight: 'bold',
 									bgcolor: '#757595',

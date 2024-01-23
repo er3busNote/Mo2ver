@@ -26,7 +26,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import BannerForm from '../../../components/form/admin/BannerForm';
+import BannerFormPC from '../../form/admin/BannerFormPC';
 import { BannerData, BannerPageData } from '../../../services/types';
 import { BannerFormValues } from '../../../components/form/admin/types';
 // import _ from 'lodash';
@@ -85,47 +85,89 @@ const BannerPC: FC<BannerProps> = ({
 		setPage(0);
 	};
 
-	const thHeader: SxProps<Theme> = {
-		px: 5,
+	const periodTh: SxProps<Theme> = {
+		px: 2,
 		py: 1.5,
-		width: 180,
+		width: 120,
+		fontSize: { sm: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
-	const tdHeader: SxProps<Theme> = {
+	const periodTd: SxProps<Theme> = {
+		px: 2,
+		py: 2,
+		fontSize: { sm: '13px', lg: '14px' },
 		border: '2px solid #d2d2d2',
 	};
-	const menuStyle: SxProps<Theme> = {
-		fontSize: 14,
+	const dataTh: SxProps<Theme> = {
+		px: 2,
+		py: 1.5,
+		fontSize: { sm: '13px', lg: '14px' },
+		bgcolor: '#EEEEEE',
+		border: '2px solid #d2d2d2',
+		fontWeight: 'bold',
+	};
+	const dataTd: SxProps<Theme> = {
+		px: 2,
+		fontSize: { sm: '13px', lg: '14px' },
+		border: '2px solid #d2d2d2',
+	};
+	const datePicker: SxProps<Theme> = {
+		'.MuiInputBase-input': {
+			py: 2,
+			width: '80px',
+			fontSize: { sm: '13px', lg: '14px' },
+		},
+	};
+	const selectForm: SxProps<Theme> = {
+		width: 120,
+		'.MuiInputLabel-shrink': {
+			ml: 0.5,
+			mt: 0.5,
+		},
+	};
+	const selectLabel: SxProps<Theme> = {
+		mt: -1,
+		ml: 0.5,
+		fontSize: { sm: '13px', lg: '14px' },
+	};
+	const selectInput: SxProps<Theme> = {
+		'.MuiSelect-select': {
+			py: 1.5,
+			fontSize: { sm: '13px', lg: '14px' },
+		},
+	};
+	const menuText: SxProps<Theme> = {
+		fontSize: { sm: '13px', lg: '14px' },
 	};
 	return (
-		<Box id="banner" sx={{ py: 2, pl: 4, pr: 4 }}>
+		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{open ? (
 				<>
 					<TableContainer>
 						<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
 							<TableBody>
 								<TableRow>
-									<TableCell sx={thHeader} align="left" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										키워드 검색
 									</TableCell>
-									<TableCell colSpan={3} sx={tdHeader} align="left">
-										<FormControl>
-											<InputLabel id="title-select-label">제목</InputLabel>
+									<TableCell colSpan={3} sx={dataTd} align="left">
+										<FormControl sx={selectForm}>
+											<InputLabel sx={selectLabel}>제목</InputLabel>
 											<Select
-												labelId="title-select-label"
 												value={keyword}
 												label="제목"
 												onChange={handleKeywordChange}
+												sx={selectInput}
 											>
-												<MenuItem sx={menuStyle} value={'A'}>
+												<MenuItem sx={menuText} value={'A'}>
 													전체
 												</MenuItem>
-												<MenuItem sx={menuStyle} value={'S'}>
+												<MenuItem sx={menuText} value={'S'}>
 													제목
 												</MenuItem>
-												<MenuItem sx={menuStyle} value={'R'}>
+												<MenuItem sx={menuText} value={'R'}>
 													등록자
 												</MenuItem>
 											</Select>
@@ -133,43 +175,45 @@ const BannerPC: FC<BannerProps> = ({
 									</TableCell>
 								</TableRow>
 								<TableRow>
-									<TableCell sx={thHeader} align="left" component="th">
+									<TableCell sx={periodTh} align="center" component="th">
 										전시기간
 									</TableCell>
-									<TableCell sx={{ ...tdHeader, width: '35%' }} align="left">
+									<TableCell sx={periodTd} align="left">
 										<LocalizationProvider dateAdapter={AdapterDayjs}>
 											<DesktopDatePicker
 												label="시작날짜"
 												value={startDate}
 												onChange={(value) => handleStartChange(value)}
+												sx={datePicker}
 											/>
 											<HorizontalRuleIcon />
 											<DesktopDatePicker
 												label="만료날짜"
 												value={dayjs(endDate)}
 												onChange={(value) => handleEndChange(value)}
+												sx={datePicker}
 											/>
 										</LocalizationProvider>
 									</TableCell>
-									<TableCell sx={thHeader} align="left" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										전시여부
 									</TableCell>
-									<TableCell sx={tdHeader} align="left">
-										<FormControl>
-											<InputLabel id="useyn-select-label">전시여부</InputLabel>
+									<TableCell sx={dataTd} align="left">
+										<FormControl sx={selectForm}>
+											<InputLabel sx={selectLabel}>전시여부</InputLabel>
 											<Select
-												labelId="useyn-select-label"
 												value={useyn}
 												label="전시여부"
 												onChange={handleUseynChange}
+												sx={selectInput}
 											>
-												<MenuItem sx={menuStyle} value={''}>
+												<MenuItem sx={menuText} value={''}>
 													전체
 												</MenuItem>
-												<MenuItem sx={menuStyle} value={'Y'}>
+												<MenuItem sx={menuText} value={'Y'}>
 													예
 												</MenuItem>
-												<MenuItem sx={menuStyle} value={'N'}>
+												<MenuItem sx={menuText} value={'N'}>
 													아니오
 												</MenuItem>
 											</Select>
@@ -223,28 +267,28 @@ const BannerPC: FC<BannerProps> = ({
 						<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
 							<TableHead>
 								<TableRow>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										제목
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										유형
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										전시기간
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										진행상태
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										전시여부
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										배경이미지여부
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										등록자
 									</TableCell>
-									<TableCell sx={thHeader} align="center" component="th">
+									<TableCell sx={dataTh} align="center" component="th">
 										등록일
 									</TableCell>
 								</TableRow>
@@ -254,29 +298,29 @@ const BannerPC: FC<BannerProps> = ({
 									bannerPageData.content.map(
 										(data: BannerData, index: number) => (
 											<TableRow key={index}>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													{data.bannerManageNo}
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													배경이미지
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
 													{moment(data.displayEndDate).format('YYYY-MM-DD')}
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													마감
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													{data.displayYesNo}
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													Y
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													{data.register}
 												</TableCell>
-												<TableCell sx={tdHeader} align="center">
+												<TableCell sx={dataTd} align="center">
 													{moment(data.registerDate).format('YYYY-MM-DD')}
 												</TableCell>
 											</TableRow>
@@ -305,7 +349,7 @@ const BannerPC: FC<BannerProps> = ({
 					</TableContainer>
 				</>
 			) : (
-				<BannerForm onSubmit={onSubmit} setOpen={setOpen} />
+				<BannerFormPC onSubmit={onSubmit} setOpen={setOpen} />
 			)}
 		</Box>
 	);

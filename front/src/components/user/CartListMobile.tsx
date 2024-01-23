@@ -1,11 +1,15 @@
 import React, { FC } from 'react';
-import CartSubHeader from './cmmn/CartSubHeader';
+import AppSubStepHeader from '../common/AppSubStepHeader';
 import { Box } from '@mui/material';
 
-const CartListMobile: FC = (): JSX.Element => {
+interface CartListProps {
+	steps: string[];
+}
+
+const CartListMobile: FC<CartListProps> = ({ steps }): JSX.Element => {
 	return (
 		<Box>
-			<CartSubHeader title={'장바구니'} />
+			<AppSubStepHeader steps={steps} />
 			<Box sx={{ mx: 3, my: 2 }}>ss</Box>
 		</Box>
 	);

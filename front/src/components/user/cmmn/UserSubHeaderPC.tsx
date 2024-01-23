@@ -63,6 +63,7 @@ const UserSubHeaderPC: FC<UserSubHeaderProps> = ({
 			>
 				<Tabs value={tab} onChange={handleChange} sx={labelTabs}>
 					<Tab label="주문/배송내역" sx={labelTab} />
+					<Tab label="상품등록내역" sx={labelTab} />
 					<Tab label="회원정보수정" sx={labelTab} disabled />
 				</Tabs>
 			</Box>

@@ -1,21 +1,18 @@
 import React, { FC, useState } from 'react';
+import { connect } from 'react-redux';
+import { TitleState } from '../../store/types';
 import { Box, Step, Stepper, StepLabel } from '@mui/material';
-import { styled } from '@mui/system';
-import Title from '../../Title';
+import Title from '../Title';
 
 interface CartSubHeaderProps {
-	title: string;
+	description?: string;
+	steps: string[];
 }
 
-const steps = ['장바구니', '주문/결제', '주문완료'];
-
-const StyledStepIconRoot = styled('div')<{ ownerState: { active?: boolean } }>(
-	() => ({
-		fontSize: 18,
-	})
-);
-
-const CartSubHeader: FC<CartSubHeaderProps> = ({ title }): JSX.Element => {
+const AppSubStepHeader: FC<CartSubHeaderProps> = ({
+	description,
+	steps,
+}): JSX.Element => {
 	const [activeStep, setActiveStep] = useState(0);
 	const [completed, setCompleted] = useState<{
 		[k: number]: boolean;
@@ -33,7 +30,7 @@ const CartSubHeader: FC<CartSubHeaderProps> = ({ title }): JSX.Element => {
 			}}
 		>
 			<Box sx={{ pt: 2 }}>
-				<Title>{title}</Title>
+				<Title>{description}</Title>
 			</Box>
 			<Stepper nonLinear activeStep={activeStep}>
 				{steps.map((label, index) => (
@@ -62,4 +59,8 @@ const CartSubHeader: FC<CartSubHeaderProps> = ({ title }): JSX.Element => {
 	);
 };
 
-export default CartSubHeader;
+const mapStateToProps = (state: any) => ({
+	description: (state.title as TitleState).description,
+});
+
+export default connect(mapStateToProps, null)(AppSubStepHeader);

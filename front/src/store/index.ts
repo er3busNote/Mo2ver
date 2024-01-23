@@ -83,16 +83,6 @@ const userMenuinitialState: MenuState = {
 		},
 		{
 			index: 2,
-			name: 'REGISTER',
-			path: '/register',
-			title: 'Register',
-			description: '상품등록',
-			subMenu: [],
-			isActive: false,
-			isShow: true,
-		},
-		{
-			index: 3,
 			name: 'NOTICE',
 			path: '/notice',
 			title: 'Notice',

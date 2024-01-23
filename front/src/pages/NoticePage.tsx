@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import GoodsList from '../components/goods/GoodsList';
+import NoticeList from '../components/user/NoticeList';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
 
@@ -18,7 +18,7 @@ const NoticePC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<NoticeList />
 				</Box>
 			)}
 		</>
@@ -38,7 +38,7 @@ const NoticeMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<NoticeList />
 				</Box>
 			)}
 		</>

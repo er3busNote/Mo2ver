@@ -12,6 +12,7 @@ import {
 	Paper,
 	Typography,
 } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import RenderTextField from '../validate/TextField';
@@ -43,6 +44,20 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 	const { control, handleSubmit, formState } = useForm<LoginFormValues>({
 		resolver: yupResolver(schema),
 	});
+
+	const loginForm: SxProps<Theme> = {
+		mt: 0,
+		'.MuiFormControl-root': {
+			overflowX: 'visible',
+		},
+		'.MuiFormLabel-root': {
+			ml: 1,
+		},
+		'.MuiInputLabel-shrink': {
+			mt: 0.5,
+			ml: 1.5,
+		},
+	};
 	return (
 		<Paper
 			sx={{
@@ -71,7 +86,7 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 					component="form"
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					sx={{ mt: 1 }}
+					sx={loginForm}
 				>
 					<Controller
 						name="username"

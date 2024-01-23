@@ -1,4 +1,8 @@
 import React, { FC } from 'react';
+import { Dispatch } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../services/api';
 import UserDetailPC from '../components/user/UserDetailPC';
 import UserDetailMobile from '../components/user/UserDetailMobile';
 import { Box, Paper } from '@mui/material';
@@ -6,7 +10,11 @@ import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
-const UserPC: FC = (): JSX.Element => {
+interface UserProps {
+	member: ActionCreatorsMapObject;
+}
+
+const UserPC: FC<UserProps> = ({ member }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -32,7 +40,7 @@ const UserPC: FC = (): JSX.Element => {
 							display: 'inline-block',
 						}}
 					>
-						<UserDetailPC />
+						<UserDetailPC member={member} />
 					</Box>
 				</>
 			)}
@@ -40,7 +48,7 @@ const UserPC: FC = (): JSX.Element => {
 	);
 };
 
-const UserMobile: FC = (): JSX.Element => {
+const UserMobile: FC<UserProps> = ({ member }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -53,20 +61,24 @@ const UserMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<UserDetailMobile />
+					<UserDetailMobile member={member} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const UserPage: FC = (): JSX.Element => {
+const UserPage: FC<UserProps> = ({ member }): JSX.Element => {
 	return (
 		<>
-			<UserPC />
-			<UserMobile />
+			<UserPC member={member} />
+			<UserMobile member={member} />
 		</>
 	);
 };
 
-export default UserPage;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	member: bindActionCreators(Api.member, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(UserPage);
