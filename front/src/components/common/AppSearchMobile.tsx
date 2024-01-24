@@ -1,6 +1,14 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -36,6 +44,10 @@ const searchDatas = [
 	{ id: 9, keyword: 'ddr5-4800' },
 	{ id: 10, keyword: 'h610m' },
 ];
+
+interface AppSearchProps {
+	description: string;
+}
 
 const SearchDivider: FC = (): JSX.Element => {
 	return (
@@ -147,7 +159,9 @@ const AppSearchItemsPC: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearchMobile: FC = (): JSX.Element => {
+const AppSearchMobile: FC<AppSearchProps> = ({ description }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
@@ -197,6 +211,19 @@ const AppSearchMobile: FC = (): JSX.Element => {
 		setSearchOpen(!openSearch);
 	};
 
+	const activeClick = (
+		title: string,
+		nextDescription: string,
+		path: string
+	) => {
+		dispatch(changeTitle(title));
+		dispatch(changeDescription(nextDescription));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
+		dispatch(menuActive(path));
+		navigate(path);
+	};
+
 	const searchFontSize = '12px';
 
 	const icon: SxProps<Theme> = {
@@ -219,7 +246,10 @@ const AppSearchMobile: FC = (): JSX.Element => {
 				<MobileView>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '60%', height: '100px' }}>
-							<IconButton component={Link} to="/" sx={{ p: 0 }}>
+							<IconButton
+								onClick={() => activeClick('홈', '메인', '/')}
+								sx={{ p: 0 }}
+							>
 								<SvgIcon
 									component={MainIcon}
 									color="primary"
@@ -288,7 +318,10 @@ const AppSearchMobile: FC = (): JSX.Element => {
 				<BrowserView>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
-							<IconButton component={Link} to="/" sx={{ p: 0 }}>
+							<IconButton
+								onClick={() => activeClick('홈', '메인', '/')}
+								sx={{ p: 0 }}
+							>
 								<SvgIcon
 									component={MainIcon}
 									color="primary"

@@ -9,7 +9,7 @@ import { TitleState } from '../../store/types';
 import Api from '../../services/api';
 import useCategoryGroupList from '../../hooks/useCategoryGroupList';
 import AppHeader from './AppHeader';
-import AppHeaderBar from './AppHeaderBar';
+//import AppHeaderBar from './AppHeaderBar';
 import AppHeaderMenu from './AppHeaderMenu';
 import AppSearchPC from './AppSearchPC';
 import AppSearchMobile from './AppSearchMobile';
@@ -77,7 +77,7 @@ const AppPC: FC<AppProps> = ({ description, categoryData }): JSX.Element => {
 						{isDesktop && (
 							<AppHeader width={'940px'} description={description} />
 						)}
-						<AppSearchPC />
+						<AppSearchPC description={description} />
 					</Box>
 					<AppHeaderMenu
 						scrolled={scrolled}
@@ -110,8 +110,8 @@ const AppMobile: FC<AppProps> = ({
 			{isTablet && (
 				<>
 					{isDesktop && <AppHeader width={'100%'} description={description} />}
-					{isMobile && <AppHeaderBar description={description} />}
-					<AppSearchMobile />
+					{/* {isMobile && <AppHeaderBar description={description} />} */}
+					<AppSearchMobile description={description} />
 					<AppMenuMobile
 						description={description}
 						categoryData={categoryData}

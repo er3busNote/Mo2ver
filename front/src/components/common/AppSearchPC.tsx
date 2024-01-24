@@ -1,5 +1,13 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -34,6 +42,10 @@ const searchDatas = [
 	{ id: 9, keyword: 'ddr5-4800' },
 	{ id: 10, keyword: 'h610m' },
 ];
+
+interface AppSearchProps {
+	description: string;
+}
 
 const SearchDivider: FC = (): JSX.Element => {
 	return (
@@ -139,7 +151,9 @@ const AppSearchItems: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearchPC: FC = (): JSX.Element => {
+const AppSearchPC: FC<AppSearchProps> = ({ description }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
@@ -184,6 +198,19 @@ const AppSearchPC: FC = (): JSX.Element => {
 		closeAnchorEl(); // → Popper 닫기
 	};
 
+	const activeClick = (
+		title: string,
+		nextDescription: string,
+		path: string
+	) => {
+		dispatch(changeTitle(title));
+		dispatch(changeDescription(nextDescription));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
+		dispatch(menuActive(path));
+		navigate(path);
+	};
+
 	const searchFontSize = '12px';
 
 	const icon: SxProps<Theme> = {
@@ -211,7 +238,10 @@ const AppSearchPC: FC = (): JSX.Element => {
 			>
 				<Grid container spacing={10}>
 					<Grid item>
-						<IconButton component={Link} to="/" sx={{ p: 0 }}>
+						<IconButton
+							onClick={() => activeClick('홈', '메인', '/')}
+							sx={{ p: 0 }}
+						>
 							<SvgIcon
 								component={MainIcon}
 								color="primary"
