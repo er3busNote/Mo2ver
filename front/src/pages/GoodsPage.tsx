@@ -1,11 +1,17 @@
 import React, { FC } from 'react';
+import { connect } from 'react-redux';
+import { TitleState } from '../store/types';
 import GoodsList from '../components/goods/GoodsList';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
-const GoodsPC: FC = (): JSX.Element => {
+interface GoodsProps {
+	description: string;
+}
+
+const GoodsPC: FC<GoodsProps> = ({ description }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -18,14 +24,14 @@ const GoodsPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<GoodsList description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsMobile: FC = (): JSX.Element => {
+const GoodsMobile: FC<GoodsProps> = ({ description }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -38,20 +44,24 @@ const GoodsMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsList />
+					<GoodsList description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsPage: FC = (): JSX.Element => {
+const GoodsPage: FC<GoodsProps> = ({ description }): JSX.Element => {
 	return (
 		<>
-			<GoodsPC />
-			<GoodsMobile />
+			<GoodsPC description={description} />
+			<GoodsMobile description={description} />
 		</>
 	);
 };
 
-export default GoodsPage;
+const mapStateToProps = (state: any) => ({
+	description: (state.title as TitleState).description,
+});
+
+export default connect(mapStateToProps, null)(GoodsPage);

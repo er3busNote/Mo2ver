@@ -2,7 +2,13 @@ import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { SubMenuInfo, MenuState } from '../../store/types';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import {
 	Box,
 	Grid,
@@ -23,9 +29,10 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '../../services/types';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { isDesktop } from 'react-device-detect';
 
 interface AppMenuProps {
+	description: string;
 	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
@@ -143,7 +150,10 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 	);
 };
 
-const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
+const AppDetail: FC<AppMenuProps> = ({
+	description,
+	categoryData,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const largeCategoyData = categoryData.largeCategoyData;
@@ -164,6 +174,8 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 	const menuClick = (title: string, code: string, type: string) => {
 		dispatch(changeTitle(title));
 		dispatch(changeDescription(title));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive(`/goods/${type}/${code}`));
 		navigate(`/goods/${type}/${code}`);
 	};
@@ -261,6 +273,7 @@ const AppDetail: FC<AppMenuProps> = ({ categoryData }): JSX.Element => {
 };
 
 const AppMenuMobile: FC<AppMenuProps> = ({
+	description,
 	categoryData,
 	menus,
 }): JSX.Element => {
@@ -269,11 +282,13 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 
 	const activeMenuClick = (
 		title: string,
-		description: string,
+		nextDescription: string,
 		path: string
 	) => {
 		dispatch(changeTitle(title));
-		dispatch(changeDescription(description));
+		dispatch(changeDescription(nextDescription));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -283,7 +298,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 			<Box>
 				<Grid container spacing={1}>
 					<Grid item>
-						<AppDetail categoryData={categoryData} />
+						<AppDetail description={description} categoryData={categoryData} />
 					</Grid>
 					{menus &&
 						menus.map((menu: SubMenuInfo) => (

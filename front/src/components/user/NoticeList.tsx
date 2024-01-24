@@ -12,7 +12,11 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
-const NoticeList: FC = (): JSX.Element => {
+interface NoticeListProps {
+	description: string;
+}
+
+const NoticeList: FC<NoticeListProps> = ({ description }): JSX.Element => {
 	const [page, setPage] = useState(0);
 
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -21,7 +25,7 @@ const NoticeList: FC = (): JSX.Element => {
 	};
 
 	const thHeader: SxProps<Theme> = {
-		px: 5,
+		px: { xs: 0, sm: 5 },
 		py: 1.5,
 		width: 180,
 		bgcolor: '#f9f9f9',
@@ -37,6 +41,8 @@ const NoticeList: FC = (): JSX.Element => {
 		width: '10%',
 	};
 	const registerColumn: SxProps<Theme> = {
+		px: { xs: 0, sm: 5 },
+		py: 1.5,
 		width: '15%',
 	};
 	const createColumn: SxProps<Theme> = {
@@ -44,7 +50,7 @@ const NoticeList: FC = (): JSX.Element => {
 	};
 	return (
 		<Box>
-			<AppSubHeader />
+			<AppSubHeader description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<TableContainer>
 					<Table size="small">

@@ -1,11 +1,9 @@
 import React, { FC, useState } from 'react';
-import { connect } from 'react-redux';
-import { TitleState } from '../../store/types';
 import { Box, Step, Stepper, StepLabel } from '@mui/material';
 import Title from '../Title';
 
 interface CartSubHeaderProps {
-	description?: string;
+	description: string;
 	steps: string[];
 }
 
@@ -59,8 +57,4 @@ const AppSubStepHeader: FC<CartSubHeaderProps> = ({
 	);
 };
 
-const mapStateToProps = (state: any) => ({
-	description: (state.title as TitleState).description,
-});
-
-export default connect(mapStateToProps, null)(AppSubStepHeader);
+export default AppSubStepHeader;

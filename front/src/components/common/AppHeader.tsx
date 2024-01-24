@@ -3,7 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import { connect } from 'react-redux';
 import Api from '../../services/api';
 import {
@@ -20,16 +26,23 @@ const headerFontSize = '12px';
 
 interface AppHeaderProps {
 	width: string;
+	description: string;
 	member: ActionCreatorsMapObject;
 }
 
-const AppHeader: FC<AppHeaderProps> = ({ width, member }): JSX.Element => {
+const AppHeader: FC<AppHeaderProps> = ({
+	width,
+	description,
+	member,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const cartClick = () => {
 		dispatch(changeTitle('Cart'));
 		dispatch(changeDescription('장바구니'));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive('/cart'));
 		navigate('/cart');
 	};

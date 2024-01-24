@@ -2,7 +2,12 @@ import React, { FC } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { TitleState } from '../../store/types';
-import { changeTitle, changeDescription } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+} from '../../store/index';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
@@ -21,6 +26,8 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 	const dashboardClick = () => {
 		dispatch(changeTitle('대시보드'));
 		dispatch(changeDescription(''));
+		dispatch(changePrevDescription(description ?? ''));
+		dispatch(changeNext());
 	};
 	return (
 		<Box
@@ -60,7 +67,7 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 						}}
 						color="text.primary"
 					>
-						{description}
+						{title}
 					</Typography>
 				)}
 				{description && description !== '' && (
@@ -72,7 +79,7 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 						}}
 						color="text.primary"
 					>
-						{title}
+						{description}
 					</Typography>
 				)}
 			</Breadcrumbs>

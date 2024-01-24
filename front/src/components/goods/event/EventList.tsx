@@ -1,7 +1,13 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { menuActive } from '../../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../../store/index';
 import AppSubHeader from '../../common/AppSubHeader';
 import {
 	Box,
@@ -18,11 +24,19 @@ const IMAGE_INFO = [
 	'https://upload.wikimedia.org/wikipedia/en/5/5f/Mac_Miller_Live_from_Space.jpg',
 ];
 
-const EventGrid: FC = (): JSX.Element => {
+interface EventListProps {
+	description: string;
+}
+
+const EventGrid: FC<EventListProps> = ({ description }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const eventClick = (code: string) => {
+		dispatch(changeTitle(description));
+		dispatch(changeDescription(description));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive('/event/' + code + '/detail'));
 		navigate('/event/' + code + '/detail');
 	};
@@ -169,7 +183,7 @@ const EventGrid: FC = (): JSX.Element => {
 	);
 };
 
-const EventList: FC = (): JSX.Element => {
+const EventList: FC<EventListProps> = ({ description }): JSX.Element => {
 	const [page, setPage] = useState(0);
 
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -179,9 +193,9 @@ const EventList: FC = (): JSX.Element => {
 
 	return (
 		<Box>
-			<AppSubHeader />
+			<AppSubHeader description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
-				<EventGrid />
+				<EventGrid description={description} />
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 				<Pagination

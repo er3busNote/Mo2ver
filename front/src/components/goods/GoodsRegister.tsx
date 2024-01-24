@@ -4,13 +4,17 @@ import RegisterForm from '../form/RegisterForm';
 import { Box } from '@mui/material';
 
 interface GoodsRegisterProps {
+	description: string;
 	steps: string[];
 }
 
-const GoodsRegister: FC<GoodsRegisterProps> = ({ steps }): JSX.Element => {
+const GoodsRegister: FC<GoodsRegisterProps> = ({
+	description,
+	steps,
+}): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
-			<AppSubStepHeader steps={steps} />
+			<AppSubStepHeader description={description} steps={steps} />
 			<RegisterForm />
 		</Box>
 	);

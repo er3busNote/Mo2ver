@@ -450,7 +450,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 				<Box>
 					<Box sx={{ display: 'flex' }}>
 						<Typography component="h2" sx={title}>
-							나의 주문/배송 현황
+							나의 상품등록 현황
 						</Typography>
 					</Box>
 					<Box sx={registerBox}>

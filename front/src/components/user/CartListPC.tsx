@@ -152,6 +152,7 @@ const NumberInput = forwardRef(function CustomNumberInput(
 });
 
 interface CartListProps {
+	description: string;
 	steps: string[];
 }
 
@@ -1325,10 +1326,10 @@ const CartTotal: FC = (): JSX.Element => {
 	);
 };
 
-const CartListPC: FC<CartListProps> = ({ steps }): JSX.Element => {
+const CartListPC: FC<CartListProps> = ({ description, steps }): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
-			<AppSubStepHeader steps={steps} />
+			<AppSubStepHeader description={description} steps={steps} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<CartList />
 			</Box>

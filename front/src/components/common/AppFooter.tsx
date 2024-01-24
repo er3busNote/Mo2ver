@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import AppFooterMenu from './AppFooterMenu';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import {
 	Box,
 	Paper,
@@ -22,11 +28,13 @@ import { isMobile, BrowserView, MobileView } from 'react-device-detect';
 
 interface AppFooterProps {
 	width: number;
+	description: string;
 	categoryData: CategoryDataGroup;
 }
 
 const AppFooter: FC<AppFooterProps> = ({
 	width,
+	description,
 	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -41,11 +49,13 @@ const AppFooter: FC<AppFooterProps> = ({
 
 	const activeMenuClick = (
 		title: string,
-		description: string,
+		nextDescription: string,
 		path: string
 	) => {
 		dispatch(changeTitle(title));
-		dispatch(changeDescription(description));
+		dispatch(changeDescription(nextDescription));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -75,6 +85,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						open={openMenu}
 						setOpen={setMenuOpen}
 						width={width}
+						description={description}
 						categoryData={categoryData}
 					/>
 					<AppSearchItemsMobile

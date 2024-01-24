@@ -1,14 +1,18 @@
 import React, { FC } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { TitleState } from '../../store/types';
-import { changeTitle, changeDescription } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+} from '../../store/index';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
 
 interface AppSubHeaderProps {
-	description?: string;
+	description: string;
 }
 
 const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
@@ -16,7 +20,9 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
 
 	const dashboardClick = () => {
 		dispatch(changeTitle('홈'));
-		dispatch(changeDescription(''));
+		dispatch(changeDescription('메인'));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 	};
 	return (
 		<Box
@@ -65,8 +71,4 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
 	);
 };
 
-const mapStateToProps = (state: any) => ({
-	description: (state.title as TitleState).description,
-});
-
-export default connect(mapStateToProps, null)(AppSubHeader);
+export default AppSubHeader;

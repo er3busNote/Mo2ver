@@ -3,7 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { menuActive } from '../../store/index';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import Api from '../../services/api';
 import useImageUrl from '../../hooks/useImageUrl';
 import useCategoryPageList from '../../hooks/useCategoryPageList';
@@ -23,20 +29,30 @@ import {
 import { GoodsData } from '../../services/types';
 
 interface GoodsListProps {
+	description: string;
 	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
 
 interface GoodsGridProps {
+	description: string;
 	image: ActionCreatorsMapObject;
 	goodsData: Array<GoodsData>;
 }
 
-const GoodsGrid: FC<GoodsGridProps> = ({ image, goodsData }): JSX.Element => {
+const GoodsGrid: FC<GoodsGridProps> = ({
+	description,
+	image,
+	goodsData,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
+		dispatch(changeTitle(description));
+		dispatch(changeDescription(description));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive('/goods/' + code + '/detail'));
 		navigate('/goods/' + code + '/detail');
 	};
@@ -140,7 +156,11 @@ const GoodsGrid: FC<GoodsGridProps> = ({ image, goodsData }): JSX.Element => {
 	);
 };
 
-const GoodsList: FC<GoodsListProps> = ({ goods, image }): JSX.Element => {
+const GoodsList: FC<GoodsListProps> = ({
+	description,
+	goods,
+	image,
+}): JSX.Element => {
 	const { code, type } = useParams();
 	const categoryCode = code ?? '';
 	const categoryType = type ?? '';
@@ -157,9 +177,13 @@ const GoodsList: FC<GoodsListProps> = ({ goods, image }): JSX.Element => {
 
 	return (
 		<Box>
-			<AppSubHeader />
+			<AppSubHeader description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
-				<GoodsGrid image={image} goodsData={goodsData.content} />
+				<GoodsGrid
+					image={image}
+					description={description}
+					goodsData={goodsData.content}
+				/>
 			</Box>
 			<Box sx={{ mb: 10, display: 'flex', justifyContent: 'center' }}>
 				<Pagination

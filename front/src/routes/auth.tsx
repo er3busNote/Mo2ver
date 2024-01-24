@@ -20,7 +20,6 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ role }): JSX.Element => {
 	else if (role === 'user' && getAccessToken() && isAuthenticated()) {
 		return <Outlet />;
 	}
-	console.log(redirectTo);
 	return (
 		<Navigate
 			to={{ pathname: '/auth/login' }}

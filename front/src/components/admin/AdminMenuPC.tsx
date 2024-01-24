@@ -9,8 +9,15 @@ import React, {
 } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '../../store/types';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import { SubMenuInfo, MenuState, TitleState } from '../../store/types';
+import {
+	changeTitle,
+	changeDescription,
+	changePrevTitle,
+	changePrevDescription,
+	changeNext,
+	menuActive,
+} from '../../store/index';
 import {
 	Box,
 	Grow, // Transitions
@@ -71,6 +78,8 @@ interface AdminMenuProps {
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
 	menus?: Array<SubMenuInfo>;
+	title: string;
+	description: string;
 }
 
 const Drawer = styled(MuiDrawer, {
@@ -205,6 +214,8 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 	setOpen,
 	width,
 	menus,
+	title,
+	description,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const location = useLocation();
@@ -240,12 +251,15 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 	};
 
 	const activeMenuClick = (
-		title: string,
-		description: string,
+		nextTitle: string,
+		nextDescription: string,
 		path: string
 	) => {
-		dispatch(changeDescription(title));
-		dispatch(changeTitle(description));
+		dispatch(changeTitle(nextTitle));
+		dispatch(changeDescription(nextDescription));
+		dispatch(changePrevTitle(title));
+		dispatch(changePrevDescription(description));
+		dispatch(changeNext());
 		dispatch(menuActive(path)); // 2. open → close : 해당 Root 메뉴를 Active(활성화)
 		navigate('/admin' + path);
 	};
@@ -371,6 +385,8 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 
 const mapStateToProps = (state: any) => ({
 	menus: (state.menu as MenuState).menus,
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
 });
 
 export default connect(mapStateToProps, null)(AdminMenuPC);

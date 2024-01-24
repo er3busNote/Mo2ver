@@ -14,12 +14,20 @@ interface TokenState {
 interface TitleState {
 	title: string;
 	description: string;
+	prevTitle: string;
+	prevDescription: string;
+	queuePrevTitle: string[];
+	queueNextTitle: string[];
+	queuePrevDescription: string[];
+	queueNextDescription: string[];
 }
 
-interface MenuInfo extends TitleState {
+interface MenuInfo {
 	index: number;
 	name: string;
 	path: string;
+	title: string;
+	description: string;
 	isActive: boolean;
 	isShow: boolean;
 	count?: number;

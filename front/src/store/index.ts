@@ -52,6 +52,12 @@ const tokenSlice = createSlice({
 const titleinitialState: TitleState = {
 	title: 'Home',
 	description: '',
+	prevTitle: '',
+	prevDescription: '',
+	queuePrevTitle: [],
+	queueNextTitle: [],
+	queuePrevDescription: [],
+	queueNextDescription: [],
 };
 
 // 2.1. titleSlice : action + reducer → slice
@@ -64,6 +70,31 @@ const titleSlice = createSlice({
 		},
 		changeDescription: (state: TitleState, action: PayloadAction<string>) => {
 			state.description = action.payload;
+		},
+		changePrevTitle: (state: TitleState, action: PayloadAction<string>) => {
+			state.prevTitle = action.payload;
+		},
+		changePrevDescription: (
+			state: TitleState,
+			action: PayloadAction<string>
+		) => {
+			state.prevDescription = action.payload;
+		},
+		changePrev: (state: TitleState) => {
+			const title = state.queuePrevTitle.pop() ?? '';
+			const description = state.queuePrevDescription.pop() ?? '';
+			state.title = title;
+			state.description = description;
+			state.queueNextTitle.push(title);
+			state.queueNextDescription.push(description);
+		},
+		changeNext: (state: TitleState) => {
+			state.queuePrevTitle.push(state.prevTitle);
+			state.queuePrevDescription.push(state.prevDescription);
+		},
+		changePrevNext: (state: TitleState) => {
+			state.title = state.queueNextTitle.pop() ?? '';
+			state.description = state.queueNextDescription.pop() ?? '';
 		},
 	},
 });
@@ -207,7 +238,15 @@ const rootReducer = combineReducers({
 
 const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
 const { tokenSuccess } = tokenSlice.actions;
-const { changeTitle, changeDescription } = titleSlice.actions;
+const {
+	changeTitle,
+	changeDescription,
+	changePrevTitle,
+	changePrevDescription,
+	changePrev,
+	changeNext,
+	changePrevNext,
+} = titleSlice.actions;
 const { menuActive, menuSwitch, menuLotate } = menuSlice.actions;
 
 export {
@@ -217,6 +256,11 @@ export {
 	tokenSuccess,
 	changeTitle,
 	changeDescription,
+	changePrevTitle,
+	changePrevDescription,
+	changePrev,
+	changeNext,
+	changePrevNext,
 	menuActive,
 	menuSwitch,
 	menuLotate,

@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import { connect } from 'react-redux';
+import { TitleState } from '../store/types';
 import GoodsRegister from '../components/goods/GoodsRegister';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
@@ -7,7 +9,13 @@ const drawerMenuLimit = 768;
 
 const steps = ['상품등록', '등록완료'];
 
-const GoodsRegisterPC: FC = (): JSX.Element => {
+interface GoodsRegisterProps {
+	description: string;
+}
+
+const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
+	description,
+}): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -20,14 +28,16 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsRegister steps={steps} />
+					<GoodsRegister description={description} steps={steps} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsRegisterMobile: FC = (): JSX.Element => {
+const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
+	description,
+}): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -40,20 +50,26 @@ const GoodsRegisterMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<GoodsRegister steps={steps} />
+					<GoodsRegister description={description} steps={steps} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsRegisterPage: FC = (): JSX.Element => {
+const GoodsRegisterPage: FC<GoodsRegisterProps> = ({
+	description,
+}): JSX.Element => {
 	return (
 		<>
-			<GoodsRegisterPC />
-			<GoodsRegisterMobile />
+			<GoodsRegisterPC description={description} />
+			<GoodsRegisterMobile description={description} />
 		</>
 	);
 };
 
-export default GoodsRegisterPage;
+const mapStateToProps = (state: any) => ({
+	description: (state.title as TitleState).description,
+});
+
+export default connect(mapStateToProps, null)(GoodsRegisterPage);

@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { menuLotate } from '../../store/index';
+import { changePrev, menuLotate } from '../../store/index';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
@@ -74,6 +74,20 @@ const AdminContent: FC<AdminProps> = ({ children }): JSX.Element => {
 
 	useEffect(() => {
 		dispatch(menuLotate('admin'));
+		const handlePopstate = (event: PopStateEvent) => {
+			if (event.state) {
+				console.log(event.state);
+				dispatch(changePrev()); // 브라우저의 뒤로가기 버튼이 클릭되면 실행될 코드
+			}
+		};
+
+		// popstate 이벤트를 구독
+		window.addEventListener('popstate', handlePopstate);
+
+		// 컴포넌트가 언마운트될 때 이벤트 구독 해제
+		return () => {
+			window.removeEventListener('popstate', handlePopstate);
+		};
 	}, [dispatch]);
 
 	return (
