@@ -1,7 +1,5 @@
-import React, { FC, useState, MouseEvent, ChangeEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { menuActive } from '../../../store/index';
+import React, { FC, useState, ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Box,
 	Grid,

@@ -28,6 +28,15 @@ import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTransition, animated, UseTransitionProps } from 'react-spring';
+
+type Position = 'relative' | 'absolute' | 'fixed';
+type DetailType = 'Delivery' | 'Register';
+const DETAIL: DetailType[] = ['Delivery', 'Register'];
+const DetailInfo = {
+	Delivery: CartDeliveryMobile,
+	Register: GoodsRegisterMobile,
+};
 
 interface UserDetailProps {
 	title: string;
@@ -42,7 +51,28 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [profile, setProfile] = useState(0);
+	const [isAnimating, setAnimating] = useState(false);
+	const [detail, setDetail] = useState<DetailType>(DETAIL[0]);
+	const [button, setButton] = useState<DetailType[]>(DETAIL.slice(1));
+	const transitionProps: UseTransitionProps = {
+		from: { position: 'relative' as Position, transform: 'translateX(-100%)' },
+		enter: { transform: 'translateX(0%)' },
+		leave: { position: 'absolute' as Position, transform: 'translateX(500%)' },
+		reset: false,
+		onRest: () => {
+			setAnimating(false); // 애니메이션이 끝났을 때 호출되는 콜백
+		},
+	};
+	const detailTransition = useTransition(detail, transitionProps);
+	const buttonTransitions = useTransition(button, transitionProps);
+
+	const switchClick = (item: DetailType) => {
+		if (!isAnimating) {
+			setAnimating(true);
+			setDetail(item);
+			setButton(DETAIL.filter((i) => i !== item));
+		}
+	};
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -186,12 +216,14 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 				</Stack>
 			</Box>
 			<Box sx={statusBox}>
-				{profile === 0 && (
-					<CartDeliveryMobile type={'DS'} value={0} setSwitch={setProfile} />
-				)}
-				{profile === 1 && (
-					<GoodsRegisterMobile type={'RS'} value={1} setSwitch={setProfile} />
-				)}
+				{detailTransition((style, item: DetailType) => {
+					const DetailBox = DetailInfo[item];
+					return (
+						<animated.div style={style} key={item}>
+							<DetailBox type={item[0] + 'S'} />
+						</animated.div>
+					);
+				})}
 			</Box>
 			<Box sx={buttonBox}>
 				<Grid container spacing={1}>
@@ -234,12 +266,14 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 				</Grid>
 			</Box>
 			<Box sx={detailBox}>
-				{profile === 0 && (
-					<CartDeliveryMobile type={'DA'} value={0} setSwitch={setProfile} />
-				)}
-				{profile === 1 && (
-					<GoodsRegisterMobile type={'RA'} value={1} setSwitch={setProfile} />
-				)}
+				{detailTransition((style, item: DetailType) => {
+					const DetailBox = DetailInfo[item];
+					return (
+						<animated.div style={style} key={item}>
+							<DetailBox type={item[0] + 'A'} />
+						</animated.div>
+					);
+				})}
 				<Accordion disabled>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
@@ -255,12 +289,17 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 			</Box>
 			<Box sx={switchBox}>
 				<List>
-					{profile !== 0 && (
-						<CartDeliveryMobile type={'DL'} value={0} setSwitch={setProfile} />
-					)}
-					{profile !== 1 && (
-						<GoodsRegisterMobile type={'RL'} value={1} setSwitch={setProfile} />
-					)}
+					{buttonTransitions((style, item: DetailType) => {
+						const DetailBox = DetailInfo[item];
+						return (
+							<animated.div style={style} key={item}>
+								<DetailBox
+									type={item[0] + 'L'}
+									setSwitch={() => switchClick(item)}
+								/>
+							</animated.div>
+						);
+					})}
 				</List>
 			</Box>
 		</Box>

@@ -152,7 +152,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
-		dispatch(menuLotate('user'));
+		dispatch(menuLotate('user')); // 메뉴 변경 : admin → user
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				dispatch(changePrev());

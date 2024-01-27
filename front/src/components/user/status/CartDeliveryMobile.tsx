@@ -1,11 +1,4 @@
-import React, {
-	FC,
-	useState,
-	Dispatch,
-	SetStateAction,
-	ChangeEvent,
-	ReactNode,
-} from 'react';
+import React, { FC, useState, ChangeEvent, ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../../store/index';
@@ -368,13 +361,11 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
 
 interface CartDeliveryProps {
 	type: string;
-	value: number;
-	setSwitch: Dispatch<SetStateAction<number>>;
+	setSwitch?: () => void;
 }
 
 const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 	type,
-	value,
 	setSwitch,
 }): JSX.Element => {
 	const [orderView, setOrderView] = useState(0);
@@ -390,10 +381,6 @@ const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 
 	const orderViewChange = (event: React.SyntheticEvent, newValue: number) => {
 		setOrderView(newValue);
-	};
-
-	const orderClick = () => {
-		setSwitch(value);
 	};
 
 	const title: SxProps<Theme> = {
@@ -636,7 +623,7 @@ const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 			return (
 				<Box>
 					<ListItem disablePadding>
-						<ListItemButton onClick={orderClick}>
+						<ListItemButton onClick={setSwitch}>
 							<ListItemIcon sx={itemIcon}>
 								<LocalShippingOutlinedIcon />
 							</ListItemIcon>

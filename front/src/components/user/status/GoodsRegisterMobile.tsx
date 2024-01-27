@@ -1,13 +1,5 @@
-import React, {
-	FC,
-	useState,
-	Dispatch,
-	SetStateAction,
-	ChangeEvent,
-} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { menuActive } from '../../../store/index';
+import React, { FC, useState, ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Box,
 	Grid,
@@ -358,13 +350,11 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 
 interface GoodsRegisterProps {
 	type: string;
-	value: number;
-	setSwitch: Dispatch<SetStateAction<number>>;
+	setSwitch?: () => void;
 }
 
 const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	type,
-	value,
 	setSwitch,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState('');
@@ -375,10 +365,6 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	};
 	const searchClick = () => {
 		setKeyword('');
-	};
-
-	const registerClick = () => {
-		setSwitch(value);
 	};
 
 	const title: SxProps<Theme> = {
@@ -460,7 +446,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 								<Box sx={registerCount}>
 									<Stack direction="row" spacing={1} sx={registerText}>
 										<Typography component="span" sx={registerInfo}>
-											8
+											32
 										</Typography>
 										<Typography component="span">건</Typography>
 									</Stack>
@@ -479,7 +465,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 								<Box sx={registerCount}>
 									<Stack direction="row" spacing={1} sx={registerText}>
 										<Typography component="span" sx={registerInfo}>
-											4
+											24
 										</Typography>
 										<Typography component="span">건</Typography>
 									</Stack>
@@ -498,7 +484,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 								<Box sx={registerCount}>
 									<Stack direction="row" spacing={1} sx={registerText}>
 										<Typography component="span" sx={registerInfo}>
-											4
+											28
 										</Typography>
 										<Typography component="span">건</Typography>
 									</Stack>
@@ -517,7 +503,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 								<Box sx={registerCount}>
 									<Stack direction="row" spacing={1} sx={registerText}>
 										<Typography component="span" sx={registerInfo}>
-											2
+											10
 										</Typography>
 										<Typography component="span">건</Typography>
 									</Stack>
@@ -569,7 +555,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 			return (
 				<Box>
 					<ListItem disablePadding>
-						<ListItemButton onClick={registerClick}>
+						<ListItemButton onClick={setSwitch}>
 							<ListItemIcon sx={itemIcon}>
 								<CheckroomOutlinedIcon />
 							</ListItemIcon>
