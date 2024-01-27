@@ -13,10 +13,14 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 
 interface NoticeListProps {
+	title: string;
 	description: string;
 }
 
-const NoticeList: FC<NoticeListProps> = ({ description }): JSX.Element => {
+const NoticeList: FC<NoticeListProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const [page, setPage] = useState(0);
 
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -50,7 +54,7 @@ const NoticeList: FC<NoticeListProps> = ({ description }): JSX.Element => {
 	};
 	return (
 		<Box>
-			<AppSubHeader description={description} />
+			<AppSubHeader title={title} description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<TableContainer>
 					<Table size="small">

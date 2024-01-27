@@ -1,20 +1,15 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { TitleState } from '../../store/types';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo, TitleState } from '../../store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
 
 interface AdminSubHeaderProps {
-	title?: string;
-	description?: string;
+	title: string;
+	description: string;
 }
 
 const AdminSubHeader: FC<AdminSubHeaderProps> = ({
@@ -22,12 +17,18 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 	description,
 }): JSX.Element => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		dispatch(changeTitle('대시보드'));
-		dispatch(changeDescription(''));
-		dispatch(changePrevDescription(description ?? ''));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: '대시보드',
+			description: '',
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/admin'));
+		navigate('/admin');
 	};
 	return (
 		<Box
@@ -44,8 +45,6 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 			</Box>
 			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
-					component={Link}
-					to="/admin"
 					sx={{
 						px: 0.5,
 						color: 'black',

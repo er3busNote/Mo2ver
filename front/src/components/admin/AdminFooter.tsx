@@ -2,7 +2,15 @@ import React, { FC } from 'react';
 import { Box, Paper } from '@mui/material';
 import Copyright from '../Copyright';
 
-const AdminFooter: FC = (): JSX.Element => {
+interface AdminFooterProps {
+	title: string;
+	description: string;
+}
+
+const AdminFooter: FC<AdminFooterProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	return (
 		<Paper
 			sx={{
@@ -16,7 +24,11 @@ const AdminFooter: FC = (): JSX.Element => {
 			variant="outlined"
 		>
 			<Box>
-				<Copyright sx={{ fontWeight: 'bold' }} />
+				<Copyright
+					title={title}
+					description={description}
+					sx={{ fontWeight: 'bold' }}
+				/>
 			</Box>
 		</Paper>
 	);

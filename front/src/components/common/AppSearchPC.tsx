@@ -1,13 +1,8 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import {
 	Box,
 	Grid,
@@ -44,6 +39,7 @@ const searchDatas = [
 ];
 
 interface AppSearchProps {
+	title: string;
 	description: string;
 }
 
@@ -151,7 +147,10 @@ const AppSearchItems: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearchPC: FC<AppSearchProps> = ({ description }): JSX.Element => {
+const AppSearchPC: FC<AppSearchProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
@@ -199,14 +198,17 @@ const AppSearchPC: FC<AppSearchProps> = ({ description }): JSX.Element => {
 	};
 
 	const activeClick = (
-		title: string,
+		nextTitle: string,
 		nextDescription: string,
 		path: string
 	) => {
-		dispatch(changeTitle(title));
-		dispatch(changeDescription(nextDescription));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextDescription,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(path));
 		navigate(path);
 	};

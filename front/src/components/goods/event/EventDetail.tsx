@@ -37,6 +37,11 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
+interface EventDetailProps {
+	title: string;
+	description: string;
+}
+
 const GoodsGrid: FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -1503,7 +1508,10 @@ const GoodsRow: FC = (): JSX.Element => {
 	);
 };
 
-const EventDetail: FC = (): JSX.Element => {
+const EventDetail: FC<EventDetailProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const { id } = useParams();
 	const [page, setPage] = useState(0);
 	const [branch, setSwitch] = useState(true);
@@ -1516,7 +1524,9 @@ const EventDetail: FC = (): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
 			<EventSubHeader
-				title={'Live From Space'}
+				title={title}
+				description={description}
+				subtitle={'Live From Space'}
 				change={false}
 				branch={branch}
 				setSwitch={setSwitch}
@@ -1531,6 +1541,8 @@ const EventDetail: FC = (): JSX.Element => {
 				/>
 			</Box>
 			<EventSubHeader
+				title={title}
+				description={description}
 				subtitle={'전체상품'}
 				change={true}
 				branch={branch}

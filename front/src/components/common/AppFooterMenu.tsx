@@ -7,13 +7,8 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import {
 	Box,
 	Drawer,
@@ -45,6 +40,7 @@ interface AppFooterMenuProps {
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	width: number;
+	title: string;
 	description: string;
 	categoryData: CategoryDataGroup;
 }
@@ -127,6 +123,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 	open,
 	setOpen,
 	width,
+	title,
 	description,
 	categoryData,
 }): JSX.Element => {
@@ -152,16 +149,19 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 	};
 
 	const activeMenuClick = (
-		title: string,
+		nextTitle: string,
 		code: string,
 		type: string,
 		check: boolean | undefined
 	) => {
 		if (!check) {
-			dispatch(changeTitle(title));
-			dispatch(changeDescription(title));
-			dispatch(changePrevDescription(description));
-			dispatch(changeNext());
+			const titleData: TitleInfo = {
+				title: nextTitle,
+				description: nextTitle,
+				prevTitle: title,
+				prevDescription: description,
+			};
+			dispatch(changeNext(titleData));
 			dispatch(menuActive(`/goods/${type}/${code}`));
 			navigate(`/goods/${type}/${code}`);
 		}

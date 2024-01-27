@@ -10,14 +10,8 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '../../store/types';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo, MenuState, SubMenuInfo } from '../../store/types';
 import {
 	Box,
 	Grid,
@@ -52,12 +46,14 @@ const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 interface AppHeaderMenuProps {
 	scrolled: boolean;
+	title: string;
 	description: string;
 	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
 
 interface AppHeaderDetailProps {
+	title: string;
 	description: string;
 	categoryData: CategoryDataGroup;
 }
@@ -124,6 +120,7 @@ const AppHeaderMenuItem: FC<AppHeaderMenuItemProps> = ({
 };
 
 const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
+	title,
 	description,
 	categoryData,
 }): JSX.Element => {
@@ -164,11 +161,14 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 		setHover('');
 	};
 
-	const menuClick = (title: string, code: string, type: string) => {
-		dispatch(changeTitle(title));
-		dispatch(changeDescription(title));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+	const menuClick = (nextTitle: string, code: string, type: string) => {
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextTitle,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(`/goods/${type}/${code}`));
 		navigate(`/goods/${type}/${code}`);
 	};
@@ -349,6 +349,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 
 const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	scrolled,
+	title,
 	description,
 	categoryData,
 	menus,
@@ -400,14 +401,17 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	};
 
 	const activeMenuClick = (
-		title: string,
+		nextTitle: string,
 		nextDescription: string,
 		path: string
 	) => {
-		dispatch(changeTitle(title));
-		dispatch(changeDescription(nextDescription));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextDescription,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -449,6 +453,7 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 						<Grid container spacing={1}>
 							<Grid item>
 								<AppHeaderDetail
+									title={title}
 									description={description}
 									categoryData={categoryData}
 								/>

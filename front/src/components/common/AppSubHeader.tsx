@@ -1,28 +1,34 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../Title';
 
 interface AppSubHeaderProps {
+	title: string;
 	description: string;
 }
 
-const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
+const AppSubHeader: FC<AppSubHeaderProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		dispatch(changeTitle('홈'));
-		dispatch(changeDescription('메인'));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: '홈',
+			description: '메인',
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/'));
+		navigate('/');
 	};
 	return (
 		<Box
@@ -40,8 +46,6 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({ description }): JSX.Element => {
 			</Box>
 			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
-					component={Link}
-					to="/"
 					sx={{
 						px: 0.5,
 						color: 'black',

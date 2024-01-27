@@ -8,15 +8,13 @@ import React, {
 } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState, TitleState } from '../../store/types';
+import { changeNext, menuActive } from '../../store/index';
 import {
-	changeTitle,
-	changeDescription,
-	changePrevTitle,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+	TitleInfo,
+	TitleState,
+	SubMenuInfo,
+	MenuState,
+} from '../../store/types';
 import {
 	Box,
 	Grow, // Transitions
@@ -165,8 +163,13 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 
 	useEffect(() => {
 		if (location.pathname === '/admin') {
-			dispatch(changeTitle('대시보드'));
-			dispatch(changeDescription(''));
+			const titleData: TitleInfo = {
+				title: '대시보드',
+				description: '',
+				prevTitle: '대시보드',
+				prevDescription: '',
+			};
+			dispatch(changeNext(titleData));
 		}
 	}, [location.pathname]);
 
@@ -194,11 +197,13 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		dispatch(changeTitle(nextTitle));
-		dispatch(changeDescription(nextDescription));
-		dispatch(changePrevTitle(title));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextDescription,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(path)); // 2. open → close : 해당 Root 메뉴를 Active(활성화)
 		navigate('/admin' + path);
 	};

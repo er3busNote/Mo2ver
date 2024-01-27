@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
+import { TitleState } from '../store/types';
 import Api from '../services/api';
 import UserDetailPC from '../components/user/UserDetailPC';
 import UserDetailMobile from '../components/user/UserDetailMobile';
@@ -11,10 +12,12 @@ import { useMediaQuery } from 'react-responsive';
 const drawerMenuLimit = 768;
 
 interface UserProps {
+	title: string;
+	description: string;
 	member: ActionCreatorsMapObject;
 }
 
-const UserPC: FC<UserProps> = ({ member }): JSX.Element => {
+const UserPC: FC<UserProps> = ({ title, description, member }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -40,7 +43,11 @@ const UserPC: FC<UserProps> = ({ member }): JSX.Element => {
 							display: 'inline-block',
 						}}
 					>
-						<UserDetailPC member={member} />
+						<UserDetailPC
+							title={title}
+							description={description}
+							member={member}
+						/>
 					</Box>
 				</>
 			)}
@@ -48,7 +55,11 @@ const UserPC: FC<UserProps> = ({ member }): JSX.Element => {
 	);
 };
 
-const UserMobile: FC<UserProps> = ({ member }): JSX.Element => {
+const UserMobile: FC<UserProps> = ({
+	title,
+	description,
+	member,
+}): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -61,24 +72,37 @@ const UserMobile: FC<UserProps> = ({ member }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<UserDetailMobile member={member} />
+					<UserDetailMobile
+						title={title}
+						description={description}
+						member={member}
+					/>
 				</Box>
 			)}
 		</>
 	);
 };
 
-const UserPage: FC<UserProps> = ({ member }): JSX.Element => {
+const UserPage: FC<UserProps> = ({
+	title,
+	description,
+	member,
+}): JSX.Element => {
 	return (
 		<>
-			<UserPC member={member} />
-			<UserMobile member={member} />
+			<UserPC title={title} description={description} member={member} />
+			<UserMobile title={title} description={description} member={member} />
 		</>
 	);
 };
+
+const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	member: bindActionCreators(Api.member, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(UserPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

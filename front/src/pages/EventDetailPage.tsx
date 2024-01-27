@@ -1,11 +1,21 @@
 import React, { FC } from 'react';
+import { connect } from 'react-redux';
+import { TitleState } from '../store/types';
 import EventDetail from '../components/goods/event/EventDetail';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
 
 const drawerMenuLimit = 768;
 
-const EventDetailPC: FC = (): JSX.Element => {
+interface EventDetailProps {
+	title: string;
+	description: string;
+}
+
+const EventDetailPC: FC<EventDetailProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -18,14 +28,17 @@ const EventDetailPC: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<EventDetail />
+					<EventDetail title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const EventDetailMobile: FC = (): JSX.Element => {
+const EventDetailMobile: FC<EventDetailProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -38,20 +51,28 @@ const EventDetailMobile: FC = (): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<EventDetail />
+					<EventDetail title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const EventDetailPage: FC = (): JSX.Element => {
+const EventDetailPage: FC<EventDetailProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	return (
 		<>
-			<EventDetailPC />
-			<EventDetailMobile />
+			<EventDetailPC title={title} description={description} />
+			<EventDetailMobile title={title} description={description} />
 		</>
 	);
 };
 
-export default EventDetailPage;
+const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
+});
+
+export default connect(mapStateToProps, null)(EventDetailPage);

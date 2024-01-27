@@ -67,7 +67,7 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 							<MenuIcon color="disabled" />
 						</IconButton>
 					)}
-					<Grid container spacing={1} sx={{ width: 400 }}>
+					<Grid container spacing={1} sx={{ width: { xs: 327, sm: 400 } }}>
 						<Grid item sx={{ display: 'flex', alignItems: 'center' }}>
 							<AccountCircleIcon color="secondary" />
 							<Typography

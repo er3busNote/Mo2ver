@@ -8,10 +8,11 @@ import { useMediaQuery } from 'react-responsive';
 const drawerMenuLimit = 768;
 
 interface NoticeProps {
+	title: string;
 	description: string;
 }
 
-const NoticePC: FC<NoticeProps> = ({ description }): JSX.Element => {
+const NoticePC: FC<NoticeProps> = ({ title, description }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -24,14 +25,14 @@ const NoticePC: FC<NoticeProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<NoticeList description={description} />
+					<NoticeList title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const NoticeMobile: FC<NoticeProps> = ({ description }): JSX.Element => {
+const NoticeMobile: FC<NoticeProps> = ({ title, description }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -44,23 +45,24 @@ const NoticeMobile: FC<NoticeProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<NoticeList description={description} />
+					<NoticeList title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const NoticePage: FC<NoticeProps> = ({ description }): JSX.Element => {
+const NoticePage: FC<NoticeProps> = ({ title, description }): JSX.Element => {
 	return (
 		<>
-			<NoticePC description={description} />
-			<NoticeMobile description={description} />
+			<NoticePC title={title} description={description} />
+			<NoticeMobile title={title} description={description} />
 		</>
 	);
 };
 
 const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 

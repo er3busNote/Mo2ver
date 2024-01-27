@@ -23,7 +23,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
 import { CategoryDataGroup } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { isDesktop } from 'react-device-detect';
 
 const mdTheme = createTheme(contentTheme);
 
@@ -31,17 +31,23 @@ const drawerMenuLimit = 768;
 const drawerMenuWidth = 200;
 
 interface AppProps {
+	title: string;
 	description: string;
 	categoryData: CategoryDataGroup;
 }
 
 interface LayoutDefaultProps {
-	children?: ReactElement;
+	title: string;
 	description: string;
+	children?: ReactElement;
 	category: ActionCreatorsMapObject;
 }
 
-const AppPC: FC<AppProps> = ({ description, categoryData }): JSX.Element => {
+const AppPC: FC<AppProps> = ({
+	title,
+	description,
+	categoryData,
+}): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -75,22 +81,32 @@ const AppPC: FC<AppProps> = ({ description, categoryData }): JSX.Element => {
 						}}
 					>
 						{isDesktop && (
-							<AppHeader width={'940px'} description={description} />
+							<AppHeader
+								width={'940px'}
+								title={title}
+								description={description}
+							/>
 						)}
-						<AppSearchPC description={description} />
+						<AppSearchPC title={title} description={description} />
 					</Box>
 					<AppHeaderMenu
 						scrolled={scrolled}
+						title={title}
 						description={description}
 						categoryData={categoryData}
 					/>
 					{location.pathname === '/' ? (
 						<AppMenuHomePC
+							title={title}
 							description={description}
 							categoryData={categoryData}
 						/>
 					) : (
-						<AppMenuPC description={description} categoryData={categoryData} />
+						<AppMenuPC
+							title={title}
+							description={description}
+							categoryData={categoryData}
+						/>
 					)}
 				</>
 			)}
@@ -99,6 +115,7 @@ const AppPC: FC<AppProps> = ({ description, categoryData }): JSX.Element => {
 };
 
 const AppMobile: FC<AppProps> = ({
+	title,
 	description,
 	categoryData,
 }): JSX.Element => {
@@ -109,10 +126,13 @@ const AppMobile: FC<AppProps> = ({
 		<>
 			{isTablet && (
 				<>
-					{isDesktop && <AppHeader width={'100%'} description={description} />}
+					{isDesktop && (
+						<AppHeader width={'100%'} title={title} description={description} />
+					)}
 					{/* {isMobile && <AppHeaderBar description={description} />} */}
-					<AppSearchMobile description={description} />
+					<AppSearchMobile title={title} description={description} />
 					<AppMenuMobile
+						title={title}
 						description={description}
 						categoryData={categoryData}
 					/>
@@ -123,8 +143,9 @@ const AppMobile: FC<AppProps> = ({
 };
 
 const AppContent: FC<LayoutDefaultProps> = ({
-	children,
+	title,
 	description,
+	children,
 	category,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -157,11 +178,20 @@ const AppContent: FC<LayoutDefaultProps> = ({
 				}}
 			>
 				<CssBaseline />
-				<AppPC description={description} categoryData={categoryData} />
-				<AppMobile description={description} categoryData={categoryData} />
+				<AppPC
+					title={title}
+					description={description}
+					categoryData={categoryData}
+				/>
+				<AppMobile
+					title={title}
+					description={description}
+					categoryData={categoryData}
+				/>
 				<AppMain>{children || <Outlet />}</AppMain>
 				<AppFooter
 					width={drawerMenuWidth}
+					title={title}
 					description={description}
 					categoryData={categoryData}
 				/>
@@ -171,6 +201,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 

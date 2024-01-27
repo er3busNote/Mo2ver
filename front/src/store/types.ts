@@ -11,15 +11,18 @@ interface TokenState {
 }
 
 // 2. 메뉴 관련 State
-interface TitleState {
+interface TitleInfo {
 	title: string;
 	description: string;
 	prevTitle: string;
 	prevDescription: string;
-	queuePrevTitle: string[];
-	queueNextTitle: string[];
-	queuePrevDescription: string[];
-	queueNextDescription: string[];
+}
+
+interface TitleState extends TitleInfo {
+	stackPrevTitle: string[];
+	stackNextTitle: string[];
+	stackPrevDescription: string[];
+	stackNextDescription: string[];
 }
 
 interface MenuInfo {
@@ -46,6 +49,7 @@ interface MenuState {
 export type {
 	MemberState,
 	TokenState,
+	TitleInfo,
 	TitleState,
 	MenuInfo,
 	SubMenuInfo,

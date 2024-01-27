@@ -1,26 +1,37 @@
 import React, { FC } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { TitleState } from '../../../store/types';
-import { changeTitle, changeDescription } from '../../../store/index';
+import { changeNext, menuActive } from '../../../store/index';
+import { TitleInfo } from '../../../store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '../../Title';
 
 interface GoodsSubHeaderProps {
 	title: string;
-	description?: string;
+	subtitle: string;
+	description: string;
 }
 
 const GoodsSubHeader: FC<GoodsSubHeaderProps> = ({
 	title,
+	subtitle,
 	description,
 }): JSX.Element => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		dispatch(changeTitle('홈'));
-		dispatch(changeDescription(''));
+		const titleData: TitleInfo = {
+			title: '홈',
+			description: '',
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/'));
+		navigate('/');
 	};
 	return (
 		<Box
@@ -34,7 +45,7 @@ const GoodsSubHeader: FC<GoodsSubHeaderProps> = ({
 			}}
 		>
 			<Box sx={{ pt: 2 }}>
-				<Title>{title}</Title>
+				<Title>{subtitle}</Title>
 			</Box>
 			<Breadcrumbs sx={{ pt: 1 }} separator="›" aria-label="breadcrumb">
 				<IconButton
@@ -69,8 +80,4 @@ const GoodsSubHeader: FC<GoodsSubHeaderProps> = ({
 	);
 };
 
-const mapStateToProps = (state: any) => ({
-	description: (state.title as TitleState).description,
-});
-
-export default connect(mapStateToProps, null)(GoodsSubHeader);
+export default GoodsSubHeader;

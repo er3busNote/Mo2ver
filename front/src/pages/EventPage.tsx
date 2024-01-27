@@ -8,10 +8,11 @@ import { useMediaQuery } from 'react-responsive';
 const drawerMenuLimit = 768;
 
 interface EventProps {
+	title: string;
 	description: string;
 }
 
-const EventPC: FC<EventProps> = ({ description }): JSX.Element => {
+const EventPC: FC<EventProps> = ({ title, description }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -24,14 +25,14 @@ const EventPC: FC<EventProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<EventList description={description} />
+					<EventList title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const EventMobile: FC<EventProps> = ({ description }): JSX.Element => {
+const EventMobile: FC<EventProps> = ({ title, description }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -44,23 +45,24 @@ const EventMobile: FC<EventProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<EventList description={description} />
+					<EventList title={title} description={description} />
 				</Box>
 			)}
 		</>
 	);
 };
 
-const EventPage: FC<EventProps> = ({ description }): JSX.Element => {
+const EventPage: FC<EventProps> = ({ title, description }): JSX.Element => {
 	return (
 		<>
-			<EventPC description={description} />
-			<EventMobile description={description} />
+			<EventPC title={title} description={description} />
+			<EventMobile title={title} description={description} />
 		</>
 	);
 };
 
 const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 

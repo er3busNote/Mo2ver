@@ -3,13 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import { connect } from 'react-redux';
 import Api from '../../services/api';
 import {
@@ -26,25 +21,34 @@ const headerFontSize = '12px';
 
 interface AppHeaderProps {
 	width: string;
+	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
 }
 
 const AppHeader: FC<AppHeaderProps> = ({
 	width,
+	title,
 	description,
 	member,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const cartClick = () => {
-		dispatch(changeTitle('Cart'));
-		dispatch(changeDescription('장바구니'));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
-		dispatch(menuActive('/cart'));
-		navigate('/cart');
+	const activeMenuClick = (
+		nextTitle: string,
+		nextDescription: string,
+		path: string
+	) => {
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextDescription,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive(path));
+		navigate(path);
 	};
 
 	const logoutClick = () => {
@@ -90,7 +94,12 @@ const AppHeader: FC<AppHeaderProps> = ({
 							</IconButton>
 						)}
 						{isAuthenticated() && (
-							<IconButton component={Link} to="/profile" sx={{ p: 0 }}>
+							<IconButton
+								onClick={() =>
+									activeMenuClick('유저', 'My 프로파일', '/profile')
+								}
+								sx={{ p: 0 }}
+							>
 								<Typography
 									color="#000"
 									align="center"
@@ -101,7 +110,10 @@ const AppHeader: FC<AppHeaderProps> = ({
 							</IconButton>
 						)}
 						{isAuthenticated() && (
-							<IconButton onClick={cartClick} sx={{ p: 0 }}>
+							<IconButton
+								onClick={() => activeMenuClick('카트', '장바구니', '/cart')}
+								sx={{ p: 0 }}
+							>
 								<Typography
 									color="#000"
 									align="center"
@@ -123,7 +135,12 @@ const AppHeader: FC<AppHeaderProps> = ({
 							</IconButton>
 						)}
 						{isAdmin() && (
-							<IconButton component={Link} to="/admin" sx={{ p: 0 }}>
+							<IconButton
+								onClick={() =>
+									activeMenuClick('관리자', '어드민페이지', '/admin')
+								}
+								sx={{ p: 0 }}
+							>
 								<Typography
 									color="#000"
 									align="center"

@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { changePrev, menuLotate } from '../../store/index';
+import { TitleState } from '../../store/types';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
@@ -18,6 +19,12 @@ const drawerMenuLimit = 768;
 const drawerMenuWidth = 200;
 
 interface AdminProps {
+	children?: ReactElement;
+}
+
+interface LayoutDefaultProps {
+	title: string;
+	description: string;
 	children?: ReactElement;
 }
 
@@ -69,11 +76,15 @@ const AdminMobile: FC<AdminProps> = ({ children }): JSX.Element => {
 	);
 };
 
-const AdminContent: FC<AdminProps> = ({ children }): JSX.Element => {
+const AdminContent: FC<LayoutDefaultProps> = ({
+	title,
+	description,
+	children,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(menuLotate('admin'));
+		dispatch(menuLotate('admin')); // 메뉴 변경 : user → admin
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				console.log(event.state);
@@ -96,10 +107,15 @@ const AdminContent: FC<AdminProps> = ({ children }): JSX.Element => {
 				<CssBaseline />
 				<AdminPC>{children}</AdminPC>
 				<AdminMobile>{children}</AdminMobile>
-				<AdminFooter />
+				<AdminFooter title={title} description={description} />
 			</Box>
 		</ThemeProvider>
 	);
 };
 
-export default AdminContent;
+const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
+});
+
+export default connect(mapStateToProps, null)(AdminContent);

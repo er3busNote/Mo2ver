@@ -7,14 +7,8 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '../../store/types';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo, SubMenuInfo, MenuState } from '../../store/types';
 import {
 	Box,
 	Grid,
@@ -41,6 +35,7 @@ const menuFontSize = '15px';
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 interface AppMenuProps {
+	title: string;
 	description: string;
 	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
@@ -124,6 +119,7 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 };
 
 const AppDetail: FC<AppMenuProps> = ({
+	title,
 	description,
 	categoryData,
 }): JSX.Element => {
@@ -152,11 +148,14 @@ const AppDetail: FC<AppMenuProps> = ({
 		setHover('');
 	};
 
-	const menuClick = (title: string, code: string, type: string) => {
-		dispatch(changeTitle(title));
-		dispatch(changeDescription(title));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+	const menuClick = (nextTitle: string, code: string, type: string) => {
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextTitle,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(`/goods/${type}/${code}`));
 		navigate(`/goods/${type}/${code}`);
 	};
@@ -301,6 +300,7 @@ const AppDetail: FC<AppMenuProps> = ({
 };
 
 const AppMenuHomePC: FC<AppMenuProps> = ({
+	title,
 	description,
 	categoryData,
 	menus,
@@ -309,14 +309,17 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 	const navigate = useNavigate();
 
 	const activeMenuClick = (
-		title: string,
+		nextTitle: string,
 		nextDescription: string,
 		path: string
 	) => {
-		dispatch(changeTitle(title));
-		dispatch(changeDescription(nextDescription));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: nextTitle,
+			description: nextDescription,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive(path));
 		navigate(path);
 	};
@@ -332,7 +335,11 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 			>
 				<Grid container spacing={1}>
 					<Grid item>
-						<AppDetail description={description} categoryData={categoryData} />
+						<AppDetail
+							title={title}
+							description={description}
+							categoryData={categoryData}
+						/>
 					</Grid>
 					{menus &&
 						menus.map((menu: SubMenuInfo) => (

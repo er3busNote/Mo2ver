@@ -1,13 +1,8 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../../store/index';
+import { changeNext, menuActive } from '../../../store/index';
+import { TitleInfo } from '../../../store/types';
 import AppSubHeader from '../../common/AppSubHeader';
 import {
 	Box,
@@ -25,18 +20,22 @@ const IMAGE_INFO = [
 ];
 
 interface EventListProps {
+	title: string;
 	description: string;
 }
 
-const EventGrid: FC<EventListProps> = ({ description }): JSX.Element => {
+const EventGrid: FC<EventListProps> = ({ title, description }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const eventClick = (code: string) => {
-		dispatch(changeTitle(description));
-		dispatch(changeDescription(description));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive('/event/' + code + '/detail'));
 		navigate('/event/' + code + '/detail');
 	};
@@ -183,7 +182,7 @@ const EventGrid: FC<EventListProps> = ({ description }): JSX.Element => {
 	);
 };
 
-const EventList: FC<EventListProps> = ({ description }): JSX.Element => {
+const EventList: FC<EventListProps> = ({ title, description }): JSX.Element => {
 	const [page, setPage] = useState(0);
 
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -193,9 +192,9 @@ const EventList: FC<EventListProps> = ({ description }): JSX.Element => {
 
 	return (
 		<Box>
-			<AppSubHeader description={description} />
+			<AppSubHeader title={title} description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
-				<EventGrid description={description} />
+				<EventGrid title={title} description={description} />
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 				<Pagination

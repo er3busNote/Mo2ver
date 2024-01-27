@@ -2,7 +2,8 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeTitle, changeDescription, menuActive } from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import UserSubHeaderPC from './cmmn/UserSubHeaderPC';
 import CartDeliveryPC from './status/CartDeliveryPC';
 import GoodsRegisterPC from './status/GoodsRegisterPC';
@@ -24,17 +25,28 @@ import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface UserDetailProps {
+	title: string;
+	description: string;
 	member: ActionCreatorsMapObject;
 }
 
-const UserDetailPC: FC<UserDetailProps> = ({ member }): JSX.Element => {
+const UserDetailPC: FC<UserDetailProps> = ({
+	title,
+	description,
+	member,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [profile, setProfile] = useState(0);
 
 	const registerClick = () => {
-		dispatch(changeTitle('Register'));
-		dispatch(changeDescription('상품등록'));
+		const titleData: TitleInfo = {
+			title: 'Register',
+			description: '상품등록',
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive('/register'));
 		navigate('/register');
 	};

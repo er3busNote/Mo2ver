@@ -1,5 +1,11 @@
 import { createSlice, combineReducers, PayloadAction } from '@reduxjs/toolkit';
-import { MemberState, TokenState, TitleState, MenuState } from './types';
+import {
+	MemberState,
+	TokenState,
+	TitleInfo,
+	TitleState,
+	MenuState,
+} from './types';
 
 // 1.1. 인증 관련 State
 const memberinitialState: MemberState = {
@@ -54,10 +60,10 @@ const titleinitialState: TitleState = {
 	description: '',
 	prevTitle: '',
 	prevDescription: '',
-	queuePrevTitle: [],
-	queueNextTitle: [],
-	queuePrevDescription: [],
-	queueNextDescription: [],
+	stackPrevTitle: [],
+	stackNextTitle: [],
+	stackPrevDescription: [],
+	stackNextDescription: [],
 };
 
 // 2.1. titleSlice : action + reducer → slice
@@ -65,36 +71,25 @@ const titleSlice = createSlice({
 	name: 'title',
 	initialState: titleinitialState,
 	reducers: {
-		changeTitle: (state: TitleState, action: PayloadAction<string>) => {
-			state.title = action.payload;
-		},
-		changeDescription: (state: TitleState, action: PayloadAction<string>) => {
-			state.description = action.payload;
-		},
-		changePrevTitle: (state: TitleState, action: PayloadAction<string>) => {
-			state.prevTitle = action.payload;
-		},
-		changePrevDescription: (
-			state: TitleState,
-			action: PayloadAction<string>
-		) => {
-			state.prevDescription = action.payload;
-		},
 		changePrev: (state: TitleState) => {
-			const title = state.queuePrevTitle.pop() ?? '';
-			const description = state.queuePrevDescription.pop() ?? '';
+			const title = state.stackPrevTitle.pop() ?? '';
+			const description = state.stackPrevDescription.pop() ?? '';
 			state.title = title;
 			state.description = description;
-			state.queueNextTitle.push(title);
-			state.queueNextDescription.push(description);
+			state.stackNextTitle.push(title);
+			state.stackNextDescription.push(description);
 		},
-		changeNext: (state: TitleState) => {
-			state.queuePrevTitle.push(state.prevTitle);
-			state.queuePrevDescription.push(state.prevDescription);
+		changeNext: (state: TitleState, action: PayloadAction<TitleInfo>) => {
+			state.title = action.payload.title;
+			state.description = action.payload.description;
+			state.prevTitle = action.payload.prevTitle;
+			state.prevDescription = action.payload.prevDescription;
+			state.stackPrevTitle.push(state.prevTitle);
+			state.stackPrevDescription.push(state.prevDescription);
 		},
 		changePrevNext: (state: TitleState) => {
-			state.title = state.queueNextTitle.pop() ?? '';
-			state.description = state.queueNextDescription.pop() ?? '';
+			state.title = state.stackNextTitle.pop() ?? '';
+			state.description = state.stackNextDescription.pop() ?? '';
 		},
 	},
 });
@@ -238,15 +233,7 @@ const rootReducer = combineReducers({
 
 const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
 const { tokenSuccess } = tokenSlice.actions;
-const {
-	changeTitle,
-	changeDescription,
-	changePrevTitle,
-	changePrevDescription,
-	changePrev,
-	changeNext,
-	changePrevNext,
-} = titleSlice.actions;
+const { changePrev, changeNext, changePrevNext } = titleSlice.actions;
 const { menuActive, menuSwitch, menuLotate } = menuSlice.actions;
 
 export {
@@ -254,10 +241,6 @@ export {
 	loginFailure,
 	logoutSuccess,
 	tokenSuccess,
-	changeTitle,
-	changeDescription,
-	changePrevTitle,
-	changePrevDescription,
 	changePrev,
 	changeNext,
 	changePrevNext,

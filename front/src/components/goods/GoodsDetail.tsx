@@ -29,11 +29,18 @@ import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
 
 interface GoodsProps {
+	title: string;
+	description: string;
 	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
 
-const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
+const GoodsDetail: FC<GoodsProps> = ({
+	title,
+	description,
+	goods,
+	image,
+}): JSX.Element => {
 	const { id } = useParams();
 	const code = id ?? '';
 	const data = useGoodsDetail({ goods, code });
@@ -49,16 +56,6 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 		display: 'grid',
 		borderBottom: '1px #F0F0F0 solid',
 	};
-	const title: SxProps<Theme> = {
-		fontSize: { xs: '14px', sm: '15px', lg: '17px' },
-		fontWeight: 'bold',
-	};
-	const description: SxProps<Theme> = {
-		px: 1.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-		fontWeight: 'bold',
-		color: '#b2b2b2',
-	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
 		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
@@ -70,6 +67,16 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 		py: 0.2,
 		width: '120px',
 		borderBlock: 'none',
+	};
+	const labelTitle: SxProps<Theme> = {
+		fontSize: { xs: '14px', sm: '15px', lg: '17px' },
+		fontWeight: 'bold',
+	};
+	const labelDescription: SxProps<Theme> = {
+		px: 1.5,
+		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontWeight: 'bold',
+		color: '#b2b2b2',
 	};
 	const info: SxProps<Theme> = {
 		py: 0.5,
@@ -157,7 +164,11 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 
 	return (
 		<Box>
-			<GoodsSubHeader title={data.goodsName} />
+			<GoodsSubHeader
+				title={title}
+				description={description}
+				subtitle={data.goodsName}
+			/>
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={6} lg={6}>
 					<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
@@ -208,10 +219,10 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 						</Box>
 						<Box sx={gridItem}>
 							<Box sx={{ py: 1 }}>
-								<Typography component="span" sx={title}>
+								<Typography component="span" sx={labelTitle}>
 									Product Info
 								</Typography>
-								<Typography component="span" sx={description}>
+								<Typography component="span" sx={labelDescription}>
 									제품정보
 								</Typography>
 							</Box>
@@ -377,10 +388,10 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 						</Box>
 						<Box sx={gridItem}>
 							<Box sx={{ py: 1 }}>
-								<Typography component="span" sx={title}>
+								<Typography component="span" sx={labelTitle}>
 									Delivery Info
 								</Typography>
-								<Typography component="span" sx={description}>
+								<Typography component="span" sx={labelDescription}>
 									배송정보
 								</Typography>
 							</Box>
@@ -434,10 +445,10 @@ const GoodsDetail: FC<GoodsProps> = ({ goods, image }): JSX.Element => {
 						</Box>
 						<Box sx={gridItem}>
 							<Box sx={{ py: 1 }}>
-								<Typography component="span" sx={title}>
+								<Typography component="span" sx={labelTitle}>
 									Price Info
 								</Typography>
-								<Typography component="span" sx={description}>
+								<Typography component="span" sx={labelDescription}>
 									가격정보
 								</Typography>
 							</Box>

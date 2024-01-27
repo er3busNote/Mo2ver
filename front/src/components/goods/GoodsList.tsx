@@ -3,13 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import {
-	changeTitle,
-	changeDescription,
-	changePrevDescription,
-	changeNext,
-	menuActive,
-} from '../../store/index';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
 import Api from '../../services/api';
 import useImageUrl from '../../hooks/useImageUrl';
 import useCategoryPageList from '../../hooks/useCategoryPageList';
@@ -29,18 +24,21 @@ import {
 import { GoodsData } from '../../services/types';
 
 interface GoodsListProps {
+	title: string;
 	description: string;
 	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
 
 interface GoodsGridProps {
+	title: string;
 	description: string;
 	image: ActionCreatorsMapObject;
 	goodsData: Array<GoodsData>;
 }
 
 const GoodsGrid: FC<GoodsGridProps> = ({
+	title,
 	description,
 	image,
 	goodsData,
@@ -49,10 +47,13 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		dispatch(changeTitle(description));
-		dispatch(changeDescription(description));
-		dispatch(changePrevDescription(description));
-		dispatch(changeNext());
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
 		dispatch(menuActive('/goods/' + code + '/detail'));
 		navigate('/goods/' + code + '/detail');
 	};
@@ -157,6 +158,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 };
 
 const GoodsList: FC<GoodsListProps> = ({
+	title,
 	description,
 	goods,
 	image,
@@ -177,10 +179,11 @@ const GoodsList: FC<GoodsListProps> = ({
 
 	return (
 		<Box>
-			<AppSubHeader description={description} />
+			<AppSubHeader title={title} description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<GoodsGrid
 					image={image}
+					title={title}
 					description={description}
 					goodsData={goodsData.content}
 				/>
