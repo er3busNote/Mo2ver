@@ -63,8 +63,7 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 			setAnimating(false); // 애니메이션이 끝났을 때 호출되는 콜백
 		},
 	};
-	const detailTransition = useTransition(detail, transitionProps);
-	const buttonTransitions = useTransition(button, transitionProps);
+	const transition = useTransition(detail, transitionProps);
 
 	const switchClick = (item: DetailType) => {
 		if (!isAnimating) {
@@ -215,93 +214,86 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 					</Box>
 				</Stack>
 			</Box>
-			<Box sx={statusBox}>
-				{detailTransition((style, item: DetailType) => {
-					const DetailBox = DetailInfo[item];
-					return (
-						<animated.div style={style} key={item}>
+			{transition((style, item: DetailType) => {
+				const DetailBox = DetailInfo[item];
+				return (
+					<animated.div style={style} key={item}>
+						<Box sx={statusBox}>
 							<DetailBox type={item[0] + 'S'} />
-						</animated.div>
-					);
-				})}
-			</Box>
-			<Box sx={buttonBox}>
-				<Grid container spacing={1}>
-					<Grid item xs={6}>
-						<Box sx={avatarRegister}>
-							<Button
-								sx={{
-									py: 0.5,
-									width: '100%',
-									fontSize: '14px',
-									fontWeight: 'bold',
-									borderRadius: 3,
-								}}
-								color="primary"
-								variant="outlined"
-								onClick={registerClick}
-							>
-								상품 등록하기
-							</Button>
 						</Box>
-					</Grid>
-					<Grid item xs={6}>
-						<Box sx={avatarLogout}>
-							<Button
-								sx={{
-									py: 0.5,
-									width: '100%',
-									fontSize: '14px',
-									fontWeight: 'bold',
-									borderRadius: 3,
-								}}
-								color="error"
-								variant="outlined"
-								onClick={logoutClick}
-							>
-								로그아웃
-							</Button>
+						<Box sx={buttonBox}>
+							<Grid container spacing={1}>
+								<Grid item xs={6}>
+									<Box sx={avatarRegister}>
+										<Button
+											sx={{
+												py: 0.5,
+												width: '100%',
+												fontSize: '14px',
+												fontWeight: 'bold',
+												borderRadius: 3,
+											}}
+											color="primary"
+											variant="outlined"
+											onClick={registerClick}
+										>
+											상품 등록하기
+										</Button>
+									</Box>
+								</Grid>
+								<Grid item xs={6}>
+									<Box sx={avatarLogout}>
+										<Button
+											sx={{
+												py: 0.5,
+												width: '100%',
+												fontSize: '14px',
+												fontWeight: 'bold',
+												borderRadius: 3,
+											}}
+											color="error"
+											variant="outlined"
+											onClick={logoutClick}
+										>
+											로그아웃
+										</Button>
+									</Box>
+								</Grid>
+							</Grid>
 						</Box>
-					</Grid>
-				</Grid>
-			</Box>
-			<Box sx={detailBox}>
-				{detailTransition((style, item: DetailType) => {
-					const DetailBox = DetailInfo[item];
-					return (
-						<animated.div style={style} key={item}>
+						<Box sx={detailBox}>
 							<DetailBox type={item[0] + 'A'} />
-						</animated.div>
-					);
-				})}
-				<Accordion disabled>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="account-content"
-						id="account-header"
-						sx={itemSummary}
-					>
-						<ManageAccountsOutlinedIcon />
-						<Typography sx={itemText}>회원정보수정</Typography>
-					</AccordionSummary>
-					<AccordionDetails>테스트</AccordionDetails>
-				</Accordion>
-			</Box>
-			<Box sx={switchBox}>
-				<List>
-					{buttonTransitions((style, item: DetailType) => {
-						const DetailBox = DetailInfo[item];
-						return (
-							<animated.div style={style} key={item}>
-								<DetailBox
-									type={item[0] + 'L'}
-									setSwitch={() => switchClick(item)}
-								/>
-							</animated.div>
-						);
-					})}
-				</List>
-			</Box>
+							<Accordion disabled>
+								<AccordionSummary
+									expandIcon={<ExpandMoreIcon />}
+									aria-controls="account-content"
+									id="account-header"
+									sx={itemSummary}
+								>
+									<ManageAccountsOutlinedIcon />
+									<Typography sx={itemText}>회원정보수정</Typography>
+								</AccordionSummary>
+								<AccordionDetails>테스트</AccordionDetails>
+							</Accordion>
+						</Box>
+						<Box sx={switchBox}>
+							<List>
+								{button.map((data: DetailType) => {
+									const ButtonBox = DetailInfo[data];
+									return (
+										<ButtonBox
+											key={data}
+											type={data[0] + 'L'}
+											setSwitch={() => switchClick(data)}
+										/>
+									);
+								})}
+							</List>
+						</Box>
+					</animated.div>
+				);
+			})}
+			;
 		</Box>
 	);
 };

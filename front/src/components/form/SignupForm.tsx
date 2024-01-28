@@ -9,7 +9,6 @@ import {
 	IconButton,
 	Grid,
 	Box,
-	Paper,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -71,7 +70,7 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 		},
 	};
 	return (
-		<Paper
+		<Box
 			sx={{
 				mt: 10, // margin-top : 6 * 10 px
 				display: 'flex',
@@ -175,7 +174,7 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 					</Grid>
 				</Box>
 			</Box>
-		</Paper>
+		</Box>
 	);
 };
 

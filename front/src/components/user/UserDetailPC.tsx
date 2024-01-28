@@ -37,7 +37,7 @@ const UserDetailPC: FC<UserDetailProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [profile, setProfile] = useState(0);
+	const [detail, setDetail] = useState(0);
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -135,7 +135,7 @@ const UserDetailPC: FC<UserDetailProps> = ({
 	};
 	return (
 		<Box>
-			<UserSubHeaderPC tab={profile} setTab={setProfile} />
+			<UserSubHeaderPC tab={detail} setTab={setDetail} />
 			<Paper sx={{ position: 'relative' }}>
 				<Stack
 					direction="row"
@@ -225,8 +225,8 @@ const UserDetailPC: FC<UserDetailProps> = ({
 						</Box>
 					</Box>
 					<Box sx={statusBox}>
-						{profile === 0 && <CartDeliveryPC />}
-						{profile === 1 && <GoodsRegisterPC />}
+						{detail === 0 && <CartDeliveryPC />}
+						{detail === 1 && <GoodsRegisterPC />}
 					</Box>
 				</Stack>
 			</Paper>

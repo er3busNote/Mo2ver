@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from '../components/common/AppContent';
 import AdminContent from '../components/admin/AdminContent';
 import {
@@ -20,14 +20,23 @@ import {
 	NotFound,
 } from '../pages/index';
 import PrivateRoute from './auth';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import './route.css';
 
 const AuthRoutes: FC = (): JSX.Element => {
+	const location = useLocation();
+	const path = location.pathname.replace('/auth', '');
+	const slide = path === '/login' ? 'left' : 'right';
 	return (
-		<Routes>
-			<Route path="/login" element={<Login />} />
-			<Route path="/signup" element={<Signup />} />
-			<Route path="*" element={<NotFound />} />
-		</Routes>
+		<TransitionGroup>
+			<CSSTransition key={location.pathname} classNames={slide} timeout={300}>
+				<Routes>
+					<Route path="/login" element={<Login />} />
+					<Route path="/signup" element={<Signup />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</CSSTransition>
+		</TransitionGroup>
 	);
 };
 
