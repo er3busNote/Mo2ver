@@ -29,7 +29,7 @@ const NoticeList: FC<NoticeListProps> = ({
 	};
 
 	const thHeader: SxProps<Theme> = {
-		px: { xs: 0, sm: 5 },
+		px: { xs: 0, sm: 2 },
 		py: 1.5,
 		width: 180,
 		bgcolor: '#f9f9f9',
@@ -45,7 +45,7 @@ const NoticeList: FC<NoticeListProps> = ({
 		width: '10%',
 	};
 	const registerColumn: SxProps<Theme> = {
-		px: { xs: 0, sm: 5 },
+		px: { xs: 0, sm: 2 },
 		py: 1.5,
 		width: '15%',
 	};

@@ -23,6 +23,15 @@ import { SxProps, Theme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useTransition, animated, UseTransitionProps } from 'react-spring';
+
+type Position = 'relative' | 'absolute' | 'fixed';
+type DetailType = 'Delivery' | 'Register';
+const DETAIL: DetailType[] = ['Delivery', 'Register'];
+const DetailInfo = {
+	Delivery: CartDeliveryPC,
+	Register: GoodsRegisterPC,
+};
 
 interface UserDetailProps {
 	title: string;
@@ -38,6 +47,24 @@ const UserDetailPC: FC<UserDetailProps> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [detail, setDetail] = useState(0);
+	const [isAnimating, setAnimating] = useState(false);
+	const transitionProps: UseTransitionProps = {
+		from: { position: 'relative' as Position, transform: 'translateY(200%)' },
+		enter: { transform: 'translateY(0%)' },
+		leave: { position: 'absolute' as Position, transform: 'translateY(500%)' },
+		reset: false,
+		onRest: () => {
+			setAnimating(false); // 애니메이션이 끝났을 때 호출되는 콜백
+		},
+	};
+	const transition = useTransition(detail, transitionProps);
+
+	const switchClick = (item: number) => {
+		if (!isAnimating) {
+			setAnimating(true);
+			setDetail(item);
+		}
+	};
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -135,7 +162,7 @@ const UserDetailPC: FC<UserDetailProps> = ({
 	};
 	return (
 		<Box>
-			<UserSubHeaderPC tab={detail} setTab={setDetail} />
+			<UserSubHeaderPC tab={detail} setTab={(item) => switchClick(item)} />
 			<Paper sx={{ position: 'relative' }}>
 				<Stack
 					direction="row"
@@ -225,8 +252,15 @@ const UserDetailPC: FC<UserDetailProps> = ({
 						</Box>
 					</Box>
 					<Box sx={statusBox}>
-						{detail === 0 && <CartDeliveryPC />}
-						{detail === 1 && <GoodsRegisterPC />}
+						{transition((style, i: number) => {
+							const DetailBox = DetailInfo[DETAIL[i]];
+							return (
+								<animated.div style={style} key={i}>
+									<DetailBox />
+								</animated.div>
+							);
+						})}
+						;
 					</Box>
 				</Stack>
 			</Paper>

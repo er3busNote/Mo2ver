@@ -1,11 +1,11 @@
-import React, { FC, Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Chip, Tab, Tabs, IconButton, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
 interface UserSubHeaderProps {
 	tab: number;
-	setTab: Dispatch<SetStateAction<number>>;
+	setTab: (value: number) => void;
 }
 
 const UserSubHeaderPC: FC<UserSubHeaderProps> = ({

@@ -26,9 +26,9 @@ import {
 } from '@mui/base/Unstable_NumberInput';
 import { red, blue, grey, pink } from '@mui/material/colors';
 import { SxProps, Theme, styled } from '@mui/material/styles';
-import StarsIcon from '@mui/icons-material/Stars';
-import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import StarsIcon from '@mui/icons-material/Stars';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -1127,13 +1127,6 @@ const CartList: FC = (): JSX.Element => {
 };
 
 const CartTotal: FC = (): JSX.Element => {
-	const totalBox: SxProps<Theme> = {
-		px: 8,
-		py: 2,
-		bgcolor: '#f9f9f9',
-		border: '1px solid #dfe3e8',
-		borderRadius: '8px',
-	};
 	const labelCell: SxProps<Theme> = {
 		px: 0,
 		borderBlock: 'none',
@@ -1192,6 +1185,13 @@ const CartTotal: FC = (): JSX.Element => {
 	const totalMileageBox: SxProps<Theme> = {
 		px: 0,
 		borderBlock: 'none',
+	};
+	const totalBox: SxProps<Theme> = {
+		px: 8,
+		py: 2,
+		bgcolor: '#f9f9f9',
+		border: '1px solid #dfe3e8',
+		borderRadius: '8px',
 	};
 	return (
 		<Box sx={totalBox}>
@@ -1340,8 +1340,9 @@ const CartListPC: FC<CartListProps> = ({ description, steps }): JSX.Element => {
 				<Box sx={{ pr: 2, width: '20%' }}>
 					<Button
 						sx={{
+							mb: 0.5,
 							width: '100%',
-							height: '100%',
+							height: '50%',
 							fontSize: '18px',
 							fontWeight: 'bold',
 							bgcolor: '#000',
@@ -1350,6 +1351,25 @@ const CartListPC: FC<CartListProps> = ({ description, steps }): JSX.Element => {
 							color: '#fff',
 							'&:hover': {
 								bgcolor: '#0f0f0f',
+							},
+						}}
+						variant="outlined"
+					>
+						선택상품구매
+					</Button>
+					<Button
+						sx={{
+							mt: 0.5,
+							width: '100%',
+							height: '50%',
+							fontSize: '18px',
+							fontWeight: 'bold',
+							bgcolor: '#7940B6',
+							border: '1px solid #757595',
+							borderRadius: 2,
+							color: '#fff',
+							'&:hover': {
+								bgcolor: '#9373B5',
 							},
 						}}
 						variant="outlined"
