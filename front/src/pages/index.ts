@@ -11,6 +11,9 @@ import Event from './EventPage';
 import EventDetail from './EventDetailPage';
 import Notice from './NoticePage';
 import Banner from './admin/BannerPage';
+import BannerImage from './admin/BannerImagePage';
+import BannerGoods from './admin/BannerGoodsPage';
+import BannerVideo from './admin/BannerVideoPage';
 import Category from './admin/CategoryPage';
 import Dashboard from './admin/DashboardPage';
 import NotFound from './NotFound';
@@ -28,6 +31,9 @@ export {
 	EventDetail,
 	Notice,
 	Banner,
+	BannerImage,
+	BannerGoods,
+	BannerVideo,
 	Category,
 	Dashboard,
 	NotFound,

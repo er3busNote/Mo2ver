@@ -1,4 +1,8 @@
-import React, { FC, Dispatch, SetStateAction, BaseSyntheticEvent } from 'react';
+import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeNext, menuActive } from '../../../store/index';
+import { TitleInfo } from '../../../store/types';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,15 +21,14 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
-import { BannerFormValues } from './types';
+import { BannerFormImageValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
-const schema = yup
+const bnnrImageSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -75,14 +78,15 @@ const schema = yup
 	.required();
 
 interface BannerProp {
+	title: string;
+	description: string;
 	onSubmit: (
-		data: BannerFormValues,
+		data: BannerFormImageValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
-	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const defaultValues = {
+const bnnrImageValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
@@ -92,51 +96,100 @@ const defaultValues = {
 	bnnrImg: [{ title: '', bnnrText: '', cnntUrl: '', useyn: '' }],
 };
 
-const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
-	const { control, handleSubmit, formState } = useForm<BannerFormValues>({
-		mode: 'onChange',
-		defaultValues,
-		resolver: yupResolver(schema),
-	});
+const BannerFormImageMobile: FC<BannerProp> = ({
+	title,
+	description,
+	onSubmit,
+}): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const watchValue = useRef<string>('BN');
+	const { control, handleSubmit, formState, watch } =
+		useForm<BannerFormImageValues>({
+			mode: 'onChange',
+			defaultValues: bnnrImageValues,
+			resolver: yupResolver(bnnrImageSchema),
+		});
 	const { fields } = useFieldArray({ control, name: 'bnnrImg' });
 
+	useEffect(() => {
+		const type = watch('type');
+		if (type !== watchValue.current) {
+			const titleData: TitleInfo = {
+				title: title,
+				description: description,
+				prevTitle: title,
+				prevDescription: description,
+			};
+			switch (type) {
+				case 'BN':
+					dispatch(changeNext(titleData));
+					dispatch(menuActive('/admin/banner/image'));
+					navigate('/admin/banner/image');
+					break;
+				case 'GD':
+					dispatch(changeNext(titleData));
+					dispatch(menuActive('/admin/banner/goods'));
+					navigate('/admin/banner/goods');
+					break;
+				case 'VD':
+					dispatch(changeNext(titleData));
+					dispatch(menuActive('/admin/banner/video'));
+					navigate('/admin/banner/video');
+					break;
+				default:
+					break;
+			}
+		}
+	}, [watch('type')]);
+
 	const cancelClick = () => {
-		setOpen(true);
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/admin/banner'));
+		navigate('/admin/banner');
 	};
 
 	const conditionTh: SxProps<Theme> = {
-		px: 2,
+		px: 1,
 		py: 1.5,
-		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		width: '20%',
+		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
-		px: 2,
-		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		pl: 1.5,
+		pr: 0,
+		fontSize: { xs: '12px', sm: '13px' },
 		border: '2px solid #d2d2d2',
 	};
 	const dataTh: SxProps<Theme> = {
-		px: 2,
-		py: 1.5,
-		minWidth: '47px',
-		fontSize: { sm: '13px', lg: '14px' },
+		px: { xs: 1, sm: 2 },
+		py: 1,
+		fontSize: { xs: '11px', sm: '12px' },
 		bgcolor: '#EEEEEE',
 		border: '2px solid #d2d2d2',
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
-		px: 2,
-		py: 1,
+		px: 1.5,
+		py: 0.5,
 		border: '2px solid #d2d2d2',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { xs: '11px', sm: '12px' },
+	};
+	const dateHorizonIcon: SxProps<Theme> = {
+		px: 0.5,
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
-			py: 2,
+			py: 1.5,
 		},
 		'.MuiFormControl-root': {
 			mt: 0.5,
@@ -144,12 +197,12 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-4px',
+				top: '-5px',
 				ml: 1,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '4px',
+				top: '5px',
 				ml: 2,
 			},
 	};
@@ -165,7 +218,7 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 					<TableBody>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								키워드 검색
+								키워드
 							</TableCell>
 							<TableCell colSpan={3} sx={dataTd} align="left">
 								<Controller
@@ -201,7 +254,9 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 											/>
 										)}
 									/>
-									<HorizontalRuleIcon />
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
 									<Controller
 										name="endDate"
 										control={control}
@@ -243,8 +298,10 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 									)}
 								/>
 							</TableCell>
+						</TableRow>
+						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								템플릿 유형
+								템플릿
 							</TableCell>
 							<TableCell sx={conditionTd} align="left">
 								<Controller
@@ -299,13 +356,13 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 						component="h1"
 						variant="h6"
 						color="inherit"
-						sx={{ fontWeight: 'bold' }}
+						sx={{ fontSize: '16px', fontWeight: 'bold' }}
 					>
 						배너이미지
 					</Typography>
 				</Box>
-				<Box>
-					<Grid container spacing={1}>
+				<Box sx={{ display: 'flex' }}>
+					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
 						<Grid item>
 							<Button
 								type="submit"
@@ -465,7 +522,8 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 					sx={{
 						px: 6,
 						py: 1,
-						fontSize: '14px',
+						width: '100%',
+						fontSize: { xs: '10px', sm: '12px' },
 						fontWeight: 'bold',
 						bgcolor: '#363658',
 						border: '1px solid #757595',
@@ -485,4 +543,4 @@ const BannerFormPC: FC<BannerProp> = ({ onSubmit, setOpen }): JSX.Element => {
 	);
 };
 
-export default BannerFormPC;
+export default BannerFormImageMobile;

@@ -15,6 +15,9 @@ import {
 	EventDetail,
 	Notice,
 	Banner,
+	BannerImage,
+	BannerGoods,
+	BannerVideo,
 	Category,
 	Dashboard,
 	NotFound,
@@ -66,6 +69,9 @@ const AdminRoutes: FC = (): JSX.Element => {
 			<Route path="/" element={<Dashboard />} />
 			<Route path="/cagetory" element={<Category />} />
 			<Route path="/banner" element={<Banner />} />
+			<Route path="/banner/image" element={<BannerImage />} />
+			<Route path="/banner/goods" element={<BannerGoods />} />
+			<Route path="/banner/video" element={<BannerVideo />} />
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);

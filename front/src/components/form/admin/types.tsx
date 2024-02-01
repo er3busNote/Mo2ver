@@ -13,7 +13,7 @@ interface BannerDetailValues {
 	useyn: string;
 }
 
-interface BannerFormValues {
+interface BannerFormImageValues {
 	title: string;
 	startDate: Dayjs;
 	endDate: Dayjs;
@@ -23,4 +23,27 @@ interface BannerFormValues {
 	bnnrImg: Array<BannerDetailValues>;
 }
 
-export type { CategoryFormValues, BannerFormValues };
+interface GoodsFormDisplayValues {
+	title: string;
+	startDate: Dayjs;
+	endDate: Dayjs;
+	position: string;
+	type: string;
+	useyn: string;
+}
+
+interface VideoFormDisplayValues {
+	title: string;
+	startDate: Dayjs;
+	endDate: Dayjs;
+	position: string;
+	type: string;
+	useyn: string;
+}
+
+export type {
+	CategoryFormValues,
+	BannerFormImageValues,
+	GoodsFormDisplayValues,
+	VideoFormDisplayValues,
+};

@@ -1,10 +1,8 @@
-import React, {
-	FC,
-	useState,
-	MouseEvent,
-	ChangeEvent,
-	BaseSyntheticEvent,
-} from 'react';
+import React, { FC, useState, MouseEvent, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeNext, menuActive } from '../../../store/index';
+import { TitleInfo } from '../../../store/types';
 import {
 	Box,
 	Button,
@@ -26,26 +24,24 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import BannerFormMobile from '../../form/admin/BannerFormMobile';
 import { BannerData, BannerPageData } from '../../../services/types';
-import { BannerFormValues } from '../../../components/form/admin/types';
 // import _ from 'lodash';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface BannerProps {
-	onSubmit: (
-		data: BannerFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
+	title: string;
+	description: string;
 	bannerPageData: BannerPageData;
 }
 
 const BannerMobile: FC<BannerProps> = ({
-	onSubmit,
+	title,
+	description,
 	bannerPageData,
 }): JSX.Element => {
-	const [open, setOpen] = useState(true);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [page, setPage] = useState(bannerPageData.number);
 	const [rowsPerPage, setRowsPerPage] = useState(
 		bannerPageData.numberOfElements
@@ -56,7 +52,15 @@ const BannerMobile: FC<BannerProps> = ({
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const registerClick = () => {
-		setOpen(false);
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/admin/banner/image'));
+		navigate('/admin/banner/image');
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -162,200 +166,192 @@ const BannerMobile: FC<BannerProps> = ({
 	};
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			{open ? (
-				<>
-					<TableContainer>
-						<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-							<TableBody>
-								<TableRow>
-									<TableCell sx={conditionTh} align="center" component="th">
-										키워드
-									</TableCell>
-									<TableCell sx={conditionTd} align="left">
-										<FormControl sx={selectForm}>
-											<InputLabel sx={selectLabel}>제목</InputLabel>
-											<Select
-												value={keyword}
-												label="제목"
-												onChange={handleKeywordChange}
-												sx={selectInput}
-											>
-												<MenuItem sx={menuText} value={'A'}>
-													전체
-												</MenuItem>
-												<MenuItem sx={menuText} value={'S'}>
-													제목
-												</MenuItem>
-												<MenuItem sx={menuText} value={'R'}>
-													등록자
-												</MenuItem>
-											</Select>
-										</FormControl>
-									</TableCell>
-								</TableRow>
-								<TableRow>
-									<TableCell sx={conditionTh} align="center" component="th">
-										전시기간
-									</TableCell>
-									<TableCell sx={conditionTd} align="left">
-										<LocalizationProvider dateAdapter={AdapterDayjs}>
-											<DesktopDatePicker
-												label="시작날짜"
-												value={startDate}
-												onChange={(value) => handleStartChange(value)}
-												sx={datePicker}
-											/>
-											<Typography component="span" sx={dateHorizonIcon}>
-												-
-											</Typography>
-											<DesktopDatePicker
-												label="만료날짜"
-												value={dayjs(endDate)}
-												onChange={(value) => handleEndChange(value)}
-												sx={datePicker}
-											/>
-										</LocalizationProvider>
-									</TableCell>
-								</TableRow>
-								<TableRow>
-									<TableCell sx={conditionTh} align="center" component="th">
-										전시여부
-									</TableCell>
-									<TableCell sx={conditionTd} align="left">
-										<FormControl sx={selectForm}>
-											<InputLabel sx={selectLabel}>전시여부</InputLabel>
-											<Select
-												value={useyn}
-												label="전시여부"
-												onChange={handleUseynChange}
-												sx={selectInput}
-											>
-												<MenuItem sx={menuText} value={''}>
-													전체
-												</MenuItem>
-												<MenuItem sx={menuText} value={'Y'}>
-													예
-												</MenuItem>
-												<MenuItem sx={menuText} value={'N'}>
-													아니오
-												</MenuItem>
-											</Select>
-										</FormControl>
-									</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					</TableContainer>
-					<Box sx={{ py: 2, display: 'flex', justifyContent: 'space-between' }}>
-						<Button
-							type="submit"
-							sx={{
-								px: 6,
-								py: 1,
-								fontSize: { xs: '10px', sm: '12px' },
-								fontWeight: 'bold',
-								bgcolor: '#7940B6',
-								border: '1px solid #757595',
-								borderRadius: 0,
-								color: '#fff',
-								'&:hover': {
-									bgcolor: '#9373B5',
-								},
-							}}
-							variant="outlined"
-							onClick={registerClick}
-						>
-							등록
-						</Button>
-						<Button
-							sx={{
-								px: 6,
-								py: 1,
-								fontSize: { xs: '10px', sm: '12px' },
-								fontWeight: 'bold',
-								bgcolor: '#363658',
-								border: '1px solid #757595',
-								borderRadius: 0,
-								color: '#fff',
-								'&:hover': {
-									bgcolor: '#757595',
-								},
-							}}
-							variant="outlined"
-						>
-							검색
-						</Button>
-					</Box>
-					<TableContainer>
-						<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-							<TableHead>
-								<TableRow>
-									<TableCell sx={dataTh} align="center" component="th">
-										제목
-									</TableCell>
-									<TableCell sx={dataTh} align="center" component="th">
-										유형
-									</TableCell>
-									<TableCell sx={dataTh} align="center" component="th">
-										전시기간
-									</TableCell>
-									<TableCell sx={dataTh} align="center" component="th">
-										상태
-									</TableCell>
-									<TableCell sx={dataTh} align="center" component="th">
-										여부
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{bannerPageData.content &&
-									bannerPageData.content.map(
-										(data: BannerData, index: number) => (
-											<TableRow key={index}>
-												<TableCell sx={dataTd} align="center">
-													{data.bannerManageNo}
-												</TableCell>
-												<TableCell sx={dataTd} align="center">
-													배경이미지
-												</TableCell>
-												<TableCell sx={dataTd} align="center">
-													{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
-													{moment(data.displayEndDate).format('YYYY-MM-DD')}
-												</TableCell>
-												<TableCell sx={dataTd} align="center">
-													마감
-												</TableCell>
-												<TableCell sx={dataTd} align="center">
-													{data.displayYesNo}
-												</TableCell>
-											</TableRow>
-										)
-									)}
-							</TableBody>
-							<TableFooter>
-								<TableRow>
-									<TablePagination
-										rowsPerPageOptions={[10, 25, 50, 100]}
-										count={bannerPageData.totalElements}
-										rowsPerPage={rowsPerPage}
-										page={page}
-										SelectProps={{
-											inputProps: {
-												'aria-label': 'rows per page',
-											},
-											native: false,
-										}}
-										onPageChange={handleChangePage}
-										onRowsPerPageChange={handleChangeRowsPerPage}
+			<TableContainer>
+				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
+					<TableBody>
+						<TableRow>
+							<TableCell sx={conditionTh} align="center" component="th">
+								키워드
+							</TableCell>
+							<TableCell sx={conditionTd} align="left">
+								<FormControl sx={selectForm}>
+									<InputLabel sx={selectLabel}>제목</InputLabel>
+									<Select
+										value={keyword}
+										label="제목"
+										onChange={handleKeywordChange}
+										sx={selectInput}
+									>
+										<MenuItem sx={menuText} value={'A'}>
+											전체
+										</MenuItem>
+										<MenuItem sx={menuText} value={'S'}>
+											제목
+										</MenuItem>
+										<MenuItem sx={menuText} value={'R'}>
+											등록자
+										</MenuItem>
+									</Select>
+								</FormControl>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell sx={conditionTh} align="center" component="th">
+								전시기간
+							</TableCell>
+							<TableCell sx={conditionTd} align="left">
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<DesktopDatePicker
+										label="시작날짜"
+										value={startDate}
+										onChange={(value) => handleStartChange(value)}
+										sx={datePicker}
 									/>
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
+									<DesktopDatePicker
+										label="만료날짜"
+										value={dayjs(endDate)}
+										onChange={(value) => handleEndChange(value)}
+										sx={datePicker}
+									/>
+								</LocalizationProvider>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell sx={conditionTh} align="center" component="th">
+								전시여부
+							</TableCell>
+							<TableCell sx={conditionTd} align="left">
+								<FormControl sx={selectForm}>
+									<InputLabel sx={selectLabel}>전시여부</InputLabel>
+									<Select
+										value={useyn}
+										label="전시여부"
+										onChange={handleUseynChange}
+										sx={selectInput}
+									>
+										<MenuItem sx={menuText} value={''}>
+											전체
+										</MenuItem>
+										<MenuItem sx={menuText} value={'Y'}>
+											예
+										</MenuItem>
+										<MenuItem sx={menuText} value={'N'}>
+											아니오
+										</MenuItem>
+									</Select>
+								</FormControl>
+							</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+			</TableContainer>
+			<Box sx={{ py: 2, display: 'flex', justifyContent: 'space-between' }}>
+				<Button
+					type="submit"
+					sx={{
+						px: 6,
+						py: 1,
+						fontSize: { xs: '10px', sm: '12px' },
+						fontWeight: 'bold',
+						bgcolor: '#7940B6',
+						border: '1px solid #757595',
+						borderRadius: 0,
+						color: '#fff',
+						'&:hover': {
+							bgcolor: '#9373B5',
+						},
+					}}
+					variant="outlined"
+					onClick={registerClick}
+				>
+					등록
+				</Button>
+				<Button
+					sx={{
+						px: 6,
+						py: 1,
+						fontSize: { xs: '10px', sm: '12px' },
+						fontWeight: 'bold',
+						bgcolor: '#363658',
+						border: '1px solid #757595',
+						borderRadius: 0,
+						color: '#fff',
+						'&:hover': {
+							bgcolor: '#757595',
+						},
+					}}
+					variant="outlined"
+				>
+					검색
+				</Button>
+			</Box>
+			<TableContainer>
+				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
+					<TableHead>
+						<TableRow>
+							<TableCell sx={dataTh} align="center" component="th">
+								제목
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								유형
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								전시기간
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								상태
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								여부
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{bannerPageData.content &&
+							bannerPageData.content.map((data: BannerData, index: number) => (
+								<TableRow key={index}>
+									<TableCell sx={dataTd} align="center">
+										{data.bannerManageNo}
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										배경이미지
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
+										{moment(data.displayEndDate).format('YYYY-MM-DD')}
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										마감
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										{data.displayYesNo}
+									</TableCell>
 								</TableRow>
-							</TableFooter>
-						</Table>
-					</TableContainer>
-				</>
-			) : (
-				<BannerFormMobile onSubmit={onSubmit} setOpen={setOpen} />
-			)}
+							))}
+					</TableBody>
+					<TableFooter>
+						<TableRow>
+							<TablePagination
+								rowsPerPageOptions={[10, 25, 50, 100]}
+								count={bannerPageData.totalElements}
+								rowsPerPage={rowsPerPage}
+								page={page}
+								SelectProps={{
+									inputProps: {
+										'aria-label': 'rows per page',
+									},
+									native: false,
+								}}
+								onPageChange={handleChangePage}
+								onRowsPerPageChange={handleChangeRowsPerPage}
+							/>
+						</TableRow>
+					</TableFooter>
+				</Table>
+			</TableContainer>
 		</Box>
 	);
 };

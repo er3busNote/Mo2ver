@@ -1,34 +1,33 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
+import { TitleState } from '../../store/types';
 import Api from '../../services/api';
-import useCSRFToken from '../../hooks/useCSRFToken';
 import useBannerPageList from '../../hooks/useBannerPageList';
 import BannerPC from '../../components/admin/banner/BannerPC';
 import BannerMobile from '../../components/admin/banner/BannerMobile';
 import { BannerPageData } from '../../services/types';
-import { BannerFormValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 
 const drawerMenuLimit = 768;
 
 interface BannerProps {
-	onSubmit: (
-		data: BannerFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
+	title: string;
+	description: string;
 	bannerPageData: BannerPageData;
 }
 
 interface BannerDispatchProps {
-	member: ActionCreatorsMapObject;
+	title: string;
+	description: string;
 	banner: ActionCreatorsMapObject;
 }
 
 const BannerPagePC: FC<BannerProps> = ({
-	onSubmit,
+	title,
+	description,
 	bannerPageData,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
@@ -36,13 +35,20 @@ const BannerPagePC: FC<BannerProps> = ({
 	});
 	return (
 		<>
-			{isPc && <BannerPC onSubmit={onSubmit} bannerPageData={bannerPageData} />}
+			{isPc && (
+				<BannerPC
+					title={title}
+					description={description}
+					bannerPageData={bannerPageData}
+				/>
+			)}
 		</>
 	);
 };
 
 const BannerPageMobile: FC<BannerProps> = ({
-	onSubmit,
+	title,
+	description,
 	bannerPageData,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
@@ -51,46 +57,45 @@ const BannerPageMobile: FC<BannerProps> = ({
 	return (
 		<>
 			{isMobile && (
-				<BannerMobile onSubmit={onSubmit} bannerPageData={bannerPageData} />
+				<BannerMobile
+					title={title}
+					description={description}
+					bannerPageData={bannerPageData}
+				/>
 			)}
 		</>
 	);
 };
 
 const BannerPage: FC<BannerDispatchProps> = ({
-	member,
+	title,
+	description,
 	banner,
 }): JSX.Element => {
-	const csrfData = useCSRFToken({ member });
 	const bannerPageData = useBannerPageList({ banner });
-	const submitForm = (
-		data: BannerFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => {
-		const bannerFormData = {
-			title: data.title,
-			startDate: data.startDate.format('YYYY-MM-DD'),
-			endDate: data.endDate.format('YYYY-MM-DD'),
-			position: data.position,
-			type: data.type,
-			useyn: data.useyn,
-			bnnrImg: data.bnnrImg,
-		};
-		console.log(bannerFormData);
-		console.log(csrfData);
-		if (event) event.preventDefault(); // 새로고침 방지
-	};
 	return (
 		<>
-			<BannerPagePC onSubmit={submitForm} bannerPageData={bannerPageData} />
-			<BannerPageMobile onSubmit={submitForm} bannerPageData={bannerPageData} />
+			<BannerPagePC
+				title={title}
+				description={description}
+				bannerPageData={bannerPageData}
+			/>
+			<BannerPageMobile
+				title={title}
+				description={description}
+				bannerPageData={bannerPageData}
+			/>
 		</>
 	);
 };
 
+const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
+});
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-	member: bindActionCreators(Api.member, dispatch),
 	banner: bindActionCreators(Api.banner, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(BannerPage);
+export default connect(mapStateToProps, mapDispatchToProps)(BannerPage);
