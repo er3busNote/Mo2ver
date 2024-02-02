@@ -80,7 +80,7 @@ const videoDisplayValues = {
 	startDate: dayjs(),
 	endDate: dayjs(),
 	position: '',
-	type: 'BN',
+	type: 'VD',
 	useyn: 'Y',
 };
 
@@ -118,11 +118,6 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 					dispatch(changeNext(titleData));
 					dispatch(menuActive('/admin/banner/goods'));
 					navigate('/admin/banner/goods');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
 					break;
 				default:
 					break;

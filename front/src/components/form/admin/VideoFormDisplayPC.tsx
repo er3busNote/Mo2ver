@@ -120,11 +120,6 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 					dispatch(menuActive('/admin/banner/goods'));
 					navigate('/admin/banner/goods');
 					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
-					break;
 				default:
 					break;
 			}

@@ -122,11 +122,6 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 				prevDescription: description,
 			};
 			switch (type) {
-				case 'BN':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
-					break;
 				case 'GD':
 					dispatch(changeNext(titleData));
 					dispatch(menuActive('/admin/banner/goods'));

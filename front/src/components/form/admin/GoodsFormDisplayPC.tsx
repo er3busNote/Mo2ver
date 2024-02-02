@@ -115,11 +115,6 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 					dispatch(menuActive('/admin/banner/image'));
 					navigate('/admin/banner/image');
 					break;
-				case 'GD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/goods'));
-					navigate('/admin/banner/goods');
-					break;
 				case 'VD':
 					dispatch(changeNext(titleData));
 					dispatch(menuActive('/admin/banner/video'));
