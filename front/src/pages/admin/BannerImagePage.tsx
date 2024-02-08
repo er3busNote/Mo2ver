@@ -7,6 +7,7 @@ import Api from '../../services/api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import BannerFormImagePC from '../../components/form/admin/BannerFormImagePC';
 import BannerFormImageMobile from '../../components/form/admin/BannerFormImageMobile';
+import { Box } from '@mui/material';
 import { BannerFormImageValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
@@ -94,7 +95,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 		if (event) event.preventDefault(); // 새로고침 방지
 	};
 	return (
-		<>
+		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<BannerImagePC
 				title={title}
 				description={description}
@@ -105,7 +106,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 				description={description}
 				onSubmit={submitForm}
 			/>
-		</>
+		</Box>
 	);
 };
 

@@ -146,7 +146,7 @@ const BannerPC: FC<BannerProps> = ({
 		fontSize: { sm: '13px', lg: '14px' },
 	};
 	return (
-		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
+		<Box>
 			<TableContainer>
 				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
 					<TableBody>

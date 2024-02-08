@@ -7,6 +7,7 @@ import Api from '../../services/api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import VideoFormDisplayPC from '../../components/form/admin/VideoFormDisplayPC';
 import VideoFormDisplayMobile from '../../components/form/admin/VideoFormDisplayMobile';
+import { Box } from '@mui/material';
 import { VideoFormDisplayValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
@@ -93,7 +94,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		if (event) event.preventDefault(); // 새로고침 방지
 	};
 	return (
-		<>
+		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<BannerVideoPC
 				title={title}
 				description={description}
@@ -104,7 +105,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 				description={description}
 				onSubmit={submitForm}
 			/>
-		</>
+		</Box>
 	);
 };
 

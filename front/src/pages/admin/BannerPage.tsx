@@ -7,6 +7,7 @@ import Api from '../../services/api';
 import useBannerPageList from '../../hooks/useBannerPageList';
 import BannerPC from '../../components/admin/banner/BannerPC';
 import BannerMobile from '../../components/admin/banner/BannerMobile';
+import { Box } from '@mui/material';
 import { BannerPageData } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
@@ -74,7 +75,7 @@ const BannerPage: FC<BannerDispatchProps> = ({
 }): JSX.Element => {
 	const bannerPageData = useBannerPageList({ banner });
 	return (
-		<>
+		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<BannerPagePC
 				title={title}
 				description={description}
@@ -85,7 +86,7 @@ const BannerPage: FC<BannerDispatchProps> = ({
 				description={description}
 				bannerPageData={bannerPageData}
 			/>
-		</>
+		</Box>
 	);
 };
 
