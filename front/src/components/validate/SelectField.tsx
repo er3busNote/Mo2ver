@@ -21,7 +21,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 	datas,
 }) => {
 	const selectForm: SxProps<Theme> = {
-		width: 120,
+		width: { xs: 100, sm: 120 },
 		'.MuiInputLabel-shrink': {
 			ml: { xs: 1, sm: 0.5 },
 			mt: { xs: 1, sm: 0.5 },

@@ -8,7 +8,7 @@ interface CategoryFormValues {
 
 interface BannerDetailValues {
 	title: string;
-	bnnrText: string;
+	bnnrImg?: File;
 	cnntUrl: string;
 	useyn: string;
 }

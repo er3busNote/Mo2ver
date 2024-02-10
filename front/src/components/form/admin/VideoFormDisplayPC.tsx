@@ -191,7 +191,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 					<TableBody>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								키워드 검색
+								제목
 							</TableCell>
 							<TableCell colSpan={3} sx={dataTd} align="left">
 								<Controller
@@ -211,7 +211,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								전시기간
+								노출기간
 							</TableCell>
 							<TableCell colSpan={3} sx={conditionTd} align="left">
 								<LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -245,7 +245,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								노출 위치
+								노출위치
 							</TableCell>
 							<TableCell sx={conditionTd} align="left">
 								<Controller

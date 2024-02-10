@@ -24,6 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
+import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { BannerFormImageValues } from './types';
 // import _ from 'lodash';
@@ -69,7 +70,19 @@ const bnnrImageSchema = yup
 			.of(
 				yup.object().shape({
 					title: yup.string().required(),
-					bnnrText: yup.string().required(),
+					bnnrImg: yup
+						.mixed<File>()
+						.test(
+							'fileSize',
+							'File size is too large',
+							(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+						)
+						.test(
+							'fileType',
+							'Invalid file type',
+							(value) =>
+								value && ['image/jpeg', 'image/png'].includes(value.type)
+						),
 					cnntUrl: yup.string().required(),
 					useyn: yup.string().required(),
 				})
@@ -94,7 +107,7 @@ const bnnrImageValues = {
 	position: '',
 	type: 'BN',
 	useyn: 'Y',
-	bnnrImg: [{ title: '', bnnrText: '', cnntUrl: '', useyn: '' }],
+	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
 };
 
 const BannerFormImagePC: FC<BannerProp> = ({
@@ -111,7 +124,16 @@ const BannerFormImagePC: FC<BannerProp> = ({
 			defaultValues: bnnrImageValues,
 			resolver: yupResolver(bnnrImageSchema),
 		});
-	const { fields } = useFieldArray({ control, name: 'bnnrImg' });
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: 'bnnrImg',
+	});
+	const addNewField = () => {
+		append({ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' });
+	};
+	const removeField = () => {
+		remove(-1);
+	};
 
 	useEffect(() => {
 		const type = watch('type');
@@ -189,12 +211,12 @@ const BannerFormImagePC: FC<BannerProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
+		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
 			{
 				top: '-4px',
 				ml: 1,
 			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
+		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
 				top: '4px',
 				ml: 2,
@@ -212,7 +234,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 					<TableBody>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								키워드 검색
+								제목
 							</TableCell>
 							<TableCell colSpan={3} sx={dataTd} align="left">
 								<Controller
@@ -232,7 +254,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								전시기간
+								노출기간
 							</TableCell>
 							<TableCell colSpan={3} sx={conditionTd} align="left">
 								<LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -266,7 +288,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								노출 위치
+								노출위치
 							</TableCell>
 							<TableCell sx={conditionTd} align="left">
 								<Controller
@@ -391,6 +413,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 									},
 								}}
 								variant="outlined"
+								onClick={addNewField}
 							>
 								추가
 							</Button>
@@ -411,6 +434,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 									},
 								}}
 								variant="outlined"
+								onClick={removeField}
 							>
 								삭제
 							</Button>
@@ -456,12 +480,10 @@ const BannerFormImagePC: FC<BannerProp> = ({
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
 									<Controller
-										name={`bnnrImg.${index}.bnnrText`}
+										name={`bnnrImg.${index}.bnnrImg`}
 										control={control}
 										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="배경이미지을 입력해주세요"
+											<RenderUploadField
 												field={field}
 												fieldState={fieldState}
 												formState={formState}

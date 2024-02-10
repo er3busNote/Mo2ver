@@ -1,16 +1,26 @@
-import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import React, {
+	FC,
+	useRef,
+	useState,
+	useEffect,
+	BaseSyntheticEvent,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm, useFieldArray } from 'react-hook-form';
+import { Control, Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
 	Box,
+	Fade,
 	Grid,
+	Modal,
 	Button,
+	Backdrop,
 	Typography,
+	InputBase,
 	Table,
 	TableHead,
 	TableBody,
@@ -23,6 +33,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
+import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { BannerFormImageValues } from './types';
 // import _ from 'lodash';
@@ -68,7 +79,19 @@ const bnnrImageSchema = yup
 			.of(
 				yup.object().shape({
 					title: yup.string().required(),
-					bnnrText: yup.string().required(),
+					bnnrImg: yup
+						.mixed<File>()
+						.test(
+							'fileSize',
+							'File size is too large',
+							(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+						)
+						.test(
+							'fileType',
+							'Invalid file type',
+							(value) =>
+								value && ['image/jpeg', 'image/png'].includes(value.type)
+						),
 					cnntUrl: yup.string().required(),
 					useyn: yup.string().required(),
 				})
@@ -93,7 +116,111 @@ const bnnrImageValues = {
 	position: '',
 	type: 'BN',
 	useyn: 'Y',
-	bnnrImg: [{ title: '', bnnrText: '', cnntUrl: '', useyn: '' }],
+	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
+};
+
+interface ModalProps {
+	index: number;
+	control: Control<BannerFormImageValues> | undefined;
+	open: boolean;
+	handleClose: () => void;
+	style: SxProps<Theme>;
+	header: SxProps<Theme>;
+	base: SxProps<Theme>;
+}
+
+const TitleModal: FC<ModalProps> = ({
+	index,
+	control,
+	open,
+	handleClose,
+	style,
+	header,
+	base,
+}): JSX.Element => {
+	return (
+		<Modal
+			open={open}
+			onClose={handleClose}
+			closeAfterTransition
+			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				backdrop: {
+					timeout: 500,
+				},
+			}}
+		>
+			<Fade in={open}>
+				<Box sx={style}>
+					<Typography variant="h6" component="h2" sx={header}>
+						배너내용 - {index}번째
+					</Typography>
+					<Box sx={base}>
+						<Controller
+							name={`bnnrImg.${index}.title`}
+							control={control}
+							render={({ field, fieldState, formState }) => (
+								<RenderTextField
+									type="text"
+									label="배너내용을 입력해주세요"
+									field={field}
+									fieldState={fieldState}
+									formState={formState}
+								/>
+							)}
+						/>
+					</Box>
+				</Box>
+			</Fade>
+		</Modal>
+	);
+};
+
+const CnntUrlModal: FC<ModalProps> = ({
+	index,
+	control,
+	open,
+	handleClose,
+	style,
+	header,
+	base,
+}): JSX.Element => {
+	return (
+		<Modal
+			open={open}
+			onClose={handleClose}
+			closeAfterTransition
+			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				backdrop: {
+					timeout: 500,
+				},
+			}}
+		>
+			<Fade in={open}>
+				<Box sx={style}>
+					<Typography variant="h6" component="h2" sx={header}>
+						연결 URL - {index}번째
+					</Typography>
+					<Box sx={base}>
+						<Controller
+							name={`bnnrImg.${index}.cnntUrl`}
+							control={control}
+							render={({ field, fieldState, formState }) => (
+								<RenderTextField
+									type="text"
+									label="URL을 입력해주세요"
+									field={field}
+									fieldState={fieldState}
+									formState={formState}
+								/>
+							)}
+						/>
+					</Box>
+				</Box>
+			</Fade>
+		</Modal>
+	);
 };
 
 const BannerFormImageMobile: FC<BannerProp> = ({
@@ -104,13 +231,24 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('BN');
+	const [titleOpen, setTitleOpen] = useState(false);
+	const [cnntUrlOpen, setCnntUrlOpen] = useState(false);
 	const { control, handleSubmit, formState, watch } =
 		useForm<BannerFormImageValues>({
 			mode: 'onChange',
 			defaultValues: bnnrImageValues,
 			resolver: yupResolver(bnnrImageSchema),
 		});
-	const { fields } = useFieldArray({ control, name: 'bnnrImg' });
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: 'bnnrImg',
+	});
+	const addNewField = () => {
+		append({ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' });
+	};
+	const removeField = () => {
+		remove(-1);
+	};
 
 	useEffect(() => {
 		const type = watch('type');
@@ -137,6 +275,11 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 			}
 		}
 	}, [watch('type')]);
+
+	const openTitle = () => setTitleOpen(true);
+	const closeTitle = () => setTitleOpen(false);
+	const openCnntUrl = () => setCnntUrlOpen(true);
+	const closeCnntUrl = () => setCnntUrlOpen(false);
 
 	const cancelClick = () => {
 		const titleData: TitleInfo = {
@@ -190,16 +333,53 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
+		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
 			{
 				top: '-5px',
 				ml: 1,
 			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
+		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
 				top: '5px',
 				ml: 2,
 			},
+	};
+	const modalStyle: SxProps<Theme> = {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: { xs: 300, sm: 400 },
+		bgcolor: 'background.paper',
+		border: '2px solid #000',
+		boxShadow: 24,
+	};
+	const inputBase: SxProps<Theme> = {
+		fontSize: '12px',
+		fontWeight: 'bold',
+		color: '#000',
+		'.MuiInputBase-readOnly': {
+			textAlign: 'center',
+		},
+	};
+	const inputHeader: SxProps<Theme> = {
+		px: 2,
+		color: '#fff',
+		fontSize: '0.9rem',
+		fontWeight: 'bold',
+		lineHeight: '38px',
+		bgcolor: '#363b74',
+	};
+	const inputBody: SxProps<Theme> = {
+		px: 4,
+		py: 1,
+		'.MuiFormControl-root': {
+			width: '100% !important',
+			overflowX: 'visible',
+		},
+		'.MuiFormLabel-root': {
+			left: '10px !important',
+		},
 	};
 	return (
 		<Box
@@ -213,7 +393,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 					<TableBody>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								키워드
+								제목
 							</TableCell>
 							<TableCell colSpan={3} sx={dataTd} align="left">
 								<Controller
@@ -233,7 +413,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								전시기간
+								노출기간
 							</TableCell>
 							<TableCell colSpan={3} sx={conditionTd} align="left">
 								<LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -269,7 +449,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								노출 위치
+								노출위치
 							</TableCell>
 							<TableCell sx={conditionTd} align="left">
 								<Controller
@@ -396,6 +576,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 									},
 								}}
 								variant="outlined"
+								onClick={addNewField}
 							>
 								추가
 							</Button>
@@ -416,6 +597,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 									},
 								}}
 								variant="outlined"
+								onClick={removeField}
 							>
 								삭제
 							</Button>
@@ -445,13 +627,28 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 						{fields.map((field, index) => (
 							<TableRow key={field.id}>
 								<TableCell sx={dataTd} align="center">
+									<InputBase
+										sx={inputBase}
+										placeholder={`${index}`}
+										onClick={openTitle}
+										readOnly={true}
+									/>
+									<TitleModal
+										index={index}
+										control={control}
+										open={titleOpen}
+										handleClose={closeTitle}
+										style={modalStyle}
+										header={inputHeader}
+										base={inputBody}
+									/>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
 									<Controller
-										name={`bnnrImg.${index}.title`}
+										name={`bnnrImg.${index}.bnnrImg`}
 										control={control}
 										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="배너내용을 입력해주세요"
+											<RenderUploadField
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
@@ -460,33 +657,20 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.bnnrText`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="배경이미지을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
+									<InputBase
+										sx={inputBase}
+										placeholder={'click'}
+										onClick={openCnntUrl}
+										readOnly={true}
 									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.cnntUrl`}
+									<CnntUrlModal
+										index={index}
 										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="URL을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
+										open={cnntUrlOpen}
+										handleClose={closeCnntUrl}
+										style={modalStyle}
+										header={inputHeader}
+										base={inputBody}
 									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
