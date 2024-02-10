@@ -5,7 +5,11 @@ import {
 	TitleInfo,
 	TitleState,
 	MenuState,
+	ToastInfo,
+	ToastState,
 } from './types';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 // 1.1. 인증 관련 State
 const memberinitialState: MemberState = {
@@ -224,17 +228,50 @@ const menuSlice = createSlice({
 	},
 });
 
+// 3.1. Toast 관련 State
+const toastinitialState: ToastState = {
+	open: false,
+	type: undefined,
+	message: '',
+};
+
+// 3.2. toastSlice : action + reducer → slice
+const toastSlice = createSlice({
+	name: 'toast',
+	initialState: toastinitialState,
+	reducers: {
+		toastMessage: (state: ToastState, action: PayloadAction<ToastInfo>) => {
+			state.open = true;
+			state.type = action.payload.type;
+			state.message = action.payload.message;
+		},
+		toastClose: (state: ToastState) => {
+			state.open = false;
+		},
+	},
+});
+
+const persistConfig = {
+	key: 'root',
+	storage, // 로컬 스토리지에 저장
+	blacklist: ['toast'],
+};
+
 const rootReducer = combineReducers({
 	auth: authSlice.reducer,
 	token: tokenSlice.reducer,
 	title: titleSlice.reducer,
 	menu: menuSlice.reducer,
+	toast: toastSlice.reducer,
 });
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
 const { tokenSuccess } = tokenSlice.actions;
 const { changePrev, changeNext, changePrevNext } = titleSlice.actions;
 const { menuActive, menuSwitch, menuLotate } = menuSlice.actions;
+const { toastMessage, toastClose } = toastSlice.actions;
 
 export {
 	loginSuccess,
@@ -247,8 +284,10 @@ export {
 	menuActive,
 	menuSwitch,
 	menuLotate,
+	toastMessage,
+	toastClose,
 };
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof persistedReducer>;
 
-export default rootReducer;
+export default persistedReducer;

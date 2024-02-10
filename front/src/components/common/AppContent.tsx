@@ -1,11 +1,17 @@
-import React, { FC, useState, useEffect, ReactElement } from 'react';
+import React, {
+	FC,
+	useState,
+	useEffect,
+	ReactElement,
+	SyntheticEvent,
+} from 'react';
 import { Outlet } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changePrev, menuLotate } from '../../store/index';
-import { TitleState } from '../../store/types';
+import { changePrev, menuLotate, toastClose } from '../../store/index';
+import { TitleState, ToastState } from '../../store/types';
 import Api from '../../services/api';
 import useCategoryGroupList from '../../hooks/useCategoryGroupList';
 import AppHeader from './AppHeader';
@@ -18,7 +24,7 @@ import AppMenuHomePC from './AppMenuHomePC';
 import AppMenuMobile from './AppMenuMobile';
 import AppMain from './AppMain';
 import AppFooter from './AppFooter';
-import { CssBaseline, Box } from '@mui/material';
+import { CssBaseline, Box, Alert, Snackbar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
 import { CategoryDataGroup } from '../../services/types';
@@ -39,6 +45,9 @@ interface AppProps {
 interface LayoutDefaultProps {
 	title: string;
 	description: string;
+	open: boolean;
+	type: 'success' | 'info' | 'warning' | 'error' | undefined;
+	message: string;
 	children?: ReactElement;
 	category: ActionCreatorsMapObject;
 }
@@ -145,6 +154,9 @@ const AppMobile: FC<AppProps> = ({
 const AppContent: FC<LayoutDefaultProps> = ({
 	title,
 	description,
+	open,
+	type,
+	message,
 	children,
 	category,
 }): JSX.Element => {
@@ -167,6 +179,13 @@ const AppContent: FC<LayoutDefaultProps> = ({
 			window.removeEventListener('popstate', handlePopstate);
 		};
 	}, [dispatch]);
+
+	const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		dispatch(toastClose());
+	};
 
 	return (
 		<ThemeProvider theme={mdTheme}>
@@ -196,6 +215,21 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					categoryData={categoryData}
 				/>
 			</Box>
+			<Snackbar
+				anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+				open={open}
+				autoHideDuration={4000}
+				onClose={handleClose}
+			>
+				<Alert
+					onClose={handleClose}
+					severity={type}
+					variant="outlined"
+					sx={{ width: '100%' }}
+				>
+					{message || ''}
+				</Alert>
+			</Snackbar>
 		</ThemeProvider>
 	);
 };
@@ -203,6 +237,9 @@ const AppContent: FC<LayoutDefaultProps> = ({
 const mapStateToProps = (state: any) => ({
 	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
+	open: (state.toast as ToastState).open,
+	type: (state.toast as ToastState).type,
+	message: (state.toast as ToastState).message,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

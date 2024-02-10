@@ -38,14 +38,14 @@ const bnnrImageSchema = yup
 			.max(50, '입력 범위가 초과되었습니다'),
 		startDate: yup
 			.mixed<Dayjs>()
-			.transform((originalValue, _) => {
+			.transform((originalValue) => {
 				return originalValue ? dayjs(originalValue) : null;
 			})
 			.nullable()
 			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup
 			.mixed<Dayjs>()
-			.transform((originalValue, _) => {
+			.transform((originalValue) => {
 				return originalValue ? dayjs(originalValue) : null;
 			})
 			.when(

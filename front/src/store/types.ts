@@ -46,6 +46,15 @@ interface MenuState {
 	menus: Array<SubMenuInfo>;
 }
 
+interface ToastInfo {
+	type: 'success' | 'info' | 'warning' | 'error' | undefined;
+	message: string;
+}
+
+interface ToastState extends ToastInfo {
+	open: boolean;
+}
+
 export type {
 	MemberState,
 	TokenState,
@@ -54,4 +63,6 @@ export type {
 	MenuInfo,
 	SubMenuInfo,
 	MenuState,
+	ToastInfo,
+	ToastState,
 };

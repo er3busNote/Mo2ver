@@ -5,13 +5,13 @@ import {
 	loginFailure,
 	logoutSuccess,
 	tokenSuccess,
+	toastMessage,
 } from '../store/index';
 import {
 	JWT_USERNAME,
 	JWT_ACCESS_TOKEN,
 	JWT_REFRESH_TOKEN,
 } from '../utils/jwttoken';
-import toastMessage from '../utils/toast';
 import { urlFormat } from '../utils/format';
 import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { setInterceptors } from './common/interceptors';
@@ -41,12 +41,18 @@ const member = {
 				},
 			})
 			.then((response: AxiosResponse) => {
+				console.log(response.data);
 				const tokenData = {
 					username: response.data.username,
 					accesstoken: response.data.accesstoken,
 					refreshtoken: response.data.refreshtoken,
 				};
-				toastMessage(response.data, 'success');
+				dispatch(
+					toastMessage({
+						message: '반갑습니다. ' + response.data.username + '님',
+						type: 'success',
+					})
+				);
 				dispatch(loginSuccess(tokenData.accesstoken));
 				setSessionStorage(JWT_USERNAME, tokenData.username);
 				setSessionStorage(JWT_ACCESS_TOKEN, tokenData.accesstoken);
@@ -57,15 +63,27 @@ const member = {
 				console.log(error.response);
 				const { status, data } = error.response as AxiosResponse;
 				if (status === 400) {
-					toastMessage('올바르지 않은 로그인 형식입니다', 'info');
+					dispatch(
+						toastMessage({
+							message: '올바르지 않은 로그인 형식입니다',
+							type: 'info',
+						})
+					);
 				} else if (status === 401) {
-					toastMessage(data.message, 'warn');
+					dispatch(toastMessage({ message: data.message, type: 'warning' }));
 				} else if (status === 403) {
-					toastMessage('CSRF Token이 유효하지 않습니다', 'warn');
+					dispatch(
+						toastMessage({
+							message: 'CSRF Token이 유효하지 않습니다',
+							type: 'warning',
+						})
+					);
 				} else if (status === 504) {
-					toastMessage('서버가 닫혀있습니다', 'error');
+					dispatch(
+						toastMessage({ message: '서버가 닫혀있습니다', type: 'error' })
+					);
 				} else {
-					toastMessage(data, 'error');
+					dispatch(toastMessage({ message: data.message, type: 'error' }));
 				}
 				dispatch(loginFailure(error.message));
 			}),
@@ -76,7 +94,7 @@ const member = {
 		dispatch(logoutSuccess());
 	},
 	// 회원가입 API : <baseURL>/member/signup
-	signup: (userData: SignUpData, csrfData: CSRFData) => () =>
+	signup: (userData: SignUpData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 		instance
 			.post('member/signup', userData, {
 				headers: {
@@ -85,20 +103,34 @@ const member = {
 				},
 			})
 			.then((response: AxiosResponse) => {
-				toastMessage(response.data, 'success');
+				dispatch(
+					toastMessage({ message: response.data.message, type: 'success' })
+				);
 			})
 			.catch((error: AxiosError) => {
 				const { status, data } = error.response as AxiosResponse;
 				if (status === 400) {
-					toastMessage('올바르지 않은 회원가입 형식입니다', 'info');
+					dispatch(
+						toastMessage({
+							message: '올바르지 않은 회원가입 형식입니다',
+							type: 'info',
+						})
+					);
 				} else if (status === 403) {
-					toastMessage('CSRF Token이 유효하지 않습니다', 'warn');
+					dispatch(
+						toastMessage({
+							message: 'CSRF Token이 유효하지 않습니다',
+							type: 'warning',
+						})
+					);
 				} else if (status === 422) {
-					toastMessage(data.message, 'warn');
+					dispatch(toastMessage({ message: data.message, type: 'warning' }));
 				} else if (status === 504) {
-					toastMessage('서버가 닫혀있습니다', 'error');
+					dispatch(
+						toastMessage({ message: '서버가 닫혀있습니다', type: 'error' })
+					);
 				} else {
-					toastMessage(data, 'error');
+					dispatch(toastMessage({ message: data.message, type: 'error' }));
 				}
 			}),
 	// Access 토큰 재생성 API : <baseURL>/member/refresh
