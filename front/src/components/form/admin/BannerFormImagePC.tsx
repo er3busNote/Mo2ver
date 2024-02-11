@@ -30,6 +30,9 @@ import { BannerFormImageValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
+const tableBorder = '1px solid #d2d2d2';
+const tableBorderHeader = '3px solid #333';
+
 const bnnrImageSchema = yup
 	.object()
 	.shape({
@@ -179,14 +182,14 @@ const BannerFormImagePC: FC<BannerProp> = ({
 		width: 120,
 		fontSize: { sm: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
 		px: 2,
 		py: 2,
 		fontSize: { sm: '13px', lg: '14px' },
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
@@ -194,13 +197,13 @@ const BannerFormImagePC: FC<BannerProp> = ({
 		minWidth: '47px',
 		fontSize: { sm: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
 		py: 1,
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontSize: { sm: '13px', lg: '14px' },
 	};
 	const bannerForm: SxProps<Theme> = {
@@ -230,8 +233,8 @@ const BannerFormImagePC: FC<BannerProp> = ({
 			sx={bannerForm}
 		>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableBody>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableBody sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
 								제목
@@ -443,8 +446,8 @@ const BannerFormImagePC: FC<BannerProp> = ({
 				</Box>
 			</Box>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableHead>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
 								배너내용

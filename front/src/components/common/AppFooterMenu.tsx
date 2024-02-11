@@ -129,9 +129,9 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoyData = categoryData.largeCategoyData;
-	const middleCategoyData = categoryData.middleCategoyData;
-	const smallCategoyData = categoryData.smallCategoyData;
+	const largeCategoryData = categoryData.largeCategoryData;
+	const middleCategoryData = categoryData.middleCategoryData;
+	const smallCategoryData = categoryData.smallCategoryData;
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string>('');
@@ -225,7 +225,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 					onNodeToggle={handleToggle}
 					onNodeSelect={handleSelect}
 				>
-					{largeCategoyData.map((ldata: CategoryData, index: number) => {
+					{largeCategoryData.map((ldata: CategoryData, index: number) => {
 						return (
 							<StyledTreeItem
 								key={index}
@@ -237,16 +237,18 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 										ldata.categoryName,
 										ldata.categoryCode,
 										'L',
-										middleCategoyData &&
-											Object.keys(middleCategoyData).includes(
+										middleCategoryData &&
+											Object.keys(middleCategoryData).includes(
 												ldata.categoryCode
 											)
 									)
 								}
 							>
-								{middleCategoyData &&
-									Object.keys(middleCategoyData).includes(ldata.categoryCode) &&
-									middleCategoyData[ldata.categoryCode].map(
+								{middleCategoryData &&
+									Object.keys(middleCategoryData).includes(
+										ldata.categoryCode
+									) &&
+									middleCategoryData[ldata.categoryCode].map(
 										(mdata: CategoryData, i: number) => {
 											return (
 												<StyledTreeItem
@@ -259,18 +261,18 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 															mdata.categoryName,
 															mdata.categoryCode,
 															'M',
-															smallCategoyData &&
-																Object.keys(smallCategoyData).includes(
+															smallCategoryData &&
+																Object.keys(smallCategoryData).includes(
 																	mdata.categoryCode
 																)
 														)
 													}
 												>
-													{smallCategoyData &&
-														Object.keys(smallCategoyData).includes(
+													{smallCategoryData &&
+														Object.keys(smallCategoryData).includes(
 															mdata.categoryCode
 														) &&
-														smallCategoyData[mdata.categoryCode].map(
+														smallCategoryData[mdata.categoryCode].map(
 															(sdata: CategoryData, j: number) => {
 																return (
 																	<StyledTreeItem

@@ -152,8 +152,8 @@ const AppDetail: FC<AppMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoyData = categoryData.largeCategoyData;
-	const middleCategoyData = categoryData.middleCategoyData;
+	const largeCategoryData = categoryData.largeCategoryData;
+	const middleCategoryData = categoryData.middleCategoryData;
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -255,11 +255,11 @@ const AppDetail: FC<AppMenuProps> = ({
 						component="nav"
 					>
 						<MenuList sx={{ pl: { xs: 0, sm: 0 }, py: 0.2 }}>
-							{largeCategoyData.map((data: CategoryData, index: number) => (
+							{largeCategoryData.map((data: CategoryData, index: number) => (
 								<AppMenu
 									key={index}
 									largeCategory={data}
-									middleCategoyData={middleCategoyData}
+									middleCategoyData={middleCategoryData}
 									menuClick={menuClick}
 								/>
 							))}

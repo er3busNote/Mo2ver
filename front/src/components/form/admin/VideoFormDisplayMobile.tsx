@@ -28,6 +28,9 @@ import { VideoFormDisplayValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
+const tableBorder = '1px solid #d2d2d2';
+const tableBorderHeader = '3px solid #333';
+
 const videoDisplaySchema = yup
 	.object()
 	.shape({
@@ -143,27 +146,27 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 		width: '20%',
 		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
 		pl: 1.5,
 		pr: 0,
 		fontSize: { xs: '12px', sm: '13px' },
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
 		px: { xs: 1, sm: 2 },
 		py: 1,
 		fontSize: { xs: '11px', sm: '12px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 1.5,
 		py: 0.5,
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontSize: { xs: '11px', sm: '12px' },
 	};
 	const dateHorizonIcon: SxProps<Theme> = {
@@ -196,8 +199,8 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 			sx={bannerForm}
 		>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableBody>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableBody sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
 								제목
@@ -371,8 +374,8 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 				</Box>
 			</Box>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableHead>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
 								동영상내용

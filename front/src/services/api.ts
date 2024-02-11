@@ -214,9 +214,9 @@ const banner = {
 };
 
 const image = {
-	// 이미지 매핑 API : <baseURL>/images/*.*
+	// 이미지 매핑 API : <baseURL>/images/goods/*.*
 	info: (imagefile: string) => () =>
-		urlFormat(instance.defaults.baseURL ?? '') + 'images/' + imagefile,
+		urlFormat(instance.defaults.baseURL ?? '') + 'images/goods/' + imagefile,
 };
 
 const api = {

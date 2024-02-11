@@ -29,6 +29,9 @@ import { BannerData, BannerPageData } from '../../../services/types';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
+const tableBorder = '1px solid #d2d2d2';
+const tableBorderHeader = '3px solid #333';
+
 interface BannerProps {
 	title: string;
 	description: string;
@@ -109,13 +112,13 @@ const BannerMobile: FC<BannerProps> = ({
 		py: 1,
 		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
 		fontSize: { xs: '11px', sm: '13px' },
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 	};
 	const datePicker: SxProps<Theme> = {
 		height: '37px',
@@ -167,8 +170,8 @@ const BannerMobile: FC<BannerProps> = ({
 	return (
 		<Box>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableBody>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableBody sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
 								키워드
@@ -289,8 +292,8 @@ const BannerMobile: FC<BannerProps> = ({
 				</Button>
 			</Box>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
-					<TableHead>
+				<Table size="small" sx={{ border: tableBorder }}>
+					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
 								제목

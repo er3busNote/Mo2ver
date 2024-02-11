@@ -112,9 +112,9 @@ const AppDetail: FC<AppMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoyData = categoryData.largeCategoyData;
-	const middleCategoyData = categoryData.middleCategoyData;
-	const smallCategoyData = categoryData.smallCategoyData;
+	const largeCategoryData = categoryData.largeCategoryData;
+	const middleCategoryData = categoryData.middleCategoryData;
+	const smallCategoryData = categoryData.smallCategoryData;
 	const [hover, setHover] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -127,10 +127,10 @@ const AppDetail: FC<AppMenuProps> = ({
 	]);
 	if (
 		hover !== '' &&
-		middleCategoyData &&
-		Object.keys(middleCategoyData).includes(hover)
+		middleCategoryData &&
+		Object.keys(middleCategoryData).includes(hover)
 	) {
-		divideData = divideArray(middleCategoyData[hover]);
+		divideData = divideArray(middleCategoryData[hover]);
 	}
 
 	const showClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -173,7 +173,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	const submenu: SxProps<Theme> = {
 		display:
 			hover === '' || // → 처음 랜더링 시, 깜빡이는 현상 방지
-			(middleCategoyData && !Object.keys(middleCategoyData).includes(hover))
+			(middleCategoryData && !Object.keys(middleCategoryData).includes(hover))
 				? 'none'
 				: 'inline-flex',
 	};
@@ -249,15 +249,17 @@ const AppDetail: FC<AppMenuProps> = ({
 						>
 							<ThemeProvider theme={darkTheme}>
 								<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-									{largeCategoyData.map((data: CategoryData, index: number) => (
-										<AppMenuItem
-											key={index}
-											setHover={setHover}
-											menuClick={menuClick}
-											categoryCode={data.categoryCode}
-											categoryName={data.categoryName}
-										/>
-									))}
+									{largeCategoryData.map(
+										(data: CategoryData, index: number) => (
+											<AppMenuItem
+												key={index}
+												setHover={setHover}
+												menuClick={menuClick}
+												categoryCode={data.categoryCode}
+												categoryName={data.categoryName}
+											/>
+										)
+									)}
 								</MenuList>
 							</ThemeProvider>
 						</Paper>
@@ -289,11 +291,11 @@ const AppDetail: FC<AppMenuProps> = ({
 														primary={mdata.categoryName}
 													/>
 												</MenuItem>
-												{smallCategoyData &&
-													Object.keys(smallCategoyData).includes(
+												{smallCategoryData &&
+													Object.keys(smallCategoryData).includes(
 														mdata.categoryCode
 													) &&
-													smallCategoyData[mdata.categoryCode].map(
+													smallCategoryData[mdata.categoryCode].map(
 														(sdata: CategoryData, j: number) => (
 															<MenuItem
 																key={j}

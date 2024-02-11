@@ -16,6 +16,8 @@ import RenderTextField from '../../validate/TextField';
 import RenderRadioField from '../../validate/RadioField';
 import { CategoryFormValues } from './types';
 
+const tableBorder = '1px solid #d2d2d2';
+
 const schema = yup
 	.object()
 	.shape({
@@ -59,11 +61,11 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 		width: { xs: 100, sm: 180 },
 		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 		bgcolor: '#EEEEEE',
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const tdHeader: SxProps<Theme> = {
-		border: '2px solid #d2d2d2',
+		border: tableBorder,
 		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
 	};
 	const categoryForm: SxProps<Theme> = {
@@ -87,7 +89,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 			sx={categoryForm}
 		>
 			<TableContainer>
-				<Table size="small" sx={{ border: '2px solid #d2d2d2' }}>
+				<Table size="small" sx={{ border: tableBorder }}>
 					<TableBody>
 						<TableRow>
 							<TableCell sx={thHeader} align="left" component="th">

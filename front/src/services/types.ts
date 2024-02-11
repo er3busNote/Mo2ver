@@ -91,9 +91,9 @@ interface CategoryDataInfo {
 }
 
 interface CategoryDataGroup {
-	largeCategoyData: Array<CategoryData>;
-	middleCategoyData: CategoryDataInfo;
-	smallCategoyData: CategoryDataInfo;
+	largeCategoryData: Array<CategoryData>;
+	middleCategoryData: CategoryDataInfo;
+	smallCategoryData: CategoryDataInfo;
 }
 
 // 3. Banner Type

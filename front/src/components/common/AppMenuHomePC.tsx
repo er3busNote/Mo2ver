@@ -125,9 +125,9 @@ const AppDetail: FC<AppMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoyData = categoryData.largeCategoyData;
-	const middleCategoyData = categoryData.middleCategoyData;
-	const smallCategoyData = categoryData.smallCategoyData;
+	const largeCategoryData = categoryData.largeCategoryData;
+	const middleCategoryData = categoryData.middleCategoryData;
+	const smallCategoryData = categoryData.smallCategoryData;
 	const [hover, setHover] = useState<string>('');
 
 	// 중 카테고리 → 3등분
@@ -138,10 +138,10 @@ const AppDetail: FC<AppMenuProps> = ({
 	]);
 	if (
 		hover !== '' &&
-		middleCategoyData &&
-		Object.keys(middleCategoyData).includes(hover)
+		middleCategoryData &&
+		Object.keys(middleCategoryData).includes(hover)
 	) {
-		divideData = divideArray(middleCategoyData[hover]);
+		divideData = divideArray(middleCategoryData[hover]);
 	}
 
 	const onMouseLeave = () => {
@@ -172,7 +172,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	const submenu: SxProps<Theme> = {
 		display:
 			hover === '' || // → 처음 랜더링 시, 깜빡이는 현상 방지
-			(middleCategoyData && !Object.keys(middleCategoyData).includes(hover))
+			(middleCategoryData && !Object.keys(middleCategoryData).includes(hover))
 				? 'none'
 				: 'inline-flex',
 	};
@@ -220,7 +220,7 @@ const AppDetail: FC<AppMenuProps> = ({
 					<Box sx={{ width: submenuWidthSize }}>
 						<ThemeProvider theme={darkTheme}>
 							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								{largeCategoyData.map((data: CategoryData, index: number) => (
+								{largeCategoryData.map((data: CategoryData, index: number) => (
 									<AppMenuItem
 										key={index}
 										setHover={setHover}
@@ -256,11 +256,11 @@ const AppDetail: FC<AppMenuProps> = ({
 													primary={mdata.categoryName}
 												/>
 											</MenuItem>
-											{smallCategoyData &&
-												Object.keys(smallCategoyData).includes(
+											{smallCategoryData &&
+												Object.keys(smallCategoryData).includes(
 													mdata.categoryCode
 												) &&
-												smallCategoyData[mdata.categoryCode].map(
+												smallCategoryData[mdata.categoryCode].map(
 													(sdata: CategoryData, j: number) => (
 														<MenuItem
 															key={j}
