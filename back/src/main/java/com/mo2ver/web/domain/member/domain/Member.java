@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(
-        name = "MEMBER",
+        name = "MEMBER",    // 회원
         indexes={
                 @Index(
                         name="UK_LOGIN_ID",

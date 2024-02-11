@@ -107,7 +107,7 @@ public class MemberController {
 
         UserDetailsService userDetailsService = (UserDetailsService) memberService;
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(signupDto.getEmail());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(signupDto.getUsername());
 
             if (signupDto.getUsername().equals(userDetails.getUsername())) {
                 return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_USERNAME_VALUE_INVALID, response));

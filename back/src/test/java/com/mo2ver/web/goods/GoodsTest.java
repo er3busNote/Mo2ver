@@ -1,8 +1,8 @@
 package com.mo2ver.web.goods;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Entity
 @Table(
-        name = "TERMS_AGR",
+        name = "TERMS_AGR",     // 약관동의
         indexes={
                 @Index(
                         name="FK_MBR_TO_TERMS_AGR",

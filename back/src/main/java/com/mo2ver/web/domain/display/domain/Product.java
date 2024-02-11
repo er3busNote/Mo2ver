@@ -1,44 +1,33 @@
-package com.mo2ver.web.domain.goods.domain;
+package com.mo2ver.web.domain.display.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "GD_CAT")    // 상품카테고리
+@Table(name = "DP_BNNR_PRD")    // 전시배너상품
 @Getter @Setter
-@EqualsAndHashCode(of = "categoryCode")
+@EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Category {
+public class Product {
 
     @Id
-    @Column(name = "CAT_CD", columnDefinition = "CHAR(10) COMMENT '카테고리코드'")
-    private String categoryCode;
+    @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
+    private Long bannerManageNo;
 
-    @Column(name = "CAT_NM", columnDefinition = "VARCHAR(50) COMMENT '카테고리명'")
-    private String categoryName;
+    @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
+    private String productCode;
 
-    @Column(name = "UPPR_CAT_CD", columnDefinition = "CHAR(10) COMMENT '상위카테고리코드'")
-    private String upperCategoryCode;
-
-    @Column(name= "CAT_LV", columnDefinition = "INT(11) COMMENT '카테고리레벨'")
-    private Integer categoryLevel;
-
-    @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
-    private Character useYesNo;
+    @Column(name = "PRD_NM", columnDefinition = "VARCHAR(50) COMMENT '상품명'")
+    private String productName;
 
     @Column(name= "SORT_SEQ", columnDefinition = "INT(11) COMMENT '정렬순서'")
     private Integer sortSequence;
-
-    @Column(name = "CNNT_URL", columnDefinition = "VARCHAR(255) COMMENT '연결URL'")
-    private String connectUrl;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

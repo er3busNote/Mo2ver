@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "TERMS_MNG")
+@Table(name = "TERMS_MNG")      // 약관관리
 @Getter @Setter
 @EqualsAndHashCode(of = "termsManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor

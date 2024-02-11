@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "CMM_CD_GRP")
+@Table(name = "CMM_CD_GRP")     // 공통그룹코드
 @Getter @Setter
 @EqualsAndHashCode(of = "commonGroupCode")
 @Builder @NoArgsConstructor @AllArgsConstructor

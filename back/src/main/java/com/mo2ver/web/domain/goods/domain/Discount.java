@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "GD_DIS_PRC",
+        name = "GD_DIS_PRC",    // 상품할인가격
         indexes={
                 @Index(
                         name="FK_GD_TO_GD_DIS_PRC",

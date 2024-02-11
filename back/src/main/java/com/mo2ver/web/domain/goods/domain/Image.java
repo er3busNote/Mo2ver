@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "GD_IMG",
+        name = "GD_IMG",    // 상품이미지
         indexes={
                 @Index(
                         name="FK_GD_TO_GD_IMG",

@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(
-        name = "GD_PRC",
+        name = "GD_PRC",    // 상품가격
         indexes={
                 @Index(
                         name="FK_GD_TO_GD_PRC_CD",

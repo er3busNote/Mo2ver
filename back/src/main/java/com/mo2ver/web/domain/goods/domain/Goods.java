@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "GD")
+@Table(name = "GD")    // 상품
 @Getter @Setter
 @EqualsAndHashCode(of = "goodsCode")
 @Builder @NoArgsConstructor @AllArgsConstructor

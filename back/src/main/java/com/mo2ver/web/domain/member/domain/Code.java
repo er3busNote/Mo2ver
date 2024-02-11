@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "CMM_CD",
+        name = "CMM_CD",    // 공통코드
         indexes={
                 @Index(
                         name="FK_CMM_CD_GRP_TO_CMM_CD",

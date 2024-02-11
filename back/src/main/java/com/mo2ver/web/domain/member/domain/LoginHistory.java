@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "LOGIN_HISTORY")
+@Table(name = "LOGIN_HISTORY")  // 로그인이력
 @Getter @Setter
 @EqualsAndHashCode(of = "loginHistoryManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor

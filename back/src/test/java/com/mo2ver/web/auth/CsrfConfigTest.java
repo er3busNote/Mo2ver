@@ -3,6 +3,7 @@ package com.mo2ver.web.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo2ver.web.domain.member.dto.LoginDto;
+import com.mo2ver.web.global.jwt.TokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +34,12 @@ public class CsrfConfigTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    @Autowired
+    protected TokenProvider tokenProvider;
 
     @BeforeEach
     public void setup() {
