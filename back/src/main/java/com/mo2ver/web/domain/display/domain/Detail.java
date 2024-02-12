@@ -9,7 +9,15 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "DP_BNNR_DTL")    // 전시배너상세
+@Table(
+        name = "DP_BNNR_DTL", // 전시배너상세
+        indexes={
+                @Index(
+                        name="FK_DP_BNNR_MNG_TO_DP_BNNR_DTL",
+                        columnList="BNNR_MNG_NO"
+                )
+        }
+)
 @Getter @Setter
 @EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
@@ -19,6 +27,10 @@ public class Detail {
     @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long bannerManageNo;
+
+    @OneToOne
+    @JoinColumn(name = "BNNR_MNG_NO", referencedColumnName = "BNNR_MNG_NO")
+    private Manage manage;
 
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;

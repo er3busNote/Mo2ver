@@ -45,7 +45,11 @@ const defaultValues = {
 };
 
 const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
-	const { control, handleSubmit, formState } = useForm<CategoryFormValues>({
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid, errors },
+	} = useForm<CategoryFormValues>({
 		mode: 'onChange',
 		defaultValues,
 		resolver: yupResolver(schema),
@@ -209,7 +213,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 						},
 					}}
 					variant="outlined"
-					disabled={formState.isSubmitted && !formState.isValid}
+					disabled={isSubmitted && !isValid}
 				>
 					저장
 				</Button>

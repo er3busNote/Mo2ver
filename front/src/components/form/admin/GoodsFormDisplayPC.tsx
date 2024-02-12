@@ -540,12 +540,16 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
-	const { control, handleSubmit, formState, watch } =
-		useForm<GoodsFormDisplayValues>({
-			mode: 'onChange',
-			defaultValues: goodsDisplayValues,
-			resolver: yupResolver(goodsDisplaySchema),
-		});
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+		watch,
+	} = useForm<GoodsFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: goodsDisplayValues,
+		resolver: yupResolver(goodsDisplaySchema),
+	});
 
 	useEffect(() => {
 		const type = watch('type');
@@ -722,7 +726,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 								<Controller
 									name="position"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="노출 위치"
 											datas={[
@@ -735,6 +739,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 												{ value: '50', label: '메인최상단' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -747,7 +752,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 								<Controller
 									name="type"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="템플릿 유형"
 											datas={[
@@ -756,6 +761,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 												{ value: 'VD', label: '동영상' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -770,7 +776,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 								<Controller
 									name="useyn"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="전시여부"
 											datas={[
@@ -779,6 +785,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 												{ value: 'N', label: '아니오' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -820,7 +827,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 									},
 								}}
 								variant="outlined"
-								disabled={formState.isSubmitted && !formState.isValid}
+								disabled={isSubmitted && !isValid}
 							>
 								저장
 							</Button>

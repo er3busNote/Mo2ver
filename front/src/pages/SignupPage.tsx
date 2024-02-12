@@ -4,6 +4,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '../services/api';
+import { SignUpData } from '../services/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import SignupForm from '../components/form/SignupForm';
 import { SignupFormValues } from '../components/form/types';
@@ -25,7 +26,7 @@ const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 		data: SignupFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const userFormData = {
+		const userFormData: SignUpData = {
 			username: data.username,
 			password: data.password,
 			email: data.email,

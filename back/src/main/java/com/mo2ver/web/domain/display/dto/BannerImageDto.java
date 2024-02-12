@@ -29,5 +29,5 @@ public class BannerImageDto {
     @NotNull(message = "전시여부가 존재하지 않습니다")
     private Character useyn;
 
-    private List<BannerDetailDto> bnnrImg;
+    private List<BannerImageDetailDto> bnnrImg;
 }

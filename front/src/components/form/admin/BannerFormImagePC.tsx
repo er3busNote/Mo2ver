@@ -65,29 +65,34 @@ const bnnrImageSchema = yup
 			)
 			.nullable()
 			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required(),
+		position: yup.string().required('필수항목'),
 		type: yup.string().required(),
-		useyn: yup.string().required(),
+		useyn: yup.string().required('필수항목'),
 		bnnrImg: yup
 			.array()
 			.of(
 				yup.object().shape({
-					title: yup.string().required(),
+					title: yup.string().required('배너내용을 입력해주세요'),
 					bnnrImg: yup
 						.mixed<File>()
 						.test(
+							'file',
+							'파일을 선택하세요',
+							(value) => value && value.size > 0
+						)
+						.test(
 							'fileSize',
-							'File size is too large',
+							'파일크기가 너무 작습니다',
 							(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
 						)
 						.test(
 							'fileType',
-							'Invalid file type',
+							'지원되는 파일 타입이 아닙니다',
 							(value) =>
 								value && ['image/jpeg', 'image/png'].includes(value.type)
 						),
-					cnntUrl: yup.string().required(),
-					useyn: yup.string().required(),
+					cnntUrl: yup.string().required('연결할 URL을 입력해주세요'),
+					useyn: yup.string().required('필수항목'),
 				})
 			)
 			.required('이미지 정보를 입력해주세요'),
@@ -121,12 +126,16 @@ const BannerFormImagePC: FC<BannerProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('BN');
-	const { control, handleSubmit, formState, watch } =
-		useForm<BannerFormImageValues>({
-			mode: 'onChange',
-			defaultValues: bnnrImageValues,
-			resolver: yupResolver(bnnrImageSchema),
-		});
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+		watch,
+	} = useForm<BannerFormImageValues>({
+		mode: 'onChange',
+		defaultValues: bnnrImageValues,
+		resolver: yupResolver(bnnrImageSchema),
+	});
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'bnnrImg',
@@ -297,7 +306,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 								<Controller
 									name="position"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="노출 위치"
 											datas={[
@@ -310,6 +319,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 												{ value: '50', label: '메인최상단' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -322,7 +332,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 								<Controller
 									name="type"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="템플릿 유형"
 											datas={[
@@ -331,6 +341,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 												{ value: 'VD', label: '동영상' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -345,7 +356,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 								<Controller
 									name="useyn"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="전시여부"
 											datas={[
@@ -354,6 +365,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 												{ value: 'N', label: '아니오' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -395,7 +407,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 									},
 								}}
 								variant="outlined"
-								disabled={formState.isSubmitted && !formState.isValid}
+								disabled={isSubmitted && !isValid}
 							>
 								저장
 							</Button>
@@ -513,7 +525,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 									<Controller
 										name={`bnnrImg.${index}.useyn`}
 										control={control}
-										render={({ field, formState }) => (
+										render={({ field, fieldState, formState }) => (
 											<RenderSelectField
 												label="전시여부"
 												datas={[
@@ -522,6 +534,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 													{ value: 'N', label: '아니오' },
 												]}
 												field={field}
+												fieldState={fieldState}
 												formState={formState}
 											/>
 										)}

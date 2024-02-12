@@ -5,6 +5,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { MemberState } from '../store/types';
 import Api from '../services/api';
+import { LoginData } from '../services/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import LoginForm from '../components/form/LoginForm';
 import { LoginFormValues } from '../components/form/types';
@@ -26,7 +27,7 @@ const LoginPage: FC<LoginDispatchProps> = ({ member }): JSX.Element => {
 		data: LoginFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const userFormData = {
+		const userFormData: LoginData = {
 			username: data.username,
 			password: data.password,
 		};

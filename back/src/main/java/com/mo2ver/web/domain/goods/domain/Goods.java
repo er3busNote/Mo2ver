@@ -62,14 +62,14 @@ public class Goods {
 //    @OneToOne(mappedBy = "applyDate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private Price priceDate;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumns({
             @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
             @JoinColumn(name = "UPD_DT", referencedColumnName = "APPL_DT", insertable = false, updatable = false)
     })
     private Price price;
 
-    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")

@@ -1,7 +1,7 @@
 package com.mo2ver.web.display;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.domain.display.dto.BannerDetailDto;
+import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import org.junit.jupiter.api.DisplayName;
@@ -37,20 +37,20 @@ public class BannerImageTest extends CsrfConfigTest {
         bannerImageDto.setPosition("BN");
         bannerImageDto.setUseyn('Y');
 
-        BannerDetailDto bannerDetailDto1 = new BannerDetailDto();
-        bannerDetailDto1.setTitle("테스트 1");
-        bannerDetailDto1.setCnntUrl("https://mo2ver.com/test1.jpg");
-        bannerDetailDto1.setUseyn('Y');
+        BannerImageDetailDto bannerImageDetailDto1 = new BannerImageDetailDto();
+        bannerImageDetailDto1.setTitle("테스트 1");
+        bannerImageDetailDto1.setCnntUrl("https://mo2ver.com/test1.jpg");
+        bannerImageDetailDto1.setUseyn('Y');
 
-        BannerDetailDto bannerDetailDto2 = new BannerDetailDto();
-        bannerDetailDto2.setTitle("테스트 2");
-        bannerDetailDto2.setCnntUrl("https://mo2ver.com/test2.jpg");
-        bannerDetailDto2.setUseyn('Y');
+        BannerImageDetailDto bannerImageDetailDto2 = new BannerImageDetailDto();
+        bannerImageDetailDto2.setTitle("테스트 2");
+        bannerImageDetailDto2.setCnntUrl("https://mo2ver.com/test2.jpg");
+        bannerImageDetailDto2.setUseyn('Y');
 
-        List<BannerDetailDto> listBannerDetailDto = new ArrayList<BannerDetailDto>();
-        listBannerDetailDto.add(bannerDetailDto1);
-        listBannerDetailDto.add(bannerDetailDto2);
-        bannerImageDto.setBnnrImg(listBannerDetailDto);
+        List<BannerImageDetailDto> listBannerImageDetailDto = new ArrayList<BannerImageDetailDto>();
+        listBannerImageDetailDto.add(bannerImageDetailDto1);
+        listBannerImageDetailDto.add(bannerImageDetailDto2);
+        bannerImageDto.setBnnrImg(listBannerImageDetailDto);
 
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "text/plain", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "text/plain", "Test file content 2".getBytes());

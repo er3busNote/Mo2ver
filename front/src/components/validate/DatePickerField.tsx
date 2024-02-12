@@ -15,18 +15,10 @@ interface RenderDatePickerFieldProps {
 }
 
 const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
-	field: { onChange, value },
+	field: { onChange, value, name },
+	fieldState: { error },
 	label,
 }) => {
-	const handleChange = (newValue: Date) => {
-		// if (name === 'startDate') setStartDate(newValue);
-		// else if (name === 'endDate') setEndDate(newValue);
-
-		// if (name === 'startDate' && newValue > endDate) setEndDate(newValue);
-		// else if (name === 'endDate' && newValue < startDate) setStartDate(newValue);
-		onChange(newValue);
-	};
-
 	const datePicker: SxProps<Theme> = {
 		height: '37px',
 		'.MuiInputBase-input': {
@@ -47,14 +39,23 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 			pr: { xs: 0.5, sm: 1 },
 			pl: 0,
 		},
+		'.MuiFormHelperText-root': {
+			color: '#d32f2f',
+		},
 		overflowX: 'visible',
 	};
 	return (
 		<DesktopDatePicker
 			label={label}
+			name={name}
 			value={value}
-			onChange={(value) => handleChange(value)}
+			onChange={onChange}
 			sx={datePicker}
+			slotProps={{
+				textField: {
+					helperText: error ? error.message : '',
+				},
+			}}
 		/>
 	);
 };

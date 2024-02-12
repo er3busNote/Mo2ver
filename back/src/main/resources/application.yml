@@ -53,6 +53,11 @@ spring:
       hibernate:
         hbm2ddl:
           auto: validate
+#          auto: update
+#    hibernate:
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    defer-datasource-initialization: true   # Hibernate 초기화 후 data.sql 실행
 ---
 spring:
   config:

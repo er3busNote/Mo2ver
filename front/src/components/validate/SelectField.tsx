@@ -1,7 +1,17 @@
 import React, { FC } from 'react';
-import { ControllerRenderProps, UseFormStateReturn } from 'react-hook-form';
+import {
+	ControllerRenderProps,
+	ControllerFieldState,
+	UseFormStateReturn,
+} from 'react-hook-form';
+import {
+	Select,
+	MenuItem,
+	FormControl,
+	InputLabel,
+	FormHelperText,
+} from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 interface SelectProps {
 	value: any;
@@ -10,6 +20,7 @@ interface SelectProps {
 
 interface RenderSelectFieldProps {
 	field: ControllerRenderProps<any, any>;
+	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
 	datas: Array<SelectProps>;
 	label: string;
@@ -17,6 +28,7 @@ interface RenderSelectFieldProps {
 
 const RenderSelectField: FC<RenderSelectFieldProps> = ({
 	field: { onChange, value, name },
+	fieldState: { error },
 	label,
 	datas,
 }) => {
@@ -43,7 +55,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 		fontSize: { xs: '12px', sm: '13px', md: '13px', lg: '14px' },
 	};
 	return (
-		<FormControl sx={selectForm}>
+		<FormControl sx={selectForm} error={error !== undefined}>
 			<InputLabel id={`${name}-select-label`} sx={selectLabel}>
 				{label}
 			</InputLabel>
@@ -62,6 +74,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 					);
 				})}
 			</Select>
+			{error && <FormHelperText>{error.message}</FormHelperText>}
 		</FormControl>
 	);
 };

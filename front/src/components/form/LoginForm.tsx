@@ -40,7 +40,11 @@ interface LoginProp {
 }
 
 const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
-	const { control, handleSubmit, formState } = useForm<LoginFormValues>({
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+	} = useForm<LoginFormValues>({
 		resolver: yupResolver(schema),
 	});
 
@@ -117,7 +121,7 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 						type="submit"
 						fullWidth
 						variant="contained"
-						disabled={formState.isSubmitted && !formState.isValid}
+						disabled={isSubmitted && !isValid}
 						sx={{ mt: 3, mb: 2 }}
 					>
 						Sign In

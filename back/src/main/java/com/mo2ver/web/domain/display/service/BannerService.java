@@ -2,7 +2,7 @@ package com.mo2ver.web.domain.display.service;
 
 import com.mo2ver.web.domain.display.dao.ManageRepository;
 import com.mo2ver.web.domain.display.domain.Manage;
-import com.mo2ver.web.domain.display.dto.BannerDetailDto;
+import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
 import com.mo2ver.web.domain.display.dto.BannerDto;
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,9 @@ public class BannerService {
 
     @Transactional
     public void saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto) throws IOException {
-        List<BannerDetailDto> listBannerDetailDto = bannerImageDto.getBnnrImg();
-        for (int i=0; i<listBannerDetailDto.size(); i++) {
-            log.info("bannerImageInfo => {} : {}", listBannerDetailDto.get(i).getTitle(), new String(files.get(i).getBytes(), "UTF-8"));
+        List<BannerImageDetailDto> listBannerImageDetailDto = bannerImageDto.getBnnrImg();
+        for (int i = 0; i< listBannerImageDetailDto.size(); i++) {
+            log.info("bannerImageInfo => {} : {}", listBannerImageDetailDto.get(i).getTitle(), new String(files.get(i).getBytes(), "UTF-8"));
         }
     }
 }

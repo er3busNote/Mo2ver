@@ -211,6 +211,22 @@ const banner = {
 			.catch((error: AxiosError) => {
 				return error.response;
 			}),
+	// 배너 이미지 업로드 API : <baseURL>/banner/upload
+	upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
+		instance
+			.post('banner/upload', formData, {
+				headers: {
+					'X-XSRF-TOKEN': csrfData.csrfToken,
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
 };
 
 const image = {

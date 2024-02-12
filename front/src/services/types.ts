@@ -135,6 +135,22 @@ interface BannerPageData {
 	totalPages: number;
 }
 
+interface BannerImageDetailData {
+	title: string;
+	cnntUrl: string;
+	useyn: string;
+}
+
+interface BannerImageData {
+	title: string;
+	startDate: string;
+	endDate: string;
+	position: string;
+	type: string;
+	useyn: string;
+	bnnrImg: Array<BannerImageDetailData>;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -161,6 +177,8 @@ export type {
 	CategoryDataGroup,
 	BannerData,
 	BannerPageData,
+	BannerImageData,
+	BannerImageDetailData,
 	PageData,
 	KeywordData,
 };

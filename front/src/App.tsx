@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import persistedReducer from './store';
 import RootRoutes from './routes/index';
 import { CookiesProvider } from 'react-cookie';
+import { SnackbarProvider } from 'notistack';
 import './App.css';
 
 const store = configureStore({
@@ -17,9 +18,14 @@ const App: FC = (): JSX.Element => {
 	return (
 		<div className="App">
 			<Provider store={store}>
-				<CookiesProvider>
-					<RootRoutes />
-				</CookiesProvider>
+				<SnackbarProvider
+					maxSnack={5}
+					anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+				>
+					<CookiesProvider>
+						<RootRoutes />
+					</CookiesProvider>
+				</SnackbarProvider>
 			</Provider>
 		</div>
 	);

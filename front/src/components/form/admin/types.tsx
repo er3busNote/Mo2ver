@@ -6,7 +6,7 @@ interface CategoryFormValues {
 	level: number;
 }
 
-interface BannerDetailValues {
+interface BannerImageDetailValues {
 	title: string;
 	bnnrImg?: File;
 	cnntUrl: string;
@@ -20,7 +20,7 @@ interface BannerFormImageValues {
 	position: string;
 	type: string;
 	useyn: string;
-	bnnrImg: Array<BannerDetailValues>;
+	bnnrImg: Array<BannerImageDetailValues>;
 }
 
 interface GoodsFormDisplayValues {
@@ -44,6 +44,7 @@ interface VideoFormDisplayValues {
 export type {
 	CategoryFormValues,
 	BannerFormImageValues,
+	BannerImageDetailValues,
 	GoodsFormDisplayValues,
 	VideoFormDisplayValues,
 };

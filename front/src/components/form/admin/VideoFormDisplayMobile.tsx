@@ -95,12 +95,16 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('VD');
-	const { control, handleSubmit, formState, watch } =
-		useForm<VideoFormDisplayValues>({
-			mode: 'onChange',
-			defaultValues: videoDisplayValues,
-			resolver: yupResolver(videoDisplaySchema),
-		});
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+		watch,
+	} = useForm<VideoFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: videoDisplayValues,
+		resolver: yupResolver(videoDisplaySchema),
+	});
 
 	useEffect(() => {
 		const type = watch('type');
@@ -265,7 +269,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 								<Controller
 									name="position"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="노출 위치"
 											datas={[
@@ -278,6 +282,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 												{ value: '50', label: '메인최상단' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -292,7 +297,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 								<Controller
 									name="type"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="템플릿 유형"
 											datas={[
@@ -301,6 +306,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 												{ value: 'VD', label: '동영상' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -315,7 +321,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 								<Controller
 									name="useyn"
 									control={control}
-									render={({ field, formState }) => (
+									render={({ field, fieldState, formState }) => (
 										<RenderSelectField
 											label="전시여부"
 											datas={[
@@ -324,6 +330,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 												{ value: 'N', label: '아니오' },
 											]}
 											field={field}
+											fieldState={fieldState}
 											formState={formState}
 										/>
 									)}
@@ -365,7 +372,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 									},
 								}}
 								variant="outlined"
-								disabled={formState.isSubmitted && !formState.isValid}
+								disabled={isSubmitted && !isValid}
 							>
 								저장
 							</Button>

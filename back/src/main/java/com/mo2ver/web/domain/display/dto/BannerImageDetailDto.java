@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerDetailDto {
+public class BannerImageDetailDto {
 
     private String title;
 
