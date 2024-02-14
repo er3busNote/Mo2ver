@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.display.domain;
 
+import com.mo2ver.web.domain.display.dto.BannerImageDto;
+import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -8,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "DP_BNNR_MNG")    // 전시배너관리
@@ -33,6 +36,12 @@ public class Manage {
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
     private Character displayYesNo;
 
+    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY)
+    private List<Detail> detailList;
+
+    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY)
+    private List<Product> productList;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -50,4 +59,15 @@ public class Manage {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static Manage of(BannerImageDto bannerImageDto, Member currentUser) {
+        return Manage.builder()
+                .subject(bannerImageDto.getTitle())
+                .displayStartDate(bannerImageDto.getStartDate())
+                .displayEndDate(bannerImageDto.getEndDate())
+                .displayYesNo(bannerImageDto.getUseyn())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
 }

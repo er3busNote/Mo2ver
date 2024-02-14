@@ -22,7 +22,7 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver_test
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver_dev
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:
@@ -46,7 +46,7 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver_dev
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     properties:

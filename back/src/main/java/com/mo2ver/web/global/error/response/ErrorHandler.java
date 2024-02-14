@@ -1,12 +1,12 @@
-package com.mo2ver.web.global.error.service;
+package com.mo2ver.web.global.error.response;
 
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
-@Service
+@Component
 public class ErrorHandler {
 
     public ErrorResponse buildError(ErrorCode errorCode, HashMap<String, Object> errorMessage) {

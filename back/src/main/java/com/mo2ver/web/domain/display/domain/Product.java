@@ -24,13 +24,21 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
+    @Column(name = "BNNR_PRD_ID", columnDefinition = "BIGINT(20) COMMENT '배너전시관리번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long bannerManageNo;
+    private Long bannerProductId;
 
-    @OneToOne
-    @JoinColumn(name = "BNNR_MNG_NO", referencedColumnName = "BNNR_MNG_NO")
-    private Manage manage;
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @JoinColumn(
+            name = "BNNR_MNG_NO",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(
+                    name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD",
+                    foreignKeyDefinition = "FOREIGN KEY (BNNR_MNG_NO) REFERENCES DP_BNNR_MNG(BNNR_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
+    )
+    private Manage bannerManageNo;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;

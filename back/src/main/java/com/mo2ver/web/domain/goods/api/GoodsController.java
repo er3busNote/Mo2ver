@@ -7,7 +7,7 @@ import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageDto;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
-import com.mo2ver.web.global.error.service.ErrorHandler;
+import com.mo2ver.web.global.error.response.ErrorHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

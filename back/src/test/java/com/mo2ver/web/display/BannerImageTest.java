@@ -52,8 +52,8 @@ public class BannerImageTest extends CsrfConfigTest {
         listBannerImageDetailDto.add(bannerImageDetailDto2);
         bannerImageDto.setBnnrImg(listBannerImageDetailDto);
 
-        MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "text/plain", "Test file content 1".getBytes());
-        MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "text/plain", "Test file content 2".getBytes());
+        MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
 
         MockPart jsonBannerImage = new MockPart("bannerImage", objectMapper.writeValueAsString(bannerImageDto).getBytes());
         jsonBannerImage.getHeaders().setContentType(MediaType.APPLICATION_JSON);

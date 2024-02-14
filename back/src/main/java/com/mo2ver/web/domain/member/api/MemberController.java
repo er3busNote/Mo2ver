@@ -6,7 +6,7 @@ import com.mo2ver.web.domain.member.dto.SignupDto;
 import com.mo2ver.web.domain.member.validation.MemberValidator;
 import com.mo2ver.web.global.common.dto.CsrfDto;
 import com.mo2ver.web.global.common.dto.ResponseDto;
-import com.mo2ver.web.global.error.service.ErrorHandler;
+import com.mo2ver.web.global.error.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;

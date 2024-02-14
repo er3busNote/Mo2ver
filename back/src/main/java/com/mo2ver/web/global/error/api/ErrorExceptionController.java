@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
-import com.mo2ver.web.global.error.service.ErrorHandler;
+import com.mo2ver.web.global.error.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
