@@ -85,7 +85,7 @@ public class Detail {
                 .imageAttachFile(fileNameWithoutExtension)
                 .connectUrl(bannerImageDetailDto.getCnntUrl())
                 .bannerContents(bannerImageDetailDto.getTitle())
-                .sortSequence(index)
+                .sortSequence(1)
                 .useYesNo(bannerImageDetailDto.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

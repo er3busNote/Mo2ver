@@ -65,8 +65,6 @@ public class BannerService {
             File targetFile = new File(uploadDirectory + "/" + detail.getBannerDetailId() + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
         }
-
-
     }
 
     private void createDirectory(String uploadDirectory) {

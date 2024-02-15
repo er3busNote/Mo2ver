@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PriceId implements Serializable {
+    @Column(name = "GD_CD")
     protected String goodsCode;
+    @Column(name = "APPL_DT")
     protected LocalDateTime applyDate;
 }

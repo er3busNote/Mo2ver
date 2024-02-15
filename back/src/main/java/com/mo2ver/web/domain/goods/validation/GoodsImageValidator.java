@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.display.validation;
+package com.mo2ver.web.domain.goods.validation;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class BannerImageValidator implements Validator {
+public class GoodsImageValidator implements Validator  {
 
     private static final List<String> ALLOWED_CONTENT_TYPES = Arrays.asList(
             "image/jpeg",
@@ -42,13 +42,13 @@ public class BannerImageValidator implements Validator {
             MultipartFile file = files.get(i);
 
             if (file.isEmpty()) {
-                errors.rejectValue("bnnrImg[" + i + "]", "fileEmpty", "파일이 존재하지 않습니다");
+                errors.rejectValue("goodsImg[" + i + "]", "fileEmpty", "파일이 존재하지 않습니다");
                 continue;
             }
 
             if (!isImageContentType(file)) {
                 String allowedTypes = getAllowedContentTypesAsString();
-                errors.rejectValue("bnnrImg[" + i + "]", "invalidType", "지원되지 않는 파일형식입니다. 허용된 파일타입 : " + allowedTypes);
+                errors.rejectValue("goodsImg[" + i + "]", "invalidType", "지원되지 않는 파일형식입니다. 허용된 파일타입 : " + allowedTypes);
             }
         }
     }

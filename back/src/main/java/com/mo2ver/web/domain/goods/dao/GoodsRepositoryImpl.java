@@ -26,6 +26,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
     public Page<Goods> findByCategoryCode(Pageable pageable, String categoryCode, Character categoryType) {
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(image.basicImageYesNo.eq('Y')); // → innerJoin으로 처음에 가져오고 나서, imageList에 대해서 한번 더 쿼리조회를 하는 방식이기 때문에, ImageDto에서 2차적으로 걸러야함
 
         switch (categoryType) {
             case 'L':

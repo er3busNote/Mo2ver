@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.domain;
 
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.goods.domain.Goods;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
@@ -18,20 +18,20 @@ public class GoodsGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(GD_CD) FROM GD";
-        String lastMemberNo = null;
-        Member newMember = (Member) obj;
+        String lastGoodsNo = null;
+        Goods newGoods = (Goods) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastMemberNo = rs.getString(1);
-                if (lastMemberNo != null) {
-                    String memberNo = generateNextId(lastMemberNo);
-                    newMember.setRegister(memberNo);
-                    newMember.setUpdater(memberNo);
-                    return memberNo;
+                lastGoodsNo = rs.getString(1);
+                if (lastGoodsNo != null) {
+                    String goodsNo = generateNextId(lastGoodsNo);
+                    newGoods.setRegister(goodsNo);
+                    newGoods.setUpdater(goodsNo);
+                    return goodsNo;
                 }
             }
         } catch (SQLException e) {
@@ -46,13 +46,13 @@ public class GoodsGenerator implements IdentifierGenerator {
             }
         }
 
-        newMember.setRegister("1000000001");
-        newMember.setUpdater("1000000001");
+        newGoods.setRegister("1000000001");
+        newGoods.setUpdater("1000000001");
         return "1000000001";
     }
 
-    private String generateNextId(String lastMemberNo) {
-        Integer nextId = Integer.parseInt(lastMemberNo.substring(1)) + 1;
+    private String generateNextId(String lastGoodsNo) {
+        Integer nextId = Integer.parseInt(lastGoodsNo.substring(1)) + 1;
         return String.valueOf(1000000000 + nextId);
     }
 }

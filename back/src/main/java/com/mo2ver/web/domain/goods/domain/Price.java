@@ -1,11 +1,15 @@
 package com.mo2ver.web.domain.goods.domain;
 
+import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,11 +19,6 @@ import java.util.Date;
                 @Index(
                         name="FK_GD_TO_GD_PRC_CD",
                         columnList="GD_CD",
-                        unique = true
-                ),
-                @Index(
-                        name="FK_GD_TO_GD_PRC_DT",
-                        columnList="APPL_DT",
                         unique = true
                 )
         }
@@ -32,7 +31,7 @@ public class Price implements Persistable<PriceId> {
     private PriceId priceId;
 
     @MapsId("goodsCode")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -41,16 +40,6 @@ public class Price implements Persistable<PriceId> {
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
     private Goods goodsCode;
-
-    @MapsId("applyDate")
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "APPL_DT",
-            nullable = false,
-            updatable = false,
-            columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '적용일시'"
-    )
-    private Goods applyDate;
 
     @Column(name = "SUPP_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '공급가'")
     private BigDecimal supplyPrice;
@@ -91,6 +80,25 @@ public class Price implements Persistable<PriceId> {
     // 새로운 엔티티 판단 전략 재정의
     @Override
     public boolean isNew() {
-        return applyDate == null;
+        return priceId == null || goodsCode == null;
+    }
+
+    public static Price of(GoodsImageDto goodsImageDto, Member currentUser) {
+        Goods goods = Goods.builder().updateDate(LocalDateTime.now()).build();
+        PriceId priceId = new PriceId(goods.getGoodsCode(), goods.getUpdateDate());
+        return Price.builder()
+                .priceId(priceId)
+                .goodsCode(Goods.of(goodsImageDto, currentUser))
+                .supplyPrice(goodsImageDto.getSupplyPrice())
+                .salePrice(goodsImageDto.getSalePrice())
+                .maxBuyQuantity(goodsImageDto.getMaxBuyQuantity())
+                .buyLimitYesNo(goodsImageDto.getBuyLimitYesNo())
+                .buyLimitCondition(goodsImageDto.getBuyLimitCondition())
+                .salePeriodYesNo(goodsImageDto.getSalePeriodYesNo())
+                .saleStartDate(goodsImageDto.getSaleStartDate())
+                .saleEndDate(goodsImageDto.getSaleEndDate())
+                .saleConditionCode("10")
+                .register(currentUser.getMemberNo())
+                .build();
     }
 }
