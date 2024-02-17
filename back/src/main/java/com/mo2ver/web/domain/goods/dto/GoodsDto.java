@@ -41,7 +41,7 @@ public class GoodsDto {
                 .goodsYear(goods.getGoodsYear())
                 .supplyPrice(goods.getPrice().getSupplyPrice())
                 .salePrice(goods.getPrice().getSalePrice())
-                .imageList(goods.getImageList().stream()
+                .imageList(goods.getGoodsImageList().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')   // innerJoin 할때, 조건을 추가로 붙여야 함..
                         .map(ImageDto::toDTO)
                         .collect(Collectors.toList()))

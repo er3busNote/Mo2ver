@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.display.api;
 
 import com.mo2ver.web.domain.display.dto.BannerDto;
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
 import com.mo2ver.web.domain.display.service.BannerService;
 import com.mo2ver.web.domain.display.validation.BannerImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
@@ -49,6 +50,13 @@ public class BannerController {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "bannerManageNo");
         Page<BannerDto> pages = bannerService.findBannerlist(pageable);
         return ResponseEntity.ok(pages);
+    }
+
+    @PostMapping("/goods")
+    public ResponseEntity goodsBanner(@RequestBody @Valid GoodsDisplayDto goodsDisplayDto,
+                                      @CurrentUser Member currentUser) {
+        bannerService.saveGoodsDisplay(goodsDisplayDto, currentUser);
+        return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "상품전시정보가 저장되었습니다"), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

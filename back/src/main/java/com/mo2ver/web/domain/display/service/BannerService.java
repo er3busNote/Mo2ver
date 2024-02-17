@@ -1,12 +1,13 @@
 package com.mo2ver.web.domain.display.service;
 
-import com.mo2ver.web.domain.display.dao.DetailRepository;
-import com.mo2ver.web.domain.display.dao.ManageRepository;
-import com.mo2ver.web.domain.display.domain.Detail;
-import com.mo2ver.web.domain.display.domain.Manage;
+import com.mo2ver.web.domain.display.dao.BannerDetailRepository;
+import com.mo2ver.web.domain.display.dao.BannerManageRepository;
+import com.mo2ver.web.domain.display.domain.BannerDetail;
+import com.mo2ver.web.domain.display.domain.BannerManage;
 import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
 import com.mo2ver.web.domain.display.dto.BannerDto;
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.properties.ImagesProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,9 +31,9 @@ import java.util.Objects;
 public class BannerService {
 
     @Autowired
-    protected ManageRepository manageRepository;
+    protected BannerManageRepository bannerManageRepository;
     @Autowired
-    protected DetailRepository detailRepository;
+    protected BannerDetailRepository bannerDetailRepository;
     @Autowired
     protected ModelMapper modelMapper;
     @Autowired
@@ -41,9 +41,14 @@ public class BannerService {
 
     @Transactional
     public Page<BannerDto> findBannerlist(Pageable pageable) {
-        Page<Manage> manage = this.manageRepository.findAll(pageable);
+        Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
         //return manage.map(data -> modelMapper.map(data, BannerDto.class));    // LocalDateTime -> Date (Error)
         return manage.map(BannerDto::toDTO);
+    }
+
+    @Transactional
+    public void saveGoodsDisplay(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
+        this.bannerManageRepository.save(BannerManage.of(goodsDisplayDto, currentUser));
     }
 
     @Transactional
@@ -52,17 +57,17 @@ public class BannerService {
         Path uploadDirectory = folderPath.resolve("banner");
         this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
 
-        Manage manage = this.manageRepository.save(Manage.of(bannerImageDto, currentUser));
+        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageDto, currentUser));
         List<BannerImageDetailDto> listBannerImageDetailDto = bannerImageDto.getBnnrImg();
-        for (int i = 0; i< listBannerImageDetailDto.size(); i++) {
+        for (int i = 0; i < listBannerImageDetailDto.size(); i++) {
             BannerImageDetailDto bannerImageDetailDto = listBannerImageDetailDto.get(i);
             log.info("bannerImageInfo => {}", bannerImageDetailDto.getTitle());
             MultipartFile file = files.get(i);
             String fileName = file.getOriginalFilename();
             String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
             String fileNameWithoutExtension = removeFileExtension(fileName);
-            Detail detail = this.detailRepository.save(Detail.of(manage, bannerImageDetailDto, fileNameWithoutExtension, i+1, currentUser));
-            File targetFile = new File(uploadDirectory + "/" + detail.getBannerDetailId() + "." + fileExtension);
+            BannerDetail bannerDetail = this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailDto, fileNameWithoutExtension, i+1, currentUser));
+            File targetFile = new File(uploadDirectory + "/" + bannerDetail.getBannerDetailId() + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
         }
     }

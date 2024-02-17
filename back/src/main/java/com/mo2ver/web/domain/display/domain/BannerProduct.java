@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.display.domain;
 
+import com.mo2ver.web.domain.display.dto.GoodsDisplayProductDto;
+import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,18 +12,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "DP_BNNR_PRD",
+        name = "DP_BNNR_PRD",   // 전시배너상품
         indexes={
                 @Index(
                         name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD",
                         columnList = "BNNR_MNG_NO"
                 )
         }
-)    // 전시배너상품
+)
 @Getter @Setter
-@EqualsAndHashCode(of = "bannerManageNo")
+@EqualsAndHashCode(of = "bannerProductId")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Product {
+public class BannerProduct {
 
     @Id
     @Column(name = "BNNR_PRD_ID", columnDefinition = "BIGINT(20) COMMENT '배너전시관리번호'")
@@ -38,7 +40,7 @@ public class Product {
                     foreignKeyDefinition = "FOREIGN KEY (BNNR_MNG_NO) REFERENCES DP_BNNR_MNG(BNNR_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private Manage bannerManageNo;
+    private BannerManage bannerManageNo;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;
@@ -66,4 +68,15 @@ public class Product {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static BannerProduct of(BannerManage bannerManage, GoodsDisplayProductDto goodsDisplayProductDto, Member currentUser) {
+        return BannerProduct.builder()
+                .bannerManageNo(bannerManage)
+                .productCode(goodsDisplayProductDto.getGoodsCode())
+                .productName(goodsDisplayProductDto.getGoodsName())
+                .sortSequence(goodsDisplayProductDto.getSortSequence())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
 }

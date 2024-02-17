@@ -12,7 +12,7 @@ import java.util.List;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    protected CategoryRepository categoryRepository;
 
     @Transactional
     public List<CategoryDto> findCategorylist() {

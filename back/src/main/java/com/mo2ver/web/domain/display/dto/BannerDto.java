@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.dto;
 
-import com.mo2ver.web.domain.display.domain.Manage;
+import com.mo2ver.web.domain.display.domain.BannerManage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,15 +29,15 @@ public class BannerDto {
 
     private Date registerDate;
 
-    public static BannerDto toDTO(Manage manage) {
+    public static BannerDto toDTO(BannerManage bannerManage) {
         return BannerDto.builder()
-                .bannerManageNo(manage.getBannerManageNo())
-                .subject(manage.getSubject())
-                .displayStartDate(manage.getDisplayStartDate())
-                .displayEndDate(manage.getDisplayEndDate())
-                .displayYesNo(manage.getDisplayYesNo())
-                .register(manage.getRegister())
-                .registerDate(Timestamp.valueOf(manage.getRegisterDate()))
+                .bannerManageNo(bannerManage.getBannerManageNo())
+                .subject(bannerManage.getSubject())
+                .displayStartDate(bannerManage.getDisplayStartDate())
+                .displayEndDate(bannerManage.getDisplayEndDate())
+                .displayYesNo(bannerManage.getDisplayYesNo())
+                .register(bannerManage.getRegister())
+                .registerDate(Timestamp.valueOf(bannerManage.getRegisterDate()))
                 .build();
     }
 }

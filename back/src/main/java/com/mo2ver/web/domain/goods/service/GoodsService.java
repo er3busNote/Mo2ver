@@ -3,7 +3,7 @@ package com.mo2ver.web.domain.goods.service;
 import com.mo2ver.web.domain.goods.dao.*;
 import com.mo2ver.web.domain.goods.domain.Discount;
 import com.mo2ver.web.domain.goods.domain.Goods;
-import com.mo2ver.web.domain.goods.domain.Image;
+import com.mo2ver.web.domain.goods.domain.GoodsImage;
 import com.mo2ver.web.domain.goods.domain.Price;
 import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsDto;
@@ -36,7 +36,7 @@ public class GoodsService {
     @Autowired
     protected DiscountRepository discountRepository;
     @Autowired
-    protected ImageRepository imageRepository;
+    protected GoodsImageRepository goodsImageRepository;
     @Autowired
     protected GoodsRepositoryImpl goodsCustomRepository;
     @Autowired
@@ -81,7 +81,7 @@ public class GoodsService {
 
         Price price = this.priceRepository.save(Price.of(goodsImageDto, currentUser));
         if (goodsImageDto.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageDto, currentUser));
-        for (int i = 0; i< files.size(); i++) {
+        for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             String fileName = file.getOriginalFilename();
             String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
@@ -89,7 +89,7 @@ public class GoodsService {
             Character basicImageYesNo = getBasicImageYesNo(i);
             File targetFile = new File(uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
-            this.imageRepository.save(Image.of(price.getGoodsCode(), goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
+            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
         }
     }
 

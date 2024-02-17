@@ -1,11 +1,10 @@
-package com.mo2ver.web.domain.display.dto;
+package com.mo2ver.web.domain.event.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,26 +17,23 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerImageDto {
+public class EventImageDto {
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
 
-    @NotNull(message = "전시시작일자가 존재하지 않습니다")
+    @NotNull(message = "이벤트시작일자가 존재하지 않습니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private Date eventStartDate;
 
-    @NotNull(message = "전시종료일자가 존재하지 않습니다")
+    @NotNull(message = "이벤트종료일자가 존재하지 않습니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private Date eventEndDate;
 
-    @NotBlank(message = "템플릿 유형이 존재하지 않습니다")
-    private String position;
+    @NotNull(message = "이벤트진행여부가 존재하지 않습니다")
+    private Character eventYesNo;
 
-    @NotNull(message = "전시여부가 존재하지 않습니다")
-    private Character useyn;
-
-    private List<BannerImageDetailDto> bnnrImg;
+    private List<EventImageProductDto> goods;
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerImageDto {
+public class GoodsDisplayDto {
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
@@ -39,5 +38,5 @@ public class BannerImageDto {
     @NotNull(message = "전시여부가 존재하지 않습니다")
     private Character useyn;
 
-    private List<BannerImageDetailDto> bnnrImg;
+    private List<GoodsDisplayProductDto> goods;
 }

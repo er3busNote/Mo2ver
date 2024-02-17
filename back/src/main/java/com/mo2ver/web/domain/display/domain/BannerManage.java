@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.display.domain;
 
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,13 +12,14 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "DP_BNNR_MNG")    // 전시배너관리
 @Getter @Setter
 @EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Manage {
+public class BannerManage {
 
     @Id
     @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
@@ -36,11 +38,11 @@ public class Manage {
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
     private Character displayYesNo;
 
-    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY)
-    private List<Detail> detailList;
+    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BannerDetail> bannerDetailList;
 
-    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY)
-    private List<Product> productList;
+    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BannerProduct> bannerProductList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -60,8 +62,8 @@ public class Manage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Manage of(BannerImageDto bannerImageDto, Member currentUser) {
-        return Manage.builder()
+    public static BannerManage of(BannerImageDto bannerImageDto, Member currentUser) {
+        return BannerManage.builder()
                 .subject(bannerImageDto.getTitle())
                 .displayStartDate(bannerImageDto.getStartDate())
                 .displayEndDate(bannerImageDto.getEndDate())
@@ -69,5 +71,20 @@ public class Manage {
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
+    }
+
+    public static BannerManage of(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
+        BannerManage bannerManage = BannerManage.builder()
+                .subject(goodsDisplayDto.getTitle())
+                .displayStartDate(goodsDisplayDto.getStartDate())
+                .displayEndDate(goodsDisplayDto.getEndDate())
+                .displayYesNo(goodsDisplayDto.getUseyn())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+        bannerManage.setBannerProductList(goodsDisplayDto.getGoods().stream()
+                .map(data -> BannerProduct.of(bannerManage, data, currentUser))
+                .collect(Collectors.toList()));
+        return bannerManage;
     }
 }

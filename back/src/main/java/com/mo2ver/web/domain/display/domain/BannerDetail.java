@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "bannerManageNo")
+@EqualsAndHashCode(of = "bannerDetailId")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Detail {
+public class BannerDetail {
 
     @Id
     @Column(name = "BNNR_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배너상세관리번호'")
@@ -40,7 +40,7 @@ public class Detail {
                     foreignKeyDefinition = "FOREIGN KEY (BNNR_MNG_NO) REFERENCES DP_BNNR_MNG(BNNR_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private Manage bannerManageNo;
+    private BannerManage bannerManageNo;
 
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;
@@ -78,9 +78,9 @@ public class Detail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Detail of(Manage manage, BannerImageDetailDto bannerImageDetailDto, String fileNameWithoutExtension, Integer index, Member currentUser) {
-        return Detail.builder()
-                .bannerManageNo(manage)
+    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailDto bannerImageDetailDto, String fileNameWithoutExtension, Integer index, Member currentUser) {
+        return BannerDetail.builder()
+                .bannerManageNo(bannerManage)
                 .detailSequence(index)
                 .imageAttachFile(fileNameWithoutExtension)
                 .connectUrl(bannerImageDetailDto.getCnntUrl())

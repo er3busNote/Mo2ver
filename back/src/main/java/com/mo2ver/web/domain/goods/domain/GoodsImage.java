@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @EqualsAndHashCode(of = "goodsImageManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Image {
+public class GoodsImage {
 
     @Id
     @Column(name = "GD_IMG_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '상품이미지관리번호'")
@@ -74,8 +74,8 @@ public class Image {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Image of(Goods goods, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
-        return Image.builder()
+    public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
+        return GoodsImage.builder()
                 .goodsCode(goods)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .goodsImageExtension(fileExtension)

@@ -101,11 +101,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**", "/goods/**", "/images/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**", "/goods/**", "/event/**", "/images/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**", "/goods/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**").hasAnyRole("MANAGER", "ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/event/**").hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

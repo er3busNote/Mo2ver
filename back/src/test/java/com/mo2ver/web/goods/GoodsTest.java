@@ -42,30 +42,7 @@ public class GoodsTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsImageDto goodsImageDto = new GoodsImageDto();
-        goodsImageDto.setGoodsName("테스트");
-        goodsImageDto.setLargeCategoryCode("C001000000");
-        goodsImageDto.setMediumCategoryCode("C001001000");
-        goodsImageDto.setSmallCategoryCode("C001001001");
-        goodsImageDto.setGoodsGender("M");
-        goodsImageDto.setGoodsBrand("bbj");
-        goodsImageDto.setGoodsYear("2024");
-        goodsImageDto.setKeyword("#전체연령#성인#어린이#유아#가족#여성#남성");
-        goodsImageDto.setSummaryInfo("요약정보 테스트");
-        goodsImageDto.setBuyLimitYesNo('N');
-        goodsImageDto.setBuyLimitCondition("10");
-        goodsImageDto.setSalePeriodYesNo('Y');
-        goodsImageDto.setSaleStartDate(new Date());
-        goodsImageDto.setSaleEndDate(new Date());
-        goodsImageDto.setSupplyPrice(new BigDecimal(181899));
-        goodsImageDto.setSalePrice(new BigDecimal(172804));
-        goodsImageDto.setMaxBuyQuantity(10);
-        goodsImageDto.setDiscountPrice(new BigDecimal(7000));
-        goodsImageDto.setDiscountStartDate(new Date());
-        goodsImageDto.setDiscountEndDate(new Date());
-        goodsImageDto.setRateYesNo('N');
-        goodsImageDto.setMaxLimitYesNo('N');
-        goodsImageDto.setMaxLimitAmount(new BigDecimal(0));
+        GoodsImageDto goodsImageDto = this.getGoodsImageDto();
 
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
@@ -81,5 +58,33 @@ public class GoodsTest extends CsrfConfigTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    private GoodsImageDto getGoodsImageDto() {
+        return GoodsImageDto.builder()
+                .goodsName("테스트")
+                .largeCategoryCode("C001000000")
+                .mediumCategoryCode("C001001000")
+                .smallCategoryCode("C001001001")
+                .goodsGender("Men")
+                .goodsBrand("bbj")
+                .goodsYear("2024")
+                .keyword("#전체연령#성인#어린이#유아#가족#여성#남성")
+                .summaryInfo("요약정보 테스트")
+                .buyLimitYesNo('N')
+                .buyLimitCondition("10")
+                .salePeriodYesNo('Y')
+                .saleStartDate(new Date())
+                .saleEndDate(new Date())
+                .supplyPrice(new BigDecimal(181899))
+                .salePrice(new BigDecimal(172804))
+                .maxBuyQuantity(10)
+                .discountPrice(new BigDecimal(7000))
+                .discountStartDate(new Date())
+                .discountEndDate(new Date())
+                .rateYesNo('N')
+                .maxLimitYesNo('N')
+                .maxLimitAmount(new BigDecimal(0))
+                .build();
     }
 }

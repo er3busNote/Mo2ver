@@ -72,7 +72,7 @@ public class Goods {
     private Price price;
 
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> imageList;
+    private List<GoodsImage> goodsImageList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

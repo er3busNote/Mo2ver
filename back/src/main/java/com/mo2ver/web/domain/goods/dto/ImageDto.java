@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.dto;
 
-import com.mo2ver.web.domain.goods.domain.Image;
+import com.mo2ver.web.domain.goods.domain.GoodsImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,21 +32,21 @@ public class ImageDto {
 
     private Character useYesNo;
 
-    public static ImageDto toDTO(Image image) {
+    public static ImageDto toDTO(GoodsImage goodsImage) {
         return ImageDto.builder()
-                .goodsImageAttachFile(image.getGoodsImageAttachFile())
-                .goodsImageExtension(image.getGoodsImageExtension())
-                .basicImageYesNo(image.getBasicImageYesNo())
-                .sortSequence(image.getSortSequence())
-                .useYesNo(image.getUseYesNo())
+                .goodsImageAttachFile(goodsImage.getGoodsImageAttachFile())
+                .goodsImageExtension(goodsImage.getGoodsImageExtension())
+                .basicImageYesNo(goodsImage.getBasicImageYesNo())
+                .sortSequence(goodsImage.getSortSequence())
+                .useYesNo(goodsImage.getUseYesNo())
                 .build();
     }
 
-    public static ImageDto toDTO(Image image, String filepath) {
+    public static ImageDto toDTO(GoodsImage goodsImage, String filepath) {
 
         String base64Image = "";
         Path folderPath = Paths.get(filepath);
-        Path imagePath = folderPath.resolve(String.valueOf(image.getGoodsImageAttachFile()) + '.' + image.getGoodsImageExtension());
+        Path imagePath = folderPath.resolve(String.valueOf(goodsImage.getGoodsImageAttachFile()) + '.' + goodsImage.getGoodsImageExtension());
         try {
             byte[] fileContent = Files.readAllBytes(imagePath);
             base64Image = Base64.getEncoder().encodeToString(fileContent);
@@ -55,9 +55,9 @@ public class ImageDto {
         }
         return ImageDto.builder()
                 .base64Image(base64Image)
-                .basicImageYesNo(image.getBasicImageYesNo())
-                .sortSequence(image.getSortSequence())
-                .useYesNo(image.getUseYesNo())
+                .basicImageYesNo(goodsImage.getBasicImageYesNo())
+                .sortSequence(goodsImage.getSortSequence())
+                .useYesNo(goodsImage.getUseYesNo())
                 .build();
     }
 }
