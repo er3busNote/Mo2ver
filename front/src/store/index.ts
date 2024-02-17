@@ -134,7 +134,7 @@ const adminMenuinitialState: MenuState = {
 			description: '카테고리 관리',
 			subMenu: [
 				{
-					index: 1,
+					index: 4,
 					name: 'ITEM',
 					path: '/item',
 					title: 'Item',
@@ -157,7 +157,7 @@ const adminMenuinitialState: MenuState = {
 			description: '배너 관리',
 			subMenu: [
 				{
-					index: 1,
+					index: 5,
 					name: 'MAIN',
 					path: '/main',
 					title: 'Main',
@@ -169,7 +169,7 @@ const adminMenuinitialState: MenuState = {
 					bgColor: '#E6f4EA',
 				},
 				{
-					index: 2,
+					index: 6,
 					name: 'POPULAR',
 					path: '/popular',
 					title: 'Popular',
@@ -181,7 +181,7 @@ const adminMenuinitialState: MenuState = {
 					bgColor: '#FCEFE3',
 				},
 				{
-					index: 3,
+					index: 7,
 					name: 'RECOMMEND',
 					path: '/recommend',
 					title: 'Recommend',
@@ -204,7 +204,7 @@ const adminMenuinitialState: MenuState = {
 			description: '이벤트 관리',
 			subMenu: [
 				{
-					index: 1,
+					index: 8,
 					name: 'ITEM',
 					path: '/item',
 					title: 'Item',
