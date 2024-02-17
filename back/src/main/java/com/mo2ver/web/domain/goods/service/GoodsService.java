@@ -43,7 +43,7 @@ public class GoodsService {
     protected ImagesProperties imagesProperties;
 
     @Transactional
-    public GoodsDto selectGoods(String id) {
+    public GoodsDto findGoods(String id) {
         Goods goods = this.goodsRepository.findByGoodsCode(id);
         return GoodsDto.toDTO(goods);
     }

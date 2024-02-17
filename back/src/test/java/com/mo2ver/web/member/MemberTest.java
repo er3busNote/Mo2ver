@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MemberTest {
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @Test
     @DisplayName("회원가입 등록 확인")

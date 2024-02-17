@@ -46,7 +46,7 @@ public class GoodsController {
     @GetMapping("/info/{id}")
     public ResponseEntity infoGoods(@PathVariable String id,
                                     @CurrentUser Member currentUser) {
-        GoodsDto goodsDto = goodsService.selectGoods(id);
+        GoodsDto goodsDto = goodsService.findGoods(id);
         return ResponseEntity.ok(goodsDto);
     }
 

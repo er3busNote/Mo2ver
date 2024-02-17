@@ -1,22 +1,27 @@
 package com.mo2ver.web.domain.event.api;
 
+import com.mo2ver.web.domain.event.dto.EventDetailDto;
+import com.mo2ver.web.domain.event.dto.EventDto;
 import com.mo2ver.web.domain.event.dto.EventImageDto;
 import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.domain.event.validation.EventImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.global.common.dto.PageDto;
 import com.mo2ver.web.global.common.dto.ResponseDto;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.error.response.ErrorHandler;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -37,6 +42,23 @@ public class EventController {
         this.eventService = eventService;
         this.errorHandler = errorHandler;
         this.eventImageValidator = eventImageValidator;
+    }
+
+    @GetMapping("/info/{id}")
+    public ResponseEntity infoGoods(@PathVariable Integer id,
+                                    @Valid PageDto pageDto,
+                                    @CurrentUser Member currentUser) {
+        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Page<EventDetailDto> eventDetailDto = eventService.findEvent(id, pageable);
+        return ResponseEntity.ok(eventDetailDto);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity listEvent(@Valid PageDto pageDto,
+                                    @CurrentUser Member currentUser) {
+        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Page<EventDto> pages = eventService.findEventlist(pageable);
+        return ResponseEntity.ok(pages);
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

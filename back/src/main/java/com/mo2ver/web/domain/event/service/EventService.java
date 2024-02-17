@@ -2,13 +2,18 @@ package com.mo2ver.web.domain.event.service;
 
 import com.mo2ver.web.domain.event.dao.EventImageRepository;
 import com.mo2ver.web.domain.event.dao.EventManageRepository;
+import com.mo2ver.web.domain.event.dao.EventManageRepositoryImpl;
 import com.mo2ver.web.domain.event.domain.EventImage;
 import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.dto.EventDetailDto;
+import com.mo2ver.web.domain.event.dto.EventDto;
 import com.mo2ver.web.domain.event.dto.EventImageDto;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.properties.ImagesProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +34,20 @@ public class EventService {
     @Autowired
     protected EventImageRepository eventImageRepository;
     @Autowired
+    protected EventManageRepositoryImpl eventManageRepositoryCustom;
+    @Autowired
     protected ImagesProperties imagesProperties;
+
+    @Transactional
+    public Page<EventDetailDto> findEvent(Integer id, Pageable pageable) {
+        return this.eventManageRepositoryCustom.findById(id, pageable);
+    }
+
+    @Transactional
+    public Page<EventDto> findEventlist(Pageable pageable) {
+        Page<EventManage> event = this.eventManageRepositoryCustom.findByAll(pageable);
+        return event.map(EventDto::toDTO);
+    }
 
     @Transactional
     public void saveImageEvent(List<MultipartFile> eventFiles, EventImageDto eventImageDto, Member currentUser) throws IOException {

@@ -1,15 +1,13 @@
 package com.mo2ver.web.domain.event.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class EventDetailDto {
-
-    private Long eventManageNo;
 
     private String subject;
 
@@ -17,7 +15,40 @@ public class EventDetailDto {
 
     private Date eventEndDate;
 
-    private Page<GoodsDto> goodsList;
+    private Integer goodsImageAttachFile;
 
-    private List<ImageDto> imageList;
+    private String goodsImageExtension;
+
+    private String goodsCode;
+
+    private String goodsName;
+
+    private String goodsBrand;
+
+    private String goodsGender;
+
+    private String goodsYear;
+
+    private BigDecimal supplyPrice;
+
+    private BigDecimal salePrice;
+
+    private Integer sortSequence;
+
+    @QueryProjection
+    public EventDetailDto(String subject, Date eventStartDate, Date eventEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence) {
+        this.subject = subject;
+        this.eventStartDate = eventStartDate;
+        this.eventEndDate = eventEndDate;
+        this.goodsImageAttachFile = goodsImageAttachFile;
+        this.goodsImageExtension = goodsImageExtension;
+        this.goodsCode = goodsCode;
+        this.goodsName = goodsName;
+        this.goodsBrand = goodsBrand;
+        this.goodsGender = goodsGender;
+        this.goodsYear = goodsYear;
+        this.supplyPrice = supplyPrice;
+        this.salePrice = salePrice;
+        this.sortSequence = sortSequence;
+    }
 }

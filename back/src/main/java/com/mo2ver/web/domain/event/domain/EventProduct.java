@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.event.domain;
 
 import com.mo2ver.web.domain.event.dto.EventImageProductDto;
+import com.mo2ver.web.domain.goods.domain.Goods;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -50,6 +51,10 @@ public class EventProduct {
 
     @Column(name= "SORT_SEQ", columnDefinition = "INT(11) COMMENT '정렬순서'")
     private Integer sortSequence;
+
+//    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+//    @JoinColumn(name = "PRD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false)
+//    private Goods goods;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
