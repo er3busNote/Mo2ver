@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.goods.dao;
 
 import com.mo2ver.web.domain.goods.domain.Goods;
+import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,6 +23,20 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
     public GoodsRepositoryImpl(JPAQueryFactory queryFactory) {
         super(Goods.class);
         this.queryFactory = queryFactory;
+    }
+
+    public Page<Goods> findByGoodsName(Pageable pageable, GoodsSearchDto goodsSearchDto) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(goods.goodsName.contains(goodsSearchDto.getGoodsName()));
+        builder.and(goods.largeCategoryCode.eq(goodsSearchDto.getLargeCategoryCode()));
+        builder.and(goods.mediumCategoryCode.eq(goodsSearchDto.getMediumCategoryCode()));
+        builder.and(goods.smallCategoryCode.eq(goodsSearchDto.getSmallCategoryCode()));
+
+        JPAQuery<Goods> query = queryFactory.selectFrom(goods)
+                .innerJoin(goods.price, price)
+                .where(builder);
+        List<Goods> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
     public Page<Goods> findByCategoryCode(Pageable pageable, String categoryCode, Character categoryType) {
@@ -48,5 +63,17 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
                 .where(builder);
         List<Goods> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
+    }
+
+    public List<Goods> findByGoodsRank(Integer count) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(goodsImage.basicImageYesNo.eq('Y'));
+        return queryFactory.selectFrom(goods)
+                .innerJoin(goods.price, price)
+                .innerJoin(goods.goodsImageList, goodsImage)
+                .where(builder)
+                .orderBy(goods.reviewCount.desc())
+                .limit(count)
+                .fetch();
     }
 }

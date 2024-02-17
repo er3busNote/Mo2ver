@@ -35,14 +35,11 @@ public class BannerService {
     @Autowired
     protected BannerDetailRepository bannerDetailRepository;
     @Autowired
-    protected ModelMapper modelMapper;
-    @Autowired
     protected ImagesProperties imagesProperties;
 
     @Transactional
     public Page<BannerDto> findBannerlist(Pageable pageable) {
         Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
-        //return manage.map(data -> modelMapper.map(data, BannerDto.class));    // LocalDateTime -> Date (Error)
         return manage.map(BannerDto::toDTO);
     }
 

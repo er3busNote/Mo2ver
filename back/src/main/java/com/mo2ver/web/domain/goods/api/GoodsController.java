@@ -1,8 +1,10 @@
 package com.mo2ver.web.domain.goods.api;
 
+import com.mo2ver.web.domain.goods.domain.Goods;
 import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsDto;
 import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
 import com.mo2ver.web.domain.goods.service.GoodsService;
 import com.mo2ver.web.domain.goods.validation.GoodsImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
@@ -56,6 +58,21 @@ public class GoodsController {
                                     @CurrentUser Member currentUser) {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
         Page<GoodsDto> pages = goodsService.findGoodslist(pageable, categoryPageDto);
+        return ResponseEntity.ok(pages);
+    }
+
+    @GetMapping("/list/rank/{count}")
+    public ResponseEntity listGoodsRank(@PathVariable Integer count) {
+        List<GoodsDto> listGoodDto = goodsService.findGoodslistRank(count);
+        return ResponseEntity.ok(listGoodDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity searchGoods(@Valid PageDto pageDto,
+                                      @Valid GoodsSearchDto goodsSearchDto,
+                                      @CurrentUser Member currentUser) {
+        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
+        Page<GoodsDto> pages = goodsService.findGoodsSearch(pageable, goodsSearchDto);
         return ResponseEntity.ok(pages);
     }
 

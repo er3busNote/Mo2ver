@@ -23,7 +23,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-    public List<CategoryDto> findCategory() {
+    public List<CategoryDto> findCategoryList() {
 
         QCategory TC = new QCategory("TC");
         QCategory C = new QCategory("C");   // 자식

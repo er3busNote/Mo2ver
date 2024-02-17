@@ -36,6 +36,30 @@ public class GoodsTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("상품 검색 확인")
+    public void findGoodsSearchTest() throws Exception {
+
+        mockMvc.perform(get("/goods/search")
+                        .param("page", "0")
+                        .param("size", "12")
+                        .param("goodsName", "스")
+                        .param("largeCategoryCode", "C001000000")
+                        .param("mediumCategoryCode", "C001001000")
+                        .param("smallCategoryCode", "C001001001"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("상품 Top 10 확인")
+    public void findGoodsRankingTest() throws Exception {
+        Integer count = 10;
+        mockMvc.perform(get("/goods/list/rank/{count}", count))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("상품 이미지정보 저장 확인")
     public void createGoodsImageTest() throws Exception {
 

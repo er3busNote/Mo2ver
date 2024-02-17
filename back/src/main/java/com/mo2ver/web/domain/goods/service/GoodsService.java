@@ -8,6 +8,7 @@ import com.mo2ver.web.domain.goods.domain.Price;
 import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsDto;
 import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.properties.ImagesProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,8 +39,6 @@ public class GoodsService {
     protected DiscountRepository discountRepository;
     @Autowired
     protected GoodsImageRepository goodsImageRepository;
-    @Autowired
-    protected GoodsRepositoryImpl goodsCustomRepository;
     @Autowired
     protected ImagesProperties imagesProperties;
 
@@ -70,7 +70,19 @@ public class GoodsService {
     }
 
     private Page<Goods> useQueryDsl(Pageable pageable, String categoryCode, Character categoryType) {
-        return this.goodsCustomRepository.findByCategoryCode(pageable, categoryCode, categoryType);
+        return this.goodsRepository.findByCategoryCode(pageable, categoryCode, categoryType);
+    }
+
+    @Transactional
+    public List<GoodsDto> findGoodslistRank(Integer count) {
+        List<Goods> goods = this.goodsRepository.findByGoodsRank(count);
+        return goods.stream().map(GoodsDto::toDTO).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Page<GoodsDto> findGoodsSearch(Pageable pageable, GoodsSearchDto goodsSearchDto) {
+        Page<Goods> goods = this.goodsRepository.findByGoodsName(pageable, goodsSearchDto);
+        return goods.map(GoodsDto::toDTO);
     }
 
     @Transactional

@@ -6,6 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EventManageRepositoryCustom {
-    Page<EventManage> findByAll(Pageable pageable);
     Page<EventDetailDto> findById(Integer id, Pageable pageable);
+    Page<EventManage> findByAll(Pageable pageable);
 }

@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.goods.domain;
 
+import com.mo2ver.web.domain.goods.dto.CategoryDetailDto;
+import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -57,4 +59,18 @@ public class Category {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static Category of(CategoryDetailDto categoryDetailDto, Member currentUser) {
+        return Category.builder()
+                .categoryCode(categoryDetailDto.getCategoryCode())
+                .categoryName(categoryDetailDto.getCategoryName())
+                .upperCategoryCode(categoryDetailDto.getUpperCategoryCode())
+                .categoryLevel(categoryDetailDto.getCategoryLevel())
+                .useYesNo(categoryDetailDto.getUseYesNo())
+                .sortSequence(categoryDetailDto.getSortSequence())
+                .connectUrl(categoryDetailDto.getConnectUrl())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
 }

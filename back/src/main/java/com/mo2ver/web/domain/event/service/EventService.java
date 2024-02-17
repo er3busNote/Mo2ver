@@ -34,18 +34,16 @@ public class EventService {
     @Autowired
     protected EventImageRepository eventImageRepository;
     @Autowired
-    protected EventManageRepositoryImpl eventManageRepositoryCustom;
-    @Autowired
     protected ImagesProperties imagesProperties;
 
     @Transactional
     public Page<EventDetailDto> findEvent(Integer id, Pageable pageable) {
-        return this.eventManageRepositoryCustom.findById(id, pageable);
+        return this.eventManageRepository.findById(id, pageable);
     }
 
     @Transactional
     public Page<EventDto> findEventlist(Pageable pageable) {
-        Page<EventManage> event = this.eventManageRepositoryCustom.findByAll(pageable);
+        Page<EventManage> event = this.eventManageRepository.findByAll(pageable);
         return event.map(EventDto::toDTO);
     }
 
