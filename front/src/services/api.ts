@@ -15,7 +15,14 @@ import {
 import { urlFormat } from '../utils/format';
 import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { setInterceptors } from './common/interceptors';
-import { LoginData, SignUpData, TokenData, CSRFData, GoodsPage } from './types';
+import {
+	LoginData,
+	SignUpData,
+	TokenData,
+	CSRFData,
+	GoodsPage,
+	GoodsSearchPage,
+} from './types';
 
 // 인스턴스 API 생성
 const createInstance = () => {
@@ -183,9 +190,42 @@ const goods = {
 			.catch((error: AxiosError) => {
 				return error.response;
 			}),
+	// 상품 검색 API : <baseURL>/goods/search
+	search: (goodsSearchPage: GoodsSearchPage) => (dispatch: Dispatch) =>
+		instance
+			.get(
+				`goods/search?page=${goodsSearchPage.page}&size=${goodsSearchPage.size}&goodsName=${goodsSearchPage.goodsName}&largeCategoryCode=${goodsSearchPage.largeCategoryCode}&mediumCategoryCode=${goodsSearchPage.mediumCategoryCode}&smallCategoryCode=${goodsSearchPage.smallCategoryCode}`
+			)
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
 };
 
 const category = {
+	// 카테고리 정보 API : <baseURL>/category/info
+	info:
+		(categoryLevel: number, upperCategoryCode: string) =>
+		(dispatch: Dispatch) =>
+			instance
+				.get(
+					upperCategoryCode === undefined || upperCategoryCode === ''
+						? 'category/info/' + categoryLevel
+						: 'category/info/' +
+								categoryLevel +
+								'?upperCategoryCode=' +
+								upperCategoryCode
+				)
+				.then((response: AxiosResponse) => {
+					dispatch(tokenSuccess(response.data));
+					return response.data;
+				})
+				.catch((error: AxiosError) => {
+					return error.response;
+				}),
 	// 카테고리 리스트 API : <baseURL>/category/list
 	list: () => (dispatch: Dispatch) =>
 		instance

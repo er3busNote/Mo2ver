@@ -48,6 +48,15 @@ interface GoodsPage {
 	categoryType: string;
 }
 
+interface GoodsSearchPage {
+	page: number;
+	size: number;
+	goodsName: string;
+	largeCategoryCode: string;
+	mediumCategoryCode: string;
+	smallCategoryCode: string;
+}
+
 interface CategoryData {
 	categoryCode: string;
 	categoryName: string;
@@ -171,6 +180,7 @@ export type {
 	CSRFData,
 	GoodsData,
 	GoodsPage,
+	GoodsSearchPage,
 	CategoryData,
 	CategoryPageData,
 	CategoryDataInfo,

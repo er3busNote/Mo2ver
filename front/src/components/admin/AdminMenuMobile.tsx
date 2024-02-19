@@ -43,6 +43,7 @@ import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import InfoIcon from '@mui/icons-material/Info';
 import ForumIcon from '@mui/icons-material/Forum';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 const AdminIcon = [
 	MenuOpenIcon,
@@ -51,6 +52,7 @@ const AdminIcon = [
 	ViewInArIcon,
 	InfoIcon,
 	ForumIcon,
+	ReceiptLongIcon,
 ];
 
 declare module 'react' {

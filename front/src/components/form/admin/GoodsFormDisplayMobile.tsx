@@ -3,11 +3,18 @@ import React, {
 	useRef,
 	useState,
 	useEffect,
+	Dispatch,
+	SetStateAction,
 	ChangeEvent,
 	BaseSyntheticEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import {
+	GoodsData,
+	CategoryData,
+	CategoryPageData,
+} from '../../../services/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
 import { Controller, useForm } from 'react-hook-form';
@@ -97,6 +104,15 @@ const goodsDisplaySchema = yup
 interface GoodsProp {
 	title: string;
 	description: string;
+	goodsData: CategoryPageData;
+	largeCategoryData: Array<CategoryData>;
+	mediumCategoryData: Array<CategoryData>;
+	smallCategoryData: Array<CategoryData>;
+	setLargeCategoryCode: Dispatch<SetStateAction<string>>;
+	setMediumCategoryCode: Dispatch<SetStateAction<string>>;
+	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
+	setPage: Dispatch<SetStateAction<number>>;
+	searchClick: (goodsName: string) => void;
 	onSubmit: (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -114,6 +130,16 @@ const goodsDisplayValues = {
 
 interface DialogProps {
 	open: boolean;
+	goodsData: CategoryPageData;
+	largeCategoryData: Array<CategoryData>;
+	mediumCategoryData: Array<CategoryData>;
+	smallCategoryData: Array<CategoryData>;
+	setLargeCategoryCode: Dispatch<SetStateAction<string>>;
+	setMediumCategoryCode: Dispatch<SetStateAction<string>>;
+	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
+	setPage: Dispatch<SetStateAction<number>>;
+	searchClick: (goodsName: string) => void;
+	setProductData: Dispatch<SetStateAction<readonly GoodsData[]>>;
 	handleClose: () => void;
 	header: SxProps<Theme>;
 	base: SxProps<Theme>;
@@ -165,45 +191,62 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GoodsDialog: FC<DialogProps> = ({
 	open,
+	goodsData,
+	largeCategoryData,
+	mediumCategoryData,
+	smallCategoryData,
+	setLargeCategoryCode,
+	setMediumCategoryCode,
+	setSmallCategoryCode,
+	setPage,
+	searchClick,
+	setProductData,
 	handleClose,
 	header,
 	base,
 }): JSX.Element => {
-	const [page, setPage] = useState(0);
-	const [largeCategory, setLargeCategory] = useState<string>('');
-	const [middleCategory, setMiddleCategory] = useState<string>('');
-	const [smallCategory, setSmallCategory] = useState<string>('');
-	const [checked, setChecked] = useState<readonly number[]>([]);
-	const [left, setLeft] = useState<readonly number[]>([0, 1, 2, 3]);
-	const [right, setRight] = useState<readonly number[]>([]);
+	const [keyword, setKeyword] = useState('');
+	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
+	const [left, setLeft] = useState<readonly GoodsData[]>(
+		goodsData.content ?? []
+	);
+	const [right, setRight] = useState<readonly GoodsData[]>([]);
+
+	useEffect(() => {
+		setLeft(goodsData.content ?? []);
+		setRight([]);
+	}, [goodsData]);
 
 	const handleLargeCategoryChange = (event: SelectChangeEvent) => {
-		setLargeCategory(event.target.value as string);
+		setLargeCategoryCode(event.target.value as string);
+		setSmallCategoryCode(''); // 초기화
 	};
 	const handleMiddleCategoryChange = (event: SelectChangeEvent) => {
-		setMiddleCategory(event.target.value as string);
+		setMediumCategoryCode(event.target.value as string);
 	};
 	const handleSmallCategoryChange = (event: SelectChangeEvent) => {
-		setSmallCategory(event.target.value as string);
+		setSmallCategoryCode(event.target.value as string);
 	};
 
+	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setKeyword(event.currentTarget.value as string);
+	};
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
 		const value = (event.target as HTMLButtonElement).textContent as any;
 		if (value && value === String(page)) setPage(page);
 	};
 
-	const not = (a: readonly number[], b: readonly number[]) => {
+	const not = (a: readonly GoodsData[], b: readonly GoodsData[]) => {
 		return a.filter((value) => b.indexOf(value) === -1);
 	};
-
-	const intersection = (a: readonly number[], b: readonly number[]) => {
+	const intersection = (a: readonly GoodsData[], b: readonly GoodsData[]) => {
 		return a.filter((value) => b.indexOf(value) !== -1);
 	};
 
 	const leftChecked = intersection(checked, left);
 	const rightChecked = intersection(checked, right);
 
-	const handleToggle = (value: number) => () => {
+	const handleToggle = (value: GoodsData) => () => {
 		const currentIndex = checked.indexOf(value);
 		const newChecked = [...checked];
 
@@ -215,27 +258,28 @@ const GoodsDialog: FC<DialogProps> = ({
 
 		setChecked(newChecked);
 	};
-
 	const handleAllRight = () => {
 		setRight(right.concat(left));
 		setLeft([]);
 	};
-
 	const handleCheckedRight = () => {
 		setRight(right.concat(leftChecked));
 		setLeft(not(left, leftChecked));
 		setChecked(not(checked, leftChecked));
 	};
-
 	const handleCheckedLeft = () => {
 		setLeft(left.concat(rightChecked));
 		setRight(not(right, rightChecked));
 		setChecked(not(checked, rightChecked));
 	};
-
 	const handleAllLeft = () => {
 		setLeft(left.concat(right));
 		setRight([]);
+	};
+
+	const handleSelect = () => {
+		setProductData(right);
+		handleClose();
 	};
 
 	const checkBox: SxProps<Theme> = {
@@ -268,15 +312,15 @@ const GoodsDialog: FC<DialogProps> = ({
 		minHeight: '30px',
 	};
 
-	const customList = (items: readonly number[]) => (
-		<Paper sx={{ width: 130, height: 180, overflow: 'auto' }}>
+	const customList = (items: readonly GoodsData[]) => (
+		<Paper sx={{ width: 210, height: 180, overflow: 'auto' }}>
 			<List dense component="div" role="list">
-				{items.map((value: number) => {
-					const labelId = `transfer-list-item-${value}-label`;
+				{items.map((value: GoodsData, index: number) => {
+					const labelId = `transfer-list-item-${value.goodsCode}-label`;
 
 					return (
 						<ListItemButton
-							key={value}
+							key={index}
 							role="listitem"
 							onClick={handleToggle(value)}
 							sx={{ px: 0.5, py: 0 }}
@@ -297,7 +341,14 @@ const GoodsDialog: FC<DialogProps> = ({
 								primaryTypographyProps={{
 									style: { fontSize: 14 },
 								}}
-								primary={`List item ${value + 1}`}
+								primary={value.goodsCode}
+							/>
+							<ListItemText
+								id={labelId}
+								primaryTypographyProps={{
+									style: { fontSize: 14 },
+								}}
+								primary={value.goodsName}
 							/>
 						</ListItemButton>
 					);
@@ -315,14 +366,15 @@ const GoodsDialog: FC<DialogProps> = ({
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>대분류</InputLabel>
 								<Select
-									value={largeCategory}
 									label="대분류"
 									onChange={handleLargeCategoryChange}
 									sx={selectInput}
 								>
-									<MenuItem sx={menuText} value={'C001000000'}>
-										C001000000
-									</MenuItem>
+									{largeCategoryData.map((data: CategoryData, i: number) => (
+										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+											{data.categoryCode}
+										</MenuItem>
+									))}
 								</Select>
 							</FormControl>
 						</Box>
@@ -330,14 +382,16 @@ const GoodsDialog: FC<DialogProps> = ({
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>중분류</InputLabel>
 								<Select
-									value={middleCategory}
 									label="중분류"
 									onChange={handleMiddleCategoryChange}
 									sx={selectInput}
+									disabled={mediumCategoryData.length === 0}
 								>
-									<MenuItem sx={menuText} value={'C001001000'}>
-										C001001000
-									</MenuItem>
+									{mediumCategoryData.map((data: CategoryData, i: number) => (
+										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+											{data.categoryCode}
+										</MenuItem>
+									))}
 								</Select>
 							</FormControl>
 						</Box>
@@ -345,14 +399,16 @@ const GoodsDialog: FC<DialogProps> = ({
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>소분류</InputLabel>
 								<Select
-									value={smallCategory}
 									label="소분류"
 									onChange={handleSmallCategoryChange}
 									sx={selectInput}
+									disabled={smallCategoryData.length === 0}
 								>
-									<MenuItem sx={menuText} value={'C001001001'}>
-										C001001001
-									</MenuItem>
+									{smallCategoryData.map((data: CategoryData, i: number) => (
+										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+											{data.categoryCode}
+										</MenuItem>
+									))}
 								</Select>
 							</FormControl>
 						</Box>
@@ -366,6 +422,7 @@ const GoodsDialog: FC<DialogProps> = ({
 							</SearchIconWrapper>
 							<StyledInputBase
 								placeholder="상품명을 검색할 수 있어요!"
+								onChange={searchOnChange}
 								inputProps={{ 'aria-label': 'search' }}
 							/>
 						</Search>
@@ -387,7 +444,7 @@ const GoodsDialog: FC<DialogProps> = ({
 								},
 							}}
 							variant="outlined"
-							onClick={handleClose}
+							onClick={() => searchClick(keyword)}
 						>
 							검색
 						</Button>
@@ -405,6 +462,7 @@ const GoodsDialog: FC<DialogProps> = ({
 								container
 								direction={isMobile ? 'row-reverse' : 'column'}
 								alignItems="center"
+								justifyContent="center"
 							>
 								<Button
 									sx={{
@@ -496,7 +554,7 @@ const GoodsDialog: FC<DialogProps> = ({
 					</Grid>
 					<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
 						<Pagination
-							count={1}
+							count={goodsData.totalPages - 1}
 							variant="outlined"
 							color="primary"
 							siblingCount={2}
@@ -525,7 +583,7 @@ const GoodsDialog: FC<DialogProps> = ({
 						},
 					}}
 					variant="outlined"
-					onClick={handleClose}
+					onClick={handleSelect}
 				>
 					선택
 				</Button>
@@ -556,12 +614,22 @@ const GoodsDialog: FC<DialogProps> = ({
 const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	title,
 	description,
+	goodsData,
+	largeCategoryData,
+	mediumCategoryData,
+	smallCategoryData,
+	setLargeCategoryCode,
+	setMediumCategoryCode,
+	setSmallCategoryCode,
+	setPage,
+	searchClick,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
+	const [productData, setProductData] = useState<readonly GoodsData[]>([]);
 	const {
 		control,
 		handleSubmit,
@@ -882,6 +950,16 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 							</Button>
 							<GoodsDialog
 								open={open}
+								goodsData={goodsData}
+								largeCategoryData={largeCategoryData}
+								mediumCategoryData={mediumCategoryData}
+								smallCategoryData={smallCategoryData}
+								setLargeCategoryCode={setLargeCategoryCode}
+								setMediumCategoryCode={setMediumCategoryCode}
+								setSmallCategoryCode={setSmallCategoryCode}
+								setPage={setPage}
+								searchClick={searchClick}
+								setProductData={setProductData}
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
@@ -912,7 +990,25 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<></>
+						{productData.map((data: GoodsData, i: number) => (
+							<TableRow key={i}>
+								<TableCell sx={dataTd} align="center">
+									{data.goodsCode}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.goodsName}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.salePrice.toLocaleString()}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									노출순서
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									관리
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</TableContainer>

@@ -37,6 +37,16 @@ public class CategoryTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("각 카테고리 Query 정보 확인")
+    public void findCategoryQueryTest() throws Exception {
+        Integer catLv = 2;
+        mockMvc.perform(get("/category/info/{catLv}", catLv)
+                        .param("upperCategoryCode", "C001000000"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("카테고리 정보 추가")
     public void createCategoryTest() throws Exception {
 

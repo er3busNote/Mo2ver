@@ -9,5 +9,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, String>, CategoryRepositoryCustom {
-    List<Category> findByCategoryLevelAndUseYesNo(Integer categoryLevel, Character useYesNo);
+    List<Category> findByCategoryLevelAndUpperCategoryCodeAndUseYesNo(Integer categoryLevel, String upperCategoryCode, Character useYesNo);
 }

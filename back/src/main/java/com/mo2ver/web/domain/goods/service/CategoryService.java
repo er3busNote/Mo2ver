@@ -19,8 +19,8 @@ public class CategoryService {
     protected CategoryRepository categoryRepository;
 
     @Transactional
-    public List<Category> findCategory(Integer id) {
-        return this.categoryRepository.findByCategoryLevelAndUseYesNo(id, 'Y');
+    public List<Category> findCategory(Integer id, String upperCategoryCode) {
+        return this.categoryRepository.findByCategoryLevelAndUpperCategoryCodeAndUseYesNo(id, upperCategoryCode, 'Y');
     }
 
     @Transactional

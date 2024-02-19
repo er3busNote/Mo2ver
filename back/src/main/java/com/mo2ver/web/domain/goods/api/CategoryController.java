@@ -21,8 +21,8 @@ public class CategoryController {
     }
 
     @GetMapping("/info/{id}")
-    public ResponseEntity infoCategory(@PathVariable Integer id) {
-        return ResponseEntity.ok(categoryService.findCategory(id));
+    public ResponseEntity infoCategory(@PathVariable Integer id, String upperCategoryCode) {
+        return ResponseEntity.ok(categoryService.findCategory(id, upperCategoryCode));
     }
 
     @GetMapping("/list")
