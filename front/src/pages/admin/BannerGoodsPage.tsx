@@ -5,12 +5,17 @@ import React, {
 	Dispatch,
 	SetStateAction,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../services/api';
-import { CategoryData, CategoryPageData } from '../../services/types';
+import {
+	CategoryData,
+	CategoryPageData,
+	GoodsDisplayData,
+} from '../../services/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useCategoryInfo from '../../hooks/useCategoryInfo';
 import useGoodsSearchPageList from '../../hooks/useGoodsSearchPageList';
@@ -45,6 +50,7 @@ interface BannerDispatchProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
+	banner: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 }
@@ -131,14 +137,16 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
 	member,
+	banner,
 	goods,
 	category,
 }): JSX.Element => {
+	const navigate = useNavigate();
+	const csrfData = useCSRFToken({ member });
 	const [goodsName, setGoodsName] = useState<string>('');
 	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
 	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
 	const [smallCategoryCode, setSmallCategoryCode] = useState<string>('');
-	const csrfData = useCSRFToken({ member });
 	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
 	const mediumCategoryData = useCategoryInfo({
 		category,
@@ -160,21 +168,24 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	const searchClick = (goodsName: string) => {
 		setGoodsName(goodsName);
 	};
-	const submitForm = (
+	const submitForm = async (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const goodsFormData = {
+		const goodsFormData: GoodsDisplayData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),
 			position: data.position,
 			type: data.type,
 			useyn: data.useyn,
+			goods: data.goods,
 		};
 		console.log(goodsFormData);
 		console.log(csrfData);
+		await banner.goods(goodsFormData, csrfData);
 		if (event) event.preventDefault(); // 새로고침 방지
+		navigate('/admin/banner');
 	};
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
@@ -217,6 +228,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
+	banner: bindActionCreators(Api.banner, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 });

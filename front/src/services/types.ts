@@ -160,6 +160,23 @@ interface BannerImageData {
 	bnnrImg: Array<BannerImageDetailData>;
 }
 
+interface GoodsDisplayDetailData {
+	goodsCode: string;
+	goodsName: string;
+	salePrice: number;
+	sortSequence: number;
+}
+
+interface GoodsDisplayData {
+	title: string;
+	startDate: string;
+	endDate: string;
+	position: string;
+	type: string;
+	useyn: string;
+	goods: Array<GoodsDisplayDetailData>;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -189,6 +206,7 @@ export type {
 	BannerPageData,
 	BannerImageData,
 	BannerImageDetailData,
+	GoodsDisplayData,
 	PageData,
 	KeywordData,
 };

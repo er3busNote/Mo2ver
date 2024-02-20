@@ -49,6 +49,7 @@ public class EventService {
 
     @Transactional
     public void saveImageEvent(List<MultipartFile> eventFiles, EventImageDto eventImageDto, Member currentUser) throws IOException {
+        String projectDir = System.getProperty("user.dir");
         Path folderPath = Paths.get(imagesProperties.getFilepath());
         Path uploadDirectory = folderPath.resolve("event");
         this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
@@ -60,7 +61,7 @@ public class EventService {
             String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
             Integer goodsImageAttachFile = getGoodsImageAttachFile(eventManage.getEventManageNo(), i+1);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            File targetFile = new File(uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
+            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
             this.eventImageRepository.save(EventImage.of(eventManage, goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
         }

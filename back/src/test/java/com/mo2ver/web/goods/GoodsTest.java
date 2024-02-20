@@ -23,8 +23,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GoodsTest extends CsrfConfigTest {
 
     @Test
+    @DisplayName("상품 상세 정보 확인")
+    public void findGoodsInfoTest() throws Exception {
+        String goodCode = "1000000001";
+        mockMvc.perform(get("/goods/info/{goodCode}", goodCode))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("상품 리스트 정보 확인")
-    public void findGoodslistTest() throws Exception {
+    public void findGoodsListTest() throws Exception {
 
         mockMvc.perform(get("/goods/list")
                         .param("page", "0")

@@ -20,7 +20,7 @@ public class CategoryTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("카테고리 리스트 정보 확인")
-    public void findCategorylistTest() throws Exception {
+    public void findCategoryListTest() throws Exception {
 
         mockMvc.perform(get("/category/list"))
                 .andDo(print())

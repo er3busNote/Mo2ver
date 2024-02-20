@@ -22,6 +22,7 @@ import {
 	CSRFData,
 	GoodsPage,
 	GoodsSearchPage,
+	GoodsDisplayData,
 } from './types';
 
 // 인스턴스 API 생성
@@ -251,6 +252,23 @@ const banner = {
 			.catch((error: AxiosError) => {
 				return error.response;
 			}),
+	// 상품 전시 정보 API : <baseURL>/banner/goods
+	goods:
+		(goodsDisplayData: GoodsDisplayData, csrfData: CSRFData) =>
+		(dispatch: Dispatch) =>
+			instance
+				.post('banner/goods', goodsDisplayData, {
+					headers: {
+						'X-XSRF-TOKEN': csrfData.csrfToken,
+					},
+				})
+				.then((response: AxiosResponse) => {
+					dispatch(tokenSuccess(response.data));
+					return response.data;
+				})
+				.catch((error: AxiosError) => {
+					return error.response;
+				}),
 	// 배너 이미지 업로드 API : <baseURL>/banner/upload
 	upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 		instance

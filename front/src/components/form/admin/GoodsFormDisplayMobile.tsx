@@ -17,7 +17,7 @@ import {
 } from '../../../services/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
@@ -55,7 +55,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
-import { GoodsFormDisplayValues } from './types';
+import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 import { isMobile } from 'react-device-detect';
@@ -95,9 +95,23 @@ const goodsDisplaySchema = yup
 			)
 			.nullable()
 			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required(),
+		position: yup.string().required('필수항목'),
 		type: yup.string().required(),
-		useyn: yup.string().required(),
+		useyn: yup.string().required('필수항목'),
+		goods: yup
+			.array()
+			.of(
+				yup.object().shape({
+					goodsCode: yup.string().required('상품코드'),
+					goodsName: yup.string().required('상품내용'),
+					salePrice: yup.number().required('판매가'),
+					sortSequence: yup
+						.number()
+						.positive('1 이상의 값을 입력해주세요')
+						.required('정렬순서'),
+				})
+			)
+			.required('상품 전시 정보를 선택해주세요'),
 	})
 	.required();
 
@@ -126,6 +140,7 @@ const goodsDisplayValues = {
 	position: '',
 	type: 'GD',
 	useyn: 'Y',
+	goods: [],
 };
 
 interface DialogProps {
@@ -139,7 +154,7 @@ interface DialogProps {
 	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
 	setPage: Dispatch<SetStateAction<number>>;
 	searchClick: (goodsName: string) => void;
-	setProductData: Dispatch<SetStateAction<readonly GoodsData[]>>;
+	replaceField: (productData: readonly GoodsData[]) => void;
 	handleClose: () => void;
 	header: SxProps<Theme>;
 	base: SxProps<Theme>;
@@ -200,7 +215,7 @@ const GoodsDialog: FC<DialogProps> = ({
 	setSmallCategoryCode,
 	setPage,
 	searchClick,
-	setProductData,
+	replaceField,
 	handleClose,
 	header,
 	base,
@@ -278,7 +293,7 @@ const GoodsDialog: FC<DialogProps> = ({
 	};
 
 	const handleSelect = () => {
-		setProductData(right);
+		replaceField(right);
 		handleClose();
 	};
 
@@ -346,7 +361,13 @@ const GoodsDialog: FC<DialogProps> = ({
 							<ListItemText
 								id={labelId}
 								primaryTypographyProps={{
-									style: { fontSize: 14 },
+									style: {
+										width: '45px',
+										fontSize: 14,
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflowX: 'hidden',
+									},
 								}}
 								primary={value.goodsName}
 							/>
@@ -454,7 +475,10 @@ const GoodsDialog: FC<DialogProps> = ({
 						spacing={2}
 						justifyContent="center"
 						alignItems="center"
-						sx={{ display: isMobile ? 'grid' : 'flex' }}
+						sx={{
+							display: isMobile ? 'grid' : 'flex',
+							width: isMobile ? '100%' : '316px',
+						}}
 					>
 						<Grid item>{customList(left)}</Grid>
 						<Grid item sx={{ pl: isMobile ? '4px !important' : '12px' }}>
@@ -629,7 +653,6 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
-	const [productData, setProductData] = useState<readonly GoodsData[]>([]);
 	const {
 		control,
 		handleSubmit,
@@ -640,6 +663,20 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		defaultValues: goodsDisplayValues,
 		resolver: yupResolver(goodsDisplaySchema),
 	});
+	const { fields, replace } = useFieldArray({
+		control,
+		name: 'goods',
+	});
+	const replaceField = (productData: readonly GoodsData[]) => {
+		replace(
+			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
+				goodsCode,
+				goodsName,
+				salePrice,
+				sortSequence: i + 1,
+			}))
+		);
+	};
 
 	useEffect(() => {
 		const type = watch('type');
@@ -710,6 +747,19 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		py: 0.5,
 		border: tableBorder,
 		fontSize: { xs: '11px', sm: '12px' },
+	};
+	const dataTdNum: SxProps<Theme> = {
+		px: isMobile ? 0 : 1,
+		width: isMobile ? '94px' : '130px',
+		'.MuiFormControl-root': {
+			height: '34px',
+		},
+		'.MuiFormHelperText-root': {
+			display: 'none',
+		},
+		'.MuiInputBase-root': {
+			overflowY: 'hidden',
+		},
 	};
 	const dateHorizonIcon: SxProps<Theme> = {
 		px: 0.5,
@@ -959,7 +1009,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 								setSmallCategoryCode={setSmallCategoryCode}
 								setPage={setPage}
 								searchClick={searchClick}
-								setProductData={setProductData}
+								replaceField={replaceField}
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
@@ -984,14 +1034,11 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 							<TableCell sx={dataTh} align="center" component="th">
 								노출순서
 							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								관리
-							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{productData.map((data: GoodsData, i: number) => (
-							<TableRow key={i}>
+						{fields.map((data: GoodsDisplayDetailValues, index: number) => (
+							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
 									{data.goodsCode}
 								</TableCell>
@@ -1001,11 +1048,20 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 								<TableCell sx={dataTd} align="center">
 									{data.salePrice.toLocaleString()}
 								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									노출순서
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									관리
+								<TableCell sx={dataTdNum} align="center">
+									<Controller
+										name={`goods.${index}.sortSequence`}
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="number"
+												label="노출순서"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
 								</TableCell>
 							</TableRow>
 						))}

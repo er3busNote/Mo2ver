@@ -17,7 +17,7 @@ import {
 } from '../../../services/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
@@ -56,7 +56,7 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
-import { GoodsFormDisplayValues } from './types';
+import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -95,9 +95,23 @@ const goodsDisplaySchema = yup
 			)
 			.nullable()
 			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required(),
+		position: yup.string().required('필수항목'),
 		type: yup.string().required(),
-		useyn: yup.string().required(),
+		useyn: yup.string().required('필수항목'),
+		goods: yup
+			.array()
+			.of(
+				yup.object().shape({
+					goodsCode: yup.string().required('상품코드'),
+					goodsName: yup.string().required('상품내용'),
+					salePrice: yup.number().required('판매가'),
+					sortSequence: yup
+						.number()
+						.positive('1 이상의 값을 입력해주세요')
+						.required('정렬순서'),
+				})
+			)
+			.required('상품 전시 정보를 선택해주세요'),
 	})
 	.required();
 
@@ -126,6 +140,7 @@ const goodsDisplayValues = {
 	position: '',
 	type: 'GD',
 	useyn: 'Y',
+	goods: [],
 };
 
 interface DialogProps {
@@ -139,7 +154,7 @@ interface DialogProps {
 	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
 	setPage: Dispatch<SetStateAction<number>>;
 	searchClick: (goodsName: string) => void;
-	setProductData: Dispatch<SetStateAction<readonly GoodsData[]>>;
+	replaceField: (productData: readonly GoodsData[]) => void;
 	handleClose: () => void;
 	header: SxProps<Theme>;
 	base: SxProps<Theme>;
@@ -200,7 +215,7 @@ const GoodsDialog: FC<DialogProps> = ({
 	setSmallCategoryCode,
 	setPage,
 	searchClick,
-	setProductData,
+	replaceField,
 	handleClose,
 	header,
 	base,
@@ -278,7 +293,7 @@ const GoodsDialog: FC<DialogProps> = ({
 	};
 
 	const handleSelect = () => {
-		setProductData(right);
+		replaceField(right);
 		handleClose();
 	};
 
@@ -328,7 +343,18 @@ const GoodsDialog: FC<DialogProps> = ({
 								/>
 							</ListItemIcon>
 							<ListItemText id={labelId} primary={value.goodsCode} />
-							<ListItemText id={labelId} primary={value.goodsName} />
+							<ListItemText
+								id={labelId}
+								primaryTypographyProps={{
+									style: {
+										width: '45px',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflowX: 'hidden',
+									},
+								}}
+								primary={value.goodsName}
+							/>
 						</ListItemButton>
 					);
 				})}
@@ -599,7 +625,6 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
-	const [productData, setProductData] = useState<readonly GoodsData[]>([]);
 	const {
 		control,
 		handleSubmit,
@@ -610,6 +635,20 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		defaultValues: goodsDisplayValues,
 		resolver: yupResolver(goodsDisplaySchema),
 	});
+	const { fields, replace } = useFieldArray({
+		control,
+		name: 'goods',
+	});
+	const replaceField = (productData: readonly GoodsData[]) => {
+		replace(
+			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
+				goodsCode,
+				goodsName,
+				salePrice,
+				sortSequence: i + 1,
+			}))
+		);
+	};
 
 	useEffect(() => {
 		const type = watch('type');
@@ -681,6 +720,12 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		py: 1,
 		border: tableBorder,
 		fontSize: { sm: '13px', lg: '14px' },
+	};
+	const dataTdNum: SxProps<Theme> = {
+		width: '220px',
+		'.MuiInputBase-input': {
+			py: 2,
+		},
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
@@ -923,7 +968,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 								setSmallCategoryCode={setSmallCategoryCode}
 								setPage={setPage}
 								searchClick={searchClick}
-								setProductData={setProductData}
+								replaceField={replaceField}
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
@@ -948,14 +993,11 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 							<TableCell sx={dataTh} align="center" component="th">
 								노출순서
 							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								관리
-							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{productData.map((data: GoodsData, i: number) => (
-							<TableRow key={i}>
+						{fields.map((data: GoodsDisplayDetailValues, index: number) => (
+							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
 									{data.goodsCode}
 								</TableCell>
@@ -965,11 +1007,20 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 								<TableCell sx={dataTd} align="center">
 									{data.salePrice.toLocaleString()}
 								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									노출순서
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									관리
+								<TableCell sx={dataTdNum} align="center">
+									<Controller
+										name={`goods.${index}.sortSequence`}
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="number"
+												label="노출순서"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
 								</TableCell>
 							</TableRow>
 						))}

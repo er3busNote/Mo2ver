@@ -50,6 +50,7 @@ public class BannerService {
 
     @Transactional
     public void saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto, Member currentUser) throws IOException {
+        String projectDir = System.getProperty("user.dir");
         Path folderPath = Paths.get(imagesProperties.getFilepath());
         Path uploadDirectory = folderPath.resolve("banner");
         this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
@@ -64,7 +65,7 @@ public class BannerService {
             String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
             String fileNameWithoutExtension = removeFileExtension(fileName);
             BannerDetail bannerDetail = this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailDto, fileNameWithoutExtension, i+1, currentUser));
-            File targetFile = new File(uploadDirectory + "/" + bannerDetail.getBannerDetailId() + "." + fileExtension);
+            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + bannerDetail.getBannerDetailId() + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
         }
     }

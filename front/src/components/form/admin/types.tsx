@@ -23,6 +23,13 @@ interface BannerFormImageValues {
 	bnnrImg: Array<BannerImageDetailValues>;
 }
 
+interface GoodsDisplayDetailValues {
+	goodsCode: string;
+	goodsName: string;
+	salePrice: number;
+	sortSequence: number;
+}
+
 interface GoodsFormDisplayValues {
 	title: string;
 	startDate: Dayjs;
@@ -30,6 +37,7 @@ interface GoodsFormDisplayValues {
 	position: string;
 	type: string;
 	useyn: string;
+	goods: Array<GoodsDisplayDetailValues>;
 }
 
 interface VideoFormDisplayValues {
@@ -46,5 +54,6 @@ export type {
 	BannerFormImageValues,
 	BannerImageDetailValues,
 	GoodsFormDisplayValues,
+	GoodsDisplayDetailValues,
 	VideoFormDisplayValues,
 };

@@ -87,6 +87,7 @@ public class GoodsService {
 
     @Transactional
     public void saveImageGoods(List<MultipartFile> files, GoodsImageDto goodsImageDto, Member currentUser) throws IOException {
+        String projectDir = System.getProperty("user.dir");
         Path folderPath = Paths.get(imagesProperties.getFilepath());
         Path uploadDirectory = folderPath.resolve("goods");
         this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
@@ -99,7 +100,7 @@ public class GoodsService {
             String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
             Integer goodsImageAttachFile = getGoodsImageAttachFile(price.getGoodsCode().getGoodsCode(), i+1);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            File targetFile = new File(uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
+            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
             file.transferTo(targetFile); // 파일 저장
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
         }
