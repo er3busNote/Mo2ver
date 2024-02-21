@@ -25,15 +25,15 @@ public class EventImageDto {
     @NotNull(message = "이벤트시작일자가 존재하지 않습니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date eventStartDate;
+    private Date startDate;
 
     @NotNull(message = "이벤트종료일자가 존재하지 않습니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date eventEndDate;
+    private Date endDate;
 
     @NotNull(message = "이벤트진행여부가 존재하지 않습니다")
-    private Character eventYesNo;
+    private Character useyn;
 
     private List<EventImageProductDto> goods;
 }

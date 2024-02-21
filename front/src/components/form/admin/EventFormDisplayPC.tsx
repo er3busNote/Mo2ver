@@ -1,8 +1,6 @@
 import React, {
 	FC,
-	useRef,
 	useState,
-	useEffect,
 	Dispatch,
 	SetStateAction,
 	BaseSyntheticEvent,
@@ -38,15 +36,16 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import GoodsDialogPC from './dialog/GoodsDialogPC';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
+import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
-import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
+import { EventFormDisplayValues, EventDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-const goodsDisplaySchema = yup
+const eventDisplaySchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -78,9 +77,33 @@ const goodsDisplaySchema = yup
 			)
 			.nullable()
 			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required('필수항목'),
-		type: yup.string().required(),
 		useyn: yup.string().required('필수항목'),
+		displayImg: yup
+			.mixed<File>()
+			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
+			.test(
+				'fileSize',
+				'파일크기가 너무 작습니다',
+				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+			)
+			.test(
+				'fileType',
+				'지원되는 파일 타입이 아닙니다',
+				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
+			),
+		eventImg: yup
+			.mixed<File>()
+			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
+			.test(
+				'fileSize',
+				'파일크기가 너무 작습니다',
+				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+			)
+			.test(
+				'fileType',
+				'지원되는 파일 타입이 아닙니다',
+				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
+			),
 		goods: yup
 			.array()
 			.of(
@@ -98,7 +121,7 @@ const goodsDisplaySchema = yup
 	})
 	.required();
 
-interface GoodsProp {
+interface EventProp {
 	title: string;
 	description: string;
 	goodsData: CategoryPageData;
@@ -111,22 +134,22 @@ interface GoodsProp {
 	setPage: Dispatch<SetStateAction<number>>;
 	searchClick: (goodsName: string) => void;
 	onSubmit: (
-		data: GoodsFormDisplayValues,
+		data: EventFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const goodsDisplayValues: GoodsFormDisplayValues = {
+const eventDisplayValues: EventFormDisplayValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
-	position: '',
-	type: 'GD',
 	useyn: 'Y',
+	displayImg: undefined,
+	eventImg: undefined,
 	goods: [],
 };
 
-const GoodsFormDisplayPC: FC<GoodsProp> = ({
+const EventFormDisplayPC: FC<EventProp> = ({
 	title,
 	description,
 	goodsData,
@@ -142,17 +165,15 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
-		watch,
-	} = useForm<GoodsFormDisplayValues>({
+	} = useForm<EventFormDisplayValues>({
 		mode: 'onChange',
-		defaultValues: goodsDisplayValues,
-		resolver: yupResolver(goodsDisplaySchema),
+		defaultValues: eventDisplayValues,
+		resolver: yupResolver(eventDisplaySchema),
 	});
 	const { fields, replace } = useFieldArray({
 		control,
@@ -169,32 +190,6 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		);
 	};
 
-	useEffect(() => {
-		const type = watch('type');
-		if (type !== watchValue.current) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			switch (type) {
-				case 'BN':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
-					break;
-				default:
-					break;
-			}
-		}
-	}, [watch('type')]);
-
 	const openGoods = () => setOpen(true);
 	const closeGoods = () => setOpen(false);
 
@@ -206,8 +201,8 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 			prevDescription: description,
 		};
 		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		dispatch(menuActive('/admin/event'));
+		navigate('/admin/event');
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -224,6 +219,23 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		py: 2,
 		fontSize: { sm: '13px', lg: '14px' },
 		border: tableBorder,
+	};
+	const uploadTh: SxProps<Theme> = {
+		px: 2,
+		py: 1.5,
+		width: 120,
+		fontSize: { sm: '13px', lg: '14px' },
+		bgcolor: '#EEEEEE',
+		border: tableBorder,
+		fontWeight: 'bold',
+	};
+	const uploadTd: SxProps<Theme> = {
+		px: 2,
+		py: 2,
+		fontSize: { sm: '13px', lg: '14px' },
+		borderBottom: 'none',
+		display: 'flex',
+		justifyContent: 'start',
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
@@ -343,25 +355,15 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell sx={conditionTh} align="center" component="th">
-								노출위치
+							<TableCell sx={uploadTh} align="center" component="th">
+								전시 이미지
 							</TableCell>
-							<TableCell sx={conditionTd} align="left">
+							<TableCell sx={uploadTd}>
 								<Controller
-									name="position"
+									name="displayImg"
 									control={control}
 									render={({ field, fieldState, formState }) => (
-										<RenderSelectField
-											label="노출 위치"
-											datas={[
-												{ value: '', label: '전체' },
-												{ value: '11', label: '메인상단-A' },
-												{ value: '12', label: '메인상단-B' },
-												{ value: '20', label: '메인중간' },
-												{ value: '30', label: '메인중하단' },
-												{ value: '40', label: '메인하단' },
-												{ value: '50', label: '메인최상단' },
-											]}
+										<RenderUploadField
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
@@ -369,21 +371,15 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 									)}
 								/>
 							</TableCell>
-							<TableCell sx={conditionTh} align="center" component="th">
-								템플릿 유형
+							<TableCell sx={uploadTh} align="center" component="th">
+								이벤트 이미지
 							</TableCell>
-							<TableCell sx={conditionTd} align="left">
+							<TableCell sx={uploadTd}>
 								<Controller
-									name="type"
+									name="eventImg"
 									control={control}
 									render={({ field, fieldState, formState }) => (
-										<RenderSelectField
-											label="템플릿 유형"
-											datas={[
-												{ value: 'BN', label: '배너이미지' },
-												{ value: 'GD', label: '상품전시' },
-												{ value: 'VD', label: '동영상' },
-											]}
+										<RenderUploadField
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
@@ -515,7 +511,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((data: GoodsDisplayDetailValues, index: number) => (
+						{fields.map((data: EventDisplayDetailValues, index: number) => (
 							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
 									{data.goodsCode}
@@ -571,4 +567,4 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	);
 };
 
-export default GoodsFormDisplayPC;
+export default EventFormDisplayPC;

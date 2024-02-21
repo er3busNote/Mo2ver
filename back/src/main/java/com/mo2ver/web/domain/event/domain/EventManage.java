@@ -64,9 +64,9 @@ public class EventManage {
     public static EventManage of(EventImageDto eventImageDto, Member currentUser) {
         EventManage eventManage = EventManage.builder()
                 .subject(eventImageDto.getTitle())
-                .eventStartDate(eventImageDto.getEventStartDate())
-                .eventEndDate(eventImageDto.getEventEndDate())
-                .eventYesNo(eventImageDto.getEventYesNo())
+                .eventStartDate(eventImageDto.getStartDate())
+                .eventEndDate(eventImageDto.getEndDate())
+                .eventYesNo(eventImageDto.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

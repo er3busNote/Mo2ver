@@ -4,34 +4,34 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../services/api';
-import useBannerPageList from '../../hooks/useBannerPageList';
-import BannerPC from '../../components/admin/banner/BannerPC';
-import BannerMobile from '../../components/admin/banner/BannerMobile';
+import useEventPageList from '../../hooks/useEventPageList';
+import EventPC from '../../components/admin/event/EventPC';
+import EventMobile from '../../components/admin/event/EventMobile';
 import { Box } from '@mui/material';
-import { BannerPageData } from '../../services/types';
+import { EventPageData } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 
 const drawerMenuLimit = 768;
 
-interface BannerProps {
+interface EventProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	bannerPageData: BannerPageData;
+	eventPageData: EventPageData;
 }
 
-interface BannerDispatchProps {
+interface EventDispatchProps {
 	title: string;
 	description: string;
-	banner: ActionCreatorsMapObject;
+	event: ActionCreatorsMapObject;
 }
 
-const BannerPagePC: FC<BannerProps> = ({
+const BannerPagePC: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
-	bannerPageData,
+	eventPageData,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
@@ -39,22 +39,22 @@ const BannerPagePC: FC<BannerProps> = ({
 	return (
 		<>
 			{isPc && (
-				<BannerPC
+				<EventPC
 					title={title}
 					description={description}
 					setPage={setPage}
-					bannerPageData={bannerPageData}
+					eventPageData={eventPageData}
 				/>
 			)}
 		</>
 	);
 };
 
-const BannerPageMobile: FC<BannerProps> = ({
+const BannerPageMobile: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
-	bannerPageData,
+	eventPageData,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
@@ -62,36 +62,36 @@ const BannerPageMobile: FC<BannerProps> = ({
 	return (
 		<>
 			{isMobile && (
-				<BannerMobile
+				<EventMobile
 					title={title}
 					description={description}
 					setPage={setPage}
-					bannerPageData={bannerPageData}
+					eventPageData={eventPageData}
 				/>
 			)}
 		</>
 	);
 };
 
-const BannerPage: FC<BannerDispatchProps> = ({
+const EventPage: FC<EventDispatchProps> = ({
 	title,
 	description,
-	banner,
+	event,
 }): JSX.Element => {
-	const [bannerPageData, setPage] = useBannerPageList({ banner });
+	const [eventPageData, setPage] = useEventPageList({ event });
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<BannerPagePC
 				title={title}
 				description={description}
 				setPage={setPage}
-				bannerPageData={bannerPageData}
+				eventPageData={eventPageData}
 			/>
 			<BannerPageMobile
 				title={title}
 				description={description}
 				setPage={setPage}
-				bannerPageData={bannerPageData}
+				eventPageData={eventPageData}
 			/>
 		</Box>
 	);
@@ -103,7 +103,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
-	banner: bindActionCreators(Api.banner, dispatch),
+	event: bindActionCreators(Api.event, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BannerPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

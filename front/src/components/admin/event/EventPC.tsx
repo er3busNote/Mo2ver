@@ -3,6 +3,7 @@ import React, {
 	useState,
 	useEffect,
 	MouseEvent,
+	ChangeEvent,
 	Dispatch,
 	SetStateAction,
 } from 'react';
@@ -31,7 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import { BannerData, BannerPageData } from '../../../services/types';
+import { EventData, EventPageData } from '../../../services/types';
 // import _ from 'lodash';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
@@ -39,18 +40,18 @@ import dayjs, { Dayjs } from 'dayjs';
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerProps {
+interface EventProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	bannerPageData: BannerPageData;
+	eventPageData: EventPageData;
 }
 
-const BannerPC: FC<BannerProps> = ({
+const EventPC: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
-	bannerPageData,
+	eventPageData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -62,8 +63,8 @@ const BannerPC: FC<BannerProps> = ({
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	useEffect(() => {
-		setRowsPerPage(bannerPageData.numberOfElements);
-	}, [bannerPageData.size]);
+		setRowsPerPage(eventPageData.numberOfElements);
+	}, [eventPageData.size]);
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -73,8 +74,8 @@ const BannerPC: FC<BannerProps> = ({
 			prevDescription: description,
 		};
 		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner/image'));
-		navigate('/admin/banner/image');
+		dispatch(menuActive('/admin/event/goods'));
+		navigate('/admin/event/goods');
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -289,9 +290,6 @@ const BannerPC: FC<BannerProps> = ({
 								제목
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								유형
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
 								전시기간
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
@@ -312,24 +310,21 @@ const BannerPC: FC<BannerProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{bannerPageData.content &&
-							bannerPageData.content.map((data: BannerData, index: number) => (
+						{eventPageData.content &&
+							eventPageData.content.map((data: EventData, index: number) => (
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
-										{data.bannerManageNo}
+										{data.eventManageNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
-										배경이미지
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
-										{moment(data.displayEndDate).format('YYYY-MM-DD')}
+										{moment(data.eventStartDate).format('YYYY-MM-DD')} ~{' '}
+										{moment(data.eventEndDate).format('YYYY-MM-DD')}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										마감
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
-										{data.displayYesNo}
+										{data.eventYesNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										Y
@@ -346,8 +341,8 @@ const BannerPC: FC<BannerProps> = ({
 					<TableFooter>
 						<TableRow>
 							<TablePagination
-								rowsPerPageOptions={[bannerPageData.size]}
-								count={bannerPageData.totalElements}
+								rowsPerPageOptions={[eventPageData.size]}
+								count={eventPageData.totalElements}
 								rowsPerPage={rowsPerPage}
 								page={newPage}
 								SelectProps={{
@@ -367,4 +362,4 @@ const BannerPC: FC<BannerProps> = ({
 	);
 };
 
-export default BannerPC;
+export default EventPC;

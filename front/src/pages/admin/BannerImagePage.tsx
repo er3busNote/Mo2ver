@@ -87,7 +87,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const submitForm = async (
 		data: BannerFormImageValues,
-		event?: BaseSyntheticEvent<object, any, any>
+		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const bnnrImg = data.bnnrImg as Array<BannerImageDetailValues>;
 		const paramBnnrImg = new Array<BannerImageDetailData>();
@@ -123,7 +123,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 		console.log(bannerFormData);
 		console.log(csrfData);
 		await banner.upload(formData, csrfData);
-		if (event) event.preventDefault(); // 새로고침 방지
+		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
 	return (

@@ -38,7 +38,7 @@ interface CategoryProp {
 	) => void;
 }
 
-const defaultValues = {
+const defaultValues: CategoryFormValues = {
 	category: '',
 	useyn: 'Y',
 	level: 1,
@@ -48,7 +48,7 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 	const {
 		control,
 		handleSubmit,
-		formState: { isSubmitted, isValid, errors },
+		formState: { isSubmitted, isValid },
 	} = useForm<CategoryFormValues>({
 		mode: 'onChange',
 		defaultValues,

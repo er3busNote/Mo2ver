@@ -79,7 +79,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const submitForm = (
 		data: VideoFormDisplayValues,
-		event?: BaseSyntheticEvent<object, any, any>
+		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const videoFormData = {
 			title: data.title,
@@ -91,7 +91,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		};
 		console.log(videoFormData);
 		console.log(csrfData);
-		if (event) event.preventDefault(); // 새로고침 방지
+		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 	};
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>

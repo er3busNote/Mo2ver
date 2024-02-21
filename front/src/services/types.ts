@@ -177,17 +177,65 @@ interface GoodsDisplayData {
 	goods: Array<GoodsDisplayDetailData>;
 }
 
+// 4. Event Type
+interface EventData {
+	eventManageNo: number;
+	subject: string;
+	eventStartDate: number;
+	eventEndDate: number;
+	eventYesNo: string;
+	register: string;
+	registerDate: number;
+	imageList: Array<ImageData>;
+}
+
+interface EventPageData {
+	content: Array<EventData>;
+	empty: boolean;
+	first: boolean;
+	last: boolean;
+	number: number;
+	numberOfElements: number;
+	pageable: {
+		offset: number;
+		pageNumber: number;
+		pageSize: number;
+		paged: boolean;
+		sort: {
+			empty: boolean;
+			sorted: boolean;
+			unsorted: boolean;
+		};
+	};
+	size: number;
+	sort: {
+		empty: boolean;
+		sorted: boolean;
+		unsorted: boolean;
+	};
+	totalElements: number;
+	totalPages: number;
+}
+
+interface EventDisplayDetailData {
+	goodsCode: string;
+	goodsName: string;
+	salePrice: number;
+	sortSequence: number;
+}
+
+interface EventDisplayData {
+	title: string;
+	startDate: string;
+	endDate: string;
+	useyn: string;
+	goods: Array<EventDisplayDetailData>;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
-	path: string;
-	type: string; // enum → (all / video / photo / pdf / doc & current / download)
-	identifier: 'file' | 'folder'; // ← enum
-}
-
-interface KeywordData {
-	page: number;
-	keyword: string;
+	size: number;
 }
 
 export type {
@@ -207,6 +255,8 @@ export type {
 	BannerImageData,
 	BannerImageDetailData,
 	GoodsDisplayData,
+	EventData,
+	EventPageData,
+	EventDisplayData,
 	PageData,
-	KeywordData,
 };

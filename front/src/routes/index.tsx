@@ -14,12 +14,14 @@ import {
 	Event,
 	EventDetail,
 	Notice,
-	Banner,
-	BannerImage,
-	BannerGoods,
-	BannerVideo,
-	Category,
-	Dashboard,
+	AdminDashboard,
+	AdminCategory,
+	AdminBanner,
+	AdminBannerImage,
+	AdminBannerGoods,
+	AdminBannerVideo,
+	AdminEvent,
+	AdminEventGoods,
 	NotFound,
 } from '../pages/index';
 import PrivateRoute from './auth';
@@ -66,12 +68,14 @@ const MainRoutes: FC = (): JSX.Element => {
 const AdminRoutes: FC = (): JSX.Element => {
 	return (
 		<Routes>
-			<Route path="/" element={<Dashboard />} />
-			<Route path="/cagetory" element={<Category />} />
-			<Route path="/banner" element={<Banner />} />
-			<Route path="/banner/image" element={<BannerImage />} />
-			<Route path="/banner/goods" element={<BannerGoods />} />
-			<Route path="/banner/video" element={<BannerVideo />} />
+			<Route path="/" element={<AdminDashboard />} />
+			<Route path="/cagetory" element={<AdminCategory />} />
+			<Route path="/banner" element={<AdminBanner />} />
+			<Route path="/banner/image" element={<AdminBannerImage />} />
+			<Route path="/banner/goods" element={<AdminBannerGoods />} />
+			<Route path="/banner/video" element={<AdminBannerVideo />} />
+			<Route path="/event" element={<AdminEvent />} />
+			<Route path="/event/goods" element={<AdminEventGoods />} />
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);

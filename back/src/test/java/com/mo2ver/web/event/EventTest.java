@@ -38,7 +38,7 @@ public class EventTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("이벤트 리스트 정보 확인")
-    public void findEventlistTest() throws Exception {
+    public void findEventListTest() throws Exception {
 
         mockMvc.perform(get("/event/list")
                         .param("page", "0")
@@ -72,8 +72,8 @@ public class EventTest extends CsrfConfigTest {
 
         EventImageDto eventImageDto = this.getEventImageDto();
 
-        MockMultipartFile file1 = new MockMultipartFile("eventFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
-        MockMultipartFile file2 = new MockMultipartFile("eventDetailFile", "file2.txt", "image/png", "Test file content 2".getBytes());
+        MockMultipartFile file1 = new MockMultipartFile("displayFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("eventFile", "file2.txt", "image/png", "Test file content 2".getBytes());
 
         MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageDto).getBytes());
         jsonEventProduct.getHeaders().setContentType(MediaType.APPLICATION_JSON);
@@ -91,9 +91,9 @@ public class EventTest extends CsrfConfigTest {
     private EventImageDto getEventImageDto() {
         return EventImageDto.builder()
                 .title("테스트")
-                .eventStartDate(new Date())
-                .eventEndDate(new Date())
-                .eventYesNo('Y')
+                .startDate(new Date())
+                .endDate(new Date())
+                .useyn('Y')
                 .goods(Arrays.asList(
                         this.getEventProductDto(1),
                         this.getEventProductDto(2)

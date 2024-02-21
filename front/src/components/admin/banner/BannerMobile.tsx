@@ -1,4 +1,12 @@
-import React, { FC, useState, MouseEvent, ChangeEvent } from 'react';
+import React, {
+	FC,
+	useState,
+	useEffect,
+	MouseEvent,
+	ChangeEvent,
+	Dispatch,
+	SetStateAction,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
@@ -35,24 +43,28 @@ const tableBorderHeader = '3px solid #333';
 interface BannerProps {
 	title: string;
 	description: string;
+	setPage: Dispatch<SetStateAction<number>>;
 	bannerPageData: BannerPageData;
 }
 
 const BannerMobile: FC<BannerProps> = ({
 	title,
 	description,
+	setPage,
 	bannerPageData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [page, setPage] = useState(bannerPageData.number);
-	const [rowsPerPage, setRowsPerPage] = useState(
-		bannerPageData.numberOfElements
-	);
 	const [keyword, setKeyword] = useState('');
 	const [useyn, setUseyn] = useState('');
+	const [newPage, setNewPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(0);
 	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+
+	useEffect(() => {
+		setRowsPerPage(bannerPageData.numberOfElements);
+	}, [bannerPageData.size]);
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -85,11 +97,13 @@ const BannerMobile: FC<BannerProps> = ({
 		newPage: number
 	) => {
 		setPage(newPage);
+		setNewPage(newPage);
 	};
-
-	const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setNewPage(0);
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -338,10 +352,10 @@ const BannerMobile: FC<BannerProps> = ({
 					<TableFooter>
 						<TableRow>
 							<TablePagination
-								rowsPerPageOptions={[10, 25, 50, 100]}
+								rowsPerPageOptions={[bannerPageData.size]}
 								count={bannerPageData.totalElements}
 								rowsPerPage={rowsPerPage}
-								page={page}
+								page={newPage}
 								SelectProps={{
 									inputProps: {
 										'aria-label': 'rows per page',

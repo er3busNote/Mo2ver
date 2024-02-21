@@ -14,21 +14,21 @@ import Api from '../../services/api';
 import {
 	CategoryData,
 	CategoryPageData,
-	GoodsDisplayData,
+	EventDisplayData,
 } from '../../services/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useCategoryInfo from '../../hooks/useCategoryInfo';
 import useGoodsSearchPageList from '../../hooks/useGoodsSearchPageList';
-import GoodsFormDisplayPC from '../../components/form/admin/GoodsFormDisplayPC';
-import GoodsFormDisplayMobile from '../../components/form/admin/GoodsFormDisplayMobile';
+import EventFormDisplayPC from '../../components/form/admin/EventFormDisplayPC';
+import EventFormDisplayMobile from '../../components/form/admin/EventFormDisplayMobile';
 import { Box } from '@mui/material';
-import { GoodsFormDisplayValues } from '../../components/form/admin/types';
+import { EventFormDisplayValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 
 const drawerMenuLimit = 768;
 
-interface BannerProps {
+interface EventProps {
 	title: string;
 	description: string;
 	goodsData: CategoryPageData;
@@ -41,21 +41,21 @@ interface BannerProps {
 	setPage: Dispatch<SetStateAction<number>>;
 	searchClick: (goodsName: string) => void;
 	onSubmit: (
-		data: GoodsFormDisplayValues,
+		data: EventFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
 	) => void;
 }
 
-interface BannerDispatchProps {
+interface EventDispatchProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
-	banner: ActionCreatorsMapObject;
+	event: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 }
 
-const BannerGoodsPC: FC<BannerProps> = ({
+const EventGoodsPC: FC<EventProps> = ({
 	title,
 	description,
 	goodsData,
@@ -75,7 +75,7 @@ const BannerGoodsPC: FC<BannerProps> = ({
 	return (
 		<>
 			{isPc && (
-				<GoodsFormDisplayPC
+				<EventFormDisplayPC
 					title={title}
 					description={description}
 					goodsData={goodsData}
@@ -94,7 +94,7 @@ const BannerGoodsPC: FC<BannerProps> = ({
 	);
 };
 
-const BannerGoodsMobile: FC<BannerProps> = ({
+const EventGoodsMobile: FC<EventProps> = ({
 	title,
 	description,
 	goodsData,
@@ -114,7 +114,7 @@ const BannerGoodsMobile: FC<BannerProps> = ({
 	return (
 		<>
 			{isMobile && (
-				<GoodsFormDisplayMobile
+				<EventFormDisplayMobile
 					title={title}
 					description={description}
 					goodsData={goodsData}
@@ -133,11 +133,11 @@ const BannerGoodsMobile: FC<BannerProps> = ({
 	);
 };
 
-const BannerGoodsPage: FC<BannerDispatchProps> = ({
+const EventGoodsPage: FC<EventDispatchProps> = ({
 	title,
 	description,
 	member,
-	banner,
+	event,
 	goods,
 	category,
 }): JSX.Element => {
@@ -169,27 +169,36 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 		setGoodsName(goodsName);
 	};
 	const submitForm = async (
-		data: GoodsFormDisplayValues,
+		data: EventFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const goodsFormData: GoodsDisplayData = {
+		const formData = new FormData();
+		const textContent = 'This is the error content of the file.';
+		const blob = new Blob([textContent], { type: 'text/plain' });
+		const file = new File([blob], 'error.txt', { type: 'text/plain' });
+		formData.append('displayFile', data.displayImg ?? file);
+		formData.append('eventFile', data.eventImg ?? file);
+		const eventFormData: EventDisplayData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),
-			position: data.position,
-			type: data.type,
 			useyn: data.useyn,
 			goods: data.goods,
 		};
-		console.log(goodsFormData);
+		formData.append(
+			'eventProduct',
+			new Blob([JSON.stringify(eventFormData)], { type: 'application/json' })
+		);
+		console.log('eventProduct');
+		console.log(eventFormData);
 		console.log(csrfData);
-		await banner.goods(goodsFormData, csrfData);
+		await event.upload(formData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/banner');
+		navigate('/admin/event');
 	};
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<BannerGoodsPC
+			<EventGoodsPC
 				title={title}
 				description={description}
 				goodsData={goodsData}
@@ -203,7 +212,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 				searchClick={searchClick}
 				onSubmit={submitForm}
 			/>
-			<BannerGoodsMobile
+			<EventGoodsMobile
 				title={title}
 				description={description}
 				goodsData={goodsData}
@@ -228,9 +237,9 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
-	banner: bindActionCreators(Api.banner, dispatch),
+	event: bindActionCreators(Api.event, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BannerGoodsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EventGoodsPage);

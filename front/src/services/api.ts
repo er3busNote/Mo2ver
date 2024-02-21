@@ -23,6 +23,7 @@ import {
 	GoodsPage,
 	GoodsSearchPage,
 	GoodsDisplayData,
+	PageData,
 } from './types';
 
 // 인스턴스 API 생성
@@ -242,9 +243,9 @@ const category = {
 
 const banner = {
 	// 배너 리스트 API : <baseURL>/banner/list
-	list: () => (dispatch: Dispatch) =>
+	list: (pageData: PageData) => (dispatch: Dispatch) =>
 		instance
-			.get('banner/list?page=0&size=12')
+			.get(`banner/list?page=${pageData.page}&size=${pageData.size}`)
 			.then((response: AxiosResponse) => {
 				dispatch(tokenSuccess(response.data));
 				return response.data;
@@ -287,6 +288,36 @@ const banner = {
 			}),
 };
 
+const event = {
+	// 이벤트 리스트 API : <baseURL>/event/list
+	list: (pageData: PageData) => (dispatch: Dispatch) =>
+		instance
+			.get(`event/list?page=${pageData.page}&size=${pageData.size}`)
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+	// 이벤트 이미지 업로드 API : <baseURL>/event/upload
+	upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
+		instance
+			.post('event/upload', formData, {
+				headers: {
+					'X-XSRF-TOKEN': csrfData.csrfToken,
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+};
+
 const image = {
 	// 이미지 매핑 API : <baseURL>/images/goods/*.*
 	info: (imagefile: string) => () =>
@@ -298,6 +329,7 @@ const api = {
 	goods,
 	category,
 	banner,
+	event,
 	image,
 };
 

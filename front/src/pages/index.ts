@@ -10,12 +10,14 @@ import GoodsRegister from './GoodsRegisterPage';
 import Event from './EventPage';
 import EventDetail from './EventDetailPage';
 import Notice from './NoticePage';
-import Banner from './admin/BannerPage';
-import BannerImage from './admin/BannerImagePage';
-import BannerGoods from './admin/BannerGoodsPage';
-import BannerVideo from './admin/BannerVideoPage';
-import Category from './admin/CategoryPage';
-import Dashboard from './admin/DashboardPage';
+import AdminDashboard from './admin/DashboardPage';
+import AdminCategory from './admin/CategoryPage';
+import AdminBanner from './admin/BannerPage';
+import AdminBannerImage from './admin/BannerImagePage';
+import AdminBannerGoods from './admin/BannerGoodsPage';
+import AdminBannerVideo from './admin/BannerVideoPage';
+import AdminEvent from './admin/EventPage';
+import AdminEventGoods from './admin/EventGoodsPage';
 import NotFound from './NotFound';
 
 export {
@@ -30,11 +32,13 @@ export {
 	Event,
 	EventDetail,
 	Notice,
-	Banner,
-	BannerImage,
-	BannerGoods,
-	BannerVideo,
-	Category,
-	Dashboard,
+	AdminDashboard,
+	AdminCategory,
+	AdminBanner,
+	AdminBannerImage,
+	AdminBannerGoods,
+	AdminBannerVideo,
+	AdminEvent,
+	AdminEventGoods,
 	NotFound,
 };

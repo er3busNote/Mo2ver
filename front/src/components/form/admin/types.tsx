@@ -40,6 +40,23 @@ interface GoodsFormDisplayValues {
 	goods: Array<GoodsDisplayDetailValues>;
 }
 
+interface EventDisplayDetailValues {
+	goodsCode: string;
+	goodsName: string;
+	salePrice: number;
+	sortSequence: number;
+}
+
+interface EventFormDisplayValues {
+	title: string;
+	startDate: Dayjs;
+	endDate: Dayjs;
+	useyn: string;
+	displayImg?: File;
+	eventImg?: File;
+	goods: Array<EventDisplayDetailValues>;
+}
+
 interface VideoFormDisplayValues {
 	title: string;
 	startDate: Dayjs;
@@ -55,5 +72,7 @@ export type {
 	BannerImageDetailValues,
 	GoodsFormDisplayValues,
 	GoodsDisplayDetailValues,
+	EventFormDisplayValues,
+	EventDisplayDetailValues,
 	VideoFormDisplayValues,
 };

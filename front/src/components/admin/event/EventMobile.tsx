@@ -3,6 +3,7 @@ import React, {
 	useState,
 	useEffect,
 	MouseEvent,
+	ChangeEvent,
 	Dispatch,
 	SetStateAction,
 } from 'react';
@@ -16,6 +17,7 @@ import {
 	MenuItem,
 	InputLabel,
 	FormControl,
+	Typography,
 	Table,
 	TableHead,
 	TableBody,
@@ -30,8 +32,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import { BannerData, BannerPageData } from '../../../services/types';
+import { EventData, EventPageData } from '../../../services/types';
 // import _ from 'lodash';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
@@ -39,18 +40,18 @@ import dayjs, { Dayjs } from 'dayjs';
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerProps {
+interface EventProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	bannerPageData: BannerPageData;
+	eventPageData: EventPageData;
 }
 
-const BannerPC: FC<BannerProps> = ({
+const EventMobile: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
-	bannerPageData,
+	eventPageData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -62,8 +63,8 @@ const BannerPC: FC<BannerProps> = ({
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	useEffect(() => {
-		setRowsPerPage(bannerPageData.numberOfElements);
-	}, [bannerPageData.size]);
+		setRowsPerPage(eventPageData.numberOfElements);
+	}, [eventPageData.size]);
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -73,8 +74,8 @@ const BannerPC: FC<BannerProps> = ({
 			prevDescription: description,
 		};
 		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner/image'));
-		navigate('/admin/banner/image');
+		dispatch(menuActive('/admin/event/goods'));
+		navigate('/admin/event/goods');
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -105,61 +106,80 @@ const BannerPC: FC<BannerProps> = ({
 		setNewPage(0);
 	};
 
-	const periodTh: SxProps<Theme> = {
-		px: 2,
+	const conditionTh: SxProps<Theme> = {
+		px: 1,
 		py: 1.5,
-		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		width: '20%',
+		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
-		border: tableBorder,
+		borderBlock: 'none',
 		fontWeight: 'bold',
 	};
-	const periodTd: SxProps<Theme> = {
-		px: 2,
-		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
-		border: tableBorder,
+	const conditionTd: SxProps<Theme> = {
+		pl: 1,
+		pr: 0,
+		borderBlock: 'none',
+		fontSize: { xs: '12px', sm: '13px' },
 	};
 	const dataTh: SxProps<Theme> = {
-		px: 2,
-		py: 1.5,
-		fontSize: { sm: '13px', lg: '14px' },
+		px: { xs: 1, sm: 2 },
+		py: 1,
+		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { xs: '11px', sm: '13px' },
 		border: tableBorder,
 	};
 	const datePicker: SxProps<Theme> = {
+		height: '37px',
 		'.MuiInputBase-input': {
+			pl: 1.5,
 			py: 2,
-			width: '80px',
-			fontSize: { sm: '13px', lg: '14px' },
+			width: '60px',
+			fontSize: { xs: '12px', sm: '13px' },
 		},
+		'.MuiFormLabel-root': {
+			ml: 1,
+			mt: 0.5,
+			fontSize: { xs: '12px', sm: '13px' },
+		},
+		'.MuiInputAdornment-root': {
+			overflowX: 'visible',
+		},
+		'.MuiIconButton-root': {
+			pr: 0.5,
+			pl: 0,
+		},
+		overflowX: 'visible',
+	};
+	const dateHorizonIcon: SxProps<Theme> = {
+		px: 0.5,
 	};
 	const selectForm: SxProps<Theme> = {
 		width: 120,
 		'.MuiInputLabel-shrink': {
-			ml: 0.5,
+			ml: 1,
 			mt: 0.5,
 		},
+		overflowX: 'visible',
 	};
 	const selectLabel: SxProps<Theme> = {
 		mt: -1,
-		ml: 0.5,
-		fontSize: { sm: '13px', lg: '14px' },
+		ml: 1,
+		fontSize: { xs: '11px', sm: '12px' },
 	};
 	const selectInput: SxProps<Theme> = {
 		'.MuiSelect-select': {
-			py: 1.5,
-			fontSize: { sm: '13px', lg: '14px' },
+			py: 1,
+			fontSize: { xs: '11px', sm: '12px' },
 		},
 	};
 	const menuText: SxProps<Theme> = {
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { xs: '12px', sm: '13px' },
 	};
 	return (
 		<Box>
@@ -167,10 +187,10 @@ const BannerPC: FC<BannerProps> = ({
 				<Table size="small" sx={{ border: tableBorder }}>
 					<TableBody sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
-							<TableCell sx={dataTh} align="center" component="th">
-								키워드 검색
+							<TableCell sx={conditionTh} align="center" component="th">
+								키워드
 							</TableCell>
-							<TableCell colSpan={3} sx={dataTd} align="left">
+							<TableCell sx={conditionTd} align="left">
 								<FormControl sx={selectForm}>
 									<InputLabel sx={selectLabel}>제목</InputLabel>
 									<Select
@@ -193,10 +213,10 @@ const BannerPC: FC<BannerProps> = ({
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell sx={periodTh} align="center" component="th">
+							<TableCell sx={conditionTh} align="center" component="th">
 								전시기간
 							</TableCell>
-							<TableCell sx={periodTd} align="left">
+							<TableCell sx={conditionTd} align="left">
 								<LocalizationProvider dateAdapter={AdapterDayjs}>
 									<DesktopDatePicker
 										label="시작날짜"
@@ -204,7 +224,9 @@ const BannerPC: FC<BannerProps> = ({
 										onChange={(value) => handleStartChange(value)}
 										sx={datePicker}
 									/>
-									<HorizontalRuleIcon />
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
 									<DesktopDatePicker
 										label="만료날짜"
 										value={dayjs(endDate)}
@@ -213,10 +235,12 @@ const BannerPC: FC<BannerProps> = ({
 									/>
 								</LocalizationProvider>
 							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
+						</TableRow>
+						<TableRow>
+							<TableCell sx={conditionTh} align="center" component="th">
 								전시여부
 							</TableCell>
-							<TableCell sx={dataTd} align="left">
+							<TableCell sx={conditionTd} align="left">
 								<FormControl sx={selectForm}>
 									<InputLabel sx={selectLabel}>전시여부</InputLabel>
 									<Select
@@ -241,13 +265,13 @@ const BannerPC: FC<BannerProps> = ({
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<Box sx={{ py: 4, display: 'flex', justifyContent: 'space-between' }}>
+			<Box sx={{ py: 2, display: 'flex', justifyContent: 'space-between' }}>
 				<Button
 					type="submit"
 					sx={{
 						px: 6,
 						py: 1,
-						fontSize: '14px',
+						fontSize: { xs: '10px', sm: '12px' },
 						fontWeight: 'bold',
 						bgcolor: '#7940B6',
 						border: '1px solid #757595',
@@ -266,7 +290,7 @@ const BannerPC: FC<BannerProps> = ({
 					sx={{
 						px: 6,
 						py: 1,
-						fontSize: '14px',
+						fontSize: { xs: '10px', sm: '12px' },
 						fontWeight: 'bold',
 						bgcolor: '#363658',
 						border: '1px solid #757595',
@@ -289,56 +313,32 @@ const BannerPC: FC<BannerProps> = ({
 								제목
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								유형
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
 								전시기간
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								진행상태
+								상태
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								전시여부
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								배경이미지여부
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								등록자
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								등록일
+								여부
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{bannerPageData.content &&
-							bannerPageData.content.map((data: BannerData, index: number) => (
+						{eventPageData.content &&
+							eventPageData.content.map((data: EventData, index: number) => (
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
-										{data.bannerManageNo}
+										{data.eventManageNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
-										배경이미지
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
-										{moment(data.displayEndDate).format('YYYY-MM-DD')}
+										{moment(data.eventStartDate).format('YYYY-MM-DD')} ~{' '}
+										{moment(data.eventEndDate).format('YYYY-MM-DD')}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										마감
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
-										{data.displayYesNo}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										Y
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{data.register}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.registerDate).format('YYYY-MM-DD')}
+										{data.eventYesNo}
 									</TableCell>
 								</TableRow>
 							))}
@@ -346,8 +346,8 @@ const BannerPC: FC<BannerProps> = ({
 					<TableFooter>
 						<TableRow>
 							<TablePagination
-								rowsPerPageOptions={[bannerPageData.size]}
-								count={bannerPageData.totalElements}
+								rowsPerPageOptions={[eventPageData.size]}
+								count={eventPageData.totalElements}
 								rowsPerPage={rowsPerPage}
 								page={newPage}
 								SelectProps={{
@@ -367,4 +367,4 @@ const BannerPC: FC<BannerProps> = ({
 	);
 };
 
-export default BannerPC;
+export default EventMobile;

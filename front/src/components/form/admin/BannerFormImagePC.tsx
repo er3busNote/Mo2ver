@@ -108,7 +108,7 @@ interface BannerProp {
 	) => void;
 }
 
-const bnnrImageValues = {
+const bnnrImageValues: BannerFormImageValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),

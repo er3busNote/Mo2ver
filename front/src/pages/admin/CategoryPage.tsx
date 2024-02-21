@@ -64,7 +64,7 @@ const CategoryPage: FC<CategoryDispatchProps> = ({
 	const categoryData = useCategoryList({ category });
 	const submitForm = (
 		data: CategoryFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
+		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const categoryFormData = {
 			category: data.category,
@@ -73,7 +73,7 @@ const CategoryPage: FC<CategoryDispatchProps> = ({
 		};
 		console.log(categoryFormData);
 		console.log(csrfData);
-		if (event) event.preventDefault(); // 새로고침 방지
+		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 	};
 	return (
 		<>

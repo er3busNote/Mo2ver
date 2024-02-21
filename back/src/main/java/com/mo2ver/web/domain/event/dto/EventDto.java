@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,12 @@ public class EventDto {
 
     private Date eventEndDate;
 
+    private Character eventYesNo;
+
+    private String register;
+
+    private Date registerDate;
+
     private List<ImageDto> imageList;
 
     public static EventDto toDTO(EventManage eventManage) {
@@ -32,6 +40,9 @@ public class EventDto {
                 .subject(eventManage.getSubject())
                 .eventStartDate(eventManage.getEventStartDate())
                 .eventEndDate(eventManage.getEventEndDate())
+                .eventYesNo(eventManage.getEventYesNo())
+                .register(eventManage.getRegister())
+                .registerDate(Timestamp.valueOf(eventManage.getRegisterDate()))
                 .imageList(eventManage.getEventImageList().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')
                         .map(ImageDto::toDTO)

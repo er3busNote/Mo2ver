@@ -62,13 +62,13 @@ public class EventController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity uploadEvent(@RequestPart(name = "eventFile") @Valid MultipartFile eventFile,
-                                      @RequestPart(name = "eventDetailFile") @Valid MultipartFile eventDetailFile,
+    public ResponseEntity uploadEvent(@RequestPart(name = "displayFile") @Valid MultipartFile displayFile,
+                                      @RequestPart(name = "eventFile") @Valid MultipartFile eventFile,
                                       @RequestPart(name = "eventProduct") @Valid EventImageDto eventImageDto,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {
         HashMap<String, Object> response = new HashMap<>();
-        List<MultipartFile> eventFiles = Arrays.asList(eventFile, eventDetailFile);
+        List<MultipartFile> eventFiles = Arrays.asList(displayFile, eventFile);
         for (MultipartFile file : eventFiles) {
             eventImageValidator.validate(file, result);
             if (result.hasErrors()) {

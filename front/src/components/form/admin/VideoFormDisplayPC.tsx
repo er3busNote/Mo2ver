@@ -79,7 +79,7 @@ interface VideoProp {
 	) => void;
 }
 
-const videoDisplayValues = {
+const videoDisplayValues: VideoFormDisplayValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
