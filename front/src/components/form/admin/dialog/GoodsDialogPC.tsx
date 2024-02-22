@@ -1,16 +1,11 @@
-import React, {
-	FC,
-	useState,
-	useEffect,
-	Dispatch,
-	SetStateAction,
-	ChangeEvent,
-} from 'react';
-import {
-	GoodsData,
-	CategoryData,
-	CategoryPageData,
-} from '../../../../services/types';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
+import { Dispatch } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../../../../services/api';
+import { GoodsData, CategoryData } from '../../../../services/types';
+import useCategoryInfo from '../../../../hooks/useCategoryInfo';
+import useGoodsSearchPageList from '../../../../hooks/useGoodsSearchPageList';
 import {
 	Box,
 	Grid,
@@ -37,15 +32,8 @@ import SearchIcon from '@mui/icons-material/Search';
 
 interface DialogProps {
 	open: boolean;
-	goodsData: CategoryPageData;
-	largeCategoryData: Array<CategoryData>;
-	mediumCategoryData: Array<CategoryData>;
-	smallCategoryData: Array<CategoryData>;
-	setLargeCategoryCode: Dispatch<SetStateAction<string>>;
-	setMediumCategoryCode: Dispatch<SetStateAction<string>>;
-	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
-	setPage: Dispatch<SetStateAction<number>>;
-	searchClick: (goodsName: string) => void;
+	goods: ActionCreatorsMapObject;
+	category: ActionCreatorsMapObject;
 	replaceField: (productData: readonly GoodsData[]) => void;
 	handleClose: () => void;
 	header: SxProps<Theme>;
@@ -98,26 +86,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GoodsDialogPC: FC<DialogProps> = ({
 	open,
-	goodsData,
-	largeCategoryData,
-	mediumCategoryData,
-	smallCategoryData,
-	setLargeCategoryCode,
-	setMediumCategoryCode,
-	setSmallCategoryCode,
-	setPage,
-	searchClick,
+	goods,
+	category,
 	replaceField,
 	handleClose,
 	header,
 	base,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState('');
-	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
+	const [goodsName, setGoodsName] = useState<string>('');
+	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
+	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
+	const [smallCategoryCode, setSmallCategoryCode] = useState<string>('');
+	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
+	const mediumCategoryData = useCategoryInfo({
+		category,
+		categoryLevel: 2,
+		categoryInfo: largeCategoryCode,
+	});
+	const smallCategoryData = useCategoryInfo({
+		category,
+		categoryLevel: 3,
+		categoryInfo: mediumCategoryCode,
+	});
+	const [goodsData, setPage] = useGoodsSearchPageList({
+		goods,
+		goodsName,
+		largeCategoryCode,
+		mediumCategoryCode,
+		smallCategoryCode,
+	});
 	const [left, setLeft] = useState<readonly GoodsData[]>(
 		goodsData.content ?? []
 	);
 	const [right, setRight] = useState<readonly GoodsData[]>([]);
+	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
 
 	useEffect(() => {
 		setLeft(goodsData.content ?? []);
@@ -135,6 +138,9 @@ const GoodsDialogPC: FC<DialogProps> = ({
 		setSmallCategoryCode(event.target.value as string);
 	};
 
+	const searchClick = (goodsName: string) => {
+		setGoodsName(goodsName);
+	};
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setKeyword(event.currentTarget.value as string);
 	};
@@ -502,4 +508,9 @@ const GoodsDialogPC: FC<DialogProps> = ({
 	);
 };
 
-export default GoodsDialogPC;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	goods: bindActionCreators(Api.goods, dispatch),
+	category: bindActionCreators(Api.category, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(GoodsDialogPC);

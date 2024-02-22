@@ -3,17 +3,11 @@ import React, {
 	useRef,
 	useState,
 	useEffect,
-	Dispatch,
-	SetStateAction,
 	BaseSyntheticEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	GoodsData,
-	CategoryData,
-	CategoryPageData,
-} from '../../../services/types';
+import { GoodsData } from '../../../services/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
@@ -101,15 +95,6 @@ const goodsDisplaySchema = yup
 interface GoodsProp {
 	title: string;
 	description: string;
-	goodsData: CategoryPageData;
-	largeCategoryData: Array<CategoryData>;
-	mediumCategoryData: Array<CategoryData>;
-	smallCategoryData: Array<CategoryData>;
-	setLargeCategoryCode: Dispatch<SetStateAction<string>>;
-	setMediumCategoryCode: Dispatch<SetStateAction<string>>;
-	setSmallCategoryCode: Dispatch<SetStateAction<string>>;
-	setPage: Dispatch<SetStateAction<number>>;
-	searchClick: (goodsName: string) => void;
 	onSubmit: (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -129,15 +114,6 @@ const goodsDisplayValues: GoodsFormDisplayValues = {
 const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	title,
 	description,
-	goodsData,
-	largeCategoryData,
-	mediumCategoryData,
-	smallCategoryData,
-	setLargeCategoryCode,
-	setMediumCategoryCode,
-	setSmallCategoryCode,
-	setPage,
-	searchClick,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -491,15 +467,6 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 							</Button>
 							<GoodsDialogMobile
 								open={open}
-								goodsData={goodsData}
-								largeCategoryData={largeCategoryData}
-								mediumCategoryData={mediumCategoryData}
-								smallCategoryData={smallCategoryData}
-								setLargeCategoryCode={setLargeCategoryCode}
-								setMediumCategoryCode={setMediumCategoryCode}
-								setSmallCategoryCode={setSmallCategoryCode}
-								setPage={setPage}
-								searchClick={searchClick}
 								replaceField={replaceField}
 								handleClose={closeGoods}
 								header={inputHeader}
