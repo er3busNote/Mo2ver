@@ -80,7 +80,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 										<CardMedia
 											component="img"
 											height="140"
-											image={useImageUrl({ image, file })}
+											image={useImageUrl({ image, file, path: 'goods' })}
 											//src={`data:image/png;base64, ${base64}`}
 										/>
 										<CardContent>
