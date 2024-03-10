@@ -19,19 +19,12 @@ import java.util.stream.Collectors;
 public class EventDto {
 
     private Long eventManageNo;
-
     private String subject;
-
     private Date eventStartDate;
-
     private Date eventEndDate;
-
     private Character eventYesNo;
-
     private String register;
-
     private Date registerDate;
-
     private List<ImageDto> imageList;
 
     public static EventDto toDTO(EventManage eventManage) {

@@ -14,11 +14,8 @@ import lombok.NoArgsConstructor;
 public class ImageDto {
 
     private String base64Image;
-
     private Integer goodsImageAttachFile;
-
     private String goodsImageExtension;
-
     private Character basicImageYesNo;
 
     public static ImageDto toDTO(EventImage eventImage) {

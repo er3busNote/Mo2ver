@@ -12,10 +12,7 @@ import lombok.NoArgsConstructor;
 public class GoodsSearchDto {
 
     private String goodsName;
-
     private String largeCategoryCode;
-
     private String mediumCategoryCode;
-
     private String smallCategoryCode;
 }

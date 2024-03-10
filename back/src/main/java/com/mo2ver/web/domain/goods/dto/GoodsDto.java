@@ -17,19 +17,12 @@ import java.util.stream.Collectors;
 public class GoodsDto {
 
     private String goodsCode;
-
     private String goodsName;
-
     private String goodsBrand;
-
     private String goodsGender;
-
     private String goodsYear;
-
     private BigDecimal supplyPrice;
-
     private BigDecimal salePrice;
-
     private List<ImageDto> imageList;
 
     public static GoodsDto toDTO(Goods goods) {

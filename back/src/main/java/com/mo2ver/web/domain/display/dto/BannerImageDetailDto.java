@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class BannerImageDetailDto {
 
     private String title;
-
     private String cnntUrl;
-
     private Character useyn;
 }

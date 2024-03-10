@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class GoodsDisplayProductDto {
 
     private String goodsCode;
-
     private String goodsName;
-
     private Integer sortSequence;
 }

@@ -7,17 +7,11 @@ import lombok.Data;
 public class CategoryDto {
 
     private String categoryCode;
-
     private String categoryName;
-
     private String upperCategoryCode;
-
     private Integer sortSequence;
-
     private Integer categoryLevel;
-
     private String sortOrdinal;
-
     private Character useYesNo;
 
     @QueryProjection

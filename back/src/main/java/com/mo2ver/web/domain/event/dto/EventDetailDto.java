@@ -10,29 +10,17 @@ import java.util.Date;
 public class EventDetailDto {
 
     private String subject;
-
     private Date eventStartDate;
-
     private Date eventEndDate;
-
     private Integer goodsImageAttachFile;
-
     private String goodsImageExtension;
-
     private String goodsCode;
-
     private String goodsName;
-
     private String goodsBrand;
-
     private String goodsGender;
-
     private String goodsYear;
-
     private BigDecimal supplyPrice;
-
     private BigDecimal salePrice;
-
     private Integer sortSequence;
 
     @QueryProjection

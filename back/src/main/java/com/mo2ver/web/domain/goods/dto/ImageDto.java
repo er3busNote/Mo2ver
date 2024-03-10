@@ -21,15 +21,10 @@ import java.util.Base64;
 public class ImageDto {
 
     private String base64Image;
-
     private Integer goodsImageAttachFile;
-
     private String goodsImageExtension;
-
     private Character basicImageYesNo;
-
     private Integer sortSequence;
-
     private Character useYesNo;
 
     public static ImageDto toDTO(GoodsImage goodsImage) {

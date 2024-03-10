@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class EventImageProductDto {
 
     private String goodsCode;
-
     private String goodsName;
-
     private Integer sortSequence;
 }

@@ -16,17 +16,11 @@ import java.util.Date;
 public class BannerDto {
 
     private Long bannerManageNo;
-
     private String subject;
-
     private Date displayStartDate;
-
     private Date displayEndDate;
-
     private Character displayYesNo;
-
     private String register;
-
     private Date registerDate;
 
     public static BannerDto toDTO(BannerManage bannerManage) {
