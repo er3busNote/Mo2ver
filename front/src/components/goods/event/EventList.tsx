@@ -64,9 +64,7 @@ const EventGrid: FC<EventGridProps> = ({
 				? eventData.map((data: EventData, index: number) => {
 						const file =
 							data.imageList.length > 0
-								? String(data.imageList[0].goodsImageAttachFile) +
-								  '.' +
-								  data.imageList[0].goodsImageExtension
+								? String(data.imageList[0].goodsImageAttachFile)
 								: '';
 						//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
 						return (
@@ -102,6 +100,7 @@ const EventGrid: FC<EventGridProps> = ({
 										</Box>
 										<CardMedia
 											component="img"
+											height="150"
 											sx={{ width: 151 }}
 											image={useImageUrl({ image, file, path: 'event' })}
 										/>

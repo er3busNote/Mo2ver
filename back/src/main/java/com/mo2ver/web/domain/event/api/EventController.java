@@ -12,6 +12,8 @@ import com.mo2ver.web.global.common.dto.ResponseDto;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.error.response.ErrorHandler;
+import org.apache.tika.Tika;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +45,24 @@ public class EventController {
         this.eventImageValidator = eventImageValidator;
     }
 
+    @GetMapping("/image/{id}")
+    public ResponseEntity imageEvent(@PathVariable Integer id) {
+        HashMap<String, Object> response = new HashMap<>();
+        try {
+            byte[] bannerImageBytes = eventService.findEventImage(id);
+            ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
+            Tika tika = new Tika();
+            String tikaMimeType = tika.detect(bannerImageBytes);
+            MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
+            return ResponseEntity.ok().contentType(mediaType).body(resource);
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+        }
+    }
+
     @GetMapping("/info/{id}")
-    public ResponseEntity infoGoods(@PathVariable Integer id,
+    public ResponseEntity infoEvent(@PathVariable Integer id,
                                     @Valid PageDto pageDto,
                                     @CurrentUser Member currentUser) {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
@@ -78,7 +95,7 @@ public class EventController {
         }
         try {
             eventService.saveImageEvent(eventFiles, eventImageDto, currentUser);
-        } catch (IOException e) {
+        } catch (Exception e) {
             response.put("error", e.getMessage());
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
         }

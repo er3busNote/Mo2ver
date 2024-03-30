@@ -332,10 +332,10 @@ const event = {
 };
 
 const image = {
-	// 이미지 매핑 API : <baseURL>/images/goods/*.*
+	// 이미지 매핑 API : <baseURL>/goods/images/*.*
 	info: (imagefile: string, targetPath: string) => () =>
 		urlFormat(instance.defaults.baseURL ?? '') +
-		`images/${targetPath}/${imagefile}`,
+		`${targetPath}/image/${imagefile}`,
 };
 
 const api = {

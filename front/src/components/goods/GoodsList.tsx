@@ -64,9 +64,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 				? goodsData.map((data: GoodsData, index: number) => {
 						const file =
 							data.imageList.length > 0
-								? String(data.imageList[0].goodsImageAttachFile) +
-								  '.' +
-								  data.imageList[0].goodsImageExtension
+								? String(data.imageList[0].goodsImageAttachFile)
 								: '';
 						//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
 						return (

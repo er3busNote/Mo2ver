@@ -73,8 +73,7 @@ const GoodsGrid: FC<GoodsProps> = ({
 		<Grid container spacing={3}>
 			{goodsData &&
 				goodsData.map((data: EventDetailData, index: number) => {
-					const file =
-						String(data.goodsImageAttachFile) + '.' + data.goodsImageExtension;
+					const file = String(data.goodsImageAttachFile);
 					return (
 						<Grid key={index} item xs={6} md={3} lg={3}>
 							<Card

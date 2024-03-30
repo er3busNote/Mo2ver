@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.goods.api;
 
-import com.mo2ver.web.domain.goods.domain.Goods;
 import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsDto;
 import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
@@ -14,6 +13,8 @@ import com.mo2ver.web.global.common.dto.ResponseDto;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.error.response.ErrorHandler;
+import org.apache.tika.Tika;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,11 +45,27 @@ public class GoodsController {
         this.goodsImageValidator = goodsImageValidator;
     }
 
+    @GetMapping("/image/{id}")
+    public ResponseEntity imageGoods(@PathVariable Integer id) {
+        HashMap<String, Object> response = new HashMap<>();
+        try {
+            byte[] bannerImageBytes = goodsService.findGoodsImage(id);
+            ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
+            Tika tika = new Tika();
+            String tikaMimeType = tika.detect(bannerImageBytes);
+            MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
+            return ResponseEntity.ok().contentType(mediaType).body(resource);
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+        }
+    }
+
     @GetMapping("/info/{id}")
     public ResponseEntity infoGoods(@PathVariable String id,
                                     @CurrentUser Member currentUser) {
         GoodsDto goodsDto = goodsService.findGoods(id);
-        return ResponseEntity.ok(goodsDto);
+        return ResponseEntity.ok().body(goodsDto);
     }
 
     @GetMapping("/list")
@@ -89,7 +105,7 @@ public class GoodsController {
         }
         try {
             goodsService.saveImageGoods(files, goodsImageDto, currentUser);
-        } catch (IOException e) {
+        } catch (Exception e) {
             response.put("error", e.getMessage());
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
         }

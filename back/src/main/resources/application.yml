@@ -116,5 +116,9 @@ jwt-setting:
   jwt-accesstoken-validation-second: 60   # 1분 (1 * 60)
   jwt-refreshtoken-validation-second: 3600   # 1시간 (60 * 60)
 
+crypto-setting:
+  password: mo2ver_aes256cbc_pbkdf2
+  salt: mo2ver_salt
+
 images-setting:
   filepath: ../data/images

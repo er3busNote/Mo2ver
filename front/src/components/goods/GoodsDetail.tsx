@@ -46,9 +46,7 @@ const GoodsDetail: FC<GoodsProps> = ({
 	const data = useGoodsDetail({ goods, code });
 	const file =
 		data.imageList.length > 0
-			? String(data.imageList[0].goodsImageAttachFile) +
-			  '.' +
-			  data.imageList[0].goodsImageExtension
+			? String(data.imageList[0].goodsImageAttachFile)
 			: '';
 
 	const gridItem: SxProps<Theme> = {
