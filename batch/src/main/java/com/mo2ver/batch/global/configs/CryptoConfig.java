@@ -15,7 +15,6 @@ import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.core.listener.ChunkListenerSupport;
 import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -23,6 +22,7 @@ import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -135,7 +135,7 @@ public class CryptoConfig {
     @Bean
     public Job cryptoJob() {
         return jobBuilderFactory.get(JOB_NAME)
-                .start(cryptoReadyStep())
+                .start(cryptoReadyStep(null))
                 .next(decider())
                 .from(decider()).on("ENCRYPTION").to(cryptoEncStep())
                 .from(decider()).on("DECRYPTION").to(cryptoDecStep())
@@ -144,10 +144,12 @@ public class CryptoConfig {
     }
 
     @Bean
-    public Step cryptoReadyStep() {
-        return stepBuilderFactory.get("step1")
+    @JobScope
+    public Step cryptoReadyStep(@Value("#{jobParameters[requestDate]}") String requestDate) {
+        return stepBuilderFactory.get("cryptoReadyStep")
                 .tasklet((contribution, chunkContext) -> {
                     log.info("암/복호화 환경이 준비되었습니다.");
+                    log.info(">>>>> requestDate = {}", requestDate);
                     return RepeatStatus.FINISHED;
                 }).build();
     }
