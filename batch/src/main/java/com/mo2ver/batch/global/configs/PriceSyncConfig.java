@@ -5,7 +5,6 @@ import com.mo2ver.batch.domain.goods.domain.Goods;
 import com.mo2ver.batch.domain.goods.service.PriceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -24,7 +23,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 
-import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.stream.Collectors;
 

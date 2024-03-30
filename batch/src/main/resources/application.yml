@@ -74,3 +74,10 @@ spring:
 
 csv-setting:
   filepath: ../data/styles.csv
+
+crypto-setting:
+  origin-folder: ../data/images/goods_master
+  encrypt-folder: ../data/images/goods
+  decrypt-folder: ../data/images/goods_dec
+  password: mo2ver_aes256cbc_pbkdf2
+  salt: mo2ver_salt
