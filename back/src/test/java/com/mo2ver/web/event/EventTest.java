@@ -5,7 +5,6 @@ import com.mo2ver.web.domain.event.dto.EventDto;
 import com.mo2ver.web.domain.event.dto.EventImageDto;
 import com.mo2ver.web.domain.event.dto.EventImageProductDto;
 import com.mo2ver.web.domain.event.service.EventService;
-import com.mo2ver.web.global.common.dto.PageDto;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

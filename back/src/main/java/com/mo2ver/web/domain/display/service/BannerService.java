@@ -9,9 +9,8 @@ import com.mo2ver.web.domain.display.dto.BannerDto;
 import com.mo2ver.web.domain.display.dto.BannerImageDto;
 import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.properties.CryptoProperties;
-import com.mo2ver.web.global.common.properties.ImagesProperties;
 import com.mo2ver.web.global.common.util.CryptoUtil;
+import com.mo2ver.web.global.common.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,19 +39,15 @@ public class BannerService {
     @Autowired
     protected BannerDetailRepository bannerDetailRepository;
     @Autowired
+    protected FileUtil fileUtil;
+    @Autowired
     protected CryptoUtil cryptoUtil;
-    @Autowired
-    protected CryptoProperties cryptoProperties;
-    @Autowired
-    protected ImagesProperties imagesProperties;
 
     public byte[] findBannerImage(String id) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(BANNER_DIRECTORY);
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(BANNER_DIRECTORY);
         String targetFileName = findFilesWithPrefix(uploadDirectory, id + ".");
-        File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + targetFileName);
-        return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath(), cryptoProperties.getPassword(), cryptoProperties.getSalt());
+        File targetFile = this.fileUtil.getTargetFile(uploadDirectory, targetFileName);
+        return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath());
     }
 
     @Transactional
@@ -68,11 +63,7 @@ public class BannerService {
 
     @Transactional
     public void saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto, Member currentUser) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(BANNER_DIRECTORY);
-        this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
-
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(BANNER_DIRECTORY);
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageDto, currentUser));
         List<BannerImageDetailDto> listBannerImageDetailDto = bannerImageDto.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailDto.size(); i++) {
@@ -80,35 +71,12 @@ public class BannerService {
             log.info("bannerImageInfo => {}", bannerImageDetailDto.getTitle());
             MultipartFile file = files.get(i);
             String fileName = file.getOriginalFilename();
-            String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
-            String fileNameWithoutExtension = removeFileExtension(fileName);
+            String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
+            String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
             BannerDetail bannerDetail = this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailDto, fileNameWithoutExtension, i+1, currentUser));
-            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + bannerDetail.getBannerDetailId() + "." + fileExtension);
-            this.cryptoUtil.encryptFile(file, targetFile, cryptoProperties.getPassword(), cryptoProperties.getSalt());  // 파일 저장
+            File targetFile = this.fileUtil.getTargetFile(uploadDirectory, bannerDetail.getBannerDetailId() + "." + fileExtension);
+            this.cryptoUtil.encryptFile(file, targetFile);  // 파일 저장
         }
-    }
-
-    private void createDirectory(String uploadDirectory) {
-        File directory = new File(uploadDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-    }
-
-    private String getFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex > 0) {
-            return fileName.substring(lastDotIndex + 1);
-        }
-        return "";
-    }
-
-    private String removeFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex > 0) {
-            return fileName.substring(0, lastDotIndex);
-        }
-        return fileName;
     }
 
     // 임시 조치 → 나중에 테이블(DP_BNNR_DTL)에 컬럼(BNNR_IMG_EXT)을 추가로 만들어 주어야 함

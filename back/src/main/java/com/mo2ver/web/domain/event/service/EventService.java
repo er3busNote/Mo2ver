@@ -8,9 +8,8 @@ import com.mo2ver.web.domain.event.dto.EventDetailDto;
 import com.mo2ver.web.domain.event.dto.EventDto;
 import com.mo2ver.web.domain.event.dto.EventImageDto;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.properties.CryptoProperties;
-import com.mo2ver.web.global.common.properties.ImagesProperties;
 import com.mo2ver.web.global.common.util.CryptoUtil;
+import com.mo2ver.web.global.common.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,23 +36,19 @@ public class EventService {
     @Autowired
     protected EventImageRepository eventImageRepository;
     @Autowired
+    protected FileUtil fileUtil;
+    @Autowired
     protected CryptoUtil cryptoUtil;
-    @Autowired
-    protected CryptoProperties cryptoProperties;
-    @Autowired
-    protected ImagesProperties imagesProperties;
 
     @Transactional
     public byte[] findEventImage(Integer id) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(EVENT_DIRECTORY);
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(EVENT_DIRECTORY);
         Optional<EventImage> info = this.eventImageRepository.findByGoodsImageAttachFile(id);
         if (info.isPresent()) {
             EventImage eventImage = info.get();
             String targetFileName = eventImage.getGoodsImageAttachFile() + "." + eventImage.getGoodsImageExtension();
-            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + targetFileName);
-            return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath(), cryptoProperties.getPassword(), cryptoProperties.getSalt());
+            File targetFile = this.fileUtil.getTargetFile(uploadDirectory, targetFileName);
+            return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath());
         } else {
             throw new IOException("해당되는 파일을 찾을 수 없습니다.");
         }
@@ -73,37 +67,18 @@ public class EventService {
 
     @Transactional
     public void saveImageEvent(List<MultipartFile> eventFiles, EventImageDto eventImageDto, Member currentUser) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(EVENT_DIRECTORY);
-        this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
-
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(EVENT_DIRECTORY);
         EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageDto, currentUser));
         for (int i = 0; i < eventFiles.size(); i++) {
             MultipartFile file = eventFiles.get(i);
             String fileName = file.getOriginalFilename();
-            String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
+            String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
             Integer goodsImageAttachFile = getGoodsImageAttachFile(eventManage.getEventManageNo(), i+1);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
-            this.cryptoUtil.encryptFile(file, targetFile, cryptoProperties.getPassword(), cryptoProperties.getSalt());  // 파일 저장
+            File targetFile = this.fileUtil.getTargetFile(uploadDirectory, goodsImageAttachFile + "." + fileExtension);
+            this.cryptoUtil.encryptFile(file, targetFile);  // 파일 저장
             this.eventImageRepository.save(EventImage.of(eventManage, goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
         }
-    }
-
-    private void createDirectory(String uploadDirectory) {
-        File directory = new File(uploadDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-    }
-
-    private String getFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex > 0) {
-            return fileName.substring(lastDotIndex + 1);
-        }
-        return "";
     }
 
     private Integer getGoodsImageAttachFile(Long eventManageNo, Integer index) {

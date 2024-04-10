@@ -10,9 +10,8 @@ import com.mo2ver.web.domain.goods.dto.GoodsDto;
 import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.properties.CryptoProperties;
-import com.mo2ver.web.global.common.properties.ImagesProperties;
 import com.mo2ver.web.global.common.util.CryptoUtil;
+import com.mo2ver.web.global.common.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,23 +43,19 @@ public class GoodsService {
     @Autowired
     protected GoodsImageRepository goodsImageRepository;
     @Autowired
+    protected FileUtil fileUtil;
+    @Autowired
     protected CryptoUtil cryptoUtil;
-    @Autowired
-    protected CryptoProperties cryptoProperties;
-    @Autowired
-    protected ImagesProperties imagesProperties;
 
     @Transactional
     public byte[] findGoodsImage(Integer id) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(GOODS_DIRECTORY);
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(GOODS_DIRECTORY);
         Optional<GoodsImage> info = this.goodsImageRepository.findByGoodsImageAttachFile(id);
         if (info.isPresent()) {
             GoodsImage goodsImage = info.get();
             String targetFileName = goodsImage.getGoodsImageAttachFile() + "." + goodsImage.getGoodsImageExtension();
-            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + targetFileName);
-            return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath(), cryptoProperties.getPassword(), cryptoProperties.getSalt());
+            File targetFile = this.fileUtil.getTargetFile(uploadDirectory, targetFileName);
+            return this.cryptoUtil.decryptFile(targetFile.getAbsolutePath());
         } else {
             throw new IOException("해당되는 파일을 찾을 수 없습니다.");
         }
@@ -112,38 +106,19 @@ public class GoodsService {
 
     @Transactional
     public void saveImageGoods(List<MultipartFile> files, GoodsImageDto goodsImageDto, Member currentUser) throws Exception {
-        String projectDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
-        Path uploadDirectory = folderPath.resolve(GOODS_DIRECTORY);
-        this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
-
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(GOODS_DIRECTORY);
         Price price = this.priceRepository.save(Price.of(goodsImageDto, currentUser));
         if (goodsImageDto.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageDto, currentUser));
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             String fileName = file.getOriginalFilename();
-            String fileExtension = getFileExtension(Objects.requireNonNull(fileName));
+            String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
             Integer goodsImageAttachFile = getGoodsImageAttachFile(price.getGoodsCode().getGoodsCode(), i+1);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            File targetFile = new File(projectDir + "/" + uploadDirectory + "/" + goodsImageAttachFile + "." + fileExtension);
-            this.cryptoUtil.encryptFile(file, targetFile, cryptoProperties.getPassword(), cryptoProperties.getSalt());  // 파일 저장
+            File targetFile = this.fileUtil.getTargetFile(uploadDirectory, goodsImageAttachFile + "." + fileExtension);
+            this.cryptoUtil.encryptFile(file, targetFile);  // 파일 저장
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), goodsImageAttachFile, basicImageYesNo, fileExtension, i+1, currentUser));
         }
-    }
-
-    private void createDirectory(String uploadDirectory) {
-        File directory = new File(uploadDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-    }
-
-    private String getFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex > 0) {
-            return fileName.substring(lastDotIndex + 1);
-        }
-        return "";
     }
 
     private Integer getGoodsImageAttachFile(String goodsCode, Integer index) {
