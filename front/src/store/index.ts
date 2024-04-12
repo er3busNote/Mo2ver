@@ -76,12 +76,10 @@ const titleSlice = createSlice({
 	initialState: titleinitialState,
 	reducers: {
 		changePrev: (state: TitleState) => {
-			const title = state.stackPrevTitle.pop() ?? '';
-			const description = state.stackPrevDescription.pop() ?? '';
-			state.title = title;
-			state.description = description;
-			state.stackNextTitle.push(title);
-			state.stackNextDescription.push(description);
+			state.stackNextTitle.push(state.title);
+			state.stackNextDescription.push(state.description);
+			state.title = state.stackPrevTitle.pop() ?? '';
+			state.description = state.stackPrevDescription.pop() ?? '';
 		},
 		changeNext: (state: TitleState, action: PayloadAction<TitleInfo>) => {
 			state.title = action.payload.title;
@@ -92,6 +90,8 @@ const titleSlice = createSlice({
 			state.stackPrevDescription.push(state.prevDescription);
 		},
 		changePrevNext: (state: TitleState) => {
+			state.stackPrevTitle.push(state.title);
+			state.stackPrevDescription.push(state.description);
 			state.title = state.stackNextTitle.pop() ?? '';
 			state.description = state.stackNextDescription.pop() ?? '';
 		},

@@ -10,7 +10,12 @@ import { useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changePrev, menuLotate, toastClose } from '../../store/index';
+import {
+	changePrev,
+	changePrevNext,
+	menuLotate,
+	toastClose,
+} from '../../store/index';
 import { TitleState, ToastState } from '../../store/types';
 import Api from '../../services/api';
 import useCategoryGroupList from '../../hooks/useCategoryGroupList';
@@ -161,13 +166,20 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	category,
 }): JSX.Element => {
 	const dispatch = useDispatch();
+	const [index, setIndex] = useState<number>(0);
 	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
 		dispatch(menuLotate('user')); // 메뉴 변경 : admin → user
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
-				dispatch(changePrev());
+				const idx = event.state.idx;
+				if (idx - index === 1) {
+					dispatch(changePrevNext()); // 브라우저의 앞으로가기 버튼이 클릭되면 실행될 코드
+				} else {
+					dispatch(changePrev()); // 브라우저의 뒤로가기 버튼이 클릭되면 실행될 코드
+				}
+				setIndex(idx);
 			}
 		};
 
@@ -178,7 +190,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 		return () => {
 			window.removeEventListener('popstate', handlePopstate);
 		};
-	}, [dispatch]);
+	}, [dispatch, index, setIndex]);
 
 	const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {

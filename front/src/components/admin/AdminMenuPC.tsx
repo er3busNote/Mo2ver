@@ -7,7 +7,12 @@ import React, {
 	SyntheticEvent,
 	ReactElement,
 } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {
+	useNavigate,
+	useLocation,
+	NavigationType,
+	useNavigationType,
+} from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../store/index';
 import {
@@ -219,12 +224,13 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
+	const navType: NavigationType = useNavigationType();
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string>('');
 
 	useEffect(() => {
-		if (location.pathname === '/admin') {
+		if (location.pathname === '/admin' && navType !== 'POP') {
 			const titleData: TitleInfo = {
 				title: '대시보드',
 				description: '',
@@ -233,7 +239,7 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 			};
 			dispatch(changeNext(titleData));
 		}
-	}, [location.pathname]);
+	}, [location.pathname, navType]);
 
 	const handleToggle = (event: SyntheticEvent, nodeIds: string[]) => {
 		setExpanded(nodeIds);

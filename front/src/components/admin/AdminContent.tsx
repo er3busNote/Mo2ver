@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, ReactElement } from 'react';
 import { Outlet } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
-import { changePrev, menuLotate } from '../../store/index';
+import { changePrev, changePrevNext, menuLotate } from '../../store/index';
 import { TitleState } from '../../store/types';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
@@ -82,13 +82,19 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 	children,
 }): JSX.Element => {
 	const dispatch = useDispatch();
+	const [index, setIndex] = useState<number>(0);
 
 	useEffect(() => {
 		dispatch(menuLotate('admin')); // 메뉴 변경 : user → admin
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
-				console.log(event.state);
-				dispatch(changePrev()); // 브라우저의 뒤로가기 버튼이 클릭되면 실행될 코드
+				const idx = event.state.idx;
+				if (idx - index === 1) {
+					dispatch(changePrevNext()); // 브라우저의 앞으로가기 버튼이 클릭되면 실행될 코드
+				} else {
+					dispatch(changePrev()); // 브라우저의 뒤로가기 버튼이 클릭되면 실행될 코드
+				}
+				setIndex(idx);
 			}
 		};
 
@@ -99,7 +105,7 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 		return () => {
 			window.removeEventListener('popstate', handlePopstate);
 		};
-	}, [dispatch]);
+	}, [dispatch, index, setIndex]);
 
 	return (
 		<ThemeProvider theme={mdTheme}>
