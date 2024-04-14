@@ -20,7 +20,7 @@ interface CSRFData {
 	csrfToken: string;
 }
 
-// 2. Category Type
+// 2. Goods Type
 interface ImageData {
 	base64Image: string;
 	goodsImageAttachFile: number;
@@ -57,6 +57,7 @@ interface GoodsSearchPage {
 	smallCategoryCode: string;
 }
 
+// 3. Category Type
 interface CategoryData {
 	categoryCode: string;
 	categoryName: string;
@@ -105,7 +106,7 @@ interface CategoryDataGroup {
 	smallCategoryData: CategoryDataInfo;
 }
 
-// 3. Banner Type
+// 4. Banner Type
 interface BannerData {
 	bannerManageNo: number;
 	subject: string;
@@ -177,7 +178,7 @@ interface GoodsDisplayData {
 	goods: Array<GoodsDisplayDetailData>;
 }
 
-// 4. Event Type
+// 5. Event Type
 interface EventData {
 	eventManageNo: number;
 	subject: string;
@@ -276,6 +277,28 @@ interface EventDisplayData {
 	goods: Array<EventDisplayDetailData>;
 }
 
+// 6. Cart Type
+interface CartData {
+	goodsCode: string;
+	goodsName: string;
+	goodsBrand: string;
+	goodsGender: string;
+	goodsYear: string;
+	supplyPrice: number;
+	salePrice: number;
+	image: ImageData;
+	amount: number;
+	totalPrice: number;
+	optionName?: string;
+	optionPrice?: number;
+	optionId?: string;
+}
+
+interface CartPageData {
+	cartTotal: number;
+	cartDto: Array<CartData>;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -287,6 +310,7 @@ export type {
 	SignUpData,
 	TokenData,
 	CSRFData,
+	ImageData,
 	GoodsData,
 	GoodsPage,
 	GoodsSearchPage,
@@ -304,5 +328,7 @@ export type {
 	EventDetailData,
 	EventDetailPageData,
 	EventDisplayData,
+	CartData,
+	CartPageData,
 	PageData,
 };

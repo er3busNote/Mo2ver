@@ -4,11 +4,11 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../services/api';
+import { EventPageData } from '../../services/types';
 import useEventPageList from '../../hooks/useEventPageList';
 import EventPC from '../../components/admin/event/EventPC';
 import EventMobile from '../../components/admin/event/EventMobile';
 import { Box } from '@mui/material';
-import { EventPageData } from '../../services/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 

@@ -23,6 +23,7 @@ import {
 	GoodsPage,
 	GoodsSearchPage,
 	GoodsDisplayData,
+	CartData,
 	PageData,
 } from './types';
 
@@ -331,8 +332,48 @@ const event = {
 			}),
 };
 
+const cart = {
+	// 장바구니 리스트 API : <baseURL>/cart/list
+	list: () => (dispatch: Dispatch) =>
+		instance
+			.get('cart/list')
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+	// 장바구니 추가 API : <baseURL>/cart/add
+	add: (cartData: CartData, csrfData: CSRFData) => (dispatch: Dispatch) =>
+		instance
+			.post('cart/add', cartData, {
+				headers: {
+					'X-XSRF-TOKEN': csrfData.csrfToken,
+				},
+			})
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+	// 장바구니 삭제 API : <baseURL>/cart/delete
+	delete: (cartIndex?: number) => (dispatch: Dispatch) =>
+		instance
+			.delete(cartIndex ? `cart/delete/${cartIndex}` : 'cart/delete')
+			.then((response: AxiosResponse) => {
+				dispatch(tokenSuccess(response.data));
+				return response.data;
+			})
+			.catch((error: AxiosError) => {
+				return error.response;
+			}),
+};
+
 const image = {
-	// 이미지 매핑 API : <baseURL>/goods/images/*.*
+	// 이미지 매핑 API : <baseURL>/images/goods/*.* → <baseURL>/goods/image/*.*
 	info: (imagefile: string, targetPath: string) => () =>
 		urlFormat(instance.defaults.baseURL ?? '') +
 		`${targetPath}/image/${imagefile}`,
@@ -344,6 +385,7 @@ const api = {
 	category,
 	banner,
 	event,
+	cart,
 	image,
 };
 

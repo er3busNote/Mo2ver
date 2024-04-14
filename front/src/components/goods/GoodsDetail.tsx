@@ -4,6 +4,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '../../services/api';
+import { ImageData, CartData } from '../../services/types';
 import useImageUrl from '../../hooks/useImageUrl';
 import useGoodsDetail from '../../hooks/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
@@ -33,6 +34,7 @@ interface GoodsProps {
 	description: string;
 	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
+	onCartAdd: (cartData: CartData) => void;
 }
 
 const GoodsDetail: FC<GoodsProps> = ({
@@ -40,10 +42,31 @@ const GoodsDetail: FC<GoodsProps> = ({
 	description,
 	goods,
 	image,
+	onCartAdd,
 }): JSX.Element => {
 	const { id } = useParams();
 	const code = id ?? '';
 	const data = useGoodsDetail({ goods, code });
+
+	const addCartClick = () => {
+		const cartData: CartData = {
+			goodsCode: data.goodsCode,
+			goodsName: data.goodsName,
+			goodsBrand: data.goodsBrand,
+			goodsGender: data.goodsGender,
+			goodsYear: data.goodsYear,
+			supplyPrice: data.supplyPrice,
+			salePrice: data.salePrice,
+			image:
+				data.imageList.length > 0
+					? data.imageList[0]
+					: (new Object() as ImageData),
+			amount: 1,
+			totalPrice: data.salePrice,
+		};
+		onCartAdd(cartData);
+	};
+
 	const file =
 		data.imageList.length > 0
 			? String(data.imageList[0].goodsImageAttachFile)
@@ -503,13 +526,32 @@ const GoodsDetail: FC<GoodsProps> = ({
 								</TableContainer>
 							</Box>
 						</Box>
-						<Box>
+						<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+							<Button
+								onClick={addCartClick}
+								sx={{
+									mt: 2,
+									py: 1,
+									width: '48%',
+									fontSize: '14px',
+									fontWeight: 'bold',
+									bgcolor: '#7940B6',
+									border: '1px solid #757595',
+									borderRadius: 0,
+									color: '#fff',
+									'&:hover': {
+										bgcolor: '#9373B5',
+									},
+								}}
+								variant="outlined"
+							>
+								장바구니
+							</Button>
 							<Button
 								sx={{
 									mt: 2,
-									px: 6,
 									py: 1,
-									width: '100%',
+									width: '48%',
 									fontSize: '14px',
 									fontWeight: 'bold',
 									bgcolor: '#000',

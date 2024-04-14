@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
+import { Dispatch } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
+import { CartData } from '../services/types';
+import Api from '../services/api';
+import useCSRFToken from '../hooks/useCSRFToken';
 import GoodsDetail from '../components/goods/GoodsDetail';
 import { Box } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
@@ -10,11 +15,20 @@ const drawerMenuLimit = 768;
 interface GoodsDetailProps {
 	title: string;
 	description: string;
+	onCartAdd: (cartData: CartData) => void;
+}
+
+interface GoodsDetailDispatchProps {
+	title: string;
+	description: string;
+	member: ActionCreatorsMapObject;
+	cart: ActionCreatorsMapObject;
 }
 
 const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	title,
 	description,
+	onCartAdd,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
@@ -28,7 +42,11 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 						display: 'inline-block',
 					}}
 				>
-					<GoodsDetail title={title} description={description} />
+					<GoodsDetail
+						title={title}
+						description={description}
+						onCartAdd={onCartAdd}
+					/>
 				</Box>
 			)}
 		</>
@@ -38,6 +56,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	title,
 	description,
+	onCartAdd,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
@@ -51,21 +70,40 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 						display: 'inline-block',
 					}}
 				>
-					<GoodsDetail title={title} description={description} />
+					<GoodsDetail
+						title={title}
+						description={description}
+						onCartAdd={onCartAdd}
+					/>
 				</Box>
 			)}
 		</>
 	);
 };
 
-const GoodsDetailPage: FC<GoodsDetailProps> = ({
+const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	title,
 	description,
+	member,
+	cart,
 }): JSX.Element => {
+	const csrfData = useCSRFToken({ member });
+	const cartAdd = async (cartData: CartData) => {
+		await cart.add(cartData, csrfData);
+		if (event) event.preventDefault(); // 새로고침 방지
+	};
 	return (
 		<>
-			<GoodsDetailPC title={title} description={description} />
-			<GoodsDetailMobile title={title} description={description} />
+			<GoodsDetailPC
+				title={title}
+				description={description}
+				onCartAdd={cartAdd}
+			/>
+			<GoodsDetailMobile
+				title={title}
+				description={description}
+				onCartAdd={cartAdd}
+			/>
 		</>
 	);
 };
@@ -75,4 +113,9 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-export default connect(mapStateToProps, null)(GoodsDetailPage);
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	member: bindActionCreators(Api.member, dispatch),
+	cart: bindActionCreators(Api.cart, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoodsDetailPage);

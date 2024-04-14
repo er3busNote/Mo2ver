@@ -1,6 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
+import Api from '../services/api';
+import { CartPageData } from '../services/types';
+import useCartPageList from '../hooks/useCartPageList';
 import CartListPC from '../components/user/CartListPC';
 import CartListMobile from '../components/user/CartListMobile';
 import { Box } from '@mui/material';
@@ -12,9 +17,20 @@ const steps = ['장바구니', '주문/결제', '주문완료'];
 
 interface CartProps {
 	description: string;
+	setPage: Dispatch<SetStateAction<number>>;
+	cartPageData: CartPageData;
 }
 
-const CartPC: FC<CartProps> = ({ description }): JSX.Element => {
+interface CartDispatchProps {
+	description: string;
+	cart: ActionCreatorsMapObject;
+}
+
+const CartPC: FC<CartProps> = ({
+	description,
+	setPage,
+	cartPageData,
+}): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -27,14 +43,23 @@ const CartPC: FC<CartProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<CartListPC description={description} steps={steps} />
+					<CartListPC
+						description={description}
+						steps={steps}
+						setPage={setPage}
+						cartPageData={cartPageData}
+					/>
 				</Box>
 			)}
 		</>
 	);
 };
 
-const CartMobile: FC<CartProps> = ({ description }): JSX.Element => {
+const CartMobile: FC<CartProps> = ({
+	description,
+	setPage,
+	cartPageData,
+}): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -47,18 +72,35 @@ const CartMobile: FC<CartProps> = ({ description }): JSX.Element => {
 						display: 'inline-block',
 					}}
 				>
-					<CartListMobile description={description} steps={steps} />
+					<CartListMobile
+						description={description}
+						steps={steps}
+						setPage={setPage}
+						cartPageData={cartPageData}
+					/>
 				</Box>
 			)}
 		</>
 	);
 };
 
-const CartPage: FC<CartProps> = ({ description }): JSX.Element => {
+const CartPage: FC<CartDispatchProps> = ({
+	description,
+	cart,
+}): JSX.Element => {
+	const [cartPageData, setPage] = useCartPageList({ cart });
 	return (
 		<>
-			<CartPC description={description} />
-			<CartMobile description={description} />
+			<CartPC
+				description={description}
+				setPage={setPage}
+				cartPageData={cartPageData}
+			/>
+			<CartMobile
+				description={description}
+				setPage={setPage}
+				cartPageData={cartPageData}
+			/>
 		</>
 	);
 };
@@ -67,4 +109,8 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-export default connect(mapStateToProps, null)(CartPage);
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	cart: bindActionCreators(Api.cart, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartPage);

@@ -4,10 +4,13 @@ import React, {
 	ChangeEvent,
 	forwardRef,
 	ForwardedRef,
+	Dispatch,
+	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
+import { CartPageData } from '../../services/types';
 import AppSubStepHeader from '../common/AppSubStepHeader';
 import {
 	Box,
@@ -161,6 +164,8 @@ const NumberInput = forwardRef(function CustomNumberInput(
 interface CartListProps {
 	description: string;
 	steps: string[];
+	setPage: Dispatch<SetStateAction<number>>;
+	cartPageData: CartPageData;
 }
 
 const CartList: FC = (): JSX.Element => {
@@ -737,6 +742,8 @@ const CartTotal: FC = (): JSX.Element => {
 const CartListMobile: FC<CartListProps> = ({
 	description,
 	steps,
+	setPage,
+	cartPageData,
 }): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
