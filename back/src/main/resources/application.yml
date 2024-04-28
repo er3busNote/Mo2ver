@@ -73,6 +73,18 @@ spring:
       fail-on-empty-beans: false
     deserialization:
       fail-on-unknown-properties: true   # 속성이 없는 경우 오류 발생 (true) -> 무시 (false)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mo2vermail
+    password: ${mail.password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
   jpa:
     properties:
       hibernate:
