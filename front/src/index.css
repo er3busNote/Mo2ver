@@ -1,3 +1,5 @@
+@import url('./fonts/font.css');
+
 * {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -12,4 +14,12 @@
   * {
     overflow-x: hidden;
   }
+}
+
+body {
+  font-family: "Pretendard-Regular", "Roboto", "Helvetica Neue", Helvetica, Sans-serif;
+}
+
+p {
+  font-family: "Pretendard-Bold" !important;
 }

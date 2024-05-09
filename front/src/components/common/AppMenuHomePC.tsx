@@ -161,7 +161,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	};
 
 	const menuWidthSize = '630px';
-	const submenuWidthSize = '210px';
+	const submenuWidthSize = '198px';
 
 	const menu: SxProps<Theme> = {
 		mt: '7px',

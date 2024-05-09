@@ -160,7 +160,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	};
 
 	const menuWidthSize = '630px';
-	const submenuWidthSize = '210px';
+	const submenuWidthSize = '198px';
 
 	const tooltip: SxProps<Theme> = {
 		//ml: '-41px !important',
