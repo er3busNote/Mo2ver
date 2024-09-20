@@ -5,9 +5,9 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../store/index';
 import { TitleInfo } from '../../store/types';
-import Api from '../../services/api';
+import Api from '../../api';
 import useImageUrl from '../../hooks/useImageUrl';
-import useCategoryPageList from '../../hooks/useCategoryPageList';
+import useCategoryPageList from '../../hooks/category/useCategoryPageList';
 import AppSubHeader from '../common/AppSubHeader';
 import {
 	Box,
@@ -21,7 +21,7 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import { GoodsData } from '../../services/types';
+import { GoodsData } from '../../api/types';
 
 interface GoodsListProps {
 	title: string;

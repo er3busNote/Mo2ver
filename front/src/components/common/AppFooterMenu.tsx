@@ -17,7 +17,7 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { CategoryData, CategoryDataGroup } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../api/types';
 import { styled } from '@mui/material/styles';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import {

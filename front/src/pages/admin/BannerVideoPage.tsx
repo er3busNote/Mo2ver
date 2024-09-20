@@ -3,7 +3,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
-import Api from '../../services/api';
+import Api from '../../api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import VideoFormDisplayPC from '../../components/form/admin/VideoFormDisplayPC';
 import VideoFormDisplayMobile from '../../components/form/admin/VideoFormDisplayMobile';

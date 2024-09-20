@@ -17,7 +17,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
-import { CategoryDataGroup } from '../../services/types';
+import { CategoryDataGroup } from '../../api/types';
 import { isAdmin } from '../../utils/jwttoken';
 import { isMobile, BrowserView, MobileView } from 'react-device-detect';
 

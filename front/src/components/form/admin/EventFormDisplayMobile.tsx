@@ -1,7 +1,7 @@
 import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { GoodsData } from '../../../services/types';
+import { GoodsData } from '../../../api/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';

@@ -1,24 +1,20 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CategoryData } from '../services/types';
+import { CategoryData } from '../../api/types';
 
-interface CategoryInfoProps {
-	categoryLevel: 1 | 2 | 3;
-	categoryInfo?: string;
+interface CategoryListProps {
 	category: ActionCreatorsMapObject;
 }
 
-const useCategoryInfo = ({
-	categoryLevel,
-	categoryInfo,
+const useCategoryList = ({
 	category,
-}: CategoryInfoProps): Array<CategoryData> => {
+}: CategoryListProps): Array<CategoryData> => {
 	const [data, setData] = useState<Array<CategoryData>>([]);
 
 	const fetchAndSetData = useCallback(async () => {
-		const data = await category.info(categoryLevel, categoryInfo);
+		const data = await category.list();
 		setData(data);
-	}, [categoryInfo]);
+	}, []);
 
 	useEffect(() => {
 		fetchAndSetData();
@@ -27,4 +23,4 @@ const useCategoryInfo = ({
 	return data;
 };
 
-export default useCategoryInfo;
+export default useCategoryList;

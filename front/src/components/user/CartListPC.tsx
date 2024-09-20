@@ -8,7 +8,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
-import { CartPageData } from '../../services/types';
+import { CartPageData } from '../../api/types';
 import AppSubStepHeader from '../common/AppSubStepHeader';
 import {
 	Box,

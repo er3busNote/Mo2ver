@@ -22,7 +22,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../api/types';
 import { isDesktop } from 'react-device-detect';
 
 interface AppMenuProps {

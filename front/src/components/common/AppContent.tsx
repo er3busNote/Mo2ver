@@ -17,8 +17,8 @@ import {
 	toastClose,
 } from '../../store/index';
 import { TitleState, ToastState } from '../../store/types';
-import Api from '../../services/api';
-import useCategoryGroupList from '../../hooks/useCategoryGroupList';
+import Api from '../../api';
+import useCategoryGroupList from '../../hooks/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
 //import AppHeaderBar from './AppHeaderBar';
 import AppHeaderMenu from './AppHeaderMenu';
@@ -32,7 +32,7 @@ import AppFooter from './AppFooter';
 import { CssBaseline, Box, Alert, Snackbar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
-import { CategoryDataGroup } from '../../services/types';
+import { CategoryDataGroup } from '../../api/types';
 import { useMediaQuery } from 'react-responsive';
 import { isDesktop } from 'react-device-detect';
 

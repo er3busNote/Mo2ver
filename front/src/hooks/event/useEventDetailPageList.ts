@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, EventDetailPageData } from '../services/types';
+import { PageData, EventDetailPageData } from '../../api/types';
 
 interface EventListProps {
 	code: string;

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CSRFData } from '../services/types';
+import { CSRFData } from '../api/types';
 
 interface CSRFTokenProps {
 	member: ActionCreatorsMapObject;

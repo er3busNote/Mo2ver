@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../store/index';
 import { TitleInfo } from '../../store/types';
 import { connect } from 'react-redux';
-import Api from '../../services/api';
+import Api from '../../api';
 import {
 	Box,
 	Paper,

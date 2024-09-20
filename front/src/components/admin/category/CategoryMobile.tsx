@@ -9,7 +9,7 @@ import {
 	treeItemClasses,
 } from '@mui/x-tree-view/TreeItem';
 import CategoryForm from '../../../components/form/admin/CategoryForm';
-import { CategoryData } from '../../../services/types';
+import { CategoryData } from '../../../api/types';
 import { CategoryFormValues } from '../../../components/form/admin/types';
 
 interface CategoryProps {

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../services/api';
+import Api from '../../api';
 import {
 	Box,
 	Paper,

@@ -37,7 +37,7 @@ import { ClickAwayListener } from '@mui/base';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { CategoryData, CategoryDataGroup } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../api/types';
 import { divideArray } from '../../utils/divide';
 
 const menuFontSize = '15px';

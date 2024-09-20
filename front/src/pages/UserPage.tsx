@@ -3,7 +3,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
-import Api from '../services/api';
+import Api from '../api';
 import UserDetailPC from '../components/user/UserDetailPC';
 import UserDetailMobile from '../components/user/UserDetailMobile';
 import { Box, Paper } from '@mui/material';

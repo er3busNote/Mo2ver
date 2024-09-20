@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CartPageData } from '../services/types';
+import { CartPageData } from '../../api/types';
 
 interface CartListProps {
 	cart: ActionCreatorsMapObject;

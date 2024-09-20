@@ -4,7 +4,7 @@ import {
 	CategoryData,
 	CategoryDataInfo,
 	CategoryDataGroup,
-} from '../services/types';
+} from '../../api/types';
 
 interface CategoryListProps {
 	category: ActionCreatorsMapObject;

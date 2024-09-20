@@ -32,7 +32,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { EventData, EventPageData } from '../../../services/types';
+import { EventData, EventPageData } from '../../../api/types';
 // import _ from 'lodash';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';

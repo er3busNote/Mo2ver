@@ -3,12 +3,12 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
-import Api from '../../services/api';
-import useBannerPageList from '../../hooks/useBannerPageList';
+import Api from '../../api';
+import useBannerPageList from '../../hooks/banner/useBannerPageList';
 import BannerPC from '../../components/admin/banner/BannerPC';
 import BannerMobile from '../../components/admin/banner/BannerMobile';
 import { Box } from '@mui/material';
-import { BannerPageData } from '../../services/types';
+import { BannerPageData } from '../../api/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 

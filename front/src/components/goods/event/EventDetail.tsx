@@ -5,9 +5,9 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import Api from '../../../services/api';
+import Api from '../../../api';
 import useImageUrl from '../../../hooks/useImageUrl';
-import useEventDetailPageList from '../../../hooks/useEventDetailPageList';
+import useEventDetailPageList from '../../../hooks/event/useEventDetailPageList';
 import EventSubHeader from '../cmmn/EventSubHeader';
 import {
 	Box,
@@ -32,7 +32,7 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import StarsIcon from '@mui/icons-material/Stars';
-import { EventDetailData } from '../../../services/types';
+import { EventDetailData } from '../../../api/types';
 
 interface EventDetailProps {
 	title: string;

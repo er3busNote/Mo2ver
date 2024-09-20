@@ -30,7 +30,7 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '../../services/types';
+import { CategoryData, CategoryDataGroup } from '../../api/types';
 import { divideArray } from '../../utils/divide';
 
 const menuFontSize = '15px';

@@ -6,18 +6,18 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, EventPageData } from '../services/types';
+import { PageData, BannerPageData } from '../../api/types';
 
-interface EventListProps {
-	event: ActionCreatorsMapObject;
+interface BannerListProps {
+	banner: ActionCreatorsMapObject;
 }
 
-const useEventPageList = ({
-	event,
-}: EventListProps): [EventPageData, Dispatch<SetStateAction<number>>] => {
+const useBannerPageList = ({
+	banner,
+}: BannerListProps): [BannerPageData, Dispatch<SetStateAction<number>>] => {
 	const [page, setPage] = useState(0);
-	const [data, setData] = useState<EventPageData>(
-		new Object() as EventPageData
+	const [data, setData] = useState<BannerPageData>(
+		new Object() as BannerPageData
 	);
 
 	const fetchAndSetData = useCallback(async () => {
@@ -25,7 +25,7 @@ const useEventPageList = ({
 			page: page,
 			size: 12,
 		};
-		const data = await event.list(pageData);
+		const data = await banner.list(pageData);
 		setData(data);
 	}, [page]);
 
@@ -36,4 +36,4 @@ const useEventPageList = ({
 	return [data, setPage];
 };
 
-export default useEventPageList;
+export default useBannerPageList;

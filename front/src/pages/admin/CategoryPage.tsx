@@ -2,12 +2,12 @@ import React, { FC, BaseSyntheticEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../services/api';
+import Api from '../../api';
 import useCSRFToken from '../../hooks/useCSRFToken';
-import useCategoryList from '../../hooks/useCategoryList';
+import useCategoryList from '../../hooks/category/useCategoryList';
 import CategoryPC from '../../components/admin/category/CategoryPC';
 import CategoryMobile from '../../components/admin/category/CategoryMobile';
-import { CategoryData } from '../../services/types';
+import { CategoryData } from '../../api/types';
 import { CategoryFormValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 

@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../services/api';
-import { ImageData, CartData } from '../../services/types';
+import Api from '../../api';
+import { ImageData, CartData } from '../../api/types';
 import useImageUrl from '../../hooks/useImageUrl';
-import useGoodsDetail from '../../hooks/useGoodsDetail';
+import useGoodsDetail from '../../hooks/goods/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
 import {
 	Box,
