@@ -6,7 +6,7 @@ const image = (instance: AxiosInstance) => {
 		// 이미지 매핑 API : <baseURL>/images/goods/*.* → <baseURL>/goods/image/*.*
 		info: (imagefile: string, targetPath: string) => () =>
 			urlFormat(instance.defaults.baseURL ?? '') +
-			`${targetPath}/image/${imagefile}`,
+			`${targetPath}/image?id=${imagefile}`,
 	};
 };
 
