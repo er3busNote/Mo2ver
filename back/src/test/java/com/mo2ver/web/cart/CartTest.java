@@ -45,7 +45,7 @@ public class CartTest  extends CsrfConfigTest {
                 .goodsYear("2024")
                 .supplyPrice(new BigDecimal(181899))
                 .salePrice(new BigDecimal(172804))
-                .image(new ImageDto("", 101, "txt", 'Y', 1, 'Y'))
+                .image(new ImageDto("", String.valueOf(101), "txt", 'Y', 1, 'Y'))
                 .amount(1)
                 .totalPrice(172804)
                 .build();

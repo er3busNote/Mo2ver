@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +37,7 @@ import java.util.List;
 @RequestMapping(value = "/goods")
 public class GoodsController {
 
-    private GoodsService goodsService;
+    private final GoodsService goodsService;
     private final ErrorHandler errorHandler;
     private final GoodsImageValidator goodsImageValidator;
 
@@ -45,11 +47,11 @@ public class GoodsController {
         this.goodsImageValidator = goodsImageValidator;
     }
 
-    @GetMapping("/image/{id}")
-    public ResponseEntity imageGoods(@PathVariable Integer id) {
+    @GetMapping("/image")
+    public ResponseEntity imageGoods(@RequestParam String id) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            byte[] bannerImageBytes = goodsService.findGoodsImage(id);
+            byte[] bannerImageBytes = goodsService.findGoodsImage(id.replace(" ", "+"));
             ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
             Tika tika = new Tika();
             String tikaMimeType = tika.detect(bannerImageBytes);

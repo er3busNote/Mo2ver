@@ -11,6 +11,7 @@ import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
 import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.util.CryptoUtil;
+import com.mo2ver.web.global.common.util.JasyptUtil;
 import com.mo2ver.web.global.common.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +46,14 @@ public class GoodsService {
     @Autowired
     protected FileUtil fileUtil;
     @Autowired
+    protected JasyptUtil jasyptUtil;
+    @Autowired
     protected CryptoUtil cryptoUtil;
 
     @Transactional
-    public byte[] findGoodsImage(Integer id) throws Exception {
+    public byte[] findGoodsImage(String id) throws Exception {
         Path uploadDirectory = this.fileUtil.getUploadDirectory(GOODS_DIRECTORY);
-        Optional<GoodsImage> info = this.goodsImageRepository.findByGoodsImageAttachFile(id);
+        Optional<GoodsImage> info = this.goodsImageRepository.findByGoodsImageAttachFile(Integer.parseInt(jasyptUtil.decrypt(id)));
         if (info.isPresent()) {
             GoodsImage goodsImage = info.get();
             String targetFileName = goodsImage.getGoodsImageAttachFile() + "." + goodsImage.getGoodsImageExtension();
