@@ -10,4 +10,13 @@ interface SignupFormValues {
 	email: string;
 }
 
-export type { LoginFormValues, SignupFormValues };
+interface RegisterFormValues {
+	name: string;
+	brand: string;
+	gender: string;
+	year: number;
+	price: number;
+	goodsImg: Array<File>;
+}
+
+export type { LoginFormValues, SignupFormValues, RegisterFormValues };

@@ -8,7 +8,7 @@ interface GoodsRegisterProps {
 	steps: string[];
 }
 
-const GoodsRegister: FC<GoodsRegisterProps> = ({
+const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 	description,
 	steps,
 }): JSX.Element => {
@@ -20,4 +20,4 @@ const GoodsRegister: FC<GoodsRegisterProps> = ({
 	);
 };
 
-export default GoodsRegister;
+export default GoodsRegisterPC;

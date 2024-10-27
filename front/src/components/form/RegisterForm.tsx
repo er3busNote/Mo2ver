@@ -1,5 +1,10 @@
 import React, { FC, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { Box, Grid, Button, CardMedia } from '@mui/material';
+import RenderFileField from '../validate/FileField';
+import { RegisterFormValues } from './types';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -8,12 +13,72 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
+const registerSchema = yup
+	.object()
+	.shape({
+		name: yup
+			.string()
+			.required('제목을 입력해주세요')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		brand: yup.string().required('브랜드명을 입력해주세요'),
+		gender: yup.string().required('성별을 입력해주세요'),
+		year: yup.number().required('등록연도를 입력해주세요'),
+		price: yup
+			.number()
+			.required('가격을 입력해주세요')
+			.min(4, '4자 이상 입력해주세요!')
+			.max(10, '입력 범위가 초과되었습니다'),
+		goodsImg: yup
+			.array()
+			.of(
+				yup
+					.mixed<File>()
+					.required('파일을 선택해야 합니다.')
+					.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
+					.test(
+						'fileSize',
+						'파일크기가 너무 작습니다',
+						(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+					)
+					.test(
+						'fileType',
+						'지원되는 파일 타입이 아닙니다',
+						(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
+					)
+			)
+			.min(1, '적어도 하나의 파일을 업로드해야 합니다.')
+			.max(5, '최대 5개의 파일을 업로드할 수 있습니다.')
+			.default([]),
+	})
+	.required();
+
+const registerValues: RegisterFormValues = {
+	name: '',
+	brand: '',
+	gender: '',
+	year: 2024,
+	price: 1000,
+	goodsImg: [],
+};
+
 const RegisterForm: FC = (): JSX.Element => {
 	const [open, setOpen] = useState(true);
 
 	const registerClick = () => {
 		setOpen(false);
 	};
+
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+		watch,
+	} = useForm<RegisterFormValues>({
+		mode: 'onChange',
+		defaultValues: registerValues,
+		resolver: yupResolver(registerSchema),
+	});
 
 	return (
 		<Grid container spacing={3}>
@@ -38,6 +103,17 @@ const RegisterForm: FC = (): JSX.Element => {
 						textAlign: 'left',
 					}}
 				>
+					<Controller
+						name="goodsImg"
+						control={control}
+						render={({ field, fieldState, formState }) => (
+							<RenderFileField
+								field={field}
+								fieldState={fieldState}
+								formState={formState}
+							/>
+						)}
+					/>
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 						<Button
 							type="submit"
