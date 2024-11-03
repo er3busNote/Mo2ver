@@ -13,8 +13,6 @@ import com.mo2ver.web.global.common.dto.ResponseDto;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.error.response.ErrorHandler;
-import org.apache.tika.Tika;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,22 +41,6 @@ public class GoodsController {
         this.goodsService = goodsService;
         this.errorHandler = errorHandler;
         this.goodsImageValidator = goodsImageValidator;
-    }
-
-    @GetMapping("/image")
-    public ResponseEntity imageGoods(@RequestParam String id) {
-        HashMap<String, Object> response = new HashMap<>();
-        try {
-            byte[] bannerImageBytes = goodsService.findGoodsImage(id.replace(" ", "+"));
-            ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
-            Tika tika = new Tika();
-            String tikaMimeType = tika.detect(bannerImageBytes);
-            MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
-            return ResponseEntity.ok().contentType(mediaType).body(resource);
-        } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
-        }
     }
 
     @GetMapping("/info/{id}")

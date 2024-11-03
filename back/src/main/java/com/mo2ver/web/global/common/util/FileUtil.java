@@ -23,8 +23,8 @@ public class FileUtil {
         return uploadDirectory;
     }
 
-    public File getTargetFile(Path uploadDirectory, String targetFileName) {
-        return new File(PROJECT_DIRECTORY + "/" + uploadDirectory + "/" + targetFileName);
+    public File getTargetFile(String targetFilePath) {
+        return new File(PROJECT_DIRECTORY + "/" + targetFilePath);
     }
 
     public String getFileExtension(String fileName) {

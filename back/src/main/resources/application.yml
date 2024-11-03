@@ -42,7 +42,25 @@ spring:
 spring:
   config:
     activate:
-      on-profile: production, test
+      on-profile: test
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mariadb://${server.host.mariadb}:3309/mo2ver_dev
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+---
+spring:
+  config:
+    activate:
+      on-profile: production
   datasource:
     username: root
     password: root
@@ -54,9 +72,9 @@ spring:
         hbm2ddl:
           auto: validate
 #          auto: update
-#    hibernate:
-#      naming:
-#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #    defer-datasource-initialization: true   # Hibernate 초기화 후 data.sql 실행
 ---
 spring:

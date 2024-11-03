@@ -45,8 +45,8 @@ public class BannerDetail {
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;
 
-    @Column(name = "IMG_ATT_FILE", columnDefinition = "VARCHAR(50) COMMENT '이미지첨부파일'")
-    private String imageAttachFile;
+    @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
+    private Integer imageAttachFile;
 
     @Column(name = "CNNT_URL", columnDefinition = "VARCHAR(255) COMMENT '연결URL'")
     private String connectUrl;
@@ -78,11 +78,11 @@ public class BannerDetail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailDto bannerImageDetailDto, String fileNameWithoutExtension, Integer index, Member currentUser) {
+    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailDto bannerImageDetailDto, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
                 .bannerManageNo(bannerManage)
                 .detailSequence(index)
-                .imageAttachFile(fileNameWithoutExtension)
+                .imageAttachFile(imageAttachFile)
                 .connectUrl(bannerImageDetailDto.getCnntUrl())
                 .bannerContents(bannerImageDetailDto.getTitle())
                 .sortSequence(1)

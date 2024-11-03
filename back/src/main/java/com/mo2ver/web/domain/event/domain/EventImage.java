@@ -41,7 +41,7 @@ public class EventImage {
     )
     private EventManage eventManageNo;
 
-    @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "INT(11) COMMENT '상품이미지첨부파일'")
+    @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
 
     @Column(name = "GD_IMG_EXT", columnDefinition = "CHAR(20) COMMENT '상품이미지확장자'")

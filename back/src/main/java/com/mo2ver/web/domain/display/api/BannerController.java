@@ -5,7 +5,6 @@ import com.mo2ver.web.domain.display.dto.BannerImageDto;
 import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
 import com.mo2ver.web.domain.display.service.BannerService;
 import com.mo2ver.web.domain.display.validation.BannerImageValidator;
-import com.mo2ver.web.domain.goods.dto.GoodsDto;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageDto;
@@ -13,16 +12,12 @@ import com.mo2ver.web.global.common.dto.ResponseDto;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorResponse;
 import com.mo2ver.web.global.error.response.ErrorHandler;
-import org.apache.tika.Tika;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,10 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/banner")
@@ -47,22 +40,6 @@ public class BannerController {
         this.bannerService = bannerService;
         this.errorHandler = errorHandler;
         this.bannerImageValidator = bannerImageValidator;
-    }
-
-    @GetMapping("/image/{id}")
-    public ResponseEntity imageBanner(@PathVariable String id) {
-        HashMap<String, Object> response = new HashMap<>();
-        try {
-            byte[] bannerImageBytes = bannerService.findBannerImage(id);
-            ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
-            Tika tika = new Tika();
-            String tikaMimeType = tika.detect(bannerImageBytes);
-            MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
-            return ResponseEntity.ok().contentType(mediaType).body(resource);
-        } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
-        }
     }
 
     @GetMapping("/list")
