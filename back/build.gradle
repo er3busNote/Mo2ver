@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.apache.velocity:velocity-engine-core:2.3'
 	implementation 'org.apache.velocity.tools:velocity-tools-generic:3.1'
 	implementation 'org.apache.velocity.tools:velocity-tools-view:3.1'

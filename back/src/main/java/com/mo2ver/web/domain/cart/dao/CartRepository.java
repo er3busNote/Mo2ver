@@ -1,24 +1,32 @@
-package com.mo2ver.web.domain.cart.dto;
+package com.mo2ver.web.domain.cart.dao;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import com.mo2ver.web.domain.cart.dto.CartDto;
+import com.mo2ver.web.domain.cart.dto.CartListDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.*;
+import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Component
-@SessionScope
-@AllArgsConstructor
-public class CartListDto {
+@Slf4j
+@Repository
+@CacheConfig(cacheNames = "cartList")
+public class CartRepository {
 
-    private List<CartDto> cartList;
+    private final List<CartDto> cartList = new ArrayList<>();
 
-    private int cartTotal;
+    private int cartTotal = 0;
 
-    public void addCart(CartDto cartDto) {
+    @Cacheable(key = "'all'")
+    public CartListDto findAll() {
+        log.info("Repository findAll {}", cartList);
+        return new CartListDto(cartList, cartTotal);
+    }
 
+    @CachePut(key = "#cartDto.goodsCode")
+    @CacheEvict(key = "'all'")
+    public CartListDto save(CartDto cartDto) {
         // 총액 계산
         cartDto.totalPriceCalc();
 
@@ -42,15 +50,25 @@ public class CartListDto {
                 cartList.add(cartDto);
             }
         }
+        return new CartListDto(cartList, cartTotal);
     }
 
-    public void deleteCart(String goodsCode) {
+    @Caching(evict = {
+            @CacheEvict(key = "'all'"),
+            @CacheEvict(key = "#goodsCode")
+    })
+    public void delete(String goodsCode) {
         cartList.removeIf(cart -> cart.getGoodsCode().equals(goodsCode));
     }
 
-    public void deleteCart(int index) {
+    @Caching(evict = {
+            @CacheEvict(key = "'all'"),
+            @CacheEvict(key = "#index")
+    })
+    public void delete(int index) {
         if (index >= 0 && index < cartList.size()) {
             CartDto removeCart = cartList.get(index);
+            log.info("Repository delete One {}", removeCart);
             int removeCartPrice = removeCart.getTotalPrice();
             cartTotal -= removeCartPrice;
             cartList.remove(index);     // [Case 5] : 특정 index 삭제
@@ -59,11 +77,12 @@ public class CartListDto {
         }
     }
 
-    public void deleteCartList() {
+    @Caching(evict = {
+            @CacheEvict(key = "'all'")
+    })
+    public void deleteAll() {
+        log.info("Repository delete {}", cartList);
         cartList.clear();
-    }
-
-    public boolean isEmpty() {
-        return cartList.isEmpty();
+        cartTotal = 0;
     }
 }

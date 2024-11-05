@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.cart.api;
 
 import com.mo2ver.web.domain.cart.dto.CartDto;
-import com.mo2ver.web.domain.cart.dto.CartListDto;
 import com.mo2ver.web.domain.cart.service.CartService;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/cart")
@@ -31,17 +29,15 @@ public class CartController {
     @PostMapping("/add")
     public ResponseEntity addCart(@RequestBody @Valid CartDto cartDto,
                                   @CurrentUser Member currentUser) {
-        CartListDto cartListDto = cartService.addCart(cartDto);
-        return ResponseEntity.ok(cartListDto);
+        return ResponseEntity.ok(cartService.addCart(cartDto));
     }
 
     @GetMapping("/list")
     public ResponseEntity listCart(@CurrentUser Member currentUser) {
-        CartListDto cartListDto = cartService.getCartList();
-        if (cartListDto != null) {
-            return ResponseEntity.ok(cartListDto);
+        if (cartService.isCartEmpty()) {
+            return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비어있습니다"), HttpStatus.OK);
         }
-        return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비어있습니다"), HttpStatus.OK);
+        return ResponseEntity.ok(cartService.getCartList());
     }
 
     @DeleteMapping("/delete")
@@ -52,21 +48,15 @@ public class CartController {
 
     @DeleteMapping("/delete/{index}")
     public ResponseEntity deleteOneCart(@PathVariable int index, @CurrentUser Member currentUser) {
-        CartListDto cartListDto = cartService.getCartList();
-        if (cartListDto == null) {
+        if (cartService.isCartEmpty()) {
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비어있습니다"), HttpStatus.OK);
         }
-        int cartTotal = cartListDto.getCartTotal();
-        List<CartDto> cart = cartListDto.getCartDto();
-        int removeCartPrice = cart.get(index).getTotalPrice();
-        cart.remove(index);
-        if (cart.size() == 0) {
+        cartService.deleteCart(index);
+        if (cartService.isCartEmpty()) {
             cartService.deleteCartList();
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비었습니다"), HttpStatus.OK);
         }
-        cartTotal -= removeCartPrice;
-        cartListDto.setCartTotal(cartTotal);
-        return ResponseEntity.ok(cartListDto);
+        return ResponseEntity.ok(cartService.getCartList());
     }
 
     private ResponseEntity badRequest(ErrorResponse response) {
