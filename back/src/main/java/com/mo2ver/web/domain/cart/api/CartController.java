@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.cart.api;
 
 import com.mo2ver.web.domain.cart.dto.CartDto;
 import com.mo2ver.web.domain.cart.dto.CartListDto;
+import com.mo2ver.web.domain.cart.service.CartService;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.ResponseDto;
@@ -12,57 +13,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/cart")
 public class CartController {
 
+    private final CartService cartService;
     private final ErrorHandler errorHandler;
 
-    public CartController(ErrorHandler errorHandler) {
+    public CartController(CartService cartService, ErrorHandler errorHandler) {
+        this.cartService = cartService;
         this.errorHandler = errorHandler;
     }
 
     @PostMapping("/add")
     public ResponseEntity addCart(@RequestBody @Valid CartDto cartDto,
-                                  @CurrentUser Member currentUser,
-                                  HttpSession session) {
-        CartListDto cartListDto = (CartListDto) session.getAttribute("cartList");
-        cartDto.totalPriceCalc();   // 총액 계산
-        if (cartListDto == null) {  // Session에 저장된 장바구니 목록이 없을시
-            List<CartDto> newCart = new ArrayList<>();
-            newCart.add(cartDto);
-            cartListDto = new CartListDto(cartDto.getTotalPrice(), newCart);
-        } else {    // Session에 저장된 장바구니 목록이 있을시
-            List<CartDto> prevCart = cartListDto.getCartDto();
-            int prevCartTotal = cartListDto.getCartTotal();
-            cartListDto.setCartTotal(prevCartTotal + cartDto.getTotalPrice());
-
-            if (prevCart.contains(cartDto)) {    // 이미 장바구니에 추가된 메뉴일때
-                int cartIndex = prevCart.indexOf(cartDto);
-                int amount = cartDto.getAmount();
-
-                CartDto newCart = prevCart.get(cartIndex);
-                int newAmount = newCart.getAmount() + amount;
-
-                newCart.setAmount(newAmount);
-                newCart.totalPriceCalc();
-                prevCart.set(cartIndex, newCart);
-            } else {    // 장바구니에 추가되어 있지 않은 메뉴일때
-                prevCart.add(cartDto);
-            }
-        }
-        session.setAttribute("cartList", cartListDto);
+                                  @CurrentUser Member currentUser) {
+        CartListDto cartListDto = cartService.addCart(cartDto);
         return ResponseEntity.ok(cartListDto);
     }
 
     @GetMapping("/list")
-    public ResponseEntity listCart(HttpSession session) {
-        CartListDto cartListDto = (CartListDto) session.getAttribute("cartList");
+    public ResponseEntity listCart(@CurrentUser Member currentUser) {
+        CartListDto cartListDto = cartService.getCartList();
         if (cartListDto != null) {
             return ResponseEntity.ok(cartListDto);
         }
@@ -70,14 +45,14 @@ public class CartController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteAllCart(HttpSession session) {
-        session.removeAttribute("cartList");
+    public ResponseEntity deleteAllCart(@CurrentUser Member currentUser) {
+        cartService.deleteCartList();
         return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 삭제되었습니다"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{index}")
-    public ResponseEntity deleteOneCart(@PathVariable int index, HttpSession session) {
-        CartListDto cartListDto = (CartListDto) session.getAttribute("cartList");
+    public ResponseEntity deleteOneCart(@PathVariable int index, @CurrentUser Member currentUser) {
+        CartListDto cartListDto = cartService.getCartList();
         if (cartListDto == null) {
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비어있습니다"), HttpStatus.OK);
         }
@@ -86,7 +61,7 @@ public class CartController {
         int removeCartPrice = cart.get(index).getTotalPrice();
         cart.remove(index);
         if (cart.size() == 0) {
-            session.removeAttribute("cartList");
+            cartService.deleteCartList();
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비었습니다"), HttpStatus.OK);
         }
         cartTotal -= removeCartPrice;

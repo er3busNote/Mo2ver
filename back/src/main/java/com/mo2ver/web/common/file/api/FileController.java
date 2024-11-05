@@ -28,10 +28,10 @@ public class FileController {
     }
 
     @GetMapping("/image")
-    public ResponseEntity imageGoods(@RequestParam String id) {
+    public ResponseEntity fileImage(@RequestParam String id) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            byte[] bannerImageBytes = fileService.getFile(id.replace(" ", "+"));
+            byte[] bannerImageBytes = fileService.findFile(id.replace(" ", "+"));
             ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
             Tika tika = new Tika();
             String tikaMimeType = tika.detect(bannerImageBytes);

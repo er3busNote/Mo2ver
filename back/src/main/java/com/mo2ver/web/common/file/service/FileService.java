@@ -41,7 +41,7 @@ public class FileService {
     private Environment environment;
 
     @Transactional
-    public byte[] getFile(String id) throws Exception {
+    public byte[] findFile(String id) throws Exception {
         Optional<File> info = this.fileRepository.findById(Long.parseLong(jasyptUtil.decrypt(id)));
         if (info.isPresent()) {
             File file = info.get();

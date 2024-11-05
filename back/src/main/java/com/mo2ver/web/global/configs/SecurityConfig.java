@@ -101,9 +101,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**", "/goods/**", "/cart/**", "/banner/image/**", "/event/**", "/images/**").permitAll()
-                .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/member/**", "/category/**", "/goods/**", "/cart/**", "/banner/**", "/event/**").permitAll()
+                .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
+                .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**", "/goods/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/cart/list").hasAnyRole("USER")           // 3.1) 장바구니 목록
+                .mvcMatchers(HttpMethod.POST, "/cart/add").hasAnyRole("USER")           // 3.2) 장바구니 추가
+                .mvcMatchers(HttpMethod.DELETE, "/cart/delete/**").hasAnyRole("USER")   // 3.3) 장바구니 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
