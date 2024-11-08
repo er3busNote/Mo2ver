@@ -2,20 +2,23 @@ package com.mo2ver.web.domain.cart.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Component
 @SessionScope
+@NoArgsConstructor
 @AllArgsConstructor
 public class CartListDto {
 
-    private List<CartDto> cartList;
+    private List<CartDto> cartList = new ArrayList<>();
 
-    private int cartTotal;
+    private int cartTotal = 0;
 
     public void addCart(CartDto cartDto) {
 
