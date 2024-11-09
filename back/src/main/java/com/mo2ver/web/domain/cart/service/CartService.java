@@ -19,6 +19,10 @@ public class CartService {
         return cartRepository.save(cartDto, currentUser);
     }
 
+    public CartListDto updateCart(CartDto cartDto, Member currentUser){
+        return cartRepository.update(cartDto, currentUser);
+    }
+
     public CartListDto getCartList(Member currentUser) {
         return cartRepository.findByUser(currentUser);
     }

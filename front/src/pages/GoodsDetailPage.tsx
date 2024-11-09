@@ -90,7 +90,6 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const cartAdd = async (cartData: CartData) => {
 		await cart.add(cartData, csrfData);
-		if (event) event.preventDefault(); // 새로고침 방지
 	};
 	return (
 		<>

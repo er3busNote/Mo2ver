@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -37,48 +35,31 @@ public class CartRepository {
     @CacheEvict(key = "'all'")
     public CartListDto save(CartDto cart, Member member) {
         String memberNo = member.getMemberNo();
-        CartListDto cartListDto;
+        CartListDto cartListDto = new CartListDto();
         if(userMap.containsKey(memberNo)){
             cartListDto = userMap.get(memberNo);
-            List<CartDto> cartList = cartListDto.getCartList();
-            int cartTotal = cartListDto.getCartTotal();
-
-            // 총액 계산
-            cart.totalPriceCalc();
-
-            if (cartList.isEmpty()) {  // [Case 1] : Session 에 저장된 장바구니 목록이 없을 시
-                cartList.add(cart);
-                cartTotal = cart.getTotalPrice();
-            } else {                    // [Case 2] : Session 에 저장된 장바구니 목록이 있을 시
-                cartTotal += cart.getTotalPrice();
-
-                if (cartList.contains(cart)) {    // [Case 3] : 이미 장바구니에 추가된 메뉴 일때
-                    int cartIndex = cartList.indexOf(cart);
-                    int amount = cart.getAmount();
-
-                    CartDto newCart = cartList.get(cartIndex);
-                    int newAmount = newCart.getAmount() + amount;
-
-                    newCart.setAmount(newAmount);
-                    newCart.totalPriceCalc();
-                    cartList.set(cartIndex, newCart);
-                } else {                // [Case 4] : 장바구니에 추가 되어 있지 않은 메뉴 일때
-                    cartList.add(cart);
-                }
-            }
-            cartListDto = new CartListDto(cartList, cartTotal);
-        } else {
-            // 총액 계산
-            cart.totalPriceCalc();
-
-            List<CartDto> cartList = new ArrayList<>();
-            cartList.add(cart);
-
-            cartListDto = new CartListDto(cartList, cart.getTotalPrice());
         }
-        userMap.put(memberNo, cartListDto);
+        cartListDto.addCart(cart);
         log.info("Repository save {} => {}", member.getLoginId(), cartListDto);
+        userMap.put(memberNo, cartListDto);
         return cartListDto;
+    }
+
+    @Caching(put = {
+            @CachePut(key = "#cart.goodsCode"),
+            @CachePut(key = "#member.memberNo")
+    })
+    @CacheEvict(key = "'all'")
+    public CartListDto update(CartDto cart, Member member) {
+        String memberNo = member.getMemberNo();
+        if(userMap.containsKey(memberNo)){
+            CartListDto cartListDto = userMap.get(memberNo);
+            CartDto updateCart = cartListDto.updateCart(cart);
+            log.info("Repository update {} => {}", member.getLoginId(), updateCart);
+            userMap.put(memberNo, cartListDto);
+            return cartListDto;
+        }
+        return new CartListDto();
     }
 
     @Caching(evict = {
@@ -90,14 +71,8 @@ public class CartRepository {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
             CartListDto cartListDto = userMap.get(memberNo);
-            List<CartDto> cartList = cartListDto.getCartList();
-            int cartTotal = cartListDto.getCartTotal();
-            CartDto removeCart = cartList.stream().filter(cart -> cart.getGoodsCode().equals(goodsCode)).findAny().orElse(null);
-            cartList.removeIf(cart -> cart.getGoodsCode().equals(goodsCode));
-            int removeCartPrice = removeCart.getTotalPrice();
-            cartTotal -= removeCartPrice;
+            CartDto removeCart = cartListDto.deleteCart(goodsCode);
             log.info("Repository delete {} => {}", member.getLoginId(), removeCart);
-            cartListDto = new CartListDto(cartList, cartTotal);
             userMap.put(memberNo, cartListDto);
         }
     }
@@ -111,19 +86,9 @@ public class CartRepository {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
             CartListDto cartListDto = userMap.get(memberNo);
-            List<CartDto> cartList = cartListDto.getCartList();
-            int cartTotal = cartListDto.getCartTotal();
-            if (index >= 0 && index < cartList.size()) {
-                CartDto removeCart = cartList.get(index);
-                cartList.remove(index);     // [Case 5] : 특정 index 삭제
-                int removeCartPrice = removeCart.getTotalPrice();
-                cartTotal -= removeCartPrice;
-                log.info("Repository delete One {} => {}", member.getLoginId(), removeCart);
-                cartListDto = new CartListDto(cartList, cartTotal);
-                userMap.put(memberNo, cartListDto);
-            } else {
-                throw new IndexOutOfBoundsException("Invalid index: " + index);
-            }
+            CartDto removeCart = cartListDto.deleteCart(index);
+            log.info("Repository delete One {} => {}", member.getLoginId(), removeCart);
+            userMap.put(memberNo, cartListDto);
         }
     }
 

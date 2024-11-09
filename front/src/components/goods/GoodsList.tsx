@@ -188,7 +188,7 @@ const GoodsList: FC<GoodsListProps> = ({
 			</Box>
 			<Box sx={{ mb: 10, display: 'flex', justifyContent: 'center' }}>
 				<Pagination
-					count={goodsData.totalPages - 1}
+					count={(goodsData.totalPages ?? 1) - 1}
 					variant="outlined"
 					color="primary"
 					siblingCount={2}

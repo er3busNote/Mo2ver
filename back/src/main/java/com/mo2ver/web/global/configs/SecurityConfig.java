@@ -106,8 +106,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/member/**", "/category/**", "/goods/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/cart/list").hasAnyRole("USER")           // 3.1) 장바구니 목록
-                .mvcMatchers(HttpMethod.POST, "/cart/add").hasAnyRole("USER")           // 3.2) 장바구니 추가
-                .mvcMatchers(HttpMethod.DELETE, "/cart/delete/**").hasAnyRole("USER")   // 3.3) 장바구니 삭제
+                .mvcMatchers(HttpMethod.POST, "/cart/**").hasAnyRole("USER")            // 3.2) 장바구니 추가
+                .mvcMatchers(HttpMethod.PUT, "/cart/**").hasAnyRole("USER")             // 3.3) 장바구니 수정
+                .mvcMatchers(HttpMethod.DELETE, "/cart/**").hasAnyRole("USER")          // 3.4) 장바구니 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
@@ -127,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(Arrays.asList(corsProperties.getUrlClient()));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Origin", "Authorization", "X-XSRF-TOKEN", "Content-Type", "Accept"));
         config.setAllowCredentials(true);   // 쿠키 요청을 허용하도록 true로 설정
         config.setMaxAge(3600L);

@@ -26,12 +26,6 @@ public class CartController {
         this.errorHandler = errorHandler;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addCart(@RequestBody @Valid CartDto cartDto,
-                                  @CurrentUser Member currentUser) {
-        return ResponseEntity.ok(cartService.addCart(cartDto, currentUser));
-    }
-
     @GetMapping("/list")
     public ResponseEntity listCart(@CurrentUser Member currentUser) {
         if (cartService.isCartEmpty(currentUser)) {
@@ -40,18 +34,30 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCartList(currentUser));
     }
 
+    @PostMapping("/add")
+    public ResponseEntity addCart(@RequestBody @Valid CartDto cartDto,
+                                  @CurrentUser Member currentUser) {
+        return ResponseEntity.ok(cartService.addCart(cartDto, currentUser));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity updateCart(@RequestBody @Valid CartDto cartDto,
+                                  @CurrentUser Member currentUser) {
+        return ResponseEntity.ok(cartService.updateCart(cartDto, currentUser));
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity deleteAllCart(@CurrentUser Member currentUser) {
         cartService.deleteCartList(currentUser);
         return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 삭제되었습니다"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{index}")
-    public ResponseEntity deleteOneCart(@PathVariable int index, @CurrentUser Member currentUser) {
+    @DeleteMapping("/delete/{goodsCode}")
+    public ResponseEntity deleteOneCart(@PathVariable String goodsCode, @CurrentUser Member currentUser) {
         if (cartService.isCartEmpty(currentUser)) {
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비어있습니다"), HttpStatus.OK);
         }
-        cartService.deleteCart(index, currentUser);
+        cartService.deleteCart(goodsCode, currentUser);
         if (cartService.isCartEmpty(currentUser)) {
             cartService.deleteCartList(currentUser);
             return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "장바구니가 비었습니다"), HttpStatus.OK);

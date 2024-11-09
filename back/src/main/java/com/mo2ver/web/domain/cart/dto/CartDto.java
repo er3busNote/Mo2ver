@@ -32,6 +32,8 @@ public class CartDto {
     private int[] optionPrice;
     private long[] optionId;
 
+    private boolean check = true;
+
     public void totalPriceCalc() {
         int temp_Price = 0;
         if(optionPrice != null) {

@@ -20,6 +20,10 @@ body {
   font-family: "Pretendard-Regular", "Roboto", "Helvetica Neue", Helvetica, Sans-serif;
 }
 
-p {
+button, input, span, h2, h6, th, p {
   font-family: "Pretendard-Bold" !important;
+}
+
+div, label, td {
+  font-family: "Pretendard-Regular" !important;
 }

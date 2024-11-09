@@ -100,7 +100,7 @@ const EventPC: FC<EventProps> = ({
 		setNewPage(newPage);
 	};
 	const handleChangeRowsPerPage = (
-		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setNewPage(0);

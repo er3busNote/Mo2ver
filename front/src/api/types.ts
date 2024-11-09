@@ -280,23 +280,24 @@ interface EventDisplayData {
 // 6. Cart Type
 interface CartData {
 	goodsCode: string;
-	goodsName: string;
-	goodsBrand: string;
-	goodsGender: string;
-	goodsYear: string;
-	supplyPrice: number;
-	salePrice: number;
-	image: ImageData;
+	goodsName?: string;
+	goodsBrand?: string;
+	goodsGender?: string;
+	goodsYear?: string;
+	supplyPrice?: number;
+	salePrice?: number;
+	image?: ImageData;
 	amount: number;
-	totalPrice: number;
-	optionName?: string;
-	optionPrice?: number;
-	optionId?: string;
+	totalPrice?: number;
+	optionName?: Array<string>;
+	optionPrice?: Array<number>;
+	optionId?: Array<string>;
+	check?: boolean;
 }
 
 interface CartPageData {
 	cartTotal: number;
-	cartDto: Array<CartData>;
+	cartList: Array<CartData>;
 }
 
 // 0. ETC Type

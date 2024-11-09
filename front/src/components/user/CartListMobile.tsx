@@ -1,16 +1,23 @@
 import React, {
 	FC,
-	useState,
 	ChangeEvent,
+	FocusEvent,
+	PointerEvent,
+	KeyboardEvent,
 	forwardRef,
 	ForwardedRef,
 	Dispatch,
 	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { menuActive } from '../../store/index';
-import { CartPageData } from '../../api/types';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect, useDispatch } from 'react-redux';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
+import { CartData, CartPageData } from '../../api/types';
+import Api from '../../api';
+import useImageUrl from '../../hooks/useImageUrl';
 import AppSubStepHeader from '../common/AppSubStepHeader';
 import {
 	Box,
@@ -42,13 +49,6 @@ import {
 	BrowserView,
 	MobileView,
 } from 'react-device-detect';
-
-const IMAGE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
 
 const StyledInputRoot = styled('div')(
 	({ theme }) => `
@@ -161,26 +161,93 @@ const NumberInput = forwardRef(function CustomNumberInput(
 	);
 });
 
+interface CartDataProps {
+	title: string;
+	description: string;
+	cartData: Array<CartData>;
+	image: ActionCreatorsMapObject;
+	onCartUpdate: (cartData: CartData) => void;
+	onCartDelete: (goodsCode: string) => void;
+}
+
+interface CartTotalProps {
+	totalSalePrice: number; // 총 상품가격 (할인된 가격)
+	totalSupplyPrice: number; // 총 공급가격
+	deliveryPrice: number; // 배송비
+	totalCount: number; // 총 주문 상풍수
+	totalOptionCount: number; // 총 주문 옵션 상품수
+	//totalCalcPrice: number; // 총 결제 예상 금액
+	productMileage: number; // 상품 마일리지
+	membershipMileage: number; // 멤버십 마일리지
+	//totalCalcMileage: number; // 총 적립 마일리지
+}
+
 interface CartListProps {
+	title: string;
 	description: string;
 	steps: string[];
 	setPage: Dispatch<SetStateAction<number>>;
 	cartPageData: CartPageData;
+	image: ActionCreatorsMapObject;
+	onCartUpdate: (cartData: CartData) => void;
+	onCartDelete: (goodsCode: string) => void;
 }
 
-const CartList: FC = (): JSX.Element => {
+const CartList: FC<CartDataProps> = ({
+	title,
+	description,
+	image,
+	cartData,
+	onCartUpdate,
+	onCartDelete,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [page, setPage] = useState(0);
 
 	const goodsClick = (code: string) => {
-		//dispatch(menuActive('/goods/' + code + '/detail'));
-		//navigate('/goods/' + code + '/detail');
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
 	};
 
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
+	const handleNumberChange = (
+		event:
+			| FocusEvent<HTMLInputElement, Element>
+			| PointerEvent<Element>
+			| KeyboardEvent<Element>,
+		code: string,
+		newValue: number | undefined,
+		check: boolean | undefined
+	) => {
+		const cartData: CartData = {
+			goodsCode: code,
+			amount: newValue ?? 0,
+			check: check,
+		};
+		onCartUpdate(cartData);
+	};
+
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement>,
+		code: string,
+		amount: number
+	) => {
+		const cartData: CartData = {
+			goodsCode: code,
+			amount: amount,
+			check: event.target.checked,
+		};
+		onCartUpdate(cartData);
+	};
+
+	const removeCartClick = (code: string) => {
+		onCartDelete(code);
 	};
 
 	const rowItem: SxProps<Theme> = {
@@ -256,161 +323,207 @@ const CartList: FC = (): JSX.Element => {
 			fontSize: 28,
 		},
 	};
+	const emptyBox: SxProps<Theme> = {
+		py: 2,
+	};
+
 	return (
 		<Box>
-			<Checkbox sx={checkBox} defaultChecked />
 			<TableContainer>
 				<Table size="small">
 					<TableBody>
-						<TableRow sx={rowItem}>
-							<TableCell sx={cardBox} component="th" scope="row">
-								<Card elevation={0} onClick={() => goodsClick('0')}>
-									<CardActionArea>
-										<CardMedia
-											component="img"
-											image={IMAGE_INFO[0]}
-											height="120"
+						{cartData ? (
+							cartData.map((data: CartData, index: number) => {
+								const file = String(data.image?.goodsImageAttachFile ?? '');
+								return (
+									<TableRow key={index} sx={rowItem}>
+										<Checkbox
+											sx={checkBox}
+											checked={data.check}
+											onChange={(event) =>
+												handleChange(event, data.goodsCode, data.amount)
+											}
 										/>
-									</CardActionArea>
-								</Card>
-							</TableCell>
-							<TableCell sx={productBox}>
-								<Table size="small">
-									<TableBody>
-										<TableRow>
-											{isBrowser && (
-												<TableCell sx={labelCell}>
-													<Typography component="span" sx={label}>
-														상품명
-													</Typography>
-												</TableCell>
-											)}
-											<TableCell sx={infoCell}>
-												<Typography component="span" sx={info}>
-													스파오
-												</Typography>
-											</TableCell>
-										</TableRow>
-										<TableRow>
-											{isBrowser && (
-												<TableCell sx={labelCell}>
-													<Typography component="span" sx={label}>
-														브랜드
-													</Typography>
-												</TableCell>
-											)}
-											<TableCell sx={infoCell}>
-												<Typography component="span" sx={info}>
-													베이직
-												</Typography>
-											</TableCell>
-										</TableRow>
-										<TableRow>
-											{isBrowser && (
-												<TableCell sx={priceCell}>
-													<Typography component="span" sx={label}>
-														판매가
-													</Typography>
-												</TableCell>
-											)}
-											<TableCell sx={infoCell}>
-												<Typography component="span" sx={infoOriginPrice}>
-													69,900원
-												</Typography>
-											</TableCell>
-										</TableRow>
-										<TableRow>
-											{isBrowser && (
-												<TableCell sx={priceCell}>
-													<Typography component="span" sx={label}>
-														할인가
-													</Typography>
-												</TableCell>
-											)}
-											<TableCell sx={infoCell}>
-												<Breadcrumbs
-													sx={infoBreadcrumbs}
-													separator="~"
-													aria-label="breadcrumb"
+										<TableCell sx={cardBox} component="th" scope="row">
+											<Card
+												elevation={0}
+												onClick={() => goodsClick(data.goodsCode)}
+											>
+												<CardActionArea>
+													<CardMedia
+														component="img"
+														height="120"
+														image={useImageUrl({ image, file, path: 'file' })}
+													/>
+												</CardActionArea>
+											</Card>
+										</TableCell>
+										<TableCell sx={productBox}>
+											<Table size="small">
+												<TableBody>
+													<TableRow>
+														{isBrowser && (
+															<TableCell sx={labelCell}>
+																<Typography component="span" sx={label}>
+																	상품명
+																</Typography>
+															</TableCell>
+														)}
+														<TableCell sx={infoCell}>
+															<Typography component="span" sx={info}>
+																{data.goodsName}
+															</Typography>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														{isBrowser && (
+															<TableCell sx={labelCell}>
+																<Typography component="span" sx={label}>
+																	브랜드
+																</Typography>
+															</TableCell>
+														)}
+														<TableCell sx={infoCell}>
+															<Typography component="span" sx={info}>
+																{data.goodsBrand}
+															</Typography>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														{isBrowser && (
+															<TableCell sx={priceCell}>
+																<Typography component="span" sx={label}>
+																	판매가
+																</Typography>
+															</TableCell>
+														)}
+														<TableCell sx={infoCell}>
+															<Typography component="span" sx={infoOriginPrice}>
+																{data.supplyPrice?.toLocaleString()}원
+															</Typography>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														{isBrowser && (
+															<TableCell sx={priceCell}>
+																<Typography component="span" sx={label}>
+																	할인가
+																</Typography>
+															</TableCell>
+														)}
+														<TableCell sx={infoCell}>
+															<Breadcrumbs
+																sx={infoBreadcrumbs}
+																separator="~"
+																aria-label="breadcrumb"
+															>
+																<Typography
+																	component="span"
+																	sx={infoDiscountPrice}
+																>
+																	{data.salePrice?.toLocaleString()}
+																</Typography>
+																<Typography
+																	component="span"
+																	sx={infoDiscountPrice}
+																>
+																	{data.supplyPrice?.toLocaleString()}원
+																</Typography>
+															</Breadcrumbs>
+														</TableCell>
+													</TableRow>
+												</TableBody>
+											</Table>
+										</TableCell>
+										<TableCell sx={controlBox}>
+											<NumberInput
+												value={data.amount}
+												min={1}
+												max={99}
+												onChange={(event, newValue) =>
+													handleNumberChange(
+														event,
+														data.goodsCode,
+														newValue,
+														data.check
+													)
+												}
+											/>
+											<Box>
+												<Button
+													sx={{
+														mt: 2,
+														py: 1,
+														width: '100%',
+														fontSize: { xs: '10px', sm: '12px' },
+														fontWeight: 'bold',
+														bgcolor: '#000',
+														border: '1px solid #000',
+														borderRadius: 0,
+														color: '#fff',
+														'&:hover': {
+															bgcolor: '#0f0f0f',
+														},
+													}}
+													variant="outlined"
 												>
-													<Typography component="span" sx={infoDiscountPrice}>
-														48,105
-													</Typography>
-													<Typography component="span" sx={infoDiscountPrice}>
-														59,390원
-													</Typography>
-												</Breadcrumbs>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								</Table>
-							</TableCell>
-							<TableCell sx={controlBox}>
-								<NumberInput defaultValue={1} min={1} max={99} />
-								<Box>
-									<Button
-										sx={{
-											mt: 2,
-											py: 1,
-											width: '100%',
-											fontSize: { xs: '10px', sm: '12px' },
-											fontWeight: 'bold',
-											bgcolor: '#000',
-											border: '1px solid #000',
-											borderRadius: 0,
-											color: '#fff',
-											'&:hover': {
-												bgcolor: '#0f0f0f',
-											},
-										}}
-										variant="outlined"
-									>
-										바로 구매
-									</Button>
-									<Button
-										sx={{
-											mt: 0.5,
-											px: 0,
-											py: 1,
-											width: '100%',
-											fontSize: { xs: '10px', sm: '12px' },
-											fontWeight: 'bold',
-											bgcolor: '#7940B6',
-											border: '1px solid #757595',
-											borderRadius: 0,
-											color: '#fff',
-											'&:hover': {
-												bgcolor: '#9373B5',
-											},
-										}}
-										variant="outlined"
-									>
-										장바구니 삭제
-									</Button>
-								</Box>
-							</TableCell>
-						</TableRow>
+													바로 구매
+												</Button>
+												<Button
+													onClick={() => removeCartClick(data.goodsCode)}
+													sx={{
+														mt: 0.5,
+														px: 0,
+														py: 1,
+														width: '100%',
+														fontSize: { xs: '10px', sm: '12px' },
+														fontWeight: 'bold',
+														bgcolor: '#7940B6',
+														border: '1px solid #757595',
+														borderRadius: 0,
+														color: '#fff',
+														'&:hover': {
+															bgcolor: '#9373B5',
+														},
+													}}
+													variant="outlined"
+												>
+													장바구니 삭제
+												</Button>
+											</Box>
+										</TableCell>
+									</TableRow>
+								);
+							})
+						) : (
+							<TableRow sx={rowItem}>
+								<TableCell sx={emptyBox} align="center">
+									장바구니가 비어있습니다.
+								</TableCell>
+							</TableRow>
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-				<Pagination
-					count={1}
-					variant="outlined"
-					color="primary"
-					siblingCount={2}
-					boundaryCount={2}
-					hidePrevButton
-					hideNextButton
-					onChange={pageChange}
-					size="small"
-				/>
-			</Box>
 		</Box>
 	);
 };
 
-const CartTotal: FC = (): JSX.Element => {
+const CartTotal: FC<CartTotalProps> = ({
+	totalSalePrice,
+	totalSupplyPrice,
+	deliveryPrice,
+	totalCount,
+	totalOptionCount,
+	//totalCalcPrice,
+	productMileage,
+	membershipMileage,
+	//totalCalcMileage,
+}): JSX.Element => {
+	const totalDiscountPrice = totalSupplyPrice - totalSalePrice; // 할인 금액
+	const totalCalcPrice = totalSalePrice + deliveryPrice; // 총 결제 예상 금액
+	const totalCalcMileage = productMileage + membershipMileage; // 총 적립 마일리지
+
 	const rowItem: SxProps<Theme> = {
 		py: 0.5,
 		display: 'flex',
@@ -508,10 +621,10 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCellSub}>
 										<Typography component="span" sx={calcinfo}>
-											12,150원
+											{totalSalePrice.toLocaleString()}원
 										</Typography>
 										<Typography component="span" sx={calcinfoSub}>
-											(1,350원 할인)
+											({totalDiscountPrice.toLocaleString()}원 할인)
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -523,7 +636,7 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCell}>
 										<Typography component="span" sx={calcinfo}>
-											0원
+											{deliveryPrice}원
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -535,10 +648,10 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCellSub}>
 										<Typography component="span" sx={calcinfo}>
-											1종 1권
+											{totalCount}종 {totalOptionCount}벌
 										</Typography>
 										<Typography component="span" sx={calcinfoSub}>
-											(1개)
+											({totalOptionCount}벌)
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -550,7 +663,7 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCell}>
 										<Typography component="span" sx={calcinfo}>
-											1,220점
+											{productMileage.toLocaleString()}점
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -562,7 +675,7 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCell}>
 										<Typography component="span" sx={calcinfo}>
-											240점
+											{membershipMileage.toLocaleString()}점
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -584,10 +697,10 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCellSub}>
 														<Typography component="span" sx={calcinfo}>
-															12,150원
+															{totalSalePrice.toLocaleString()}원
 														</Typography>
 														<Typography component="span" sx={calcinfoSub}>
-															(1,350원 할인)
+															({totalDiscountPrice.toLocaleString()}원 할인)
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -599,7 +712,7 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCell}>
 														<Typography component="span" sx={calcinfo}>
-															0원
+															{deliveryPrice}원
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -611,10 +724,10 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCellSub}>
 														<Typography component="span" sx={calcinfo}>
-															1종 1권
+															{totalCount}종 {totalOptionCount}벌
 														</Typography>
 														<Typography component="span" sx={calcinfoSub}>
-															(1개)
+															({totalOptionCount}벌)
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -632,7 +745,7 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCell}>
 														<Typography component="span" sx={calcinfo}>
-															1,220점
+															{productMileage.toLocaleString()}점
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -644,7 +757,7 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCell}>
 														<Typography component="span" sx={calcinfo}>
-															240점
+															{membershipMileage.toLocaleString()}점
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -664,7 +777,7 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCellSub}>
 														<Typography component="span" sx={totalPrice}>
-															12,150
+															{totalCalcPrice.toLocaleString()}
 														</Typography>
 														<Typography component="span" sx={totalInfo}>
 															원
@@ -685,7 +798,7 @@ const CartTotal: FC = (): JSX.Element => {
 													</TableCell>
 													<TableCell sx={infoCell}>
 														<Typography component="span" sx={totalInfo}>
-															1,463점
+															{totalCalcMileage.toLocaleString()}점
 														</Typography>
 													</TableCell>
 												</TableRow>
@@ -711,7 +824,7 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCellSub}>
 										<Typography component="span" sx={totalPrice}>
-											12,150
+											{totalCalcPrice.toLocaleString()}
 										</Typography>
 										<Typography component="span" sx={totalInfo}>
 											원
@@ -726,7 +839,7 @@ const CartTotal: FC = (): JSX.Element => {
 									</TableCell>
 									<TableCell sx={infoCell}>
 										<Typography component="span" sx={totalInfo}>
-											1,463점
+											{totalCalcMileage.toLocaleString()}점
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -740,20 +853,74 @@ const CartTotal: FC = (): JSX.Element => {
 };
 
 const CartListMobile: FC<CartListProps> = ({
+	title,
 	description,
 	steps,
 	setPage,
 	cartPageData,
+	image,
+	onCartUpdate,
+	onCartDelete,
 }): JSX.Element => {
+	const calculateTotalSupplyPrice = (cartData: Array<CartData>) => {
+		return cartData.reduce((total, item) => total + (item.supplyPrice ?? 0), 0);
+	};
+
+	const calculateTotalOptionCount = (cartData: Array<CartData>) => {
+		return cartData.reduce((total, item) => total + (item.amount ?? 0), 0);
+	};
+
+	const totalSalePrice = cartPageData.cartTotal ?? 0;
+	const totalSupplyPrice = cartPageData.cartList
+		? calculateTotalSupplyPrice(cartPageData.cartList)
+		: 0;
+	const totalCount = cartPageData.cartList ? cartPageData.cartList.length : 0;
+	const totalOptionCount = cartPageData.cartList
+		? calculateTotalOptionCount(cartPageData.cartList)
+		: 0;
+
+	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
+		const value = (event.target as HTMLButtonElement).textContent as any;
+		if (value && value === String(page)) setPage(page);
+	};
+
 	return (
 		<Box sx={{ mb: 10 }}>
 			<AppSubStepHeader description={description} steps={steps} />
 			<Box sx={{ mx: 2, my: 2 }}>
-				<CartList />
+				<CartList
+					title={title}
+					description={description}
+					image={image}
+					cartData={cartPageData.cartList}
+					onCartUpdate={onCartUpdate}
+					onCartDelete={onCartDelete}
+				/>
+				<Box sx={{ mt: 2, display: 'none', justifyContent: 'center' }}>
+					<Pagination
+						count={1}
+						variant="outlined"
+						color="primary"
+						siblingCount={2}
+						boundaryCount={2}
+						hidePrevButton
+						hideNextButton
+						onChange={pageChange}
+						size="small"
+					/>
+				</Box>
 			</Box>
 			<Box sx={{ mx: 3, my: 2 }}>
 				<Box>
-					<CartTotal />
+					<CartTotal
+						totalSalePrice={totalSalePrice}
+						totalSupplyPrice={totalSupplyPrice}
+						deliveryPrice={0}
+						totalCount={totalCount}
+						totalOptionCount={totalOptionCount}
+						productMileage={1220}
+						membershipMileage={263}
+					/>
 				</Box>
 				<Box
 					sx={{
@@ -806,4 +973,8 @@ const CartListMobile: FC<CartListProps> = ({
 	);
 };
 
-export default CartListMobile;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(CartListMobile);

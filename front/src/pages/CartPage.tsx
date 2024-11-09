@@ -3,8 +3,9 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
+import { CartData, CartPageData } from '../api/types';
 import Api from '../api';
-import { CartPageData } from '../api/types';
+import useCSRFToken from '../hooks/useCSRFToken';
 import useCartPageList from '../hooks/cart/useCartPageList';
 import CartListPC from '../components/user/CartListPC';
 import CartListMobile from '../components/user/CartListMobile';
@@ -16,20 +17,28 @@ const drawerMenuLimit = 768;
 const steps = ['장바구니', '주문/결제', '주문완료'];
 
 interface CartProps {
+	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
 	cartPageData: CartPageData;
+	onCartUpdate: (cartData: CartData) => void;
+	onCartDelete: (goodsCode: string) => void;
 }
 
 interface CartDispatchProps {
+	title: string;
 	description: string;
+	member: ActionCreatorsMapObject;
 	cart: ActionCreatorsMapObject;
 }
 
 const CartPC: FC<CartProps> = ({
+	title,
 	description,
 	setPage,
 	cartPageData,
+	onCartUpdate,
+	onCartDelete,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
@@ -44,10 +53,13 @@ const CartPC: FC<CartProps> = ({
 					}}
 				>
 					<CartListPC
+						title={title}
 						description={description}
 						steps={steps}
 						setPage={setPage}
 						cartPageData={cartPageData}
+						onCartUpdate={onCartUpdate}
+						onCartDelete={onCartDelete}
 					/>
 				</Box>
 			)}
@@ -56,9 +68,12 @@ const CartPC: FC<CartProps> = ({
 };
 
 const CartMobile: FC<CartProps> = ({
+	title,
 	description,
 	setPage,
 	cartPageData,
+	onCartUpdate,
+	onCartDelete,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
@@ -73,10 +88,13 @@ const CartMobile: FC<CartProps> = ({
 					}}
 				>
 					<CartListMobile
+						title={title}
 						description={description}
 						steps={steps}
 						setPage={setPage}
 						cartPageData={cartPageData}
+						onCartUpdate={onCartUpdate}
+						onCartDelete={onCartDelete}
 					/>
 				</Box>
 			)}
@@ -85,31 +103,50 @@ const CartMobile: FC<CartProps> = ({
 };
 
 const CartPage: FC<CartDispatchProps> = ({
+	title,
 	description,
+	member,
 	cart,
 }): JSX.Element => {
-	const [cartPageData, setPage] = useCartPageList({ cart });
+	const csrfData = useCSRFToken({ member });
+	const [cartPageData, setPage, setTotalPrice] = useCartPageList({ cart });
+	const cartUpdate = async (cartData: CartData) => {
+		const data = (await cart.update(cartData, csrfData)) as CartPageData;
+		setTotalPrice(data.cartTotal);
+	};
+	const cartDelete = async (goodsCode: string) => {
+		const data = (await cart.delete(goodsCode, csrfData)) as CartPageData;
+		setTotalPrice(data.cartTotal);
+	};
 	return (
 		<>
 			<CartPC
+				title={title}
 				description={description}
 				setPage={setPage}
 				cartPageData={cartPageData}
+				onCartUpdate={cartUpdate}
+				onCartDelete={cartDelete}
 			/>
 			<CartMobile
+				title={title}
 				description={description}
 				setPage={setPage}
 				cartPageData={cartPageData}
+				onCartUpdate={cartUpdate}
+				onCartDelete={cartDelete}
 			/>
 		</>
 	);
 };
 
 const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
 });
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
 	cart: bindActionCreators(Api.cart, dispatch),
 });
 

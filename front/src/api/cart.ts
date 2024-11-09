@@ -31,10 +31,44 @@ const cart = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => {
 					return error.response;
 				}),
-		// 장바구니 삭제 API : <baseURL>/cart/delete
-		delete: (cartIndex?: number) => (dispatch: Dispatch) =>
+		// 장바구니 수정 API : <baseURL>/cart/update
+		update: (cartData: CartData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
-				.delete(cartIndex ? `cart/delete/${cartIndex}` : 'cart/delete')
+				.put('cart/update', cartData, {
+					headers: {
+						'X-XSRF-TOKEN': csrfData.csrfToken,
+					},
+				})
+				.then((response: AxiosResponse) => {
+					dispatch(tokenSuccess(response.data));
+					return response.data;
+				})
+				.catch((error: AxiosError) => {
+					return error.response;
+				}),
+		// 장바구니 삭제 API : <baseURL>/cart/delete
+		delete: (goodsCode: string, csrfData: CSRFData) => (dispatch: Dispatch) =>
+			instance
+				.delete(`cart/delete/${goodsCode}`, {
+					headers: {
+						'X-XSRF-TOKEN': csrfData.csrfToken,
+					},
+				})
+				.then((response: AxiosResponse) => {
+					dispatch(tokenSuccess(response.data));
+					return response.data;
+				})
+				.catch((error: AxiosError) => {
+					return error.response;
+				}),
+		// 장바구니 전체 삭제 API : <baseURL>/cart/deleteAll
+		deleteAll: (csrfData: CSRFData) => (dispatch: Dispatch) =>
+			instance
+				.delete('cart/delete', {
+					headers: {
+						'X-XSRF-TOKEN': csrfData.csrfToken,
+					},
+				})
 				.then((response: AxiosResponse) => {
 					dispatch(tokenSuccess(response.data));
 					return response.data;

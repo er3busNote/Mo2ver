@@ -1,14 +1,23 @@
 import React, {
 	FC,
+	ChangeEvent,
+	FocusEvent,
+	PointerEvent,
+	KeyboardEvent,
 	forwardRef,
 	ForwardedRef,
 	Dispatch,
 	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { menuActive } from '../../store/index';
-import { CartPageData } from '../../api/types';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect, useDispatch } from 'react-redux';
+import { changeNext, menuActive } from '../../store/index';
+import { TitleInfo } from '../../store/types';
+import { CartData, CartPageData } from '../../api/types';
+import Api from '../../api';
+import useImageUrl from '../../hooks/useImageUrl';
 import AppSubStepHeader from '../common/AppSubStepHeader';
 import {
 	Box,
@@ -16,6 +25,7 @@ import {
 	Button,
 	Rating,
 	Checkbox,
+	Pagination,
 	Breadcrumbs,
 	CardMedia,
 	CardActionArea,
@@ -36,13 +46,6 @@ import { SxProps, Theme, styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import StarsIcon from '@mui/icons-material/Stars';
-
-const IMAGE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
 
 const StyledInputRoot = styled('div')(
 	({ theme }) => `
@@ -158,20 +161,93 @@ const NumberInput = forwardRef(function CustomNumberInput(
 	);
 });
 
+interface CartDataProps {
+	title: string;
+	description: string;
+	cartData: Array<CartData>;
+	image: ActionCreatorsMapObject;
+	onCartUpdate: (cartData: CartData) => void;
+	onCartDelete: (goodsCode: string) => void;
+}
+
+interface CartTotalProps {
+	totalSalePrice: number; // 총 상품가격 (할인된 가격)
+	totalSupplyPrice: number; // 총 공급가격
+	deliveryPrice: number; // 배송비
+	totalCount: number; // 총 주문 상풍수
+	totalOptionCount: number; // 총 주문 옵션 상품수
+	//totalCalcPrice: number; // 총 결제 예상 금액
+	productMileage: number; // 상품 마일리지
+	membershipMileage: number; // 멤버십 마일리지
+	//totalCalcMileage: number; // 총 적립 마일리지
+}
+
 interface CartListProps {
+	title: string;
 	description: string;
 	steps: string[];
 	setPage: Dispatch<SetStateAction<number>>;
 	cartPageData: CartPageData;
+	image: ActionCreatorsMapObject;
+	onCartUpdate: (cartData: CartData) => void;
+	onCartDelete: (goodsCode: string) => void;
 }
 
-const CartList: FC = (): JSX.Element => {
+const CartList: FC<CartDataProps> = ({
+	title,
+	description,
+	image,
+	cartData,
+	onCartUpdate,
+	onCartDelete,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		//dispatch(menuActive('/goods/' + code + '/detail'));
-		//navigate('/goods/' + code + '/detail');
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/goods/' + code + '/detail'));
+		navigate('/goods/' + code + '/detail');
+	};
+
+	const handleNumberChange = (
+		event:
+			| FocusEvent<HTMLInputElement, Element>
+			| PointerEvent<Element>
+			| KeyboardEvent<Element>,
+		code: string,
+		newValue: number | undefined,
+		check: boolean | undefined
+	) => {
+		const cartData: CartData = {
+			goodsCode: code,
+			amount: newValue ?? 0,
+			check: check,
+		};
+		onCartUpdate(cartData);
+	};
+
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement>,
+		code: string,
+		amount: number
+	) => {
+		const cartData: CartData = {
+			goodsCode: code,
+			amount: amount,
+			check: event.target.checked,
+		};
+		onCartUpdate(cartData);
+	};
+
+	const removeCartClick = (code: string) => {
+		onCartDelete(code);
 	};
 
 	const thHeader: SxProps<Theme> = {
@@ -265,17 +341,22 @@ const CartList: FC = (): JSX.Element => {
 		width: '20%',
 	};
 	const productBox: SxProps<Theme> = {
+		px: 0,
 		width: '33%',
 		justifyContent: 'left',
 		textAlign: 'left',
 	};
 	const priceBox: SxProps<Theme> = {
+		px: 0,
 		justifyContent: 'center',
 		textAlign: 'left',
 	};
 	const selectBox: SxProps<Theme> = {
 		width: '10%',
 		textAlign: 'center',
+	};
+	const emptyBox: SxProps<Theme> = {
+		py: 2,
 	};
 
 	return (
@@ -298,844 +379,286 @@ const CartList: FC = (): JSX.Element => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox} component="th" scope="row">
-							<Card elevation={0} onClick={() => goodsClick('0')}>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										image={IMAGE_INFO[0]}
-										height="170"
-									/>
-								</CardActionArea>
-							</Card>
-						</TableCell>
-						<TableCell sx={productBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													상품명
-												</Typography>
-												<Typography component="span" sx={label}>
-													브랜드
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													스파오
-												</Typography>
-												<Typography component="span" sx={info}>
-													베이직
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													등록연도
-												</Typography>
-												<Typography component="span" sx={label}>
-													성별
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													2023
-												</Typography>
-												<Typography component="span" sx={info}>
-													남
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												조회수(1개월)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={info}>
-												52.4만 회 이상
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												누적판매(1년)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<Typography component="span" sx={info}>
-													1.7만개 이상
-												</Typography>
-												<Typography component="span" sx={infoSub}>
-													(결제완료-반품)
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												좋아요
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<StarsIcon sx={infoLikeIcon} />
-												<Typography component="span" sx={infoLike}>
-													30,174
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												별점
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCellStar}>
-											<Rating
-												name="read-only"
-												value={4.8}
-												sx={infoRating}
-												readOnly
-											/>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell sx={priceBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												판매가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={infoOriginPrice}>
-												69,900원
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												할인가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs
-												sx={infoBreadcrumbs}
-												separator="~"
-												aria-label="breadcrumb"
+					{cartData ? (
+						cartData.map((data: CartData, index: number) => {
+							const file = String(data.image?.goodsImageAttachFile ?? '');
+							return (
+								<TableRow key={index} sx={rowItem}>
+									<TableCell sx={cardBox} component="th" scope="row">
+										<Card
+											elevation={0}
+											onClick={() => goodsClick(data.goodsCode)}
+										>
+											<CardActionArea>
+												<CardMedia
+													component="img"
+													height="170"
+													image={useImageUrl({ image, file, path: 'file' })}
+												/>
+											</CardActionArea>
+										</Card>
+									</TableCell>
+									<TableCell sx={productBox}>
+										<Table size="small">
+											<TableBody>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={label}>
+																상품명
+															</Typography>
+															<Typography component="span" sx={label}>
+																브랜드
+															</Typography>
+														</Breadcrumbs>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={info}>
+																{data.goodsName}
+															</Typography>
+															<Typography component="span" sx={info}>
+																{data.goodsBrand}
+															</Typography>
+														</Breadcrumbs>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={label}>
+																등록연도
+															</Typography>
+															<Typography component="span" sx={label}>
+																성별
+															</Typography>
+														</Breadcrumbs>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															aria-label="breadcrumb"
+														>
+															<Typography component="span" sx={info}>
+																{data.goodsYear}
+															</Typography>
+															<Typography component="span" sx={info}>
+																{data.goodsGender}
+															</Typography>
+														</Breadcrumbs>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Typography component="span" sx={label}>
+															조회수(1개월)
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Typography component="span" sx={info}>
+															52.4만 회 이상
+														</Typography>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Typography component="span" sx={label}>
+															누적판매(1년)
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Box>
+															<Typography component="span" sx={info}>
+																1.7만개 이상
+															</Typography>
+															<Typography component="span" sx={infoSub}>
+																(결제완료-반품)
+															</Typography>
+														</Box>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Typography component="span" sx={label}>
+															좋아요
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Box>
+															<StarsIcon sx={infoLikeIcon} />
+															<Typography component="span" sx={infoLike}>
+																30,174
+															</Typography>
+														</Box>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={labelCell}>
+														<Typography component="span" sx={label}>
+															별점
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCellStar}>
+														<Rating
+															name="read-only"
+															value={4.8}
+															sx={infoRating}
+															readOnly
+														/>
+													</TableCell>
+												</TableRow>
+											</TableBody>
+										</Table>
+									</TableCell>
+									<TableCell sx={priceBox}>
+										<Table size="small">
+											<TableBody>
+												<TableRow>
+													<TableCell sx={priceCell}>
+														<Typography component="span" sx={label}>
+															판매가
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Typography component="span" sx={infoOriginPrice}>
+															{data.supplyPrice?.toLocaleString()}원
+														</Typography>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell sx={priceCell}>
+														<Typography component="span" sx={label}>
+															할인가
+														</Typography>
+													</TableCell>
+													<TableCell sx={infoCell}>
+														<Breadcrumbs
+															sx={infoBreadcrumbs}
+															separator="~"
+															aria-label="breadcrumb"
+														>
+															<Typography
+																component="span"
+																sx={infoDiscountPrice}
+															>
+																{data.salePrice?.toLocaleString()}
+															</Typography>
+															<Typography
+																component="span"
+																sx={infoDiscountPrice}
+															>
+																{data.supplyPrice?.toLocaleString()}원
+															</Typography>
+														</Breadcrumbs>
+													</TableCell>
+												</TableRow>
+											</TableBody>
+										</Table>
+									</TableCell>
+									<TableCell>
+										<NumberInput
+											value={data.amount}
+											min={1}
+											max={99}
+											onChange={(event, newValue) =>
+												handleNumberChange(
+													event,
+													data.goodsCode,
+													newValue,
+													data.check
+												)
+											}
+										/>
+										<Box>
+											<Button
+												sx={{
+													mt: 2,
+													py: 1,
+													width: '100%',
+													fontSize: '14px',
+													fontWeight: 'bold',
+													bgcolor: '#000',
+													border: '1px solid #000',
+													borderRadius: 0,
+													color: '#fff',
+													'&:hover': {
+														bgcolor: '#0f0f0f',
+													},
+												}}
+												variant="outlined"
 											>
-												<Typography component="span" sx={infoDiscountPrice}>
-													48,105
-												</Typography>
-												<Typography component="span" sx={infoDiscountPrice}>
-													59,390원
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell>
-							<NumberInput defaultValue={1} min={1} max={99} />
-							<Box>
-								<Button
-									sx={{
-										mt: 2,
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#000',
-										border: '1px solid #000',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#0f0f0f',
-										},
-									}}
-									variant="outlined"
-								>
-									바로 구매
-								</Button>
-								<Button
-									sx={{
-										mt: 0.5,
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#7940B6',
-										border: '1px solid #757595',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#9373B5',
-										},
-									}}
-									variant="outlined"
-								>
-									장바구니 삭제
-								</Button>
-							</Box>
-						</TableCell>
-						<TableCell sx={selectBox}>
-							<Checkbox defaultChecked />
-						</TableCell>
-					</TableRow>
-					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox} component="th" scope="row">
-							<Card elevation={0} onClick={() => goodsClick('1')}>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										image={IMAGE_INFO[1]}
-										height="170"
-									/>
-								</CardActionArea>
-							</Card>
-						</TableCell>
-						<TableCell sx={productBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													상품명
-												</Typography>
-												<Typography component="span" sx={label}>
-													브랜드
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													코드그라피
-												</Typography>
-												<Typography component="span" sx={info}>
-													내피분리형
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													등록연도
-												</Typography>
-												<Typography component="span" sx={label}>
-													성별
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													2023
-												</Typography>
-												<Typography component="span" sx={info}>
-													남
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												조회수(1개월)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={info}>
-												52.4만 회 이상
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												누적판매(1년)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<Typography component="span" sx={info}>
-													1.7만개 이상
-												</Typography>
-												<Typography component="span" sx={infoSub}>
-													(결제완료-반품)
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												좋아요
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<StarsIcon sx={infoLikeIcon} />
-												<Typography component="span" sx={infoLike}>
-													30,174
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												별점
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCellStar}>
-											<Rating
-												name="read-only"
-												value={4.8}
-												sx={infoRating}
-												readOnly
-											/>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell sx={priceBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												판매가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={infoOriginPrice}>
-												69,900원
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												할인가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs
-												sx={infoBreadcrumbs}
-												separator="~"
-												aria-label="breadcrumb"
+												바로 구매
+											</Button>
+											<Button
+												onClick={() => removeCartClick(data.goodsCode)}
+												sx={{
+													mt: 0.5,
+													py: 1,
+													width: '100%',
+													fontSize: '14px',
+													fontWeight: 'bold',
+													bgcolor: '#7940B6',
+													border: '1px solid #757595',
+													borderRadius: 0,
+													color: '#fff',
+													'&:hover': {
+														bgcolor: '#9373B5',
+													},
+												}}
+												variant="outlined"
 											>
-												<Typography component="span" sx={infoDiscountPrice}>
-													48,105
-												</Typography>
-												<Typography component="span" sx={infoDiscountPrice}>
-													59,390원
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell>
-							<NumberInput defaultValue={1} min={1} max={99} />
-							<Box>
-								<Button
-									sx={{
-										mt: 2,
-										px: { xs: 3, sm: 4, md: 5, lg: 6 },
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#000',
-										border: '1px solid #000',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#0f0f0f',
-										},
-									}}
-									variant="outlined"
-								>
-									바로 구매
-								</Button>
-								<Button
-									sx={{
-										mt: 0.5,
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#7940B6',
-										border: '1px solid #757595',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#9373B5',
-										},
-									}}
-									variant="outlined"
-								>
-									장바구니 삭제
-								</Button>
-							</Box>
-						</TableCell>
-						<TableCell sx={selectBox}>
-							<Checkbox defaultChecked />
-						</TableCell>
-					</TableRow>
-					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox} component="th" scope="row">
-							<Card elevation={0} onClick={() => goodsClick('2')}>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										image={IMAGE_INFO[2]}
-										height="170"
-									/>
-								</CardActionArea>
-							</Card>
-						</TableCell>
-						<TableCell sx={productBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													상품명
-												</Typography>
-												<Typography component="span" sx={label}>
-													브랜드
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													집시
-												</Typography>
-												<Typography component="span" sx={info}>
-													마스터 구스다운 숏패딩
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													등록연도
-												</Typography>
-												<Typography component="span" sx={label}>
-													성별
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													2023
-												</Typography>
-												<Typography component="span" sx={info}>
-													남
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												조회수(1개월)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={info}>
-												52.4만 회 이상
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												누적판매(1년)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<Typography component="span" sx={info}>
-													1.7만개 이상
-												</Typography>
-												<Typography component="span" sx={infoSub}>
-													(결제완료-반품)
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												좋아요
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<StarsIcon sx={infoLikeIcon} />
-												<Typography component="span" sx={infoLike}>
-													30,174
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												별점
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCellStar}>
-											<Rating
-												name="read-only"
-												value={4.8}
-												sx={infoRating}
-												readOnly
-											/>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell sx={priceBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												판매가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={infoOriginPrice}>
-												69,900원
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												할인가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs
-												sx={infoBreadcrumbs}
-												separator="~"
-												aria-label="breadcrumb"
-											>
-												<Typography component="span" sx={infoDiscountPrice}>
-													48,105
-												</Typography>
-												<Typography component="span" sx={infoDiscountPrice}>
-													59,390원
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell>
-							<NumberInput defaultValue={1} min={1} max={99} />
-							<Box>
-								<Button
-									sx={{
-										mt: 2,
-										px: { xs: 3, sm: 4, md: 5, lg: 6 },
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#000',
-										border: '1px solid #000',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#0f0f0f',
-										},
-									}}
-									variant="outlined"
-								>
-									바로 구매
-								</Button>
-								<Button
-									sx={{
-										mt: 0.5,
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#7940B6',
-										border: '1px solid #757595',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#9373B5',
-										},
-									}}
-									variant="outlined"
-								>
-									장바구니 삭제
-								</Button>
-							</Box>
-						</TableCell>
-						<TableCell sx={selectBox}>
-							<Checkbox defaultChecked />
-						</TableCell>
-					</TableRow>
-					<TableRow sx={rowItem}>
-						<TableCell sx={cardBox} component="th" scope="row">
-							<Card elevation={0} onClick={() => goodsClick('3')}>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										image={IMAGE_INFO[3]}
-										height="170"
-									/>
-								</CardActionArea>
-							</Card>
-						</TableCell>
-						<TableCell sx={productBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													상품명
-												</Typography>
-												<Typography component="span" sx={label}>
-													브랜드
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													키뮤어
-												</Typography>
-												<Typography component="span" sx={info}>
-													서플러스 울 (WOOL)
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={label}>
-													등록연도
-												</Typography>
-												<Typography component="span" sx={label}>
-													성별
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs sx={infoBreadcrumbs} aria-label="breadcrumb">
-												<Typography component="span" sx={info}>
-													2023
-												</Typography>
-												<Typography component="span" sx={info}>
-													남
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												조회수(1개월)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={info}>
-												52.4만 회 이상
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												누적판매(1년)
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<Typography component="span" sx={info}>
-													1.7만개 이상
-												</Typography>
-												<Typography component="span" sx={infoSub}>
-													(결제완료-반품)
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												좋아요
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Box>
-												<StarsIcon sx={infoLikeIcon} />
-												<Typography component="span" sx={infoLike}>
-													30,174
-												</Typography>
-											</Box>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={labelCell}>
-											<Typography component="span" sx={label}>
-												별점
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCellStar}>
-											<Rating
-												name="read-only"
-												value={4.8}
-												sx={infoRating}
-												readOnly
-											/>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell sx={priceBox}>
-							<Table size="small">
-								<TableBody>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												판매가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Typography component="span" sx={infoOriginPrice}>
-												69,900원
-											</Typography>
-										</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell sx={priceCell}>
-											<Typography component="span" sx={label}>
-												할인가
-											</Typography>
-										</TableCell>
-										<TableCell sx={infoCell}>
-											<Breadcrumbs
-												sx={infoBreadcrumbs}
-												separator="~"
-												aria-label="breadcrumb"
-											>
-												<Typography component="span" sx={infoDiscountPrice}>
-													48,105
-												</Typography>
-												<Typography component="span" sx={infoDiscountPrice}>
-													59,390원
-												</Typography>
-											</Breadcrumbs>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableCell>
-						<TableCell>
-							<NumberInput defaultValue={1} min={1} max={99} />
-							<Box>
-								<Button
-									sx={{
-										mt: 2,
-										px: { xs: 3, sm: 4, md: 5, lg: 6 },
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#000',
-										border: '1px solid #000',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#0f0f0f',
-										},
-									}}
-									variant="outlined"
-								>
-									바로 구매
-								</Button>
-								<Button
-									sx={{
-										mt: 0.5,
-										py: 1,
-										width: '100%',
-										fontSize: '14px',
-										fontWeight: 'bold',
-										bgcolor: '#7940B6',
-										border: '1px solid #757595',
-										borderRadius: 0,
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#9373B5',
-										},
-									}}
-									variant="outlined"
-								>
-									장바구니 삭제
-								</Button>
-							</Box>
-						</TableCell>
-						<TableCell sx={selectBox}>
-							<Checkbox defaultChecked />
-						</TableCell>
-					</TableRow>
+												장바구니 삭제
+											</Button>
+										</Box>
+									</TableCell>
+									<TableCell sx={selectBox}>
+										<Checkbox
+											checked={data.check}
+											onChange={(event) =>
+												handleChange(event, data.goodsCode, data.amount)
+											}
+										/>
+									</TableCell>
+								</TableRow>
+							);
+						})
+					) : (
+						<TableRow sx={rowItem}>
+							<TableCell colSpan={5} sx={emptyBox} align="center">
+								장바구니가 비어있습니다.
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>
 	);
 };
 
-const CartTotal: FC = (): JSX.Element => {
+const CartTotal: FC<CartTotalProps> = ({
+	totalSalePrice,
+	totalSupplyPrice,
+	deliveryPrice,
+	totalCount,
+	totalOptionCount,
+	//totalCalcPrice,
+	productMileage,
+	membershipMileage,
+	//totalCalcMileage,
+}): JSX.Element => {
+	const totalDiscountPrice = totalSupplyPrice - totalSalePrice; // 할인 금액
+	const totalCalcPrice = totalSalePrice + deliveryPrice; // 총 결제 예상 금액
+	const totalCalcMileage = productMileage + membershipMileage; // 총 적립 마일리지
+
 	const labelCell: SxProps<Theme> = {
 		px: 0,
 		borderBlock: 'none',
@@ -1219,10 +742,10 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCellSub}>
 												<Typography component="span" sx={calcinfo}>
-													12,150원
+													{totalSalePrice.toLocaleString()}원
 												</Typography>
 												<Typography component="span" sx={calcinfoSub}>
-													(1,350원 할인)
+													({totalDiscountPrice.toLocaleString()}원 할인)
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1234,7 +757,7 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCell}>
 												<Typography component="span" sx={calcinfo}>
-													0원
+													{deliveryPrice}원
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1246,10 +769,10 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCellSub}>
 												<Typography component="span" sx={calcinfo}>
-													1종 1권
+													{totalCount}종 {totalOptionCount}벌
 												</Typography>
 												<Typography component="span" sx={calcinfoSub}>
-													(1개)
+													({totalOptionCount}벌)
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1267,7 +790,7 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCell}>
 												<Typography component="span" sx={calcinfo}>
-													1,220점
+													{productMileage.toLocaleString()}점
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1279,7 +802,7 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCell}>
 												<Typography component="span" sx={calcinfo}>
-													240점
+													{membershipMileage.toLocaleString()}점
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1299,7 +822,7 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCellSub}>
 												<Typography component="span" sx={totalPrice}>
-													12,150
+													{totalCalcPrice.toLocaleString()}
 												</Typography>
 												<Typography component="span" sx={totalInfo}>
 													원
@@ -1320,7 +843,7 @@ const CartTotal: FC = (): JSX.Element => {
 											</TableCell>
 											<TableCell sx={infoCell}>
 												<Typography component="span" sx={totalInfo}>
-													1,463점
+													{totalCalcMileage.toLocaleString()}점
 												</Typography>
 											</TableCell>
 										</TableRow>
@@ -1336,20 +859,74 @@ const CartTotal: FC = (): JSX.Element => {
 };
 
 const CartListPC: FC<CartListProps> = ({
+	title,
 	description,
 	steps,
 	setPage,
 	cartPageData,
+	image,
+	onCartUpdate,
+	onCartDelete,
 }): JSX.Element => {
+	const calculateTotalSupplyPrice = (cartData: Array<CartData>) => {
+		return cartData.reduce((total, item) => total + (item.supplyPrice ?? 0), 0);
+	};
+
+	const calculateTotalOptionCount = (cartData: Array<CartData>) => {
+		return cartData.reduce((total, item) => total + (item.amount ?? 0), 0);
+	};
+
+	const totalSalePrice = cartPageData.cartTotal ?? 0;
+	const totalSupplyPrice = cartPageData.cartList
+		? calculateTotalSupplyPrice(cartPageData.cartList)
+		: 0;
+	const totalCount = cartPageData.cartList ? cartPageData.cartList.length : 0;
+	const totalOptionCount = cartPageData.cartList
+		? calculateTotalOptionCount(cartPageData.cartList)
+		: 0;
+
+	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
+		const value = (event.target as HTMLButtonElement).textContent as any;
+		if (value && value === String(page)) setPage(page);
+	};
+
 	return (
 		<Box sx={{ mb: 10 }}>
 			<AppSubStepHeader description={description} steps={steps} />
 			<Box sx={{ mx: 3, my: 2 }}>
-				<CartList />
+				<CartList
+					title={title}
+					description={description}
+					image={image}
+					cartData={cartPageData.cartList}
+					onCartUpdate={onCartUpdate}
+					onCartDelete={onCartDelete}
+				/>
+				<Box sx={{ mt: 2, display: 'none', justifyContent: 'center' }}>
+					<Pagination
+						count={1}
+						variant="outlined"
+						color="primary"
+						siblingCount={2}
+						boundaryCount={2}
+						hidePrevButton
+						hideNextButton
+						onChange={pageChange}
+						size="small"
+					/>
+				</Box>
 			</Box>
 			<Box sx={{ display: 'flex' }}>
 				<Box sx={{ mx: 2, width: '75%' }}>
-					<CartTotal />
+					<CartTotal
+						totalSalePrice={totalSalePrice}
+						totalSupplyPrice={totalSupplyPrice}
+						deliveryPrice={0}
+						totalCount={totalCount}
+						totalOptionCount={totalOptionCount}
+						productMileage={1220}
+						membershipMileage={263}
+					/>
 				</Box>
 				<Box sx={{ pr: 2, width: '20%' }}>
 					<Button
@@ -1396,4 +973,8 @@ const CartListPC: FC<CartListProps> = ({
 	);
 };
 
-export default CartListPC;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(CartListPC);
