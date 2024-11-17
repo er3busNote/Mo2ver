@@ -2,12 +2,10 @@ package com.mo2ver.web.common.file.service;
 
 import com.mo2ver.web.common.file.dao.FileRepository;
 import com.mo2ver.web.common.file.domain.File;
+import com.mo2ver.web.common.file.dto.FileAttachDto;
 import com.mo2ver.web.common.file.dto.FileDto;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.util.CryptoUtil;
-import com.mo2ver.web.global.common.util.DateUtil;
-import com.mo2ver.web.global.common.util.FileUtil;
-import com.mo2ver.web.global.common.util.JasyptUtil;
+import com.mo2ver.web.global.common.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,13 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class FileService {
+
+    private static final String FILE_DIRECTORY = "cmmn";
 
     @Autowired
     protected FileRepository fileRepository;
@@ -62,6 +64,12 @@ public class FileService {
         File fileInfo = this.fileRepository.save(File.of(fileName, getFilePath(uploadDirectory), contentType, fileSize, currentUser));
         this.cryptoUtil.encryptFile(file, this.fileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
         return FileDto.toDTO(fileInfo, fileExtension, fileNameWithoutExtension);
+    }
+
+    @Transactional
+    public List<FileAttachDto> saveFile(List<MultipartFile> files, Member currentUser) throws Exception {
+        List<FileDto> fileDtoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveFile(file, FILE_DIRECTORY, currentUser))).collect(Collectors.toList());
+        return fileDtoList.stream().map(FileAttachDto::toDTO).collect(Collectors.toList());
     }
 
     private String getDirectory(String targetFolder) {

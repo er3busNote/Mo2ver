@@ -102,7 +102,7 @@ const EventGrid: FC<EventGridProps> = ({
 											component="img"
 											height="150"
 											sx={{ width: 151 }}
-											image={useImageUrl({ image, file, path: 'file' })}
+											image={useImageUrl({ image, file })}
 										/>
 									</CardActionArea>
 								</Card>

@@ -85,7 +85,7 @@ const GoodsGrid: FC<GoodsProps> = ({
 									<CardMedia
 										component="img"
 										height="140"
-										image={useImageUrl({ image, file, path: 'file' })}
+										image={useImageUrl({ image, file })}
 									/>
 									<CardContent>
 										<Typography
@@ -304,7 +304,7 @@ const GoodsRow: FC<GoodsProps> = ({
 											<CardActionArea>
 												<CardMedia
 													component="img"
-													image={useImageUrl({ image, file, path: 'file' })}
+													image={useImageUrl({ image, file })}
 													sx={{
 														height: {
 															xs: '200px',
@@ -627,7 +627,7 @@ const EventDetail: FC<EventDetailProps> = ({
 				<CardMedia
 					component="img"
 					width="100%"
-					image={useImageUrl({ image, file, path: 'file' })}
+					image={useImageUrl({ image, file })}
 					sx={{ p: 1.5 }}
 				/>
 			</Box>

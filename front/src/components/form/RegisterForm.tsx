@@ -31,22 +31,6 @@ const registerSchema = yup
 			.max(10, '입력 범위가 초과되었습니다'),
 		goodsImg: yup
 			.array()
-			.of(
-				yup
-					.mixed<File>()
-					.required('파일을 선택해야 합니다.')
-					.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
-					.test(
-						'fileSize',
-						'파일크기가 너무 작습니다',
-						(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-					)
-					.test(
-						'fileType',
-						'지원되는 파일 타입이 아닙니다',
-						(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-					)
-			)
 			.min(1, '적어도 하나의 파일을 업로드해야 합니다.')
 			.max(5, '최대 5개의 파일을 업로드할 수 있습니다.')
 			.default([]),

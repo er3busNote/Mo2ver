@@ -306,6 +306,14 @@ interface PageData {
 	size: number;
 }
 
+interface FileData {
+	fileAttachCode: string;
+	fileName: string;
+	fileType: string;
+	fileSize: number;
+	fileExtension: string;
+}
+
 export type {
 	LoginData,
 	SignUpData,
@@ -332,4 +340,5 @@ export type {
 	CartData,
 	CartPageData,
 	PageData,
+	FileData,
 };

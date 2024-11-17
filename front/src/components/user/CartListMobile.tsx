@@ -353,7 +353,7 @@ const CartList: FC<CartDataProps> = ({
 													<CardMedia
 														component="img"
 														height="120"
-														image={useImageUrl({ image, file, path: 'file' })}
+														image={useImageUrl({ image, file })}
 													/>
 												</CardActionArea>
 											</Card>

@@ -1,3 +1,5 @@
+import { FileData } from '../../api/types';
+
 interface LoginFormValues {
 	username: string;
 	password: string;
@@ -16,7 +18,7 @@ interface RegisterFormValues {
 	gender: string;
 	year: number;
 	price: number;
-	goodsImg: Array<File>;
+	goodsImg: Array<FileData>;
 }
 
 export type { LoginFormValues, SignupFormValues, RegisterFormValues };

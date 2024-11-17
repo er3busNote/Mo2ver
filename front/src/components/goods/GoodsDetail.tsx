@@ -198,7 +198,7 @@ const GoodsDetail: FC<GoodsProps> = ({
 								component="img"
 								width="100%"
 								height="556"
-								image={useImageUrl({ image, file, path: 'file' })}
+								image={useImageUrl({ image, file })}
 								sx={{ p: 1.5 }}
 							/>
 						) : (

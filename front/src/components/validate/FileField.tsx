@@ -4,9 +4,16 @@ import {
 	ControllerFieldState,
 	UseFormStateReturn,
 } from 'react-hook-form';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import { FileData } from '../../api/types';
+import Api from '../../api';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Close, FileUploadOutlined } from '@mui/icons-material';
+import useCSRFToken from '../../hooks/useCSRFToken';
+import useFieInfo from '../../hooks/cmmn/useFileInfo';
 
 const VisuallyHiddenInput = styled('input')({
 	display: 'none',
@@ -16,16 +23,23 @@ interface RenderFileFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
+	member: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
 }
 
 const RenderFileField: FC<RenderFileFieldProps> = ({
 	field: { onChange, value, name },
+	member,
+	image,
 }) => {
+	const csrfData = useCSRFToken({ member });
+	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const handleCarouselFiles = (event: ChangeEvent<HTMLInputElement>) => {
 		const selectedFiles = event.target.files;
 		if (selectedFiles) {
-			onChange((prevFiles: Array<File>) => [...prevFiles, ...selectedFiles]);
+			setFiles(selectedFiles);
+			onChange((prevFiles: Array<FileData>) => [...prevFiles, ...dataFiles]);
 		}
 	};
 	const handleCarouselInput = () => {
@@ -36,7 +50,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 			<Autocomplete
 				multiple
 				options={value}
-				getOptionLabel={(option: File) => option.name}
+				getOptionLabel={(option: FileData) => option.fileName}
 				renderInput={(params) => (
 					<TextField
 						{...params}
@@ -101,4 +115,9 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 	);
 };
 
-export default RenderFileField;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(RenderFileField);
