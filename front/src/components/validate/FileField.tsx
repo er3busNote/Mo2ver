@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useRef, ChangeEvent } from 'react';
+import React, { FC, Fragment, useEffect, useRef, ChangeEvent } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
@@ -34,12 +34,17 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 }) => {
 	const csrfData = useCSRFToken({ member });
 	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	useEffect(() => {
+		if (dataFiles.length > 0) {
+			onChange((prevFiles: Array<FileData>) => [...prevFiles, ...dataFiles]);
+		}
+	}, [dataFiles]);
+
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const handleCarouselFiles = (event: ChangeEvent<HTMLInputElement>) => {
 		const selectedFiles = event.target.files;
 		if (selectedFiles) {
 			setFiles(selectedFiles);
-			onChange((prevFiles: Array<FileData>) => [...prevFiles, ...dataFiles]);
 		}
 	};
 	const handleCarouselInput = () => {
@@ -50,7 +55,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 			<Autocomplete
 				multiple
 				options={value}
-				getOptionLabel={(option: FileData) => option.fileName}
+				getOptionLabel={(option: FileData) => option?.fileName}
 				renderInput={(params) => (
 					<TextField
 						{...params}
