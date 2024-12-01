@@ -248,13 +248,13 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-5px',
-				ml: 1,
+				top: '-3px',
+				ml: 0.5,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '5px',
-				ml: 2,
+				top: '3px',
+				ml: 1,
 			},
 	};
 	const inputHeader: SxProps<Theme> = {
