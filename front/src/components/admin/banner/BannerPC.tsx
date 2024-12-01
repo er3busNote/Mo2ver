@@ -120,7 +120,8 @@ const BannerPC: FC<BannerProps> = ({
 	};
 	const periodTd: SxProps<Theme> = {
 		px: 2,
-		py: 2,
+		pt: 1.2,
+		pb: 1,
 		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
