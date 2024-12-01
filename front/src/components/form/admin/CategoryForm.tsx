@@ -16,6 +16,11 @@ import RenderTextField from '../../validate/TextField';
 import RenderRadioField from '../../validate/RadioField';
 import { CategoryFormValues } from './types';
 
+const fontSize_xs = '12px';
+const fontSize_sm = '12px';
+const fontSize_md = '13px';
+const fontSize_lg = '14px';
+
 const tableBorder = '1px solid #d2d2d2';
 
 const schema = yup
@@ -61,16 +66,27 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 
 	const thHeader: SxProps<Theme> = {
 		px: { xs: 2, sm: 5 },
-		py: 1.5,
+		py: 1,
 		width: { xs: 100, sm: 180 },
-		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
+		fontSize: {
+			xs: fontSize_xs,
+			sm: fontSize_sm,
+			md: fontSize_md,
+			lg: fontSize_lg,
+		},
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const tdHeader: SxProps<Theme> = {
 		border: tableBorder,
-		fontSize: { xs: '12px', sm: '12px', md: '13px', lg: '14px' },
+		py: 0.5,
+		fontSize: {
+			xs: fontSize_xs,
+			sm: fontSize_sm,
+			md: fontSize_md,
+			lg: fontSize_lg,
+		},
 	};
 	const categoryForm: SxProps<Theme> = {
 		'.MuiFormControl-root': {
@@ -181,8 +197,8 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 				<Button
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#7D7D7D',
 						border: '1px solid #757595',
@@ -201,8 +217,8 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 					type="submit"
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#7940B6',
 						border: '1px solid #757595',

@@ -33,6 +33,9 @@ import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
+const fontSize_sm = '13px';
+const fontSize_lg = '13px';
+
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
 	borderRadius: theme.shape.borderRadius,
@@ -103,7 +106,7 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 		px: 2,
 		py: 1.5,
 		width: 100,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#f9f9f9',
 		borderBlock: 'none',
 		fontWeight: 'bold',
@@ -111,39 +114,39 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 	const periodTd: SxProps<Theme> = {
 		width: '50%',
 		borderBlock: 'none',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const progressTh: SxProps<Theme> = {
 		px: 2,
 		py: 1.5,
 		width: 100,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#f9f9f9',
 		borderBlock: 'none',
 		fontWeight: 'bold',
 	};
 	const progressTd: SxProps<Theme> = {
 		borderBlock: 'none',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
 		py: 1.5,
 		width: 180,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#f9f9f9',
 		borderBlock: 'none',
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		borderBlock: 'none',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const datePicker: SxProps<Theme> = {
 		'.MuiInputBase-input': {
 			py: 2,
 			width: '80px',
-			fontSize: { sm: '13px', lg: '14px' },
+			fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		},
 	};
 	const selectForm: SxProps<Theme> = {
@@ -156,16 +159,16 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 	const selectLabel: SxProps<Theme> = {
 		mt: -1,
 		ml: 1,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const selectInput: SxProps<Theme> = {
 		'.MuiSelect-select': {
 			py: 1.5,
-			fontSize: { sm: '13px', lg: '14px' },
+			fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		},
 	};
 	const menuText: SxProps<Theme> = {
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	return (
 		<Box>
@@ -234,8 +237,8 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 				<Button
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#363658',
 						border: '1px solid #757595',

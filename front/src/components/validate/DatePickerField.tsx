@@ -7,6 +7,11 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
+const fontSize_xs = '11px';
+const fontSize_sm = '12px';
+const fontSize_md = '13px';
+const fontSize_lg = '13px';
+
 interface RenderDatePickerFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
@@ -23,14 +28,24 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 		height: '37px',
 		'.MuiInputBase-input': {
 			pl: { xs: 1.5, sm: 2 },
-			py: 2,
+			py: { xs: 1.5, sm: 2 },
 			width: { xs: '60px', sm: '80px' },
-			fontSize: { xs: '12px', sm: '13px', md: '13px', lg: '14px' },
+			fontSize: {
+				xs: fontSize_xs,
+				sm: fontSize_sm,
+				md: fontSize_md,
+				lg: fontSize_lg,
+			},
 		},
 		'.MuiFormLabel-root': {
 			ml: 1,
 			mt: 0.5,
-			fontSize: { xs: '12px', sm: '13px', md: '13px', lg: '14px' },
+			fontSize: {
+				xs: fontSize_xs,
+				sm: fontSize_sm,
+				md: fontSize_md,
+				lg: fontSize_lg,
+			},
 		},
 		'.MuiInputAdornment-root': {
 			overflowX: 'visible',

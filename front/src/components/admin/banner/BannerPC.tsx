@@ -37,6 +37,9 @@ import { BannerData, BannerPageData } from '../../../api/types';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
+const fontSize_sm = '13px';
+const fontSize_lg = '14px';
+
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
@@ -110,7 +113,7 @@ const BannerPC: FC<BannerProps> = ({
 		px: 2,
 		py: 1.5,
 		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
@@ -118,27 +121,27 @@ const BannerPC: FC<BannerProps> = ({
 	const periodTd: SxProps<Theme> = {
 		px: 2,
 		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
 		py: 1.5,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const datePicker: SxProps<Theme> = {
 		'.MuiInputBase-input': {
 			py: 2,
 			width: '80px',
-			fontSize: { sm: '13px', lg: '14px' },
+			fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		},
 	};
 	const selectForm: SxProps<Theme> = {
@@ -151,16 +154,16 @@ const BannerPC: FC<BannerProps> = ({
 	const selectLabel: SxProps<Theme> = {
 		mt: -1,
 		ml: 0.5,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const selectInput: SxProps<Theme> = {
 		'.MuiSelect-select': {
 			py: 1.5,
-			fontSize: { sm: '13px', lg: '14px' },
+			fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		},
 	};
 	const menuText: SxProps<Theme> = {
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	return (
 		<Box>
@@ -247,8 +250,8 @@ const BannerPC: FC<BannerProps> = ({
 					type="submit"
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#7940B6',
 						border: '1px solid #757595',
@@ -266,8 +269,8 @@ const BannerPC: FC<BannerProps> = ({
 				<Button
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#363658',
 						border: '1px solid #757595',

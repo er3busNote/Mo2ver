@@ -13,6 +13,11 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
+const fontSize_xs = '11px';
+const fontSize_sm = '12px';
+const fontSize_md = '13px';
+const fontSize_lg = '13px';
+
 interface SelectProps {
 	value: any;
 	label: string;
@@ -43,16 +48,31 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 	const selectLabel: SxProps<Theme> = {
 		mt: -1,
 		ml: 0.5,
-		fontSize: { xs: '11px', sm: '12px', md: '13px', lg: '14px' },
+		fontSize: {
+			xs: fontSize_xs,
+			sm: fontSize_sm,
+			md: fontSize_md,
+			lg: fontSize_lg,
+		},
 	};
 	const selectInput: SxProps<Theme> = {
 		'.MuiSelect-select': {
-			py: { xs: 1, sm: 1.5 },
-			fontSize: { xs: '11px', sm: '12px', md: '13px', lg: '14px' },
+			py: { xs: 0.8, sm: 1 },
+			fontSize: {
+				xs: fontSize_xs,
+				sm: fontSize_sm,
+				md: fontSize_md,
+				lg: fontSize_lg,
+			},
 		},
 	};
 	const menuText: SxProps<Theme> = {
-		fontSize: { xs: '12px', sm: '13px', md: '13px', lg: '14px' },
+		fontSize: {
+			xs: fontSize_xs,
+			sm: fontSize_sm,
+			md: fontSize_md,
+			lg: fontSize_lg,
+		},
 	};
 	return (
 		<FormControl sx={selectForm} error={error !== undefined}>
