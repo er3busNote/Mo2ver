@@ -32,6 +32,9 @@ import { EventFormDisplayValues, EventDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
+const fontSize_sm = '13px';
+const fontSize_lg = '14px';
+
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
@@ -181,48 +184,49 @@ const EventFormDisplayPC: FC<EventProp> = ({
 		px: 2,
 		py: 1.5,
 		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
 		px: 2,
-		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		pt: 0.8,
+		pb: 1.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const uploadTh: SxProps<Theme> = {
 		px: 2,
-		py: 1.5,
+		py: 1,
 		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const uploadTd: SxProps<Theme> = {
 		px: 2,
-		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		py: 1.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		borderBottom: 'none',
 		display: 'flex',
 		justifyContent: 'start',
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
-		py: 1.5,
+		py: 1.2,
 		minWidth: '47px',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
-		py: 1,
+		py: 0.5,
 		border: tableBorder,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const dataTdNum: SxProps<Theme> = {
 		width: '220px',
@@ -240,12 +244,12 @@ const EventFormDisplayPC: FC<EventProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-4px',
+				top: '0px',
 				ml: 1,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '4px',
+				top: '2px',
 				ml: 2,
 			},
 	};
@@ -509,8 +513,8 @@ const EventFormDisplayPC: FC<EventProp> = ({
 				<Button
 					sx={{
 						px: 6,
-						py: 1,
-						fontSize: '14px',
+						py: 0.5,
+						fontSize: '13px',
 						fontWeight: 'bold',
 						bgcolor: '#363658',
 						border: '1px solid #757595',

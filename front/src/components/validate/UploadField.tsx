@@ -52,7 +52,7 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 					startIcon={<CloudUploadIcon />}
 					sx={{
 						px: { xs: '10px', sm: '12px', lg: '16px' },
-						py: { xs: '3px', sm: '6px' },
+						py: { xs: '3px', sm: '4px' },
 						fontSize: { xs: '7px', sm: '8px', md: '11px', lg: '12px' },
 					}}
 					disabled={value !== undefined}
