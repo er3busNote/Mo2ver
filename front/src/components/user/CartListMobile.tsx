@@ -19,10 +19,10 @@ import { CartData, CartPageData } from '../../api/types';
 import Api from '../../api';
 import useImageUrl from '../../hooks/useImageUrl';
 import AppSubStepHeader from '../common/AppSubStepHeader';
+import ButtonCart from '../button/ButtonCart';
 import {
 	Box,
 	Card,
-	Button,
 	Checkbox,
 	Pagination,
 	Breadcrumbs,
@@ -450,46 +450,21 @@ const CartList: FC<CartDataProps> = ({
 												}
 											/>
 											<Box>
-												<Button
-													sx={{
-														mt: 2,
-														py: 1,
-														width: '100%',
-														fontSize: { xs: '10px', sm: '12px' },
-														fontWeight: 'bold',
-														bgcolor: '#000',
-														border: '1px solid #000',
-														borderRadius: 0,
-														color: '#fff',
-														'&:hover': {
-															bgcolor: '#0f0f0f',
-														},
-													}}
+												<ButtonCart
+													buttonType="buynow"
+													device="mobile"
 													variant="outlined"
 												>
 													바로 구매
-												</Button>
-												<Button
-													onClick={() => removeCartClick(data.goodsCode)}
-													sx={{
-														mt: 0.5,
-														px: 0,
-														py: 1,
-														width: '100%',
-														fontSize: { xs: '10px', sm: '12px' },
-														fontWeight: 'bold',
-														bgcolor: '#7940B6',
-														border: '1px solid #757595',
-														borderRadius: 0,
-														color: '#fff',
-														'&:hover': {
-															bgcolor: '#9373B5',
-														},
-													}}
+												</ButtonCart>
+												<ButtonCart
+													buttonType="cartremove"
+													device="mobile"
 													variant="outlined"
+													onClick={() => removeCartClick(data.goodsCode)}
 												>
 													장바구니 삭제
-												</Button>
+												</ButtonCart>
 											</Box>
 										</TableCell>
 									</TableRow>
@@ -924,49 +899,22 @@ const CartListMobile: FC<CartListProps> = ({
 				</Box>
 				<Box
 					sx={{
+						gap: '10px',
 						py: isMobile ? 0.5 : 2,
 						display: 'flex',
 						justifyContent: 'center',
 					}}
 				>
-					<Button
-						sx={{
-							mr: 0.5,
-							py: 1,
-							width: '100%',
-							fontSize: { xs: '10px', sm: '12px' },
-							fontWeight: 'bold',
-							bgcolor: '#000',
-							border: '1px solid #000',
-							borderRadius: 1,
-							color: '#fff',
-							'&:hover': {
-								bgcolor: '#0f0f0f',
-							},
-						}}
+					<ButtonCart
+						buttonType="selectbuynow"
+						device="mobile"
 						variant="outlined"
 					>
 						선택상품구매
-					</Button>
-					<Button
-						sx={{
-							ml: 0.5,
-							py: 1,
-							width: '100%',
-							fontSize: { xs: '10px', sm: '12px' },
-							fontWeight: 'bold',
-							bgcolor: '#7940B6',
-							border: '1px solid #757595',
-							borderRadius: 1,
-							color: '#fff',
-							'&:hover': {
-								bgcolor: '#9373B5',
-							},
-						}}
-						variant="outlined"
-					>
+					</ButtonCart>
+					<ButtonCart buttonType="allbuynow" device="mobile" variant="outlined">
 						전체상품구매
-					</Button>
+					</ButtonCart>
 				</Box>
 			</Box>
 		</Box>

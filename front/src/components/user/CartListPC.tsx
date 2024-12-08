@@ -19,10 +19,10 @@ import { CartData, CartPageData } from '../../api/types';
 import Api from '../../api';
 import useImageUrl from '../../hooks/useImageUrl';
 import AppSubStepHeader from '../common/AppSubStepHeader';
+import ButtonCart from '../button/ButtonCart';
 import {
 	Box,
 	Card,
-	Button,
 	Rating,
 	Checkbox,
 	Pagination,
@@ -579,45 +579,21 @@ const CartList: FC<CartDataProps> = ({
 											}
 										/>
 										<Box>
-											<Button
-												sx={{
-													mt: 2,
-													py: 1,
-													width: '100%',
-													fontSize: '14px',
-													fontWeight: 'bold',
-													bgcolor: '#000',
-													border: '1px solid #000',
-													borderRadius: 0,
-													color: '#fff',
-													'&:hover': {
-														bgcolor: '#0f0f0f',
-													},
-												}}
+											<ButtonCart
+												buttonType="buynow"
+												device="pc"
 												variant="outlined"
 											>
 												바로 구매
-											</Button>
-											<Button
-												onClick={() => removeCartClick(data.goodsCode)}
-												sx={{
-													mt: 0.5,
-													py: 1,
-													width: '100%',
-													fontSize: '14px',
-													fontWeight: 'bold',
-													bgcolor: '#7940B6',
-													border: '1px solid #757595',
-													borderRadius: 0,
-													color: '#fff',
-													'&:hover': {
-														bgcolor: '#9373B5',
-													},
-												}}
+											</ButtonCart>
+											<ButtonCart
+												buttonType="cartremove"
+												device="pc"
 												variant="outlined"
+												onClick={() => removeCartClick(data.goodsCode)}
 											>
 												장바구니 삭제
-											</Button>
+											</ButtonCart>
 										</Box>
 									</TableCell>
 									<TableCell sx={selectBox}>
@@ -928,45 +904,21 @@ const CartListPC: FC<CartListProps> = ({
 						membershipMileage={263}
 					/>
 				</Box>
-				<Box sx={{ pr: 2, width: '20%' }}>
-					<Button
-						sx={{
-							mb: 0.5,
-							width: '100%',
-							height: '50%',
-							fontSize: '18px',
-							fontWeight: 'bold',
-							bgcolor: '#000',
-							border: '1px solid #000',
-							borderRadius: 2,
-							color: '#fff',
-							'&:hover': {
-								bgcolor: '#0f0f0f',
-							},
-						}}
-						variant="outlined"
-					>
+				<Box
+					sx={{
+						pr: 2,
+						width: '20%',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-between',
+					}}
+				>
+					<ButtonCart buttonType="selectbuynow" device="pc" variant="outlined">
 						선택상품구매
-					</Button>
-					<Button
-						sx={{
-							mt: 0.5,
-							width: '100%',
-							height: '50%',
-							fontSize: '18px',
-							fontWeight: 'bold',
-							bgcolor: '#7940B6',
-							border: '1px solid #757595',
-							borderRadius: 2,
-							color: '#fff',
-							'&:hover': {
-								bgcolor: '#9373B5',
-							},
-						}}
-						variant="outlined"
-					>
+					</ButtonCart>
+					<ButtonCart buttonType="allbuynow" device="pc" variant="outlined">
 						전체상품구매
-					</Button>
+					</ButtonCart>
 				</Box>
 			</Box>
 		</Box>

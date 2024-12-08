@@ -8,12 +8,13 @@ import { ImageData, CartData } from '../../api/types';
 import useImageUrl from '../../hooks/useImageUrl';
 import useGoodsDetail from '../../hooks/goods/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
+import ButtonTag from '../button/ButtonTag';
+import ButtonGoods from '../button/ButtonGoods';
 import {
 	Box,
 	Grid,
 	Link,
 	Paper,
-	Button,
 	Rating,
 	Breadcrumbs,
 	CardMedia,
@@ -138,21 +139,6 @@ const GoodsDetail: FC<GoodsProps> = ({
 		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
 		color: 'blue',
-	};
-	const infoTag: SxProps<Theme> = {
-		mr: 1,
-		px: 1.5,
-		py: 0.5,
-		minWidth: 10,
-		fontSize: '10px',
-		fontWeight: 'bold',
-		border: '1px solid #e8e8e8',
-		color: '#b2b2b2',
-		'&:hover': {
-			color: '#b2b2b2',
-			bgcolor: '#f3f3f3',
-			border: '1px solid #e8e8e8',
-		},
 	};
 	const infoDelivery: SxProps<Theme> = {
 		px: 2,
@@ -386,24 +372,24 @@ const GoodsDetail: FC<GoodsProps> = ({
 									</Table>
 								</TableContainer>
 								<Box sx={{ py: 1, display: 'flex' }}>
-									<Button sx={infoTag} variant="outlined">
+									<ButtonTag buttonType="detail" variant="outlined">
 										#방한
-									</Button>
-									<Button sx={infoTag} variant="outlined">
+									</ButtonTag>
+									<ButtonTag buttonType="detail" variant="outlined">
 										#보온
-									</Button>
-									<Button sx={infoTag} variant="outlined">
+									</ButtonTag>
+									<ButtonTag buttonType="detail" variant="outlined">
 										#숏패딩
-									</Button>
-									<Button sx={infoTag} variant="outlined">
+									</ButtonTag>
+									<ButtonTag buttonType="detail" variant="outlined">
 										#파카
-									</Button>
-									<Button sx={infoTag} variant="outlined">
+									</ButtonTag>
+									<ButtonTag buttonType="detail" variant="outlined">
 										#점퍼
-									</Button>
-									<Button sx={infoTag} variant="outlined">
+									</ButtonTag>
+									<ButtonTag buttonType="detail" variant="outlined">
 										#패딩
-									</Button>
+									</ButtonTag>
 								</Box>
 							</Box>
 						</Box>
@@ -527,45 +513,16 @@ const GoodsDetail: FC<GoodsProps> = ({
 							</Box>
 						</Box>
 						<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-							<Button
+							<ButtonGoods
+								buttonType="cart"
 								onClick={addCartClick}
-								sx={{
-									mt: 2,
-									py: 1,
-									width: '48%',
-									fontSize: '14px',
-									fontWeight: 'bold',
-									bgcolor: '#7940B6',
-									border: '1px solid #757595',
-									borderRadius: 0,
-									color: '#fff',
-									'&:hover': {
-										bgcolor: '#9373B5',
-									},
-								}}
 								variant="outlined"
 							>
 								장바구니
-							</Button>
-							<Button
-								sx={{
-									mt: 2,
-									py: 1,
-									width: '48%',
-									fontSize: '14px',
-									fontWeight: 'bold',
-									bgcolor: '#000',
-									border: '1px solid #000',
-									borderRadius: 0,
-									color: '#fff',
-									'&:hover': {
-										bgcolor: '#0f0f0f',
-									},
-								}}
-								variant="outlined"
-							>
+							</ButtonGoods>
+							<ButtonGoods buttonType="buynow" variant="outlined">
 								바로 구매
-							</Button>
+							</ButtonGoods>
 						</Box>
 					</Box>
 				</Grid>

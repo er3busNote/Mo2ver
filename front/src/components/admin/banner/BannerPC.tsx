@@ -11,9 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
+import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
-	Button,
 	MenuItem,
 	InputLabel,
 	FormControl,
@@ -246,45 +246,19 @@ const BannerPC: FC<BannerProps> = ({
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<Box sx={{ py: 4, display: 'flex', justifyContent: 'space-between' }}>
-				<Button
+			<Box sx={{ py: 3, display: 'flex', justifyContent: 'space-between' }}>
+				<ButtonBase
 					type="submit"
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#7940B6',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#9373B5',
-						},
-					}}
+					device="pc"
+					buttonType="register"
 					variant="outlined"
 					onClick={registerClick}
 				>
 					등록
-				</Button>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#363658',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#757595',
-						},
-					}}
-					variant="outlined"
-				>
+				</ButtonBase>
+				<ButtonBase device="pc" buttonType="search" variant="outlined">
 					검색
-				</Button>
+				</ButtonBase>
 			</Box>
 			<TableContainer>
 				<Table size="small" sx={{ border: tableBorder }}>

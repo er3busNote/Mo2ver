@@ -2,6 +2,7 @@ import React, { FC, useState, ChangeEvent, ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../../store/index';
+import ButtonDelivery from '../../button/ButtonDelivery';
 import {
 	Box,
 	Tab,
@@ -10,7 +11,6 @@ import {
 	Grid,
 	Chip,
 	Stack,
-	Button,
 	Rating,
 	InputBase,
 	IconButton,
@@ -405,64 +405,28 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
 								</Table>
 							</TableCell>
 							<TableCell sx={controlBox}>
-								<Box>
-									<Button
-										sx={{
-											mt: 0.5,
-											py: 1,
-											width: '100%',
-											fontSize: '14px',
-											fontWeight: 'bold',
-											bgcolor: '#000',
-											border: '1px solid #000',
-											borderRadius: 0,
-											color: '#fff',
-											'&:hover': {
-												bgcolor: '#0f0f0f',
-											},
-										}}
+								<Box sx={{ display: 'grid', gap: '5px' }}>
+									<ButtonDelivery
+										buttonType="search"
+										device="pc"
 										variant="outlined"
 									>
 										배송 조회
-									</Button>
-									<Button
-										sx={{
-											mt: 0.5,
-											py: 1,
-											width: '100%',
-											fontSize: '14px',
-											fontWeight: 'bold',
-											bgcolor: '#000',
-											border: '1px solid #000',
-											borderRadius: 0,
-											color: '#fff',
-											'&:hover': {
-												bgcolor: '#0f0f0f',
-											},
-										}}
+									</ButtonDelivery>
+									<ButtonDelivery
+										buttonType="cancel"
+										device="pc"
 										variant="outlined"
 									>
 										주문·배송 취소
-									</Button>
-									<Button
-										sx={{
-											mt: 0.5,
-											py: 1,
-											width: '100%',
-											fontSize: '14px',
-											fontWeight: 'bold',
-											bgcolor: '#7940B6',
-											border: '1px solid #757595',
-											borderRadius: 0,
-											color: '#fff',
-											'&:hover': {
-												bgcolor: '#9373B5',
-											},
-										}}
+									</ButtonDelivery>
+									<ButtonDelivery
+										buttonType="inquiry"
+										device="pc"
 										variant="outlined"
 									>
 										판매자 문의
-									</Button>
+									</ButtonDelivery>
 								</Box>
 							</TableCell>
 						</TableRow>

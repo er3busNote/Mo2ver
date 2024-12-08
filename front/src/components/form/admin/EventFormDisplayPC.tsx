@@ -7,10 +7,10 @@ import { TitleInfo } from '../../../store/types';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
 	Grid,
-	Button,
 	Typography,
 	Table,
 	TableHead,
@@ -407,47 +407,25 @@ const EventFormDisplayPC: FC<EventProp> = ({
 				<Box>
 					<Grid container spacing={1}>
 						<Grid item>
-							<Button
+							<ButtonBase
 								type="submit"
-								sx={{
-									px: 4,
-									py: 0.8,
-									fontSize: '8px',
-									fontWeight: 'bold',
-									bgcolor: '#7940B6',
-									border: '1px solid #757595',
-									borderRadius: 0,
-									color: '#fff',
-									'&:hover': {
-										bgcolor: '#9373B5',
-									},
-								}}
+								buttonType="save"
+								size="small"
 								variant="outlined"
 								disabled={isSubmitted && !isValid}
 							>
 								저장
-							</Button>
+							</ButtonBase>
 						</Grid>
 						<Grid item>
-							<Button
-								sx={{
-									px: 4,
-									py: 0.8,
-									fontSize: '8px',
-									fontWeight: 'bold',
-									bgcolor: '#363658',
-									border: '1px solid #757595',
-									borderRadius: 0,
-									color: '#fff',
-									'&:hover': {
-										bgcolor: '#757595',
-									},
-								}}
+							<ButtonBase
+								buttonType="search"
+								size="small"
 								variant="outlined"
 								onClick={openGoods}
 							>
 								상품찾기
-							</Button>
+							</ButtonBase>
 							<GoodsDialogPC
 								open={open}
 								replaceField={replaceField}
@@ -510,25 +488,14 @@ const EventFormDisplayPC: FC<EventProp> = ({
 				</Table>
 			</TableContainer>
 			<Box sx={{ pt: 2 }}>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#363658',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#757595',
-						},
-					}}
+				<ButtonBase
+					buttonType="cancel"
+					device="pc"
 					variant="outlined"
 					onClick={cancelClick}
 				>
 					취소
-				</Button>
+				</ButtonBase>
 			</Box>
 		</Box>
 	);

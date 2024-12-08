@@ -2,14 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
-import {
-	Box,
-	Grid,
-	Button,
-	IconButton,
-	CardMedia,
-	Typography,
-} from '@mui/material';
+import ButtonTag from '../button/ButtonTag';
+import { Box, Grid, IconButton, CardMedia, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
 const SLIDE_INFO = [
@@ -51,17 +45,6 @@ const PopularMobile: FC = (): JSX.Element => {
 	const info: SxProps<Theme> = {
 		fontSize: '0.9rem',
 		fontWeight: 'bold',
-	};
-	const infoTag: SxProps<Theme> = {
-		fontSize: '10px',
-		border: '1px solid #ccc',
-		color: '#1992DF',
-		'&:hover': {
-			color: '#fff',
-			bgcolor: '#1992DF',
-			border: '1px solid #1992DF',
-		},
-		width: { xs: 'max-content' },
 	};
 	const infoImage: SxProps<Theme> = {
 		width: { xs: '90px', sm: '120px' },
@@ -134,29 +117,49 @@ const PopularMobile: FC = (): JSX.Element => {
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag
+									buttonType="popular"
+									device="mobile"
+									variant="outlined"
+								>
 									#반팔 티셔츠
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag
+									buttonType="popular"
+									device="mobile"
+									variant="outlined"
+								>
 									#반바지
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag
+									buttonType="popular"
+									device="mobile"
+									variant="outlined"
+								>
 									#리넨 팬츠
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag
+									buttonType="popular"
+									device="mobile"
+									variant="outlined"
+								>
 									#슬리퍼
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag
+									buttonType="popular"
+									device="mobile"
+									variant="outlined"
+								>
 									#카드지갑
-								</Button>
+								</ButtonTag>
 							</Grid>
 						</Grid>
 					</Box>

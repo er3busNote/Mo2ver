@@ -1,10 +1,10 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import ButtonGoods from '../../button/ButtonGoods';
 import {
 	Box,
 	Grid,
 	Stack,
-	Button,
 	InputBase,
 	IconButton,
 	Typography,
@@ -234,24 +234,9 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 				</Table>
 			</TableContainer>
 			<Box sx={{ py: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#363658',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#757595',
-						},
-					}}
-					variant="outlined"
-				>
+				<ButtonGoods buttonType="search" device="pc" variant="outlined">
 					검색
-				</Button>
+				</ButtonGoods>
 			</Box>
 			<TableContainer>
 				<Table size="small">

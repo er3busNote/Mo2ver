@@ -6,10 +6,10 @@ import { TitleInfo } from '../../../store/types';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
 	Grid,
-	Button,
 	Typography,
 	Table,
 	TableHead,
@@ -343,26 +343,15 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 				<Box>
 					<Grid container spacing={1}>
 						<Grid item>
-							<Button
+							<ButtonBase
 								type="submit"
-								sx={{
-									px: 4,
-									py: 0.8,
-									fontSize: '8px',
-									fontWeight: 'bold',
-									bgcolor: '#7940B6',
-									border: '1px solid #757595',
-									borderRadius: 0,
-									color: '#fff',
-									'&:hover': {
-										bgcolor: '#9373B5',
-									},
-								}}
+								buttonType="save"
+								size="small"
 								variant="outlined"
 								disabled={isSubmitted && !isValid}
 							>
 								저장
-							</Button>
+							</ButtonBase>
 						</Grid>
 					</Grid>
 				</Box>
@@ -385,25 +374,14 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 				</Table>
 			</TableContainer>
 			<Box sx={{ pt: 2 }}>
-				<Button
-					sx={{
-						px: 6,
-						py: 1,
-						fontSize: '14px',
-						fontWeight: 'bold',
-						bgcolor: '#363658',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#757595',
-						},
-					}}
+				<ButtonBase
+					buttonType="cancel"
+					device="pc"
 					variant="outlined"
 					onClick={cancelClick}
 				>
 					취소
-				</Button>
+				</ButtonBase>
 			</Box>
 		</Box>
 	);

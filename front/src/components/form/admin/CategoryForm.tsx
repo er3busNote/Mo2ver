@@ -2,9 +2,9 @@ import React, { FC, BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
-	Button,
 	Table,
 	TableBody,
 	TableRow,
@@ -194,45 +194,21 @@ const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 				</Table>
 			</TableContainer>
 			<Box sx={{ pt: 4, display: 'flex', justifyContent: 'space-between' }}>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#7D7D7D',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#A1A1A1',
-						},
-					}}
+				<ButtonBase
+					buttonType="remove"
 					variant="outlined"
 					onClick={removeClick}
 				>
 					삭제
-				</Button>
-				<Button
+				</ButtonBase>
+				<ButtonBase
 					type="submit"
-					sx={{
-						px: 6,
-						py: 0.5,
-						fontSize: '13px',
-						fontWeight: 'bold',
-						bgcolor: '#7940B6',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#9373B5',
-						},
-					}}
+					buttonType="save"
 					variant="outlined"
 					disabled={isSubmitted && !isValid}
 				>
 					저장
-				</Button>
+				</ButtonBase>
 			</Box>
 		</Box>
 	);

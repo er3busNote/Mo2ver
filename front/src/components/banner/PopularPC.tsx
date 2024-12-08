@@ -2,12 +2,12 @@ import React, { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
+import ButtonTag from '../button/ButtonTag';
 import {
 	Box,
 	Card,
 	Grid,
 	Fade,
-	Button,
 	IconButton,
 	CardMedia,
 	Typography,
@@ -79,16 +79,6 @@ const PopularPC: FC = (): JSX.Element => {
 		fontSize: '0.9rem',
 		fontWeight: 'bold',
 	};
-	const infoTag: SxProps<Theme> = {
-		fontSize: '10px',
-		border: '1px solid #ccc',
-		color: '#1992DF',
-		'&:hover': {
-			color: '#fff',
-			bgcolor: '#1992DF',
-			border: '1px solid #1992DF',
-		},
-	};
 
 	return (
 		<React.Fragment>
@@ -148,29 +138,29 @@ const PopularPC: FC = (): JSX.Element => {
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag buttonType="popular" device="pc" variant="outlined">
 									#반팔 티셔츠
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag buttonType="popular" device="pc" variant="outlined">
 									#반바지
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag buttonType="popular" device="pc" variant="outlined">
 									#리넨 팬츠
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag buttonType="popular" device="pc" variant="outlined">
 									#슬리퍼
-								</Button>
+								</ButtonTag>
 							</Grid>
 							<Grid item>
-								<Button sx={infoTag} variant="outlined">
+								<ButtonTag buttonType="popular" device="pc" variant="outlined">
 									#카드지갑
-								</Button>
+								</ButtonTag>
 							</Grid>
 						</Grid>
 					</Box>
