@@ -1,17 +1,22 @@
-import React, { FC, useState } from 'react';
+import React, {
+	FC,
+	Dispatch,
+	SetStateAction,
+	useState,
+	useEffect,
+	BaseSyntheticEvent,
+} from 'react';
+import { ActionCreatorsMapObject } from 'redux';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import useImageUrl from '../../hooks/useImageUrl';
 import { Box, Grid, Button, CardMedia } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 import RenderFileField from '../validate/FileField';
 import { RegisterFormValues } from './types';
-
-const IMAGE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import { FileData } from '../../api/types';
 
 const registerSchema = yup
 	.object()
@@ -37,6 +42,15 @@ const registerSchema = yup
 	})
 	.required();
 
+interface RegisterProp {
+	image: ActionCreatorsMapObject;
+	setFiles: Dispatch<SetStateAction<Array<FileData> | undefined>>;
+	onSubmit: (
+		data: RegisterFormValues,
+		event?: BaseSyntheticEvent<object, any, any>
+	) => void;
+}
+
 const registerValues: RegisterFormValues = {
 	name: '',
 	brand: '',
@@ -46,8 +60,13 @@ const registerValues: RegisterFormValues = {
 	goodsImg: [],
 };
 
-const RegisterForm: FC = (): JSX.Element => {
+const RegisterForm: FC<RegisterProp> = ({
+	image,
+	setFiles,
+	onSubmit,
+}): JSX.Element => {
 	const [open, setOpen] = useState(true);
+	const [file, setFile] = useState<string>();
 
 	const registerClick = () => {
 		setOpen(false);
@@ -64,18 +83,44 @@ const RegisterForm: FC = (): JSX.Element => {
 		resolver: yupResolver(registerSchema),
 	});
 
+	useEffect(() => {
+		const goodsImg = watch('goodsImg');
+		const goods = Array.from(goodsImg) as Array<FileData>;
+		if (goods.length === 0) setFile(undefined);
+		if (goods.length > 0) setFile(goods[0].fileAttachCode);
+		if (goods.length > 1) setFiles(goods.slice(1));
+	}, [watch('goodsImg')]);
+
+	const icon: SxProps<Theme> = {
+		fontSize: '9rem',
+		color: '#B3B3B3',
+	};
+
 	return (
 		<Grid container spacing={3}>
 			<Grid item xs={12} md={6} lg={6}>
 				<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
-					<CardMedia
-						component="img"
-						width="100%"
-						height="556"
-						image={IMAGE_INFO[0]}
-						sx={{ p: 1.5 }}
-						alt="green iguana"
-					/>
+					{file ? (
+						<CardMedia
+							component="img"
+							width="100%"
+							height="556"
+							image={useImageUrl({ image, file })}
+							sx={{ p: 1.5, objectFit: 'fill' }}
+							alt="Image"
+						/>
+					) : (
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								height: 556,
+							}}
+						>
+							<InsertPhotoOutlinedIcon sx={icon} />
+						</Box>
+					)}
 				</Box>
 			</Grid>
 			<Grid item xs={12} md={6} lg={6}>

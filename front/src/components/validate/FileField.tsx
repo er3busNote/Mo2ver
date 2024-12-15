@@ -36,7 +36,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
 	useEffect(() => {
 		if (dataFiles.length > 0) {
-			onChange((prevFiles: Array<FileData>) => [...prevFiles, ...dataFiles]);
+			onChange([...value, ...dataFiles]);
 		}
 	}, [dataFiles]);
 
