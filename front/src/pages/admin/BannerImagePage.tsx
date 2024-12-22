@@ -1,4 +1,7 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
@@ -16,8 +19,75 @@ import {
 } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
+import dayjs, { Dayjs } from 'dayjs';
 
 const drawerMenuLimit = 768;
+
+const bnnrImageSchema = yup
+	.object()
+	.shape({
+		title: yup
+			.string()
+			.required('제목을 입력해주세요')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		startDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.nullable()
+			.required('시작날짜가 존재하질 않습니다'),
+		endDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.when(
+				'startDate',
+				(startDate, schema) =>
+					startDate &&
+					schema.test({
+						test: (endDate) =>
+							endDate && endDate.isAfter(startDate.toLocaleString()),
+						message: '시작날짜 이후여야 합니다',
+					})
+			)
+			.nullable()
+			.required('마지막날짜가 존재하질 않습니다'),
+		position: yup.string().required('필수항목'),
+		type: yup.string().required(),
+		useyn: yup.string().required('필수항목'),
+		bnnrImg: yup
+			.array()
+			.of(
+				yup.object().shape({
+					title: yup.string().required('배너내용을 입력해주세요'),
+					bnnrImg: yup
+						.mixed<File>()
+						.test(
+							'file',
+							'파일을 선택하세요',
+							(value) => value && value.size > 0
+						)
+						.test(
+							'fileSize',
+							'파일크기가 너무 작습니다',
+							(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+						)
+						.test(
+							'fileType',
+							'지원되는 파일 타입이 아닙니다',
+							(value) =>
+								value && ['image/jpeg', 'image/png'].includes(value.type)
+						),
+					cnntUrl: yup.string().required('연결할 URL을 입력해주세요'),
+					useyn: yup.string().required('필수항목'),
+				})
+			)
+			.required('이미지 정보를 입력해주세요'),
+	})
+	.required();
 
 interface BannerProps {
 	title: string;
@@ -34,6 +104,16 @@ interface BannerDispatchProps {
 	member: ActionCreatorsMapObject;
 	banner: ActionCreatorsMapObject;
 }
+
+const bnnrImageValues: BannerFormImageValues = {
+	title: '',
+	startDate: dayjs(),
+	endDate: dayjs(),
+	position: '',
+	type: 'BN',
+	useyn: 'Y',
+	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
+};
 
 const BannerImagePC: FC<BannerProps> = ({
 	title,
@@ -126,18 +206,27 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
+
+	const methods = useForm<BannerFormImageValues>({
+		mode: 'onChange',
+		defaultValues: bnnrImageValues,
+		resolver: yupResolver(bnnrImageSchema),
+	});
+
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<BannerImagePC
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
-			<BannerImageMobile
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
+			<FormProvider {...methods}>
+				<BannerImagePC
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+				<BannerImageMobile
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+			</FormProvider>
 		</Box>
 	);
 };

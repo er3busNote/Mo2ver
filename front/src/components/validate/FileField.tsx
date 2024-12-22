@@ -15,6 +15,11 @@ import { Close, FileUploadOutlined } from '@mui/icons-material';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useFieInfo from '../../hooks/cmmn/useFileInfo';
 
+const fontSize_xs = '11px';
+const fontSize_sm = '12px';
+const fontSize_md = '13px';
+const fontSize_lg = '13px';
+
 const VisuallyHiddenInput = styled('input')({
 	display: 'none',
 });
@@ -87,8 +92,21 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 						sx={{
 							color: 'inherit',
 							'& .MuiInputBase-root , & .MuiInputBase-input': {
+								py: 0.5,
 								paddingRight: '1rem !important',
 								cursor: 'pointer',
+							},
+							'& .MuiChip-root': {
+								height: '28px',
+								maxWidth: '260px',
+							},
+							'& .MuiChip-label': {
+								fontSize: {
+									xs: fontSize_xs,
+									sm: fontSize_sm,
+									md: fontSize_md,
+									lg: fontSize_lg,
+								},
 							},
 						}}
 					/>

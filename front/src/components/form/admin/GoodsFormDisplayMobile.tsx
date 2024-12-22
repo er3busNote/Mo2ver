@@ -10,9 +10,7 @@ import { useDispatch } from 'react-redux';
 import { GoodsData } from '../../../api/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
@@ -34,63 +32,10 @@ import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
-import dayjs, { Dayjs } from 'dayjs';
 import { isMobile } from 'react-device-detect';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-const goodsDisplaySchema = yup
-	.object()
-	.shape({
-		title: yup
-			.string()
-			.required('제목을 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		startDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.nullable()
-			.required('시작날짜가 존재하질 않습니다'),
-		endDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.when(
-				'startDate',
-				(startDate, schema) =>
-					startDate &&
-					schema.test({
-						test: (endDate) =>
-							endDate && endDate.isAfter(startDate.toLocaleString()),
-						message: '시작날짜 이후여야 합니다',
-					})
-			)
-			.nullable()
-			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required('필수항목'),
-		type: yup.string().required(),
-		useyn: yup.string().required('필수항목'),
-		goods: yup
-			.array()
-			.of(
-				yup.object().shape({
-					goodsCode: yup.string().required('상품코드'),
-					goodsName: yup.string().required('상품내용'),
-					salePrice: yup.number().required('판매가'),
-					sortSequence: yup
-						.number()
-						.positive('1 이상의 값을 입력해주세요')
-						.required('정렬순서'),
-				})
-			)
-			.required('상품 전시 정보를 선택해주세요'),
-	})
-	.required();
 
 interface GoodsProp {
 	title: string;
@@ -101,16 +46,6 @@ interface GoodsProp {
 	) => void;
 }
 
-const goodsDisplayValues: GoodsFormDisplayValues = {
-	title: '',
-	startDate: dayjs(),
-	endDate: dayjs(),
-	position: '',
-	type: 'GD',
-	useyn: 'Y',
-	goods: [],
-};
-
 const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	title,
 	description,
@@ -120,16 +55,14 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
+
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useForm<GoodsFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: goodsDisplayValues,
-		resolver: yupResolver(goodsDisplaySchema),
-	});
+	} = useFormContext<GoodsFormDisplayValues>();
+
 	const { fields, replace } = useFieldArray({
 		control,
 		name: 'goods',
@@ -241,13 +174,13 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-5px',
-				ml: 1,
+				top: '-3px',
+				ml: 0.5,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '5px',
-				ml: 2,
+				top: '3px',
+				ml: 1,
 			},
 	};
 	const inputHeader: SxProps<Theme> = {

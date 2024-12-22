@@ -1,4 +1,7 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -11,8 +14,47 @@ import { Box } from '@mui/material';
 import { VideoFormDisplayValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
+import dayjs, { Dayjs } from 'dayjs';
 
 const drawerMenuLimit = 768;
+
+const videoDisplaySchema = yup
+	.object()
+	.shape({
+		title: yup
+			.string()
+			.required('제목을 입력해주세요')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		startDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.nullable()
+			.required('시작날짜가 존재하질 않습니다'),
+		endDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.when(
+				'startDate',
+				(startDate, schema) =>
+					startDate &&
+					schema.test({
+						test: (endDate) =>
+							endDate && endDate.isAfter(startDate.toLocaleString()),
+						message: '시작날짜 이후여야 합니다',
+					})
+			)
+			.nullable()
+			.required('마지막날짜가 존재하질 않습니다'),
+		position: yup.string().required(),
+		type: yup.string().required(),
+		useyn: yup.string().required(),
+	})
+	.required();
 
 interface BannerProps {
 	title: string;
@@ -28,6 +70,15 @@ interface BannerDispatchProps {
 	description: string;
 	member: ActionCreatorsMapObject;
 }
+
+const videoDisplayValues: VideoFormDisplayValues = {
+	title: '',
+	startDate: dayjs(),
+	endDate: dayjs(),
+	position: '',
+	type: 'VD',
+	useyn: 'Y',
+};
 
 const BannerVideoPC: FC<BannerProps> = ({
 	title,
@@ -93,18 +144,27 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		console.log(csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 	};
+
+	const methods = useForm<VideoFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: videoDisplayValues,
+		resolver: yupResolver(videoDisplaySchema),
+	});
+
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<BannerVideoPC
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
-			<BannerVideoMobile
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
+			<FormProvider {...methods}>
+				<BannerVideoPC
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+				<BannerVideoMobile
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+			</FormProvider>
 		</Box>
 	);
 };

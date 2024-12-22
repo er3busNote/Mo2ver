@@ -89,6 +89,11 @@ const ButtonGoods: FC<ButtonGoodsProps> = ({
 				};
 			case 'register':
 				return {
+					mt: 2,
+					px: 6,
+					py: 1,
+					width: '80%',
+					fontSize: '14px',
 					fontWeight: 'bold',
 					bgcolor: '#7940B6',
 					border: '1px solid #757595',

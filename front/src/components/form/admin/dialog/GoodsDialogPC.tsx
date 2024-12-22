@@ -6,13 +6,13 @@ import Api from '../../../../api';
 import { GoodsData, CategoryData } from '../../../../api/types';
 import useCategoryInfo from '../../../../hooks/category/useCategoryInfo';
 import useGoodsSearchPageList from '../../../../hooks/goods/useGoodsSearchPageList';
+import SearchInput from '../../../input/SearchInput';
 import {
 	Box,
 	Grid,
 	Paper,
 	Button,
 	Checkbox,
-	InputBase,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -26,9 +26,8 @@ import {
 	FormControl,
 	Pagination,
 } from '@mui/material';
-import { SxProps, Theme, styled, alpha } from '@mui/material/styles';
+import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import SearchIcon from '@mui/icons-material/Search';
 
 interface DialogProps {
 	open: boolean;
@@ -39,50 +38,6 @@ interface DialogProps {
 	header: SxProps<Theme>;
 	base: SxProps<Theme>;
 }
-
-const Search = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: 0,
-	width: '100%',
-	[theme.breakpoints.up('sm')]: {
-		width: 'auto',
-	},
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: '100%',
-	position: 'absolute',
-	pointerEvents: 'none',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: 'inherit',
-	width: '100%',
-	'& .MuiInputBase-input': {
-		border: '2px solid #ddd',
-		borderRadius: '7px',
-		padding: theme.spacing(1, 1, 1, 0),
-		// vertical padding + font size from searchIcon
-		fontSize: '14px',
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		[theme.breakpoints.up('sm')]: {
-			width: '28ch',
-			'&:focus': {
-				width: '38ch',
-			},
-		},
-	},
-}));
 
 const GoodsDialogPC: FC<DialogProps> = ({
 	open,
@@ -282,7 +237,7 @@ const GoodsDialogPC: FC<DialogProps> = ({
 								>
 									{largeCategoryData.map((data: CategoryData, i: number) => (
 										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryCode}
+											{data.categoryName}
 										</MenuItem>
 									))}
 								</Select>
@@ -300,7 +255,7 @@ const GoodsDialogPC: FC<DialogProps> = ({
 								>
 									{mediumCategoryData.map((data: CategoryData, i: number) => (
 										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryCode}
+											{data.categoryName}
 										</MenuItem>
 									))}
 								</Select>
@@ -318,7 +273,7 @@ const GoodsDialogPC: FC<DialogProps> = ({
 								>
 									{smallCategoryData.map((data: CategoryData, i: number) => (
 										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryCode}
+											{data.categoryName}
 										</MenuItem>
 									))}
 								</Select>
@@ -328,16 +283,10 @@ const GoodsDialogPC: FC<DialogProps> = ({
 					<Box
 						sx={{ pt: 0.5, pb: 1, display: 'flex', justifyContent: 'center' }}
 					>
-						<Search>
-							<SearchIconWrapper>
-								<SearchIcon />
-							</SearchIconWrapper>
-							<StyledInputBase
-								placeholder="상품명을 검색할 수 있어요!"
-								onChange={searchOnChange}
-								inputProps={{ 'aria-label': 'search' }}
-							/>
-						</Search>
+						<SearchInput
+							placeholder="상품명을 검색할 수 있어요!"
+							onChange={searchOnChange}
+						/>
 						<Button
 							sx={{
 								px: 4,

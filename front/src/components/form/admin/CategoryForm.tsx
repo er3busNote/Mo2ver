@@ -1,7 +1,5 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
@@ -23,19 +21,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 
-const schema = yup
-	.object()
-	.shape({
-		category: yup
-			.string()
-			.required('카테고리를 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		useyn: yup.string().required(),
-		level: yup.number().required(),
-	})
-	.required();
-
 interface CategoryProp {
 	onSubmit: (
 		data: CategoryFormValues,
@@ -43,22 +28,12 @@ interface CategoryProp {
 	) => void;
 }
 
-const defaultValues: CategoryFormValues = {
-	category: '',
-	useyn: 'Y',
-	level: 1,
-};
-
 const CategoryForm: FC<CategoryProp> = ({ onSubmit }): JSX.Element => {
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
-	} = useForm<CategoryFormValues>({
-		mode: 'onChange',
-		defaultValues,
-		resolver: yupResolver(schema),
-	});
+	} = useFormContext<CategoryFormValues>();
 
 	const removeClick = () => {
 		console.log('logout');

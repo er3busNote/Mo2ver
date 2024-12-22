@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
@@ -26,48 +24,9 @@ import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { VideoFormDisplayValues } from './types';
 // import _ from 'lodash';
-import dayjs, { Dayjs } from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-const videoDisplaySchema = yup
-	.object()
-	.shape({
-		title: yup
-			.string()
-			.required('제목을 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		startDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.nullable()
-			.required('시작날짜가 존재하질 않습니다'),
-		endDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.when(
-				'startDate',
-				(startDate, schema) =>
-					startDate &&
-					schema.test({
-						test: (endDate) =>
-							endDate && endDate.isAfter(startDate.toLocaleString()),
-						message: '시작날짜 이후여야 합니다',
-					})
-			)
-			.nullable()
-			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required(),
-		type: yup.string().required(),
-		useyn: yup.string().required(),
-	})
-	.required();
 
 interface VideoProp {
 	title: string;
@@ -78,15 +37,6 @@ interface VideoProp {
 	) => void;
 }
 
-const videoDisplayValues: VideoFormDisplayValues = {
-	title: '',
-	startDate: dayjs(),
-	endDate: dayjs(),
-	position: '',
-	type: 'VD',
-	useyn: 'Y',
-};
-
 const VideoFormDisplayMobile: FC<VideoProp> = ({
 	title,
 	description,
@@ -95,16 +45,13 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('VD');
+
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useForm<VideoFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: videoDisplayValues,
-		resolver: yupResolver(videoDisplaySchema),
-	});
+	} = useFormContext<VideoFormDisplayValues>();
 
 	useEffect(() => {
 		const type = watch('type');
@@ -186,13 +133,13 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-5px',
-				ml: 1,
+				top: '-3px',
+				ml: 0.5,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '5px',
-				ml: 2,
+				top: '3px',
+				ml: 1,
 			},
 	};
 	return (

@@ -1,12 +1,12 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import SearchInput from '../../input/SearchInput';
 import ButtonGoods from '../../button/ButtonGoods';
 import {
 	Box,
 	Grid,
 	Stack,
 	Divider,
-	InputBase,
 	IconButton,
 	Typography,
 	MenuItem,
@@ -31,8 +31,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { SxProps, Theme, styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
+import { SxProps, Theme } from '@mui/material/styles';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
@@ -42,50 +41,6 @@ import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-
-const Search = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: 0,
-	width: '100%',
-	[theme.breakpoints.up('sm')]: {
-		width: 'auto',
-	},
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: '100%',
-	position: 'absolute',
-	pointerEvents: 'none',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: 'inherit',
-	width: '100%',
-	'& .MuiInputBase-input': {
-		border: '2px solid #ddd',
-		borderRadius: '7px',
-		padding: theme.spacing(1, 1, 1, 0),
-		// vertical padding + font size from searchIcon
-		fontSize: '12px',
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		[theme.breakpoints.up('xs')]: {
-			width: '28ch',
-			'&:focus': {
-				width: '38ch',
-			},
-		},
-	},
-}));
 
 const UserRegisterDetail: FC = (): JSX.Element => {
 	const [page, setPage] = useState(0);
@@ -519,15 +474,10 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 					</AccordionSummary>
 					<AccordionDetails>
 						<Box sx={searchBox}>
-							<Search>
-								<SearchIconWrapper>
-									<SearchIcon />
-								</SearchIconWrapper>
-								<StyledInputBase
-									placeholder="등록한 상품을 검색할 수 있어요!"
-									inputProps={{ 'aria-label': 'search' }}
-								/>
-							</Search>
+							<SearchInput
+								placeholder="등록한 상품을 검색할 수 있어요!"
+								onChange={searchOnChange}
+							/>
 						</Box>
 						<Box sx={registerViewBox}>
 							<UserRegisterDetail />

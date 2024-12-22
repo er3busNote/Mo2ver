@@ -1,4 +1,5 @@
 import { FileData } from '../../api/types';
+import { Dayjs } from 'dayjs';
 
 interface LoginFormValues {
 	username: string;
@@ -19,6 +20,19 @@ interface RegisterFormValues {
 	year: number;
 	price: number;
 	goodsImg: Array<FileData>;
+	largeCategory: string;
+	mediumCategory: string;
+	smallCategory: string;
+	buyLimitYesNo: string;
+	salePeriodYesNo: string;
+	saleStartDate: Dayjs;
+	saleEndDate: Dayjs;
+	supplyPrice: number;
+	salePrice: number;
+	maxBuyQuantity: number;
+	discountPrice: number;
+	discountStartDate: Dayjs;
+	discountEndDate: Dayjs;
 }
 
 export type { LoginFormValues, SignupFormValues, RegisterFormValues };

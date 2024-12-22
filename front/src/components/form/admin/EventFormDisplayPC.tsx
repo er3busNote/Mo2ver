@@ -4,9 +4,7 @@ import { useDispatch } from 'react-redux';
 import { GoodsData } from '../../../api/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
@@ -30,89 +28,12 @@ import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { EventFormDisplayValues, EventDisplayDetailValues } from './types';
 // import _ from 'lodash';
-import dayjs, { Dayjs } from 'dayjs';
 
 const fontSize_sm = '13px';
 const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-const eventDisplaySchema = yup
-	.object()
-	.shape({
-		title: yup
-			.string()
-			.required('제목을 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		startDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.nullable()
-			.required('시작날짜가 존재하질 않습니다'),
-		endDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.when(
-				'startDate',
-				(startDate, schema) =>
-					startDate &&
-					schema.test({
-						test: (endDate) =>
-							endDate && endDate.isAfter(startDate.toLocaleString()),
-						message: '시작날짜 이후여야 합니다',
-					})
-			)
-			.nullable()
-			.required('마지막날짜가 존재하질 않습니다'),
-		useyn: yup.string().required('필수항목'),
-		displayImg: yup
-			.mixed<File>()
-			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
-			.test(
-				'fileSize',
-				'파일크기가 너무 작습니다',
-				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-			)
-			.test(
-				'fileType',
-				'지원되는 파일 타입이 아닙니다',
-				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-			),
-		eventImg: yup
-			.mixed<File>()
-			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
-			.test(
-				'fileSize',
-				'파일크기가 너무 작습니다',
-				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-			)
-			.test(
-				'fileType',
-				'지원되는 파일 타입이 아닙니다',
-				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-			),
-		goods: yup
-			.array()
-			.of(
-				yup.object().shape({
-					goodsCode: yup.string().required('상품코드'),
-					goodsName: yup.string().required('상품내용'),
-					salePrice: yup.number().required('판매가'),
-					sortSequence: yup
-						.number()
-						.positive('1 이상의 값을 입력해주세요')
-						.required('정렬순서'),
-				})
-			)
-			.required('상품 전시 정보를 선택해주세요'),
-	})
-	.required();
 
 interface EventProp {
 	title: string;
@@ -123,16 +44,6 @@ interface EventProp {
 	) => void;
 }
 
-const eventDisplayValues: EventFormDisplayValues = {
-	title: '',
-	startDate: dayjs(),
-	endDate: dayjs(),
-	useyn: 'Y',
-	displayImg: undefined,
-	eventImg: undefined,
-	goods: [],
-};
-
 const EventFormDisplayPC: FC<EventProp> = ({
 	title,
 	description,
@@ -141,15 +52,13 @@ const EventFormDisplayPC: FC<EventProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
+
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
-	} = useForm<EventFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: eventDisplayValues,
-		resolver: yupResolver(eventDisplaySchema),
-	});
+	} = useFormContext<EventFormDisplayValues>();
+
 	const { fields, replace } = useFieldArray({
 		control,
 		name: 'goods',

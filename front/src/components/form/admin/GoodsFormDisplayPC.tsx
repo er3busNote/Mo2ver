@@ -10,9 +10,7 @@ import { useDispatch } from 'react-redux';
 import { GoodsData } from '../../../api/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
-import { Controller, useForm, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,
@@ -35,62 +33,12 @@ import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
-import dayjs, { Dayjs } from 'dayjs';
+
+const fontSize_sm = '13px';
+const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-const goodsDisplaySchema = yup
-	.object()
-	.shape({
-		title: yup
-			.string()
-			.required('제목을 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		startDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.nullable()
-			.required('시작날짜가 존재하질 않습니다'),
-		endDate: yup
-			.mixed<Dayjs>()
-			.transform((originalValue) => {
-				return originalValue ? dayjs(originalValue) : null;
-			})
-			.when(
-				'startDate',
-				(startDate, schema) =>
-					startDate &&
-					schema.test({
-						test: (endDate) =>
-							endDate && endDate.isAfter(startDate.toLocaleString()),
-						message: '시작날짜 이후여야 합니다',
-					})
-			)
-			.nullable()
-			.required('마지막날짜가 존재하질 않습니다'),
-		position: yup.string().required('필수항목'),
-		type: yup.string().required(),
-		useyn: yup.string().required('필수항목'),
-		goods: yup
-			.array()
-			.of(
-				yup.object().shape({
-					goodsCode: yup.string().required('상품코드'),
-					goodsName: yup.string().required('상품내용'),
-					salePrice: yup.number().required('판매가'),
-					sortSequence: yup
-						.number()
-						.positive('1 이상의 값을 입력해주세요')
-						.required('정렬순서'),
-				})
-			)
-			.required('상품 전시 정보를 선택해주세요'),
-	})
-	.required();
 
 interface GoodsProp {
 	title: string;
@@ -101,16 +49,6 @@ interface GoodsProp {
 	) => void;
 }
 
-const goodsDisplayValues: GoodsFormDisplayValues = {
-	title: '',
-	startDate: dayjs(),
-	endDate: dayjs(),
-	position: '',
-	type: 'GD',
-	useyn: 'Y',
-	goods: [],
-};
-
 const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	title,
 	description,
@@ -120,16 +58,14 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
+
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useForm<GoodsFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: goodsDisplayValues,
-		resolver: yupResolver(goodsDisplaySchema),
-	});
+	} = useFormContext<GoodsFormDisplayValues>();
+
 	const { fields, replace } = useFieldArray({
 		control,
 		name: 'goods',
@@ -190,31 +126,32 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		px: 2,
 		py: 1.5,
 		width: 120,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
 		px: 2,
-		py: 2,
-		fontSize: { sm: '13px', lg: '14px' },
+		pt: 0.8,
+		pb: 1.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
 		px: 2,
-		py: 1.5,
+		py: 1.2,
 		minWidth: '47px',
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
 		px: 2,
-		py: 1,
+		py: 0.5,
 		border: tableBorder,
-		fontSize: { sm: '13px', lg: '14px' },
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const dataTdNum: SxProps<Theme> = {
 		width: '220px',
@@ -232,12 +169,12 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-4px',
+				top: '0px',
 				ml: 1,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '4px',
+				top: '2px',
 				ml: 2,
 			},
 	};

@@ -7,42 +7,41 @@ import React, {
 	BaseSyntheticEvent,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext } from 'react-hook-form';
+import { CategoryData } from '../../api/types';
+import useCategoryInfo from '../../hooks/category/useCategoryInfo';
 import useImageUrl from '../../hooks/useImageUrl';
-import { Box, Grid, Button, CardMedia } from '@mui/material';
+import ButtonGoods from '../button/ButtonGoods';
+import {
+	Box,
+	Grid,
+	CardMedia,
+	Table,
+	TableBody,
+	TableRow,
+	TableCell,
+	TableContainer,
+} from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import RenderTextField from '../validate/TextField';
+import RenderRadioField from '../validate/RadioField';
+import RenderSelectField from '../validate/SelectField';
+import RenderDatePickerField from '../validate/DatePickerField';
 import RenderFileField from '../validate/FileField';
 import { RegisterFormValues } from './types';
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import { FileData } from '../../api/types';
+import { isMobile } from 'react-device-detect';
 
-const registerSchema = yup
-	.object()
-	.shape({
-		name: yup
-			.string()
-			.required('제목을 입력해주세요')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		brand: yup.string().required('브랜드명을 입력해주세요'),
-		gender: yup.string().required('성별을 입력해주세요'),
-		year: yup.number().required('등록연도를 입력해주세요'),
-		price: yup
-			.number()
-			.required('가격을 입력해주세요')
-			.min(4, '4자 이상 입력해주세요!')
-			.max(10, '입력 범위가 초과되었습니다'),
-		goodsImg: yup
-			.array()
-			.min(1, '적어도 하나의 파일을 업로드해야 합니다.')
-			.max(5, '최대 5개의 파일을 업로드할 수 있습니다.')
-			.default([]),
-	})
-	.required();
+const fontSize_xs = '11px';
+const fontSize_sm = '13px';
+const fontSize_lg = '13px';
 
 interface RegisterProp {
+	category: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 	setFiles: Dispatch<SetStateAction<Array<FileData> | undefined>>;
 	onSubmit: (
@@ -51,22 +50,27 @@ interface RegisterProp {
 	) => void;
 }
 
-const registerValues: RegisterFormValues = {
-	name: '',
-	brand: '',
-	gender: '',
-	year: 2024,
-	price: 1000,
-	goodsImg: [],
-};
-
 const RegisterForm: FC<RegisterProp> = ({
+	category,
 	image,
 	setFiles,
 	onSubmit,
 }): JSX.Element => {
 	const [open, setOpen] = useState(true);
 	const [file, setFile] = useState<string>();
+	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
+	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
+	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
+	const mediumCategoryData = useCategoryInfo({
+		category,
+		categoryLevel: 2,
+		categoryInfo: largeCategoryCode,
+	});
+	const smallCategoryData = useCategoryInfo({
+		category,
+		categoryLevel: 3,
+		categoryInfo: mediumCategoryCode,
+	});
 
 	const registerClick = () => {
 		setOpen(false);
@@ -77,11 +81,7 @@ const RegisterForm: FC<RegisterProp> = ({
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useForm<RegisterFormValues>({
-		mode: 'onChange',
-		defaultValues: registerValues,
-		resolver: yupResolver(registerSchema),
-	});
+	} = useFormContext<RegisterFormValues>();
 
 	useEffect(() => {
 		const goodsImg = watch('goodsImg');
@@ -91,9 +91,61 @@ const RegisterForm: FC<RegisterProp> = ({
 		if (goods.length > 1) setFiles(goods.slice(1));
 	}, [watch('goodsImg')]);
 
+	useEffect(() => {
+		const largeCategory = watch('largeCategory');
+		setLargeCategoryCode(largeCategory);
+		setMediumCategoryCode('');
+	}, [watch('largeCategory')]);
+
+	useEffect(() => {
+		const mediumCategory = watch('mediumCategory');
+		setMediumCategoryCode(mediumCategory);
+	}, [watch('mediumCategory')]);
+
 	const icon: SxProps<Theme> = {
 		fontSize: '9rem',
 		color: '#B3B3B3',
+	};
+	const conditionTd: SxProps<Theme> = {
+		borderBlock: 'none',
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		'& .MuiInputLabel-root': {
+			top: { xs: '-9px', md: '-8px', sm: '-6px' },
+			left: { xs: '-8px', md: '-8px', sm: '0px' },
+		},
+		'& .MuiInputLabel-root[data-shrink="true"]': {
+			top: { xs: '2px', md: '1px', sm: '0px' },
+			left: { xs: '2px', md: '1px', sm: '0px' },
+		},
+		'& .MuiFormHelperText-root': {
+			top: '31px',
+			left: '-18px',
+			maxWidth: '150px',
+			position: 'absolute',
+			whiteSpace: 'nowrap',
+			textOverflow: 'ellipsis',
+			overflowX: 'clip',
+		},
+	};
+	const dataTh: SxProps<Theme> = {
+		width: { xs: 80, sm: 100 },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		bgcolor: '#f9f9f9',
+		borderBlock: 'none',
+		fontWeight: 'bold',
+	};
+	const dataTd: SxProps<Theme> = {
+		borderBlock: 'none',
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		'& .MuiFormControl-root': {
+			my: { xs: 0, sm: 0.25 },
+		},
+	};
+	const registerForm: SxProps<Theme> = {
+		mt: { xs: -3, sm: -3, md: 3, lg: 3 },
+		mx: { xs: 6, sm: 6, md: 3, lg: 3 },
+		mb: { xs: 10, sm: 10 },
+		textAlign: 'left',
 	};
 
 	return (
@@ -124,48 +176,266 @@ const RegisterForm: FC<RegisterProp> = ({
 				</Box>
 			</Grid>
 			<Grid item xs={12} md={6} lg={6}>
-				<Box
-					sx={{
-						mt: { xs: -3, sm: -3, md: 3, lg: 3 },
-						mx: { xs: 6, sm: 6, md: 3, lg: 3 },
-						mb: { xs: 10, sm: 10 },
-						textAlign: 'left',
-					}}
-				>
-					<Controller
-						name="goodsImg"
-						control={control}
-						render={({ field, fieldState, formState }) => (
-							<RenderFileField
-								field={field}
-								fieldState={fieldState}
-								formState={formState}
-							/>
-						)}
-					/>
+				<Box sx={registerForm}>
+					<TableContainer>
+						<Table size="small">
+							<TableBody>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										상품명
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="name"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderTextField
+													type="text"
+													label="상품명을 입력해주세요"
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										브랜드명
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="brand"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderTextField
+													type="text"
+													label="브랜드명을 입력해주세요"
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										성별
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="gender"
+											control={control}
+											render={({ field, formState }) => (
+												<RenderRadioField
+													datas={[
+														{ value: 'Men', label: '남' },
+														{ value: 'Women', label: '여' },
+													]}
+													field={field}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										대분류
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="largeCategory"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="대분류"
+													datas={largeCategoryData.map(
+														(data: CategoryData) => ({
+															value: data.categoryCode,
+															label: data.categoryName,
+														})
+													)}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										중분류
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="mediumCategory"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="중분류"
+													datas={mediumCategoryData.map(
+														(data: CategoryData) => ({
+															value: data.categoryCode,
+															label: data.categoryName,
+														})
+													)}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										소분류
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="smallCategory"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="소분류"
+													datas={smallCategoryData.map(
+														(data: CategoryData) => ({
+															value: data.categoryCode,
+															label: data.categoryName,
+														})
+													)}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										구매제한여부
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="gender"
+											control={control}
+											render={({ field, formState }) => (
+												<RenderRadioField
+													datas={[
+														{ value: 'Y', label: '제한' },
+														{ value: 'N', label: '제한없음' },
+													]}
+													field={field}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										판매기간
+									</TableCell>
+									<TableCell sx={conditionTd} align="left">
+										<LocalizationProvider dateAdapter={AdapterDayjs}>
+											<Controller
+												name="saleStartDate"
+												control={control}
+												render={({ field, fieldState, formState }) => (
+													<RenderDatePickerField
+														label="판매시작일시"
+														field={field}
+														fieldState={fieldState}
+														formState={formState}
+													/>
+												)}
+											/>
+											<HorizontalRuleIcon />
+											<Controller
+												name="saleEndDate"
+												control={control}
+												render={({ field, fieldState, formState }) => (
+													<RenderDatePickerField
+														label="판매종료일시"
+														field={field}
+														fieldState={fieldState}
+														formState={formState}
+													/>
+												)}
+											/>
+										</LocalizationProvider>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										할인기간
+									</TableCell>
+									<TableCell sx={conditionTd} align="left">
+										<LocalizationProvider dateAdapter={AdapterDayjs}>
+											<Controller
+												name="discountStartDate"
+												control={control}
+												render={({ field, fieldState, formState }) => (
+													<RenderDatePickerField
+														label="할인시작일시"
+														field={field}
+														fieldState={fieldState}
+														formState={formState}
+													/>
+												)}
+											/>
+											<HorizontalRuleIcon />
+											<Controller
+												name="discountEndDate"
+												control={control}
+												render={({ field, fieldState, formState }) => (
+													<RenderDatePickerField
+														label="할인종료일시"
+														field={field}
+														fieldState={fieldState}
+														formState={formState}
+													/>
+												)}
+											/>
+										</LocalizationProvider>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										첨부파일
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="goodsImg"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderFileField
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+					</TableContainer>
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-						<Button
+						<ButtonGoods
 							type="submit"
-							sx={{
-								mt: 2,
-								px: 6,
-								py: 1,
-								width: '80%',
-								fontSize: '14px',
-								fontWeight: 'bold',
-								bgcolor: '#7940B6',
-								border: '1px solid #757595',
-								borderRadius: 0,
-								color: '#fff',
-								'&:hover': {
-									bgcolor: '#9373B5',
-								},
-							}}
+							buttonType="register"
 							variant="outlined"
+							disabled={isSubmitted && !isValid}
 							onClick={registerClick}
 						>
 							등록
-						</Button>
+						</ButtonGoods>
 					</Box>
 				</Box>
 			</Grid>

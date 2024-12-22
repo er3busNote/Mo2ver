@@ -27,7 +27,7 @@ interface EventDispatchProps {
 	event: ActionCreatorsMapObject;
 }
 
-const BannerPagePC: FC<EventProps> = ({
+const EventPagePC: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
@@ -50,7 +50,7 @@ const BannerPagePC: FC<EventProps> = ({
 	);
 };
 
-const BannerPageMobile: FC<EventProps> = ({
+const EventPageMobile: FC<EventProps> = ({
 	title,
 	description,
 	setPage,
@@ -81,13 +81,13 @@ const EventPage: FC<EventDispatchProps> = ({
 	const [eventPageData, setPage] = useEventPageList({ event });
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<BannerPagePC
+			<EventPagePC
 				title={title}
 				description={description}
 				setPage={setPage}
 				eventPageData={eventPageData}
 			/>
-			<BannerPageMobile
+			<EventPageMobile
 				title={title}
 				description={description}
 				setPage={setPage}

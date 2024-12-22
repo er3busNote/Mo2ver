@@ -2,6 +2,7 @@ import React, { FC, useState, ChangeEvent, ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../../store/index';
+import SearchInput from '../../input/SearchInput';
 import ButtonDelivery from '../../button/ButtonDelivery';
 import {
 	Box,
@@ -12,7 +13,6 @@ import {
 	Chip,
 	Stack,
 	Rating,
-	InputBase,
 	IconButton,
 	Pagination,
 	Breadcrumbs,
@@ -26,9 +26,8 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { SxProps, Theme, styled, alpha } from '@mui/material/styles';
+import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
-import SearchIcon from '@mui/icons-material/Search';
 import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
@@ -40,50 +39,6 @@ const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
-
-const Search = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: 0,
-	width: '100%',
-	[theme.breakpoints.up('sm')]: {
-		width: 'auto',
-	},
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: '100%',
-	position: 'absolute',
-	pointerEvents: 'none',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: 'inherit',
-	width: '100%',
-	'& .MuiInputBase-input': {
-		border: '2px solid #ddd',
-		borderRadius: '7px',
-		padding: theme.spacing(1, 1, 1, 0),
-		// vertical padding + font size from searchIcon
-		fontSize: '14px',
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		[theme.breakpoints.up('sm')]: {
-			width: '28ch',
-			'&:focus': {
-				width: '38ch',
-			},
-		},
-	},
-}));
 
 interface TabPanelProps {
 	children?: ReactNode;
@@ -617,15 +572,10 @@ const CartDeliveryPC: FC = (): JSX.Element => {
 				</Typography>
 			</Box>
 			<Box sx={searchBox}>
-				<Search>
-					<SearchIconWrapper>
-						<SearchIcon />
-					</SearchIconWrapper>
-					<StyledInputBase
-						placeholder="주문한 상품을 검색할 수 있어요!"
-						inputProps={{ 'aria-label': 'search' }}
-					/>
-				</Search>
+				<SearchInput
+					placeholder="주문한 상품을 검색할 수 있어요!"
+					onChange={searchOnChange}
+				/>
 			</Box>
 			<Box sx={selectBox}>
 				<Stack direction="row" spacing={1}>

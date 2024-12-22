@@ -9,6 +9,7 @@ import { FileData } from '../../api/types';
 interface GoodsRegisterProps {
 	description: string;
 	steps: string[];
+	category: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 	setFiles: Dispatch<SetStateAction<Array<FileData> | undefined>>;
 	onSubmit: (
@@ -20,6 +21,7 @@ interface GoodsRegisterProps {
 const GoodsRegister: FC<GoodsRegisterProps> = ({
 	description,
 	steps,
+	category,
 	image,
 	setFiles,
 	onSubmit,
@@ -27,7 +29,12 @@ const GoodsRegister: FC<GoodsRegisterProps> = ({
 	return (
 		<Box sx={{ mb: 10 }}>
 			<AppSubStepHeader description={description} steps={steps} />
-			<RegisterForm image={image} setFiles={setFiles} onSubmit={onSubmit} />
+			<RegisterForm
+				category={category}
+				image={image}
+				setFiles={setFiles}
+				onSubmit={onSubmit}
+			/>
 		</Box>
 	);
 };

@@ -1,4 +1,7 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
@@ -13,8 +16,85 @@ import { Box } from '@mui/material';
 import { EventFormDisplayValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
+import dayjs, { Dayjs } from 'dayjs';
 
 const drawerMenuLimit = 768;
+
+const eventDisplaySchema = yup
+	.object()
+	.shape({
+		title: yup
+			.string()
+			.required('제목을 입력해주세요')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		startDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.nullable()
+			.required('시작날짜가 존재하질 않습니다'),
+		endDate: yup
+			.mixed<Dayjs>()
+			.transform((originalValue) => {
+				return originalValue ? dayjs(originalValue) : null;
+			})
+			.when(
+				'startDate',
+				(startDate, schema) =>
+					startDate &&
+					schema.test({
+						test: (endDate) =>
+							endDate && endDate.isAfter(startDate.toLocaleString()),
+						message: '시작날짜 이후여야 합니다',
+					})
+			)
+			.nullable()
+			.required('마지막날짜가 존재하질 않습니다'),
+		useyn: yup.string().required('필수항목'),
+		displayImg: yup
+			.mixed<File>()
+			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
+			.test(
+				'fileSize',
+				'파일크기가 너무 작습니다',
+				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+			)
+			.test(
+				'fileType',
+				'지원되는 파일 타입이 아닙니다',
+				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
+			),
+		eventImg: yup
+			.mixed<File>()
+			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
+			.test(
+				'fileSize',
+				'파일크기가 너무 작습니다',
+				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
+			)
+			.test(
+				'fileType',
+				'지원되는 파일 타입이 아닙니다',
+				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
+			),
+		goods: yup
+			.array()
+			.of(
+				yup.object().shape({
+					goodsCode: yup.string().required('상품코드'),
+					goodsName: yup.string().required('상품내용'),
+					salePrice: yup.number().required('판매가'),
+					sortSequence: yup
+						.number()
+						.positive('1 이상의 값을 입력해주세요')
+						.required('정렬순서'),
+				})
+			)
+			.required('상품 전시 정보를 선택해주세요'),
+	})
+	.required();
 
 interface EventProps {
 	title: string;
@@ -31,6 +111,16 @@ interface EventDispatchProps {
 	member: ActionCreatorsMapObject;
 	event: ActionCreatorsMapObject;
 }
+
+const eventDisplayValues: EventFormDisplayValues = {
+	title: '',
+	startDate: dayjs(),
+	endDate: dayjs(),
+	useyn: 'Y',
+	displayImg: undefined,
+	eventImg: undefined,
+	goods: [],
+};
 
 const EventGoodsPC: FC<EventProps> = ({
 	title,
@@ -110,18 +200,27 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/event');
 	};
+
+	const methods = useForm<EventFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: eventDisplayValues,
+		resolver: yupResolver(eventDisplaySchema),
+	});
+
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<EventGoodsPC
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
-			<EventGoodsMobile
-				title={title}
-				description={description}
-				onSubmit={submitForm}
-			/>
+			<FormProvider {...methods}>
+				<EventGoodsPC
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+				<EventGoodsMobile
+					title={title}
+					description={description}
+					onSubmit={submitForm}
+				/>
+			</FormProvider>
 		</Box>
 	);
 };
