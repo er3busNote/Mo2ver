@@ -41,6 +41,27 @@ interface GoodsData {
 	imageList: Array<ImageData>;
 }
 
+interface GoodsRegisterData {
+	goodsName: string;
+	goodsBrand: string;
+	goodsGender: string;
+	goodsYear: number;
+	goodsImg: Array<FileData>;
+	largeCategoryCode: string;
+	mediumCategoryCode: string;
+	smallCategoryCode: string;
+	buyLimitYesNo: string;
+	salePeriodYesNo: string;
+	saleStartDate: string;
+	saleEndDate: string;
+	supplyPrice: number;
+	salePrice: number;
+	maxBuyQuantity: number;
+	discountPrice: number;
+	discountStartDate: string;
+	discountEndDate: string;
+}
+
 interface GoodsPage {
 	page: number;
 	size: number;
@@ -321,6 +342,7 @@ export type {
 	CSRFData,
 	ImageData,
 	GoodsData,
+	GoodsRegisterData,
 	GoodsPage,
 	GoodsSearchPage,
 	CategoryData,

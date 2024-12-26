@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ChangeEvent, KeyboardEvent } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
@@ -56,6 +56,7 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 						lg: fontSize_lg,
 					},
 				},
+				...(type === 'number' && { pattern: '[0-9]*' }),
 			}} // font size of input text
 			InputLabelProps={{
 				sx: {

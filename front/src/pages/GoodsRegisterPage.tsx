@@ -8,6 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
 import Api from '../api';
+import { GoodsRegisterData } from '../api/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import GoodsRegister from '../components/goods/GoodsRegister';
 import { Box } from '@mui/material';
@@ -31,19 +32,44 @@ const registerSchema = yup
 			.max(50, '입력 범위가 초과되었습니다'),
 		brand: yup.string().required('브랜드명을 입력해주세요'),
 		gender: yup.string().required('성별을 입력해주세요'),
-		year: yup.number().required('등록연도를 입력해주세요'),
-		price: yup
+		year: yup
 			.number()
-			.required('가격을 입력해주세요')
-			.min(0, '0원 이상 입력해주세요!'),
+			.typeError('제조일자를 입력해주세요')
+			.required('제조일자를 입력해주세요')
+			.min(1990, '1990년 이상 입력해주세요'),
 		goodsImg: yup
 			.array()
+			.of(
+				yup.object().shape({
+					fileAttachCode: yup
+						.string()
+						.test(
+							'non-empty', // 커스텀 테스트 이름
+							'fileAttachCode는 빈 문자열일 수 없습니다.', // 에러 메시지
+							(value) => value !== '' // 빈 문자열이 아닌지 체크
+						)
+						.required('첨부파일코드는 필수 항목입니다.'),
+					fileSize: yup
+						.number()
+						.test(
+							'non-zero-size', // 커스텀 테스트 이름
+							'fileSize는 0일 수 없습니다.', // 에러 메시지
+							(value) => value !== 0 // 0이 아닌지 체크
+						)
+						.required('파일크기는 필수 항목입니다.'),
+					fileName: yup.string().required('파일이름은 필수 항목입니다.'),
+					fileType: yup.string().required('파일형식은 필수 항목입니다.'),
+					fileExtension: yup
+						.string()
+						.required('파일 확장자는 필수 항목입니다.'),
+				})
+			)
 			.min(1, '적어도 하나의 파일을 업로드해야 합니다.')
 			.max(5, '최대 5개의 파일을 업로드할 수 있습니다.')
 			.default([]),
-		largeCategory: yup.string().required(),
-		mediumCategory: yup.string().required(),
-		smallCategory: yup.string().required(),
+		largeCategory: yup.string().required('대분류를 선택해주세요'),
+		mediumCategory: yup.string().required('중분류를 선택해주세요'),
+		smallCategory: yup.string().required('소분류를 선택해주세요'),
 		buyLimitYesNo: yup.string().required(),
 		salePeriodYesNo: yup.string().required(),
 		saleStartDate: yup
@@ -73,20 +99,23 @@ const registerSchema = yup
 			.required('판매종료일시가 존재하질 않습니다'),
 		supplyPrice: yup
 			.number()
+			.typeError('공급가격을 입력해주세요')
 			.required('공급가격을 입력해주세요')
-			.min(0, '0원 이상 입력해주세요!'),
+			.min(100, '100원 이상 입력해주세요'),
 		salePrice: yup
 			.number()
+			.typeError('판매가격을 입력해주세요')
 			.required('판매가격을 입력해주세요')
-			.min(0, '0원 이상 입력해주세요!'),
+			.min(100, '100원 이상 입력해주세요'),
 		maxBuyQuantity: yup
 			.number()
-			.required('가격을 입력해주세요')
-			.min(1, '1개 이상 입력해주세요!'),
+			.required('최대구매수량을 입력해주세요')
+			.min(1, '1개 이상 입력해주세요'),
 		discountPrice: yup
 			.number()
+			.typeError('할인가격을 입력해주세요')
 			.required('할인가격을 입력해주세요')
-			.min(0, '0원 이상 입력해주세요!'),
+			.min(100, '100원 이상 입력해주세요'),
 		discountStartDate: yup
 			.mixed<Dayjs>()
 			.transform((originalValue) => {
@@ -137,7 +166,6 @@ const registerValues: RegisterFormValues = {
 	brand: '',
 	gender: '',
 	year: 2024,
-	price: 1000,
 	goodsImg: [],
 	largeCategory: '',
 	mediumCategory: '',
@@ -146,10 +174,10 @@ const registerValues: RegisterFormValues = {
 	salePeriodYesNo: 'Y',
 	saleStartDate: dayjs(),
 	saleEndDate: dayjs(),
-	supplyPrice: 0,
-	salePrice: 0,
+	supplyPrice: 1000,
+	salePrice: 1000,
 	maxBuyQuantity: 1,
-	discountPrice: 0,
+	discountPrice: 1000,
 	discountStartDate: dayjs(),
 	discountEndDate: dayjs(),
 };
@@ -232,6 +260,27 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 		data: RegisterFormValues,
 		registerForm?: BaseSyntheticEvent<object, any, any>
 	) => {
+		const registerFormData: GoodsRegisterData = {
+			goodsName: data.name,
+			goodsBrand: data.brand,
+			goodsGender: data.gender,
+			goodsYear: data.year,
+			goodsImg: data.goodsImg,
+			largeCategoryCode: data.largeCategory,
+			mediumCategoryCode: data.mediumCategory,
+			smallCategoryCode: data.smallCategory,
+			buyLimitYesNo: data.buyLimitYesNo,
+			salePeriodYesNo: data.salePeriodYesNo,
+			saleStartDate: data.saleStartDate.format('YYYY-MM-DD'),
+			saleEndDate: data.saleEndDate.format('YYYY-MM-DD'),
+			supplyPrice: data.supplyPrice,
+			salePrice: data.salePrice,
+			maxBuyQuantity: data.maxBuyQuantity,
+			discountPrice: data.discountPrice,
+			discountStartDate: data.discountStartDate.format('YYYY-MM-DD'),
+			discountEndDate: data.discountEndDate.format('YYYY-MM-DD'),
+		};
+		console.log(registerFormData);
 		console.log(csrfData);
 		if (registerForm) registerForm.preventDefault(); // 새로고침 방지
 		navigate('/register');

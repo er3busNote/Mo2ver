@@ -18,7 +18,6 @@ interface RegisterFormValues {
 	brand: string;
 	gender: string;
 	year: number;
-	price: number;
 	goodsImg: Array<FileData>;
 	largeCategory: string;
 	mediumCategory: string;
