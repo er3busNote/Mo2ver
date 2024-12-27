@@ -1,4 +1,4 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -12,9 +12,9 @@ import { GoodsRegisterData } from '../api/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import GoodsRegister from '../components/goods/GoodsRegister';
 import { Box } from '@mui/material';
-import { FileData } from '../api/types';
 import { RegisterFormValues } from '../components/form/types';
 import { useMediaQuery } from 'react-responsive';
+import { isMobile as isMobileDevice } from 'react-device-detect';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -188,7 +188,6 @@ const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 	image,
 	onSubmit,
 }): JSX.Element => {
-	const [files, setFiles] = useState<Array<FileData>>();
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -204,9 +203,10 @@ const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 					<GoodsRegister
 						description={description}
 						steps={steps}
+						slidesPerView={4}
+						spaceBetween={40}
 						category={category}
 						image={image}
-						setFiles={setFiles}
 						onSubmit={onSubmit}
 					/>
 				</Box>
@@ -221,7 +221,6 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	image,
 	onSubmit,
 }): JSX.Element => {
-	const [files, setFiles] = useState<Array<FileData>>();
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -237,9 +236,10 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 					<GoodsRegister
 						description={description}
 						steps={steps}
+						slidesPerView={isMobileDevice ? 4 : 5}
+						spaceBetween={10}
 						category={category}
 						image={image}
-						setFiles={setFiles}
 						onSubmit={onSubmit}
 					/>
 				</Box>

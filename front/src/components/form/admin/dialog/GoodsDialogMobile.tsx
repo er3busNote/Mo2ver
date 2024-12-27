@@ -7,11 +7,11 @@ import { GoodsData, CategoryData } from '../../../../api/types';
 import useCategoryInfo from '../../../../hooks/category/useCategoryInfo';
 import useGoodsSearchPageList from '../../../../hooks/goods/useGoodsSearchPageList';
 import SearchInput from '../../../input/SearchInput';
+import ButtonDialog from '../../../button/ButtonDialog';
 import {
 	Box,
 	Grid,
 	Paper,
-	Button,
 	Checkbox,
 	Dialog,
 	DialogActions,
@@ -298,28 +298,14 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 							placeholder="상품명을 검색할 수 있어요!"
 							onChange={searchOnChange}
 						/>
-						<Button
-							sx={{
-								px: 2,
-								mx: 1.5,
-								mt: 0.2,
-								mb: 0.5,
-								fontSize: { xs: '10px', sm: '12px' },
-								fontWeight: 'bold',
-								bgcolor: '#F4F5FB',
-								borderRadius: 0,
-								border: '1px solid #87A0F4',
-								color: '#87A0F4',
-								'&:hover': {
-									bgcolor: '#EFF1FF',
-									border: '1px solid #93ACFF',
-								},
-							}}
+						<ButtonDialog
+							buttonType="search"
+							device="mobile"
 							variant="outlined"
 							onClick={() => searchClick(keyword)}
 						>
 							검색
-						</Button>
+						</ButtonDialog>
 					</Box>
 					<Grid
 						container
@@ -339,90 +325,46 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								alignItems="center"
 								justifyContent="center"
 							>
-								<Button
-									sx={{
-										mx: isMobile ? 0.5 : 0,
-										my: isMobile ? 0 : 0.5,
-										lineHeight: 1.05,
-										minWidth: 30,
-										fontSize: { xs: '0.6125rem', sm: '0.8125rem' },
-										bgcolor: '#7C62FE',
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#917EF1',
-										},
-									}}
+								<ButtonDialog
+									buttonType="moveall"
+									device="mobile"
 									variant="outlined"
 									size="small"
 									onClick={handleAllRight}
 									disabled={left.length === 0}
-									aria-label="move all right"
 								>
 									≫
-								</Button>
-								<Button
-									sx={{
-										mx: isMobile ? 0.5 : 0,
-										my: isMobile ? 0 : 0.5,
-										lineHeight: 1.05,
-										minWidth: 30,
-										fontSize: { xs: '0.6125rem', sm: '0.8125rem' },
-										bgcolor: '#EBEBEB',
-										'&:hover': {
-											bgcolor: '#EFEFEF',
-											border: '1px solid #D4D4D4',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveselected"
+									device="mobile"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedRight}
 									disabled={leftChecked.length === 0}
-									aria-label="move selected right"
 								>
 									&gt;
-								</Button>
-								<Button
-									sx={{
-										mx: isMobile ? 0.5 : 0,
-										my: isMobile ? 0 : 0.5,
-										lineHeight: 1.05,
-										minWidth: 30,
-										fontSize: { xs: '0.6125rem', sm: '0.8125rem' },
-										bgcolor: '#EBEBEB',
-										'&:hover': {
-											bgcolor: '#EFEFEF',
-											border: '1px solid #D4D4D4',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveselected"
+									device="mobile"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedLeft}
 									disabled={rightChecked.length === 0}
-									aria-label="move selected left"
 								>
 									&lt;
-								</Button>
-								<Button
-									sx={{
-										mx: isMobile ? 0.5 : 0,
-										my: isMobile ? 0 : 0.5,
-										lineHeight: 1.05,
-										minWidth: 30,
-										fontSize: { xs: '0.6125rem', sm: '0.8125rem' },
-										bgcolor: '#7C62FE',
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#917EF1',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveall"
+									device="mobile"
 									variant="outlined"
 									size="small"
 									onClick={handleAllLeft}
 									disabled={right.length === 0}
-									aria-label="move all left"
 								>
 									≪
-								</Button>
+								</ButtonDialog>
 							</Grid>
 						</Grid>
 						<Grid item>{customList(right)}</Grid>
@@ -443,44 +385,22 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 				</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
-				<Button
-					sx={{
-						px: 5,
-						py: 0.8,
-						fontSize: { xs: '8px', sm: '10px' },
-						fontWeight: 'bold',
-						bgcolor: '#7C62FC',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#917EF1',
-						},
-					}}
+				<ButtonDialog
+					buttonType="select"
+					device="mobile"
 					variant="outlined"
 					onClick={handleSelect}
 				>
 					선택
-				</Button>
-				<Button
-					sx={{
-						px: 5,
-						py: 0.8,
-						fontSize: { xs: '8px', sm: '10px' },
-						fontWeight: 'bold',
-						bgcolor: '#555555',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#7F7F7F',
-						},
-					}}
+				</ButtonDialog>
+				<ButtonDialog
+					buttonType="cancel"
+					device="mobile"
 					variant="outlined"
 					onClick={handleClose}
 				>
 					취소
-				</Button>
+				</ButtonDialog>
 			</DialogActions>
 		</Dialog>
 	);

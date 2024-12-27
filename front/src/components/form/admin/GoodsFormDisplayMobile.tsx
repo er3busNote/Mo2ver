@@ -172,16 +172,14 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
-			{
-				top: '-3px',
-				ml: 0.5,
-			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
-			{
-				top: '3px',
-				ml: 1,
-			},
+		'label[id$="title-label"]': {
+			top: '-3px',
+			ml: 0.5,
+		},
+		'label[id$="title-label"][data-shrink="true"]': {
+			top: '3px',
+			ml: 1,
+		},
 	};
 	const inputHeader: SxProps<Theme> = {
 		px: 2,

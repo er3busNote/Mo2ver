@@ -1,17 +1,17 @@
-import React, { FC, Dispatch, SetStateAction, BaseSyntheticEvent } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import AppSubStepHeader from '../common/AppSubStepHeader';
 import RegisterForm from '../form/RegisterForm';
 import { Box } from '@mui/material';
 import { RegisterFormValues } from '../form/types';
-import { FileData } from '../../api/types';
 
 interface GoodsRegisterProps {
 	description: string;
 	steps: string[];
+	slidesPerView: number;
+	spaceBetween: number;
 	category: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
-	setFiles: Dispatch<SetStateAction<Array<FileData> | undefined>>;
 	onSubmit: (
 		data: RegisterFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -21,18 +21,20 @@ interface GoodsRegisterProps {
 const GoodsRegister: FC<GoodsRegisterProps> = ({
 	description,
 	steps,
+	slidesPerView,
+	spaceBetween,
 	category,
 	image,
-	setFiles,
 	onSubmit,
 }): JSX.Element => {
 	return (
 		<Box sx={{ mb: 10 }}>
 			<AppSubStepHeader description={description} steps={steps} />
 			<RegisterForm
+				slidesPerView={slidesPerView}
+				spaceBetween={spaceBetween}
 				category={category}
 				image={image}
-				setFiles={setFiles}
 				onSubmit={onSubmit}
 			/>
 		</Box>

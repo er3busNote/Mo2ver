@@ -98,7 +98,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 							},
 							'& .MuiChip-root': {
 								height: '28px',
-								maxWidth: '260px',
+								maxWidth: { xs: '180px', sm: '260px' },
 							},
 							'& .MuiChip-label': {
 								fontSize: {

@@ -88,6 +88,7 @@ const eventDisplaySchema = yup
 					salePrice: yup.number().required('판매가'),
 					sortSequence: yup
 						.number()
+						.typeError('정렬순서를 입력해주세요')
 						.positive('1 이상의 값을 입력해주세요')
 						.required('정렬순서'),
 				})

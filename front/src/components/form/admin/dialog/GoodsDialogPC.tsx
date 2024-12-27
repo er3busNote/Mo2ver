@@ -7,11 +7,11 @@ import { GoodsData, CategoryData } from '../../../../api/types';
 import useCategoryInfo from '../../../../hooks/category/useCategoryInfo';
 import useGoodsSearchPageList from '../../../../hooks/goods/useGoodsSearchPageList';
 import SearchInput from '../../../input/SearchInput';
+import ButtonDialog from '../../../button/ButtonDialog';
 import {
 	Box,
 	Grid,
 	Paper,
-	Button,
 	Checkbox,
 	Dialog,
 	DialogActions,
@@ -287,27 +287,14 @@ const GoodsDialogPC: FC<DialogProps> = ({
 							placeholder="상품명을 검색할 수 있어요!"
 							onChange={searchOnChange}
 						/>
-						<Button
-							sx={{
-								px: 4,
-								mx: 1.5,
-								my: 0.5,
-								fontSize: '12px',
-								fontWeight: 'bold',
-								bgcolor: '#F4F5FB',
-								borderRadius: 0,
-								border: '1px solid #87A0F4',
-								color: '#87A0F4',
-								'&:hover': {
-									bgcolor: '#EFF1FF',
-									border: '1px solid #93ACFF',
-								},
-							}}
+						<ButtonDialog
+							buttonType="search"
+							device="pc"
 							variant="outlined"
 							onClick={() => searchClick(keyword)}
 						>
 							검색
-						</Button>
+						</ButtonDialog>
 					</Box>
 					<Grid
 						container
@@ -318,82 +305,46 @@ const GoodsDialogPC: FC<DialogProps> = ({
 						<Grid item>{customList(left)}</Grid>
 						<Grid item>
 							<Grid container direction="column" alignItems="center">
-								<Button
-									sx={{
-										my: 0.5,
-										lineHeight: 1.25,
-										minWidth: 40,
-										bgcolor: '#7C62FE',
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#917EF1',
-										},
-									}}
+								<ButtonDialog
+									buttonType="moveall"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleAllRight}
 									disabled={left.length === 0}
-									aria-label="move all right"
 								>
 									≫
-								</Button>
-								<Button
-									sx={{
-										my: 0.5,
-										lineHeight: 1.25,
-										minWidth: 40,
-										bgcolor: '#EBEBEB',
-										'&:hover': {
-											bgcolor: '#EFEFEF',
-											border: '1px solid #D4D4D4',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveselected"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedRight}
 									disabled={leftChecked.length === 0}
-									aria-label="move selected right"
 								>
 									&gt;
-								</Button>
-								<Button
-									sx={{
-										my: 0.5,
-										lineHeight: 1.25,
-										minWidth: 40,
-										bgcolor: '#EBEBEB',
-										'&:hover': {
-											bgcolor: '#EFEFEF',
-											border: '1px solid #D4D4D4',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveselected"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedLeft}
 									disabled={rightChecked.length === 0}
-									aria-label="move selected left"
 								>
 									&lt;
-								</Button>
-								<Button
-									sx={{
-										my: 0.5,
-										lineHeight: 1.25,
-										minWidth: 40,
-										bgcolor: '#7C62FE',
-										color: '#fff',
-										'&:hover': {
-											bgcolor: '#917EF1',
-										},
-									}}
+								</ButtonDialog>
+								<ButtonDialog
+									buttonType="moveall"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleAllLeft}
 									disabled={right.length === 0}
-									aria-label="move all left"
 								>
 									≪
-								</Button>
+								</ButtonDialog>
 							</Grid>
 						</Grid>
 						<Grid item>{customList(right)}</Grid>
@@ -414,44 +365,22 @@ const GoodsDialogPC: FC<DialogProps> = ({
 				</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.8,
-						fontSize: '10px',
-						fontWeight: 'bold',
-						bgcolor: '#7C62FC',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#917EF1',
-						},
-					}}
+				<ButtonDialog
+					buttonType="select"
+					device="pc"
 					variant="outlined"
 					onClick={handleSelect}
 				>
 					선택
-				</Button>
-				<Button
-					sx={{
-						px: 6,
-						py: 0.8,
-						fontSize: '10px',
-						fontWeight: 'bold',
-						bgcolor: '#555555',
-						border: '1px solid #757595',
-						borderRadius: 0,
-						color: '#fff',
-						'&:hover': {
-							bgcolor: '#7F7F7F',
-						},
-					}}
+				</ButtonDialog>
+				<ButtonDialog
+					buttonType="cancel"
+					device="pc"
 					variant="outlined"
 					onClick={handleClose}
 				>
 					취소
-				</Button>
+				</ButtonDialog>
 			</DialogActions>
 		</Dialog>
 	);

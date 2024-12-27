@@ -126,16 +126,14 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrText-label"], label[id$="cnntUrl-label"]':
-			{
-				top: '0px',
-				ml: 1,
-			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrText-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
-			{
-				top: '2px',
-				ml: 2,
-			},
+		'label[id$="title-label"]': {
+			top: '0px',
+			ml: 1,
+		},
+		'label[id$="title-label"][data-shrink="true"]': {
+			top: '2px',
+			ml: 2,
+		},
 	};
 	return (
 		<Box
