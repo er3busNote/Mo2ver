@@ -80,9 +80,17 @@ const RenderSelectChipField: FC<RenderSelectChipFieldProps> = ({
 				lg: fontSize_lg,
 			},
 		},
-		'& .MuiOutlinedInput-notchedOutline legend': {
-			paddingRight: '40px',
+		'& .MuiOutlinedInput-notchedOutline': {
+			'& legend': {
+				paddingRight: '0px', // 기본값
+			},
 		},
+		'& .MuiInputLabel-shrink + .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline':
+			{
+				'& legend': {
+					paddingRight: '40px', // shrink 상태일 때 padding-right 변경
+				},
+			},
 		'& .MuiChip-root': {
 			height: '28px',
 			maxWidth: { xs: '180px', sm: '260px' },
