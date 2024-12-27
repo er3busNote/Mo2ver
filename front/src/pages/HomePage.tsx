@@ -90,7 +90,7 @@ const HomeMobile: FC<HomeProps> = ({ image }): JSX.Element => {
 						<PopularMobile />
 					</Box>
 					<MobileView>
-						<Box sx={{ px: 4, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
+						<Box sx={{ p: 2, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
 							<HorizontalScroll
 								slidesPerView={2}
 								spaceBetween={30}

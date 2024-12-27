@@ -73,6 +73,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 			md: fontSize_md,
 			lg: fontSize_lg,
 		},
+		minHeight: { xs: '37px', sm: '42px' },
 	};
 	return (
 		<FormControl sx={selectForm} error={error !== undefined}>

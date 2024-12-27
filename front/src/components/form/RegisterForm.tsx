@@ -22,6 +22,7 @@ import RenderTextField from '../validate/TextField';
 import RenderNumberField from '../validate/NumberField';
 import RenderRadioField from '../validate/RadioField';
 import RenderSelectField from '../validate/SelectField';
+import RenderSelectChipField from '../validate/SelectChipField';
 import RenderDatePickerField from '../validate/DatePickerField';
 import RenderFileField from '../validate/FileField';
 import HorizontalScroll from '../HorizontalScroll';
@@ -138,14 +139,14 @@ const RegisterForm: FC<RegisterProp> = ({
 			my: { xs: 0, sm: 0.25 },
 			overflowX: 'visible',
 		},
-		'label[id$="name-label"], label[id$="brand-label"], label[id$="year-label"], label[id$="supplyPrice-label"], label[id$="salePrice-label"], label[id$="discountPrice-label"]':
+		'label[id$="name-label"], label[id$="brand-label"], label[id$="year-label"], label[id$="keyword-label"], label[id$="supplyPrice-label"], label[id$="salePrice-label"], label[id$="discountPrice-label"]':
 			{
-				top: '-0.5px',
+				top: { xs: '-1px', sm: '-0.5px' },
 				ml: 1,
 			},
-		'label[id$="name-label"][data-shrink="true"], label[id$="brand-label"][data-shrink="true"], label[id$="year-label"][data-shrink="true"], label[id$="supplyPrice-label"][data-shrink="true"], label[id$="salePrice-label"][data-shrink="true"], label[id$="discountPrice-label"][data-shrink="true"]':
+		'label[id$="name-label"][data-shrink="true"], label[id$="brand-label"][data-shrink="true"], label[id$="year-label"][data-shrink="true"], label[id$="keyword-label"][data-shrink="true"], label[id$="supplyPrice-label"][data-shrink="true"], label[id$="salePrice-label"][data-shrink="true"], label[id$="discountPrice-label"][data-shrink="true"]':
 			{
-				top: '0px',
+				top: { xs: '-1px', sm: '0px' },
 				ml: 2,
 			},
 	};
@@ -272,6 +273,34 @@ const RegisterForm: FC<RegisterProp> = ({
 												<RenderTextField
 													type="number"
 													label="제조일자를 입력해주세요"
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										키워드
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="keyword"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectChipField
+													datas={[
+														'전체연령',
+														'성인',
+														'어린이',
+														'유아',
+														'가족',
+														'여성',
+														'남성',
+													]}
+													label="키워드를 입력해주세요"
 													field={field}
 													fieldState={fieldState}
 													formState={formState}

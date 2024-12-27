@@ -47,6 +47,7 @@ interface GoodsRegisterData {
 	goodsGender: string;
 	goodsYear: number;
 	goodsImg: Array<FileData>;
+	keyword: string;
 	largeCategoryCode: string;
 	mediumCategoryCode: string;
 	smallCategoryCode: string;

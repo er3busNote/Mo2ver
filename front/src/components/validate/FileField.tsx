@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { FileData } from '../../api/types';
 import Api from '../../api';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, SxProps, Theme } from '@mui/material/styles';
 import { Close, FileUploadOutlined } from '@mui/icons-material';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useFieInfo from '../../hooks/cmmn/useFileInfo';
@@ -40,7 +40,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
 	useEffect(() => {
-		if (dataFiles.length > 0) {
+		if (dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
 			onChange([...value, ...dataFiles]);
 		}
 	}, [dataFiles]);
@@ -55,6 +55,37 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 	const handleCarouselInput = () => {
 		fileInputRef.current?.click();
 	};
+
+	const textInput: SxProps<Theme> = {
+		color: 'inherit',
+		'& .MuiInputBase-root , & .MuiInputBase-input': {
+			py: 0.5,
+			paddingRight: '1rem !important',
+			cursor: 'pointer',
+		},
+		'& .MuiChip-root': {
+			height: '28px',
+			maxWidth: { xs: '180px', sm: '260px' },
+		},
+		'& .MuiChip-label': {
+			fontSize: {
+				xs: fontSize_xs,
+				sm: fontSize_sm,
+				md: fontSize_md,
+				lg: fontSize_lg,
+			},
+		},
+	};
+
+	const autoComplete: SxProps<Theme> = {
+		caretColor: 'transparent',
+		cursor: 'pointer',
+		'& .Mui-disabled,& .MuiInputLabel-root': {
+			color: 'rgba(0,0,0,0.6)',
+			backgroundColor: 'transparent',
+		},
+	};
+
 	return (
 		<Fragment>
 			<Autocomplete
@@ -89,26 +120,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 								</Fragment>
 							),
 						}}
-						sx={{
-							color: 'inherit',
-							'& .MuiInputBase-root , & .MuiInputBase-input': {
-								py: 0.5,
-								paddingRight: '1rem !important',
-								cursor: 'pointer',
-							},
-							'& .MuiChip-root': {
-								height: '28px',
-								maxWidth: { xs: '180px', sm: '260px' },
-							},
-							'& .MuiChip-label': {
-								fontSize: {
-									xs: fontSize_xs,
-									sm: fontSize_sm,
-									md: fontSize_md,
-									lg: fontSize_lg,
-								},
-							},
-						}}
+						sx={textInput}
 					/>
 				)}
 				value={value}
@@ -117,14 +129,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 					onChange(newValue);
 				}}
 				open={false}
-				sx={{
-					caretColor: 'transparent',
-					cursor: 'pointer',
-					'& .Mui-disabled,& .MuiInputLabel-root': {
-						color: 'rgba(0,0,0,0.6)',
-						backgroundColor: 'transparent',
-					},
-				}}
+				sx={autoComplete}
 			/>
 			<VisuallyHiddenInput
 				type="file"

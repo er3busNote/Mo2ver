@@ -37,6 +37,10 @@ const registerSchema = yup
 			.typeError('제조일자를 입력해주세요')
 			.required('제조일자를 입력해주세요')
 			.min(1990, '1990년 이상 입력해주세요'),
+		keyword: yup
+			.array()
+			.min(1, '적어도 하나의 키워드를 입력해야 합니다.')
+			.default([]),
 		goodsImg: yup
 			.array()
 			.of(
@@ -166,6 +170,7 @@ const registerValues: RegisterFormValues = {
 	brand: '',
 	gender: '',
 	year: 2024,
+	keyword: [],
 	goodsImg: [],
 	largeCategory: '',
 	mediumCategory: '',
@@ -266,6 +271,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 			goodsGender: data.gender,
 			goodsYear: data.year,
 			goodsImg: data.goodsImg,
+			keyword: '#'.concat(data.keyword.join('#')),
 			largeCategoryCode: data.largeCategory,
 			mediumCategoryCode: data.mediumCategory,
 			smallCategoryCode: data.smallCategory,
