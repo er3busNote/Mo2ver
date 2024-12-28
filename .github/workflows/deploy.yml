@@ -101,6 +101,7 @@ jobs:
       # 3. 빌드된 파일을 압축
       - name: Compressing build artifact
         run: |
+          ls -alh
           ls -al ./dist/
           tar -cpzf ui.tar.gz ./dist/*  # frontend 빌드 압축
           ls -al ./build/
