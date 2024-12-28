@@ -51,7 +51,7 @@ Under construction of demo website.
 	</tr>
 	<tr>
 		<td>
-			<img src="./images/GOOT_DETAIL_PC_01.PNG" alt="GOOT_DETAIL_PC_01" width="200">
+			<img src="./images/GOODS_DETAIL_PC_01.PNG" alt="GOODS_DETAIL_PC_01" width="200">
 			<br><lebel>Detail (PC)</label>
 		</td>
 		<td>
