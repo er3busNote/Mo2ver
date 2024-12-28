@@ -101,10 +101,10 @@ jobs:
       # 3. 빌드된 파일을 압축
       - name: Compressing build artifact
         run: |
-          ls -al dist/
-          tar -cpzf ui.tar.gz dist/*  # frontend 빌드 압축
-          ls -al build/
-          tar -cpzf app.tar.gz build/*  # backend 빌드 압축
+          ls -al ./dist/
+          tar -cpzf ui.tar.gz ./dist/*  # frontend 빌드 압축
+          ls -al ./build/
+          tar -cpzf app.tar.gz ./build/*  # backend 빌드 압축
 
       # 4. SCP를 통해 서버로 파일 전송
       - name: Deploy to Oracle Cloud
