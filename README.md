@@ -18,99 +18,26 @@ Under construction of demo website.
 - URL : [Demo](https://mo2ver.vercel.app/)
 
 ## User Page
-<table>
-	<tr>
-		<th colspan="4" style="text-align: center;">HOME</th>
-	</tr>
-	<tr>
-		<td style="text-align: center;">
-			<img src="./images/HOME_PC_01.PNG" alt="HOME_PC_01" width="200">
-			<br><lebel>Dashboard (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/HOME_PC_02.PNG" alt="HOME_PC_02" width="250">
-			<br><lebel>Category (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/HOME_MOBILE_01.PNG" alt="HOME_MOBILE_01" width="100">
-			<br><lebel>Dashboard (Mobile)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_SEARCH_MOBILE_01.PNG" alt="GOODS_SEARCH_MOBILE_01" width="100">
-			<br><lebel>Search (Mobile)</label>
-		</td>
-	</tr>
-	<tr>
-		<th colspan="2" style="text-align: center;">GOODS</th>
-		<th colspan="2" style="text-align: center;">CART</th>
-	</tr>
-	<tr>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_DETAIL_PC_01.PNG" alt="GOODS_DETAIL_PC_01" width="200">
-			<br><lebel>Detail (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_REGISTER_PC_01.PNG" alt="GOODS_REGISTER_PC_01" width="180">
-			<br><lebel>Register (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/CART_PC_01.PNG" alt="CART_PC_01" width="200">
-			<br><lebel>CART (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/CART_MOBILE_01.PNG" alt="CART_MOBILE_01" width="100">
-			<br><lebel>CART (Mobile)</label>
-		</td>
-	</tr>
-	<tr>
-		<th colspan="4" style="text-align: center;">PROFILE</th>
-	</tr>
-	<tr>
-		<td colspan="3" style="text-align: center;">
-			<img src="./images/MY_PROFILE_PC_01.PNG" alt="MY_PROFILE_PC_01" width="250">
-			<img src="./images/MY_PROFILE_PC_02.PNG" alt="MY_PROFILE_PC_02" width="250">
-			<br><lebel>My Profile (PC)</label>
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/MY_PROFILE_MOBILE_01.PNG" alt="MY_PROFILE_MOBILE_01" width="100">
-			<br><lebel>My Profile (Mobile)</label>
-		</td>
-	</tr>
-</table>
+| HOME #1 (PC) | HOME #2 (PC) | HOME #3 (MOBILE) | HOME #4 (MOBILE) |
+| :----------: | :----------: | :--------------: | :--------------: |
+| ![Home Page 01](./images/HOME_PC_01.PNG) | ![Home Page 02](./images/HOME_PC_02.PNG) | ![Home Page 03](./images/HOME_MOBILE_01.PNG) | ![Home Page 04](./images/GOODS_SEARCH_MOBILE_01.PNG) |
+
+| GOODS #1 | GOODS #2 | CART #1 (PC) | CART #2 (MOBILE) |
+| :------: | :------: | :----------: | :--------------: |
+| ![Detail Page 01](./images/GOODS_DETAIL_PC_01.PNG) | ![Register Page 01](./images/GOODS_REGISTER_PC_01.PNG) | ![Cart Page 01](./images/CART_PC_01.PNG) | ![Cart Page 02](./images/CART_MOBILE_01.PNG) |
+
+| PROFILE #1 (PC) | PROFILE #2 (PC) | PROFILE #3 (MOBILE) |
+| :-------------: | :-------------: | :-----------------: |
+| ![Profile Page 01](./images/MY_PROFILE_PC_01.PNG) | ![Profile Page 02](./images/MY_PROFILE_PC_02.PNG) | ![Profile Page 03](./images/MY_PROFILE_MOBILE_01.PNG) |
 
 ## Admin Page
-<table>
-	<tr>
-		<th style="text-align: center;">CATEGORY (Manage)</th>
-		<th colspan="3" style="text-align: center;">BANNER (Manage)</th>
-	</tr>
-	<tr>
-		<td style="text-align: center;">
-			<img src="./images/CATEGORY_MANAGE_PC_01.PNG" alt="CATEGORY_MANAGE_PC_01" width="250">
-		</td>
-		<td colspan="3" style="text-align: center;">
-			<img src="./images/BANNER_MANAGE_PC_01.PNG" alt="BANNER_MANAGE_PC_01" width="200">
-			<img src="./images/BANNER_MANAGE_PC_02.PNG" alt="BANNER_MANAGE_PC_02" width="200">
-		</td>
-	</tr>
-	<tr>
-		<th colspan="4" style="text-align: center;">GOODS (Manage)</th>
-	</tr>
-	<tr>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_MANAGE_PC_01.PNG" alt="GOODS_MANAGE_PC_01" width="200">
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_MANAGE_PC_02.PNG" alt="GOODS_MANAGE_PC_02" width="200">
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_MANAGE_MOBILE_01.PNG" alt="GOODS_MANAGE_MOBILE_01" width="100">
-		</td>
-		<td style="text-align: center;">
-			<img src="./images/GOODS_MANAGE_MOBILE_02.PNG" alt="GOODS_MANAGE_MOBILE_02" width="100">
-		</td>
-	</tr>
-</table>
+| CATEGORY #1 | BANNER #1 | BANNER #2 |
+| :---------: | :-------: | :-------: |
+| ![Category Page 01](./images/CATEGORY_MANAGE_PC_01.PNG) | ![Banner Page 01](./images/BANNER_MANAGE_PC_01.PNG) | ![Banner Page 02](./images/BANNER_MANAGE_PC_02.PNG) |
+
+| GOODS #1 (PC) | GOODS #2 (PC) | GOODS #3 (MOBILE) | GOODS #4 (MOBILE) |
+| :-----------: | :-----------: | :---------------: | :---------------: |
+| ![Goods Page 01](./images/GOODS_MANAGE_PC_01.PNG) | ![Goods Page 02](./images/GOODS_MANAGE_PC_02.PNG) | ![Goods Page 03](./images/GOODS_MANAGE_MOBILE_01.PNG) | ![Goods Page 04](./images/GOODS_MANAGE_MOBILE_02.PNG) |
 
 ## Contact us
 - qudwn0768@naver.com
