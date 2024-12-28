@@ -24,8 +24,9 @@ jobs:
           
       # 3. Frontend 빌드 (yarn)
       - name: Install dependencies and Build frontend with Yarn
-        working-directory: ~/front
+        working-directory: front
         run: |
+          ls -al
           yarn install
           yarn build
           ls -al
@@ -35,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: ~/front/dist  # frontend 빌드 파일 경로
+          path: front/dist  # frontend 빌드 파일 경로
 
   back_build:
     runs-on: ubuntu-latest
@@ -65,8 +66,9 @@ jobs:
             
       # 4. Backend 빌드 (gradle)
       - name: Build backend with Gradle
-        working-directory: ~/back
+        working-directory: back
         run: |
+          ls -al
           ./gradlew build
 
       # 5. 빌드 결과물 아티팩트로 업로드
@@ -74,7 +76,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: ~/back/build  # backend 빌드 파일 경로
+          path: back/build  # backend 빌드 파일 경로
           
   deploy:
     runs-on: ubuntu-latest
