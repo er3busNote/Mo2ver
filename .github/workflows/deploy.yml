@@ -97,26 +97,45 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
+          
+      # 3. 빌드된 파일을 압축
+      - name: Compressing build artifact
+        run: |
+          ls -al dist/
+          tar -cpzf ui.tar.gz dist/*  # frontend 빌드 압축
+          ls -al build/
+          tar -cpzf app.tar.gz build/*  # backend 빌드 압축
 
-      # 3. SSH를 통해 서버로 파일 전송
+      # 4. SCP를 통해 서버로 파일 전송
       - name: Deploy to Oracle Cloud
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.OCI_SERVER }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_FINGERPRINT }}
+          port: ${{ secrets.OCI_PORT }}
+          source: "*.tar.gz"
+          target: "/tmp/"  # 서버의 대상 경로
+
+      # 5. SSH를 통해 서버에서 명령 실행
+      - name: Run commands Oracle Cloud
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.OCI_SERVER }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.OCI_FINGERPRINT }}
           port: ${{ secrets.OCI_PORT }}
-          source: |
-            ./dist     # frontend 빌드 아티팩트 경로
-            ./build    # backend 빌드 아티팩트 경로
-          target: "/home/ubuntu"  # 서버의 대상 경로
           script: |
-            ls -al build/
             # echo "sudo cp /etc/letsencrypt/live/api.mo2ver.p-e.kr/* /home/ubuntu/build/resources/main" >> start.sh
             # echo "sudo cp /etc/letsencrypt/live/api.mo2ver.p-e.kr/* /home/ubuntu" >> start.sh
             echo "sudo cp /etc/letsencrypt/live/mo2ver.duckdns.org/* /home/ubuntu" >> start.sh
             echo "sudo pkill -f java" >> start.sh
             echo "sudo java -jar -DPORT=${{ secrets.PORT }} -DKEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }} -DMYSQL_USER_NAME=${{ secrets.MYSQL_USER_NAME }} -DMYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -DMYSQL_HOST=${{ secrets.MYSQL_HOST }} -DMYSQL_PORT=${{ secrets.MYSQL_PORT }} -DDATA_BASE_NAME=${{ secrets.DATA_BASE_NAME }} -DMAIL_USER_NAME=${{ secrets.MAIL_USER_NAME }} -DMAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dspring.profiles.active=prod -Dfile.encoding=UTF-8" >> start.sh
+            ls /home/ubuntu
+            rm -fr /home/ubuntu/build
+            mkdir -p /home/ubuntu/build
+            tar -xzf /tmp/app.tar.gz -C /home/ubuntu/build --strip-components 1
             rm ./build/resources/main/data.sql
+            ls -al ./build/resources/main
             chmod +x start.sh
             ./exec.sh
