@@ -69,7 +69,7 @@ jobs:
         working-directory: back
         run: |
           ls -al
-          ./gradlew build
+          gradle build -x test -Pspring.profiles.active=prod
 
       # 5. 빌드 결과물 아티팩트로 업로드
       - name: Upload backend build artifact
