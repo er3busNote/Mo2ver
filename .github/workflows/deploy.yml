@@ -115,7 +115,7 @@ jobs:
         with:
           host: ${{ secrets.OCI_SERVER }}
           username: ${{ secrets.OCI_USER }}
-          key: ${{ secrets.OCI_FINGERPRINT }}
+          key: ${{ secrets.OCI_SSH_KEY }}
           port: ${{ secrets.OCI_PORT }}
           source: "*.tar.gz"
           target: "/tmp/"  # 서버의 대상 경로
@@ -126,7 +126,7 @@ jobs:
         with:
           host: ${{ secrets.OCI_SERVER }}
           username: ${{ secrets.OCI_USER }}
-          key: ${{ secrets.OCI_FINGERPRINT }}
+          key: ${{ secrets.OCI_SSH_KEY }}
           port: ${{ secrets.OCI_PORT }}
           script: |
             # echo "sudo cp /etc/letsencrypt/live/api.mo2ver.p-e.kr/* /home/ubuntu/build/resources/main" >> start.sh
