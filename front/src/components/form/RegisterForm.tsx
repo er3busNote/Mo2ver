@@ -29,6 +29,7 @@ import HorizontalScroll from '../HorizontalScroll';
 import { RegisterFormValues } from './types';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import dayjs from 'dayjs';
 
 const fontSize_xs = '11px';
 const fontSize_sm = '13px';
@@ -56,6 +57,8 @@ const RegisterForm: FC<RegisterProp> = ({
 	const [files, setFiles] = useState<Array<FileData>>();
 	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
 	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
+	const [buyLimitYesNo, setBuyLimitYesNo] = useState<string>('');
+	const [salePeriodYesNo, setSalePeriodYesNo] = useState<string>('');
 	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
 	const mediumCategoryData = useCategoryInfo({
 		category,
@@ -72,6 +75,7 @@ const RegisterForm: FC<RegisterProp> = ({
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
+		setValue,
 		watch,
 	} = useFormContext<RegisterFormValues>();
 
@@ -94,9 +98,41 @@ const RegisterForm: FC<RegisterProp> = ({
 		setMediumCategoryCode(mediumCategory);
 	}, [watch('mediumCategory')]);
 
+	useEffect(() => {
+		const buyLimitYesNo = watch('buyLimitYesNo');
+		setBuyLimitYesNo(buyLimitYesNo);
+	}, [watch('buyLimitYesNo')]);
+
+	useEffect(() => {
+		const discountPrice = watch('discountPrice');
+		const salePeriodYesNo = watch('salePeriodYesNo');
+		if (salePeriodYesNo !== 'Y') {
+			if (Number(discountPrice) === 0) {
+				setValue('discountPrice', 100, { shouldValidate: false });
+			}
+			setValue('discountStartDate', dayjs(), { shouldValidate: false });
+			setValue('discountEndDate', dayjs(), { shouldValidate: false });
+		}
+		setSalePeriodYesNo(salePeriodYesNo);
+	}, [watch('salePeriodYesNo')]);
+
 	const icon: SxProps<Theme> = {
 		fontSize: '9rem',
 		color: '#B3B3B3',
+	};
+	const multilineTd: SxProps<Theme> = {
+		borderBlock: 'none',
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		'& .MuiFormControl-root': {
+			width: '80%',
+		},
+		'& .MuiInputBase-root': {
+			py: 1.6,
+		},
+		'& .MuiInputBase-input': {
+			py: 0,
+			fontWeight: 'bold',
+		},
 	};
 	const conditionTd: SxProps<Theme> = {
 		borderBlock: 'none',
@@ -139,12 +175,12 @@ const RegisterForm: FC<RegisterProp> = ({
 			my: { xs: 0, sm: 0.25 },
 			overflowX: 'visible',
 		},
-		'label[id$="name-label"], label[id$="brand-label"], label[id$="year-label"], label[id$="keyword-label"], label[id$="supplyPrice-label"], label[id$="salePrice-label"], label[id$="discountPrice-label"]':
+		'label[id$="name-label"], label[id$="brand-label"], label[id$="year-label"], label[id$="keyword-label"], label[id$="summaryInfo-label"], label[id$="supplyPrice-label"], label[id$="salePrice-label"], label[id$="discountPrice-label"]':
 			{
 				top: { xs: '-1px', sm: '-0.5px' },
 				ml: 1,
 			},
-		'label[id$="name-label"][data-shrink="true"], label[id$="brand-label"][data-shrink="true"], label[id$="year-label"][data-shrink="true"], label[id$="keyword-label"][data-shrink="true"], label[id$="supplyPrice-label"][data-shrink="true"], label[id$="salePrice-label"][data-shrink="true"], label[id$="discountPrice-label"][data-shrink="true"]':
+		'label[id$="name-label"][data-shrink="true"], label[id$="brand-label"][data-shrink="true"], label[id$="year-label"][data-shrink="true"], label[id$="keyword-label"][data-shrink="true"], label[id$="summaryInfo-label"][data-shrink="true"], label[id$="supplyPrice-label"][data-shrink="true"], label[id$="salePrice-label"][data-shrink="true"], label[id$="discountPrice-label"][data-shrink="true"]':
 			{
 				top: { xs: '-1px', sm: '0px' },
 				ml: 2,
@@ -311,6 +347,27 @@ const RegisterForm: FC<RegisterProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={dataTh} align="center" component="th">
+										상품설명
+									</TableCell>
+									<TableCell sx={multilineTd} align="left">
+										<Controller
+											name="summaryInfo"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderTextField
+													type="text"
+													label="상품설명을 입력해주세요"
+													multiline
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
 										대분류
 									</TableCell>
 									<TableCell sx={dataTd} align="left">
@@ -390,7 +447,7 @@ const RegisterForm: FC<RegisterProp> = ({
 									</TableCell>
 									<TableCell sx={dataTd} align="left">
 										<Controller
-											name="gender"
+											name="buyLimitYesNo"
 											control={control}
 											render={({ field, formState }) => (
 												<RenderRadioField
@@ -400,6 +457,25 @@ const RegisterForm: FC<RegisterProp> = ({
 													]}
 													field={field}
 													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={dataTh} align="center" component="th">
+										최대구매수량
+									</TableCell>
+									<TableCell sx={dataTd} align="left">
+										<Controller
+											name="maxBuyQuantity"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderNumberField
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+													readonly={buyLimitYesNo !== 'Y'}
 												/>
 											)}
 										/>
@@ -481,16 +557,19 @@ const RegisterForm: FC<RegisterProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={dataTh} align="center" component="th">
-										최대구매수량
+										할인기간여부
 									</TableCell>
 									<TableCell sx={dataTd} align="left">
 										<Controller
-											name="maxBuyQuantity"
+											name="salePeriodYesNo"
 											control={control}
-											render={({ field, fieldState, formState }) => (
-												<RenderNumberField
+											render={({ field, formState }) => (
+												<RenderRadioField
+													datas={[
+														{ value: 'Y', label: '예' },
+														{ value: 'N', label: '아니오' },
+													]}
 													field={field}
-													fieldState={fieldState}
 													formState={formState}
 												/>
 											)}
@@ -512,6 +591,7 @@ const RegisterForm: FC<RegisterProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
+													readonly={salePeriodYesNo !== 'Y'}
 												/>
 											)}
 										/>
@@ -532,6 +612,7 @@ const RegisterForm: FC<RegisterProp> = ({
 														field={field}
 														fieldState={fieldState}
 														formState={formState}
+														readonly={salePeriodYesNo !== 'Y'}
 													/>
 												)}
 											/>
@@ -545,6 +626,7 @@ const RegisterForm: FC<RegisterProp> = ({
 														field={field}
 														fieldState={fieldState}
 														formState={formState}
+														readonly={salePeriodYesNo !== 'Y'}
 													/>
 												)}
 											/>

@@ -31,6 +31,25 @@ const videoDisplaySchema = yup
 			.transform((originalValue) => {
 				return originalValue ? dayjs(originalValue) : null;
 			})
+			.test(
+				'not-before-now',
+				'시작날짜는 현재 날짜보다 이전일 수 없습니다.',
+				(value) => {
+					if (!value) return true;
+					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
+				}
+			)
+			.test(
+				'is-before-start',
+				'시작날짜는 종료날짜 이전여야 합니다.',
+				function (value) {
+					const { endDate } = this.parent; // 다른 필드 참조
+					return (
+						(value && endDate && dayjs(value).isSame(dayjs(endDate))) ||
+						(value && endDate && dayjs(value).isBefore(dayjs(endDate)))
+					);
+				}
+			)
 			.nullable()
 			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup
@@ -43,13 +62,14 @@ const videoDisplaySchema = yup
 				(startDate, schema) =>
 					startDate &&
 					schema.test({
-						test: (endDate) =>
-							endDate && endDate.isAfter(startDate.toLocaleString()),
+						test: (value) =>
+							(value && value.isSame(startDate.toLocaleString())) ||
+							(value && value.isAfter(startDate.toLocaleString())),
 						message: '시작날짜 이후여야 합니다',
 					})
 			)
 			.nullable()
-			.required('마지막날짜가 존재하질 않습니다'),
+			.required('종료날짜가 존재하질 않습니다'),
 		position: yup.string().required(),
 		type: yup.string().required(),
 		useyn: yup.string().required(),

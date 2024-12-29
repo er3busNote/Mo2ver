@@ -1,7 +1,12 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { tokenSuccess } from '../store/index';
-import { GoodsPage, GoodsSearchPage } from './types';
+import {
+	CSRFData,
+	GoodsPage,
+	GoodsSearchPage,
+	GoodsRegisterData,
+} from './types';
 
 const goods = (instance: AxiosInstance) => {
 	return {
@@ -42,6 +47,23 @@ const goods = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => {
 					return error.response;
 				}),
+		// 상품 저장 API : <baseURL>/goods/create
+		create:
+			(goodsRegisterData: GoodsRegisterData, csrfData: CSRFData) =>
+			(dispatch: Dispatch) =>
+				instance
+					.post('goods/create', goodsRegisterData, {
+						headers: {
+							'X-XSRF-TOKEN': csrfData.csrfToken,
+						},
+					})
+					.then((response: AxiosResponse) => {
+						dispatch(tokenSuccess(response.data));
+						return response.data;
+					})
+					.catch((error: AxiosError) => {
+						return error.response;
+					}),
 	};
 };
 

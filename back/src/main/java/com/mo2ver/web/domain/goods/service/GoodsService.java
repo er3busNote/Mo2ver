@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.goods.service;
 
+import com.mo2ver.web.common.file.dto.FileAttachDto;
 import com.mo2ver.web.common.file.dto.FileDto;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.goods.dao.*;
@@ -7,10 +8,7 @@ import com.mo2ver.web.domain.goods.domain.Discount;
 import com.mo2ver.web.domain.goods.domain.Goods;
 import com.mo2ver.web.domain.goods.domain.GoodsImage;
 import com.mo2ver.web.domain.goods.domain.Price;
-import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
-import com.mo2ver.web.domain.goods.dto.GoodsDto;
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
-import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
+import com.mo2ver.web.domain.goods.dto.*;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +82,19 @@ public class GoodsService {
     public Page<GoodsDto> findGoodsSearch(Pageable pageable, GoodsSearchDto goodsSearchDto) {
         Page<Goods> goods = this.goodsRepository.findByGoodsName(pageable, goodsSearchDto);
         return goods.map(GoodsDto::toDTO);
+    }
+
+    @Transactional
+    public void saveImageGoods(GoodsImageAttachDto goodsImageAttachDto, Member currentUser) throws Exception {
+        Price price = this.priceRepository.save(Price.of(goodsImageAttachDto, currentUser));
+        if (goodsImageAttachDto.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachDto, currentUser));
+        for (int i = 0; i < goodsImageAttachDto.getGoodsImg().size(); i++) {
+            FileAttachDto fileAttachDto = goodsImageAttachDto.getGoodsImg().get(i);
+            String fileAttachCode = fileService.getFileAttachCode(fileAttachDto.getFileAttachCode());
+            Character basicImageYesNo = 'N';
+            if (i == 0) basicImageYesNo = 'Y';
+            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), Integer.parseInt(fileAttachCode), basicImageYesNo, fileAttachDto.getFileExtension(), i+1, currentUser));
+        }
     }
 
     @Transactional

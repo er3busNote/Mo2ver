@@ -38,7 +38,8 @@ public class FileController {
     public ResponseEntity fileImage(@RequestParam String id) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            byte[] bannerImageBytes = fileService.findFile(id.replace(" ", "+"));
+            String fileAttachCode = fileService.getFileAttachCode(id);
+            byte[] bannerImageBytes = fileService.findFile(fileAttachCode);
             ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
             Tika tika = new Tika();
             String tikaMimeType = tika.detect(bannerImageBytes);

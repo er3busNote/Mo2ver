@@ -43,8 +43,8 @@ public class FileService {
     private Environment environment;
 
     @Transactional
-    public byte[] findFile(String id) throws Exception {
-        Optional<File> info = this.fileRepository.findById(Long.parseLong(jasyptUtil.decrypt(id)));
+    public byte[] findFile(String fileAttachCode) throws Exception {
+        Optional<File> info = this.fileRepository.findById(Long.parseLong(fileAttachCode));
         if (info.isPresent()) {
             File file = info.get();
             return this.cryptoUtil.decryptFile(file.getFilePath());
@@ -82,5 +82,9 @@ public class FileService {
 
     private String getFilePath(Path uploadDirectory) {
         return uploadDirectory.toString() + "/" + UUID.randomUUID();
+    }
+
+    public String getFileAttachCode(String id) {
+        return jasyptUtil.decrypt(id.replace(" ", "+"));
     }
 }

@@ -1,9 +1,6 @@
 package com.mo2ver.web.domain.goods.api;
 
-import com.mo2ver.web.domain.goods.dto.CategoryPageDto;
-import com.mo2ver.web.domain.goods.dto.GoodsDto;
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
-import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
+import com.mo2ver.web.domain.goods.dto.*;
 import com.mo2ver.web.domain.goods.service.GoodsService;
 import com.mo2ver.web.domain.goods.validation.GoodsImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
@@ -72,6 +69,19 @@ public class GoodsController {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
         Page<GoodsDto> pages = goodsService.findGoodsSearch(pageable, goodsSearchDto);
         return ResponseEntity.ok(pages);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity createGoods(@RequestBody @Valid GoodsImageAttachDto goodsImageAttachDto,
+                                      @CurrentUser Member currentUser) {
+        HashMap<String, Object> response = new HashMap<>();
+        try {
+            goodsService.saveImageGoods(goodsImageAttachDto, currentUser);
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+        }
+        return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "상품정보가 저장되었습니다"), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

@@ -5,6 +5,7 @@ import {
 	UseFormStateReturn,
 } from 'react-hook-form';
 import { SxProps, Theme } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 const fontSize_xs = '11px';
@@ -17,16 +18,21 @@ interface RenderDatePickerFieldProps {
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
 	label: string;
+	readonly?: boolean;
 }
 
 const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 	field: { onChange, value, name },
 	fieldState: { error },
 	label,
+	readonly = false,
 }) => {
 	const datePicker: SxProps<Theme> = {
 		height: '37px',
-		'.MuiInputBase-input': {
+		'& .MuiInputBase-root': {
+			backgroundColor: readonly ? grey[200] : 'transparent',
+		},
+		'& .MuiInputBase-input': {
 			pl: { xs: 1.5, sm: 2 },
 			py: { xs: 1.5, sm: 2 },
 			width: { xs: '60px', sm: '80px' },
@@ -37,7 +43,7 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 				lg: fontSize_lg,
 			},
 		},
-		'.MuiFormLabel-root': {
+		'& .MuiFormLabel-root': {
 			ml: 1,
 			mt: 0.5,
 			fontSize: {
@@ -47,14 +53,14 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 				lg: fontSize_lg,
 			},
 		},
-		'.MuiInputAdornment-root': {
+		'& .MuiInputAdornment-root': {
 			overflowX: 'visible',
 		},
-		'.MuiIconButton-root': {
+		'& .MuiIconButton-root': {
 			pr: { xs: 0.5, sm: 1 },
 			pl: 0,
 		},
-		'.MuiFormHelperText-root': {
+		'& .MuiFormHelperText-root': {
 			color: '#d32f2f',
 		},
 		overflowX: 'visible',
@@ -68,9 +74,13 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 			sx={datePicker}
 			slotProps={{
 				textField: {
+					InputProps: {
+						readOnly: readonly,
+					},
 					helperText: error ? error.message : '',
 				},
 			}}
+			disabled={readonly}
 		/>
 	);
 };

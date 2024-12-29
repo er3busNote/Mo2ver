@@ -48,10 +48,12 @@ interface GoodsRegisterData {
 	goodsYear: number;
 	goodsImg: Array<FileData>;
 	keyword: string;
+	summaryInfo: string;
 	largeCategoryCode: string;
 	mediumCategoryCode: string;
 	smallCategoryCode: string;
 	buyLimitYesNo: string;
+	buyLimitCondition: string;
 	salePeriodYesNo: string;
 	saleStartDate: string;
 	saleEndDate: string;
@@ -61,6 +63,9 @@ interface GoodsRegisterData {
 	discountPrice: number;
 	discountStartDate: string;
 	discountEndDate: string;
+	rateYesNo: string;
+	maxLimitYesNo: string;
+	maxLimitAmount: number;
 }
 
 interface GoodsPage {

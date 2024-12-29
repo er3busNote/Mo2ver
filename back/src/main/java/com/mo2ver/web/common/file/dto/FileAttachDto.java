@@ -1,6 +1,5 @@
 package com.mo2ver.web.common.file.dto;
 
-import com.mo2ver.web.common.file.domain.File;
 import com.mo2ver.web.global.common.util.BeanUtil;
 import com.mo2ver.web.global.common.util.JasyptUtil;
 import lombok.AllArgsConstructor;

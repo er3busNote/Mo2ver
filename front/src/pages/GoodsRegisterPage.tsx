@@ -41,6 +41,7 @@ const registerSchema = yup
 			.array()
 			.min(1, '적어도 하나의 키워드를 입력해야 합니다.')
 			.default([]),
+		summaryInfo: yup.string().required('상품설명을 입력해주세요'),
 		goodsImg: yup
 			.array()
 			.of(
@@ -70,6 +71,7 @@ const registerSchema = yup
 			)
 			.min(1, '적어도 하나의 파일을 업로드해야 합니다.')
 			.max(5, '최대 5개의 파일을 업로드할 수 있습니다.')
+			.required('첨부파일은 필수입니다.')
 			.default([]),
 		largeCategory: yup.string().required('대분류를 선택해주세요'),
 		mediumCategory: yup.string().required('중분류를 선택해주세요'),
@@ -82,6 +84,25 @@ const registerSchema = yup
 				return originalValue ? dayjs(originalValue) : null;
 			})
 			.nullable()
+			.test(
+				'not-before-now',
+				'판매시작일시는 현재 날짜보다 이전일 수 없습니다.',
+				(value) => {
+					if (!value) return true;
+					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
+				}
+			)
+			.test(
+				'is-before-start',
+				'판매시작일시는 판매종료일시 이전여야 합니다.',
+				function (value) {
+					const { saleEndDate } = this.parent; // 다른 필드 참조
+					return (
+						(value && saleEndDate && dayjs(value).isSame(dayjs(saleEndDate))) ||
+						(value && saleEndDate && dayjs(value).isBefore(dayjs(saleEndDate)))
+					);
+				}
+			)
 			.required('판매시작일시가 존재하질 않습니다'),
 		saleEndDate: yup
 			.mixed<Dayjs>()
@@ -93,9 +114,9 @@ const registerSchema = yup
 				(saleStartDate, schema) =>
 					saleStartDate &&
 					schema.test({
-						test: (saleEndDate) =>
-							saleEndDate &&
-							saleEndDate.isAfter(saleStartDate.toLocaleString()),
+						test: (value) =>
+							(value && value.isSame(saleStartDate.toLocaleString())) ||
+							(value && value.isAfter(saleStartDate.toLocaleString())),
 						message: '판매시작일시 이후여야 합니다',
 					})
 			)
@@ -125,6 +146,29 @@ const registerSchema = yup
 			.transform((originalValue) => {
 				return originalValue ? dayjs(originalValue) : null;
 			})
+			.test(
+				'not-before-now',
+				'할인시작일시는 현재 날짜보다 이전일 수 없습니다.',
+				(value) => {
+					if (!value) return true;
+					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
+				}
+			)
+			.test(
+				'is-before-start',
+				'할인시작일시는 할인종료일시 이전여야 합니다.',
+				function (value) {
+					const { discountEndDate } = this.parent; // 다른 필드 참조
+					return (
+						(value &&
+							discountEndDate &&
+							dayjs(value).isSame(dayjs(discountEndDate))) ||
+						(value &&
+							discountEndDate &&
+							dayjs(value).isBefore(dayjs(discountEndDate)))
+					);
+				}
+			)
 			.nullable()
 			.required('할인시작일시가 존재하질 않습니다'),
 		discountEndDate: yup
@@ -133,13 +177,13 @@ const registerSchema = yup
 				return originalValue ? dayjs(originalValue) : null;
 			})
 			.when(
-				'saleStartDate',
+				'discountStartDate',
 				(discountStartDate, schema) =>
 					discountStartDate &&
 					schema.test({
-						test: (discountEndDate) =>
-							discountEndDate &&
-							discountEndDate.isAfter(discountStartDate.toLocaleString()),
+						test: (value) =>
+							(value && value.isSame(discountStartDate.toLocaleString())) ||
+							(value && value.isAfter(discountStartDate.toLocaleString())),
 						message: '할인시작일시 이후여야 합니다',
 					})
 			)
@@ -161,6 +205,7 @@ interface GoodsRegisterProps {
 interface GoodsRegisterDispatchProps {
 	description: string;
 	member: ActionCreatorsMapObject;
+	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
@@ -171,6 +216,7 @@ const registerValues: RegisterFormValues = {
 	gender: '',
 	year: 2024,
 	keyword: [],
+	summaryInfo: '',
 	goodsImg: [],
 	largeCategory: '',
 	mediumCategory: '',
@@ -256,6 +302,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 	description,
 	member,
+	goods,
 	category,
 	image,
 }): JSX.Element => {
@@ -272,10 +319,12 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 			goodsYear: data.year,
 			goodsImg: data.goodsImg,
 			keyword: '#'.concat(data.keyword.join('#')),
+			summaryInfo: data.summaryInfo,
 			largeCategoryCode: data.largeCategory,
 			mediumCategoryCode: data.mediumCategory,
 			smallCategoryCode: data.smallCategory,
 			buyLimitYesNo: data.buyLimitYesNo,
+			buyLimitCondition: '10',
 			salePeriodYesNo: data.salePeriodYesNo,
 			saleStartDate: data.saleStartDate.format('YYYY-MM-DD'),
 			saleEndDate: data.saleEndDate.format('YYYY-MM-DD'),
@@ -285,9 +334,13 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 			discountPrice: data.discountPrice,
 			discountStartDate: data.discountStartDate.format('YYYY-MM-DD'),
 			discountEndDate: data.discountEndDate.format('YYYY-MM-DD'),
+			rateYesNo: 'N',
+			maxLimitYesNo: 'N',
+			maxLimitAmount: 0,
 		};
 		console.log(registerFormData);
 		console.log(csrfData);
+		await goods.create(registerFormData, csrfData);
 		if (registerForm) registerForm.preventDefault(); // 새로고침 방지
 		navigate('/register');
 	};
@@ -322,6 +375,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	member: bindActionCreators(Api.member, dispatch),
+	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 	image: bindActionCreators(Api.image, dispatch),
 });

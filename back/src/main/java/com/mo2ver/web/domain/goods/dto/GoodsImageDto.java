@@ -1,9 +1,9 @@
 package com.mo2ver.web.domain.goods.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GoodsImageDto {

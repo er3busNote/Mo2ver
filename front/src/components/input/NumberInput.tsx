@@ -19,7 +19,7 @@ const StyledInputRoot = styled('div')(({ theme }) => ({
 	alignItems: 'center',
 }));
 
-const StyledInput = styled('input')(({ theme }) => ({
+const StyledInput = styled('input')(({ theme, readOnly }) => ({
 	fontSize: '0.875rem',
 	fontFamily: 'inherit',
 	fontWeight: '400',
@@ -57,9 +57,14 @@ const StyledInput = styled('input')(({ theme }) => ({
 	'&:focus-visible': {
 		outline: 0,
 	},
+	// readOnly 속성에 따라 스타일 변경
+	...(readOnly && {
+		backgroundColor: theme.palette.mode === 'dark' ? grey[800] : grey[200],
+		cursor: 'not-allowed',
+	}),
 }));
 
-const StyledButton = styled('button')(({ theme }) => ({
+const StyledButton = styled('button')(({ theme, disabled }) => ({
 	fontSize: '0.875rem',
 	boxSizing: 'border-box',
 	lineHeight: '1.5',
@@ -97,33 +102,51 @@ const StyledButton = styled('button')(({ theme }) => ({
 	'&.increment': {
 		order: 1,
 	},
+	// disabled 속성에 따라 스타일 변경
+	...(disabled && {
+		'&:hover': {
+			backgroundColor: theme.palette.mode === 'dark' ? grey[800] : grey[200],
+			cursor: 'not-allowed',
+		},
+	}),
 }));
 
-const NumberInput = forwardRef(function CustomNumberInput(
-	props: NumberInputProps,
-	ref: ForwardedRef<HTMLDivElement>
-) {
-	return (
-		<BaseNumberInput
-			slots={{
-				root: StyledInputRoot,
-				input: StyledInput,
-				incrementButton: StyledButton,
-				decrementButton: StyledButton,
-			}}
-			slotProps={{
-				incrementButton: {
-					children: <AddIcon fontSize="small" />,
-					className: 'increment',
-				},
-				decrementButton: {
-					children: <RemoveIcon fontSize="small" />,
-				},
-			}}
-			{...props}
-			ref={ref}
-		/>
-	);
-});
+const NumberInput = forwardRef(
+	(
+		{ readonly, ...props }: NumberInputProps & { readonly?: boolean },
+		ref: ForwardedRef<HTMLDivElement>
+	) => {
+		return (
+			<BaseNumberInput
+				component="div"
+				{...props}
+				ref={ref}
+				slots={{
+					root: StyledInputRoot,
+					input: StyledInput,
+					incrementButton: StyledButton,
+					decrementButton: StyledButton,
+				}}
+				slotProps={{
+					input: {
+						readOnly: readonly,
+					},
+					incrementButton: {
+						children: <AddIcon fontSize="small" />,
+						className: 'increment',
+						disabled: readonly,
+					},
+					decrementButton: {
+						children: <RemoveIcon fontSize="small" />,
+						className: 'decrement',
+						disabled: readonly,
+					},
+				}}
+			/>
+		);
+	}
+);
+
+NumberInput.displayName = 'NumberInput';
 
 export default NumberInput;

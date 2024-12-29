@@ -11,11 +11,13 @@ interface RenderNumberFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
+	readonly?: boolean;
 }
 
 const RenderNumberField: FC<RenderNumberFieldProps> = ({
 	field: { onChange, value, name },
 	fieldState: { error },
+	readonly = false,
 }) => {
 	const handleNumberChange = (
 		event:
@@ -35,6 +37,7 @@ const RenderNumberField: FC<RenderNumberFieldProps> = ({
 				min={1}
 				max={99}
 				onChange={(event, newValue) => handleNumberChange(event, newValue)}
+				readonly={readonly}
 			/>
 			{error && <FormHelperText>{error.message}</FormHelperText>}
 		</FormControl>

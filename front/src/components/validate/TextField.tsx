@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, KeyboardEvent } from 'react';
+import React, { FC } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
@@ -6,6 +6,7 @@ import {
 } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 
 const fontSize_xs = '11px';
 const fontSize_sm = '12px';
@@ -18,6 +19,8 @@ interface RenderTextFieldProps {
 	formState: UseFormStateReturn<any>;
 	type: string;
 	label: string;
+	multiline?: boolean;
+	readonly?: boolean;
 }
 
 const RenderTextField: FC<RenderTextFieldProps> = ({
@@ -25,6 +28,8 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 	fieldState: { error },
 	type,
 	label,
+	multiline,
+	readonly = false,
 }) => {
 	const textInput: SxProps<Theme> = {
 		'.MuiInputLabel-shrink': {
@@ -46,6 +51,7 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 			sx={textInput}
 			autoComplete={name}
 			helperText={error?.message}
+			multiline={multiline}
 			inputProps={{
 				sx: {
 					py: { xs: 1.8, sm: 2 },
@@ -55,7 +61,9 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 						md: fontSize_md,
 						lg: fontSize_lg,
 					},
+					backgroundColor: readonly ? grey[200] : 'transparent',
 				},
+				readOnly: readonly,
 				...(type === 'number' && { pattern: '[0-9]*' }),
 			}} // font size of input text
 			InputLabelProps={{
