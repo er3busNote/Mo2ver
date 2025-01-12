@@ -37,12 +37,15 @@ jobs:
       # 3. Yarn 의존성 설치
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true' # 캐시가 없을 때만 실행
-        run: yarn install
+        run: |
+          yarn install
+          yarn add webpack --dev
           
       # 4. Frontend 빌드 (yarn)
       - name: Install dependencies and Build frontend with Yarn
         working-directory: front
         run: |
+          ls -al
           yarn build
           ls -al
       
