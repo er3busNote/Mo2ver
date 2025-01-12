@@ -41,6 +41,7 @@ jobs:
           yarn install
           yarn add webpack --dev
           yarn add dotenv-webpack --dev
+          yarn add html-webpack-plugin --dev
           
       # 4. Frontend 빌드 (yarn)
       - name: Install dependencies and Build frontend with Yarn
