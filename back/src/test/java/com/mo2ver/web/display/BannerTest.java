@@ -19,11 +19,26 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class BannerTest extends CsrfConfigTest {
+
+    @Test
+    @DisplayName("배너 전시 정보 조회")
+    public void findBannerDisplayTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+
+        mockMvc.perform(get("/banner/display")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
     @Test
     @DisplayName("배너 이미지정보 저장 확인")

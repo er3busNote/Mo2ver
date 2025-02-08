@@ -50,6 +50,11 @@ public class BannerController {
         return ResponseEntity.ok(pages);
     }
 
+    @GetMapping("/display")
+    public ResponseEntity displayBanner(@CurrentUser Member currentUser) {
+        return ResponseEntity.ok(bannerService.findBannerDisplay());
+    }
+
     @PostMapping("/goods")
     public ResponseEntity goodsBanner(@RequestBody @Valid GoodsDisplayDto goodsDisplayDto,
                                       @CurrentUser Member currentUser) {

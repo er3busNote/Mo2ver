@@ -6,6 +6,7 @@ import com.mo2ver.web.domain.event.dto.QEventDetailDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,10 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
 
         Expression<BigDecimal> salePrice = new CaseBuilder()
-                .when(price.salePeriodYesNo.eq('Y').and(price.saleStartDate.before(new Date()).and(price.saleEndDate.after(new Date())))).then(price.salePrice)
+                .when(price.salePeriodYesNo.eq('Y')
+                        .and(Expressions.currentDate().between(price.saleStartDate, price.saleEndDate))
+                )
+                .then(price.salePrice)
                 .otherwise(price.supplyPrice);
 
         JPAQuery<EventDetailDto> query = queryFactory
@@ -65,8 +69,7 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
     public Page<EventManage> findByAll(Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(eventManage.eventYesNo.eq('Y'));
-        builder.and(eventManage.eventStartDate.before(new Date()));
-        builder.and(eventManage.eventEndDate.after(new Date()));
+        builder.and(Expressions.currentDate().between(eventManage.eventStartDate, eventManage.eventEndDate));
         builder.and(eventImage.basicImageYesNo.eq('Y'));
 
         JPAQuery<EventManage> query = queryFactory.selectFrom(eventManage)

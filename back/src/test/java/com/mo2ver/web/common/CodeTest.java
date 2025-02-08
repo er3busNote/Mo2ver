@@ -20,7 +20,7 @@ public class CodeTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("공통코드 정보 조회")
-    public void fileCodeListTest() throws Exception {
+    public void findCodeListTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
@@ -37,7 +37,7 @@ public class CodeTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("공통코드 정보 상세 조회")
-    public void fileCodeListDetailTest() throws Exception {
+    public void findCodeListDetailTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인

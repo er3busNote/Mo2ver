@@ -12,7 +12,7 @@ import static com.querydsl.core.group.GroupBy.*;
 import static com.mo2ver.web.common.code.domain.QCode.code;
 import static com.mo2ver.web.common.code.domain.QGroupCode.groupCode;
 
-public class CodeRepositoryImpl implements CodeRepositoryCustom{
+public class CodeRepositoryImpl implements CodeRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

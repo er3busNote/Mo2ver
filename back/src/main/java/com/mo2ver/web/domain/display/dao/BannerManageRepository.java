@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BannerManageRepository extends JpaRepository<BannerManage, Long> {
+public interface BannerManageRepository extends JpaRepository<BannerManage, Long>, BannerManageRepositoryCustom {
     Page<BannerManage> findAll(Pageable paging);
 }

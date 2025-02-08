@@ -6,10 +6,7 @@ import com.mo2ver.web.domain.display.dao.BannerDetailRepository;
 import com.mo2ver.web.domain.display.dao.BannerManageRepository;
 import com.mo2ver.web.domain.display.domain.BannerDetail;
 import com.mo2ver.web.domain.display.domain.BannerManage;
-import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
-import com.mo2ver.web.domain.display.dto.BannerDto;
-import com.mo2ver.web.domain.display.dto.BannerImageDto;
-import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
+import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -39,6 +39,28 @@ public class BannerService {
     public Page<BannerDto> findBannerlist(Pageable pageable) {
         Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
         return manage.map(BannerDto::toDTO);
+    }
+
+    @Transactional
+    public Map<String, Map<String, List<Object>>> findBannerDisplay() {
+        Map<String, List<BannerDetailDto>> bannerDetailGroupDto = this.bannerManageRepository.findGroupBannerDetail();
+        Map<String, List<BannerProductDto>> bannerProductGroupDto = this.bannerManageRepository.findGroupBannerProduct();
+
+        Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
+
+        for (String detailKey : bannerDetailGroupDto.keySet()) {
+            bannerDisplay
+                    .computeIfAbsent(detailKey, k -> new HashMap<>())
+                    .put("detail", new ArrayList<>(bannerDetailGroupDto.get(detailKey)));
+        }
+
+        for (String productKey : bannerProductGroupDto.keySet()) {
+            bannerDisplay
+                    .computeIfAbsent(productKey, k -> new HashMap<>())
+                    .put("product", new ArrayList<>(bannerProductGroupDto.get(productKey)));
+        }
+
+        return bannerDisplay;
     }
 
     @Transactional

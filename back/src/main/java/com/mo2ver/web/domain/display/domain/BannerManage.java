@@ -35,6 +35,9 @@ public class BannerManage {
     @Column(name = "DP_END_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시종료일자'")
     private Date displayEndDate;
 
+    @Column(name = "DP_CND_CD", nullable = false, columnDefinition = "CHAR(10) COMMENT '전시상태코드'")
+    private String displayConditionCode;
+
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
     private Character displayYesNo;
 
