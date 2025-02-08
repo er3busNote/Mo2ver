@@ -12,14 +12,12 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static com.mo2ver.web.domain.display.domain.QBannerDetail.bannerDetail;
 import static com.mo2ver.web.domain.display.domain.QBannerManage.bannerManage;
 import static com.mo2ver.web.domain.display.domain.QBannerProduct.bannerProduct;
-import static com.mo2ver.web.domain.event.domain.QEventManage.eventManage;
 import static com.mo2ver.web.domain.goods.domain.QGoods.goods;
 import static com.mo2ver.web.domain.goods.domain.QGoodsImage.goodsImage;
 import static com.mo2ver.web.domain.goods.domain.QPrice.price;
