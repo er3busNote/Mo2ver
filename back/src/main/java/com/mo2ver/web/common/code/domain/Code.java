@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.member.domain;
+package com.mo2ver.web.common.code.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,7 +28,6 @@ public class Code implements Serializable {
     @Column(name = "CMM_CD", columnDefinition = "CHAR(5) COMMENT '공통코드'")
     private String commonCode;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "CMM_GRP_CD",

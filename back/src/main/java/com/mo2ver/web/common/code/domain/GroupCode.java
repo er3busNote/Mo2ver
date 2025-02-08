@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.member.domain;
+package com.mo2ver.web.common.code.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "CMM_CD_GRP")     // 공통그룹코드
@@ -30,6 +31,9 @@ public class GroupCode {
 
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
     private Character useYesNo;
+
+    @OneToMany(mappedBy = "commonGroupCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Code> codeList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
