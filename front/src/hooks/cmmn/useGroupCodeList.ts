@@ -18,7 +18,7 @@ const useGroupCodeList = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await code.list(groupCodelist, csrfData);
 		setData(data);
-	}, []);
+	}, [csrfData.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();
