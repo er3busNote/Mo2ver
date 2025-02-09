@@ -71,6 +71,7 @@ public class BannerTest extends CsrfConfigTest {
                 .startDate(new Date())
                 .endDate(new Date())
                 .position("BN")
+                .code("MAN")
                 .useyn('Y')
                 .bnnrImg(Arrays.asList(
                         this.getBannerDetailDto(1),
@@ -110,6 +111,7 @@ public class BannerTest extends CsrfConfigTest {
                 .startDate(new Date())
                 .endDate(new Date())
                 .position("GD")
+                .code("WOMAN")
                 .useyn('Y')
                 .goods(Arrays.asList(
                         this.getGoodsDisplayProductDto(1),

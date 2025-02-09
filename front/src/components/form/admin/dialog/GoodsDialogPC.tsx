@@ -350,17 +350,19 @@ const GoodsDialogPC: FC<DialogProps> = ({
 						<Grid item>{customList(right)}</Grid>
 					</Grid>
 					<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-						<Pagination
-							count={goodsData.totalPages - 1}
-							variant="outlined"
-							color="primary"
-							siblingCount={2}
-							boundaryCount={2}
-							hidePrevButton
-							hideNextButton
-							onChange={pageChange}
-							size="small"
-						/>
+						{goodsData.totalPages && (
+							<Pagination
+								count={goodsData.totalPages - 1}
+								variant="outlined"
+								color="primary"
+								siblingCount={2}
+								boundaryCount={2}
+								hidePrevButton
+								hideNextButton
+								onChange={pageChange}
+								size="small"
+							/>
+						)}
 					</Box>
 				</Box>
 			</DialogContent>

@@ -19,6 +19,7 @@ interface BannerFormImageValues {
 	endDate: Dayjs;
 	position: string;
 	type: string;
+	code: string;
 	useyn: string;
 	bnnrImg: Array<BannerImageDetailValues>;
 }
@@ -36,6 +37,7 @@ interface GoodsFormDisplayValues {
 	endDate: Dayjs;
 	position: string;
 	type: string;
+	code: string;
 	useyn: string;
 	goods: Array<GoodsDisplayDetailValues>;
 }
@@ -63,6 +65,7 @@ interface VideoFormDisplayValues {
 	endDate: Dayjs;
 	position: string;
 	type: string;
+	code: string;
 	useyn: string;
 }
 

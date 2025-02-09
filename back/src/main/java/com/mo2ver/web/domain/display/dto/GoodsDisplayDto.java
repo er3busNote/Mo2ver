@@ -35,6 +35,9 @@ public class GoodsDisplayDto {
     @NotBlank(message = "템플릿 유형이 존재하지 않습니다")
     private String position;
 
+    @NotNull(message = "전시상태코드가 존재하지 않습니다")
+    private String code;
+
     @NotNull(message = "전시여부가 존재하지 않습니다")
     private Character useyn;
 

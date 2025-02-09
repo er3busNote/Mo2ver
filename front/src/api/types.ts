@@ -184,6 +184,7 @@ interface BannerImageData {
 	endDate: string;
 	position: string;
 	type: string;
+	code: string;
 	useyn: string;
 	bnnrImg: Array<BannerImageDetailData>;
 }
@@ -201,6 +202,7 @@ interface GoodsDisplayData {
 	endDate: string;
 	position: string;
 	type: string;
+	code: string;
 	useyn: string;
 	goods: Array<GoodsDisplayDetailData>;
 }
@@ -333,6 +335,13 @@ interface PageData {
 	size: number;
 }
 
+interface CodeData {
+	commonCode: string;
+	commonCodeName: string;
+	description: string;
+	sortSequence: number;
+}
+
 interface FileData {
 	fileAttachCode: string;
 	fileName: string;
@@ -368,5 +377,6 @@ export type {
 	CartData,
 	CartPageData,
 	PageData,
+	CodeData,
 	FileData,
 };

@@ -8,8 +8,9 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { GoodsDisplayData } from '../../api/types';
+import { CodeData, GoodsDisplayData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
+import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import GoodsFormDisplayPC from '../../components/form/admin/GoodsFormDisplayPC';
 import GoodsFormDisplayMobile from '../../components/form/admin/GoodsFormDisplayMobile';
 import { Box } from '@mui/material';
@@ -74,6 +75,7 @@ const goodsDisplaySchema = yup
 			.required('종료날짜가 존재하질 않습니다'),
 		position: yup.string().required('필수항목'),
 		type: yup.string().required(),
+		code: yup.string().required(),
 		useyn: yup.string().required('필수항목'),
 		goods: yup
 			.array()
@@ -96,6 +98,7 @@ const goodsDisplaySchema = yup
 interface BannerProps {
 	title: string;
 	description: string;
+	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	onSubmit: (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -105,6 +108,7 @@ interface BannerProps {
 interface BannerDispatchProps {
 	title: string;
 	description: string;
+	code: ActionCreatorsMapObject;
 	member: ActionCreatorsMapObject;
 	banner: ActionCreatorsMapObject;
 }
@@ -115,6 +119,7 @@ const goodsDisplayValues: GoodsFormDisplayValues = {
 	endDate: dayjs(),
 	position: '',
 	type: 'GD',
+	code: '',
 	useyn: 'Y',
 	goods: [],
 };
@@ -122,6 +127,7 @@ const goodsDisplayValues: GoodsFormDisplayValues = {
 const BannerGoodsPC: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
@@ -133,6 +139,7 @@ const BannerGoodsPC: FC<BannerProps> = ({
 				<GoodsFormDisplayPC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -143,6 +150,7 @@ const BannerGoodsPC: FC<BannerProps> = ({
 const BannerGoodsMobile: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
@@ -154,6 +162,7 @@ const BannerGoodsMobile: FC<BannerProps> = ({
 				<GoodsFormDisplayMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -164,11 +173,17 @@ const BannerGoodsMobile: FC<BannerProps> = ({
 const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
+	code,
 	member,
 	banner,
 }): JSX.Element => {
 	const navigate = useNavigate();
 	const csrfData = useCSRFToken({ member });
+	const groupCodeData = useGroupCodeList({
+		code,
+		groupCodelist: ['BN001', 'BN002', 'BN003'],
+		csrfData,
+	});
 	const submitForm = async (
 		data: GoodsFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
@@ -180,6 +195,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 			position: data.position,
 			type: data.type,
 			useyn: data.useyn,
+			code: data.code,
 			goods: data.goods,
 		};
 		console.log(goodsFormData);
@@ -201,11 +217,13 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 				<BannerGoodsPC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 				<BannerGoodsMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 			</FormProvider>
@@ -219,6 +237,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	code: bindActionCreators(Api.code, dispatch),
 	member: bindActionCreators(Api.member, dispatch),
 	banner: bindActionCreators(Api.banner, dispatch),
 });

@@ -16,7 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import RenderTextField from '../validate/TextField';
 import { SignupFormValues } from './types';
-import { validateEmail, validatePassword } from '../../utils/validation';
+import { isEmail, isPassword } from '../../utils/validation';
 
 const schema = yup
 	.object({
@@ -28,7 +28,7 @@ const schema = yup
 			.string()
 			.required('비밀번호를 입력해주세요')
 			.matches(
-				validatePassword,
+				isPassword,
 				'비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.'
 			),
 		repeat_password: yup
@@ -38,7 +38,7 @@ const schema = yup
 		email: yup
 			.string()
 			.required('이메일을 입력해주세요')
-			.matches(validateEmail, '유효하지 않은 이메일 주소입니다')
+			.matches(isEmail, '유효하지 않은 이메일 주소입니다')
 			.min(5, '5자 이상 입력해주세요!')
 			.max(50, '입력 범위가 초과되었습니다'),
 	})

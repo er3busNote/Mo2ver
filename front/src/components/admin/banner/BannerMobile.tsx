@@ -325,20 +325,22 @@ const BannerMobile: FC<BannerProps> = ({
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							<TablePagination
-								rowsPerPageOptions={[bannerPageData.size]}
-								count={bannerPageData.totalElements}
-								rowsPerPage={rowsPerPage}
-								page={newPage}
-								SelectProps={{
-									inputProps: {
-										'aria-label': 'rows per page',
-									},
-									native: false,
-								}}
-								onPageChange={handleChangePage}
-								onRowsPerPageChange={handleChangeRowsPerPage}
-							/>
+							{bannerPageData.totalElements && rowsPerPage && (
+								<TablePagination
+									rowsPerPageOptions={[bannerPageData.size]}
+									count={bannerPageData.totalElements}
+									rowsPerPage={rowsPerPage}
+									page={newPage}
+									SelectProps={{
+										inputProps: {
+											'aria-label': 'rows per page',
+										},
+										native: false,
+									}}
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={handleChangeRowsPerPage}
+								/>
+							)}
 						</TableRow>
 					</TableFooter>
 				</Table>

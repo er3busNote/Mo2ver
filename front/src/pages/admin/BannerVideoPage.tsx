@@ -7,7 +7,9 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
+import { CodeData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
+import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import VideoFormDisplayPC from '../../components/form/admin/VideoFormDisplayPC';
 import VideoFormDisplayMobile from '../../components/form/admin/VideoFormDisplayMobile';
 import { Box } from '@mui/material';
@@ -72,6 +74,7 @@ const videoDisplaySchema = yup
 			.required('종료날짜가 존재하질 않습니다'),
 		position: yup.string().required(),
 		type: yup.string().required(),
+		code: yup.string().required(),
 		useyn: yup.string().required(),
 	})
 	.required();
@@ -79,6 +82,7 @@ const videoDisplaySchema = yup
 interface BannerProps {
 	title: string;
 	description: string;
+	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	onSubmit: (
 		data: VideoFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -88,6 +92,7 @@ interface BannerProps {
 interface BannerDispatchProps {
 	title: string;
 	description: string;
+	code: ActionCreatorsMapObject;
 	member: ActionCreatorsMapObject;
 }
 
@@ -97,12 +102,14 @@ const videoDisplayValues: VideoFormDisplayValues = {
 	endDate: dayjs(),
 	position: '',
 	type: 'VD',
+	code: '',
 	useyn: 'Y',
 };
 
 const BannerVideoPC: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
@@ -114,6 +121,7 @@ const BannerVideoPC: FC<BannerProps> = ({
 				<VideoFormDisplayPC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -124,6 +132,7 @@ const BannerVideoPC: FC<BannerProps> = ({
 const BannerVideoMobile: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
@@ -135,6 +144,7 @@ const BannerVideoMobile: FC<BannerProps> = ({
 				<VideoFormDisplayMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -145,9 +155,15 @@ const BannerVideoMobile: FC<BannerProps> = ({
 const BannerVideoPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
+	code,
 	member,
 }): JSX.Element => {
 	const csrfData = useCSRFToken({ member });
+	const groupCodeData = useGroupCodeList({
+		code,
+		groupCodelist: ['BN001', 'BN002', 'BN003'],
+		csrfData,
+	});
 	const submitForm = (
 		data: VideoFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
@@ -158,6 +174,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 			endDate: data.endDate.format('YYYY-MM-DD'),
 			position: data.position,
 			type: data.type,
+			code: data.code,
 			useyn: data.useyn,
 		};
 		console.log(videoFormData);
@@ -177,11 +194,13 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 				<BannerVideoPC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 				<BannerVideoMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 			</FormProvider>
@@ -195,6 +214,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	code: bindActionCreators(Api.code, dispatch),
 	member: bindActionCreators(Api.member, dispatch),
 });
 

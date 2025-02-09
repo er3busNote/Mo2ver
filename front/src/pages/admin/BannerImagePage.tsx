@@ -8,8 +8,13 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { BannerImageData, BannerImageDetailData } from '../../api/types';
+import {
+	CodeData,
+	BannerImageData,
+	BannerImageDetailData,
+} from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
+import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import BannerFormImagePC from '../../components/form/admin/BannerFormImagePC';
 import BannerFormImageMobile from '../../components/form/admin/BannerFormImageMobile';
 import { Box } from '@mui/material';
@@ -77,6 +82,7 @@ const bnnrImageSchema = yup
 			.required('종료날짜가 존재하질 않습니다'),
 		position: yup.string().required('필수항목'),
 		type: yup.string().required(),
+		code: yup.string().required(),
 		useyn: yup.string().required('필수항목'),
 		bnnrImg: yup
 			.array()
@@ -112,6 +118,7 @@ const bnnrImageSchema = yup
 interface BannerProps {
 	title: string;
 	description: string;
+	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	onSubmit: (
 		data: BannerFormImageValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -121,6 +128,7 @@ interface BannerProps {
 interface BannerDispatchProps {
 	title: string;
 	description: string;
+	code: ActionCreatorsMapObject;
 	member: ActionCreatorsMapObject;
 	banner: ActionCreatorsMapObject;
 }
@@ -131,6 +139,7 @@ const bnnrImageValues: BannerFormImageValues = {
 	endDate: dayjs(),
 	position: '',
 	type: 'BN',
+	code: '',
 	useyn: 'Y',
 	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
 };
@@ -138,6 +147,7 @@ const bnnrImageValues: BannerFormImageValues = {
 const BannerImagePC: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isPc = useMediaQuery({
@@ -149,6 +159,7 @@ const BannerImagePC: FC<BannerProps> = ({
 				<BannerFormImagePC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -159,6 +170,7 @@ const BannerImagePC: FC<BannerProps> = ({
 const BannerImageMobile: FC<BannerProps> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const isMobile = useMediaQuery({
@@ -170,6 +182,7 @@ const BannerImageMobile: FC<BannerProps> = ({
 				<BannerFormImageMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={onSubmit}
 				/>
 			)}
@@ -180,11 +193,17 @@ const BannerImageMobile: FC<BannerProps> = ({
 const BannerImagePage: FC<BannerDispatchProps> = ({
 	title,
 	description,
+	code,
 	member,
 	banner,
 }): JSX.Element => {
 	const navigate = useNavigate();
 	const csrfData = useCSRFToken({ member });
+	const groupCodeData = useGroupCodeList({
+		code,
+		groupCodelist: ['BN001', 'BN002', 'BN003'],
+		csrfData,
+	});
 	const submitForm = async (
 		data: BannerFormImageValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
@@ -212,6 +231,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			endDate: data.endDate.format('YYYY-MM-DD'),
 			position: data.position,
 			type: data.type,
+			code: data.code,
 			useyn: data.useyn,
 			bnnrImg: paramBnnrImg,
 		};
@@ -239,11 +259,13 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 				<BannerImagePC
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 				<BannerImageMobile
 					title={title}
 					description={description}
+					groupCodeData={groupCodeData}
 					onSubmit={submitForm}
 				/>
 			</FormProvider>
@@ -257,6 +279,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	code: bindActionCreators(Api.code, dispatch),
 	member: bindActionCreators(Api.member, dispatch),
 	banner: bindActionCreators(Api.banner, dispatch),
 });

@@ -319,20 +319,22 @@ const EventMobile: FC<EventProps> = ({
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							<TablePagination
-								rowsPerPageOptions={[eventPageData.size]}
-								count={eventPageData.totalElements}
-								rowsPerPage={rowsPerPage}
-								page={newPage}
-								SelectProps={{
-									inputProps: {
-										'aria-label': 'rows per page',
-									},
-									native: false,
-								}}
-								onPageChange={handleChangePage}
-								onRowsPerPageChange={handleChangeRowsPerPage}
-							/>
+							{eventPageData.totalElements && rowsPerPage && (
+								<TablePagination
+									rowsPerPageOptions={[eventPageData.size]}
+									count={eventPageData.totalElements}
+									rowsPerPage={rowsPerPage}
+									page={newPage}
+									SelectProps={{
+										inputProps: {
+											'aria-label': 'rows per page',
+										},
+										native: false,
+									}}
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={handleChangeRowsPerPage}
+								/>
+							)}
 						</TableRow>
 					</TableFooter>
 				</Table>

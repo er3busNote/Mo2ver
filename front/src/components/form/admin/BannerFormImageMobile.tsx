@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
+import { CodeData } from '../../../api/types';
 import {
 	Control,
 	Controller,
@@ -40,6 +41,7 @@ import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { BannerFormImageValues } from './types';
 // import _ from 'lodash';
+import { renameKeys } from '../../../utils/code';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -47,6 +49,7 @@ const tableBorderHeader = '3px solid #333';
 interface BannerProp {
 	title: string;
 	description: string;
+	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	onSubmit: (
 		data: BannerFormImageValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -160,6 +163,7 @@ const CnntUrlModal: FC<ModalProps> = ({
 const BannerFormImageMobile: FC<BannerProp> = ({
 	title,
 	description,
+	groupCodeData,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -383,82 +387,94 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 								</LocalizationProvider>
 							</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell sx={conditionTh} align="center" component="th">
-								노출위치
-							</TableCell>
-							<TableCell sx={conditionTd} align="left">
-								<Controller
-									name="position"
-									control={control}
-									render={({ field, fieldState, formState }) => (
-										<RenderSelectField
-											label="노출 위치"
-											datas={[
-												{ value: '', label: '전체' },
-												{ value: '11', label: '메인상단-A' },
-												{ value: '12', label: '메인상단-B' },
-												{ value: '20', label: '메인중간' },
-												{ value: '30', label: '메인중하단' },
-												{ value: '40', label: '메인하단' },
-												{ value: '50', label: '메인최상단' },
-											]}
-											field={field}
-											fieldState={fieldState}
-											formState={formState}
+						{groupCodeData && (
+							<>
+								<TableRow>
+									<TableCell sx={conditionTh} align="center" component="th">
+										노출위치
+									</TableCell>
+									<TableCell sx={conditionTd} align="left">
+										<Controller
+											name="position"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="노출 위치"
+													datas={renameKeys(groupCodeData, 'BN002')}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
 										/>
-									)}
-								/>
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell sx={conditionTh} align="center" component="th">
-								템플릿
-							</TableCell>
-							<TableCell sx={conditionTd} align="left">
-								<Controller
-									name="type"
-									control={control}
-									render={({ field, fieldState, formState }) => (
-										<RenderSelectField
-											label="템플릿 유형"
-											datas={[
-												{ value: 'BN', label: '배너이미지' },
-												{ value: 'GD', label: '상품전시' },
-												{ value: 'VD', label: '동영상' },
-											]}
-											field={field}
-											fieldState={fieldState}
-											formState={formState}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={conditionTh} align="center" component="th">
+										템플릿
+									</TableCell>
+									<TableCell sx={conditionTd} align="left">
+										<Controller
+											name="type"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="템플릿 유형"
+													datas={renameKeys(groupCodeData, 'BN001')}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
 										/>
-									)}
-								/>
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell sx={conditionTh} align="center" component="th">
-								전시여부
-							</TableCell>
-							<TableCell colSpan={3} sx={conditionTd} align="left">
-								<Controller
-									name="useyn"
-									control={control}
-									render={({ field, fieldState, formState }) => (
-										<RenderSelectField
-											label="전시여부"
-											datas={[
-												{ value: '', label: '전체' },
-												{ value: 'Y', label: '예' },
-												{ value: 'N', label: '아니오' },
-											]}
-											field={field}
-											fieldState={fieldState}
-											formState={formState}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={conditionTh} align="center" component="th">
+										전시코드
+									</TableCell>
+									<TableCell sx={conditionTd} align="left">
+										<Controller
+											name="code"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="전시코드"
+													datas={renameKeys(groupCodeData, 'BN003')}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
 										/>
-									)}
-								/>
-							</TableCell>
-						</TableRow>
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell sx={conditionTh} align="center" component="th">
+										전시여부
+									</TableCell>
+									<TableCell colSpan={3} sx={conditionTd} align="left">
+										<Controller
+											name="useyn"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderSelectField
+													label="전시여부"
+													datas={[
+														{ value: '', label: '전체' },
+														{ value: 'Y', label: '예' },
+														{ value: 'N', label: '아니오' },
+													]}
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+									</TableCell>
+								</TableRow>
+							</>
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
