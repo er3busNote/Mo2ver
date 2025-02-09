@@ -71,7 +71,12 @@ const setInterceptors = (instance: AxiosInstance) => {
 				} else {
 					if (['post', 'put', 'delete'].includes(config.method ?? '')) {
 						const { status, data } = await axios.get(
-							[config.baseURL, API_MEMBER_CSRF_TOKEN].join('/')
+							[config.baseURL, API_MEMBER_CSRF_TOKEN].join('/'),
+							{
+								headers: {
+									Authorization: ['Bearer', getAccessToken()].join(' '),
+								},
+							}
 						); // O
 						if (status === 200) {
 							headers['X-XSRF-TOKEN'] = data.csrfToken;
