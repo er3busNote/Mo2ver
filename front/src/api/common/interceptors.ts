@@ -22,6 +22,8 @@ import {
 const API_MEMBER_REFRESH_TOKEN = 'member/refresh';
 const API_MEMBER_CSRF_TOKEN = 'member/csrf-token';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const setInterceptors = (instance: AxiosInstance) => {
 	instance.interceptors.request.use(
 		(config: InternalAxiosRequestConfig) => {
@@ -48,7 +50,9 @@ const setInterceptors = (instance: AxiosInstance) => {
 				};
 				clearSessionStorage(JWT_ACCESS_TOKEN);
 				const { status, data } = await axios.patch(
-					[config.baseURL, API_MEMBER_REFRESH_TOKEN].join('/'),
+					[config.baseURL, API_MEMBER_REFRESH_TOKEN].join(
+						isProduction ? '' : '/'
+					),
 					tokenData
 				); // O
 				if (status === 201) {
@@ -71,7 +75,9 @@ const setInterceptors = (instance: AxiosInstance) => {
 				} else {
 					if (['post', 'put', 'delete'].includes(config.method ?? '')) {
 						const { status, data } = await axios.get(
-							[config.baseURL, API_MEMBER_CSRF_TOKEN].join('/'),
+							[config.baseURL, API_MEMBER_CSRF_TOKEN].join(
+								isProduction ? '' : '/'
+							),
 							{
 								headers: {
 									Authorization: ['Bearer', getAccessToken()].join(' '),
