@@ -19,6 +19,9 @@ import {
 	clearSessionStorage,
 } from '../../utils/storage';
 
+const API_MEMBER_REFRESH_TOKEN = 'member/refresh';
+const API_MEMBER_CSRF_TOKEN = 'member/csrf-token';
+
 const setInterceptors = (instance: AxiosInstance) => {
 	instance.interceptors.request.use(
 		(config: InternalAxiosRequestConfig) => {
@@ -45,7 +48,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 				};
 				clearSessionStorage(JWT_ACCESS_TOKEN);
 				const { status, data } = await axios.patch(
-					[config.baseURL, 'member/refresh'].join('/'),
+					[config.baseURL, API_MEMBER_REFRESH_TOKEN].join('/'),
 					tokenData
 				); // O
 				if (status === 201) {
@@ -59,11 +62,23 @@ const setInterceptors = (instance: AxiosInstance) => {
 			}
 
 			// -> Refresh Token 인증 실패 (FORBIDDEN : status === 403)
-			if (status === 403 && config.url === 'member/refresh') {
-				clearSessionStorage(JWT_USERNAME);
-				clearSessionStorage(JWT_ACCESS_TOKEN);
-				clearSessionStorage(JWT_REFRESH_TOKEN);
-				return axios(config);
+			if (status === 403) {
+				if (config.url === API_MEMBER_REFRESH_TOKEN) {
+					clearSessionStorage(JWT_USERNAME);
+					clearSessionStorage(JWT_ACCESS_TOKEN);
+					clearSessionStorage(JWT_REFRESH_TOKEN);
+					return axios(config);
+				} else {
+					if (['post', 'put', 'delete'].includes(config.method ?? '')) {
+						const { status, data } = await axios.get(
+							[config.baseURL, API_MEMBER_CSRF_TOKEN].join('/')
+						); // O
+						if (status === 200) {
+							headers['X-XSRF-TOKEN'] = data.csrfToken;
+							return axios(config);
+						}
+					}
+				}
 			}
 
 			return Promise.reject(error); // [Case - 2.2] : 요청 에러 처리를 작성함
