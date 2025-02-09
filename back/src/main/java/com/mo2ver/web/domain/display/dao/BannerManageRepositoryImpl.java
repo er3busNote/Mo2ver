@@ -39,12 +39,12 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(bannerManage.displayYesNo.eq('Y'));
         builder.and(bannerDetail.useYesNo.eq('Y'));
+        builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
 
         return queryFactory
                 .selectFrom(bannerManage)
                 .innerJoin(bannerManage.bannerDetailList, bannerDetail)
                 .where(builder)
-                .where(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate))
                 .orderBy(bannerManage.bannerManageNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
                 .transform(groupBy(bannerManage.displayConditionCode).as(
                         list(new QBannerDetailDto(
