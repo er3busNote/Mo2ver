@@ -73,7 +73,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 					clearSessionStorage(JWT_REFRESH_TOKEN);
 					return axios(config);
 				} else {
-					if (['post', 'put', 'delete'].includes(config.method ?? '')) {
+					/*if (['post', 'put', 'delete'].includes(config.method ?? '')) {
 						const { status, data } = await axios.get(
 							[config.baseURL, API_MEMBER_CSRF_TOKEN].join(
 								isProduction ? '' : '/'
@@ -88,7 +88,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 							headers['X-XSRF-TOKEN'] = data.csrfToken;
 							return axios(config);
 						}
-					}
+					}*/
 				}
 			}
 
