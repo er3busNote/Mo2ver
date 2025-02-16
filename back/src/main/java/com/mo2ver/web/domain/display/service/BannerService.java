@@ -64,6 +64,16 @@ public class BannerService {
     }
 
     @Transactional
+    public BannerImageDto findBannerImagesDetail(BannerDto bannerDto) {
+        return this.bannerManageRepository.findBannerDetail(bannerDto);
+    }
+
+    @Transactional
+    public GoodsDisplayDto findBannerGoodsDetail(BannerDto bannerDto) {
+        return this.bannerManageRepository.findBannerProduct(bannerDto);
+    }
+
+    @Transactional
     public void saveGoodsDisplay(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
         this.bannerManageRepository.save(BannerManage.of(goodsDisplayDto, currentUser));
     }

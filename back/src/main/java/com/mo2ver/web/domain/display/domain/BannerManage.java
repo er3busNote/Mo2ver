@@ -35,6 +35,9 @@ public class BannerManage {
     @Column(name = "DP_END_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시종료일자'")
     private Date displayEndDate;
 
+    @Column(name = "DP_TPL_CD", nullable = false, columnDefinition = "CHAR(10) COMMENT '템플릿유형'")
+    private String displayTemplateCode;
+
     @Column(name = "DP_CND_CD", nullable = false, columnDefinition = "CHAR(10) COMMENT '전시상태코드'")
     private String displayConditionCode;
 
@@ -70,6 +73,7 @@ public class BannerManage {
                 .subject(bannerImageDto.getTitle())
                 .displayStartDate(bannerImageDto.getStartDate())
                 .displayEndDate(bannerImageDto.getEndDate())
+                .displayTemplateCode(bannerImageDto.getType())
                 .displayConditionCode(bannerImageDto.getCode())
                 .displayYesNo(bannerImageDto.getUseyn())
                 .register(currentUser.getMemberNo())
@@ -82,6 +86,7 @@ public class BannerManage {
                 .subject(goodsDisplayDto.getTitle())
                 .displayStartDate(goodsDisplayDto.getStartDate())
                 .displayEndDate(goodsDisplayDto.getEndDate())
+                .displayTemplateCode(goodsDisplayDto.getType())
                 .displayConditionCode(goodsDisplayDto.getCode())
                 .displayYesNo(goodsDisplayDto.getUseyn())
                 .register(currentUser.getMemberNo())

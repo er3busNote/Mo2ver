@@ -17,6 +17,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,7 +59,22 @@ public class ErrorExceptionController {
         HashMap<String, Object> message = new HashMap<>();
         message.put("unsupported", e.getContentType());
         message.put("supported", e.getSupportedMediaTypes());
-        return errorHandler.buildError(ErrorCode.UNSUPPORTED_MEDIA_TYPE, message);
+        return errorHandler.buildError(ErrorCode.HANDLE_ACCESS_DENIED, message);
+    }
+
+    /**
+     * Restful API 통신시, 파라미터 유효성 검사 실패
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        HashMap<String, Object> message = new HashMap<>();
+        HashMap<String, String> errors = new HashMap<>();
+        e.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
+        message.put("message", "유효성 검사 실패");
+        message.put("errors", errors);
+        return errorHandler.buildError(ErrorCode.HANDLE_ACCESS_DENIED, message);
     }
 
     /**

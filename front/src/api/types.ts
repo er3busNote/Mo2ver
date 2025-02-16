@@ -139,9 +139,16 @@ interface BannerData {
 	subject: string;
 	displayStartDate: number;
 	displayEndDate: number;
+	displayTemplateCode: string;
+	displayConditionCode: string;
 	displayYesNo: string;
 	register: string;
 	registerDate: number;
+}
+
+interface BannerDetailData {
+	bannerManageNo: number;
+	displayTemplateCode: string;
 }
 
 interface BannerPageData {
@@ -173,12 +180,15 @@ interface BannerPageData {
 }
 
 interface BannerImageDetailData {
+	id?: number;
 	title: string;
 	cnntUrl: string;
+	file?: number;
 	useyn: string;
 }
 
 interface BannerImageData {
+	bannerNo?: number;
 	title: string;
 	startDate: string;
 	endDate: string;
@@ -190,6 +200,7 @@ interface BannerImageData {
 }
 
 interface GoodsDisplayDetailData {
+	id?: number;
 	goodsCode: string;
 	goodsName: string;
 	salePrice: number;
@@ -197,6 +208,7 @@ interface GoodsDisplayDetailData {
 }
 
 interface GoodsDisplayData {
+	bannerNo?: number;
 	title: string;
 	startDate: string;
 	endDate: string;
@@ -365,6 +377,7 @@ export type {
 	CategoryDataInfo,
 	CategoryDataGroup,
 	BannerData,
+	BannerDetailData,
 	BannerPageData,
 	BannerImageData,
 	BannerImageDetailData,

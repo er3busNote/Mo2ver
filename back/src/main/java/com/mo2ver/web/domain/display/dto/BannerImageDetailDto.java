@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BannerImageDetailDto {
 
+    private Long id;
     private String title;
     private String cnntUrl;
+    private Integer file;
     private Character useyn;
 }

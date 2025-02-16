@@ -2,6 +2,7 @@ import React, { FC, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -158,12 +159,15 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 	code,
 	member,
 }): JSX.Element => {
+	const navigate = useNavigate();
+	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
 	const groupCodeData = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,
 	});
+
 	const submitForm = (
 		data: VideoFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>

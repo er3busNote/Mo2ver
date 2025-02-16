@@ -4,6 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '../api';
 import { FileData } from '../api/types';
+import useBannerDisplayList from '../hooks/banner/useBannerDisplayList';
 import { Paper, Box } from '@mui/material';
 import BannerPC from '../components/banner/BannerPC';
 import BannerMobile from '../components/banner/BannerMobile';
@@ -19,9 +20,15 @@ const files: Array<FileData> = [];
 
 interface HomeProps {
 	image: ActionCreatorsMapObject;
+	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
-const HomePC: FC<HomeProps> = ({ image }): JSX.Element => {
+interface HomeDispatchProps {
+	banner: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
+}
+
+const HomePC: FC<HomeProps> = ({ image, bannerDisplayData }): JSX.Element => {
 	const isPc = useMediaQuery({
 		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
 	});
@@ -40,7 +47,7 @@ const HomePC: FC<HomeProps> = ({ image }): JSX.Element => {
 							height: 450,
 						}}
 					>
-						<PopularPC />
+						<PopularPC bannerDisplayData={bannerDisplayData} />
 					</Box>
 					<Box
 						sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
@@ -68,7 +75,10 @@ const HomePC: FC<HomeProps> = ({ image }): JSX.Element => {
 	);
 };
 
-const HomeMobile: FC<HomeProps> = ({ image }): JSX.Element => {
+const HomeMobile: FC<HomeProps> = ({
+	image,
+	bannerDisplayData,
+}): JSX.Element => {
 	const isMobile = useMediaQuery({
 		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
 	});
@@ -87,7 +97,7 @@ const HomeMobile: FC<HomeProps> = ({ image }): JSX.Element => {
 							height: { xs: 362, sm: 396 },
 						}}
 					>
-						<PopularMobile />
+						<PopularMobile bannerDisplayData={bannerDisplayData} />
 					</Box>
 					<MobileView>
 						<Box sx={{ p: 2, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
@@ -117,7 +127,8 @@ const HomeMobile: FC<HomeProps> = ({ image }): JSX.Element => {
 	);
 };
 
-const HomePage: FC<HomeProps> = ({ image }): JSX.Element => {
+const HomePage: FC<HomeDispatchProps> = ({ banner, image }): JSX.Element => {
+	const bannerDisplayData = useBannerDisplayList({ banner });
 	return (
 		<Paper
 			sx={{ width: '100%', /*height: '105%',*/ position: 'absolute' }}
@@ -125,13 +136,14 @@ const HomePage: FC<HomeProps> = ({ image }): JSX.Element => {
 			square
 			variant="outlined"
 		>
-			<HomePC image={image} />
-			<HomeMobile image={image} />
+			<HomePC image={image} bannerDisplayData={bannerDisplayData} />
+			<HomeMobile image={image} bannerDisplayData={bannerDisplayData} />
 		</Paper>
 	);
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	banner: bindActionCreators(Api.banner, dispatch),
 	image: bindActionCreators(Api.image, dispatch),
 });
 

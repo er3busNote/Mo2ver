@@ -1,22 +1,23 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { CodeData, GoodsDisplayData } from '../../api/types';
+import { CodeData, BannerDetailData, GoodsDisplayData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
+import useBannerGoodsDetail from '../../hooks/banner/useBannerGoodsDetail';
 import GoodsFormDisplayPC from '../../components/form/admin/GoodsFormDisplayPC';
 import GoodsFormDisplayMobile from '../../components/form/admin/GoodsFormDisplayMobile';
 import { Box } from '@mui/material';
 import { GoodsFormDisplayValues } from '../../components/form/admin/types';
 import { useMediaQuery } from 'react-responsive';
-// import _ from 'lodash';
+//import { merge } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
 const drawerMenuLimit = 768;
@@ -178,12 +179,53 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	banner,
 }): JSX.Element => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
 	const groupCodeData = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,
 	});
+	const componentType =
+		location.state?.bannerManageNo && location.state?.displayTemplateCode
+			? 'Update'
+			: 'Create';
+
+	const methods = useForm<GoodsFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: goodsDisplayValues,
+		resolver: yupResolver(goodsDisplaySchema),
+	});
+
+	if (componentType === 'Update') {
+		const bannerManageNo = location.state?.bannerManageNo;
+		const displayTemplateCode = location.state?.displayTemplateCode;
+		const bannerData: BannerDetailData = {
+			bannerManageNo: bannerManageNo,
+			displayTemplateCode: displayTemplateCode,
+		};
+		const goodsInfo = useBannerGoodsDetail({
+			banner,
+			bannerData,
+			csrfData,
+		});
+		if (goodsInfo && !isDataLoaded) {
+			const { reset } = methods;
+			reset({
+				title: goodsInfo.title,
+				startDate: dayjs(goodsInfo.startDate),
+				endDate: dayjs(goodsInfo.endDate),
+				position: goodsInfo.position,
+				type: goodsInfo.type,
+				code: goodsInfo.code,
+				useyn: goodsInfo.useyn,
+				goods: goodsInfo.goods,
+			});
+			setIsDataLoaded(true);
+		}
+	}
+
 	const submitForm = async (
 		data: GoodsFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
@@ -205,28 +247,25 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 		navigate('/admin/banner');
 	};
 
-	const methods = useForm<GoodsFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: goodsDisplayValues,
-		resolver: yupResolver(goodsDisplaySchema),
-	});
-
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<FormProvider {...methods}>
-				<BannerGoodsPC
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={submitForm}
-				/>
-				<BannerGoodsMobile
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={submitForm}
-				/>
-			</FormProvider>
+			{(componentType === 'Create' ||
+				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
+				<FormProvider {...methods}>
+					<BannerGoodsPC
+						title={title}
+						description={description}
+						groupCodeData={groupCodeData}
+						onSubmit={submitForm}
+					/>
+					<BannerGoodsMobile
+						title={title}
+						description={description}
+						groupCodeData={groupCodeData}
+						onSubmit={submitForm}
+					/>
+				</FormProvider>
+			)}
 		</Box>
 	);
 };

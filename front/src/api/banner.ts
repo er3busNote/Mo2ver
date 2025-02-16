@@ -1,7 +1,12 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { tokenSuccess } from '../store/index';
-import { CSRFData, GoodsDisplayData, PageData } from './types';
+import {
+	CSRFData,
+	GoodsDisplayData,
+	BannerDetailData,
+	PageData,
+} from './types';
 
 const banner = (instance: AxiosInstance) => {
 	return {
@@ -16,6 +21,51 @@ const banner = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => {
 					return error.response;
 				}),
+		// 배너 전시 정보 API : <baseURL>/banner/display
+		display: () => (dispatch: Dispatch) =>
+			instance
+				.get('banner/display')
+				.then((response: AxiosResponse) => {
+					dispatch(tokenSuccess(response.data));
+					return response.data;
+				})
+				.catch((error: AxiosError) => {
+					return error.response;
+				}),
+		// 배너 이미지 정보 API : <baseURL>/banner/images/detail
+		imagesDetail:
+			(bannerData: BannerDetailData, csrfData: CSRFData) =>
+			(dispatch: Dispatch) =>
+				instance
+					.post('banner/images/detail', bannerData, {
+						headers: {
+							'X-XSRF-TOKEN': csrfData.csrfToken,
+						},
+					})
+					.then((response: AxiosResponse) => {
+						dispatch(tokenSuccess(response.data));
+						return response.data;
+					})
+					.catch((error: AxiosError) => {
+						return error.response;
+					}),
+		// 배너 상품 전시 정보 API : <baseURL>/banner/goods/detail
+		goodsDetail:
+			(bannerData: BannerDetailData, csrfData: CSRFData) =>
+			(dispatch: Dispatch) =>
+				instance
+					.post('banner/goods/detail', bannerData, {
+						headers: {
+							'X-XSRF-TOKEN': csrfData.csrfToken,
+						},
+					})
+					.then((response: AxiosResponse) => {
+						dispatch(tokenSuccess(response.data));
+						return response.data;
+					})
+					.catch((error: AxiosError) => {
+						return error.response;
+					}),
 		// 상품 전시 정보 API : <baseURL>/banner/goods
 		goods:
 			(goodsDisplayData: GoodsDisplayData, csrfData: CSRFData) =>

@@ -1,11 +1,9 @@
 package com.mo2ver.web.domain.display.dao;
 
-import com.mo2ver.web.domain.display.dto.BannerDetailDto;
-import com.mo2ver.web.domain.display.dto.BannerProductDto;
-import com.mo2ver.web.domain.display.dto.QBannerDetailDto;
-import com.mo2ver.web.domain.display.dto.QBannerProductDto;
+import com.mo2ver.web.domain.display.dto.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
@@ -30,6 +28,69 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
 
     public BannerManageRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
+    }
+
+    public BannerImageDto findBannerDetail(BannerDto bannerDto) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(bannerManage.bannerManageNo.eq(bannerDto.getBannerManageNo()));
+        builder.and(bannerManage.displayTemplateCode.eq(bannerDto.getDisplayTemplateCode()));
+
+        return queryFactory
+                .selectFrom(bannerManage)
+                .innerJoin(bannerManage.bannerDetailList, bannerDetail)
+                .where(builder)
+                .transform(groupBy(bannerManage.bannerManageNo).list(
+                        new QBannerImageDto(
+                                bannerManage.bannerManageNo,
+                                bannerManage.subject,
+                                bannerManage.displayStartDate,
+                                bannerManage.displayEndDate,
+                                Expressions.constant(""),
+                                bannerManage.displayTemplateCode,
+                                bannerManage.displayConditionCode,
+                                bannerManage.displayYesNo,
+                                list(Projections.constructor(BannerImageDetailDto.class,
+                                        bannerDetail.bannerDetailId,
+                                        bannerDetail.bannerContents,
+                                        bannerDetail.connectUrl,
+                                        bannerDetail.imageAttachFile,
+                                        bannerDetail.useYesNo
+                                ))
+                        ))
+                ).stream().findFirst().orElse(null);
+    }
+
+    public GoodsDisplayDto findBannerProduct(BannerDto bannerDto) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(bannerManage.bannerManageNo.eq(bannerDto.getBannerManageNo()));
+        builder.and(bannerManage.displayTemplateCode.eq(bannerDto.getDisplayTemplateCode()));
+
+        return queryFactory
+                .selectFrom(bannerManage)
+                .innerJoin(bannerManage.bannerProductList, bannerProduct)
+                .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
+                .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
+                .where(builder)
+                .transform(groupBy(bannerManage.bannerManageNo).list(
+                        new QGoodsDisplayDto(
+                                bannerManage.bannerManageNo,
+                                bannerManage.subject,
+                                bannerManage.displayStartDate,
+                                bannerManage.displayEndDate,
+                                Expressions.constant(""),
+                                bannerManage.displayTemplateCode,
+                                bannerManage.displayConditionCode,
+                                bannerManage.displayYesNo,
+                                list(Projections.constructor(GoodsDisplayProductDto.class,
+                                        bannerProduct.bannerProductId,
+                                        bannerProduct.productCode,
+                                        bannerProduct.productName,
+                                        price.supplyPrice,
+                                        price.salePrice,
+                                        bannerProduct.sortSequence
+                                ))
+                        ))
+                ).stream().findFirst().orElse(null);
     }
 
     public Map<String, List<BannerDetailDto>> findGroupBannerDetail() {

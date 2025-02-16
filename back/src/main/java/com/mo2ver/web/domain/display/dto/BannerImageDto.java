@@ -1,11 +1,10 @@
 package com.mo2ver.web.domain.display.dto;
 
-import lombok.AllArgsConstructor;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,8 +16,9 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class BannerImageDto {
+
+    private Long bannerNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
@@ -33,8 +33,11 @@ public class BannerImageDto {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    @NotBlank(message = "템플릿 유형이 존재하지 않습니다")
+    //@NotBlank(message = "노출위치가 존재하지 않습니다")
     private String position;
+
+    @NotNull(message = "템플릿 유형이 존재하지 않습니다")
+    private String type;
 
     @NotNull(message = "전시상태코드가 존재하지 않습니다")
     private String code;
@@ -43,4 +46,17 @@ public class BannerImageDto {
     private Character useyn;
 
     private List<BannerImageDetailDto> bnnrImg;
+
+    @QueryProjection
+    public BannerImageDto(Long bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<BannerImageDetailDto> bnnrImg) {
+        this.bannerNo = bannerNo;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.position = position;
+        this.type = type;
+        this.code = code;
+        this.useyn = useyn;
+        this.bnnrImg = bnnrImg;
+    }
 }

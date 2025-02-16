@@ -13,7 +13,13 @@ const SLIDE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
-const PopularMobile: FC = (): JSX.Element => {
+interface PopularProps {
+	bannerDisplayData: Record<string, Record<string, Array<object>>>;
+}
+
+const PopularMobile: FC<PopularProps> = ({
+	bannerDisplayData,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [index, setIndex] = useState(0);

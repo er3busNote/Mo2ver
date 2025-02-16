@@ -1,10 +1,7 @@
 package com.mo2ver.web.display;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
-import com.mo2ver.web.domain.display.dto.BannerImageDto;
-import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
-import com.mo2ver.web.domain.display.dto.GoodsDisplayProductDto;
+import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +36,53 @@ public class BannerTest extends CsrfConfigTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+    @Test
+    @DisplayName("배너 이미지 상세 정보 조회")
+    public void findBannerImagesDetailTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+
+        BannerDto bannerDto = this.getBannerImagesDto();
+
+        mockMvc.perform(post("/banner/images/detail")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bannerDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    private BannerDto getBannerImagesDto() {
+        return BannerDto.builder()
+                .bannerManageNo(22L)
+                .displayTemplateCode("BN")
+                .build();
+    }
+
+    @Test
+    @DisplayName("배너 상품 전시 상세 정보 조회")
+    public void findBannerGoodsDetailTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+
+        BannerDto bannerDto = this.getBannerGoodsDto();
+
+        mockMvc.perform(post("/banner/goods/detail")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bannerDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    private BannerDto getBannerGoodsDto() {
+        return BannerDto.builder()
+                .bannerManageNo(20L)
+                .displayTemplateCode("GD")
+                .build();
+    }
 
     @Test
     @DisplayName("배너 이미지정보 저장 확인")
@@ -70,7 +114,8 @@ public class BannerTest extends CsrfConfigTest {
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
-                .position("BN")
+                .position("")
+                .type("BN")
                 .code("MAN")
                 .useyn('Y')
                 .bnnrImg(Arrays.asList(
@@ -110,7 +155,8 @@ public class BannerTest extends CsrfConfigTest {
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
-                .position("GD")
+                .position("")
+                .type("GD")
                 .code("WOMAN")
                 .useyn('Y')
                 .goods(Arrays.asList(

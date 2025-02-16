@@ -62,6 +62,18 @@ public class BannerController {
         return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "상품전시정보가 저장되었습니다"), HttpStatus.CREATED);
     }
 
+    @PostMapping("/images/detail")
+    public ResponseEntity imagesDetailBanner(@RequestBody @Valid BannerDto bannerDto,
+                                             @CurrentUser Member currentUser) {
+        return ResponseEntity.ok(bannerService.findBannerImagesDetail(bannerDto));
+    }
+
+    @PostMapping("/goods/detail")
+    public ResponseEntity goodsDetailBanner(@RequestBody @Valid BannerDto bannerDto,
+                                            @CurrentUser Member currentUser) {
+        return ResponseEntity.ok(bannerService.findBannerGoodsDetail(bannerDto));
+    }
+
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
                                        @RequestPart(name = "bannerImage") @Valid BannerImageDto bannerImageDto,

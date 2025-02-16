@@ -29,7 +29,7 @@ public class CodeController {
     }
     @PostMapping("/list/detail")
     public ResponseEntity listCodeDetail(@RequestBody List<String> groupCodelist,
-                                   @CurrentUser Member currentUser) {
+                                         @CurrentUser Member currentUser) {
         return ResponseEntity.ok(codeService.fileCodelistDetail(groupCodelist));
     }
 
