@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping(value = "/member")
 public class MemberController {
 
