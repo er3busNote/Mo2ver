@@ -63,13 +63,13 @@ public class FileService {
         String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, getFilePath(uploadDirectory), contentType, fileSize, currentUser));
         this.cryptoUtil.encryptFile(file, this.fileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
-        return FileDto.toDTO(fileInfo, fileExtension, fileNameWithoutExtension);
+        return FileDto.of(fileInfo, fileExtension, fileNameWithoutExtension);
     }
 
     @Transactional
     public List<FileAttachDto> saveFile(List<MultipartFile> files, Member currentUser) throws Exception {
         List<FileDto> fileDtoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveFile(file, FILE_DIRECTORY, currentUser))).collect(Collectors.toList());
-        return fileDtoList.stream().map(FileAttachDto::toDTO).collect(Collectors.toList());
+        return fileDtoList.stream().map(FileAttachDto::of).collect(Collectors.toList());
     }
 
     private String getDirectory(String targetFolder) {

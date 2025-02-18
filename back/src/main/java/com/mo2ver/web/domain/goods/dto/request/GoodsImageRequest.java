@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.goods.dto;
+package com.mo2ver.web.domain.goods.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsImageDto {
+public class GoodsImageRequest {
 
     @NotBlank(message = "상품명이 존재하지 않습니다")
     private String goodsName;

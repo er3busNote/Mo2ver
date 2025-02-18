@@ -1,10 +1,10 @@
-package com.mo2ver.web.domain.goods.dto;
+package com.mo2ver.web.domain.goods.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class CategoryDto {
+public class CategoryResponse {
 
     private String categoryCode;
     private String categoryName;
@@ -15,7 +15,7 @@ public class CategoryDto {
     private Character useYesNo;
 
     @QueryProjection
-    public CategoryDto(String categoryCode, String categoryName, String upperCategoryCode, Integer sortSequence, Integer categoryLevel, String sortOrdinal, Character useYesNo) {
+    public CategoryResponse(String categoryCode, String categoryName, String upperCategoryCode, Integer sortSequence, Integer categoryLevel, String sortOrdinal, Character useYesNo) {
         this.categoryCode = categoryCode;
         this.categoryName = categoryName;
         this.upperCategoryCode = upperCategoryCode;

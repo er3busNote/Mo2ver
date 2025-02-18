@@ -24,7 +24,7 @@ public class FileAttachDto {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
-    public static FileAttachDto toDTO(FileDto fileDto) {
+    public static FileAttachDto of(FileDto fileDto) {
         return FileAttachDto.builder()
                 .fileAttachCode(getEncryptor(fileDto.getFileCode()))
                 .fileName(fileDto.getFileName())

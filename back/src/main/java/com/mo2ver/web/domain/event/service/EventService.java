@@ -6,9 +6,9 @@ import com.mo2ver.web.domain.event.dao.EventImageRepository;
 import com.mo2ver.web.domain.event.dao.EventManageRepository;
 import com.mo2ver.web.domain.event.domain.EventImage;
 import com.mo2ver.web.domain.event.domain.EventManage;
-import com.mo2ver.web.domain.event.dto.EventDetailDto;
-import com.mo2ver.web.domain.event.dto.EventDto;
-import com.mo2ver.web.domain.event.dto.EventImageDto;
+import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
+import com.mo2ver.web.domain.event.dto.response.EventResponse;
+import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,25 +35,26 @@ public class EventService {
     protected EventImageRepository eventImageRepository;
 
     @Transactional
-    public Page<EventDetailDto> findEvent(Integer id, Pageable pageable) {
+    public Page<EventDetailResponse> findEvent(Integer id, Pageable pageable) {
         return this.eventManageRepository.findById(id, pageable);
     }
 
     @Transactional
-    public Page<EventDto> findEventlist(Pageable pageable) {
+    public Page<EventResponse> findEventlist(Pageable pageable) {
         Page<EventManage> event = this.eventManageRepository.findByAll(pageable);
-        return event.map(EventDto::toDTO);
+        return event.map(EventResponse::of);
     }
 
     @Transactional
-    public void saveImageEvent(List<MultipartFile> eventFiles, EventImageDto eventImageDto, Member currentUser) throws Exception {
-        EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageDto, currentUser));
+    public EventManage saveImageEvent(List<MultipartFile> eventFiles, EventImageRequest eventImageRequest, Member currentUser) throws Exception {
+        EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageRequest, currentUser));
         for (int i = 0; i < eventFiles.size(); i++) {
             MultipartFile file = eventFiles.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
             FileDto fileDto = this.fileService.saveFile(file, EVENT_DIRECTORY, currentUser);
             this.eventImageRepository.save(EventImage.of(eventManage, fileDto.getFileCode(), basicImageYesNo, fileDto.getFileExtension(), i+1, currentUser));
         }
+        return eventManage;
     }
 
     private Character getBasicImageYesNo(int i) {

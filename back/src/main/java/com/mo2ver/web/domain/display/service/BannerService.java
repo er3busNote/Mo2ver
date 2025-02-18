@@ -7,6 +7,8 @@ import com.mo2ver.web.domain.display.dao.BannerManageRepository;
 import com.mo2ver.web.domain.display.domain.BannerDetail;
 import com.mo2ver.web.domain.display.domain.BannerManage;
 import com.mo2ver.web.domain.display.dto.*;
+import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
+import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,26 +40,26 @@ public class BannerService {
     @Transactional
     public Page<BannerDto> findBannerlist(Pageable pageable) {
         Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
-        return manage.map(BannerDto::toDTO);
+        return manage.map(BannerDto::of);
     }
 
     @Transactional
     public Map<String, Map<String, List<Object>>> findBannerDisplay() {
-        Map<String, List<BannerDetailDto>> bannerDetailGroupDto = this.bannerManageRepository.findGroupBannerDetail();
-        Map<String, List<BannerProductDto>> bannerProductGroupDto = this.bannerManageRepository.findGroupBannerProduct();
+        Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerManageRepository.findGroupBannerDetail();
+        Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerManageRepository.findGroupBannerProduct();
 
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 
-        for (String detailKey : bannerDetailGroupDto.keySet()) {
+        for (String detailKey : bannerDetailGroupResponse.keySet()) {
             bannerDisplay
                     .computeIfAbsent(detailKey, k -> new HashMap<>())
-                    .put("detail", new ArrayList<>(bannerDetailGroupDto.get(detailKey)));
+                    .put("detail", new ArrayList<>(bannerDetailGroupResponse.get(detailKey)));
         }
 
-        for (String productKey : bannerProductGroupDto.keySet()) {
+        for (String productKey : bannerProductGroupResponse.keySet()) {
             bannerDisplay
                     .computeIfAbsent(productKey, k -> new HashMap<>())
-                    .put("product", new ArrayList<>(bannerProductGroupDto.get(productKey)));
+                    .put("product", new ArrayList<>(bannerProductGroupResponse.get(productKey)));
         }
 
         return bannerDisplay;
@@ -74,12 +76,12 @@ public class BannerService {
     }
 
     @Transactional
-    public void saveGoodsDisplay(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
-        this.bannerManageRepository.save(BannerManage.of(goodsDisplayDto, currentUser));
+    public BannerManage saveGoodsDisplay(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
+        return this.bannerManageRepository.save(BannerManage.of(goodsDisplayDto, currentUser));
     }
 
     @Transactional
-    public void saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto, Member currentUser) throws Exception {
+    public BannerManage saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto, Member currentUser) throws Exception {
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageDto, currentUser));
         List<BannerImageDetailDto> listBannerImageDetailDto = bannerImageDto.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailDto.size(); i++) {
@@ -89,5 +91,6 @@ public class BannerService {
             FileDto fileDto = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
             this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailDto, fileDto.getFileCode(), i+1, currentUser));
         }
+        return bannerManage;
     }
 }

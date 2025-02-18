@@ -2,8 +2,8 @@ package com.mo2ver.web.goods;
 
 import com.mo2ver.web.domain.goods.domain.Category;
 import com.mo2ver.web.domain.goods.domain.QCategory;
-import com.mo2ver.web.domain.goods.dto.CategoryDto;
-import com.mo2ver.web.domain.goods.dto.QCategoryDto;
+import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
+import com.mo2ver.web.domain.goods.dto.response.QCategoryResponse;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
@@ -62,7 +62,7 @@ public class QueryDSLTest {
         QCategory P = new QCategory("P");   // 부모
 
         JPASQLQuery<?> query = new JPASQLQuery<>(entityManager, MySQLTemplates.DEFAULT);
-        EntityPathBase<QCategoryDto> recursive = new EntityPathBase<>(QCategoryDto.class, "TC");
+        EntityPathBase<QCategoryResponse> recursive = new EntityPathBase<>(QCategoryResponse.class, "TC");
 
         // SELECT CAT_CD, CAT_NM, UPPR_CAT_CD, SORT_SEQ, CAT_LV, USE_YN FROM T_GD_CAT WHERE UPPR_CAT_CD IS NULL
         SQLQuery<Category> T = SQLExpressions.select(
@@ -109,8 +109,8 @@ public class QueryDSLTest {
         QCategory C = new QCategory("C");   // 자식
         QCategory P = new QCategory("P");   // 부모
 
-        JPASQLQuery<QCategoryDto> query = new JPASQLQuery<>(entityManager, MySQLTemplates.DEFAULT);
-        EntityPathBase<QCategoryDto> recursive = new EntityPathBase<>(QCategoryDto.class, "TC");
+        JPASQLQuery<QCategoryResponse> query = new JPASQLQuery<>(entityManager, MySQLTemplates.DEFAULT);
+        EntityPathBase<QCategoryResponse> recursive = new EntityPathBase<>(QCategoryResponse.class, "TC");
 
         StringExpression sortOrdinal = new CaseBuilder()
                 .when(TC.categoryCode.isEmpty().or(TC.categoryCode.isNull())).then("")
@@ -136,7 +136,7 @@ public class QueryDSLTest {
                 .fetch();
 
         resultQuerydsl.stream()
-                .map(tuple -> new CategoryDto(
+                .map(tuple -> new CategoryResponse(
                         tuple.get(0, String.class),
                         tuple.get(1, String.class),
                         tuple.get(2, String.class),

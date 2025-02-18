@@ -1,8 +1,8 @@
 package com.mo2ver.web.domain.goods.dao;
 
 import com.mo2ver.web.domain.goods.domain.QCategory;
-import com.mo2ver.web.domain.goods.dto.CategoryDto;
-import com.mo2ver.web.domain.goods.dto.QCategoryDto;
+import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
+import com.mo2ver.web.domain.goods.dto.response.QCategoryResponse;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -23,14 +23,14 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-    public List<CategoryDto> findCategoryList() {
+    public List<CategoryResponse> findCategoryList() {
 
         QCategory TC = new QCategory("TC");
         QCategory C = new QCategory("C");   // 자식
         QCategory P = new QCategory("P");   // 부모
 
-        JPASQLQuery<QCategoryDto> query = new JPASQLQuery<>(entityManager, MySQLTemplates.DEFAULT);
-        EntityPathBase<QCategoryDto> recursive = new EntityPathBase<>(QCategoryDto.class, "TC");
+        JPASQLQuery<QCategoryResponse> query = new JPASQLQuery<>(entityManager, MySQLTemplates.DEFAULT);
+        EntityPathBase<QCategoryResponse> recursive = new EntityPathBase<>(QCategoryResponse.class, "TC");
 
         StringExpression sortOrdinal = new CaseBuilder()
                 .when(TC.categoryCode.isEmpty().or(TC.categoryCode.isNull())).then("")
@@ -44,7 +44,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
                         select(C.categoryCode, C.categoryName, C.upperCategoryCode, C.sortSequence, C.categoryLevel, C.useYesNo).from(C).where(C.upperCategoryCode.isNull()),
                         select(P.categoryCode, P.categoryName, P.upperCategoryCode, P.sortSequence, P.categoryLevel, P.useYesNo).from(P).innerJoin(recursive).on(TC.categoryCode.eq(P.upperCategoryCode))
                 ))
-                .select(new QCategoryDto(
+                .select(new QCategoryResponse(
                         TC.categoryCode, TC.categoryName,
                         TC.upperCategoryCode.coalesce("C000000000").as("UPPR_CAT_CD"),
                         TC.sortSequence, TC.categoryLevel,

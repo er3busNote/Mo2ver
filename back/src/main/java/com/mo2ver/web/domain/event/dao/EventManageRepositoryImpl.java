@@ -1,8 +1,8 @@
 package com.mo2ver.web.domain.event.dao;
 
 import com.mo2ver.web.domain.event.domain.EventManage;
-import com.mo2ver.web.domain.event.dto.EventDetailDto;
-import com.mo2ver.web.domain.event.dto.QEventDetailDto;
+import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
+import com.mo2ver.web.domain.event.dto.response.QEventDetailResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -33,7 +33,7 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
         this.queryFactory = queryFactory;
     }
 
-    public Page<EventDetailDto> findById(Integer id, Pageable pageable) {
+    public Page<EventDetailResponse> findById(Integer id, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(eventManage.eventManageNo.eq(Long.valueOf(id)));
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
@@ -45,8 +45,8 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .then(price.salePrice)
                 .otherwise(price.supplyPrice);
 
-        JPAQuery<EventDetailDto> query = queryFactory
-                .select(new QEventDetailDto(
+        JPAQuery<EventDetailResponse> query = queryFactory
+                .select(new QEventDetailResponse(
                         eventManage.subject,
                         eventManage.eventStartDate, eventManage.eventEndDate,
                         goodsImage.goodsImageAttachFile, goodsImage.goodsImageExtension,
@@ -61,7 +61,7 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
                 .where(builder);
-        List<EventDetailDto> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<EventDetailResponse> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 

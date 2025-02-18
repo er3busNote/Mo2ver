@@ -8,7 +8,11 @@ import com.mo2ver.web.domain.goods.domain.Discount;
 import com.mo2ver.web.domain.goods.domain.Goods;
 import com.mo2ver.web.domain.goods.domain.GoodsImage;
 import com.mo2ver.web.domain.goods.domain.Price;
-import com.mo2ver.web.domain.goods.dto.*;
+import com.mo2ver.web.domain.goods.dto.request.CategoryPageRequest;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
+import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
+import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,16 +44,16 @@ public class GoodsService {
     protected GoodsImageRepository goodsImageRepository;
 
     @Transactional
-    public GoodsDto findGoods(String id) {
+    public GoodsResponse findGoods(String id) {
         Goods goods = this.goodsRepository.findByGoodsCode(id);
-        return GoodsDto.toDTO(goods);
+        return GoodsResponse.of(goods);
     }
 
     @Transactional
-    public Page<GoodsDto> findGoodslist(Pageable pageable, CategoryPageDto categoryPageDto) {
+    public Page<GoodsResponse> findGoodslist(Pageable pageable, CategoryPageRequest categoryPageRequest) {
         //Page<Goods> goods = useJpaRepository(pageable, categoryPageDto.getCategoryCode(), categoryPageDto.getCategoryType());
-        Page<Goods> goods = useQueryDsl(pageable, categoryPageDto.getCategoryCode(), categoryPageDto.getCategoryType());
-        return goods.map(GoodsDto::toDTO);
+        Page<Goods> goods = useQueryDsl(pageable, categoryPageRequest.getCategoryCode(), categoryPageRequest.getCategoryType());
+        return goods.map(GoodsResponse::of);
     }
 
     // @EntityGraph → 복잡한 연관 관계일수록 속도가 느려짐... → QueryDSL 구성 요소인 QuerydslRepositorySupport으로 해결함
@@ -73,40 +75,42 @@ public class GoodsService {
     }
 
     @Transactional
-    public List<GoodsDto> findGoodslistRank(Integer count) {
+    public List<GoodsResponse> findGoodslistRank(Integer count) {
         List<Goods> goods = this.goodsRepository.findByGoodsRank(count);
-        return goods.stream().map(GoodsDto::toDTO).collect(Collectors.toList());
+        return goods.stream().map(GoodsResponse::of).collect(Collectors.toList());
     }
 
     @Transactional
-    public Page<GoodsDto> findGoodsSearch(Pageable pageable, GoodsSearchDto goodsSearchDto) {
-        Page<Goods> goods = this.goodsRepository.findByGoodsName(pageable, goodsSearchDto);
-        return goods.map(GoodsDto::toDTO);
+    public Page<GoodsResponse> findGoodsSearch(Pageable pageable, GoodsSearchRequest goodsSearchRequest) {
+        Page<Goods> goods = this.goodsRepository.findByGoodsName(pageable, goodsSearchRequest);
+        return goods.map(GoodsResponse::of);
     }
 
     @Transactional
-    public void saveImageGoods(GoodsImageAttachDto goodsImageAttachDto, Member currentUser) throws Exception {
-        Price price = this.priceRepository.save(Price.of(goodsImageAttachDto, currentUser));
-        if (goodsImageAttachDto.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachDto, currentUser));
-        for (int i = 0; i < goodsImageAttachDto.getGoodsImg().size(); i++) {
-            FileAttachDto fileAttachDto = goodsImageAttachDto.getGoodsImg().get(i);
+    public Price saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) throws Exception {
+        Price price = this.priceRepository.save(Price.of(goodsImageAttachRequest, currentUser));
+        if (goodsImageAttachRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachRequest, currentUser));
+        for (int i = 0; i < goodsImageAttachRequest.getGoodsImg().size(); i++) {
+            FileAttachDto fileAttachDto = goodsImageAttachRequest.getGoodsImg().get(i);
             String fileAttachCode = fileService.getFileAttachCode(fileAttachDto.getFileAttachCode());
             Character basicImageYesNo = 'N';
             if (i == 0) basicImageYesNo = 'Y';
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), Integer.parseInt(fileAttachCode), basicImageYesNo, fileAttachDto.getFileExtension(), i+1, currentUser));
         }
+        return price;
     }
 
     @Transactional
-    public void saveImageGoods(List<MultipartFile> files, GoodsImageDto goodsImageDto, Member currentUser) throws Exception {
-        Price price = this.priceRepository.save(Price.of(goodsImageDto, currentUser));
-        if (goodsImageDto.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageDto, currentUser));
+    public Price saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
+        Price price = this.priceRepository.save(Price.of(goodsImageRequest, currentUser));
+        if (goodsImageRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageRequest, currentUser));
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
             FileDto fileDto = this.fileService.saveFile(file, GOODS_DIRECTORY, currentUser);
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileDto.getFileCode(), basicImageYesNo, fileDto.getFileExtension(), i+1, currentUser));
         }
+        return price;
     }
 
     private Character getBasicImageYesNo(int i) {

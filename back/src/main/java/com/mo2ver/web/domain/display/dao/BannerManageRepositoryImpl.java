@@ -1,6 +1,10 @@
 package com.mo2ver.web.domain.display.dao;
 
 import com.mo2ver.web.domain.display.dto.*;
+import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
+import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
+import com.mo2ver.web.domain.display.dto.response.QBannerDetailResponse;
+import com.mo2ver.web.domain.display.dto.response.QBannerProductResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -93,7 +97,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 ).stream().findFirst().orElse(null);
     }
 
-    public Map<String, List<BannerDetailDto>> findGroupBannerDetail() {
+    public Map<String, List<BannerDetailResponse>> findGroupBannerDetail() {
         StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
         StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
 
@@ -108,7 +112,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 .where(builder)
                 .orderBy(bannerManage.bannerManageNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
                 .transform(groupBy(bannerManage.displayConditionCode).as(
-                        list(new QBannerDetailDto(
+                        list(new QBannerDetailResponse(
                                 bannerManage.displayStartDate,
                                 bannerManage.displayEndDate,
                                 bannerDetail.imageAttachFile,
@@ -119,7 +123,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 );
     }
 
-    public Map<String, List<BannerProductDto>> findGroupBannerProduct() {
+    public Map<String, List<BannerProductResponse>> findGroupBannerProduct() {
         StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
         StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
 
@@ -144,7 +148,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 .where(builder)
                 .orderBy(bannerManage.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
                 .transform(groupBy(bannerManage.displayConditionCode).as(
-                        list(new QBannerProductDto(
+                        list(new QBannerProductResponse(
                                 bannerManage.displayStartDate,
                                 bannerManage.displayEndDate,
                                 goodsImage.goodsImageAttachFile,

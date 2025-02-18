@@ -3,7 +3,7 @@ package com.mo2ver.web.domain.member.service;
 import com.mo2ver.web.domain.member.dao.MemberRepository;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.domain.member.domain.MemberRole;
-import com.mo2ver.web.domain.member.dto.SignupDto;
+import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,13 +45,13 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void signup(SignupDto signupDto) {
+    public void signup(SignupRequest signupRequest) {
         Member newMember = Member.builder()
-                .loginId(signupDto.getUsername())
+                .loginId(signupRequest.getUsername())
                 .memberName("ANONYMOUS")
-                .password(signupDto.getPassword())
+                .password(signupRequest.getPassword())
                 .cellPhoneNumber("010XXXXXXXX")
-                .email(signupDto.getEmail())
+                .email(signupRequest.getEmail())
                 .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
                 .build();
         this.saveAuth(newMember);

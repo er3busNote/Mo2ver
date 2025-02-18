@@ -1,8 +1,8 @@
 package com.mo2ver.web.event;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.domain.event.dto.EventDto;
-import com.mo2ver.web.domain.event.dto.EventImageDto;
+import com.mo2ver.web.domain.event.dto.response.EventResponse;
+import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
 import com.mo2ver.web.domain.event.dto.EventImageProductDto;
 import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
@@ -51,11 +51,11 @@ public class EventTest extends CsrfConfigTest {
     public void findEventDetailTest() throws Exception {
 
         Pageable pageable = PageRequest.of(0, 12, Sort.Direction.DESC, "eventManageNo");
-        Page<EventDto> pages = eventService.findEventlist(pageable);
-        List<EventDto> listEventDto = pages.get().collect(Collectors.toList());
-        EventDto eventDto = listEventDto.get(0);
+        Page<EventResponse> pages = eventService.findEventlist(pageable);
+        List<EventResponse> listEventResponse = pages.get().collect(Collectors.toList());
+        EventResponse eventResponse = listEventResponse.get(0);
 
-        mockMvc.perform(get("/event/info/{id}", eventDto.getEventManageNo())
+        mockMvc.perform(get("/event/info/{id}", eventResponse.getEventManageNo())
                         .param("page", "0")
                         .param("size", "12"))
                 .andDo(print())
@@ -69,12 +69,12 @@ public class EventTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        EventImageDto eventImageDto = this.getEventImageDto();
+        EventImageRequest eventImageRequest = this.getEventImageDto();
 
         MockMultipartFile file1 = new MockMultipartFile("displayFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("eventFile", "file2.txt", "image/png", "Test file content 2".getBytes());
 
-        MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageDto).getBytes());
+        MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageRequest).getBytes());
         jsonEventProduct.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(multipart("/event/upload")
@@ -87,8 +87,8 @@ public class EventTest extends CsrfConfigTest {
                 .andExpect(status().isCreated());
     }
 
-    private EventImageDto getEventImageDto() {
-        return EventImageDto.builder()
+    private EventImageRequest getEventImageDto() {
+        return EventImageRequest.builder()
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())

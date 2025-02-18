@@ -1,4 +1,4 @@
-package com.mo2ver.web.common.code.dto;
+package com.mo2ver.web.common.code.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupCodeDto {
+public class GroupCodeResponse {
 
     private String commonGroupCode;
     private String commonCodeGroupName;
-    private List<CodeDto> commonCodeList;
+    private List<CodeResponse> commonCodeList;
 }

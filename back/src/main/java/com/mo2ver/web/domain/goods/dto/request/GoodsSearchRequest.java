@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.goods.dto;
+package com.mo2ver.web.domain.goods.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsSearchDto {
+public class GoodsSearchRequest {
 
     private String goodsName;
     private String largeCategoryCode;

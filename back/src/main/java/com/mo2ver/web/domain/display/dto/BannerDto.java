@@ -30,7 +30,7 @@ public class BannerDto {
     private String register;
     private Date registerDate;
 
-    public static BannerDto toDTO(BannerManage bannerManage) {
+    public static BannerDto of(BannerManage bannerManage) {
         return BannerDto.builder()
                 .bannerManageNo(bannerManage.getBannerManageNo())
                 .subject(bannerManage.getSubject())

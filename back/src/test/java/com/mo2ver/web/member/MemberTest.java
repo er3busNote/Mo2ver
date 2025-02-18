@@ -1,7 +1,7 @@
 package com.mo2ver.web.member;
 
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.domain.member.dto.SignupDto;
+import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,12 +29,12 @@ public class MemberTest {
 
         // When (실행)
         for (int i = 0; i < numOfExecute ; i++) {
-            SignupDto signUpDto = SignupDto.builder()
+            SignupRequest signUpRequest = SignupRequest.builder()
                     .username("test" + Integer.toString(i+1))
                     .password("test" + Integer.toString(i+1))
                     .email("test" + Integer.toString(i+1) + "@test.com")
                     .build();
-            this.memberService.signup(signUpDto);
+            this.memberService.signup(signUpRequest);
         }
 
         // Then (검증)

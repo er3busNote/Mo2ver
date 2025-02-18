@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.goods.dto;
+package com.mo2ver.web.domain.goods.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDetailDto {
+public class CategoryDetailRequest {
 
     @NotBlank(message = "카테고리 코드가 존재하지 않습니다")
     private String categoryCode;

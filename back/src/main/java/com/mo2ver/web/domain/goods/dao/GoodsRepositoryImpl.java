@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.goods.dao;
 
 import com.mo2ver.web.domain.goods.domain.Goods;
-import com.mo2ver.web.domain.goods.dto.GoodsSearchDto;
+import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,12 +25,12 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         this.queryFactory = queryFactory;
     }
 
-    public Page<Goods> findByGoodsName(Pageable pageable, GoodsSearchDto goodsSearchDto) {
+    public Page<Goods> findByGoodsName(Pageable pageable, GoodsSearchRequest goodsSearchRequest) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(goods.goodsName.contains(goodsSearchDto.getGoodsName()));
-        builder.and(goods.largeCategoryCode.eq(goodsSearchDto.getLargeCategoryCode()));
-        builder.and(goods.mediumCategoryCode.eq(goodsSearchDto.getMediumCategoryCode()));
-        builder.and(goods.smallCategoryCode.eq(goodsSearchDto.getSmallCategoryCode()));
+        builder.and(goods.goodsName.contains(goodsSearchRequest.getGoodsName()));
+        builder.and(goods.largeCategoryCode.eq(goodsSearchRequest.getLargeCategoryCode()));
+        builder.and(goods.mediumCategoryCode.eq(goodsSearchRequest.getMediumCategoryCode()));
+        builder.and(goods.smallCategoryCode.eq(goodsSearchRequest.getSmallCategoryCode()));
 
         JPAQuery<Goods> query = queryFactory.selectFrom(goods)
                 .innerJoin(goods.price, price)

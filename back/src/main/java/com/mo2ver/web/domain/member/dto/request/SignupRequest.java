@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.member.dto;
+package com.mo2ver.web.domain.member.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupDto {
+public class SignupRequest {
 
     @NotBlank(message = "아이디가 존재하지 않습니다")
     private String username;

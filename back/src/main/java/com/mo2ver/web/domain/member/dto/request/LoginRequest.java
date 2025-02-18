@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.member.dto;
+package com.mo2ver.web.domain.member.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
+public class LoginRequest {
 
     @NotNull
     @Size(min = 3, max = 50)

@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.domain;
 
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -92,18 +92,18 @@ public class Goods {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Goods of(GoodsImageDto goodsImageDto, Member currentUser) {
+    public static Goods of(GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Goods.builder()
-                .goodsName(goodsImageDto.getGoodsName())
-                .largeCategoryCode(goodsImageDto.getLargeCategoryCode())
-                .mediumCategoryCode(goodsImageDto.getMediumCategoryCode())
-                .smallCategoryCode(goodsImageDto.getSmallCategoryCode())
+                .goodsName(goodsImageRequest.getGoodsName())
+                .largeCategoryCode(goodsImageRequest.getLargeCategoryCode())
+                .mediumCategoryCode(goodsImageRequest.getMediumCategoryCode())
+                .smallCategoryCode(goodsImageRequest.getSmallCategoryCode())
                 .goodsCondition("10")   // 초기값 : 등록(10)
-                .goodsGender(goodsImageDto.getGoodsGender())
-                .goodsBrand(goodsImageDto.getGoodsBrand())
-                .goodsYear(goodsImageDto.getGoodsYear())
-                .summaryInfo(goodsImageDto.getSummaryInfo())
-                .keyword(goodsImageDto.getKeyword())
+                .goodsGender(goodsImageRequest.getGoodsGender())
+                .goodsBrand(goodsImageRequest.getGoodsBrand())
+                .goodsYear(goodsImageRequest.getGoodsYear())
+                .summaryInfo(goodsImageRequest.getSummaryInfo())
+                .keyword(goodsImageRequest.getKeyword())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

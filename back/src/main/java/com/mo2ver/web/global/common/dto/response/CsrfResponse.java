@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.common.dto;
+package com.mo2ver.web.global.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CsrfDto {
+public class CsrfResponse {
 
     @NotBlank
     private String csrfToken;

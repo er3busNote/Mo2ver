@@ -34,7 +34,7 @@ public class ImageDto {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
-    public static ImageDto toDTO(GoodsImage goodsImage) {
+    public static ImageDto of(GoodsImage goodsImage) {
         return ImageDto.builder()
                 .goodsImageAttachFile(getEncryptor(goodsImage.getGoodsImageAttachFile()))
                 .goodsImageExtension(goodsImage.getGoodsImageExtension())
@@ -44,7 +44,7 @@ public class ImageDto {
                 .build();
     }
 
-    public static ImageDto toDTO(GoodsImage goodsImage, String filepath) {
+    public static ImageDto of(GoodsImage goodsImage, String filepath) {
 
         String base64Image = "";
         Path folderPath = Paths.get(filepath);

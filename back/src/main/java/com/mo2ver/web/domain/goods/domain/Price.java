@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.domain;
 
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Persistable;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -99,20 +98,20 @@ public class Price implements Persistable<PriceId> {
         return priceId == null || goodsCode == null;
     }
 
-    public static Price of(GoodsImageDto goodsImageDto, Member currentUser) {
+    public static Price of(GoodsImageRequest goodsImageRequest, Member currentUser) {
         Goods goods = Goods.builder().updateDate(LocalDateTime.now()).build();
         PriceId priceId = new PriceId(goods.getGoodsCode(), goods.getUpdateDate());
         return Price.builder()
                 .priceId(priceId)
-                .goodsCode(Goods.of(goodsImageDto, currentUser))
-                .supplyPrice(goodsImageDto.getSupplyPrice())
-                .salePrice(goodsImageDto.getSalePrice())
-                .maxBuyQuantity(goodsImageDto.getMaxBuyQuantity())
-                .buyLimitYesNo(goodsImageDto.getBuyLimitYesNo())
-                .buyLimitCondition(goodsImageDto.getBuyLimitCondition())
-                .salePeriodYesNo(goodsImageDto.getSalePeriodYesNo())
-                .saleStartDate(goodsImageDto.getSaleStartDate())
-                .saleEndDate(goodsImageDto.getSaleEndDate())
+                .goodsCode(Goods.of(goodsImageRequest, currentUser))
+                .supplyPrice(goodsImageRequest.getSupplyPrice())
+                .salePrice(goodsImageRequest.getSalePrice())
+                .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())
+                .buyLimitYesNo(goodsImageRequest.getBuyLimitYesNo())
+                .buyLimitCondition(goodsImageRequest.getBuyLimitCondition())
+                .salePeriodYesNo(goodsImageRequest.getSalePeriodYesNo())
+                .saleStartDate(goodsImageRequest.getSaleStartDate())
+                .saleEndDate(goodsImageRequest.getSaleEndDate())
                 .saleConditionCode("10")
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

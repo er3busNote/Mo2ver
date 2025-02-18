@@ -1,7 +1,6 @@
-package com.mo2ver.web.global.error.response;
+package com.mo2ver.web.global.error.dto.response;
 
 import com.mo2ver.web.global.error.dto.ErrorCode;
-import com.mo2ver.web.global.error.dto.ErrorResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

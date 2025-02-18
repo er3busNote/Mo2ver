@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.display.dto;
+package com.mo2ver.web.domain.display.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
-public class BannerProductDto {
+public class BannerProductResponse {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -26,7 +26,7 @@ public class BannerProductDto {
     private Integer sortSequence;
 
     @QueryProjection
-    public BannerProductDto(Date displayStartDate, Date displayEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence) {
+    public BannerProductResponse(Date displayStartDate, Date displayEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence) {
         this.displayStartDate = formatter.format(displayStartDate);
         this.displayEndDate = formatter.format(displayEndDate);
         this.goodsImageAttachFile = goodsImageAttachFile;

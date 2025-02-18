@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.domain;
 
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -80,15 +80,15 @@ public class Discount {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Discount of(Goods goods, GoodsImageDto goodsImageDto, Member currentUser) {
+    public static Discount of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Discount.builder()
                 .goodsCode(goods)
-                .startDate(goodsImageDto.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
-                .endDate(goodsImageDto.getDiscountEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
-                .discountPrice(goodsImageDto.getDiscountPrice())
-                .rateYesNo(goodsImageDto.getRateYesNo())
-                .maxLimitYesNo(goodsImageDto.getMaxLimitYesNo())
-                .maxLimitAmount(goodsImageDto.getMaxLimitAmount())
+                .startDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                .endDate(goodsImageRequest.getDiscountEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                .discountPrice(goodsImageRequest.getDiscountPrice())
+                .rateYesNo(goodsImageRequest.getRateYesNo())
+                .maxLimitYesNo(goodsImageRequest.getMaxLimitYesNo())
+                .maxLimitAmount(goodsImageRequest.getMaxLimitAmount())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

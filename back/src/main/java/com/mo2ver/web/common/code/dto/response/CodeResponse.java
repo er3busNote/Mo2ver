@@ -1,4 +1,4 @@
-package com.mo2ver.web.common.code.dto;
+package com.mo2ver.web.common.code.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CodeDto {
+public class CodeResponse {
 
     private String commonCode;
     private String commonCodeName;

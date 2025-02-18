@@ -2,7 +2,7 @@ package com.mo2ver.web.domain.cart.service;
 
 import com.mo2ver.web.domain.cart.dao.CartRepository;
 import com.mo2ver.web.domain.cart.dto.CartDto;
-import com.mo2ver.web.domain.cart.dto.CartListDto;
+import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +15,15 @@ public class CartService {
     @Autowired
     protected CartRepository cartRepository;
 
-    public CartListDto addCart(CartDto cartDto, Member currentUser){
+    public CartResponse addCart(CartDto cartDto, Member currentUser){
         return cartRepository.save(cartDto, currentUser);
     }
 
-    public CartListDto updateCart(CartDto cartDto, Member currentUser){
+    public CartResponse updateCart(CartDto cartDto, Member currentUser){
         return cartRepository.update(cartDto, currentUser);
     }
 
-    public CartListDto getCartList(Member currentUser) {
+    public CartResponse getCartList(Member currentUser) {
         return cartRepository.findByUser(currentUser);
     }
 
@@ -40,7 +40,7 @@ public class CartService {
     }
 
     public boolean isCartEmpty(Member currentUser) {
-        CartListDto cartListDto = this.getCartList(currentUser);
-        return cartListDto.isEmpty();
+        CartResponse cartResponse = this.getCartList(currentUser);
+        return cartResponse.isEmpty();
     }
 }

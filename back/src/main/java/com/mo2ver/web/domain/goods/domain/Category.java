@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.domain;
 
-import com.mo2ver.web.domain.goods.dto.CategoryDetailDto;
+import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -60,15 +60,15 @@ public class Category {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Category of(CategoryDetailDto categoryDetailDto, Member currentUser) {
+    public static Category of(CategoryDetailRequest categoryDetailRequest, Member currentUser) {
         return Category.builder()
-                .categoryCode(categoryDetailDto.getCategoryCode())
-                .categoryName(categoryDetailDto.getCategoryName())
-                .upperCategoryCode(categoryDetailDto.getUpperCategoryCode())
-                .categoryLevel(categoryDetailDto.getCategoryLevel())
-                .useYesNo(categoryDetailDto.getUseYesNo())
-                .sortSequence(categoryDetailDto.getSortSequence())
-                .connectUrl(categoryDetailDto.getConnectUrl())
+                .categoryCode(categoryDetailRequest.getCategoryCode())
+                .categoryName(categoryDetailRequest.getCategoryName())
+                .upperCategoryCode(categoryDetailRequest.getUpperCategoryCode())
+                .categoryLevel(categoryDetailRequest.getCategoryLevel())
+                .useYesNo(categoryDetailRequest.getUseYesNo())
+                .sortSequence(categoryDetailRequest.getSortSequence())
+                .connectUrl(categoryDetailRequest.getConnectUrl())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

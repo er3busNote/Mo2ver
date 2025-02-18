@@ -1,5 +1,6 @@
-package com.mo2ver.web.domain.event.dto;
+package com.mo2ver.web.domain.event.dto.request;
 
+import com.mo2ver.web.domain.event.dto.EventImageProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventImageDto {
+public class EventImageRequest {
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;

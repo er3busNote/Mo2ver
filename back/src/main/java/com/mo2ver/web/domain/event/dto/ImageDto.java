@@ -18,7 +18,7 @@ public class ImageDto {
     private String goodsImageExtension;
     private Character basicImageYesNo;
 
-    public static ImageDto toDTO(EventImage eventImage) {
+    public static ImageDto of(EventImage eventImage) {
         return ImageDto.builder()
                 .goodsImageAttachFile(eventImage.getGoodsImageAttachFile())
                 .goodsImageExtension(eventImage.getGoodsImageExtension())

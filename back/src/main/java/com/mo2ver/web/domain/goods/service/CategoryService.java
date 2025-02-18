@@ -2,8 +2,8 @@ package com.mo2ver.web.domain.goods.service;
 
 import com.mo2ver.web.domain.goods.dao.CategoryRepository;
 import com.mo2ver.web.domain.goods.domain.Category;
-import com.mo2ver.web.domain.goods.dto.CategoryDetailDto;
-import com.mo2ver.web.domain.goods.dto.CategoryDto;
+import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
+import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +24,13 @@ public class CategoryService {
     }
 
     @Transactional
-    public List<CategoryDto> findCategorylist() {
+    public List<CategoryResponse> findCategorylist() {
         return this.categoryRepository.findCategoryList();
     }
 
     @Transactional
-    public Category saveCategory(CategoryDetailDto categoryDetailDto, Member currentUser) {
-        return this.categoryRepository.save(Category.of(categoryDetailDto, currentUser));
+    public Category saveCategory(CategoryDetailRequest categoryDetailRequest, Member currentUser) {
+        return this.categoryRepository.save(Category.of(categoryDetailRequest, currentUser));
     }
 
     @Transactional

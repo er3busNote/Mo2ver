@@ -1,7 +1,7 @@
 package com.mo2ver.web.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mo2ver.web.global.common.dto.ResponseDto;
+import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ResponseDto jwtresponse = ResponseDto.builder()
+        ResponseHandler jwtresponse = ResponseHandler.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .message(message)
                 .build();

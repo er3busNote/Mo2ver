@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.member.validation;
 
-import com.mo2ver.web.domain.member.dto.SignupDto;
+import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -35,20 +35,20 @@ public class MemberValidator {
         return matcher.find();
     }
 
-    public void validate(SignupDto signupDto, Errors errors) {
-        if (!hasUpperCase(signupDto.getPassword())) {
+    public void validate(SignupRequest signupRequest, Errors errors) {
+        if (!hasUpperCase(signupRequest.getPassword())) {
             errors.rejectValue("password", "wrongValue", "비밀번호는 대문자를 포함하지 않습니다");
         }
 
-        if (!hasLowerCase(signupDto.getPassword())) {
+        if (!hasLowerCase(signupRequest.getPassword())) {
             errors.rejectValue("password", "wrongValue", "비밀번호는 소문자를 포함하지 않습니다");
         }
 
-        if (!hasDigit(signupDto.getPassword())) {
+        if (!hasDigit(signupRequest.getPassword())) {
             errors.rejectValue("password", "wrongValue", "비밀번호는 숫자를 포함하지 않습니다");
         }
 
-        if (!hasSpecialChar(signupDto.getPassword())) {
+        if (!hasSpecialChar(signupRequest.getPassword())) {
             errors.rejectValue("password", "wrongValue", "암호에 특수 문자가 포함되어 있지 않습니다");
         }
 

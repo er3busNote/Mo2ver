@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.event.dto;
+package com.mo2ver.web.domain.event.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class EventDetailDto {
+public class EventDetailResponse {
 
     private String subject;
     private Date eventStartDate;
@@ -24,7 +24,7 @@ public class EventDetailDto {
     private Integer sortSequence;
 
     @QueryProjection
-    public EventDetailDto(String subject, Date eventStartDate, Date eventEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence) {
+    public EventDetailResponse(String subject, Date eventStartDate, Date eventEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence) {
         this.subject = subject;
         this.eventStartDate = eventStartDate;
         this.eventEndDate = eventEndDate;

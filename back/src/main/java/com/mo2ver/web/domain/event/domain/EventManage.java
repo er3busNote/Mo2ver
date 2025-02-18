@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.domain;
 
-import com.mo2ver.web.domain.event.dto.EventImageDto;
+import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,16 +61,16 @@ public class EventManage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventManage of(EventImageDto eventImageDto, Member currentUser) {
+    public static EventManage of(EventImageRequest eventImageRequest, Member currentUser) {
         EventManage eventManage = EventManage.builder()
-                .subject(eventImageDto.getTitle())
-                .eventStartDate(eventImageDto.getStartDate())
-                .eventEndDate(eventImageDto.getEndDate())
-                .eventYesNo(eventImageDto.getUseyn())
+                .subject(eventImageRequest.getTitle())
+                .eventStartDate(eventImageRequest.getStartDate())
+                .eventEndDate(eventImageRequest.getEndDate())
+                .eventYesNo(eventImageRequest.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
-        eventManage.setEventProductList(eventImageDto.getGoods().stream()
+        eventManage.setEventProductList(eventImageRequest.getGoods().stream()
                 .map(data -> EventProduct.of(eventManage, data, currentUser))
                 .collect(Collectors.toList()));
         return eventManage;

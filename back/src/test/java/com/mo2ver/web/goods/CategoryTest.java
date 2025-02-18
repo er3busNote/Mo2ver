@@ -1,7 +1,7 @@
 package com.mo2ver.web.goods;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.domain.goods.dto.CategoryDetailDto;
+import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,18 +53,18 @@ public class CategoryTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        CategoryDetailDto categoryDetailDto = getCategoryDetailDto();
+        CategoryDetailRequest categoryDetailRequest = getCategoryDetailDto();
 
         mockMvc.perform(post("/category/create")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryDetailDto)))
+                        .content(objectMapper.writeValueAsString(categoryDetailRequest)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    private CategoryDetailDto getCategoryDetailDto() {
-        return CategoryDetailDto.builder()
+    private CategoryDetailRequest getCategoryDetailDto() {
+        return CategoryDetailRequest.builder()
                 .categoryCode("C012000000")
                 .categoryName("테스트 1")
                 .upperCategoryCode(null)

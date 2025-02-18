@@ -1,13 +1,12 @@
 package com.mo2ver.web.common.file.api;
 
 import com.mo2ver.web.common.file.service.FileService;
-import com.mo2ver.web.common.file.validation.FileListValidator;
 import com.mo2ver.web.common.file.validation.ValidFileList;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.dto.ErrorCode;
-import com.mo2ver.web.global.error.dto.ErrorResponse;
-import com.mo2ver.web.global.error.response.ErrorHandler;
+import com.mo2ver.web.global.error.dto.response.ErrorResponse;
+import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import org.apache.tika.Tika;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -25,12 +24,10 @@ public class FileController {
 
     private final FileService fileService;
     private final ErrorHandler errorHandler;
-    private final FileListValidator fileValidator;
 
-    public FileController(FileService fileService, ErrorHandler errorHandler, FileListValidator fileValidator) {
+    public FileController(FileService fileService, ErrorHandler errorHandler) {
         this.fileService = fileService;
         this.errorHandler = errorHandler;
-        this.fileValidator = fileValidator;
     }
 
     @GetMapping("/image")
@@ -55,7 +52,7 @@ public class FileController {
                                       @CurrentUser Member currentUser) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            return ResponseEntity.ok(fileService.saveFile(files, currentUser));
+            return ResponseEntity.ok().body(fileService.saveFile(files, currentUser));
         } catch (Exception e) {
             response.put("error", e.getMessage());
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
@@ -63,11 +60,11 @@ public class FileController {
     }
 
 
-    private ResponseEntity badRequest(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);
     }
 
-    private ResponseEntity unprocessableEntity(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
         return ResponseEntity.unprocessableEntity().body(response);
     }
 }

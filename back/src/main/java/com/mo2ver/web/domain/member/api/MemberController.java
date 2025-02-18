@@ -1,14 +1,14 @@
 package com.mo2ver.web.domain.member.api;
 
 import com.mo2ver.web.domain.member.service.MemberService;
-import com.mo2ver.web.domain.member.dto.LoginDto;
-import com.mo2ver.web.domain.member.dto.SignupDto;
+import com.mo2ver.web.domain.member.dto.request.LoginRequest;
+import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.validation.MemberValidator;
-import com.mo2ver.web.global.common.dto.CsrfDto;
-import com.mo2ver.web.global.common.dto.ResponseDto;
-import com.mo2ver.web.global.error.response.ErrorHandler;
+import com.mo2ver.web.global.common.dto.response.CsrfResponse;
+import com.mo2ver.web.global.common.dto.response.ResponseHandler;
+import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
-import com.mo2ver.web.global.error.dto.ErrorResponse;
+import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.HashMap;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> authLogin(@RequestBody @Valid LoginDto loginDto,
+    public ResponseEntity authLogin(@RequestBody @Valid LoginRequest loginRequest,
                                               Errors errors) {
         HashMap<String, Object> response = new HashMap<>();
         if (errors.hasErrors()) {
@@ -60,18 +61,19 @@ public class MemberController {
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);   // --> Authenticated (인증)
 
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
+                .body(tokenDto);
     }
 
     @PatchMapping("/refresh")
-    public ResponseEntity<TokenDto> authRefresh(@RequestBody @Valid TokenDto tokenDto,
+    public ResponseEntity authRefresh(@RequestBody @Valid TokenDto tokenDto,
                                                 Errors errors) {
         HashMap<String, Object> response = new HashMap<>();
         if (errors.hasErrors()) {
@@ -81,7 +83,11 @@ public class MemberController {
 
         // Refresh Token - Expired
         if (!tokenProvider.validateToken(tokenDto.getRefreshtoken())) {
-            return new ResponseEntity(new ResponseDto(HttpStatus.FORBIDDEN.value(), "Refresh Token이 유효하지 않습니다."), HttpStatus.FORBIDDEN);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ResponseHandler.builder()
+                            .status(HttpStatus.FORBIDDEN.value())
+                            .message("Refresh Token이 유효하지 않습니다.")
+                            .build());
         }
 
         // Access Token - Expired
@@ -89,14 +95,15 @@ public class MemberController {
             Authentication authentication = tokenProvider.getAuthentication(tokenDto.getRefreshtoken());
             TokenDto refreshtokenDto = tokenProvider.refreshToken(authentication, tokenDto.getRefreshtoken());
 
-            return new ResponseEntity<>(refreshtokenDto, HttpStatus.CREATED);
+            return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
+                    .body(refreshtokenDto);
         }
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(tokenDto);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> authSignup(@RequestBody @Valid SignupDto signupDto,
+    public ResponseEntity authSignup(@RequestBody @Valid SignupRequest signupRequest,
                                                   Errors errors) {
         HashMap<String, Object> response = new HashMap<>();
         if (errors.hasErrors()) {
@@ -106,9 +113,9 @@ public class MemberController {
 
         UserDetailsService userDetailsService = (UserDetailsService) memberService;
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(signupDto.getUsername());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(signupRequest.getUsername());
 
-            if (signupDto.getUsername().equals(userDetails.getUsername())) {
+            if (signupRequest.getUsername().equals(userDetails.getUsername())) {
                 return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_USERNAME_VALUE_INVALID, response));
             }
 
@@ -118,15 +125,18 @@ public class MemberController {
 
         } catch (UsernameNotFoundException e) {
 
-            memberValidator.validate(signupDto, errors);
+            memberValidator.validate(signupRequest, errors);
             if (errors.hasErrors()) {
                 response.put("required", errors);
                 return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
             }
 
-            memberService.signup(signupDto);  // 회원가입
+            memberService.signup(signupRequest);  // 회원가입
 
-            return new ResponseEntity(new ResponseDto(HttpStatus.OK.value(), "회원가입이 완료되었습니다"), HttpStatus.OK);
+            return ResponseEntity.ok().body(ResponseHandler.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("회원가입이 완료되었습니다")
+                    .build());
         }
     }
 
@@ -140,15 +150,21 @@ public class MemberController {
                     .sameSite("None")
                     .build();
             response.setHeader("Set-Cookie", csrfCookie.toString());
-            return ResponseEntity.ok(new CsrfDto(csrf.getToken()));
+            return ResponseEntity.ok().body(CsrfResponse.builder()
+                    .csrfToken(csrf.getToken())
+                    .build());
         }
-        return new ResponseEntity(new ResponseDto(HttpStatus.NOT_FOUND.value(), "CSRF Token이 존재하지 않습니다."), HttpStatus.NOT_FOUND); }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseHandler.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("CSRF Token이 존재하지 않습니다")
+                .build());
+    }
 
-    private ResponseEntity badRequest(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);
     }
 
-    private ResponseEntity unprocessableEntity(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
         return ResponseEntity.unprocessableEntity().body(response);
     }
 }

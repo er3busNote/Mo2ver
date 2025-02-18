@@ -2,8 +2,8 @@ package com.mo2ver.web.goods;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.common.file.dto.FileAttachDto;
-import com.mo2ver.web.domain.goods.dto.GoodsImageAttachDto;
-import com.mo2ver.web.domain.goods.dto.GoodsImageDto;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.global.jwt.dto.TokenDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -77,13 +77,13 @@ public class GoodsTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsImageDto goodsImageDto = this.getGoodsImageDto();
-        GoodsImageAttachDto goodsImageAttachDto = getGoodsImageAttachDto(goodsImageDto);
+        GoodsImageRequest goodsImageRequest = this.getGoodsImageDto();
+        GoodsImageAttachRequest goodsImageAttachRequest = getGoodsImageAttachDto(goodsImageRequest);
 
         mockMvc.perform(post("/goods/create")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(goodsImageAttachDto)))
+                        .content(objectMapper.writeValueAsString(goodsImageAttachRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
@@ -95,12 +95,12 @@ public class GoodsTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsImageDto goodsImageDto = this.getGoodsImageDto();
+        GoodsImageRequest goodsImageRequest = this.getGoodsImageDto();
 
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
 
-        MockPart jsonGoodsImage = new MockPart("goodsImage", objectMapper.writeValueAsString(goodsImageDto).getBytes());
+        MockPart jsonGoodsImage = new MockPart("goodsImage", objectMapper.writeValueAsString(goodsImageRequest).getBytes());
         jsonGoodsImage.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(multipart("/goods/upload")
@@ -113,8 +113,8 @@ public class GoodsTest extends CsrfConfigTest {
                 .andExpect(status().isCreated());
     }
 
-    private GoodsImageDto getGoodsImageDto() {
-        return GoodsImageDto.builder()
+    private GoodsImageRequest getGoodsImageDto() {
+        return GoodsImageRequest.builder()
                 .goodsName("테스트")
                 .largeCategoryCode("C001000000")
                 .mediumCategoryCode("C001001000")
@@ -141,35 +141,35 @@ public class GoodsTest extends CsrfConfigTest {
                 .build();
     }
 
-    private GoodsImageAttachDto getGoodsImageAttachDto(GoodsImageDto goodsImageDto) {
-        return (GoodsImageAttachDto) GoodsImageAttachDto.builder()
+    private GoodsImageAttachRequest getGoodsImageAttachDto(GoodsImageRequest goodsImageRequest) {
+        return (GoodsImageAttachRequest) GoodsImageAttachRequest.builder()
                 .goodsImg(Arrays.asList(
                         new FileAttachDto("123", "image1.png", "image/png", 2048, ".png"),
                         new FileAttachDto("124", "image2.jpg", "image/jpeg", 1024, ".jpg")
                 ))
-                .goodsName(goodsImageDto.getGoodsName())
-                .largeCategoryCode(goodsImageDto.getLargeCategoryCode())
-                .mediumCategoryCode(goodsImageDto.getMediumCategoryCode())
-                .smallCategoryCode(goodsImageDto.getSmallCategoryCode())
-                .goodsGender(goodsImageDto.getGoodsGender())
-                .goodsBrand(goodsImageDto.getGoodsBrand())
-                .goodsYear(goodsImageDto.getGoodsYear())
-                .keyword(goodsImageDto.getKeyword())
-                .summaryInfo(goodsImageDto.getSummaryInfo())
-                .buyLimitYesNo(goodsImageDto.getBuyLimitYesNo())
-                .buyLimitCondition(goodsImageDto.getBuyLimitCondition())
-                .salePeriodYesNo(goodsImageDto.getSalePeriodYesNo())
-                .saleStartDate(goodsImageDto.getSaleStartDate())
-                .saleEndDate(goodsImageDto.getSaleEndDate())
-                .supplyPrice(goodsImageDto.getSupplyPrice())
-                .salePrice(goodsImageDto.getSalePrice())
-                .maxBuyQuantity(goodsImageDto.getMaxBuyQuantity())
-                .discountPrice(goodsImageDto.getDiscountPrice())
-                .discountStartDate(goodsImageDto.getDiscountStartDate())
-                .discountEndDate(goodsImageDto.getDiscountEndDate())
-                .rateYesNo(goodsImageDto.getRateYesNo())
-                .maxLimitYesNo(goodsImageDto.getMaxLimitYesNo())
-                .maxLimitAmount(goodsImageDto.getMaxLimitAmount())
+                .goodsName(goodsImageRequest.getGoodsName())
+                .largeCategoryCode(goodsImageRequest.getLargeCategoryCode())
+                .mediumCategoryCode(goodsImageRequest.getMediumCategoryCode())
+                .smallCategoryCode(goodsImageRequest.getSmallCategoryCode())
+                .goodsGender(goodsImageRequest.getGoodsGender())
+                .goodsBrand(goodsImageRequest.getGoodsBrand())
+                .goodsYear(goodsImageRequest.getGoodsYear())
+                .keyword(goodsImageRequest.getKeyword())
+                .summaryInfo(goodsImageRequest.getSummaryInfo())
+                .buyLimitYesNo(goodsImageRequest.getBuyLimitYesNo())
+                .buyLimitCondition(goodsImageRequest.getBuyLimitCondition())
+                .salePeriodYesNo(goodsImageRequest.getSalePeriodYesNo())
+                .saleStartDate(goodsImageRequest.getSaleStartDate())
+                .saleEndDate(goodsImageRequest.getSaleEndDate())
+                .supplyPrice(goodsImageRequest.getSupplyPrice())
+                .salePrice(goodsImageRequest.getSalePrice())
+                .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())
+                .discountPrice(goodsImageRequest.getDiscountPrice())
+                .discountStartDate(goodsImageRequest.getDiscountStartDate())
+                .discountEndDate(goodsImageRequest.getDiscountEndDate())
+                .rateYesNo(goodsImageRequest.getRateYesNo())
+                .maxLimitYesNo(goodsImageRequest.getMaxLimitYesNo())
+                .maxLimitAmount(goodsImageRequest.getMaxLimitAmount())
                 .build();
     }
 }

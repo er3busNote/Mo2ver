@@ -1,17 +1,18 @@
 package com.mo2ver.web.domain.event.api;
 
-import com.mo2ver.web.domain.event.dto.EventDetailDto;
-import com.mo2ver.web.domain.event.dto.EventDto;
-import com.mo2ver.web.domain.event.dto.EventImageDto;
+import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
+import com.mo2ver.web.domain.event.dto.response.EventResponse;
+import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
 import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.domain.event.validation.EventImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageDto;
-import com.mo2ver.web.global.common.dto.ResponseDto;
+import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
-import com.mo2ver.web.global.error.dto.ErrorResponse;
-import com.mo2ver.web.global.error.response.ErrorHandler;
+import com.mo2ver.web.global.error.dto.response.ErrorResponse;
+import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,26 +45,30 @@ public class EventController {
     }
 
     @GetMapping("/info/{id}")
-    public ResponseEntity infoEvent(@PathVariable Integer id,
-                                    @Valid PageDto pageDto,
-                                    @CurrentUser Member currentUser) {
+    public ResponseEntity<Page<EventDetailResponse>> infoEvent(
+            @PathVariable Integer id,
+            @Valid PageDto pageDto,
+            @CurrentUser Member currentUser
+    ) {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
-        Page<EventDetailDto> eventDetailDto = eventService.findEvent(id, pageable);
-        return ResponseEntity.ok(eventDetailDto);
+        Page<EventDetailResponse> eventDetailDto = eventService.findEvent(id, pageable);
+        return ResponseEntity.ok().body(eventDetailDto);
     }
 
     @GetMapping("/list")
-    public ResponseEntity listEvent(@Valid PageDto pageDto,
-                                    @CurrentUser Member currentUser) {
+    public ResponseEntity<Page<EventResponse>> listEvent(
+            @Valid PageDto pageDto,
+            @CurrentUser Member currentUser
+    ) {
         Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
-        Page<EventDto> pages = eventService.findEventlist(pageable);
-        return ResponseEntity.ok(pages);
+        Page<EventResponse> pages = eventService.findEventlist(pageable);
+        return ResponseEntity.ok().body(pages);
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity uploadEvent(@RequestPart(name = "displayFile") @Valid MultipartFile displayFile,
                                       @RequestPart(name = "eventFile") @Valid MultipartFile eventFile,
-                                      @RequestPart(name = "eventProduct") @Valid EventImageDto eventImageDto,
+                                      @RequestPart(name = "eventProduct") @Valid EventImageRequest eventImageRequest,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {
         HashMap<String, Object> response = new HashMap<>();
@@ -75,19 +81,23 @@ public class EventController {
             }
         }
         try {
-            eventService.saveImageEvent(eventFiles, eventImageDto, currentUser);
+            EventManage eventManage = eventService.saveImageEvent(eventFiles, eventImageRequest, currentUser);
+            return ResponseEntity.created(URI.create("/upload/" + eventManage.getEventManageNo()))
+                    .body(ResponseHandler.builder()
+                            .status(HttpStatus.CREATED.value())
+                            .message("배너정보가 저장되었습니다")
+                            .build());
         } catch (Exception e) {
             response.put("error", e.getMessage());
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
         }
-        return new ResponseEntity(new ResponseDto(HttpStatus.CREATED.value(), "배너정보가 저장되었습니다"), HttpStatus.CREATED);
     }
 
-    private ResponseEntity badRequest(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);
     }
 
-    private ResponseEntity unprocessableEntity(ErrorResponse response) {
+    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
         return ResponseEntity.unprocessableEntity().body(response);
     }
 }

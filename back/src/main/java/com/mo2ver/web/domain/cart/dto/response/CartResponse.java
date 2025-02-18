@@ -1,5 +1,6 @@
-package com.mo2ver.web.domain.cart.dto;
+package com.mo2ver.web.domain.cart.dto.response;
 
+import com.mo2ver.web.domain.cart.dto.CartDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.stream.IntStream;
 @SessionScope
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartListDto {
+public class CartResponse {
 
     private List<CartDto> cartList = new ArrayList<>();
 
