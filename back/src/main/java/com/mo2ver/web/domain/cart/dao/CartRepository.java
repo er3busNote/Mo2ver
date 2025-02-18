@@ -17,7 +17,7 @@ public class CartRepository {
 
     private final Map<String, CartResponse> userMap = new HashMap<>();
 
-    @Cacheable(key = "#member.memberNo", unless = "#result == null")
+    @Cacheable(key = "#member?.memberNo", condition = "#member != null", unless = "#result == null")
     public CartResponse findByUser(Member member) {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
