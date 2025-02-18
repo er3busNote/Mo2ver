@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileDto {
+public class FileInfo {
 
     private Integer fileCode;
     private String fileName;
@@ -20,8 +20,8 @@ public class FileDto {
     private String fileExtension;
     private String fileNameWithoutExtension;
 
-    public static FileDto of(File file, String fileExtension, String fileNameWithoutExtension) {
-        return FileDto.builder()
+    public static FileInfo of(File file, String fileExtension, String fileNameWithoutExtension) {
+        return FileInfo.builder()
                 .fileCode(file.getFileCode().intValue())
                 .fileName(file.getFileName())
                 .filePath(file.getFilePath())

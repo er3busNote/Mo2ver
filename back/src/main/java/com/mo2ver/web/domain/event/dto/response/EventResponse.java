@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.event.dto.response;
 
 import com.mo2ver.web.domain.event.domain.EventManage;
-import com.mo2ver.web.domain.event.dto.ImageDto;
+import com.mo2ver.web.domain.event.dto.ImageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class EventResponse {
     private Character eventYesNo;
     private String register;
     private Date registerDate;
-    private List<ImageDto> imageList;
+    private List<ImageInfo> imageList;
 
     public static EventResponse of(EventManage eventManage) {
         return EventResponse.builder()
@@ -38,7 +38,7 @@ public class EventResponse {
                 .registerDate(Timestamp.valueOf(eventManage.getRegisterDate()))
                 .imageList(eventManage.getEventImageList().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')
-                        .map(ImageDto::of)
+                        .map(ImageInfo::of)
                         .collect(Collectors.toList()))
                 .build();
     }

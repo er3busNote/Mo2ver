@@ -1,10 +1,10 @@
 package com.mo2ver.web.goods;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.common.file.dto.FileAttachDto;
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.http.HttpHeaders;
@@ -75,13 +75,13 @@ public class GoodsTest extends CsrfConfigTest {
     public void createGoodsImageTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsImageRequest goodsImageRequest = this.getGoodsImageDto();
-        GoodsImageAttachRequest goodsImageAttachRequest = getGoodsImageAttachDto(goodsImageRequest);
+        GoodsImageRequest goodsImageRequest = this.getGoodsImageInfo();
+        GoodsImageAttachRequest goodsImageAttachRequest = this.getGoodsImageAttachInfo(goodsImageRequest);
 
         mockMvc.perform(post("/goods/create")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(goodsImageAttachRequest)))
                 .andDo(print())
@@ -93,9 +93,9 @@ public class GoodsTest extends CsrfConfigTest {
     public void createGoodsImageUploadTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsImageRequest goodsImageRequest = this.getGoodsImageDto();
+        GoodsImageRequest goodsImageRequest = this.getGoodsImageInfo();
 
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
@@ -107,13 +107,13 @@ public class GoodsTest extends CsrfConfigTest {
                         .file(file1)
                         .file(file2)
                         .part(jsonGoodsImage)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
-    private GoodsImageRequest getGoodsImageDto() {
+    private GoodsImageRequest getGoodsImageInfo() {
         return GoodsImageRequest.builder()
                 .goodsName("테스트")
                 .largeCategoryCode("C001000000")
@@ -141,11 +141,11 @@ public class GoodsTest extends CsrfConfigTest {
                 .build();
     }
 
-    private GoodsImageAttachRequest getGoodsImageAttachDto(GoodsImageRequest goodsImageRequest) {
+    private GoodsImageAttachRequest getGoodsImageAttachInfo(GoodsImageRequest goodsImageRequest) {
         return (GoodsImageAttachRequest) GoodsImageAttachRequest.builder()
                 .goodsImg(Arrays.asList(
-                        new FileAttachDto("123", "image1.png", "image/png", 2048, ".png"),
-                        new FileAttachDto("124", "image2.jpg", "image/jpeg", 1024, ".jpg")
+                        new FileAttachInfo("123", "image1.png", "image/png", 2048, ".png"),
+                        new FileAttachInfo("124", "image2.jpg", "image/jpeg", 1024, ".jpg")
                 ))
                 .goodsName(goodsImageRequest.getGoodsName())
                 .largeCategoryCode(goodsImageRequest.getLargeCategoryCode())

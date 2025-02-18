@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.service;
 
-import com.mo2ver.web.common.file.dto.FileDto;
+import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.event.dao.EventImageRepository;
 import com.mo2ver.web.domain.event.dao.EventManageRepository;
@@ -51,8 +51,8 @@ public class EventService {
         for (int i = 0; i < eventFiles.size(); i++) {
             MultipartFile file = eventFiles.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            FileDto fileDto = this.fileService.saveFile(file, EVENT_DIRECTORY, currentUser);
-            this.eventImageRepository.save(EventImage.of(eventManage, fileDto.getFileCode(), basicImageYesNo, fileDto.getFileExtension(), i+1, currentUser));
+            FileInfo fileInfo = this.fileService.saveFile(file, EVENT_DIRECTORY, currentUser);
+            this.eventImageRepository.save(EventImage.of(eventManage, fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
         return eventManage;
     }

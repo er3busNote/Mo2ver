@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.dto.request;
 
-import com.mo2ver.web.domain.event.dto.EventImageProductDto;
+import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,5 +36,5 @@ public class EventImageRequest {
     @NotNull(message = "이벤트진행여부가 존재하지 않습니다")
     private Character useyn;
 
-    private List<EventImageProductDto> goods;
+    private List<EventImageProductInfo> goods;
 }

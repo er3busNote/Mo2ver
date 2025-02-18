@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.goods.service;
 
-import com.mo2ver.web.common.file.dto.FileAttachDto;
-import com.mo2ver.web.common.file.dto.FileDto;
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
+import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.goods.dao.*;
 import com.mo2ver.web.domain.goods.domain.Discount;
@@ -51,7 +51,7 @@ public class GoodsService {
 
     @Transactional
     public Page<GoodsResponse> findGoodslist(Pageable pageable, CategoryPageRequest categoryPageRequest) {
-        //Page<Goods> goods = useJpaRepository(pageable, categoryPageDto.getCategoryCode(), categoryPageDto.getCategoryType());
+        //Page<Goods> goods = useJpaRepository(pageable, categoryPageRequest.getCategoryCode(), categoryPageRequest.getCategoryType());
         Page<Goods> goods = useQueryDsl(pageable, categoryPageRequest.getCategoryCode(), categoryPageRequest.getCategoryType());
         return goods.map(GoodsResponse::of);
     }
@@ -91,11 +91,11 @@ public class GoodsService {
         Price price = this.priceRepository.save(Price.of(goodsImageAttachRequest, currentUser));
         if (goodsImageAttachRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachRequest, currentUser));
         for (int i = 0; i < goodsImageAttachRequest.getGoodsImg().size(); i++) {
-            FileAttachDto fileAttachDto = goodsImageAttachRequest.getGoodsImg().get(i);
-            String fileAttachCode = fileService.getFileAttachCode(fileAttachDto.getFileAttachCode());
+            FileAttachInfo fileAttachInfo = goodsImageAttachRequest.getGoodsImg().get(i);
+            String fileAttachCode = fileService.getFileAttachCode(fileAttachInfo.getFileAttachCode());
             Character basicImageYesNo = 'N';
             if (i == 0) basicImageYesNo = 'Y';
-            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), Integer.parseInt(fileAttachCode), basicImageYesNo, fileAttachDto.getFileExtension(), i+1, currentUser));
+            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), Integer.parseInt(fileAttachCode), basicImageYesNo, fileAttachInfo.getFileExtension(), i+1, currentUser));
         }
         return price;
     }
@@ -107,8 +107,8 @@ public class GoodsService {
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
-            FileDto fileDto = this.fileService.saveFile(file, GOODS_DIRECTORY, currentUser);
-            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileDto.getFileCode(), basicImageYesNo, fileDto.getFileExtension(), i+1, currentUser));
+            FileInfo fileInfo = this.fileService.saveFile(file, GOODS_DIRECTORY, currentUser);
+            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
         return price;
     }

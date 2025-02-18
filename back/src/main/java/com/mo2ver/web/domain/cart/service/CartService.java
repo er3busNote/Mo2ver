@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.cart.service;
 
 import com.mo2ver.web.domain.cart.dao.CartRepository;
-import com.mo2ver.web.domain.cart.dto.CartDto;
+import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +15,12 @@ public class CartService {
     @Autowired
     protected CartRepository cartRepository;
 
-    public CartResponse addCart(CartDto cartDto, Member currentUser){
-        return cartRepository.save(cartDto, currentUser);
+    public CartResponse addCart(CartInfo cartInfo, Member currentUser){
+        return cartRepository.save(cartInfo, currentUser);
     }
 
-    public CartResponse updateCart(CartDto cartDto, Member currentUser){
-        return cartRepository.update(cartDto, currentUser);
+    public CartResponse updateCart(CartInfo cartInfo, Member currentUser){
+        return cartRepository.update(cartInfo, currentUser);
     }
 
     public CartResponse getCartList(Member currentUser) {

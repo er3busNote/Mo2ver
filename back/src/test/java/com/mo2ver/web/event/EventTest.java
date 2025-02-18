@@ -3,9 +3,9 @@ package com.mo2ver.web.event;
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
-import com.mo2ver.web.domain.event.dto.EventImageProductDto;
+import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import com.mo2ver.web.domain.event.service.EventService;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +67,9 @@ public class EventTest extends CsrfConfigTest {
     public void createEventImageTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        EventImageRequest eventImageRequest = this.getEventImageDto();
+        EventImageRequest eventImageRequest = this.getEventImageInfo();
 
         MockMultipartFile file1 = new MockMultipartFile("displayFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("eventFile", "file2.txt", "image/png", "Test file content 2".getBytes());
@@ -81,27 +81,27 @@ public class EventTest extends CsrfConfigTest {
                         .file(file1)
                         .file(file2)
                         .part(jsonEventProduct)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
-    private EventImageRequest getEventImageDto() {
+    private EventImageRequest getEventImageInfo() {
         return EventImageRequest.builder()
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
                 .useyn('Y')
                 .goods(Arrays.asList(
-                        this.getEventProductDto(1),
-                        this.getEventProductDto(2)
+                        this.getEventProductInfo(1),
+                        this.getEventProductInfo(2)
                 ))
                 .build();
     }
 
-    private EventImageProductDto getEventProductDto(Integer i) {
-        return EventImageProductDto.builder()
+    private EventImageProductInfo getEventProductInfo(Integer i) {
+        return EventImageProductInfo.builder()
                 .goodsCode("100000000" + i)
                 .goodsName("테스트")
                 .sortSequence(i)

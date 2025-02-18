@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.cart.dto.response;
 
-import com.mo2ver.web.domain.cart.dto.CartDto;
+import com.mo2ver.web.domain.cart.dto.CartInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +19,11 @@ import java.util.stream.IntStream;
 @AllArgsConstructor
 public class CartResponse {
 
-    private List<CartDto> cartList = new ArrayList<>();
+    private List<CartInfo> cartList = new ArrayList<>();
 
     private int cartTotal = 0;
 
-    public void addCart(CartDto cart) {
+    public void addCart(CartInfo cart) {
 
         // 총액 계산
         cart.totalPriceCalc();
@@ -40,7 +40,7 @@ public class CartResponse {
                 int cartIndex = this.findCartIndex(goodsCode);
                 int amount = cart.getAmount();
 
-                CartDto newCart = cartList.get(cartIndex);
+                CartInfo newCart = cartList.get(cartIndex);
                 int newAmount = newCart.getAmount() + amount;
 
                 newCart.setAmount(newAmount);
@@ -52,14 +52,14 @@ public class CartResponse {
         }
     }
 
-    public CartDto updateCart(CartDto cart) {
+    public CartInfo updateCart(CartInfo cart) {
         int cartIndex = this.findCartIndex(cart.getGoodsCode());
         int amount = cart.getAmount();
         boolean check = cart.isCheck();
 
         boolean isUpdate = false;
 
-        CartDto updateCart = cartList.get(cartIndex);
+        CartInfo updateCart = cartList.get(cartIndex);
         if(updateCart.getAmount() != amount){
             updateCart.setAmount(amount);
             updateCart.totalPriceCalc();
@@ -79,16 +79,16 @@ public class CartResponse {
         return updateCart;
     }
 
-    public CartDto deleteCart(String goodsCode) {
-        CartDto removeCart = this.findCart(goodsCode);
+    public CartInfo deleteCart(String goodsCode) {
+        CartInfo removeCart = this.findCart(goodsCode);
         cartList.removeIf(cart -> cart.getGoodsCode().equals(goodsCode));   // [Case 5.1] : 특정 index 삭제
         cartTotal -= removeCart.getTotalPrice();
         return removeCart;
     }
 
-    public CartDto deleteCart(int index) {
+    public CartInfo deleteCart(int index) {
         if (index >= 0 && index < cartList.size()) {
-            CartDto removeCart = cartList.get(index);
+            CartInfo removeCart = cartList.get(index);
             cartTotal -= removeCart.getTotalPrice();
             cartList.remove(index);     // [Case 5.2] : 특정 index 삭제
             return removeCart;
@@ -109,7 +109,7 @@ public class CartResponse {
         return cartList.stream().anyMatch(cart -> cart.getGoodsCode().equals(goodsCode));
     }
 
-    public CartDto findCart(String goodsCode) {
+    public CartInfo findCart(String goodsCode) {
         return cartList.stream().filter(cart -> cart.getGoodsCode().equals(goodsCode)).findAny().orElseThrow(() -> new NoSuchElementException("상품코드가 " + goodsCode + "인 장바구니 내역을 찾을 수 없습니다."));
     }
 
@@ -119,7 +119,7 @@ public class CartResponse {
     
     public void calcTotalCart() {
         cartTotal = 0;
-        for(CartDto cart : cartList){
+        for(CartInfo cart : cartList){
             if(cart.isCheck()){
                 cartTotal += cart.getTotalPrice();
             }

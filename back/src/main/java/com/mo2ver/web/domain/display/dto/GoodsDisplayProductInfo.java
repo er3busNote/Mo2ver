@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerImageDetailDto {
+public class GoodsDisplayProductInfo {
 
     private Long id;
-    private String title;
-    private String cnntUrl;
-    private Integer file;
-    private Character useyn;
+    private String goodsCode;
+    private String goodsName;
+    private BigDecimal supplyPrice;
+    private BigDecimal salePrice;
+    private Integer sortSequence;
 }

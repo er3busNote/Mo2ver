@@ -2,7 +2,7 @@ package com.mo2ver.web.display;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.display.dto.*;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -28,10 +28,10 @@ public class BannerTest extends CsrfConfigTest {
     public void findBannerDisplayTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
         mockMvc.perform(get("/banner/display")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -41,20 +41,20 @@ public class BannerTest extends CsrfConfigTest {
     public void findBannerImagesDetailTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        BannerDto bannerDto = this.getBannerImagesDto();
+        BannerInfo bannerInfo = this.getBannerImagesInfo();
 
         mockMvc.perform(post("/banner/images/detail")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(bannerDto)))
+                        .content(objectMapper.writeValueAsString(bannerInfo)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    private BannerDto getBannerImagesDto() {
-        return BannerDto.builder()
+    private BannerInfo getBannerImagesInfo() {
+        return BannerInfo.builder()
                 .bannerManageNo(22L)
                 .displayTemplateCode("BN")
                 .build();
@@ -65,20 +65,20 @@ public class BannerTest extends CsrfConfigTest {
     public void findBannerGoodsDetailTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        BannerDto bannerDto = this.getBannerGoodsDto();
+        BannerInfo bannerInfo = this.getBannerGoodsInfo();
 
         mockMvc.perform(post("/banner/goods/detail")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(bannerDto)))
+                        .content(objectMapper.writeValueAsString(bannerInfo)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    private BannerDto getBannerGoodsDto() {
-        return BannerDto.builder()
+    private BannerInfo getBannerGoodsInfo() {
+        return BannerInfo.builder()
                 .bannerManageNo(20L)
                 .displayTemplateCode("GD")
                 .build();
@@ -89,28 +89,28 @@ public class BannerTest extends CsrfConfigTest {
     public void createBannerImageTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        BannerImageDto bannerImageDto = this.getBannerImageDto();
+        BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
 
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
 
-        MockPart jsonBannerImage = new MockPart("bannerImage", objectMapper.writeValueAsString(bannerImageDto).getBytes());
+        MockPart jsonBannerImage = new MockPart("bannerImage", objectMapper.writeValueAsString(bannerImageInfo).getBytes());
         jsonBannerImage.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(multipart("/banner/upload")
                         .file(file1)
                         .file(file2)
                         .part(jsonBannerImage)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
-    private BannerImageDto getBannerImageDto() {
-        return BannerImageDto.builder()
+    private BannerImageInfo getBannerImageInfo() {
+        return BannerImageInfo.builder()
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
@@ -119,14 +119,14 @@ public class BannerTest extends CsrfConfigTest {
                 .code("MAN")
                 .useyn('Y')
                 .bnnrImg(Arrays.asList(
-                        this.getBannerDetailDto(1),
-                        this.getBannerDetailDto(2)
+                        this.getBannerDetailInfo(1),
+                        this.getBannerDetailInfo(2)
                 ))
                 .build();
     }
 
-    private BannerImageDetailDto getBannerDetailDto(Integer i) {
-        return BannerImageDetailDto.builder()
+    private BannerImageDetailInfo getBannerDetailInfo(Integer i) {
+        return BannerImageDetailInfo.builder()
                 .title("테스트 " + i)
                 .cnntUrl("https://mo2ver.com/test" + i + ".jpg")
                 .useyn('Y')
@@ -138,20 +138,20 @@ public class BannerTest extends CsrfConfigTest {
     public void createGoodsDisplay() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        GoodsDisplayDto goodsDisplayDto = this.getGoodsDisplayDto();
+        GoodsDisplayInfo goodsDisplayInfo = this.getGoodsDisplayInfo();
 
         mockMvc.perform(post("/banner/goods")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(goodsDisplayDto)))
+                        .content(objectMapper.writeValueAsString(goodsDisplayInfo)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
-    private GoodsDisplayDto getGoodsDisplayDto() {
-        return GoodsDisplayDto.builder()
+    private GoodsDisplayInfo getGoodsDisplayInfo() {
+        return GoodsDisplayInfo.builder()
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
@@ -160,14 +160,14 @@ public class BannerTest extends CsrfConfigTest {
                 .code("WOMAN")
                 .useyn('Y')
                 .goods(Arrays.asList(
-                        this.getGoodsDisplayProductDto(1),
-                        this.getGoodsDisplayProductDto(2)
+                        this.getGoodsDisplayProductInfo(1),
+                        this.getGoodsDisplayProductInfo(2)
                 ))
                 .build();
     }
 
-    private GoodsDisplayProductDto getGoodsDisplayProductDto(Integer i) {
-        return GoodsDisplayProductDto.builder()
+    private GoodsDisplayProductInfo getGoodsDisplayProductInfo(Integer i) {
+        return GoodsDisplayProductInfo.builder()
                 .goodsCode("100000000" + i)
                 .goodsName("테스트")
                 .sortSequence(i)

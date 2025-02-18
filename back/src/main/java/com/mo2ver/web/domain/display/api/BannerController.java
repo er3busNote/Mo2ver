@@ -1,14 +1,14 @@
 package com.mo2ver.web.domain.display.api;
 
 import com.mo2ver.web.domain.display.domain.BannerManage;
-import com.mo2ver.web.domain.display.dto.BannerDto;
-import com.mo2ver.web.domain.display.dto.BannerImageDto;
-import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
+import com.mo2ver.web.domain.display.dto.BannerImageInfo;
+import com.mo2ver.web.domain.display.dto.BannerInfo;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayInfo;
 import com.mo2ver.web.domain.display.service.BannerService;
 import com.mo2ver.web.domain.display.validation.BannerImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.dto.PageDto;
+import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
@@ -45,12 +45,12 @@ public class BannerController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<BannerDto>> listBanner(
-            @Valid PageDto pageDto,
+    public ResponseEntity<Page<BannerInfo>> listBanner(
+            @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "bannerManageNo");
-        Page<BannerDto> pages = bannerService.findBannerlist(pageable);
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "bannerManageNo");
+        Page<BannerInfo> pages = bannerService.findBannerlist(pageable);
         return ResponseEntity.ok().body(pages);
     }
 
@@ -63,10 +63,10 @@ public class BannerController {
 
     @PostMapping("/goods")
     public ResponseEntity<ResponseHandler> goodsBanner(
-            @RequestBody @Valid GoodsDisplayDto goodsDisplayDto,
+            @RequestBody @Valid GoodsDisplayInfo goodsDisplayInfo,
             @CurrentUser Member currentUser
     ) {
-        BannerManage bannerManage = bannerService.saveGoodsDisplay(goodsDisplayDto, currentUser);
+        BannerManage bannerManage = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
         return ResponseEntity.created(URI.create("/goods/" + bannerManage.getBannerManageNo()))
                 .body(ResponseHandler.builder()
                 .status(HttpStatus.CREATED.value())
@@ -75,24 +75,24 @@ public class BannerController {
     }
 
     @PostMapping("/images/detail")
-    public ResponseEntity<BannerImageDto> imagesDetailBanner(
-            @RequestBody @Valid BannerDto bannerDto,
+    public ResponseEntity<BannerImageInfo> imagesDetailBanner(
+            @RequestBody @Valid BannerInfo bannerInfo,
             @CurrentUser Member currentUser
     ) {
-        return ResponseEntity.ok().body(bannerService.findBannerImagesDetail(bannerDto));
+        return ResponseEntity.ok().body(bannerService.findBannerImagesDetail(bannerInfo));
     }
 
     @PostMapping("/goods/detail")
-    public ResponseEntity<GoodsDisplayDto> goodsDetailBanner(
-            @RequestBody @Valid BannerDto bannerDto,
+    public ResponseEntity<GoodsDisplayInfo> goodsDetailBanner(
+            @RequestBody @Valid BannerInfo bannerInfo,
             @CurrentUser Member currentUser
     ) {
-        return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerDto));
+        return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerInfo));
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
-                                       @RequestPart(name = "bannerImage") @Valid BannerImageDto bannerImageDto,
+                                       @RequestPart(name = "bannerImage") @Valid BannerImageInfo bannerImageInfo,
                                        @CurrentUser Member currentUser,
                                        BindingResult result) {
         HashMap<String, Object> response = new HashMap<>();
@@ -102,7 +102,7 @@ public class BannerController {
             return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
         }
         try {
-            BannerManage bannerManage = bannerService.saveImageBanner(files, bannerImageDto, currentUser);
+            BannerManage bannerManage = bannerService.saveImageBanner(files, bannerImageInfo, currentUser);
             return ResponseEntity.created(URI.create("/upload/" + bannerManage.getBannerManageNo()))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())

@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.event.domain;
 
-import com.mo2ver.web.domain.event.dto.EventImageProductDto;
-import com.mo2ver.web.domain.goods.domain.Goods;
+import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -74,12 +73,12 @@ public class EventProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventProduct of(EventManage eventManage, EventImageProductDto eventImageProductDto, Member currentUser) {
+    public static EventProduct of(EventManage eventManage, EventImageProductInfo eventImageProductInfo, Member currentUser) {
         return EventProduct.builder()
                 .eventManageNo(eventManage)
-                .productCode(eventImageProductDto.getGoodsCode())
-                .productName(eventImageProductDto.getGoodsName())
-                .sortSequence(eventImageProductDto.getSortSequence())
+                .productCode(eventImageProductInfo.getGoodsCode())
+                .productName(eventImageProductInfo.getGoodsName())
+                .sortSequence(eventImageProductInfo.getSortSequence())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

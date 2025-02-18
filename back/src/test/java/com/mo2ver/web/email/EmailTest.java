@@ -1,7 +1,7 @@
 package com.mo2ver.web.email;
 
-import com.mo2ver.web.global.common.dto.EmailDto;
-import com.mo2ver.web.global.common.dto.EmailInfoDto;
+import com.mo2ver.web.global.common.dto.EmailInfo;
+import com.mo2ver.web.global.common.dto.EmailDetailInfo;
 import com.mo2ver.web.global.common.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -24,15 +24,15 @@ public class EmailTest {
     @Test
     @DisplayName("이메일 수신 여부 확인")
     public void sendEmail() throws Exception {
-        emailUtil.sendEmail(getEmailDto());
+        emailUtil.sendEmail(getEmailInfo());
     }
 
-    private EmailDto getEmailDto() {
-        return EmailDto.builder()
+    private EmailInfo getEmailInfo() {
+        return EmailInfo.builder()
                 .to("mo2vermail@gmail.com")
                 .subject("테스트")
                 .templateName("email-sample.vm")
-                .info(new EmailInfoDto("배병주", "ByeongJu"))
+                .info(new EmailDetailInfo("배병주", "ByeongJu"))
                 .build();
     }
 }

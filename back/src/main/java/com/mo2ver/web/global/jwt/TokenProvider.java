@@ -2,7 +2,7 @@ package com.mo2ver.web.global.jwt;
 
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.global.common.properties.JwtProperties;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -47,21 +47,21 @@ public class TokenProvider implements InitializingBean {
         this.signkey = Keys.hmacShaKeyFor(jwtProperties.getJwtSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    public TokenDto createToken(Authentication authentication) {
+    public TokenInfo createToken(Authentication authentication) {
         String accesstoken = createAccessToken(authentication);
         String refreshtoken = createRefreshToken(authentication);
 
-        return TokenDto.builder()
+        return TokenInfo.builder()
                 .username(authentication.getName())
                 .accesstoken(accesstoken)
                 .refreshtoken(refreshtoken)
                 .build();
     }
 
-    public TokenDto refreshToken(Authentication authentication, String refreshtoken) {
+    public TokenInfo refreshToken(Authentication authentication, String refreshtoken) {
         String accesstoken = createAccessToken(authentication);
 
-        return TokenDto.builder()
+        return TokenInfo.builder()
                 .username(authentication.getName())
                 .accesstoken(accesstoken)
                 .refreshtoken(refreshtoken)

@@ -34,17 +34,17 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
         this.queryFactory = queryFactory;
     }
 
-    public BannerImageDto findBannerDetail(BannerDto bannerDto) {
+    public BannerImageInfo findBannerDetail(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.bannerManageNo.eq(bannerDto.getBannerManageNo()));
-        builder.and(bannerManage.displayTemplateCode.eq(bannerDto.getDisplayTemplateCode()));
+        builder.and(bannerManage.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(bannerManage.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
                 .selectFrom(bannerManage)
                 .innerJoin(bannerManage.bannerDetailList, bannerDetail)
                 .where(builder)
                 .transform(groupBy(bannerManage.bannerManageNo).list(
-                        new QBannerImageDto(
+                        new QBannerImageInfo(
                                 bannerManage.bannerManageNo,
                                 bannerManage.subject,
                                 bannerManage.displayStartDate,
@@ -53,7 +53,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                                 bannerManage.displayTemplateCode,
                                 bannerManage.displayConditionCode,
                                 bannerManage.displayYesNo,
-                                list(Projections.constructor(BannerImageDetailDto.class,
+                                list(Projections.constructor(BannerImageDetailInfo.class,
                                         bannerDetail.bannerDetailId,
                                         bannerDetail.bannerContents,
                                         bannerDetail.connectUrl,
@@ -64,10 +64,10 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 ).stream().findFirst().orElse(null);
     }
 
-    public GoodsDisplayDto findBannerProduct(BannerDto bannerDto) {
+    public GoodsDisplayInfo findBannerProduct(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.bannerManageNo.eq(bannerDto.getBannerManageNo()));
-        builder.and(bannerManage.displayTemplateCode.eq(bannerDto.getDisplayTemplateCode()));
+        builder.and(bannerManage.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(bannerManage.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
                 .selectFrom(bannerManage)
@@ -76,7 +76,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .where(builder)
                 .transform(groupBy(bannerManage.bannerManageNo).list(
-                        new QGoodsDisplayDto(
+                        new QGoodsDisplayInfo(
                                 bannerManage.bannerManageNo,
                                 bannerManage.subject,
                                 bannerManage.displayStartDate,
@@ -85,7 +85,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                                 bannerManage.displayTemplateCode,
                                 bannerManage.displayConditionCode,
                                 bannerManage.displayYesNo,
-                                list(Projections.constructor(GoodsDisplayProductDto.class,
+                                list(Projections.constructor(GoodsDisplayProductInfo.class,
                                         bannerProduct.bannerProductId,
                                         bannerProduct.productCode,
                                         bannerProduct.productName,

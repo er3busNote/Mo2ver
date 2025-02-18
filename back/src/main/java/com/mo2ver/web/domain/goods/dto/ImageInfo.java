@@ -20,7 +20,7 @@ import java.util.Base64;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageDto {
+public class ImageInfo {
 
     private String base64Image;
     private String goodsImageAttachFile;
@@ -34,8 +34,8 @@ public class ImageDto {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
-    public static ImageDto of(GoodsImage goodsImage) {
-        return ImageDto.builder()
+    public static ImageInfo of(GoodsImage goodsImage) {
+        return ImageInfo.builder()
                 .goodsImageAttachFile(getEncryptor(goodsImage.getGoodsImageAttachFile()))
                 .goodsImageExtension(goodsImage.getGoodsImageExtension())
                 .basicImageYesNo(goodsImage.getBasicImageYesNo())
@@ -44,7 +44,7 @@ public class ImageDto {
                 .build();
     }
 
-    public static ImageDto of(GoodsImage goodsImage, String filepath) {
+    public static ImageInfo of(GoodsImage goodsImage, String filepath) {
 
         String base64Image = "";
         Path folderPath = Paths.get(filepath);
@@ -55,7 +55,7 @@ public class ImageDto {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-        return ImageDto.builder()
+        return ImageInfo.builder()
                 .base64Image(base64Image)
                 .basicImageYesNo(goodsImage.getBasicImageYesNo())
                 .sortSequence(goodsImage.getSortSequence())

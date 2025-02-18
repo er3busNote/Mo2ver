@@ -10,7 +10,7 @@ import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -66,14 +66,14 @@ public class MemberController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);   // --> Authenticated (인증)
 
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
         return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
-                .body(tokenDto);
+                .body(tokenInfo);
     }
 
     @PatchMapping("/refresh")
-    public ResponseEntity authRefresh(@RequestBody @Valid TokenDto tokenDto,
+    public ResponseEntity authRefresh(@RequestBody @Valid TokenInfo tokenInfo,
                                                 Errors errors) {
         HashMap<String, Object> response = new HashMap<>();
         if (errors.hasErrors()) {
@@ -82,7 +82,7 @@ public class MemberController {
         }
 
         // Refresh Token - Expired
-        if (!tokenProvider.validateToken(tokenDto.getRefreshtoken())) {
+        if (!tokenProvider.validateToken(tokenInfo.getRefreshtoken())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.FORBIDDEN.value())
@@ -91,15 +91,15 @@ public class MemberController {
         }
 
         // Access Token - Expired
-        if (!tokenProvider.validateToken(tokenDto.getAccesstoken())) {
-            Authentication authentication = tokenProvider.getAuthentication(tokenDto.getRefreshtoken());
-            TokenDto refreshtokenDto = tokenProvider.refreshToken(authentication, tokenDto.getRefreshtoken());
+        if (!tokenProvider.validateToken(tokenInfo.getAccesstoken())) {
+            Authentication authentication = tokenProvider.getAuthentication(tokenInfo.getRefreshtoken());
+            TokenInfo refreshtokenInfo = tokenProvider.refreshToken(authentication, tokenInfo.getRefreshtoken());
 
             return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
-                    .body(refreshtokenDto);
+                    .body(refreshtokenInfo);
         }
 
-        return ResponseEntity.ok().body(tokenDto);
+        return ResponseEntity.ok().body(tokenInfo);
     }
 
     @PostMapping("/signup")

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageDto {
+public class PageInfo {
 
     @NotNull
     private int page;

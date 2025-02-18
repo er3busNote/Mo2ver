@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.domain;
 
-import com.mo2ver.web.domain.display.dto.GoodsDisplayProductDto;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayProductInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -69,12 +69,12 @@ public class BannerProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerProduct of(BannerManage bannerManage, GoodsDisplayProductDto goodsDisplayProductDto, Member currentUser) {
+    public static BannerProduct of(BannerManage bannerManage, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
         return BannerProduct.builder()
                 .bannerManageNo(bannerManage)
-                .productCode(goodsDisplayProductDto.getGoodsCode())
-                .productName(goodsDisplayProductDto.getGoodsName())
-                .sortSequence(goodsDisplayProductDto.getSortSequence())
+                .productCode(goodsDisplayProductInfo.getGoodsCode())
+                .productName(goodsDisplayProductInfo.getGoodsName())
+                .sortSequence(goodsDisplayProductInfo.getSortSequence())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

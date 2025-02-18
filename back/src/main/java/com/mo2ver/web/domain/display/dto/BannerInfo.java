@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerDto {
+public class BannerInfo {
 
     @NotNull(message = "배너관리번호가 존재하지 않습니다")
     @Range(min = 1)
@@ -30,8 +30,8 @@ public class BannerDto {
     private String register;
     private Date registerDate;
 
-    public static BannerDto of(BannerManage bannerManage) {
-        return BannerDto.builder()
+    public static BannerInfo of(BannerManage bannerManage) {
+        return BannerInfo.builder()
                 .bannerManageNo(bannerManage.getBannerManageNo())
                 .subject(bannerManage.getSubject())
                 .displayStartDate(bannerManage.getDisplayStartDate())

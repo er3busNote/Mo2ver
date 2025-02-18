@@ -1,7 +1,7 @@
 package com.mo2ver.web.common;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -23,12 +23,12 @@ public class CodeTest extends CsrfConfigTest {
     public void findCodeListTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
         List<String> groupCodelist = getGroupCodeList();
 
         mockMvc.perform(post("/code/list")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(groupCodelist)))
                 .andDo(print())
@@ -40,12 +40,12 @@ public class CodeTest extends CsrfConfigTest {
     public void findCodeListDetailTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
         List<String> groupCodelist = getGroupCodeList();
 
         mockMvc.perform(post("/code/list/detail")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(groupCodelist)))
                 .andDo(print())

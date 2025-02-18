@@ -10,7 +10,7 @@ import com.mo2ver.web.domain.goods.service.GoodsService;
 import com.mo2ver.web.domain.goods.validation.GoodsImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.dto.PageDto;
+import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
@@ -56,11 +56,11 @@ public class GoodsController {
 
     @GetMapping("/list")
     public ResponseEntity<Page<GoodsResponse>> listGoods(
-            @Valid PageDto pageDto,
+            @Valid PageInfo pageInfo,
             @Valid CategoryPageRequest categoryPageRequest,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "goodsCode");
         Page<GoodsResponse> pages = goodsService.findGoodslist(pageable, categoryPageRequest);
         return ResponseEntity.ok().body(pages);
     }
@@ -69,17 +69,17 @@ public class GoodsController {
     public ResponseEntity<List<GoodsResponse>> listGoodsRank(
             @PathVariable Integer count
     ) {
-        List<GoodsResponse> listGoodDto = goodsService.findGoodslistRank(count);
-        return ResponseEntity.ok().body(listGoodDto);
+        List<GoodsResponse> listGoods = goodsService.findGoodslistRank(count);
+        return ResponseEntity.ok().body(listGoods);
     }
 
     @GetMapping("/search")
     public ResponseEntity<Page<GoodsResponse>> searchGoods(
-            @Valid PageDto pageDto,
+            @Valid PageInfo pageInfo,
             @Valid GoodsSearchRequest goodsSearchRequest,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "goodsCode");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "goodsCode");
         Page<GoodsResponse> pages = goodsService.findGoodsSearch(pageable, goodsSearchRequest);
         return ResponseEntity.ok(pages);
     }

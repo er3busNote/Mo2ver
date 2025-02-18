@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.cart.dto;
 
-import com.mo2ver.web.domain.goods.dto.ImageDto;
+import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDto {
+public class CartInfo {
 
     private String goodsCode;
     private String goodsName;
@@ -23,7 +23,7 @@ public class CartDto {
     private String goodsYear;
     private BigDecimal supplyPrice;
     private BigDecimal salePrice;
-    private ImageDto image;
+    private ImageInfo image;
 
     private int amount;
     private int totalPrice;
@@ -63,7 +63,7 @@ public class CartDto {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        CartDto other = (CartDto) obj;
+        CartInfo other = (CartInfo) obj;
         return goodsCode == other.goodsCode && Objects.equals(goodsName, other.goodsName) && salePrice == other.salePrice
                 && Arrays.equals(optionId, other.optionId) && Arrays.equals(optionName, other.optionName)
                 && Arrays.equals(optionPrice, other.optionPrice);

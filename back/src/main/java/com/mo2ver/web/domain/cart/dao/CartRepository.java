@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.cart.dao;
 
-import com.mo2ver.web.domain.cart.dto.CartDto;
+import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class CartRepository {
             @CachePut(key = "#member.memberNo")
     })
     @CacheEvict(key = "'all'")
-    public CartResponse save(CartDto cart, Member member) {
+    public CartResponse save(CartInfo cart, Member member) {
         String memberNo = member.getMemberNo();
         CartResponse cartResponse = new CartResponse();
         if(userMap.containsKey(memberNo)){
@@ -50,11 +50,11 @@ public class CartRepository {
             @CachePut(key = "#member.memberNo")
     })
     @CacheEvict(key = "'all'")
-    public CartResponse update(CartDto cart, Member member) {
+    public CartResponse update(CartInfo cart, Member member) {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
             CartResponse cartResponse = userMap.get(memberNo);
-            CartDto updateCart = cartResponse.updateCart(cart);
+            CartInfo updateCart = cartResponse.updateCart(cart);
             log.info("Repository update {} => {}", member.getLoginId(), updateCart);
             userMap.put(memberNo, cartResponse);
             return cartResponse;
@@ -71,7 +71,7 @@ public class CartRepository {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
             CartResponse cartResponse = userMap.get(memberNo);
-            CartDto removeCart = cartResponse.deleteCart(goodsCode);
+            CartInfo removeCart = cartResponse.deleteCart(goodsCode);
             log.info("Repository delete {} => {}", member.getLoginId(), removeCart);
             userMap.put(memberNo, cartResponse);
         }
@@ -86,7 +86,7 @@ public class CartRepository {
         String memberNo = member.getMemberNo();
         if(userMap.containsKey(memberNo)){
             CartResponse cartResponse = userMap.get(memberNo);
-            CartDto removeCart = cartResponse.deleteCart(index);
+            CartInfo removeCart = cartResponse.deleteCart(index);
             log.info("Repository delete One {} => {}", member.getLoginId(), removeCart);
             userMap.put(memberNo, cartResponse);
         }

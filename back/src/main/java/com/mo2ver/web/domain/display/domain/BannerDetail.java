@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.domain;
 
-import com.mo2ver.web.domain.display.dto.BannerImageDetailDto;
+import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -78,15 +78,15 @@ public class BannerDetail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailDto bannerImageDetailDto, Integer imageAttachFile, Integer index, Member currentUser) {
+    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
                 .bannerManageNo(bannerManage)
                 .detailSequence(index)
                 .imageAttachFile(imageAttachFile)
-                .connectUrl(bannerImageDetailDto.getCnntUrl())
-                .bannerContents(bannerImageDetailDto.getTitle())
+                .connectUrl(bannerImageDetailInfo.getCnntUrl())
+                .bannerContents(bannerImageDetailInfo.getTitle())
                 .sortSequence(1)
-                .useYesNo(bannerImageDetailDto.getUseyn())
+                .useYesNo(bannerImageDetailInfo.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

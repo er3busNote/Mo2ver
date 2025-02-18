@@ -1,13 +1,11 @@
 package com.mo2ver.web.domain.cart.api;
 
-import com.mo2ver.web.domain.cart.dto.CartDto;
+import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.cart.service.CartService;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
-import com.mo2ver.web.global.error.dto.response.ErrorResponse;
-import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +17,9 @@ import javax.validation.Valid;
 public class CartController {
 
     private final CartService cartService;
-    private final ErrorHandler errorHandler;
 
-    public CartController(CartService cartService, ErrorHandler errorHandler) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
-        this.errorHandler = errorHandler;
     }
 
     @GetMapping("/list")
@@ -38,15 +34,19 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CartResponse> addCart(@RequestBody @Valid CartDto cartDto,
-                                                @CurrentUser Member currentUser) {
-        return ResponseEntity.ok().body(cartService.addCart(cartDto, currentUser));
+    public ResponseEntity<CartResponse> addCart(
+            @RequestBody @Valid CartInfo cartInfo,
+            @CurrentUser Member currentUser
+    ) {
+        return ResponseEntity.ok().body(cartService.addCart(cartInfo, currentUser));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CartResponse> updateCart(@RequestBody @Valid CartDto cartDto,
-                                                   @CurrentUser Member currentUser) {
-        return ResponseEntity.ok().body(cartService.updateCart(cartDto, currentUser));
+    public ResponseEntity<CartResponse> updateCart(
+            @RequestBody @Valid CartInfo cartInfo,
+            @CurrentUser Member currentUser
+    ) {
+        return ResponseEntity.ok().body(cartService.updateCart(cartInfo, currentUser));
     }
 
     @DeleteMapping("/delete")
@@ -75,13 +75,5 @@ public class CartController {
                     .build());
         }
         return ResponseEntity.ok().body(cartService.getCartList(currentUser));
-    }
-
-    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
-        return ResponseEntity.unprocessableEntity().body(response);
     }
 }

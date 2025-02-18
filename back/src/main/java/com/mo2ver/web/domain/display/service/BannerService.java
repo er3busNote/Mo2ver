@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.service;
 
-import com.mo2ver.web.common.file.dto.FileDto;
+import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.display.dao.BannerDetailRepository;
 import com.mo2ver.web.domain.display.dao.BannerManageRepository;
@@ -38,9 +38,9 @@ public class BannerService {
     protected BannerDetailRepository bannerDetailRepository;
 
     @Transactional
-    public Page<BannerDto> findBannerlist(Pageable pageable) {
+    public Page<BannerInfo> findBannerlist(Pageable pageable) {
         Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
-        return manage.map(BannerDto::of);
+        return manage.map(BannerInfo::of);
     }
 
     @Transactional
@@ -66,30 +66,30 @@ public class BannerService {
     }
 
     @Transactional
-    public BannerImageDto findBannerImagesDetail(BannerDto bannerDto) {
-        return this.bannerManageRepository.findBannerDetail(bannerDto);
+    public BannerImageInfo findBannerImagesDetail(BannerInfo bannerInfo) {
+        return this.bannerManageRepository.findBannerDetail(bannerInfo);
     }
 
     @Transactional
-    public GoodsDisplayDto findBannerGoodsDetail(BannerDto bannerDto) {
-        return this.bannerManageRepository.findBannerProduct(bannerDto);
+    public GoodsDisplayInfo findBannerGoodsDetail(BannerInfo bannerInfo) {
+        return this.bannerManageRepository.findBannerProduct(bannerInfo);
     }
 
     @Transactional
-    public BannerManage saveGoodsDisplay(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
-        return this.bannerManageRepository.save(BannerManage.of(goodsDisplayDto, currentUser));
+    public BannerManage saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        return this.bannerManageRepository.save(BannerManage.of(goodsDisplayInfo, currentUser));
     }
 
     @Transactional
-    public BannerManage saveImageBanner(List<MultipartFile> files, BannerImageDto bannerImageDto, Member currentUser) throws Exception {
-        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageDto, currentUser));
-        List<BannerImageDetailDto> listBannerImageDetailDto = bannerImageDto.getBnnrImg();
-        for (int i = 0; i < listBannerImageDetailDto.size(); i++) {
-            BannerImageDetailDto bannerImageDetailDto = listBannerImageDetailDto.get(i);
-            log.info("bannerImageInfo => {}", bannerImageDetailDto.getTitle());
+    public BannerManage saveImageBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
+        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
+        List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
+        for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
+            BannerImageDetailInfo bannerImageDetailInfo = listBannerImageDetailInfo.get(i);
+            log.info("bannerImageInfo => {}", bannerImageDetailInfo.getTitle());
             MultipartFile file = files.get(i);
-            FileDto fileDto = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
-            this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailDto, fileDto.getFileCode(), i+1, currentUser));
+            FileInfo fileInfo = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
+            this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
         }
         return bannerManage;
     }

@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.goods.dto.response;
 
 import com.mo2ver.web.domain.goods.domain.Goods;
-import com.mo2ver.web.domain.goods.dto.ImageDto;
+import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class GoodsResponse {
     private String goodsYear;
     private BigDecimal supplyPrice;
     private BigDecimal salePrice;
-    private List<ImageDto> imageList;
+    private List<ImageInfo> imageList;
 
     public static GoodsResponse of(Goods goods) {
         return GoodsResponse.builder()
@@ -37,7 +37,7 @@ public class GoodsResponse {
                 .salePrice(goods.getPrice().getSalePrice())
                 .imageList(goods.getGoodsImageList().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')   // innerJoin 할때, 조건을 추가로 붙여야 함..
-                        .map(ImageDto::of)
+                        .map(ImageInfo::of)
                         .collect(Collectors.toList()))
                 .build();
     }

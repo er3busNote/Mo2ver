@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface BannerManageRepositoryCustom {
-    BannerImageDto findBannerDetail(BannerDto bannerDto);
-    GoodsDisplayDto findBannerProduct(BannerDto bannerDto);
+    BannerImageInfo findBannerDetail(BannerInfo bannerInfo);
+    GoodsDisplayInfo findBannerProduct(BannerInfo bannerInfo);
     Map<String, List<BannerDetailResponse>> findGroupBannerDetail();
     Map<String, List<BannerProductResponse>> findGroupBannerProduct();
 }

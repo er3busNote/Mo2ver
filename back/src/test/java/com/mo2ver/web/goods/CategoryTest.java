@@ -2,7 +2,7 @@ package com.mo2ver.web.goods;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
-import com.mo2ver.web.global.jwt.dto.TokenDto;
+import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -51,19 +51,19 @@ public class CategoryTest extends CsrfConfigTest {
     public void createCategoryTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        CategoryDetailRequest categoryDetailRequest = getCategoryDetailDto();
+        CategoryDetailRequest categoryDetailRequest = this.getCategoryDetailInfo();
 
         mockMvc.perform(post("/category/create")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(categoryDetailRequest)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    private CategoryDetailRequest getCategoryDetailDto() {
+    private CategoryDetailRequest getCategoryDetailInfo() {
         return CategoryDetailRequest.builder()
                 .categoryCode("C012000000")
                 .categoryName("테스트 1")
@@ -80,12 +80,12 @@ public class CategoryTest extends CsrfConfigTest {
     public void deleteCategoryTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenDto tokenDto = tokenProvider.createToken(authentication);  // 로그인
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
         String categoryCode = "C012000000";
 
         mockMvc.perform(delete("/category/delete/{categoryCode}", categoryCode)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccesstoken()))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken()))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

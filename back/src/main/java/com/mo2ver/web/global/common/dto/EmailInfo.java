@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailDto {
+public class EmailInfo {
 
     private String to;
 
@@ -17,5 +17,5 @@ public class EmailDto {
 
     private String templateName;
 
-    private EmailInfoDto info;
+    private EmailDetailInfo info;
 }

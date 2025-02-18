@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.display.domain;
 
-import com.mo2ver.web.domain.display.dto.BannerImageDto;
-import com.mo2ver.web.domain.display.dto.GoodsDisplayDto;
+import com.mo2ver.web.domain.display.dto.BannerImageInfo;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -68,31 +68,31 @@ public class BannerManage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerManage of(BannerImageDto bannerImageDto, Member currentUser) {
+    public static BannerManage of(BannerImageInfo bannerImageInfo, Member currentUser) {
         return BannerManage.builder()
-                .subject(bannerImageDto.getTitle())
-                .displayStartDate(bannerImageDto.getStartDate())
-                .displayEndDate(bannerImageDto.getEndDate())
-                .displayTemplateCode(bannerImageDto.getType())
-                .displayConditionCode(bannerImageDto.getCode())
-                .displayYesNo(bannerImageDto.getUseyn())
+                .subject(bannerImageInfo.getTitle())
+                .displayStartDate(bannerImageInfo.getStartDate())
+                .displayEndDate(bannerImageInfo.getEndDate())
+                .displayTemplateCode(bannerImageInfo.getType())
+                .displayConditionCode(bannerImageInfo.getCode())
+                .displayYesNo(bannerImageInfo.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
     }
 
-    public static BannerManage of(GoodsDisplayDto goodsDisplayDto, Member currentUser) {
+    public static BannerManage of(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
         BannerManage bannerManage = BannerManage.builder()
-                .subject(goodsDisplayDto.getTitle())
-                .displayStartDate(goodsDisplayDto.getStartDate())
-                .displayEndDate(goodsDisplayDto.getEndDate())
-                .displayTemplateCode(goodsDisplayDto.getType())
-                .displayConditionCode(goodsDisplayDto.getCode())
-                .displayYesNo(goodsDisplayDto.getUseyn())
+                .subject(goodsDisplayInfo.getTitle())
+                .displayStartDate(goodsDisplayInfo.getStartDate())
+                .displayEndDate(goodsDisplayInfo.getEndDate())
+                .displayTemplateCode(goodsDisplayInfo.getType())
+                .displayConditionCode(goodsDisplayInfo.getCode())
+                .displayYesNo(goodsDisplayInfo.getUseyn())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
-        bannerManage.setBannerProductList(goodsDisplayDto.getGoods().stream()
+        bannerManage.setBannerProductList(goodsDisplayInfo.getGoods().stream()
                 .map(data -> BannerProduct.of(bannerManage, data, currentUser))
                 .collect(Collectors.toList()));
         return bannerManage;

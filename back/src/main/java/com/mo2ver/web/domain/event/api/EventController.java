@@ -8,7 +8,7 @@ import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.domain.event.validation.EventImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.dto.PageDto;
+import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
@@ -47,20 +47,20 @@ public class EventController {
     @GetMapping("/info/{id}")
     public ResponseEntity<Page<EventDetailResponse>> infoEvent(
             @PathVariable Integer id,
-            @Valid PageDto pageDto,
+            @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
-        Page<EventDetailResponse> eventDetailDto = eventService.findEvent(id, pageable);
-        return ResponseEntity.ok().body(eventDetailDto);
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Page<EventDetailResponse> eventDetails = eventService.findEvent(id, pageable);
+        return ResponseEntity.ok().body(eventDetails);
     }
 
     @GetMapping("/list")
     public ResponseEntity<Page<EventResponse>> listEvent(
-            @Valid PageDto pageDto,
+            @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventManageNo");
         Page<EventResponse> pages = eventService.findEventlist(pageable);
         return ResponseEntity.ok().body(pages);
     }

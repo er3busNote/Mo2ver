@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailInfoDto {
+public class EmailDetailInfo {
 
     private String title;
 

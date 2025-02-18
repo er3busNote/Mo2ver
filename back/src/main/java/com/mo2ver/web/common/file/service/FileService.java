@@ -2,8 +2,8 @@ package com.mo2ver.web.common.file.service;
 
 import com.mo2ver.web.common.file.dao.FileRepository;
 import com.mo2ver.web.common.file.domain.File;
-import com.mo2ver.web.common.file.dto.FileAttachDto;
-import com.mo2ver.web.common.file.dto.FileDto;
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
+import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class FileService {
     }
 
     @Transactional
-    public FileDto saveFile(MultipartFile file, String targetFolder, Member currentUser) throws Exception {
+    public FileInfo saveFile(MultipartFile file, String targetFolder, Member currentUser) throws Exception {
         Path uploadDirectory = this.fileUtil.getUploadDirectory(getDirectory(targetFolder));
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
@@ -63,13 +63,13 @@ public class FileService {
         String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, getFilePath(uploadDirectory), contentType, fileSize, currentUser));
         this.cryptoUtil.encryptFile(file, this.fileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
-        return FileDto.of(fileInfo, fileExtension, fileNameWithoutExtension);
+        return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
     }
 
     @Transactional
-    public List<FileAttachDto> saveFile(List<MultipartFile> files, Member currentUser) throws Exception {
-        List<FileDto> fileDtoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveFile(file, FILE_DIRECTORY, currentUser))).collect(Collectors.toList());
-        return fileDtoList.stream().map(FileAttachDto::of).collect(Collectors.toList());
+    public List<FileAttachInfo> saveFile(List<MultipartFile> files, Member currentUser) throws Exception {
+        List<FileInfo> fileInfoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveFile(file, FILE_DIRECTORY, currentUser))).collect(Collectors.toList());
+        return fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
     }
 
     private String getDirectory(String targetFolder) {

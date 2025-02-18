@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
-public class GoodsDisplayDto {
+public class GoodsDisplayInfo {
 
     private Long bannerNo;
 
@@ -45,10 +45,10 @@ public class GoodsDisplayDto {
     @NotNull(message = "전시여부가 존재하지 않습니다")
     private Character useyn;
 
-    private List<GoodsDisplayProductDto> goods;
+    private List<GoodsDisplayProductInfo> goods;
 
     @QueryProjection
-    public GoodsDisplayDto(Long bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<GoodsDisplayProductDto> goods) {
+    public GoodsDisplayInfo(Long bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<GoodsDisplayProductInfo> goods) {
         this.bannerNo = bannerNo;
         this.title = title;
         this.startDate = startDate;

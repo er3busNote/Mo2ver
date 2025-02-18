@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileAttachDto {
+public class FileAttachInfo {
 
     private String fileAttachCode;
     private String fileName;
@@ -24,13 +24,13 @@ public class FileAttachDto {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
-    public static FileAttachDto of(FileDto fileDto) {
-        return FileAttachDto.builder()
-                .fileAttachCode(getEncryptor(fileDto.getFileCode()))
-                .fileName(fileDto.getFileName())
-                .fileType(fileDto.getFileType())
-                .fileSize(fileDto.getFileSize())
-                .fileExtension(fileDto.getFileExtension())
+    public static FileAttachInfo of(FileInfo fileInfo) {
+        return FileAttachInfo.builder()
+                .fileAttachCode(getEncryptor(fileInfo.getFileCode()))
+                .fileName(fileInfo.getFileName())
+                .fileType(fileInfo.getFileType())
+                .fileSize(fileInfo.getFileSize())
+                .fileExtension(fileInfo.getFileExtension())
                 .build();
     }
 }
