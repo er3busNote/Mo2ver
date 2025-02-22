@@ -1,10 +1,7 @@
 package com.mo2ver.web.domain.cart.dto;
 
 import com.mo2ver.web.domain.goods.dto.ImageInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -12,8 +9,8 @@ import java.util.Objects;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CartInfo {
 
     private String goodsCode;

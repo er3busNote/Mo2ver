@@ -32,7 +32,10 @@ public class EmailTest {
                 .to("mo2vermail@gmail.com")
                 .subject("테스트")
                 .templateName("email-sample.vm")
-                .info(new EmailDetailInfo("배병주", "ByeongJu"))
+                .info(EmailDetailInfo.builder()
+                        .title("배병주")
+                        .username("ByeongJu")
+                        .build())
                 .build();
     }
 }

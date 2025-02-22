@@ -25,7 +25,7 @@ public class CartRepository {
             log.info("Repository findByUser {} => {}", member.getLoginId(), cartList);
             return cartList;
         }
-        return new CartResponse();
+        return CartResponse.from();
     }
 
     @Caching(put = {
@@ -35,7 +35,7 @@ public class CartRepository {
     @CacheEvict(key = "'all'")
     public CartResponse save(CartInfo cart, Member member) {
         String memberNo = member.getMemberNo();
-        CartResponse cartResponse = new CartResponse();
+        CartResponse cartResponse = CartResponse.from();
         if(userMap.containsKey(memberNo)){
             cartResponse = userMap.get(memberNo);
         }
@@ -59,7 +59,7 @@ public class CartRepository {
             userMap.put(memberNo, cartResponse);
             return cartResponse;
         }
-        return new CartResponse();
+        return CartResponse.from();
     }
 
     @Caching(evict = {

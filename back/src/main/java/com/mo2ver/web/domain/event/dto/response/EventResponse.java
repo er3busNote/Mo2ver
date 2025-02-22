@@ -2,10 +2,7 @@ package com.mo2ver.web.domain.event.dto.response;
 
 import com.mo2ver.web.domain.event.domain.EventManage;
 import com.mo2ver.web.domain.event.dto.ImageInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -14,8 +11,8 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventResponse {
 
     private Long eventManageNo;

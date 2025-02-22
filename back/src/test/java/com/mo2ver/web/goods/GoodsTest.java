@@ -144,8 +144,8 @@ public class GoodsTest extends CsrfConfigTest {
     private GoodsImageAttachRequest getGoodsImageAttachInfo(GoodsImageRequest goodsImageRequest) {
         return (GoodsImageAttachRequest) GoodsImageAttachRequest.builder()
                 .goodsImg(Arrays.asList(
-                        new FileAttachInfo("123", "image1.png", "image/png", 2048, ".png"),
-                        new FileAttachInfo("124", "image2.jpg", "image/jpeg", 1024, ".jpg")
+                        FileAttachInfo.from(123, "image1.png", "image/png", 2048, ".png"),
+                        FileAttachInfo.from(124, "image2.jpg", "image/jpeg", 1024, ".jpg")
                 ))
                 .goodsName(goodsImageRequest.getGoodsName())
                 .largeCategoryCode(goodsImageRequest.getLargeCategoryCode())

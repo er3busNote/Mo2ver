@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.cart.dto.response;
 
 import com.mo2ver.web.domain.cart.dto.CartInfo;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,17 @@ import java.util.stream.IntStream;
 @Data
 @Component
 @SessionScope
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CartResponse {
 
     private List<CartInfo> cartList = new ArrayList<>();
 
     private int cartTotal = 0;
+
+    public static CartResponse from() {
+        return new CartResponse();
+    }
 
     public void addCart(CartInfo cart) {
 

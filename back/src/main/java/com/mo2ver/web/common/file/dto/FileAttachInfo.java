@@ -2,15 +2,12 @@ package com.mo2ver.web.common.file.dto;
 
 import com.mo2ver.web.global.common.util.BeanUtil;
 import com.mo2ver.web.global.common.util.JasyptUtil;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileAttachInfo {
 
     private String fileAttachCode;
@@ -22,6 +19,10 @@ public class FileAttachInfo {
     private static String getEncryptor(Integer id) {
         JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
         return jasyptUtil.encrypt(String.valueOf(id));
+    }
+
+    public static FileAttachInfo from(Integer fileAttachCode, String fileName, String fileType, Integer fileSize, String fileExtension) {
+        return new FileAttachInfo(getEncryptor(fileAttachCode), fileName, fileType, fileSize, fileExtension);
     }
 
     public static FileAttachInfo of(FileInfo fileInfo) {
