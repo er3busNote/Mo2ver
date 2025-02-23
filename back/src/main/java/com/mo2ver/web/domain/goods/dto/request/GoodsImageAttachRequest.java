@@ -2,16 +2,14 @@ package com.mo2ver.web.domain.goods.dto.request;
 
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.global.common.validation.MinListSize;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GoodsImageAttachRequest extends GoodsImageRequest {

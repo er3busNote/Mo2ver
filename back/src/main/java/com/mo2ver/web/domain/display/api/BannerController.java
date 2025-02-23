@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,6 +89,38 @@ public class BannerController {
             @CurrentUser Member currentUser
     ) {
         return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerInfo));
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<ResponseHandler> createBanner(
+            @RequestBody @Valid BannerImageInfo bannerImageInfo,
+            @CurrentUser Member currentUser
+    ) {
+        BannerManage bannerManage = bannerService.saveImageBanner(bannerImageInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + bannerManage.getBannerManageNo()))
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.CREATED.value())
+                        .message("배너정보가 저장되었습니다")
+                        .build());
+    }
+
+    @PatchMapping(value = "/update")
+    public ResponseEntity updateBanner(
+            @RequestBody @Validated(BannerImageInfo.Update.class) BannerImageInfo bannerImageInfo,
+            @CurrentUser Member currentUser
+    ) {
+        try {
+            bannerService.updateImageBanner(bannerImageInfo, currentUser);
+            return ResponseEntity.ok()
+                    .body(ResponseHandler.builder()
+                            .status(HttpStatus.OK.value())
+                            .message("배너정보가 수정되었습니다")
+                            .build());
+        } catch (Exception e) {
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, new HashMap<String, Object>(){{
+                put("error", e.getMessage());
+            }}));
+        }
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

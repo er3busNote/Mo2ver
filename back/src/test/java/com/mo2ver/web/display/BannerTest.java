@@ -1,6 +1,7 @@
 package com.mo2ver.web.display;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import java.util.Date;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -93,6 +95,42 @@ public class BannerTest extends CsrfConfigTest {
 
         BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
 
+        mockMvc.perform(post("/banner/create")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bannerImageInfo)))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    @DisplayName("배너 이미지정보 수정 확인")
+    public void updateBannerImageTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
+
+        mockMvc.perform(patch("/banner/update")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bannerImageInfo)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @DisplayName("배너 이미지정보 첨부파일 저장 확인")
+    public void createBannerImageUploadTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
+
         MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
 
@@ -111,16 +149,17 @@ public class BannerTest extends CsrfConfigTest {
 
     private BannerImageInfo getBannerImageInfo() {
         return BannerImageInfo.builder()
+                .bannerNo(31L)
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
                 .position("")
                 .type("BN")
-                .code("MAN")
+                .code("WOMAN")
                 .useyn('Y')
                 .bnnrImg(Arrays.asList(
-                        this.getBannerDetailInfo(1),
-                        this.getBannerDetailInfo(2)
+                        this.getBannerDetailInfo(3),
+                        this.getBannerDetailInfo(4)
                 ))
                 .build();
     }
@@ -129,6 +168,7 @@ public class BannerTest extends CsrfConfigTest {
         return BannerImageDetailInfo.builder()
                 .title("테스트 " + i)
                 .cnntUrl("https://mo2ver.com/test" + i + ".jpg")
+                .file(FileAttachInfo.from(100011, "image1.png", "image/png", 2048, ".png").getFileAttachCode())
                 .useyn('Y')
                 .build();
     }

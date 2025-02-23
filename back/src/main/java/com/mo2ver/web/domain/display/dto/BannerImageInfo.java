@@ -11,6 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BannerImageInfo {
 
+    @NotNull(groups = Update.class)
     private Long bannerNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")
@@ -47,6 +49,8 @@ public class BannerImageInfo {
     private Character useyn;
 
     private List<BannerImageDetailInfo> bnnrImg;
+
+    public interface Update extends Default {}
 
     @QueryProjection
     public BannerImageInfo(Long bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<BannerImageDetailInfo> bnnrImg) {

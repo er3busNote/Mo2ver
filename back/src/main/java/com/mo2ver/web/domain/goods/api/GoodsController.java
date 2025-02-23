@@ -85,20 +85,16 @@ public class GoodsController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createGoods(@RequestBody @Valid GoodsImageAttachRequest goodsImageAttachRequest,
-                                      @CurrentUser Member currentUser) {
-        HashMap<String, Object> response = new HashMap<>();
-        try {
-            Price price = goodsService.saveImageGoods(goodsImageAttachRequest, currentUser);
-            return ResponseEntity.created(URI.create("/create/" + price.getGoodsCode()))
-                    .body(ResponseHandler.builder()
-                            .status(HttpStatus.CREATED.value())
-                            .message("상품정보가 저장되었습니다")
-                            .build());
-        } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
-        }
+    public ResponseEntity<ResponseHandler> createGoods(
+            @RequestBody @Valid GoodsImageAttachRequest goodsImageAttachRequest,
+            @CurrentUser Member currentUser
+    ) {
+        Price price = goodsService.saveImageGoods(goodsImageAttachRequest, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + price.getGoodsCode()))
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.CREATED.value())
+                        .message("상품정보가 저장되었습니다")
+                        .build());
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

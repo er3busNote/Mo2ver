@@ -87,7 +87,7 @@ public class GoodsService {
     }
 
     @Transactional
-    public Price saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) throws Exception {
+    public Price saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         Price price = this.priceRepository.save(Price.of(goodsImageAttachRequest, currentUser));
         if (goodsImageAttachRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachRequest, currentUser));
         for (int i = 0; i < goodsImageAttachRequest.getGoodsImg().size(); i++) {

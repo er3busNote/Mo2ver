@@ -10,6 +10,7 @@ import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
 import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
 import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -81,6 +82,24 @@ public class BannerService {
     }
 
     @Transactional
+    public BannerManage saveImageBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
+        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
+        List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
+        for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
+            BannerImageDetailInfo bannerImageDetailInfo = listBannerImageDetailInfo.get(i);
+            String fileAttachCode = fileService.getFileAttachCode(bannerImageDetailInfo.getFile());
+            this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, Integer.parseInt(fileAttachCode), i+1, currentUser));
+        }
+        return bannerManage;
+    }
+
+    @Transactional
+    public void updateImageBanner(BannerImageInfo bannerImageInfo, Member currentUser)  throws Exception {
+        BannerManage bannerManage = this.findBannerManageById(bannerImageInfo.getBannerNo());
+        bannerManage.update(bannerImageInfo, currentUser);
+    }
+
+    @Transactional
     public BannerManage saveImageBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
@@ -92,5 +111,10 @@ public class BannerService {
             this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
         }
         return bannerManage;
+    }
+
+    private BannerManage findBannerManageById(long id) {
+        return this.bannerManageRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 배너정보 입니다."));
     }
 }

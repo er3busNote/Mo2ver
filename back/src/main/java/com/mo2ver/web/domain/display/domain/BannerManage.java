@@ -1,8 +1,11 @@
 package com.mo2ver.web.domain.display.domain;
 
+import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
 import com.mo2ver.web.domain.display.dto.BannerImageInfo;
 import com.mo2ver.web.domain.display.dto.GoodsDisplayInfo;
 import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.global.common.util.BeanUtil;
+import com.mo2ver.web.global.common.util.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -67,6 +70,60 @@ public class BannerManage {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    private static String getDecryptor(String attachFile) {
+        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
+        return jasyptUtil.decrypt(attachFile);
+    }
+
+    public void update(BannerImageInfo bannerImageInfo, Member currentUser) {
+        this.subject = bannerImageInfo.getTitle();
+        this.displayStartDate = bannerImageInfo.getStartDate();
+        this.displayEndDate = bannerImageInfo.getEndDate();
+        this.displayConditionCode = bannerImageInfo.getCode();
+        this.displayYesNo = bannerImageInfo.getUseyn();
+        this.updater = currentUser.getMemberNo();
+
+        int oldSize = this.bannerDetailList.size();
+        this.bannerDetailList.addAll(this.updateBannerDetailList(bannerImageInfo.getBnnrImg()));
+        this.bannerDetailList.subList(0, oldSize).clear();
+
+        sortBannerDetailList();
+    }
+
+    private List<BannerDetail> updateBannerDetailList(List<BannerImageDetailInfo> bannerImageDetailInfoList) {
+        return bannerImageDetailInfoList.stream()
+                .map(this::createOrUpdateBannerDetail)
+                .collect(Collectors.toList());
+    }
+
+    private BannerDetail createOrUpdateBannerDetail(BannerImageDetailInfo bannerImageDetailInfo) {
+        BannerDetail bannerDetail = this.bannerDetailList.stream()
+                .filter(it -> it.getBannerDetailId().equals(bannerImageDetailInfo.getId()))
+                .findFirst()
+                .orElseGet(() -> BannerDetail.from(from(this.bannerManageNo, this.updater)));
+        bannerDetail.setBannerContents(bannerImageDetailInfo.getTitle());
+        bannerDetail.setConnectUrl(bannerImageDetailInfo.getCnntUrl());
+        bannerDetail.setImageAttachFile(Integer.parseInt(getDecryptor(bannerImageDetailInfo.getFile())));
+        bannerDetail.setUseYesNo(bannerImageDetailInfo.getUseyn());
+        bannerDetail.setUpdater(this.updater);
+        return bannerDetail;
+    }
+
+    private void sortBannerDetailList() {
+        int index = 1;
+        for (BannerDetail bannerDetail: this.bannerDetailList) {
+            bannerDetail.setDetailSequence(index++);
+        }
+    }
+
+    public static BannerManage from(Long bannerManageNo, String updater) {
+        return BannerManage.builder()
+                .bannerManageNo(bannerManageNo)
+                .register(updater)
+                .updater(updater)
+                .build();
+    }
 
     public static BannerManage of(BannerImageInfo bannerImageInfo, Member currentUser) {
         return BannerManage.builder()

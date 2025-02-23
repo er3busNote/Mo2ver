@@ -78,6 +78,15 @@ public class BannerDetail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
+    public static BannerDetail from(BannerManage bannerManage) {
+        return BannerDetail.builder()
+                .bannerManageNo(bannerManage)
+                .sortSequence(1)
+                .register(bannerManage.getRegister())
+                .updater(bannerManage.getUpdater())
+                .build();
+    }
+
     public static BannerDetail of(BannerManage bannerManage, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
                 .bannerManageNo(bannerManage)
