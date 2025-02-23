@@ -95,7 +95,7 @@ public class BannerTest extends CsrfConfigTest {
 
         BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
 
-        mockMvc.perform(post("/banner/create")
+        mockMvc.perform(post("/banner/images/create")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bannerImageInfo)))
@@ -113,7 +113,7 @@ public class BannerTest extends CsrfConfigTest {
 
         BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
 
-        mockMvc.perform(patch("/banner/update")
+        mockMvc.perform(patch("/banner/images/update")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bannerImageInfo)))
@@ -182,7 +182,7 @@ public class BannerTest extends CsrfConfigTest {
 
         GoodsDisplayInfo goodsDisplayInfo = this.getGoodsDisplayInfo();
 
-        mockMvc.perform(post("/banner/goods")
+        mockMvc.perform(post("/banner/goods/create")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(goodsDisplayInfo)))
@@ -190,18 +190,36 @@ public class BannerTest extends CsrfConfigTest {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    @DisplayName("상품 전시정보 수정 확인")
+    public void updateGoodsDisplay() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        GoodsDisplayInfo goodsDisplayInfo = this.getGoodsDisplayInfo();
+
+        mockMvc.perform(patch("/banner/goods/update")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(goodsDisplayInfo)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     private GoodsDisplayInfo getGoodsDisplayInfo() {
         return GoodsDisplayInfo.builder()
+                .bannerNo(32L)
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
                 .position("")
                 .type("GD")
-                .code("WOMAN")
+                .code("MAN")
                 .useyn('Y')
                 .goods(Arrays.asList(
-                        this.getGoodsDisplayProductInfo(1),
-                        this.getGoodsDisplayProductInfo(2)
+                        this.getGoodsDisplayProductInfo(3),
+                        this.getGoodsDisplayProductInfo(4)
                 ))
                 .build();
     }

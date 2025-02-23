@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.display.domain;
 import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
 import com.mo2ver.web.domain.display.dto.BannerImageInfo;
 import com.mo2ver.web.domain.display.dto.GoodsDisplayInfo;
+import com.mo2ver.web.domain.display.dto.GoodsDisplayProductInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.util.BeanUtil;
 import com.mo2ver.web.global.common.util.JasyptUtil;
@@ -76,6 +77,21 @@ public class BannerManage {
         return jasyptUtil.decrypt(attachFile);
     }
 
+    public void update(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        this.subject = goodsDisplayInfo.getTitle();
+        this.displayStartDate = goodsDisplayInfo.getStartDate();
+        this.displayEndDate = goodsDisplayInfo.getEndDate();
+        this.displayConditionCode = goodsDisplayInfo.getCode();
+        this.displayYesNo = goodsDisplayInfo.getUseyn();
+        this.updater = currentUser.getMemberNo();
+
+        int oldSize = this.bannerProductList.size();
+        this.bannerProductList.addAll(this.updateBannerProductList(goodsDisplayInfo.getGoods()));
+        this.bannerProductList.subList(0, oldSize).clear();
+
+        this.sortBannerProductList();
+    }
+
     public void update(BannerImageInfo bannerImageInfo, Member currentUser) {
         this.subject = bannerImageInfo.getTitle();
         this.displayStartDate = bannerImageInfo.getStartDate();
@@ -88,13 +104,30 @@ public class BannerManage {
         this.bannerDetailList.addAll(this.updateBannerDetailList(bannerImageInfo.getBnnrImg()));
         this.bannerDetailList.subList(0, oldSize).clear();
 
-        sortBannerDetailList();
+        this.sortBannerDetailList();
+    }
+
+    private List<BannerProduct> updateBannerProductList(List<GoodsDisplayProductInfo> bannerGoodsProductInfoList) {
+        return bannerGoodsProductInfoList.stream()
+                .map(this::createOrUpdateBannerProduct)
+                .collect(Collectors.toList());
     }
 
     private List<BannerDetail> updateBannerDetailList(List<BannerImageDetailInfo> bannerImageDetailInfoList) {
         return bannerImageDetailInfoList.stream()
                 .map(this::createOrUpdateBannerDetail)
                 .collect(Collectors.toList());
+    }
+
+    private BannerProduct createOrUpdateBannerProduct(GoodsDisplayProductInfo goodsDisplayProductInfo) {
+        BannerProduct bannerProduct = this.bannerProductList.stream()
+                .filter(it -> it.getBannerProductId().equals(goodsDisplayProductInfo.getId()))
+                .findFirst()
+                .orElseGet(() -> BannerProduct.from(from(this.bannerManageNo, this.updater)));
+        bannerProduct.setProductCode(goodsDisplayProductInfo.getGoodsCode());
+        bannerProduct.setProductName(goodsDisplayProductInfo.getGoodsName());
+        bannerProduct.setUpdater(this.updater);
+        return bannerProduct;
     }
 
     private BannerDetail createOrUpdateBannerDetail(BannerImageDetailInfo bannerImageDetailInfo) {
@@ -108,6 +141,13 @@ public class BannerManage {
         bannerDetail.setUseYesNo(bannerImageDetailInfo.getUseyn());
         bannerDetail.setUpdater(this.updater);
         return bannerDetail;
+    }
+
+    private void sortBannerProductList() {
+        int index = 1;
+        for (BannerProduct bannerProduct: this.bannerProductList) {
+            bannerProduct.setSortSequence(index++);
+        }
     }
 
     private void sortBannerDetailList() {

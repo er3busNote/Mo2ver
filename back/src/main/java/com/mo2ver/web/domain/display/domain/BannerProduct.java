@@ -69,6 +69,14 @@ public class BannerProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
+    public static BannerProduct from(BannerManage bannerManage) {
+        return BannerProduct.builder()
+                .bannerManageNo(bannerManage)
+                .register(bannerManage.getRegister())
+                .updater(bannerManage.getUpdater())
+                .build();
+    }
+
     public static BannerProduct of(BannerManage bannerManage, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
         return BannerProduct.builder()
                 .bannerManageNo(bannerManage)

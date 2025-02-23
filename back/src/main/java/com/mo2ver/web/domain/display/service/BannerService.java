@@ -82,7 +82,13 @@ public class BannerService {
     }
 
     @Transactional
-    public BannerManage saveImageBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
+    public void updateGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        BannerManage bannerManage = this.findBannerManageById(goodsDisplayInfo.getBannerNo());
+        bannerManage.update(goodsDisplayInfo, currentUser);
+    }
+
+    @Transactional
+    public BannerManage saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
@@ -94,13 +100,13 @@ public class BannerService {
     }
 
     @Transactional
-    public void updateImageBanner(BannerImageInfo bannerImageInfo, Member currentUser)  throws Exception {
+    public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser)  throws Exception {
         BannerManage bannerManage = this.findBannerManageById(bannerImageInfo.getBannerNo());
         bannerManage.update(bannerImageInfo, currentUser);
     }
 
     @Transactional
-    public BannerManage saveImageBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
+    public BannerManage saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {

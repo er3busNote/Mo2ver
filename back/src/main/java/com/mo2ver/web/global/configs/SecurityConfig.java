@@ -111,6 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.DELETE, "/cart/**").hasAnyRole("USER")          // 3.4) 장바구니 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
+                .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest()
                 .authenticated()

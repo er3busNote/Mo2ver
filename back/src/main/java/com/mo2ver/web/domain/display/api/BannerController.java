@@ -62,8 +62,16 @@ public class BannerController {
         return ResponseEntity.ok().body(bannerService.findBannerDisplay());
     }
 
-    @PostMapping("/goods")
-    public ResponseEntity<ResponseHandler> goodsBanner(
+    @PostMapping("/goods/detail")
+    public ResponseEntity<GoodsDisplayInfo> goodsDetailBanner(
+            @RequestBody @Valid BannerInfo bannerInfo,
+            @CurrentUser Member currentUser
+    ) {
+        return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerInfo));
+    }
+
+    @PostMapping("/goods/create")
+    public ResponseEntity<ResponseHandler> createGoodsBanner(
             @RequestBody @Valid GoodsDisplayInfo goodsDisplayInfo,
             @CurrentUser Member currentUser
     ) {
@@ -75,6 +83,25 @@ public class BannerController {
                 .build());
     }
 
+    @PatchMapping("/goods/update")
+    public ResponseEntity updateGoodsBanner(
+            @RequestBody @Validated(GoodsDisplayInfo.Update.class) GoodsDisplayInfo goodsDisplayInfo,
+            @CurrentUser Member currentUser
+    ) {
+        try {
+            bannerService.updateGoodsDisplay(goodsDisplayInfo, currentUser);
+            return ResponseEntity.ok()
+                    .body(ResponseHandler.builder()
+                            .status(HttpStatus.OK.value())
+                            .message("상품전시정보가 수정되었습니다")
+                            .build());
+        } catch (Exception e) {
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, new HashMap<String, Object>(){{
+                put("error", e.getMessage());
+            }}));
+        }
+    }
+
     @PostMapping("/images/detail")
     public ResponseEntity<BannerImageInfo> imagesDetailBanner(
             @RequestBody @Valid BannerInfo bannerInfo,
@@ -83,38 +110,30 @@ public class BannerController {
         return ResponseEntity.ok().body(bannerService.findBannerImagesDetail(bannerInfo));
     }
 
-    @PostMapping("/goods/detail")
-    public ResponseEntity<GoodsDisplayInfo> goodsDetailBanner(
-            @RequestBody @Valid BannerInfo bannerInfo,
-            @CurrentUser Member currentUser
-    ) {
-        return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerInfo));
-    }
-
-    @PostMapping(value = "/create")
-    public ResponseEntity<ResponseHandler> createBanner(
+    @PostMapping(value = "/images/create")
+    public ResponseEntity<ResponseHandler> createImagesBanner(
             @RequestBody @Valid BannerImageInfo bannerImageInfo,
             @CurrentUser Member currentUser
     ) {
-        BannerManage bannerManage = bannerService.saveImageBanner(bannerImageInfo, currentUser);
+        BannerManage bannerManage = bannerService.saveImagesBanner(bannerImageInfo, currentUser);
         return ResponseEntity.created(URI.create("/create/" + bannerManage.getBannerManageNo()))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
-                        .message("배너정보가 저장되었습니다")
+                        .message("배너이미지정보가 저장되었습니다")
                         .build());
     }
 
-    @PatchMapping(value = "/update")
-    public ResponseEntity updateBanner(
+    @PatchMapping(value = "/images/update")
+    public ResponseEntity updateImagesBanner(
             @RequestBody @Validated(BannerImageInfo.Update.class) BannerImageInfo bannerImageInfo,
             @CurrentUser Member currentUser
     ) {
         try {
-            bannerService.updateImageBanner(bannerImageInfo, currentUser);
+            bannerService.updateImagesBanner(bannerImageInfo, currentUser);
             return ResponseEntity.ok()
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.OK.value())
-                            .message("배너정보가 수정되었습니다")
+                            .message("배너이미지정보가 수정되었습니다")
                             .build());
         } catch (Exception e) {
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, new HashMap<String, Object>(){{
@@ -135,11 +154,11 @@ public class BannerController {
             return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
         }
         try {
-            BannerManage bannerManage = bannerService.saveImageBanner(files, bannerImageInfo, currentUser);
+            BannerManage bannerManage = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
             return ResponseEntity.created(URI.create("/upload/" + bannerManage.getBannerManageNo()))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())
-                            .message("배너정보가 저장되었습니다")
+                            .message("배너이미지정보가 저장되었습니다")
                             .build());
         } catch (Exception e) {
             response.put("error", e.getMessage());
