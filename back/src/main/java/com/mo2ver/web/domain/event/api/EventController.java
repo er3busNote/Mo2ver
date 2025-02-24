@@ -77,8 +77,8 @@ public class EventController {
             }
         }
         try {
-            EventManage eventManage = eventService.saveImageEvent(eventFiles, eventImageRequest, currentUser);
-            return ResponseEntity.created(URI.create("/upload/" + eventManage.getEventManageNo()))
+            Long eventManageNo = eventService.saveImageEvent(eventFiles, eventImageRequest, currentUser);
+            return ResponseEntity.created(URI.create("/upload/" + eventManageNo))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())
                             .message("배너정보가 저장되었습니다")

@@ -43,7 +43,7 @@ public class EventService {
     }
 
     @Transactional
-    public EventManage saveImageEvent(List<MultipartFile> eventFiles, EventImageRequest eventImageRequest, Member currentUser) throws Exception {
+    public Long saveImageEvent(List<MultipartFile> eventFiles, EventImageRequest eventImageRequest, Member currentUser) throws Exception {
         EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageRequest, currentUser));
         for (int i = 0; i < eventFiles.size(); i++) {
             MultipartFile file = eventFiles.get(i);
@@ -51,7 +51,7 @@ public class EventService {
             FileInfo fileInfo = this.fileService.saveFile(file, EVENT_DIRECTORY, currentUser);
             this.eventImageRepository.save(EventImage.of(eventManage, fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
-        return eventManage;
+        return eventManage.getEventManageNo();
     }
 
     private Character getBasicImageYesNo(int i) {

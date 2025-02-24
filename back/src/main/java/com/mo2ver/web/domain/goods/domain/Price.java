@@ -98,6 +98,25 @@ public class Price implements Persistable<PriceId> {
         return priceId == null || goodsCode == null;
     }
 
+    public static Price of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
+        PriceId priceId = new PriceId(goods.getGoodsCode(), goods.getUpdateDate());
+        return Price.builder()
+                .priceId(priceId)
+                .goodsCode(goods)
+                .supplyPrice(goodsImageRequest.getSupplyPrice())
+                .salePrice(goodsImageRequest.getSalePrice())
+                .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())
+                .buyLimitYesNo(goodsImageRequest.getBuyLimitYesNo())
+                .buyLimitCondition(goodsImageRequest.getBuyLimitCondition())
+                .salePeriodYesNo(goodsImageRequest.getSalePeriodYesNo())
+                .saleStartDate(goodsImageRequest.getSaleStartDate())
+                .saleEndDate(goodsImageRequest.getSaleEndDate())
+                .saleConditionCode("10")
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
+
     public static Price of(GoodsImageRequest goodsImageRequest, Member currentUser) {
         Goods goods = Goods.builder().updateDate(LocalDateTime.now()).build();
         PriceId priceId = new PriceId(goods.getGoodsCode(), goods.getUpdateDate());

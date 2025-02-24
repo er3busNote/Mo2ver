@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.goods.service;
 
-import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.goods.dao.*;
@@ -82,30 +81,22 @@ public class GoodsService {
     }
 
     @Transactional
-    public Price saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
-        Price price = this.priceRepository.save(Price.of(goodsImageAttachRequest, currentUser));
-        if (goodsImageAttachRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageAttachRequest, currentUser));
-        for (int i = 0; i < goodsImageAttachRequest.getGoodsImg().size(); i++) {
-            FileAttachInfo fileAttachInfo = goodsImageAttachRequest.getGoodsImg().get(i);
-            String fileAttachCode = fileService.getFileAttachCode(fileAttachInfo.getFileAttachCode());
-            Character basicImageYesNo = 'N';
-            if (i == 0) basicImageYesNo = 'Y';
-            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), Integer.parseInt(fileAttachCode), basicImageYesNo, fileAttachInfo.getFileExtension(), i+1, currentUser));
-        }
-        return price;
+    public String saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+        Goods goods = new Goods(goodsImageAttachRequest, currentUser);
+        return this.goodsRepository.save(goods).getGoodsCode();
     }
 
     @Transactional
-    public Price saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
+    public String saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
         Price price = this.priceRepository.save(Price.of(goodsImageRequest, currentUser));
-        if (goodsImageRequest.getSalePeriodYesNo() == 'Y') this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageRequest, currentUser));
+        if ('Y' == goodsImageRequest.getSalePeriodYesNo()) this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageRequest, currentUser));
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
             FileInfo fileInfo = this.fileService.saveFile(file, GOODS_DIRECTORY, currentUser);
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
-        return price;
+        return price.getGoodsCode().getGoodsCode();
     }
 
     private Character getBasicImageYesNo(int i) {

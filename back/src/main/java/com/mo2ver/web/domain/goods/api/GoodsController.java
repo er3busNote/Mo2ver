@@ -85,8 +85,8 @@ public class GoodsController {
             @RequestBody @Valid GoodsImageAttachRequest goodsImageAttachRequest,
             @CurrentUser Member currentUser
     ) {
-        Price price = goodsService.saveImageGoods(goodsImageAttachRequest, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + price.getGoodsCode()))
+        String goodsCode = goodsService.saveImageGoods(goodsImageAttachRequest, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + goodsCode))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("상품정보가 저장되었습니다")
@@ -105,8 +105,8 @@ public class GoodsController {
             return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
         }
         try {
-            Price price = goodsService.saveImageGoods(files, goodsImageRequest, currentUser);
-            return ResponseEntity.created(URI.create("/upload/" + price.getGoodsCode()))
+            String goodsCode = goodsService.saveImageGoods(files, goodsImageRequest, currentUser);
+            return ResponseEntity.created(URI.create("/upload/" + goodsCode))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value()).message("상품정보가 저장되었습니다")
                             .build());

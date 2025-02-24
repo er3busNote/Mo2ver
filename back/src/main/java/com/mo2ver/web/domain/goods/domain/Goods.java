@@ -1,7 +1,11 @@
 package com.mo2ver.web.domain.goods.domain;
 
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
+import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.global.common.util.BeanUtil;
+import com.mo2ver.web.global.common.util.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,13 +14,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "GD")   // 상품
 @Getter @Setter
 @EqualsAndHashCode(of = "goodsCode")
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Builder @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Goods {
 
     @Id
@@ -64,7 +72,7 @@ public class Goods {
 //    @OneToOne(mappedBy = "applyDate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private Price priceDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumns(value = {
             @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
             @JoinColumn(name = "UPD_DT", referencedColumnName = "APPL_DT", insertable = false, updatable = false)
@@ -72,7 +80,10 @@ public class Goods {
     private Price price;
 
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GoodsImage> goodsImageList;
+    private List<Discount> goodsDiscountList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GoodsImage> goodsImageList = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -91,6 +102,62 @@ public class Goods {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    private static String getDecryptor(String attachFile) {
+        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
+        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
+    }
+
+    public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+        this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
+        this.goodsCondition = "10";
+        this.register = currentUser.getMemberNo();
+        this.updateDate = LocalDateTime.now();
+
+        this.price = this.createGoodsPrice(goodsImageAttachRequest, currentUser);
+        if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
+            this.goodsDiscountList.addAll(this.createGoodsDiscountList(goodsImageAttachRequest, currentUser));
+        }
+        this.goodsImageList.addAll(this.createGoodsImageList(goodsImageAttachRequest.getGoodsImg(), currentUser));
+
+        this.sortGoodsImageList();
+    }
+
+    private void createOrUpdateGoods(GoodsImageRequest goodsImageRequest, Member currentUser) {
+        this.goodsName = goodsImageRequest.getGoodsName();
+        this.largeCategoryCode = goodsImageRequest.getLargeCategoryCode();
+        this.mediumCategoryCode = goodsImageRequest.getMediumCategoryCode();
+        this.smallCategoryCode = goodsImageRequest.getSmallCategoryCode();
+        this.goodsGender = goodsImageRequest.getGoodsGender();
+        this.goodsBrand = goodsImageRequest.getGoodsBrand();
+        this.goodsYear = goodsImageRequest.getGoodsYear();
+        this.keyword = goodsImageRequest.getKeyword();
+        this.summaryInfo = goodsImageRequest.getSummaryInfo();
+        this.updater = currentUser.getMemberNo();
+    }
+
+    private Price createGoodsPrice(GoodsImageRequest goodsImageRequest, Member currentUser) {
+        return Price.of(this, goodsImageRequest, currentUser);
+    }
+
+    private List<Discount> createGoodsDiscountList(GoodsImageRequest goodsImageRequest, Member currentUser) {
+        return Collections.singletonList(Discount.of(this, goodsImageRequest, currentUser));
+    }
+
+    private List<GoodsImage> createGoodsImageList(List<FileAttachInfo> fileAttachInfoList, Member currentUser) {
+        return fileAttachInfoList.stream()
+                .map(info -> GoodsImage.of(this, Integer.parseInt(getDecryptor(info.getFileAttachCode())), info.getFileExtension(), currentUser))
+                .collect(Collectors.toList());
+    }
+
+    private void sortGoodsImageList() {
+        int index = 1;
+        for (GoodsImage goodsImage : this.goodsImageList) {
+            if(index == 1) goodsImage.setBasicImageYesNo('Y');
+            else goodsImage.setBasicImageYesNo('N');
+            goodsImage.setSortSequence(index++);
+        }
+    }
 
     public static Goods of(GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Goods.builder()

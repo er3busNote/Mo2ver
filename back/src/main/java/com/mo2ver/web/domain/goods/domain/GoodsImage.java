@@ -74,6 +74,17 @@ public class GoodsImage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
+    public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, String fileExtension, Member currentUser) {
+        return GoodsImage.builder()
+                .goodsCode(goods)
+                .goodsImageAttachFile(goodsImageAttachFile)
+                .goodsImageExtension(fileExtension)
+                .useYesNo('Y')
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
+
     public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
         return GoodsImage.builder()
                 .goodsCode(goods)
