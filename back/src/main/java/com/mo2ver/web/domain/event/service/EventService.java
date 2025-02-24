@@ -10,6 +10,7 @@ import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
 import com.mo2ver.web.domain.member.domain.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,17 +23,14 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private static final String EVENT_DIRECTORY = "event";
 
-    @Autowired
-    protected FileService fileService;
-
-    @Autowired
-    protected EventManageRepository eventManageRepository;
-    @Autowired
-    protected EventImageRepository eventImageRepository;
+    private final FileService fileService;
+    private final EventManageRepository eventManageRepository;
+    private final EventImageRepository eventImageRepository;
 
     @Transactional
     public Page<EventDetailResponse> findEvent(Integer id, Pageable pageable) {

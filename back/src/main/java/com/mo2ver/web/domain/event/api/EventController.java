@@ -13,6 +13,7 @@ import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,18 +32,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/event")
 public class EventController {
 
     private final EventService eventService;
     private final ErrorHandler errorHandler;
     private final EventImageValidator eventImageValidator;
-
-    public EventController(EventService eventService, ErrorHandler errorHandler, EventImageValidator eventImageValidator) {
-        this.eventService = eventService;
-        this.errorHandler = errorHandler;
-        this.eventImageValidator = eventImageValidator;
-    }
 
     @GetMapping("/info/{id}")
     public ResponseEntity<Page<EventDetailResponse>> infoEvent(

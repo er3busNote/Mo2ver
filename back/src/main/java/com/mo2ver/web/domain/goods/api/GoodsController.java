@@ -15,6 +15,7 @@ import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,18 +33,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/goods")
 public class GoodsController {
 
     private final GoodsService goodsService;
     private final ErrorHandler errorHandler;
     private final GoodsImageValidator goodsImageValidator;
-
-    public GoodsController(GoodsService goodsService, ErrorHandler errorHandler, GoodsImageValidator goodsImageValidator) {
-        this.goodsService = goodsService;
-        this.errorHandler = errorHandler;
-        this.goodsImageValidator = goodsImageValidator;
-    }
 
     @GetMapping("/info/{id}")
     public ResponseEntity<GoodsResponse> infoGoods(

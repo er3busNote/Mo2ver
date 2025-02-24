@@ -14,6 +14,7 @@ import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.member.domain.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,21 +28,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GoodsService {
 
     private static final String GOODS_DIRECTORY = "goods";
 
-    @Autowired
-    protected FileService fileService;
-
-    @Autowired
-    protected GoodsRepository goodsRepository;
-    @Autowired
-    protected PriceRepository priceRepository;
-    @Autowired
-    protected DiscountRepository discountRepository;
-    @Autowired
-    protected GoodsImageRepository goodsImageRepository;
+    private final FileService fileService;
+    private final GoodsRepository goodsRepository;
+    private final PriceRepository priceRepository;
+    private final DiscountRepository discountRepository;
+    private final GoodsImageRepository goodsImageRepository;
 
     @Transactional
     public GoodsResponse findGoods(String id) {

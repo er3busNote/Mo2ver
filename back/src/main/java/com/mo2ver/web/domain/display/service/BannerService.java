@@ -11,6 +11,7 @@ import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
 import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.exception.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,17 +27,14 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BannerService {
 
     private static final String BANNER_DIRECTORY = "banner";
 
-    @Autowired
-    protected FileService fileService;
-
-    @Autowired
-    protected BannerManageRepository bannerManageRepository;
-    @Autowired
-    protected BannerDetailRepository bannerDetailRepository;
+    private final FileService fileService;
+    private final BannerManageRepository bannerManageRepository;
+    private final BannerDetailRepository bannerDetailRepository;
 
     @Transactional
     public Page<BannerInfo> findBannerlist(Pageable pageable) {

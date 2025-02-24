@@ -4,6 +4,7 @@ import com.mo2ver.web.domain.member.dao.MemberRepository;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.domain.member.domain.MemberRole;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,13 +21,11 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
 
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Member saveAuth(Member member) {
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));

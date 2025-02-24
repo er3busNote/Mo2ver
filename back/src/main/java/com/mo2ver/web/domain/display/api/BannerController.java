@@ -13,6 +13,7 @@ import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,18 +33,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/banner")
 public class BannerController {
 
     private final BannerService bannerService;
     private final ErrorHandler errorHandler;
     private final BannerImageValidator bannerImageValidator;
-
-    public BannerController(BannerService bannerService, ErrorHandler errorHandler, BannerImageValidator bannerImageValidator) {
-        this.bannerService = bannerService;
-        this.errorHandler = errorHandler;
-        this.bannerImageValidator = bannerImageValidator;
-    }
 
     @GetMapping("/list")
     public ResponseEntity<Page<BannerInfo>> listBanner(

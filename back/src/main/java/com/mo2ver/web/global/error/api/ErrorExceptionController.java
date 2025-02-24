@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,21 +26,18 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class ErrorExceptionController {
 
     private final ErrorHandler errorHandler;
-
-    public ErrorExceptionController(ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
-    }
 
     /**
      * 지원하지 않은 HTTP Method 호출 할 경우 발생
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    protected ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         HashMap<String, Object> message = new HashMap<>();
         message.put("unsupported", e.getMethod());
         message.put("supported", e.getSupportedMethods());
@@ -51,7 +49,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    protected ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    public ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         HashMap<String, Object> message = new HashMap<>();
         message.put("unsupported", e.getContentType());
         message.put("supported", e.getSupportedMediaTypes());
@@ -63,7 +61,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         HashMap<String, Object> message = new HashMap<>();
         HashMap<String, String> errors = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(error ->
@@ -78,7 +76,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> message = new HashMap<>();
         if (throwable instanceof JsonParseException) {
@@ -128,7 +126,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(HttpMessageNotWritableException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ErrorResponse handleHttpMessageNotWritableException(HttpMessageNotWritableException e) {
+    public ErrorResponse handleHttpMessageNotWritableException(HttpMessageNotWritableException e) {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> message = new HashMap<>();
         if (throwable instanceof JsonMappingException) {
@@ -163,7 +161,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ErrorResponse handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
+    public ErrorResponse handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> message = new HashMap<>();
         if (throwable instanceof IllegalArgumentException) {
@@ -190,7 +188,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ErrorResponse handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
+    public ErrorResponse handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> message = new HashMap<>();
         if (throwable instanceof NonUniqueResultException) {
@@ -217,7 +215,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> message = new HashMap<>();
         if (throwable instanceof SQLException) {
@@ -254,7 +252,7 @@ public class ErrorExceptionController {
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ErrorResponse handleRuntimeException(RuntimeException e) {
+    public ErrorResponse handleRuntimeException(RuntimeException e) {
         HashMap<String, Object> message = new HashMap<>();
         message.put("message", e.getMessage());
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, message);

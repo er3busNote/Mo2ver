@@ -6,6 +6,7 @@ import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.util.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -23,21 +24,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FileService {
 
     private static final String FILE_DIRECTORY = "cmmn";
 
-    @Autowired
-    protected FileRepository fileRepository;
-
-    @Autowired
-    protected FileUtil fileUtil;
-    @Autowired
-    protected JasyptUtil jasyptUtil;
-    @Autowired
-    protected CryptoUtil cryptoUtil;
-
-    protected DateUtil dateUtil;
+    private final FileRepository fileRepository;
+    private final FileUtil fileUtil;
+    private final JasyptUtil jasyptUtil;
+    private final CryptoUtil cryptoUtil;
 
     @Autowired
     private Environment environment;
@@ -77,7 +72,7 @@ public class FileService {
         if(environment.acceptsProfiles("test")){
             targetPath = targetFolder + "_dev";
         }
-        return targetPath + "/" + this.dateUtil.getCurrentDate();
+        return targetPath + "/" + DateUtil.getCurrentDate();
     }
 
     private String getFilePath(Path uploadDirectory) {

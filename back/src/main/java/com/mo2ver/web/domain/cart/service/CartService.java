@@ -4,16 +4,17 @@ import com.mo2ver.web.domain.cart.dao.CartRepository;
 import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.member.domain.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CartService {
 
-    @Autowired
-    protected CartRepository cartRepository;
+    protected final CartRepository cartRepository;
 
     public CartResponse addCart(CartInfo cartInfo, Member currentUser){
         return cartRepository.save(cartInfo, currentUser);

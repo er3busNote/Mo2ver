@@ -7,6 +7,7 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
+import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -19,16 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/file")
 public class FileController {
 
     private final FileService fileService;
     private final ErrorHandler errorHandler;
-
-    public FileController(FileService fileService, ErrorHandler errorHandler) {
-        this.fileService = fileService;
-        this.errorHandler = errorHandler;
-    }
 
     @GetMapping("/image")
     public ResponseEntity fileImage(@RequestParam String id) {

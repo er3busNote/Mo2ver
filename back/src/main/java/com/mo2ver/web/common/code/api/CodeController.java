@@ -6,6 +6,7 @@ import com.mo2ver.web.common.code.service.CodeService;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/code")
 public class CodeController {
 
     private final CodeService codeService;
-
-    public CodeController(CodeService codeService) {
-        this.codeService = codeService;
-    }
 
     @PostMapping("/list")
     public ResponseEntity<Map<String, List<CodeResponse>>> listCode(

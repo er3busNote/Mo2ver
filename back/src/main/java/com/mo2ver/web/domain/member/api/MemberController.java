@@ -11,6 +11,7 @@ import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/member")
 public class MemberController {
 
@@ -42,14 +44,6 @@ public class MemberController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberValidator memberValidator;
-
-    public MemberController(MemberService memberService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, MemberValidator memberValidator, ErrorHandler errorHandler) {
-        this.memberService = memberService;
-        this.errorHandler = errorHandler;
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.memberValidator = memberValidator;
-    }
 
     @PostMapping("/login")
     public ResponseEntity authLogin(@RequestBody @Valid LoginRequest loginRequest,
