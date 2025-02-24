@@ -5,7 +5,6 @@ import com.mo2ver.web.common.code.dto.response.CodeResponse;
 import com.mo2ver.web.common.code.dto.response.GroupCodeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

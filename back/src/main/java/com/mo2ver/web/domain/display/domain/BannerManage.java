@@ -14,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,8 @@ import java.util.stream.Collectors;
 @Table(name = "DP_BNNR_MNG")    // 전시배너관리
 @Getter @Setter
 @EqualsAndHashCode(of = "bannerManageNo")
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Builder @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class BannerManage {
 
     @Id
@@ -49,10 +51,10 @@ public class BannerManage {
     private Character displayYesNo;
 
     @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BannerDetail> bannerDetailList;
+    private List<BannerDetail> bannerDetailList = new ArrayList<>();
 
     @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BannerProduct> bannerProductList;
+    private List<BannerProduct> bannerProductList = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -74,16 +76,31 @@ public class BannerManage {
 
     private static String getDecryptor(String attachFile) {
         JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.decrypt(attachFile);
+        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
+    }
+
+    public BannerManage(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        this.createOrUpdateBannerManage(goodsDisplayInfo, currentUser);
+        this.displayTemplateCode = goodsDisplayInfo.getType();
+        this.register = currentUser.getMemberNo();
+
+        this.bannerProductList.addAll(this.createBannerProductList(goodsDisplayInfo.getGoods(), currentUser));
+
+        this.sortBannerProductList();
+    }
+
+    public BannerManage(BannerImageInfo bannerImageInfo, Member currentUser) {
+        this.createOrUpdateBannerManage(bannerImageInfo, currentUser);
+        this.displayTemplateCode = bannerImageInfo.getType();
+        this.register = currentUser.getMemberNo();
+
+        this.bannerDetailList.addAll(this.createBannerDetailList(bannerImageInfo.getBnnrImg(), currentUser));
+
+        this.sortBannerDetailList();
     }
 
     public void update(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        this.subject = goodsDisplayInfo.getTitle();
-        this.displayStartDate = goodsDisplayInfo.getStartDate();
-        this.displayEndDate = goodsDisplayInfo.getEndDate();
-        this.displayConditionCode = goodsDisplayInfo.getCode();
-        this.displayYesNo = goodsDisplayInfo.getUseyn();
-        this.updater = currentUser.getMemberNo();
+        this.createOrUpdateBannerManage(goodsDisplayInfo, currentUser);
 
         int oldSize = this.bannerProductList.size();
         this.bannerProductList.addAll(this.updateBannerProductList(goodsDisplayInfo.getGoods()));
@@ -93,18 +110,43 @@ public class BannerManage {
     }
 
     public void update(BannerImageInfo bannerImageInfo, Member currentUser) {
-        this.subject = bannerImageInfo.getTitle();
-        this.displayStartDate = bannerImageInfo.getStartDate();
-        this.displayEndDate = bannerImageInfo.getEndDate();
-        this.displayConditionCode = bannerImageInfo.getCode();
-        this.displayYesNo = bannerImageInfo.getUseyn();
-        this.updater = currentUser.getMemberNo();
+        this.createOrUpdateBannerManage(bannerImageInfo, currentUser);
 
         int oldSize = this.bannerDetailList.size();
         this.bannerDetailList.addAll(this.updateBannerDetailList(bannerImageInfo.getBnnrImg()));
         this.bannerDetailList.subList(0, oldSize).clear();
 
         this.sortBannerDetailList();
+    }
+
+    private void createOrUpdateBannerManage(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        this.subject = goodsDisplayInfo.getTitle();
+        this.displayStartDate = goodsDisplayInfo.getStartDate();
+        this.displayEndDate = goodsDisplayInfo.getEndDate();
+        this.displayConditionCode = goodsDisplayInfo.getCode();
+        this.displayYesNo = goodsDisplayInfo.getUseyn();
+        this.updater = currentUser.getMemberNo();
+    }
+
+    private void createOrUpdateBannerManage(BannerImageInfo bannerImageInfo, Member currentUser) {
+        this.subject = bannerImageInfo.getTitle();
+        this.displayStartDate = bannerImageInfo.getStartDate();
+        this.displayEndDate = bannerImageInfo.getEndDate();
+        this.displayConditionCode = bannerImageInfo.getCode();
+        this.displayYesNo = bannerImageInfo.getUseyn();
+        this.updater = currentUser.getMemberNo();
+    }
+
+    private List<BannerProduct> createBannerProductList(List<GoodsDisplayProductInfo> bannerGoodsProductInfoList, Member currentUser) {
+        return bannerGoodsProductInfoList.stream()
+                .map(info -> BannerProduct.of(this, info, currentUser))
+                .collect(Collectors.toList());
+    }
+
+    private List<BannerDetail> createBannerDetailList(List<BannerImageDetailInfo> bannerImageDetailInfoList, Member currentUser) {
+        return bannerImageDetailInfoList.stream()
+                .map(info -> BannerDetail.of(this, info, currentUser))
+                .collect(Collectors.toList());
     }
 
     private List<BannerProduct> updateBannerProductList(List<GoodsDisplayProductInfo> bannerGoodsProductInfoList) {
@@ -123,7 +165,7 @@ public class BannerManage {
         BannerProduct bannerProduct = this.bannerProductList.stream()
                 .filter(it -> it.getBannerProductId().equals(goodsDisplayProductInfo.getId()))
                 .findFirst()
-                .orElseGet(() -> BannerProduct.from(from(this.bannerManageNo, this.updater)));
+                .orElseGet(() -> BannerProduct.from(this));
         bannerProduct.setProductCode(goodsDisplayProductInfo.getGoodsCode());
         bannerProduct.setProductName(goodsDisplayProductInfo.getGoodsName());
         bannerProduct.setUpdater(this.updater);
@@ -134,7 +176,7 @@ public class BannerManage {
         BannerDetail bannerDetail = this.bannerDetailList.stream()
                 .filter(it -> it.getBannerDetailId().equals(bannerImageDetailInfo.getId()))
                 .findFirst()
-                .orElseGet(() -> BannerDetail.from(from(this.bannerManageNo, this.updater)));
+                .orElseGet(() -> BannerDetail.from(this));
         bannerDetail.setBannerContents(bannerImageDetailInfo.getTitle());
         bannerDetail.setConnectUrl(bannerImageDetailInfo.getCnntUrl());
         bannerDetail.setImageAttachFile(Integer.parseInt(getDecryptor(bannerImageDetailInfo.getFile())));
@@ -157,14 +199,6 @@ public class BannerManage {
         }
     }
 
-    public static BannerManage from(Long bannerManageNo, String updater) {
-        return BannerManage.builder()
-                .bannerManageNo(bannerManageNo)
-                .register(updater)
-                .updater(updater)
-                .build();
-    }
-
     public static BannerManage of(BannerImageInfo bannerImageInfo, Member currentUser) {
         return BannerManage.builder()
                 .subject(bannerImageInfo.getTitle())
@@ -176,22 +210,5 @@ public class BannerManage {
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
-    }
-
-    public static BannerManage of(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        BannerManage bannerManage = BannerManage.builder()
-                .subject(goodsDisplayInfo.getTitle())
-                .displayStartDate(goodsDisplayInfo.getStartDate())
-                .displayEndDate(goodsDisplayInfo.getEndDate())
-                .displayTemplateCode(goodsDisplayInfo.getType())
-                .displayConditionCode(goodsDisplayInfo.getCode())
-                .displayYesNo(goodsDisplayInfo.getUseyn())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
-                .build();
-        bannerManage.setBannerProductList(goodsDisplayInfo.getGoods().stream()
-                .map(data -> BannerProduct.of(bannerManage, data, currentUser))
-                .collect(Collectors.toList()));
-        return bannerManage;
     }
 }

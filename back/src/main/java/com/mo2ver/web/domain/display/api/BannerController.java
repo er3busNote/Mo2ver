@@ -66,13 +66,21 @@ public class BannerController {
         return ResponseEntity.ok().body(bannerService.findBannerGoodsDetail(bannerInfo));
     }
 
+    @PostMapping("/images/detail")
+    public ResponseEntity<BannerImageInfo> imagesDetailBanner(
+            @RequestBody @Valid BannerInfo bannerInfo,
+            @CurrentUser Member currentUser
+    ) {
+        return ResponseEntity.ok().body(bannerService.findBannerImagesDetail(bannerInfo));
+    }
+
     @PostMapping("/goods/create")
     public ResponseEntity<ResponseHandler> createGoodsBanner(
             @RequestBody @Valid GoodsDisplayInfo goodsDisplayInfo,
             @CurrentUser Member currentUser
     ) {
-        BannerManage bannerManage = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
-        return ResponseEntity.created(URI.create("/goods/" + bannerManage.getBannerManageNo()))
+        Long bannerManageNo = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
+        return ResponseEntity.created(URI.create("/goods/" + bannerManageNo))
                 .body(ResponseHandler.builder()
                 .status(HttpStatus.CREATED.value())
                 .message("상품전시정보가 저장되었습니다")
@@ -92,21 +100,13 @@ public class BannerController {
                         .build());
     }
 
-    @PostMapping("/images/detail")
-    public ResponseEntity<BannerImageInfo> imagesDetailBanner(
-            @RequestBody @Valid BannerInfo bannerInfo,
-            @CurrentUser Member currentUser
-    ) {
-        return ResponseEntity.ok().body(bannerService.findBannerImagesDetail(bannerInfo));
-    }
-
     @PostMapping(value = "/images/create")
     public ResponseEntity<ResponseHandler> createImagesBanner(
             @RequestBody @Valid BannerImageInfo bannerImageInfo,
             @CurrentUser Member currentUser
     ) {
-        BannerManage bannerManage = bannerService.saveImagesBanner(bannerImageInfo, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + bannerManage.getBannerManageNo()))
+        Long bannerManageNo = bannerService.saveImagesBanner(bannerImageInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + bannerManageNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("배너이미지정보가 저장되었습니다")
@@ -138,8 +138,8 @@ public class BannerController {
             return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
         }
         try {
-            BannerManage bannerManage = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
-            return ResponseEntity.created(URI.create("/upload/" + bannerManage.getBannerManageNo()))
+            Long bannerManageNo = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
+            return ResponseEntity.created(URI.create("/upload/" + bannerManageNo))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())
                             .message("배너이미지정보가 저장되었습니다")

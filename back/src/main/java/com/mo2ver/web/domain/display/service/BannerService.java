@@ -13,7 +13,6 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,14 +49,12 @@ public class BannerService {
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 
         for (String detailKey : bannerDetailGroupResponse.keySet()) {
-            bannerDisplay
-                    .computeIfAbsent(detailKey, k -> new HashMap<>())
+            bannerDisplay.computeIfAbsent(detailKey, k -> new HashMap<>())
                     .put("detail", new ArrayList<>(bannerDetailGroupResponse.get(detailKey)));
         }
 
         for (String productKey : bannerProductGroupResponse.keySet()) {
-            bannerDisplay
-                    .computeIfAbsent(productKey, k -> new HashMap<>())
+            bannerDisplay.computeIfAbsent(productKey, k -> new HashMap<>())
                     .put("product", new ArrayList<>(bannerProductGroupResponse.get(productKey)));
         }
 
@@ -75,8 +72,9 @@ public class BannerService {
     }
 
     @Transactional
-    public BannerManage saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        return this.bannerManageRepository.save(BannerManage.of(goodsDisplayInfo, currentUser));
+    public Long saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+        BannerManage bannerManage = new BannerManage(goodsDisplayInfo, currentUser);
+        return this.bannerManageRepository.save(bannerManage).getBannerManageNo();
     }
 
     @Transactional
@@ -86,15 +84,9 @@ public class BannerService {
     }
 
     @Transactional
-    public BannerManage saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
-        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
-        List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
-        for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
-            BannerImageDetailInfo bannerImageDetailInfo = listBannerImageDetailInfo.get(i);
-            String fileAttachCode = fileService.getFileAttachCode(bannerImageDetailInfo.getFile());
-            this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, Integer.parseInt(fileAttachCode), i+1, currentUser));
-        }
-        return bannerManage;
+    public Long saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
+        BannerManage bannerManage = new BannerManage(bannerImageInfo, currentUser);
+        return this.bannerManageRepository.save(bannerManage).getBannerManageNo();
     }
 
     @Transactional
@@ -104,7 +96,7 @@ public class BannerService {
     }
 
     @Transactional
-    public BannerManage saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
+    public Long saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
         BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
@@ -114,7 +106,7 @@ public class BannerService {
             FileInfo fileInfo = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
             this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
         }
-        return bannerManage;
+        return bannerManage.getBannerManageNo();
     }
 
     private BannerManage findBannerManageById(long id) {

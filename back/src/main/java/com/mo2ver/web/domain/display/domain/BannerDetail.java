@@ -2,6 +2,8 @@ package com.mo2ver.web.domain.display.domain;
 
 import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
 import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.global.common.util.BeanUtil;
+import com.mo2ver.web.global.common.util.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -78,12 +80,30 @@ public class BannerDetail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
+    private static String getDecryptor(String attachFile) {
+        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
+        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
+    }
+
     public static BannerDetail from(BannerManage bannerManage) {
         return BannerDetail.builder()
                 .bannerManageNo(bannerManage)
                 .sortSequence(1)
                 .register(bannerManage.getRegister())
                 .updater(bannerManage.getUpdater())
+                .build();
+    }
+
+    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailInfo bannerImageDetailInfo, Member currentUser) {
+        return BannerDetail.builder()
+                .bannerManageNo(bannerManage)
+                .imageAttachFile(Integer.parseInt(getDecryptor(bannerImageDetailInfo.getFile())))
+                .connectUrl(bannerImageDetailInfo.getCnntUrl())
+                .bannerContents(bannerImageDetailInfo.getTitle())
+                .sortSequence(1)
+                .useYesNo(bannerImageDetailInfo.getUseyn())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
                 .build();
     }
 

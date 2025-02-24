@@ -5,7 +5,6 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.domain.member.domain.MemberRole;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

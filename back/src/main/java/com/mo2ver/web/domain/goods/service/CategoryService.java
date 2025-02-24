@@ -6,7 +6,6 @@ import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
 import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
