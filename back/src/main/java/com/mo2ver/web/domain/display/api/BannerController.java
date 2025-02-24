@@ -84,22 +84,16 @@ public class BannerController {
     }
 
     @PatchMapping("/goods/update")
-    public ResponseEntity updateGoodsBanner(
+    public ResponseEntity<ResponseHandler> updateGoodsBanner(
             @RequestBody @Validated(GoodsDisplayInfo.Update.class) GoodsDisplayInfo goodsDisplayInfo,
             @CurrentUser Member currentUser
     ) {
-        try {
-            bannerService.updateGoodsDisplay(goodsDisplayInfo, currentUser);
-            return ResponseEntity.ok()
-                    .body(ResponseHandler.builder()
-                            .status(HttpStatus.OK.value())
-                            .message("상품전시정보가 수정되었습니다")
-                            .build());
-        } catch (Exception e) {
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, new HashMap<String, Object>(){{
-                put("error", e.getMessage());
-            }}));
-        }
+        bannerService.updateGoodsDisplay(goodsDisplayInfo, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("상품전시정보가 수정되었습니다")
+                        .build());
     }
 
     @PostMapping("/images/detail")
@@ -124,22 +118,16 @@ public class BannerController {
     }
 
     @PatchMapping(value = "/images/update")
-    public ResponseEntity updateImagesBanner(
+    public ResponseEntity<ResponseHandler> updateImagesBanner(
             @RequestBody @Validated(BannerImageInfo.Update.class) BannerImageInfo bannerImageInfo,
             @CurrentUser Member currentUser
     ) {
-        try {
-            bannerService.updateImagesBanner(bannerImageInfo, currentUser);
-            return ResponseEntity.ok()
-                    .body(ResponseHandler.builder()
-                            .status(HttpStatus.OK.value())
-                            .message("배너이미지정보가 수정되었습니다")
-                            .build());
-        } catch (Exception e) {
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, new HashMap<String, Object>(){{
-                put("error", e.getMessage());
-            }}));
-        }
+        bannerService.updateImagesBanner(bannerImageInfo, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("배너이미지정보가 수정되었습니다")
+                        .build());
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

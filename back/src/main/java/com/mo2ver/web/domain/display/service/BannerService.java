@@ -100,7 +100,7 @@ public class BannerService {
     }
 
     @Transactional
-    public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser)  throws Exception {
+    public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
         BannerManage bannerManage = this.findBannerManageById(bannerImageInfo.getBannerNo());
         bannerManage.update(bannerImageInfo, currentUser);
     }

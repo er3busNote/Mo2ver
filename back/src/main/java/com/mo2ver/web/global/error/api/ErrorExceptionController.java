@@ -248,4 +248,15 @@ public class ErrorExceptionController {
         message.put("message", e.getMessage());
         return errorHandler.buildError(ErrorCode.SQL_QUERY_INVALID, message);
     }
+
+    /**
+     * Restful API 통신시, 내부 Runtime 에러
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ErrorResponse handleRuntimeException(RuntimeException e) {
+        HashMap<String, Object> message = new HashMap<>();
+        message.put("message", e.getMessage());
+        return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, message);
+    }
 }
