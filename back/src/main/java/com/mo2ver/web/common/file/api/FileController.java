@@ -5,6 +5,7 @@ import com.mo2ver.web.common.file.validation.ValidFileList;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
 import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -29,7 +29,6 @@ public class FileController {
 
     @GetMapping("/image")
     public ResponseEntity fileImage(@RequestParam String id) {
-        HashMap<String, Object> response = new HashMap<>();
         try {
             String fileAttachCode = fileService.getFileAttachCode(id);
             byte[] bannerImageBytes = fileService.findFile(fileAttachCode);
@@ -39,20 +38,21 @@ public class FileController {
             MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
             return ResponseEntity.ok().contentType(mediaType).body(resource);
         } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
         }
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity uploadFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
                                       @CurrentUser Member currentUser) {
-        HashMap<String, Object> response = new HashMap<>();
         try {
             return ResponseEntity.ok().body(fileService.saveFile(files, currentUser));
         } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
         }
     }
 

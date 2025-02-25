@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.goods.api;
 
-import com.mo2ver.web.domain.goods.domain.Price;
 import com.mo2ver.web.domain.goods.dto.request.CategoryPageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
@@ -13,6 +12,7 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -98,11 +97,11 @@ public class GoodsController {
                                       @RequestPart(name = "goodsImage") @Valid GoodsImageRequest goodsImageRequest,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {
-        HashMap<String, Object> response = new HashMap<>();
         goodsImageValidator.validate(files, result);
         if (result.hasErrors()) {
-            response.put("error", result.getFieldError());
-            return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
+            return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, ErrorInfo.builder()
+                    .errors(result.getFieldError())
+                    .build()));
         }
         try {
             String goodsCode = goodsService.saveImageGoods(files, goodsImageRequest, currentUser);
@@ -111,8 +110,9 @@ public class GoodsController {
                             .status(HttpStatus.CREATED.value()).message("상품정보가 저장되었습니다")
                             .build());
         } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
         }
     }
 

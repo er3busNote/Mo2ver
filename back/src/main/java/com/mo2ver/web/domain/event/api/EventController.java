@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.event.api;
 
-import com.mo2ver.web.domain.event.domain.EventManage;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
@@ -11,6 +10,7 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -67,13 +66,13 @@ public class EventController {
                                       @RequestPart(name = "eventProduct") @Valid EventImageRequest eventImageRequest,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {
-        HashMap<String, Object> response = new HashMap<>();
         List<MultipartFile> eventFiles = Arrays.asList(displayFile, eventFile);
         for (MultipartFile file : eventFiles) {
             eventImageValidator.validate(file, result);
             if (result.hasErrors()) {
-                response.put("error", result.getFieldError());
-                return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
+                return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, ErrorInfo.builder()
+                        .errors(result.getFieldError())
+                        .build()));
             }
         }
         try {
@@ -84,8 +83,9 @@ public class EventController {
                             .message("배너정보가 저장되었습니다")
                             .build());
         } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
         }
     }
 

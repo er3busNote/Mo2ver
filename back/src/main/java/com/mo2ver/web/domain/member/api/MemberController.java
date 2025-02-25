@@ -6,6 +6,7 @@ import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.validation.MemberValidator;
 import com.mo2ver.web.global.common.dto.response.CsrfResponse;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
@@ -31,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 
 @Slf4j
 @RestController
@@ -47,11 +47,11 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity authLogin(@RequestBody @Valid LoginRequest loginRequest,
-                                              Errors errors) {
-        HashMap<String, Object> response = new HashMap<>();
+                                    Errors errors) {
         if (errors.hasErrors()) {
-            response.put("required", errors);
-            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
+            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, ErrorInfo.builder()
+                    .errors(errors.getFieldError())
+                    .build()));
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -68,11 +68,11 @@ public class MemberController {
 
     @PatchMapping("/refresh")
     public ResponseEntity authRefresh(@RequestBody @Valid TokenInfo tokenInfo,
-                                                Errors errors) {
-        HashMap<String, Object> response = new HashMap<>();
+                                      Errors errors) {
         if (errors.hasErrors()) {
-            response.put("required", errors);
-            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
+            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, ErrorInfo.builder()
+                    .errors(errors.getFieldError())
+                    .build()));
         }
 
         // Refresh Token - Expired
@@ -98,11 +98,11 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity authSignup(@RequestBody @Valid SignupRequest signupRequest,
-                                                  Errors errors) {
-        HashMap<String, Object> response = new HashMap<>();
+                                     Errors errors) {
         if (errors.hasErrors()) {
-            response.put("required", errors);
-            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
+            return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, ErrorInfo.builder()
+                    .errors(errors.getFieldError())
+                    .build()));
         }
 
         UserDetailsService userDetailsService = (UserDetailsService) memberService;
@@ -110,19 +110,24 @@ public class MemberController {
             UserDetails userDetails = userDetailsService.loadUserByUsername(signupRequest.getUsername());
 
             if (signupRequest.getUsername().equals(userDetails.getUsername())) {
-                return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_USERNAME_VALUE_INVALID, response));
+                return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_USERNAME_VALUE_INVALID, ErrorInfo.builder()
+                        .message("이미 존재하는 사용자입니다")
+                        .build()));
             }
 
             // <-- 이메일 처리를 추가로 해야됨...!!!
 
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_EMAIL_VALUE_INVALID, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.SIGNUP_EMAIL_VALUE_INVALID, ErrorInfo.builder()
+                    .message("회원가입이 실패하였습니다")
+                    .build()));
 
         } catch (UsernameNotFoundException e) {
 
             memberValidator.validate(signupRequest, errors);
             if (errors.hasErrors()) {
-                response.put("required", errors);
-                return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, response));
+                return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, ErrorInfo.builder()
+                        .errors(errors.getFieldError())
+                        .build()));
             }
 
             memberService.signup(signupRequest);  // 회원가입

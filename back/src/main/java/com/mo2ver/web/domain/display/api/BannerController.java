@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.display.api;
 
-import com.mo2ver.web.domain.display.domain.BannerManage;
 import com.mo2ver.web.domain.display.dto.BannerImageInfo;
 import com.mo2ver.web.domain.display.dto.BannerInfo;
 import com.mo2ver.web.domain.display.dto.GoodsDisplayInfo;
@@ -11,6 +10,7 @@ import com.mo2ver.web.domain.member.domain.Member;
 import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,11 +130,11 @@ public class BannerController {
                                        @RequestPart(name = "bannerImage") @Valid BannerImageInfo bannerImageInfo,
                                        @CurrentUser Member currentUser,
                                        BindingResult result) {
-        HashMap<String, Object> response = new HashMap<>();
         bannerImageValidator.validate(files, result);
         if (result.hasErrors()) {
-            response.put("error", result.getFieldError());
-            return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, response));
+            return badRequest(errorHandler.buildError(ErrorCode.FILETYPE_MAPPING_INVALID, ErrorInfo.builder()
+                    .errors(result.getFieldError())
+                    .build()));
         }
         try {
             Long bannerManageNo = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
@@ -145,8 +144,9 @@ public class BannerController {
                             .message("배너이미지정보가 저장되었습니다")
                             .build());
         } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, response));
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
         }
     }
 

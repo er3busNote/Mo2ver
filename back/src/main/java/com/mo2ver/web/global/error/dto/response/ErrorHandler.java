@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.error.dto.response;
 
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.dto.ErrorInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 @Component
 public class ErrorHandler {
 
-    public ErrorResponse buildError(ErrorCode errorCode, HashMap<String, Object> errorMessage) {
+    public ErrorResponse buildError(ErrorCode errorCode, ErrorInfo errorMessage) {
         return ErrorResponse.builder()
                 .code(errorCode.getCode())
                 .status(errorCode.getStatus())
