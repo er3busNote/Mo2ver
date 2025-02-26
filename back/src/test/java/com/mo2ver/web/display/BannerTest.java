@@ -168,7 +168,7 @@ public class BannerTest extends CsrfConfigTest {
         return BannerImageDetailInfo.builder()
                 .title("테스트 " + i)
                 .cnntUrl("https://mo2ver.com/test" + i + ".jpg")
-                .file(FileAttachInfo.from(100011, "image1.png", "image/png", 2048, ".png").getFileAttachCode())
+                .file(FileAttachInfo.from(100011))
                 .useyn('Y')
                 .build();
     }

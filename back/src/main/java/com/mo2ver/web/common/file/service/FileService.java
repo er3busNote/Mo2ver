@@ -33,6 +33,7 @@ public class FileService {
     private final FileUtil fileUtil;
     private final JasyptUtil jasyptUtil;
     private final CryptoUtil cryptoUtil;
+    private final ObjectStorageUtil objectStorageUtil;
 
     @Autowired
     private Environment environment;
@@ -42,7 +43,11 @@ public class FileService {
         Optional<File> info = this.fileRepository.findById(Long.parseLong(fileAttachCode));
         if (info.isPresent()) {
             File file = info.get();
-            return this.cryptoUtil.decryptFile(file.getFilePath());
+            if('Y' == file.getCloudYn()){
+                return this.objectStorageUtil.downloadFile(file.getFilePath());
+            } else {
+                return this.cryptoUtil.decryptFile(file.getFilePath());
+            }
         } else {
             throw new IOException("해당되는 파일을 찾을 수 없습니다.");
         }
@@ -50,20 +55,39 @@ public class FileService {
 
     @Transactional
     public FileInfo saveFile(MultipartFile file, String targetFolder, Member currentUser) throws Exception {
-        Path uploadDirectory = this.fileUtil.getUploadDirectory(getDirectory(targetFolder));
+        Path uploadDirectory = this.fileUtil.getUploadDirectory(this.getDirectory(targetFolder));
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
         Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
         String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
         String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
-        File fileInfo = this.fileRepository.save(File.of(fileName, getFilePath(uploadDirectory), contentType, fileSize, currentUser));
+        File fileInfo = this.fileRepository.save(File.of(fileName, this.getFilePath(uploadDirectory), contentType, fileSize, 'N', currentUser));
         this.cryptoUtil.encryptFile(file, this.fileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
+        return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
+    }
+
+    @Transactional
+    public FileInfo saveBucketFile(MultipartFile file, Member currentUser) throws IOException {
+        String bucketPath = this.getBucketPath();
+        String fileName = file.getOriginalFilename();
+        String contentType = file.getContentType();
+        Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
+        String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
+        String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
+        File fileInfo = this.fileRepository.save(File.of(fileName, bucketPath, contentType, fileSize, 'Y', currentUser));
+        this.objectStorageUtil.uploadFile(file, bucketPath);
         return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
     }
 
     @Transactional
     public List<FileAttachInfo> saveFile(List<MultipartFile> files, Member currentUser) throws Exception {
         List<FileInfo> fileInfoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveFile(file, FILE_DIRECTORY, currentUser))).collect(Collectors.toList());
+        return fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<FileAttachInfo> saveBucketFile(List<MultipartFile> files, Member currentUser) throws Exception {
+        List<FileInfo> fileInfoList = files.stream().map(ExceptionUtil.wrapFunction(file -> this.saveBucketFile(file, currentUser))).collect(Collectors.toList());
         return fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
     }
 
@@ -77,6 +101,10 @@ public class FileService {
 
     private String getFilePath(Path uploadDirectory) {
         return uploadDirectory.toString() + "/" + UUID.randomUUID();
+    }
+
+    private String getBucketPath() {
+        return DateUtil.getCurrentDate() + "/" + UUID.randomUUID();
     }
 
     public String getFileAttachCode(String id) {

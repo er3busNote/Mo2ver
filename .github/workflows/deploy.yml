@@ -156,7 +156,7 @@ jobs:
             # echo "sudo cp /etc/letsencrypt/live/api.mo2ver.p-e.kr/* /home/ubuntu" >> start.sh
             echo "sudo cp /etc/letsencrypt/live/mo2ver.duckdns.org/* /home/ubuntu" >> start.sh
             echo "sudo pkill -f java" >> start.sh
-            echo "sudo java -jar -DPORT=${{ secrets.PORT }} -DKEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }} -DMYSQL_USER_NAME=${{ secrets.MYSQL_USER_NAME }} -DMYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -DMYSQL_HOST=${{ secrets.MYSQL_HOST }} -DMYSQL_PORT=${{ secrets.MYSQL_PORT }} -DDATA_BASE_NAME=${{ secrets.DATA_BASE_NAME }} -DMAIL_USER_NAME=${{ secrets.MAIL_USER_NAME }} -DMAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dspring.profiles.active=prod -Dfile.encoding=UTF-8" >> start.sh
+            echo "sudo java -jar -DPORT=${{ secrets.PORT }} -DKEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }} -DMYSQL_USER_NAME=${{ secrets.MYSQL_USER_NAME }} -DMYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -DMYSQL_HOST=${{ secrets.MYSQL_HOST }} -DMYSQL_PORT=${{ secrets.MYSQL_PORT }} -DDATA_BASE_NAME=${{ secrets.DATA_BASE_NAME }} -DMAIL_USER_NAME=${{ secrets.MAIL_USER_NAME }} -DMAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -DOCI_BUCKET_ACCESS_KEY_ID=${{ secrets.OCI_BUCKET_ACCESS_KEY_ID }} -DOCI_BUCKET_SECRET_ACCESS_KEY=${{ secrets.OCI_BUCKET_SECRET_ACCESS_KEY }} ./build/libs/master-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:./,file:./build/resources/main/application-prod.yml -Dspring.profiles.active=prod -Dfile.encoding=UTF-8" >> start.sh
             ls /home/ubuntu
             rm -fr /home/ubuntu/build
             mkdir -p /home/ubuntu/build

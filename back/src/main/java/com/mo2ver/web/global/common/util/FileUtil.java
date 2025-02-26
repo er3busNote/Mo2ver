@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.common.util;
 
 import com.mo2ver.web.global.common.properties.ImagesProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +10,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
+@RequiredArgsConstructor
 public class FileUtil {
 
     private static final String PROJECT_DIRECTORY = System.getProperty("user.dir");
 
-    @Autowired
-    protected ImagesProperties imagesProperties;
+    private final ImagesProperties imagesProperties;
 
     public Path getUploadDirectory(String directoryPath) {
         Path folderPath = Paths.get(imagesProperties.getFilepath());

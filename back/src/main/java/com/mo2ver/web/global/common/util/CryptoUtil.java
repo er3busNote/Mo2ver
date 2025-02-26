@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.common.util;
 
 import com.mo2ver.web.global.common.properties.CryptoProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,14 +20,14 @@ import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
 @Component
+@RequiredArgsConstructor
 public class CryptoUtil {
 
     private static final int ITERATIONS = 10000;
     private static final int KEY_SIZE = 256;
     private static final int IV_LENGTH = 16;
 
-    @Autowired
-    protected CryptoProperties cryptoProperties;
+    private final CryptoProperties cryptoProperties;
 
     // 참고 (Java AES Encryption and Decryption) : https://howtodoinjava.com/java/java-security/aes-256-encryption-decryption/
     public void encryptFile(MultipartFile file, File targetFile) throws Exception {

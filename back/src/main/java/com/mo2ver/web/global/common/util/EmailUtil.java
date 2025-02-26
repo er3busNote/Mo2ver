@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.common.util;
 
 import com.mo2ver.web.global.common.dto.EmailInfo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -16,13 +17,11 @@ import java.io.StringWriter;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class EmailUtil {
 
-    @Autowired
-    private JavaMailSender emailSender;
-
-    @Autowired
-    private VelocityEngine velocityEngine;
+    private final JavaMailSender emailSender;
+    private final  VelocityEngine velocityEngine;
 
     public void sendEmail(EmailInfo emailInfo) {
         // Mime Message 생성

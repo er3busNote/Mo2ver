@@ -6,6 +6,7 @@ import com.mo2ver.web.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.web.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.web.global.jwt.JwtSecurityConfig;
 import com.mo2ver.web.global.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -36,30 +37,20 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    MemberService memberService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    CorsProperties corsProperties;
-    @Autowired
-    private Environment environment;
-    @Autowired
-    private ApplicationContext applicationContext;
-
+    private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
+    private final CorsProperties corsProperties;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(TokenProvider tokenProvider,
-                          JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                          JwtAccessDeniedHandler jwtAccessDeniedHandler) {
-        this.tokenProvider = tokenProvider;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

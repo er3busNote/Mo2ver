@@ -41,6 +41,10 @@ public class File {
     @Column(name = "FILE_SIZE", columnDefinition = "INT(11) COMMENT '파일크기'")
     private Integer fileSize;
 
+    @Builder.Default
+    @Column(name = "CLOUD_YN", nullable = false, columnDefinition = "CHAR(1) COMMENT '버킷사용여부'")
+    private Character cloudYn = 'N';
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -59,12 +63,13 @@ public class File {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static File of(String fileName, String filePath, String fileType, Integer fileSize, Member currentUser) {
+    public static File of(String fileName, String filePath, String fileType, Integer fileSize, Character cloudYn, Member currentUser) {
         return File.builder()
                 .fileName(fileName)
                 .filePath(filePath)
                 .fileType(fileType)
                 .fileSize(fileSize)
+                .cloudYn(cloudYn)
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

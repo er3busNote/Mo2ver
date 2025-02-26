@@ -25,6 +25,10 @@ public class FileAttachInfo {
         return new FileAttachInfo(getEncryptor(fileAttachCode), fileName, fileType, fileSize, fileExtension);
     }
 
+    public static String from(Integer fileAttachCode) {
+        return getEncryptor(fileAttachCode);
+    }
+
     public static FileAttachInfo of(FileInfo fileInfo) {
         return FileAttachInfo.builder()
                 .fileAttachCode(getEncryptor(fileInfo.getFileCode()))

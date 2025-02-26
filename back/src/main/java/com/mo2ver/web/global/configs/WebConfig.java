@@ -2,6 +2,7 @@ package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.global.common.properties.CorsProperties;
 import com.mo2ver.web.global.common.properties.ImagesProperties;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -21,15 +22,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebMvc // Spring Boot의 자동 구성을 비활성화 ( → 수동 설정)
 public class WebConfig implements WebMvcConfigurer {
 
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
 
-    @Autowired
-    CorsProperties corsProperties;
-    @Autowired
-    ImagesProperties imagesProperties;
+    private final CorsProperties corsProperties;
+    private final ImagesProperties imagesProperties;
+
     @Autowired
     private Environment environment;
 

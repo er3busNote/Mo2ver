@@ -5,6 +5,7 @@ import com.mo2ver.web.global.common.properties.JwtProperties;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,17 +26,15 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
 
-    @Autowired
-    MemberService memberService;
-
-    @Autowired
-    JwtProperties jwtProperties;
+    private final MemberService memberService;
+    private final JwtProperties jwtProperties;
 
     // 호출순서 : Constructor -> postConstruct -> afterPropertiesSet -> init
 

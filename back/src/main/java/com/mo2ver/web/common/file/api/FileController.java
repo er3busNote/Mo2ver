@@ -56,6 +56,18 @@ public class FileController {
         }
     }
 
+    @PostMapping(value = "/upload/bucket", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity uploadBucketFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
+                                            @CurrentUser Member currentUser) {
+        try {
+            return ResponseEntity.ok().body(fileService.saveBucketFile(files, currentUser));
+        } catch (Exception e) {
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
+        }
+    }
+
 
     private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);
