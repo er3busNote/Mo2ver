@@ -38,7 +38,7 @@ public class OracleCloudConfig {
                 .build(provider);
     }
 
-    public static String loadPrivateKey(String filePath) throws IOException {
+    private static String loadPrivateKey(String filePath) throws IOException {
         return new String(Files.readAllBytes(Paths.get(filePath)));
     }
 }

@@ -31,7 +31,7 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.57.0'
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.57.2'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-okhttp:3.57.2'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient:3.57.2'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.3'
