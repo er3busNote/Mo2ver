@@ -6,16 +6,14 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CartPageData, CSRFData } from '../../api/types';
+import { CartPageData } from '../../api/types';
 
 interface CartListProps {
 	cart: ActionCreatorsMapObject;
-	csrfData: CSRFData;
 }
 
 const useCartPageList = ({
 	cart,
-	csrfData,
 }: CartListProps): [
 	CartPageData,
 	Dispatch<SetStateAction<number>>,
@@ -26,9 +24,9 @@ const useCartPageList = ({
 	const [data, setData] = useState<CartPageData>(new Object() as CartPageData);
 
 	const fetchAndSetData = useCallback(async () => {
-		const data = await cart.list(csrfData);
+		const data = await cart.list();
 		setData(data);
-	}, [csrfData.csrfToken, page, totalPrice]);
+	}, [page, totalPrice]);
 
 	useEffect(() => {
 		fetchAndSetData();

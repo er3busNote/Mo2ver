@@ -20,7 +20,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity listCart(@CurrentUser Member currentUser) {
         if (cartService.isCartEmpty(currentUser)) {
             return ResponseEntity.ok().body(ResponseHandler.builder()

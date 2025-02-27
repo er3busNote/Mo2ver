@@ -96,10 +96,7 @@ const CartPage: FC<CartDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const csrfData = useCSRFToken({ member });
-	const [cartPageData, setPage, setTotalPrice] = useCartPageList({
-		cart,
-		csrfData,
-	});
+	const [cartPageData, setPage, setTotalPrice] = useCartPageList({ cart });
 	const cartUpdate = async (cartData: CartData) => {
 		const data = (await cart.update(cartData, csrfData)) as CartPageData;
 		setTotalPrice(data.cartTotal);
