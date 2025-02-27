@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
 import {
-	CodeData,
 	BannerDetailData,
 	BannerImageData,
 	BannerImageDetailData,
@@ -19,16 +18,13 @@ import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import useBannerImagesDetail from '../../hooks/banner/useBannerImagesDetail';
 import BannerFormImagePC from '../../components/form/admin/BannerFormImagePC';
 import BannerFormImageMobile from '../../components/form/admin/BannerFormImageMobile';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import {
 	BannerFormImageValues,
 	BannerImageDetailValues,
 } from '../../components/form/admin/types';
-import { useMediaQuery } from 'react-responsive';
 //import { merge } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-
-const drawerMenuLimit = 768;
 
 const bnnrImageSchema = yup
 	.object()
@@ -117,16 +113,6 @@ const bnnrImageSchema = yup
 	})
 	.required();
 
-interface BannerProps {
-	title: string;
-	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	onSubmit: (
-		data: BannerFormImageValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-}
-
 interface BannerDispatchProps {
 	title: string;
 	description: string;
@@ -146,52 +132,6 @@ const bnnrImageValues: BannerFormImageValues = {
 	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
 };
 
-const BannerImagePC: FC<BannerProps> = ({
-	title,
-	description,
-	groupCodeData,
-	onSubmit,
-}): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
-	return (
-		<>
-			{isPc && (
-				<BannerFormImagePC
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
-const BannerImageMobile: FC<BannerProps> = ({
-	title,
-	description,
-	groupCodeData,
-	onSubmit,
-}): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
-	return (
-		<>
-			{isMobile && (
-				<BannerFormImageMobile
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
 const BannerImagePage: FC<BannerDispatchProps> = ({
 	title,
 	description,
@@ -199,6 +139,10 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 	member,
 	banner,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const navigate = useNavigate();
 	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
@@ -295,18 +239,22 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			{(componentType === 'Create' ||
 				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
 				<FormProvider {...methods}>
-					<BannerImagePC
-						title={title}
-						description={description}
-						groupCodeData={groupCodeData}
-						onSubmit={submitForm}
-					/>
-					<BannerImageMobile
-						title={title}
-						description={description}
-						groupCodeData={groupCodeData}
-						onSubmit={submitForm}
-					/>
+					{isDesktop && (
+						<BannerFormImagePC
+							title={title}
+							description={description}
+							groupCodeData={groupCodeData}
+							onSubmit={submitForm}
+						/>
+					)}
+					{isMobile && (
+						<BannerFormImageMobile
+							title={title}
+							description={description}
+							groupCodeData={groupCodeData}
+							onSubmit={submitForm}
+						/>
+					)}
 				</FormProvider>
 			)}
 		</Box>

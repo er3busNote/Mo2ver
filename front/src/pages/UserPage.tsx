@@ -6,10 +6,7 @@ import { TitleState } from '../store/types';
 import Api from '../api';
 import UserDetailPC from '../components/user/UserDetailPC';
 import UserDetailMobile from '../components/user/UserDetailMobile';
-import { Box, Paper } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
-
-const drawerMenuLimit = 768;
+import { Box, Paper, useTheme, useMediaQuery } from '@mui/material';
 
 interface UserProps {
 	title: string;
@@ -18,39 +15,28 @@ interface UserProps {
 }
 
 const UserPC: FC<UserProps> = ({ title, description, member }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
 		<>
-			{isPc && (
-				<>
-					<Box>
-						<Paper
-							sx={{
-								width: '100%',
-								height: '300px',
-								position: 'absolute',
-								opacity: 0.8,
-								background:
-									'radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(83,10,124,1) 56%, rgba(136,15,148,1) 100%)',
-							}}
-						/>
-					</Box>
-					<Box
-						sx={{
-							width: '940px',
-							display: 'inline-block',
-						}}
-					>
-						<UserDetailPC
-							title={title}
-							description={description}
-							member={member}
-						/>
-					</Box>
-				</>
-			)}
+			<Box>
+				<Paper
+					sx={{
+						width: '100%',
+						height: '300px',
+						position: 'absolute',
+						opacity: 0.8,
+						background:
+							'radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(83,10,124,1) 56%, rgba(136,15,148,1) 100%)',
+					}}
+				/>
+			</Box>
+			<Box
+				sx={{
+					width: '940px',
+					display: 'inline-block',
+				}}
+			>
+				<UserDetailPC title={title} description={description} member={member} />
+			</Box>
 		</>
 	);
 };
@@ -60,26 +46,19 @@ const UserMobile: FC<UserProps> = ({
 	description,
 	member,
 }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<UserDetailMobile
-						title={title}
-						description={description}
-						member={member}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<UserDetailMobile
+				title={title}
+				description={description}
+				member={member}
+			/>
+		</Box>
 	);
 };
 
@@ -88,10 +67,17 @@ const UserPage: FC<UserProps> = ({
 	description,
 	member,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 	return (
 		<>
-			<UserPC title={title} description={description} member={member} />
-			<UserMobile title={title} description={description} member={member} />
+			{isDesktop && (
+				<UserPC title={title} description={description} member={member} />
+			)}
+			{isMobile && (
+				<UserMobile title={title} description={description} member={member} />
+			)}
 		</>
 	);
 };

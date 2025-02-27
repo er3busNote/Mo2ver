@@ -2,24 +2,19 @@ import React, { FC, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { CodeData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import VideoFormDisplayPC from '../../components/form/admin/VideoFormDisplayPC';
 import VideoFormDisplayMobile from '../../components/form/admin/VideoFormDisplayMobile';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { VideoFormDisplayValues } from '../../components/form/admin/types';
-import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-
-const drawerMenuLimit = 768;
 
 const videoDisplaySchema = yup
 	.object()
@@ -80,16 +75,6 @@ const videoDisplaySchema = yup
 	})
 	.required();
 
-interface BannerProps {
-	title: string;
-	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	onSubmit: (
-		data: VideoFormDisplayValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-}
-
 interface BannerDispatchProps {
 	title: string;
 	description: string;
@@ -107,60 +92,16 @@ const videoDisplayValues: VideoFormDisplayValues = {
 	useyn: 'Y',
 };
 
-const BannerVideoPC: FC<BannerProps> = ({
-	title,
-	description,
-	groupCodeData,
-	onSubmit,
-}): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
-	return (
-		<>
-			{isPc && (
-				<VideoFormDisplayPC
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
-const BannerVideoMobile: FC<BannerProps> = ({
-	title,
-	description,
-	groupCodeData,
-	onSubmit,
-}): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
-	return (
-		<>
-			{isMobile && (
-				<VideoFormDisplayMobile
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
 const BannerVideoPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
 	code,
 	member,
 }): JSX.Element => {
-	const navigate = useNavigate();
-	const location = useLocation();
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const csrfData = useCSRFToken({ member });
 	const groupCodeData = useGroupCodeList({
 		code,
@@ -195,18 +136,22 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<FormProvider {...methods}>
-				<BannerVideoPC
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={submitForm}
-				/>
-				<BannerVideoMobile
-					title={title}
-					description={description}
-					groupCodeData={groupCodeData}
-					onSubmit={submitForm}
-				/>
+				{isDesktop && (
+					<VideoFormDisplayPC
+						title={title}
+						description={description}
+						groupCodeData={groupCodeData}
+						onSubmit={submitForm}
+					/>
+				)}
+				{isMobile && (
+					<VideoFormDisplayMobile
+						title={title}
+						description={description}
+						groupCodeData={groupCodeData}
+						onSubmit={submitForm}
+					/>
+				)}
 			</FormProvider>
 		</Box>
 	);

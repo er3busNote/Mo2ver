@@ -3,8 +3,6 @@ import { InputBase } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
-const drawerMenuLimit = 768;
-
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
 	borderRadius: theme.shape.borderRadius,
@@ -38,11 +36,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 		padding: theme.spacing(1, 1, 1, 0),
 		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
 		transition: theme.transitions.create('width'),
-		[theme.breakpoints.up(drawerMenuLimit)]: {
+		[theme.breakpoints.up('sm')]: {
 			// PC
 			fontSize: '14px',
 		},
-		[theme.breakpoints.down(drawerMenuLimit)]: {
+		[theme.breakpoints.down('sm')]: {
 			// Mobile
 			fontSize: '12px',
 		},

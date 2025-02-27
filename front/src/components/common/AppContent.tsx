@@ -29,16 +29,21 @@ import AppMenuHomePC from './AppMenuHomePC';
 import AppMenuMobile from './AppMenuMobile';
 import AppMain from './AppMain';
 import AppFooter from './AppFooter';
-import { CssBaseline, Box, Alert, Snackbar } from '@mui/material';
+import {
+	CssBaseline,
+	Box,
+	Alert,
+	Snackbar,
+	useTheme,
+	useMediaQuery,
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '../../utils/theme';
 import { CategoryDataGroup } from '../../api/types';
-import { useMediaQuery } from 'react-responsive';
 import { isDesktop } from 'react-device-detect';
 
 const mdTheme = createTheme(contentTheme);
 
-const drawerMenuLimit = 768;
 const drawerMenuWidth = 200;
 
 interface AppProps {
@@ -62,9 +67,6 @@ const AppPC: FC<AppProps> = ({
 	description,
 	categoryData,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	const location = useLocation();
 	const [scrolled, setScrolled] = useState(false);
 
@@ -85,44 +87,36 @@ const AppPC: FC<AppProps> = ({
 
 	return (
 		<>
-			{isPc && (
-				<>
-					<Box
-						component="header"
-						sx={{
-							width: '100%',
-							display: 'block',
-						}}
-					>
-						{isDesktop && (
-							<AppHeader
-								width={'940px'}
-								title={title}
-								description={description}
-							/>
-						)}
-						<AppSearchPC title={title} description={description} />
-					</Box>
-					<AppHeaderMenu
-						scrolled={scrolled}
-						title={title}
-						description={description}
-						categoryData={categoryData}
-					/>
-					{location.pathname === '/' ? (
-						<AppMenuHomePC
-							title={title}
-							description={description}
-							categoryData={categoryData}
-						/>
-					) : (
-						<AppMenuPC
-							title={title}
-							description={description}
-							categoryData={categoryData}
-						/>
-					)}
-				</>
+			<Box
+				component="header"
+				sx={{
+					width: '100%',
+					display: 'block',
+				}}
+			>
+				{isDesktop && (
+					<AppHeader width={'940px'} title={title} description={description} />
+				)}
+				<AppSearchPC title={title} description={description} />
+			</Box>
+			<AppHeaderMenu
+				scrolled={scrolled}
+				title={title}
+				description={description}
+				categoryData={categoryData}
+			/>
+			{location.pathname === '/' ? (
+				<AppMenuHomePC
+					title={title}
+					description={description}
+					categoryData={categoryData}
+				/>
+			) : (
+				<AppMenuPC
+					title={title}
+					description={description}
+					categoryData={categoryData}
+				/>
 			)}
 		</>
 	);
@@ -133,25 +127,18 @@ const AppMobile: FC<AppProps> = ({
 	description,
 	categoryData,
 }): JSX.Element => {
-	const isTablet = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
 		<>
-			{isTablet && (
-				<>
-					{isDesktop && (
-						<AppHeader width={'100%'} title={title} description={description} />
-					)}
-					{/* {isMobile && <AppHeaderBar description={description} />} */}
-					<AppSearchMobile title={title} description={description} />
-					<AppMenuMobile
-						title={title}
-						description={description}
-						categoryData={categoryData}
-					/>
-				</>
+			{isDesktop && (
+				<AppHeader width={'100%'} title={title} description={description} />
 			)}
+			{/* {isMobile && <AppHeaderBar description={description} />} */}
+			<AppSearchMobile title={title} description={description} />
+			<AppMenuMobile
+				title={title}
+				description={description}
+				categoryData={categoryData}
+			/>
 		</>
 	);
 };
@@ -165,6 +152,10 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	children,
 	category,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const dispatch = useDispatch();
 	const [index, setIndex] = useState<number>(0);
 	const categoryData = useCategoryGroupList({ category });
@@ -209,16 +200,20 @@ const AppContent: FC<LayoutDefaultProps> = ({
 				}}
 			>
 				<CssBaseline />
-				<AppPC
-					title={title}
-					description={description}
-					categoryData={categoryData}
-				/>
-				<AppMobile
-					title={title}
-					description={description}
-					categoryData={categoryData}
-				/>
+				{isDesktop && (
+					<AppPC
+						title={title}
+						description={description}
+						categoryData={categoryData}
+					/>
+				)}
+				{isMobile && (
+					<AppMobile
+						title={title}
+						description={description}
+						categoryData={categoryData}
+					/>
+				)}
 				<AppMain>{children || <Outlet />}</AppMain>
 				<AppFooter
 					width={drawerMenuWidth}

@@ -11,14 +11,11 @@ import Api from '../api';
 import { GoodsRegisterData } from '../api/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import GoodsRegister from '../components/goods/GoodsRegister';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { RegisterFormValues } from '../components/form/types';
-import { useMediaQuery } from 'react-responsive';
-import { isMobile as isMobileDevice } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-
-const drawerMenuLimit = 768;
 
 const steps = ['상품등록', '등록완료'];
 
@@ -239,30 +236,23 @@ const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 	image,
 	onSubmit,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
-		<>
-			{isPc && (
-				<Box
-					sx={{
-						width: '940px',
-						display: 'inline-block',
-					}}
-				>
-					<GoodsRegister
-						description={description}
-						steps={steps}
-						slidesPerView={4}
-						spaceBetween={40}
-						category={category}
-						image={image}
-						onSubmit={onSubmit}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '940px',
+				display: 'inline-block',
+			}}
+		>
+			<GoodsRegister
+				description={description}
+				steps={steps}
+				slidesPerView={4}
+				spaceBetween={40}
+				category={category}
+				image={image}
+				onSubmit={onSubmit}
+			/>
+		</Box>
 	);
 };
 
@@ -272,30 +262,23 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	image,
 	onSubmit,
 }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<GoodsRegister
-						description={description}
-						steps={steps}
-						slidesPerView={isMobileDevice ? 4 : 5}
-						spaceBetween={10}
-						category={category}
-						image={image}
-						onSubmit={onSubmit}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<GoodsRegister
+				description={description}
+				steps={steps}
+				slidesPerView={isMobile ? 4 : 5}
+				spaceBetween={10}
+				category={category}
+				image={image}
+				onSubmit={onSubmit}
+			/>
+		</Box>
 	);
 };
 
@@ -306,6 +289,10 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 	category,
 	image,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const navigate = useNavigate();
 	const csrfData = useCSRFToken({ member });
 	const submitForm = async (
@@ -353,18 +340,22 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 
 	return (
 		<FormProvider {...methods}>
-			<GoodsRegisterPC
-				description={description}
-				category={category}
-				image={image}
-				onSubmit={submitForm}
-			/>
-			<GoodsRegisterMobile
-				description={description}
-				category={category}
-				image={image}
-				onSubmit={submitForm}
-			/>
+			{isDesktop && (
+				<GoodsRegisterPC
+					description={description}
+					category={category}
+					image={image}
+					onSubmit={submitForm}
+				/>
+			)}
+			{isMobile && (
+				<GoodsRegisterMobile
+					description={description}
+					category={category}
+					image={image}
+					onSubmit={submitForm}
+				/>
+			)}
 		</FormProvider>
 	);
 };

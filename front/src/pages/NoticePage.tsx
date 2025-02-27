@@ -2,10 +2,7 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
 import NoticeList from '../components/user/NoticeList';
-import { Box } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
-
-const drawerMenuLimit = 768;
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface NoticeProps {
 	title: string;
@@ -13,50 +10,39 @@ interface NoticeProps {
 }
 
 const NoticePC: FC<NoticeProps> = ({ title, description }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
-		<>
-			{isPc && (
-				<Box
-					sx={{
-						width: '940px',
-						display: 'inline-block',
-					}}
-				>
-					<NoticeList title={title} description={description} />
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '940px',
+				display: 'inline-block',
+			}}
+		>
+			<NoticeList title={title} description={description} />
+		</Box>
 	);
 };
 
 const NoticeMobile: FC<NoticeProps> = ({ title, description }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<NoticeList title={title} description={description} />
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<NoticeList title={title} description={description} />
+		</Box>
 	);
 };
 
 const NoticePage: FC<NoticeProps> = ({ title, description }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 	return (
 		<>
-			<NoticePC title={title} description={description} />
-			<NoticeMobile title={title} description={description} />
+			{isDesktop && <NoticePC title={title} description={description} />}
+			{isMobile && <NoticeMobile title={title} description={description} />}
 		</>
 	);
 };

@@ -12,13 +12,10 @@ import { EventDisplayData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import EventFormDisplayPC from '../../components/form/admin/EventFormDisplayPC';
 import EventFormDisplayMobile from '../../components/form/admin/EventFormDisplayMobile';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { EventFormDisplayValues } from '../../components/form/admin/types';
-import { useMediaQuery } from 'react-responsive';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-
-const drawerMenuLimit = 768;
 
 const eventDisplaySchema = yup
 	.object()
@@ -117,15 +114,6 @@ const eventDisplaySchema = yup
 	})
 	.required();
 
-interface EventProps {
-	title: string;
-	description: string;
-	onSubmit: (
-		data: EventFormDisplayValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-}
-
 interface EventDispatchProps {
 	title: string;
 	description: string;
@@ -143,54 +131,16 @@ const eventDisplayValues: EventFormDisplayValues = {
 	goods: [],
 };
 
-const EventGoodsPC: FC<EventProps> = ({
-	title,
-	description,
-	onSubmit,
-}): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
-	return (
-		<>
-			{isPc && (
-				<EventFormDisplayPC
-					title={title}
-					description={description}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
-const EventGoodsMobile: FC<EventProps> = ({
-	title,
-	description,
-	onSubmit,
-}): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
-	return (
-		<>
-			{isMobile && (
-				<EventFormDisplayMobile
-					title={title}
-					description={description}
-					onSubmit={onSubmit}
-				/>
-			)}
-		</>
-	);
-};
-
 const EventGoodsPage: FC<EventDispatchProps> = ({
 	title,
 	description,
 	member,
 	event,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const navigate = useNavigate();
 	const csrfData = useCSRFToken({ member });
 	const submitForm = async (
@@ -231,16 +181,20 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<FormProvider {...methods}>
-				<EventGoodsPC
-					title={title}
-					description={description}
-					onSubmit={submitForm}
-				/>
-				<EventGoodsMobile
-					title={title}
-					description={description}
-					onSubmit={submitForm}
-				/>
+				{isDesktop && (
+					<EventFormDisplayPC
+						title={title}
+						description={description}
+						onSubmit={submitForm}
+					/>
+				)}
+				{isMobile && (
+					<EventFormDisplayMobile
+						title={title}
+						description={description}
+						onSubmit={submitForm}
+					/>
+				)}
 			</FormProvider>
 		</Box>
 	);

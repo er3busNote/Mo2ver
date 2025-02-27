@@ -2,10 +2,7 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { TitleState } from '../store/types';
 import EventDetail from '../components/goods/event/EventDetail';
-import { Box } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
-
-const drawerMenuLimit = 768;
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface EventDetailProps {
 	title: string;
@@ -16,22 +13,15 @@ const EventDetailPC: FC<EventDetailProps> = ({
 	title,
 	description,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
-		<>
-			{isPc && (
-				<Box
-					sx={{
-						width: '940px',
-						display: 'inline-block',
-					}}
-				>
-					<EventDetail title={title} description={description} />
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '940px',
+				display: 'inline-block',
+			}}
+		>
+			<EventDetail title={title} description={description} />
+		</Box>
 	);
 };
 
@@ -39,22 +29,15 @@ const EventDetailMobile: FC<EventDetailProps> = ({
 	title,
 	description,
 }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<EventDetail title={title} description={description} />
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<EventDetail title={title} description={description} />
+		</Box>
 	);
 };
 
@@ -62,10 +45,15 @@ const EventDetailPage: FC<EventDetailProps> = ({
 	title,
 	description,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 	return (
 		<>
-			<EventDetailPC title={title} description={description} />
-			<EventDetailMobile title={title} description={description} />
+			{isDesktop && <EventDetailPC title={title} description={description} />}
+			{isMobile && (
+				<EventDetailMobile title={title} description={description} />
+			)}
 		</>
 	);
 };

@@ -7,10 +7,7 @@ import { CartData } from '../api/types';
 import Api from '../api';
 import useCSRFToken from '../hooks/useCSRFToken';
 import GoodsDetail from '../components/goods/GoodsDetail';
-import { Box } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
-
-const drawerMenuLimit = 768;
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface GoodsDetailProps {
 	title: string;
@@ -30,26 +27,19 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	description,
 	onCartAdd,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
-		<>
-			{isPc && (
-				<Box
-					sx={{
-						width: '940px',
-						display: 'inline-block',
-					}}
-				>
-					<GoodsDetail
-						title={title}
-						description={description}
-						onCartAdd={onCartAdd}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '940px',
+				display: 'inline-block',
+			}}
+		>
+			<GoodsDetail
+				title={title}
+				description={description}
+				onCartAdd={onCartAdd}
+			/>
+		</Box>
 	);
 };
 
@@ -58,26 +48,19 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	description,
 	onCartAdd,
 }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<GoodsDetail
-						title={title}
-						description={description}
-						onCartAdd={onCartAdd}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<GoodsDetail
+				title={title}
+				description={description}
+				onCartAdd={onCartAdd}
+			/>
+		</Box>
 	);
 };
 
@@ -87,22 +70,30 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	member,
 	cart,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const csrfData = useCSRFToken({ member });
 	const cartAdd = async (cartData: CartData) => {
 		await cart.add(cartData, csrfData);
 	};
 	return (
 		<>
-			<GoodsDetailPC
-				title={title}
-				description={description}
-				onCartAdd={cartAdd}
-			/>
-			<GoodsDetailMobile
-				title={title}
-				description={description}
-				onCartAdd={cartAdd}
-			/>
+			{isDesktop && (
+				<GoodsDetailPC
+					title={title}
+					description={description}
+					onCartAdd={cartAdd}
+				/>
+			)}
+			{isMobile && (
+				<GoodsDetailMobile
+					title={title}
+					description={description}
+					onCartAdd={cartAdd}
+				/>
+			)}
 		</>
 	);
 };

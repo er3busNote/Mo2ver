@@ -1,4 +1,11 @@
-import React, { FC, useState, useEffect, ReactElement } from 'react';
+import React, {
+	FC,
+	useState,
+	useEffect,
+	Dispatch,
+	SetStateAction,
+	ReactElement,
+} from 'react';
 import { Outlet } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
 import { changePrev, changePrevNext, menuLotate } from '../../store/index';
@@ -8,17 +15,17 @@ import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
 import AdminMain from './AdminMain';
 import AdminFooter from './AdminFooter';
-import { CssBaseline, Box } from '@mui/material';
+import { CssBaseline, Box, useTheme, useMediaQuery } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { adminTheme } from '../../utils/theme';
-import { useMediaQuery } from 'react-responsive';
 
 const mdTheme = createTheme(adminTheme);
 
-const drawerMenuLimit = 768;
 const drawerMenuWidth = 200;
 
 interface AdminProps {
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
 	children?: ReactElement;
 }
 
@@ -28,50 +35,34 @@ interface LayoutDefaultProps {
 	children?: ReactElement;
 }
 
-const AdminPC: FC<AdminProps> = ({ children }): JSX.Element => {
-	const [open, setOpen] = useState(true);
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
+const AdminPC: FC<AdminProps> = ({ open, setOpen, children }): JSX.Element => {
 	return (
 		<>
-			{isPc && (
-				<>
-					<AdminHeader isMobile={false} open={open} setOpen={setOpen} />
-					<Box sx={{ display: 'flex' }}>
-						<AdminMenuPC
-							open={open}
-							setOpen={setOpen}
-							width={drawerMenuWidth}
-						/>
-						<AdminMain>{children || <Outlet />}</AdminMain>
-					</Box>
-				</>
-			)}
+			<AdminHeader isMobile={false} open={open} setOpen={setOpen} />
+			<Box sx={{ display: 'flex' }}>
+				<AdminMenuPC open={open} setOpen={setOpen} width={drawerMenuWidth} />
+				<AdminMain>{children || <Outlet />}</AdminMain>
+			</Box>
 		</>
 	);
 };
 
-const AdminMobile: FC<AdminProps> = ({ children }): JSX.Element => {
-	const [open, setOpen] = useState(true);
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
+const AdminMobile: FC<AdminProps> = ({
+	open,
+	setOpen,
+	children,
+}): JSX.Element => {
 	return (
 		<>
-			{isMobile && (
-				<>
-					<AdminHeader isMobile={true} open={open} setOpen={setOpen} />
-					<Box sx={{ display: 'flex' }}>
-						<AdminMenuMobile
-							open={open}
-							setOpen={setOpen}
-							width={drawerMenuWidth}
-						/>
-						<AdminMain>{children || <Outlet />}</AdminMain>
-					</Box>
-				</>
-			)}
+			<AdminHeader isMobile={true} open={open} setOpen={setOpen} />
+			<Box sx={{ display: 'flex' }}>
+				<AdminMenuMobile
+					open={open}
+					setOpen={setOpen}
+					width={drawerMenuWidth}
+				/>
+				<AdminMain>{children || <Outlet />}</AdminMain>
+			</Box>
 		</>
 	);
 };
@@ -81,7 +72,12 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 	description,
 	children,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const dispatch = useDispatch();
+	const [open, setOpen] = useState<boolean>(true);
 	const [index, setIndex] = useState<number>(0);
 
 	useEffect(() => {
@@ -111,8 +107,16 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 		<ThemeProvider theme={mdTheme}>
 			<Box sx={{ flexDirection: 'column' }}>
 				<CssBaseline />
-				<AdminPC>{children}</AdminPC>
-				<AdminMobile>{children}</AdminMobile>
+				{isDesktop && (
+					<AdminPC open={open} setOpen={setOpen}>
+						{children}
+					</AdminPC>
+				)}
+				{isMobile && (
+					<AdminMobile open={open} setOpen={setOpen}>
+						{children}
+					</AdminMobile>
+				)}
 				<AdminFooter title={title} description={description} />
 			</Box>
 		</ThemeProvider>

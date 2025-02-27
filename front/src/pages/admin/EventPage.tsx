@@ -1,25 +1,14 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { EventPageData } from '../../api/types';
 import useEventPageList from '../../hooks/event/useEventPageList';
 import EventPC from '../../components/admin/event/EventPC';
 import EventMobile from '../../components/admin/event/EventMobile';
-import { Box } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 // import _ from 'lodash';
-
-const drawerMenuLimit = 768;
-
-interface EventProps {
-	title: string;
-	description: string;
-	setPage: Dispatch<SetStateAction<number>>;
-	eventPageData: EventPageData;
-}
 
 interface EventDispatchProps {
 	title: string;
@@ -27,18 +16,19 @@ interface EventDispatchProps {
 	event: ActionCreatorsMapObject;
 }
 
-const EventPagePC: FC<EventProps> = ({
+const EventPage: FC<EventDispatchProps> = ({
 	title,
 	description,
-	setPage,
-	eventPageData,
+	event,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const [eventPageData, setPage] = useEventPageList({ event });
 	return (
-		<>
-			{isPc && (
+		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
+			{isDesktop && (
 				<EventPC
 					title={title}
 					description={description}
@@ -46,21 +36,6 @@ const EventPagePC: FC<EventProps> = ({
 					eventPageData={eventPageData}
 				/>
 			)}
-		</>
-	);
-};
-
-const EventPageMobile: FC<EventProps> = ({
-	title,
-	description,
-	setPage,
-	eventPageData,
-}): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
-	return (
-		<>
 			{isMobile && (
 				<EventMobile
 					title={title}
@@ -69,30 +44,6 @@ const EventPageMobile: FC<EventProps> = ({
 					eventPageData={eventPageData}
 				/>
 			)}
-		</>
-	);
-};
-
-const EventPage: FC<EventDispatchProps> = ({
-	title,
-	description,
-	event,
-}): JSX.Element => {
-	const [eventPageData, setPage] = useEventPageList({ event });
-	return (
-		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<EventPagePC
-				title={title}
-				description={description}
-				setPage={setPage}
-				eventPageData={eventPageData}
-			/>
-			<EventPageMobile
-				title={title}
-				description={description}
-				setPage={setPage}
-				eventPageData={eventPageData}
-			/>
 		</Box>
 	);
 };

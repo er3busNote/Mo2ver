@@ -9,10 +9,7 @@ import useCSRFToken from '../hooks/useCSRFToken';
 import useCartPageList from '../hooks/cart/useCartPageList';
 import CartListPC from '../components/user/CartListPC';
 import CartListMobile from '../components/user/CartListMobile';
-import { Box } from '@mui/material';
-import { useMediaQuery } from 'react-responsive';
-
-const drawerMenuLimit = 768;
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];
 
@@ -40,30 +37,23 @@ const CartPC: FC<CartProps> = ({
 	onCartUpdate,
 	onCartDelete,
 }): JSX.Element => {
-	const isPc = useMediaQuery({
-		query: '(min-width:' + String(drawerMenuLimit + 1) + 'px)',
-	});
 	return (
-		<>
-			{isPc && (
-				<Box
-					sx={{
-						width: '940px',
-						display: 'inline-block',
-					}}
-				>
-					<CartListPC
-						title={title}
-						description={description}
-						steps={steps}
-						setPage={setPage}
-						cartPageData={cartPageData}
-						onCartUpdate={onCartUpdate}
-						onCartDelete={onCartDelete}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '940px',
+				display: 'inline-block',
+			}}
+		>
+			<CartListPC
+				title={title}
+				description={description}
+				steps={steps}
+				setPage={setPage}
+				cartPageData={cartPageData}
+				onCartUpdate={onCartUpdate}
+				onCartDelete={onCartDelete}
+			/>
+		</Box>
 	);
 };
 
@@ -75,30 +65,23 @@ const CartMobile: FC<CartProps> = ({
 	onCartUpdate,
 	onCartDelete,
 }): JSX.Element => {
-	const isMobile = useMediaQuery({
-		query: '(max-width:' + String(drawerMenuLimit) + 'px)',
-	});
 	return (
-		<>
-			{isMobile && (
-				<Box
-					sx={{
-						width: '100%',
-						display: 'inline-block',
-					}}
-				>
-					<CartListMobile
-						title={title}
-						description={description}
-						steps={steps}
-						setPage={setPage}
-						cartPageData={cartPageData}
-						onCartUpdate={onCartUpdate}
-						onCartDelete={onCartDelete}
-					/>
-				</Box>
-			)}
-		</>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'inline-block',
+			}}
+		>
+			<CartListMobile
+				title={title}
+				description={description}
+				steps={steps}
+				setPage={setPage}
+				cartPageData={cartPageData}
+				onCartUpdate={onCartUpdate}
+				onCartDelete={onCartDelete}
+			/>
+		</Box>
 	);
 };
 
@@ -108,6 +91,10 @@ const CartPage: FC<CartDispatchProps> = ({
 	member,
 	cart,
 }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const csrfData = useCSRFToken({ member });
 	const [cartPageData, setPage, setTotalPrice] = useCartPageList({
 		cart,
@@ -123,22 +110,26 @@ const CartPage: FC<CartDispatchProps> = ({
 	};
 	return (
 		<>
-			<CartPC
-				title={title}
-				description={description}
-				setPage={setPage}
-				cartPageData={cartPageData}
-				onCartUpdate={cartUpdate}
-				onCartDelete={cartDelete}
-			/>
-			<CartMobile
-				title={title}
-				description={description}
-				setPage={setPage}
-				cartPageData={cartPageData}
-				onCartUpdate={cartUpdate}
-				onCartDelete={cartDelete}
-			/>
+			{isDesktop && (
+				<CartPC
+					title={title}
+					description={description}
+					setPage={setPage}
+					cartPageData={cartPageData}
+					onCartUpdate={cartUpdate}
+					onCartDelete={cartDelete}
+				/>
+			)}
+			{isMobile && (
+				<CartMobile
+					title={title}
+					description={description}
+					setPage={setPage}
+					cartPageData={cartPageData}
+					onCartUpdate={cartUpdate}
+					onCartDelete={cartDelete}
+				/>
+			)}
 		</>
 	);
 };

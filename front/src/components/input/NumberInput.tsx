@@ -8,8 +8,6 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const drawerMenuLimit = 768;
-
 const StyledInputRoot = styled('div')(({ theme }) => ({
 	fontWeight: '400',
 	color: theme.palette.mode === 'dark' ? grey[300] : grey[500],
@@ -30,14 +28,14 @@ const StyledInput = styled('input')(({ theme, readOnly }) => ({
 	boxShadow: `0px 2px 4px ${
 		theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
 	}`,
-	[theme.breakpoints.up(drawerMenuLimit)]: {
+	[theme.breakpoints.up('sm')]: {
 		// PC
 		borderRadius: '8px',
 		margin: '0 8px',
 		padding: '10px 12px',
 		width: '4rem',
 	},
-	[theme.breakpoints.down(drawerMenuLimit)]: {
+	[theme.breakpoints.down('sm')]: {
 		// Mobile
 		padding: '2px',
 		width: '3rem',
@@ -72,13 +70,13 @@ const StyledButton = styled('button')(({ theme, disabled }) => ({
 	borderColor: theme.palette.mode === 'dark' ? grey[800] : grey[200],
 	background: theme.palette.mode === 'dark' ? grey[900] : grey[50],
 	color: theme.palette.mode === 'dark' ? grey[200] : grey[900],
-	[theme.breakpoints.up(drawerMenuLimit)]: {
+	[theme.breakpoints.up('sm')]: {
 		// PC
 		borderRadius: '999px',
 		width: '32px',
 		height: '32px',
 	},
-	[theme.breakpoints.down(drawerMenuLimit)]: {
+	[theme.breakpoints.down('sm')]: {
 		// Mobile
 		width: '20px',
 		height: '25px',
