@@ -109,7 +109,10 @@ const CartPage: FC<CartDispatchProps> = ({
 	cart,
 }): JSX.Element => {
 	const csrfData = useCSRFToken({ member });
-	const [cartPageData, setPage, setTotalPrice] = useCartPageList({ cart });
+	const [cartPageData, setPage, setTotalPrice] = useCartPageList({
+		cart,
+		csrfData,
+	});
 	const cartUpdate = async (cartData: CartData) => {
 		const data = (await cart.update(cartData, csrfData)) as CartPageData;
 		setTotalPrice(data.cartTotal);

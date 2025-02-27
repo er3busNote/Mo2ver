@@ -6,9 +6,13 @@ import { CSRFData, CartData } from './types';
 const cart = (instance: AxiosInstance) => {
 	return {
 		// 장바구니 리스트 API : <baseURL>/cart/list
-		list: () => (dispatch: Dispatch) =>
+		list: (csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
-				.get('cart/list')
+				.post('cart/list', {
+					headers: {
+						'X-XSRF-TOKEN': csrfData.csrfToken,
+					},
+				})
 				.then((response: AxiosResponse) => {
 					dispatch(tokenSuccess(response.data));
 					return response.data;
