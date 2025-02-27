@@ -10,6 +10,7 @@ import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -43,7 +44,17 @@ public class ErrorExceptionController {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleRuntimeException(RuntimeException e) {
+        Throwable throwable = e.getCause();
+        if (throwable instanceof ExpiredJwtException) {
+            return this.getExpiredJwtException((ExpiredJwtException) throwable);
+        }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                .message(e.getMessage())
+                .build());
+    }
+
+    private ErrorResponse getExpiredJwtException(ExpiredJwtException e) {
+        return errorHandler.buildError(ErrorCode.TOKEN_ACCESS_DENIED, ErrorInfo.builder()
                 .message(e.getMessage())
                 .build());
     }
@@ -95,11 +106,11 @@ public class ErrorExceptionController {
     public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         Throwable throwable = e.getMostSpecificCause();
         if (throwable instanceof JsonParseException) {
-            return getJsonParseException((JsonParseException) throwable);
+            return this.getJsonParseException((JsonParseException) throwable);
         } else if (throwable instanceof UnrecognizedPropertyException) {
-            return getUnrecognizedPropertyException((UnrecognizedPropertyException) throwable);
+            return this.getUnrecognizedPropertyException((UnrecognizedPropertyException) throwable);
         } else if (throwable instanceof InvalidFormatException) {
-            return getInvalidFormatException((InvalidFormatException) throwable);
+            return this.getInvalidFormatException((InvalidFormatException) throwable);
         }
         return errorHandler.buildError(ErrorCode.HANDLE_ACCESS_DENIED, ErrorInfo.builder()
                 .exceptionName(throwable.getClass().getName())
@@ -135,9 +146,9 @@ public class ErrorExceptionController {
     public ErrorResponse handleHttpMessageNotWritableException(HttpMessageNotWritableException e) {
         Throwable throwable = e.getMostSpecificCause();
         if (throwable instanceof JsonMappingException) {
-            return getJsonMappingException((JsonMappingException) throwable);
+            return this.getJsonMappingException((JsonMappingException) throwable);
         } else if (throwable instanceof IllegalStateException) {
-            return getIllegalStateException((IllegalStateException) throwable);
+            return this.getIllegalStateException((IllegalStateException) throwable);
         }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
                 .exceptionName(throwable.getClass().getName())
@@ -165,7 +176,7 @@ public class ErrorExceptionController {
     public ErrorResponse handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
         Throwable throwable = e.getMostSpecificCause();
         if (throwable instanceof IllegalArgumentException) {
-            return getIllegalArgumentException((IllegalArgumentException) throwable);
+            return this.getIllegalArgumentException((IllegalArgumentException) throwable);
         }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
                 .exceptionName(throwable.getClass().getName())
@@ -187,7 +198,7 @@ public class ErrorExceptionController {
     public ErrorResponse handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
         Throwable throwable = e.getMostSpecificCause();
         if (throwable instanceof NonUniqueResultException) {
-            return getNonUniqueResultException((NonUniqueResultException) throwable);
+            return this.getNonUniqueResultException((NonUniqueResultException) throwable);
         }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
                 .exceptionName(throwable.getClass().getName())
@@ -209,9 +220,9 @@ public class ErrorExceptionController {
     public ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         Throwable throwable = e.getMostSpecificCause();
         if (throwable instanceof SQLException) {
-            return getSQLException((SQLException) throwable);
+            return this.getSQLException((SQLException) throwable);
         } else if (throwable instanceof ConstraintViolationException) {
-            return getConstraintViolationException((ConstraintViolationException) throwable);
+            return this.getConstraintViolationException((ConstraintViolationException) throwable);
         }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
                 .exceptionName(throwable.getClass().getName())

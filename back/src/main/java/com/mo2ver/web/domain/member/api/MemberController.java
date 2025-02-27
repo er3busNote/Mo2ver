@@ -76,7 +76,7 @@ public class MemberController {
         }
 
         // Refresh Token - Expired
-        if (!tokenProvider.validateToken(tokenInfo.getRefreshtoken())) {
+        if (!tokenProvider.validateToken(tokenInfo.getRefreshtoken(), false)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.FORBIDDEN.value())
@@ -85,7 +85,7 @@ public class MemberController {
         }
 
         // Access Token - Expired
-        if (!tokenProvider.validateToken(tokenInfo.getAccesstoken())) {
+        if (!tokenProvider.validateToken(tokenInfo.getAccesstoken(), false)) {
             Authentication authentication = tokenProvider.getAuthentication(tokenInfo.getRefreshtoken());
             TokenInfo refreshtokenInfo = tokenProvider.refreshToken(authentication, tokenInfo.getRefreshtoken());
 

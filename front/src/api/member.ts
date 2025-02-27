@@ -132,7 +132,7 @@ const member = (instance: AxiosInstance) => {
 				})
 				.catch((error: AxiosError) => {
 					dispatch(loginFailure(error.message));
-					return error.response;
+					return error.response?.data;
 				}),
 		// CSRF 토큰 생성 API : <baseURL>/member/csrf-token
 		csrf: () => (dispatch: Dispatch) =>
@@ -143,7 +143,7 @@ const member = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					return error.response?.data;
 				}),
 	};
 };

@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess } from '../store/index';
+import { tokenSuccess, toastMessage } from '../store/index';
 import { CSRFData, PageData } from './types';
 
 const event = (instance: AxiosInstance) => {
@@ -16,7 +16,8 @@ const event = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 이벤트 리스트 API : <baseURL>/event/list
 		list: (pageData: PageData) => (dispatch: Dispatch) =>
@@ -27,7 +28,8 @@ const event = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 이벤트 이미지 업로드 API : <baseURL>/event/upload
 		upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
@@ -43,7 +45,8 @@ const event = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 	};
 };

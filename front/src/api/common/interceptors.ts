@@ -38,7 +38,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 
 	instance.interceptors.response.use(
 		(response: AxiosResponse) => response,
-		async (error: AxiosError) => {
+		async (error: AxiosError): Promise<AxiosResponse> => {
 			const { status, config } = error.response as AxiosResponse;
 			const headers = config.headers as AxiosResponseHeaders;
 			// -> Access Token 인증 실패 (UNAUTHORIZED : status === 401)
@@ -48,7 +48,6 @@ const setInterceptors = (instance: AxiosInstance) => {
 					accesstoken: getSessionStorage(JWT_ACCESS_TOKEN),
 					refreshtoken: getSessionStorage(JWT_REFRESH_TOKEN),
 				};
-				clearSessionStorage(JWT_ACCESS_TOKEN);
 				const { status, data } = await axios.patch(
 					[config.baseURL, API_MEMBER_REFRESH_TOKEN].join(
 						isProduction ? '' : '/'
@@ -56,11 +55,10 @@ const setInterceptors = (instance: AxiosInstance) => {
 					tokenData
 				); // O
 				if (status === 201) {
+					setSessionStorage(JWT_USERNAME, data.username);
 					setSessionStorage(JWT_ACCESS_TOKEN, data.accesstoken);
+					setSessionStorage(JWT_REFRESH_TOKEN, data.refreshtoken);
 					headers.Authorization = ['Bearer', getAccessToken()].join(' ');
-				} else {
-					clearSessionStorage(JWT_USERNAME);
-					clearSessionStorage(JWT_REFRESH_TOKEN);
 				}
 				return axios(config);
 			}

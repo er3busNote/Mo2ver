@@ -115,7 +115,7 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, boolean isException) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(signkey)
@@ -126,6 +126,7 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
+            if(isException) throw new ExpiredJwtException(null, null, e.getMessage());
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {

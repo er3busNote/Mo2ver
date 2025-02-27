@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess } from '../store/index';
+import { tokenSuccess, toastMessage } from '../store/index';
 import {
 	CSRFData,
 	GoodsPage,
@@ -19,7 +19,8 @@ const goods = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 상품 리스트 API : <baseURL>/goods/list
 		list: (goodsPage: GoodsPage) => (dispatch: Dispatch) =>
@@ -32,7 +33,8 @@ const goods = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 상품 검색 API : <baseURL>/goods/search
 		search: (goodsSearchPage: GoodsSearchPage) => (dispatch: Dispatch) =>
@@ -45,7 +47,8 @@ const goods = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 상품 저장 API : <baseURL>/goods/create
 		create:
@@ -62,7 +65,8 @@ const goods = (instance: AxiosInstance) => {
 						return response.data;
 					})
 					.catch((error: AxiosError) => {
-						return error.response;
+						dispatch(toastMessage({ message: error.message, type: 'error' }));
+						return error.response?.data;
 					}),
 	};
 };

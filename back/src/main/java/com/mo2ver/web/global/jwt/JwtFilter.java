@@ -1,5 +1,6 @@
 package com.mo2ver.web.global.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String jwt = resolveToken(httpServletRequest);
 
             // JWT가 생성되면, ServletContext에 저장 <-> JWP가 소멸되면 ServletContext에서 삭제
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt, true)) {
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
 
                 // 실제 SecurityContext에 authentication정보를 등록
@@ -49,7 +50,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 Authentication authentication = context.getAuthentication();
                 logger.debug("유효한 JWT 토큰이 없습니다 {} -> {}", context, authentication);
             }
-        } catch(NullPointerException e){ }
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("JWT 토큰이 만료되었습니다.", e);
+        } catch (NullPointerException e) {
+            throw new RuntimeException("인증정보가 유효하지 않습니다.", e);
+        }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
         // TODO 후처리

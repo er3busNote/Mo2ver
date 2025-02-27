@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess } from '../store/index';
+import { tokenSuccess, toastMessage } from '../store/index';
 import {
 	CSRFData,
 	GoodsDisplayData,
@@ -19,7 +19,8 @@ const banner = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 배너 전시 정보 API : <baseURL>/banner/display
 		display: () => (dispatch: Dispatch) =>
@@ -30,7 +31,8 @@ const banner = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 		// 배너 이미지 정보 API : <baseURL>/banner/images/detail
 		imagesDetail:
@@ -47,7 +49,8 @@ const banner = (instance: AxiosInstance) => {
 						return response.data;
 					})
 					.catch((error: AxiosError) => {
-						return error.response;
+						dispatch(toastMessage({ message: error.message, type: 'error' }));
+						return error.response?.data;
 					}),
 		// 배너 상품 전시 정보 API : <baseURL>/banner/goods/detail
 		goodsDetail:
@@ -64,7 +67,8 @@ const banner = (instance: AxiosInstance) => {
 						return response.data;
 					})
 					.catch((error: AxiosError) => {
-						return error.response;
+						dispatch(toastMessage({ message: error.message, type: 'error' }));
+						return error.response?.data;
 					}),
 		// 상품 전시 정보 API : <baseURL>/banner/goods
 		goods:
@@ -81,7 +85,8 @@ const banner = (instance: AxiosInstance) => {
 						return response.data;
 					})
 					.catch((error: AxiosError) => {
-						return error.response;
+						dispatch(toastMessage({ message: error.message, type: 'error' }));
+						return error.response?.data;
 					}),
 		// 배너 이미지 업로드 API : <baseURL>/banner/upload
 		upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
@@ -97,7 +102,8 @@ const banner = (instance: AxiosInstance) => {
 					return response.data;
 				})
 				.catch((error: AxiosError) => {
-					return error.response;
+					dispatch(toastMessage({ message: error.message, type: 'error' }));
+					return error.response?.data;
 				}),
 	};
 };
