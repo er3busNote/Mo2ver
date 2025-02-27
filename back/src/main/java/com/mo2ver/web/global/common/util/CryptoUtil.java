@@ -2,7 +2,6 @@ package com.mo2ver.web.global.common.util;
 
 import com.mo2ver.web.global.common.properties.CryptoProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

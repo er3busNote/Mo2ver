@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Configuration
@@ -23,8 +25,9 @@ public class OracleCloudConfig {
     private final OracleCloudProperties oracleCloudProperties;
 
     @Bean
-    public ObjectStorage objectStorageClient() throws IOException {
-        Supplier<InputStream> privateKeySupplier = new StringPrivateKeySupplier(loadPrivateKey(oracleCloudProperties.getPrivateKey()));
+    public ObjectStorage objectStorageClient() {
+        String privateKey = loadPrivateKey(oracleCloudProperties.getPrivateKey());
+        Supplier<InputStream> privateKeySupplier = new StringPrivateKeySupplier(privateKey);
         SimpleAuthenticationDetailsProvider provider = SimpleAuthenticationDetailsProvider.builder()
                 .tenantId(oracleCloudProperties.getTenantId())
                 .userId(oracleCloudProperties.getUserId())
@@ -38,7 +41,15 @@ public class OracleCloudConfig {
                 .build(provider);
     }
 
-    private static String loadPrivateKey(String filePath) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
+    private static String loadPrivateKey(String filePath) {
+        return Optional.of(Paths.get(filePath))
+                .filter(Files::exists)
+                .map(path -> {
+                    try {
+                        return new String(Files.readAllBytes(path));
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                }).orElseThrow(() -> new RuntimeException("Oracle API Key 파일을 찾을 수 없습니다"));
     }
 }
