@@ -12,15 +12,11 @@ import {
 	JWT_REFRESH_TOKEN,
 	getAccessToken,
 	isAuthenticated,
+	clearAuthenticated,
 } from '../../utils/jwttoken';
-import {
-	setSessionStorage,
-	getSessionStorage,
-	clearSessionStorage,
-} from '../../utils/storage';
+import { setSessionStorage, getSessionStorage } from '../../utils/storage';
 
 const API_MEMBER_REFRESH_TOKEN = 'member/refresh';
-const API_MEMBER_CSRF_TOKEN = 'member/csrf-token';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -64,36 +60,15 @@ const setInterceptors = (instance: AxiosInstance) => {
 			// -> Refresh Token 인증 실패 (FORBIDDEN : status === 403)
 			if (status === 403) {
 				if (config.url === API_MEMBER_REFRESH_TOKEN) {
-					clearSessionStorage(JWT_USERNAME);
-					clearSessionStorage(JWT_ACCESS_TOKEN);
-					clearSessionStorage(JWT_REFRESH_TOKEN);
+					clearAuthenticated();
 					window.location.href = '/auth/login';
 					return axios(config);
-				} else {
-					/*if (['post', 'put', 'delete'].includes(config.method ?? '')) {
-						const { status, data } = await axios.get(
-							[config.baseURL, API_MEMBER_CSRF_TOKEN].join(
-								isProduction ? '' : '/'
-							),
-							{
-								headers: {
-									Authorization: ['Bearer', getAccessToken()].join(' '),
-								},
-							}
-						); // O
-						if (status === 200) {
-							headers['X-XSRF-TOKEN'] = data.csrfToken;
-							return axios(config);
-						}
-					}*/
 				}
 			}
 
 			// -> 서버 오류 (INTERNAL_SERVER_ERROR : status === 500)
 			if (status === 500) {
-				clearSessionStorage(JWT_USERNAME);
-				clearSessionStorage(JWT_ACCESS_TOKEN);
-				clearSessionStorage(JWT_REFRESH_TOKEN);
+				clearAuthenticated();
 				window.location.href = '/auth/login';
 				return axios(config);
 			}

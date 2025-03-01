@@ -46,10 +46,14 @@ const isAuthenticated = (): boolean => {
 	) {
 		return true;
 	}
+	clearAuthenticated();
+	return false;
+};
+
+const clearAuthenticated = (): void => {
 	clearSessionStorage(JWT_USERNAME);
 	clearSessionStorage(JWT_ACCESS_TOKEN);
 	clearSessionStorage(JWT_REFRESH_TOKEN);
-	return false;
 };
 
 export {
@@ -59,4 +63,5 @@ export {
 	isAdmin,
 	getAccessToken,
 	isAuthenticated,
+	clearAuthenticated,
 };
