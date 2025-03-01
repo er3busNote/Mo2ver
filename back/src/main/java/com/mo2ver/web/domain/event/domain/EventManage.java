@@ -28,10 +28,10 @@ public class EventManage {
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;
 
-    @Column(name = "EVT_STRT_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '이벤트시작일자'")
+    @Column(name = "EVT_STRT_DE", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '이벤트시작일자'")
     private Date eventStartDate;
 
-    @Column(name = "EVT_END_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '이벤트종료일자'")
+    @Column(name = "EVT_END_DE", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '이벤트종료일자'")
     private Date eventEndDate;
 
     @Column(name = "EVT_YN", columnDefinition = "CHAR(1) COMMENT '이벤트진행여부'")

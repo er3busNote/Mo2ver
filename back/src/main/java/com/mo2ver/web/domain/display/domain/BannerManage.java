@@ -35,10 +35,10 @@ public class BannerManage {
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;
 
-    @Column(name = "DP_STRT_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시시작일자'")
+    @Column(name = "DP_STRT_DE", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시시작일자'")
     private Date displayStartDate;
 
-    @Column(name = "DP_END_DE", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시종료일자'")
+    @Column(name = "DP_END_DE", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '전시종료일자'")
     private Date displayEndDate;
 
     @Column(name = "DP_TPL_CD", nullable = false, columnDefinition = "CHAR(10) COMMENT '템플릿유형'")

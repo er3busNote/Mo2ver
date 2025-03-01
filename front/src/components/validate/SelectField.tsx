@@ -29,6 +29,7 @@ interface RenderSelectFieldProps {
 	formState: UseFormStateReturn<any>;
 	datas: Array<SelectProps>;
 	label: string;
+	readonly?: boolean;
 }
 
 const RenderSelectField: FC<RenderSelectFieldProps> = ({
@@ -36,6 +37,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 	fieldState: { error },
 	label,
 	datas,
+	readonly = false,
 }) => {
 	const selectForm: SxProps<Theme> = {
 		width: { xs: 100, sm: 120 },
@@ -86,6 +88,7 @@ const RenderSelectField: FC<RenderSelectFieldProps> = ({
 				label={label}
 				onChange={onChange}
 				sx={selectInput}
+				disabled={readonly}
 			>
 				{datas.map((data: SelectProps) => {
 					return (

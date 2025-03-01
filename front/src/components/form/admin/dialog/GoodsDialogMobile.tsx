@@ -83,9 +83,34 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 		setRight([]);
 	}, [goodsData]);
 
+	useEffect(() => {
+		if (
+			!mediumCategoryData
+				.map((data: CategoryData) => data.categoryCode)
+				.includes(mediumCategoryCode)
+		) {
+			setMediumCategoryCode(
+				mediumCategoryData.length > 0 ? mediumCategoryData[0].categoryCode : ''
+			);
+		}
+		if (
+			!smallCategoryData
+				.map((data: CategoryData) => data.categoryCode)
+				.includes(smallCategoryCode)
+		) {
+			setSmallCategoryCode(
+				smallCategoryData.length > 0 ? smallCategoryData[0].categoryCode : ''
+			);
+		}
+	}, [
+		mediumCategoryData,
+		mediumCategoryCode,
+		smallCategoryData,
+		smallCategoryCode,
+	]);
+
 	const handleLargeCategoryChange = (event: SelectChangeEvent) => {
 		setLargeCategoryCode(event.target.value as string);
-		setSmallCategoryCode(''); // 초기화
 	};
 	const handleMiddleCategoryChange = (event: SelectChangeEvent) => {
 		setMediumCategoryCode(event.target.value as string);
@@ -243,6 +268,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								<Select
 									label="대분류"
 									defaultValue=""
+									value={largeCategoryCode}
 									onChange={handleLargeCategoryChange}
 									sx={selectInput}
 								>
@@ -260,6 +286,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								<Select
 									label="중분류"
 									defaultValue=""
+									value={mediumCategoryCode}
 									onChange={handleMiddleCategoryChange}
 									sx={selectInput}
 									disabled={mediumCategoryData.length === 0}
@@ -278,6 +305,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								<Select
 									label="소분류"
 									defaultValue=""
+									value={smallCategoryCode}
 									onChange={handleSmallCategoryChange}
 									sx={selectInput}
 									disabled={smallCategoryData.length === 0}

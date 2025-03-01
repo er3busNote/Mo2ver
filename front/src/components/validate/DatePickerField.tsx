@@ -7,6 +7,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 
 const fontSize_xs = '11px';
 const fontSize_sm = '12px';
@@ -18,6 +19,7 @@ interface RenderDatePickerFieldProps {
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
 	label: string;
+	minDate?: Date | string | number | Dayjs;
 	readonly?: boolean;
 }
 
@@ -25,6 +27,7 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 	field: { onChange, value, name },
 	fieldState: { error },
 	label,
+	minDate,
 	readonly = false,
 }) => {
 	const datePicker: SxProps<Theme> = {
@@ -80,6 +83,7 @@ const RenderDatePickerField: FC<RenderDatePickerFieldProps> = ({
 					helperText: error ? error.message : '',
 				},
 			}}
+			{...(minDate ? { minDate: dayjs(minDate) } : {})}
 			disabled={readonly}
 		/>
 	);

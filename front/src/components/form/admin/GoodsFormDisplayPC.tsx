@@ -35,6 +35,7 @@ import RenderDatePickerField from '../../validate/DatePickerField';
 import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import { renameKeys } from '../../../utils/code';
+import dayjs from 'dayjs';
 
 const fontSize_sm = '13px';
 const fontSize_lg = '14px';
@@ -46,6 +47,7 @@ interface GoodsProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	type: 'Create' | 'Update';
 	onSubmit: (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -56,6 +58,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	title,
 	description,
 	groupCodeData,
+	type,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -238,6 +241,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={dayjs()}
 											/>
 										)}
 									/>
@@ -251,6 +255,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={watch('startDate')}
 											/>
 										)}
 									/>
@@ -292,6 +297,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
+													readonly={type === 'Update'}
 												/>
 											)}
 										/>

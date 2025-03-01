@@ -28,6 +28,7 @@ import RenderUploadField from '../../validate/UploadField';
 import RenderDatePickerField from '../../validate/DatePickerField';
 import { EventFormDisplayValues, EventDisplayDetailValues } from './types';
 // import _ from 'lodash';
+import dayjs from 'dayjs';
 
 const fontSize_sm = '13px';
 const fontSize_lg = '14px';
@@ -57,6 +58,7 @@ const EventFormDisplayPC: FC<EventProp> = ({
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
+		watch,
 	} = useFormContext<EventFormDisplayValues>();
 
 	const { fields, replace } = useFieldArray({
@@ -218,6 +220,7 @@ const EventFormDisplayPC: FC<EventProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={dayjs()}
 											/>
 										)}
 									/>
@@ -231,6 +234,7 @@ const EventFormDisplayPC: FC<EventProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={watch('startDate')}
 											/>
 										)}
 									/>

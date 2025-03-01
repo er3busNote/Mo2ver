@@ -35,6 +35,7 @@ import { GoodsFormDisplayValues, GoodsDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import { isMobile } from 'react-device-detect';
 import { renameKeys } from '../../../utils/code';
+import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -43,6 +44,7 @@ interface GoodsProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	type: 'Create' | 'Update';
 	onSubmit: (
 		data: GoodsFormDisplayValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -53,6 +55,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	title,
 	description,
 	groupCodeData,
+	type,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -243,6 +246,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={dayjs()}
 											/>
 										)}
 									/>
@@ -258,6 +262,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={watch('startDate')}
 											/>
 										)}
 									/>
@@ -301,6 +306,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
+													readonly={type === 'Update'}
 												/>
 											)}
 										/>

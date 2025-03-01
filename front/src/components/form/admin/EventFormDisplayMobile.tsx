@@ -28,6 +28,7 @@ import RenderDatePickerField from '../../validate/DatePickerField';
 import { EventFormDisplayValues, EventDisplayDetailValues } from './types';
 // import _ from 'lodash';
 import { isMobile } from 'react-device-detect';
+import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -54,6 +55,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
+		watch,
 	} = useFormContext<EventFormDisplayValues>();
 
 	const { fields, replace } = useFieldArray({
@@ -222,6 +224,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={dayjs()}
 											/>
 										)}
 									/>
@@ -237,6 +240,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={watch('startDate')}
 											/>
 										)}
 									/>

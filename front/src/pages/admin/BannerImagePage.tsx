@@ -8,21 +8,14 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import {
-	BannerDetailData,
-	BannerImageData,
-	BannerImageDetailData,
-} from '../../api/types';
+import { BannerDetailData, BannerImageData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import useBannerImagesDetail from '../../hooks/banner/useBannerImagesDetail';
 import BannerFormImagePC from '../../components/form/admin/BannerFormImagePC';
 import BannerFormImageMobile from '../../components/form/admin/BannerFormImageMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import {
-	BannerFormImageValues,
-	BannerImageDetailValues,
-} from '../../components/form/admin/types';
+import { BannerFormImageValues } from '../../components/form/admin/types';
 //import { merge } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -47,7 +40,7 @@ const bnnrImageSchema = yup
 					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
 				}
 			)
-			.test(
+			/*.test(
 				'is-before-start',
 				'시작날짜는 종료날짜 이전여야 합니다.',
 				function (value) {
@@ -57,7 +50,7 @@ const bnnrImageSchema = yup
 						(value && endDate && dayjs(value).isBefore(dayjs(endDate)))
 					);
 				}
-			)
+			)*/
 			.nullable()
 			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup
@@ -146,7 +139,8 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
-	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [bannerNo, setBannerNo] = useState<number>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const groupCodeData = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
@@ -187,6 +181,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 				useyn: imagesInfo.useyn,
 				bnnrImg: imagesInfo.bnnrImg,
 			});
+			if (imagesInfo.bannerNo) setBannerNo(imagesInfo.bannerNo);
 			setIsDataLoaded(true);
 		}
 	}
@@ -195,23 +190,6 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 		data: BannerFormImageValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const bnnrImg = data.bnnrImg as Array<BannerImageDetailValues>;
-		const paramBnnrImg = new Array<BannerImageDetailData>();
-		const formData = new FormData();
-		bnnrImg.map((item: BannerImageDetailValues) => {
-			if (item.bnnrImg) formData.append('files', item.bnnrImg);
-			else {
-				const textContent = 'This is the error content of the file.';
-				const blob = new Blob([textContent], { type: 'text/plain' });
-				const file = new File([blob], 'error.txt', { type: 'text/plain' });
-				formData.append('files', file);
-			}
-			paramBnnrImg.push({
-				title: item.title,
-				cnntUrl: item.cnntUrl,
-				useyn: item.useyn,
-			});
-		});
 		const bannerFormData: BannerImageData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
@@ -220,16 +198,17 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			type: data.type,
 			code: data.code,
 			useyn: data.useyn,
-			bnnrImg: paramBnnrImg,
+			bnnrImg: data.bnnrImg,
 		};
-		formData.append(
-			'bannerImage',
-			new Blob([JSON.stringify(bannerFormData)], { type: 'application/json' })
-		);
-		console.log('bannerImage');
+		if (componentType === 'Update') {
+			bannerFormData.bannerNo = bannerNo;
+		}
 		console.log(bannerFormData);
 		console.log(csrfData);
-		await banner.upload(formData, csrfData);
+		if (componentType === 'Create')
+			await banner.imagesCreate(bannerFormData, csrfData);
+		if (componentType === 'Update')
+			await banner.imagesUpdate(bannerFormData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
@@ -244,6 +223,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
+							type={componentType}
 							onSubmit={submitForm}
 						/>
 					)}
@@ -252,6 +232,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
+							type={componentType}
 							onSubmit={submitForm}
 						/>
 					)}

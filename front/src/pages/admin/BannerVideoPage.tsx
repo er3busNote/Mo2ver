@@ -37,7 +37,7 @@ const videoDisplaySchema = yup
 					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
 				}
 			)
-			.test(
+			/*.test(
 				'is-before-start',
 				'시작날짜는 종료날짜 이전여야 합니다.',
 				function (value) {
@@ -47,7 +47,7 @@ const videoDisplaySchema = yup
 						(value && endDate && dayjs(value).isBefore(dayjs(endDate)))
 					);
 				}
-			)
+			)*/
 			.nullable()
 			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup

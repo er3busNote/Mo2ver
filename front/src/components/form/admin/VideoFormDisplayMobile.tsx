@@ -26,6 +26,7 @@ import RenderDatePickerField from '../../validate/DatePickerField';
 import { VideoFormDisplayValues } from './types';
 // import _ from 'lodash';
 import { renameKeys } from '../../../utils/code';
+import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -189,6 +190,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={dayjs()}
 											/>
 										)}
 									/>
@@ -204,6 +206,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
+												minDate={watch('startDate')}
 											/>
 										)}
 									/>

@@ -40,7 +40,7 @@ const goodsDisplaySchema = yup
 					return value.isSame(dayjs(), 'day') || value.isAfter(dayjs(), 'day');
 				}
 			)
-			.test(
+			/*.test(
 				'is-before-start',
 				'시작날짜는 종료날짜 이전여야 합니다.',
 				function (value) {
@@ -50,7 +50,7 @@ const goodsDisplaySchema = yup
 						(value && endDate && dayjs(value).isBefore(dayjs(endDate)))
 					);
 				}
-			)
+			)*/
 			.nullable()
 			.required('시작날짜가 존재하질 않습니다'),
 		endDate: yup
@@ -126,7 +126,8 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
-	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [bannerNo, setBannerNo] = useState<number>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const groupCodeData = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
@@ -167,6 +168,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 				useyn: goodsInfo.useyn,
 				goods: goodsInfo.goods,
 			});
+			if (goodsInfo.bannerNo) setBannerNo(goodsInfo.bannerNo);
 			setIsDataLoaded(true);
 		}
 	}
@@ -185,9 +187,15 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 			code: data.code,
 			goods: data.goods,
 		};
+		if (componentType === 'Update') {
+			goodsFormData.bannerNo = bannerNo;
+		}
 		console.log(goodsFormData);
 		console.log(csrfData);
-		await banner.goods(goodsFormData, csrfData);
+		if (componentType === 'Create')
+			await banner.goodsCreate(goodsFormData, csrfData);
+		if (componentType === 'Update')
+			await banner.goodsUpdate(goodsFormData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
@@ -202,6 +210,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
+							type={componentType}
 							onSubmit={submitForm}
 						/>
 					)}
@@ -210,6 +219,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
+							type={componentType}
 							onSubmit={submitForm}
 						/>
 					)}
