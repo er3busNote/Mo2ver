@@ -55,9 +55,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 					tokenData
 				); // O
 				if (status === 201) {
-					setSessionStorage(JWT_USERNAME, data.username);
 					setSessionStorage(JWT_ACCESS_TOKEN, data.accesstoken);
-					setSessionStorage(JWT_REFRESH_TOKEN, data.refreshtoken);
 					headers.Authorization = ['Bearer', getAccessToken()].join(' ');
 				}
 				return axios(config);
@@ -69,6 +67,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 					clearSessionStorage(JWT_USERNAME);
 					clearSessionStorage(JWT_ACCESS_TOKEN);
 					clearSessionStorage(JWT_REFRESH_TOKEN);
+					window.location.href = '/auth/login';
 					return axios(config);
 				} else {
 					/*if (['post', 'put', 'delete'].includes(config.method ?? '')) {
@@ -88,6 +87,15 @@ const setInterceptors = (instance: AxiosInstance) => {
 						}
 					}*/
 				}
+			}
+
+			// -> 서버 오류 (INTERNAL_SERVER_ERROR : status === 500)
+			if (status === 500) {
+				clearSessionStorage(JWT_USERNAME);
+				clearSessionStorage(JWT_ACCESS_TOKEN);
+				clearSessionStorage(JWT_REFRESH_TOKEN);
+				window.location.href = '/auth/login';
+				return axios(config);
 			}
 
 			return Promise.reject(error); // [Case - 2.2] : 요청 에러 처리를 작성함

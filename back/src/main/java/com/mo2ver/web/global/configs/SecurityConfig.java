@@ -24,6 +24,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -81,7 +83,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private void configureForHTTPS(HttpSecurity http) throws Exception {
-        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        RequestMatcher refreshTokenMatcher = new AntPathRequestMatcher("/member/refresh");
+        http.csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // CSRF 토큰을 쿠키에 저장
+                .ignoringRequestMatchers(refreshTokenMatcher) // Refresh Token 요청은 CSRF 검사 제외
+        );
     }
 
     private void configureCommon(HttpSecurity http) throws Exception {
