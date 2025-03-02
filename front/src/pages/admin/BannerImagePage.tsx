@@ -80,25 +80,8 @@ const bnnrImageSchema = yup
 			.of(
 				yup.object().shape({
 					title: yup.string().required('배너내용을 입력해주세요'),
-					bnnrImg: yup
-						.mixed<File>()
-						.test(
-							'file',
-							'파일을 선택하세요',
-							(value) => value && value.size > 0
-						)
-						.test(
-							'fileSize',
-							'파일크기가 너무 작습니다',
-							(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-						)
-						.test(
-							'fileType',
-							'지원되는 파일 타입이 아닙니다',
-							(value) =>
-								value && ['image/jpeg', 'image/png'].includes(value.type)
-						),
 					cnntUrl: yup.string().required('연결할 URL을 입력해주세요'),
+					file: yup.string().required('첨부파일이 존재하질 않습니다'),
 					useyn: yup.string().required('필수항목'),
 				})
 			)
@@ -122,7 +105,7 @@ const bnnrImageValues: BannerFormImageValues = {
 	type: 'BN',
 	code: '',
 	useyn: 'Y',
-	bnnrImg: [{ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' }],
+	bnnrImg: [{ title: '', cnntUrl: '', file: '', useyn: '' }],
 };
 
 const BannerImagePage: FC<BannerDispatchProps> = ({
@@ -159,7 +142,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 
 	if (componentType === 'Update') {
 		const bannerManageNo = location.state?.bannerManageNo;
-		const displayTemplateCode = location.state?.bannerManageNo;
+		const displayTemplateCode = location.state?.displayTemplateCode;
 		const bannerData: BannerDetailData = {
 			bannerManageNo: bannerManageNo,
 			displayTemplateCode: displayTemplateCode,

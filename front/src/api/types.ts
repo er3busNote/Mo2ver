@@ -183,7 +183,7 @@ interface BannerImageDetailData {
 	id?: number;
 	title: string;
 	cnntUrl: string;
-	file?: number;
+	file?: string;
 	useyn: string;
 }
 

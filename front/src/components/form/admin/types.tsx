@@ -8,8 +8,8 @@ interface CategoryFormValues {
 
 interface BannerImageDetailValues {
 	title: string;
-	bnnrImg?: File;
 	cnntUrl: string;
+	file: string;
 	useyn: string;
 }
 

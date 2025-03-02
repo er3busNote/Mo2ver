@@ -1,9 +1,15 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useEffect, useRef, ChangeEvent } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
 	UseFormStateReturn,
 } from 'react-hook-form';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '../../api';
+import useCSRFToken from '../../hooks/useCSRFToken';
+import useFieInfo from '../../hooks/cmmn/useFileInfo';
 import { Box, Button, IconButton, FormHelperText } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -25,13 +31,31 @@ interface RenderUploadFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
+	member: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
 }
 
 const RenderUploadField: FC<RenderUploadFieldProps> = ({
 	field: { onChange, value, name },
 	fieldState: { error },
+	member,
+	image,
 }) => {
+	const csrfData = useCSRFToken({ member });
+	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	useEffect(() => {
+		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
+			onChange(dataFiles[0].fileAttachCode);
+		}
+	}, [dataFiles]);
+
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
+		const selectedFiles = event.target.files;
+		if (selectedFiles) {
+			setFiles(selectedFiles);
+		}
+	};
 
 	const uploadBox: SxProps<Theme> = {
 		display: 'grid',
@@ -55,29 +79,23 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 						py: { xs: '3px', sm: '4px' },
 						fontSize: { xs: '7px', sm: '8px', md: '11px', lg: '12px' },
 					}}
-					disabled={value !== undefined}
+					disabled={value !== ''}
 				>
 					Upload file
 					<VisuallyHiddenInput
 						type="file"
 						ref={fileInputRef}
 						name={name}
-						defaultValue={value}
 						accept="image/png, image/jpeg"
-						onChange={(e) => {
-							const file = e.target.files && e.target.files[0];
-							if (file) {
-								onChange(file);
-							}
-						}}
+						onChange={handleFiles}
 					/>
 				</Button>
-				{value !== undefined && (
+				{value !== '' && (
 					<IconButton
 						size="small"
 						onClick={() => {
 							if (fileInputRef.current) fileInputRef.current.value = '';
-							onChange(undefined);
+							onChange('');
 						}}
 					>
 						<ClearIcon />
@@ -91,4 +109,9 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 	);
 };
 
-export default RenderUploadField;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(RenderUploadField);

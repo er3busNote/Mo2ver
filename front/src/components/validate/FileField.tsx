@@ -9,11 +9,11 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { FileData } from '../../api/types';
 import Api from '../../api';
+import useCSRFToken from '../../hooks/useCSRFToken';
+import useFieInfo from '../../hooks/cmmn/useFileInfo';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { Close, FileUploadOutlined } from '@mui/icons-material';
-import useCSRFToken from '../../hooks/useCSRFToken';
-import useFieInfo from '../../hooks/cmmn/useFileInfo';
 
 const fontSize_xs = '11px';
 const fontSize_sm = '12px';

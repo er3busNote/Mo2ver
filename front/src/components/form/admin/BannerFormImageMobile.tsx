@@ -187,7 +187,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 		name: 'bnnrImg',
 	});
 	const addNewField = () => {
-		append({ title: '', bnnrImg: undefined, cnntUrl: '', useyn: '' });
+		append({ title: '', cnntUrl: '', file: '', useyn: '' });
 	};
 	const removeField = () => {
 		remove(-1);
@@ -573,7 +573,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
 									<Controller
-										name={`bnnrImg.${index}.bnnrImg`}
+										name={`bnnrImg.${index}.file`}
 										control={control}
 										render={({ field, fieldState, formState }) => (
 											<RenderUploadField
