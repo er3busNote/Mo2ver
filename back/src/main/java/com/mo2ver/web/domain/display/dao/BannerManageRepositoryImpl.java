@@ -41,7 +41,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
 
         return queryFactory
                 .selectFrom(bannerManage)
-                .innerJoin(bannerManage.bannerDetailList, bannerDetail)
+                .leftJoin(bannerManage.bannerDetailList, bannerDetail)
                 .where(builder)
                 .transform(groupBy(bannerManage.bannerManageNo).list(
                         new QBannerImageInfo(
@@ -71,9 +71,9 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
 
         return queryFactory
                 .selectFrom(bannerManage)
-                .innerJoin(bannerManage.bannerProductList, bannerProduct)
-                .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
-                .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
+                .leftJoin(bannerManage.bannerProductList, bannerProduct)
+                .leftJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
+                .leftJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .where(builder)
                 .transform(groupBy(bannerManage.bannerManageNo).list(
                         new QGoodsDisplayInfo(

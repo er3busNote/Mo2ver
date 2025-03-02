@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.display.dto;
 
+import com.mo2ver.web.global.common.util.ObjectUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,8 +13,11 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -62,6 +66,6 @@ public class GoodsDisplayInfo {
         this.type = type;
         this.code = code;
         this.useyn = useyn;
-        this.goods = goods;
+        this.goods = goods.stream().filter(ObjectUtil::nonAllFieldsNull).collect(Collectors.toList());
     }
 }
