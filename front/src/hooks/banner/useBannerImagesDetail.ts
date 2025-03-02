@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { BannerDetailData, BannerImageData, CSRFData } from '../../api/types';
+import { BannerRequestData, BannerImageData, CSRFData } from '../../api/types';
 
 interface BannerDetailProps {
 	banner: ActionCreatorsMapObject;
-	bannerData: BannerDetailData;
+	bannerData: BannerRequestData;
 	csrfData: CSRFData;
 }
 

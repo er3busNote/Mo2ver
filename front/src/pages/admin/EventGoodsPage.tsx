@@ -1,15 +1,16 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { EventDisplayData } from '../../api/types';
+import { EventRequestData, EventDisplayData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
+import useEventDetail from '../../hooks/event/useEventDetail';
 import EventFormDisplayPC from '../../components/form/admin/EventFormDisplayPC';
 import EventFormDisplayMobile from '../../components/form/admin/EventFormDisplayMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -69,33 +70,9 @@ const eventDisplaySchema = yup
 			)
 			.nullable()
 			.required('종료날짜 존재하질 않습니다'),
+		displayFile: yup.string().required('첨부파일이 존재하질 않습니다'),
+		eventFile: yup.string().required('첨부파일이 존재하질 않습니다'),
 		useyn: yup.string().required('필수항목'),
-		displayImg: yup
-			.mixed<File>()
-			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
-			.test(
-				'fileSize',
-				'파일크기가 너무 작습니다',
-				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-			)
-			.test(
-				'fileType',
-				'지원되는 파일 타입이 아닙니다',
-				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-			),
-		eventImg: yup
-			.mixed<File>()
-			.test('file', '파일을 선택하세요', (value) => value && value.size > 0)
-			.test(
-				'fileSize',
-				'파일크기가 너무 작습니다',
-				(value) => value && value.size <= 1024 * 1024 * 5 // 5MB
-			)
-			.test(
-				'fileType',
-				'지원되는 파일 타입이 아닙니다',
-				(value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-			),
 		goods: yup
 			.array()
 			.of(
@@ -125,9 +102,9 @@ const eventDisplayValues: EventFormDisplayValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
+	displayFile: '',
+	eventFile: '',
 	useyn: 'Y',
-	displayImg: undefined,
-	eventImg: undefined,
 	goods: [],
 };
 
@@ -142,35 +119,14 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const navigate = useNavigate();
+	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
-	const submitForm = async (
-		data: EventFormDisplayValues,
-		eventForm?: BaseSyntheticEvent<object, any, any>
-	) => {
-		const formData = new FormData();
-		const textContent = 'This is the error content of the file.';
-		const blob = new Blob([textContent], { type: 'text/plain' });
-		const file = new File([blob], 'error.txt', { type: 'text/plain' });
-		formData.append('displayFile', data.displayImg ?? file);
-		formData.append('eventFile', data.eventImg ?? file);
-		const eventFormData: EventDisplayData = {
-			title: data.title,
-			startDate: data.startDate.format('YYYY-MM-DD'),
-			endDate: data.endDate.format('YYYY-MM-DD'),
-			useyn: data.useyn,
-			goods: data.goods,
-		};
-		formData.append(
-			'eventProduct',
-			new Blob([JSON.stringify(eventFormData)], { type: 'application/json' })
-		);
-		console.log('eventProduct');
-		console.log(eventFormData);
-		console.log(csrfData);
-		await event.upload(formData, csrfData);
-		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/event');
-	};
+	const [eventNo, setEventNo] = useState<number>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+	const componentType =
+		location.state?.bannerManageNo && location.state?.displayTemplateCode
+			? 'Update'
+			: 'Create';
 
 	const methods = useForm<EventFormDisplayValues>({
 		mode: 'onChange',
@@ -178,24 +134,79 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 		resolver: yupResolver(eventDisplaySchema),
 	});
 
+	if (componentType === 'Update') {
+		const eventManageNo = location.state?.eventManageNo;
+		const eventData: EventRequestData = {
+			eventManageNo: eventManageNo,
+		};
+		const eventInfo = useEventDetail({
+			event,
+			eventData,
+			csrfData,
+		});
+		if (eventInfo && !isDataLoaded) {
+			const { reset } = methods;
+			reset({
+				title: eventInfo.title,
+				startDate: dayjs(eventInfo.startDate),
+				endDate: dayjs(eventInfo.endDate),
+				displayFile: eventInfo.displayFile,
+				eventFile: eventInfo.eventFile,
+				useyn: eventInfo.useyn,
+				goods: eventInfo.goods,
+			});
+			if (eventInfo.eventNo) setEventNo(eventInfo.eventNo);
+			setIsDataLoaded(true);
+		}
+	}
+
+	const submitForm = async (
+		data: EventFormDisplayValues,
+		eventForm?: BaseSyntheticEvent<object, any, any>
+	) => {
+		const eventFormData: EventDisplayData = {
+			title: data.title,
+			startDate: data.startDate.format('YYYY-MM-DD'),
+			endDate: data.endDate.format('YYYY-MM-DD'),
+			displayFile: data.displayFile,
+			eventFile: data.eventFile,
+			useyn: data.useyn,
+			goods: data.goods,
+		};
+		if (componentType === 'Update') {
+			eventFormData.eventNo = eventNo;
+		}
+		console.log(eventFormData);
+		console.log(csrfData);
+		if (componentType === 'Create')
+			await event.imagesCreate(eventFormData, csrfData);
+		if (componentType === 'Update')
+			await event.imagesUpdate(eventFormData, csrfData);
+		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
+		navigate('/admin/event');
+	};
+
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
-			<FormProvider {...methods}>
-				{isDesktop && (
-					<EventFormDisplayPC
-						title={title}
-						description={description}
-						onSubmit={submitForm}
-					/>
-				)}
-				{isMobile && (
-					<EventFormDisplayMobile
-						title={title}
-						description={description}
-						onSubmit={submitForm}
-					/>
-				)}
-			</FormProvider>
+			{(componentType === 'Create' ||
+				(componentType === 'Update' && isDataLoaded)) && (
+				<FormProvider {...methods}>
+					{isDesktop && (
+						<EventFormDisplayPC
+							title={title}
+							description={description}
+							onSubmit={submitForm}
+						/>
+					)}
+					{isMobile && (
+						<EventFormDisplayMobile
+							title={title}
+							description={description}
+							onSubmit={submitForm}
+						/>
+					)}
+				</FormProvider>
+			)}
 		</Box>
 	);
 };

@@ -8,7 +8,7 @@ import com.mo2ver.web.domain.event.domain.EventImage;
 import com.mo2ver.web.domain.event.domain.EventManage;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
-import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
+import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +43,8 @@ public class EventService {
     }
 
     @Transactional
-    public Long saveImageEvent(List<MultipartFile> eventFiles, EventImageRequest eventImageRequest, Member currentUser) throws Exception {
-        EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageRequest, currentUser));
+    public Long saveImageEvent(List<MultipartFile> eventFiles, EventImageInfo eventImageInfo, Member currentUser) throws Exception {
+        EventManage eventManage = this.eventManageRepository.save(EventManage.of(eventImageInfo, currentUser));
         for (int i = 0; i < eventFiles.size(); i++) {
             MultipartFile file = eventFiles.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);

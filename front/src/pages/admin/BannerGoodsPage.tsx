@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '../../store/types';
 import Api from '../../api';
-import { BannerDetailData, GoodsDisplayData } from '../../api/types';
+import { BannerRequestData, GoodsDisplayData } from '../../api/types';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useGroupCodeList from '../../hooks/cmmn/useGroupCodeList';
 import useBannerGoodsDetail from '../../hooks/banner/useBannerGoodsDetail';
@@ -147,7 +147,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	if (componentType === 'Update') {
 		const bannerManageNo = location.state?.bannerManageNo;
 		const displayTemplateCode = location.state?.displayTemplateCode;
-		const bannerData: BannerDetailData = {
+		const bannerData: BannerRequestData = {
 			bannerManageNo: bannerManageNo,
 			displayTemplateCode: displayTemplateCode,
 		};

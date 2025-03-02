@@ -2,7 +2,7 @@ package com.mo2ver.web.event;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
-import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
+import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
@@ -69,12 +69,12 @@ public class EventTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        EventImageRequest eventImageRequest = this.getEventImageInfo();
+        EventImageInfo eventImageInfo = this.getEventImageInfo();
 
         MockMultipartFile file1 = new MockMultipartFile("displayFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("eventFile", "file2.txt", "image/png", "Test file content 2".getBytes());
 
-        MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageRequest).getBytes());
+        MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageInfo).getBytes());
         jsonEventProduct.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(multipart("/event/upload")
@@ -87,8 +87,8 @@ public class EventTest extends CsrfConfigTest {
                 .andExpect(status().isCreated());
     }
 
-    private EventImageRequest getEventImageInfo() {
-        return EventImageRequest.builder()
+    private EventImageInfo getEventImageInfo() {
+        return EventImageInfo.builder()
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())

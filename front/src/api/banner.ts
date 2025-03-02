@@ -5,7 +5,7 @@ import {
 	CSRFData,
 	GoodsDisplayData,
 	BannerImageData,
-	BannerDetailData,
+	BannerRequestData,
 	PageData,
 } from './types';
 
@@ -35,9 +35,9 @@ const banner = (instance: AxiosInstance) => {
 					dispatch(toastMessage({ message: error.message, type: 'error' }));
 					return error.response?.data;
 				}),
-		// 배너 상품 전시 정보 API : <baseURL>/banner/goods/detail
+		// 배너 상품 상세 정보 API : <baseURL>/banner/goods/detail
 		goodsDetail:
-			(bannerData: BannerDetailData, csrfData: CSRFData) =>
+			(bannerData: BannerRequestData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
 					.post('banner/goods/detail', bannerData, {
@@ -53,9 +53,9 @@ const banner = (instance: AxiosInstance) => {
 						dispatch(toastMessage({ message: error.message, type: 'error' }));
 						return error.response?.data;
 					}),
-		// 배너 이미지 정보 API : <baseURL>/banner/images/detail
+		// 배너 이미지 상세 정보 API : <baseURL>/banner/images/detail
 		imagesDetail:
-			(bannerData: BannerDetailData, csrfData: CSRFData) =>
+			(bannerData: BannerRequestData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
 					.post('banner/images/detail', bannerData, {

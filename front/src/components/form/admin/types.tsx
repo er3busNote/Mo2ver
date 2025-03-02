@@ -53,9 +53,9 @@ interface EventFormDisplayValues {
 	title: string;
 	startDate: Dayjs;
 	endDate: Dayjs;
+	displayFile: string;
+	eventFile: string;
 	useyn: string;
-	displayImg?: File;
-	eventImg?: File;
 	goods: Array<EventDisplayDetailValues>;
 }
 

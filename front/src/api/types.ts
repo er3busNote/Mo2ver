@@ -146,7 +146,7 @@ interface BannerData {
 	registerDate: number;
 }
 
-interface BannerDetailData {
+interface BannerRequestData {
 	bannerManageNo: number;
 	displayTemplateCode: string;
 }
@@ -231,6 +231,10 @@ interface EventData {
 	imageList: Array<ImageData>;
 }
 
+interface EventRequestData {
+	eventManageNo: number;
+}
+
 interface EventPageData {
 	content: Array<EventData>;
 	empty: boolean;
@@ -311,9 +315,12 @@ interface EventDisplayDetailData {
 }
 
 interface EventDisplayData {
+	eventNo?: number;
 	title: string;
 	startDate: string;
 	endDate: string;
+	displayFile: string;
+	eventFile: string;
 	useyn: string;
 	goods: Array<EventDisplayDetailData>;
 }
@@ -377,12 +384,13 @@ export type {
 	CategoryDataInfo,
 	CategoryDataGroup,
 	BannerData,
-	BannerDetailData,
+	BannerRequestData,
 	BannerPageData,
 	BannerImageData,
 	BannerImageDetailData,
 	GoodsDisplayData,
 	EventData,
+	EventRequestData,
 	EventPageData,
 	EventDetailData,
 	EventDetailPageData,

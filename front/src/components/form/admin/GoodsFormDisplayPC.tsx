@@ -28,7 +28,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import GoodsDialogPC from './dialog/GoodsDialogPC';
+import DialogGoodsPC from '../../dialog/DialogGoodsPC';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
@@ -385,7 +385,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 							>
 								상품찾기
 							</ButtonBase>
-							<GoodsDialogPC
+							<DialogGoodsPC
 								open={open}
 								replaceField={replaceField}
 								handleClose={closeGoods}

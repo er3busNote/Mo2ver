@@ -2,7 +2,7 @@ package com.mo2ver.web.domain.event.api;
 
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
-import com.mo2ver.web.domain.event.dto.request.EventImageRequest;
+import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.domain.event.validation.EventImageValidator;
 import com.mo2ver.web.domain.member.domain.CurrentUser;
@@ -63,7 +63,7 @@ public class EventController {
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity uploadEvent(@RequestPart(name = "displayFile") @Valid MultipartFile displayFile,
                                       @RequestPart(name = "eventFile") @Valid MultipartFile eventFile,
-                                      @RequestPart(name = "eventProduct") @Valid EventImageRequest eventImageRequest,
+                                      @RequestPart(name = "eventProduct") @Valid EventImageInfo eventImageInfo,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {
         List<MultipartFile> eventFiles = Arrays.asList(displayFile, eventFile);
@@ -76,7 +76,7 @@ public class EventController {
             }
         }
         try {
-            Long eventManageNo = eventService.saveImageEvent(eventFiles, eventImageRequest, currentUser);
+            Long eventManageNo = eventService.saveImageEvent(eventFiles, eventImageInfo, currentUser);
             return ResponseEntity.created(URI.create("/upload/" + eventManageNo))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())

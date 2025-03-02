@@ -21,7 +21,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import GoodsDialogPC from './dialog/GoodsDialogPC';
+import GoodsDialogPC from '../../dialog/DialogGoodsPC';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderUploadField from '../../validate/UploadField';
@@ -247,7 +247,7 @@ const EventFormDisplayPC: FC<EventProp> = ({
 							</TableCell>
 							<TableCell sx={uploadTd}>
 								<Controller
-									name="displayImg"
+									name="displayFile"
 									control={control}
 									render={({ field, fieldState, formState }) => (
 										<RenderUploadField
@@ -263,7 +263,7 @@ const EventFormDisplayPC: FC<EventProp> = ({
 							</TableCell>
 							<TableCell sx={uploadTd}>
 								<Controller
-									name="eventImg"
+									name="eventFile"
 									control={control}
 									render={({ field, fieldState, formState }) => (
 										<RenderUploadField

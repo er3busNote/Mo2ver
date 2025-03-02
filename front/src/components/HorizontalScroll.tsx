@@ -2,15 +2,8 @@ import React, { FC, useState } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { FileData } from '../api/types';
 import useImageUrl from '../hooks/useImageUrl';
-import {
-	Box,
-	Card,
-	CardMedia,
-	CardActionArea,
-	Dialog,
-	DialogContent,
-	DialogTitle,
-} from '@mui/material';
+import { Box, Card, CardMedia, CardActionArea } from '@mui/material';
+import DialogImage from './dialog/DialogImage';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Pagination } from 'swiper/modules';
@@ -29,14 +22,6 @@ interface CarouselSlideProps {
 	size: string;
 }
 
-interface CarouselDialogProps {
-	open: boolean;
-	file: string;
-	name: string;
-	image: ActionCreatorsMapObject;
-	handleClose: () => void;
-}
-
 interface HorizontalScrollProps {
 	slidesPerView: number;
 	spaceBetween: number;
@@ -45,27 +30,6 @@ interface HorizontalScrollProps {
 	type?: 'deault' | 'display';
 	size?: 'deault' | 'small';
 }
-
-const CarouselDialog: FC<CarouselDialogProps> = ({
-	open,
-	image,
-	file,
-	name,
-	handleClose,
-}): JSX.Element => {
-	return (
-		<Dialog open={open} onClose={handleClose}>
-			<DialogTitle>{name}</DialogTitle>
-			<DialogContent>
-				<CardMedia
-					component="img"
-					image={useImageUrl({ image, file })}
-					alt="Image"
-				/>
-			</DialogContent>
-		</Dialog>
-	);
-};
 
 const CarouselSlide: FC<CarouselSlideProps> = ({
 	image,
@@ -109,7 +73,7 @@ const CarouselSlide: FC<CarouselSlideProps> = ({
 					alt="Image"
 				/>
 			</CardActionArea>
-			<CarouselDialog
+			<DialogImage
 				open={open}
 				file={file}
 				name={name}

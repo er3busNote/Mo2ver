@@ -27,7 +27,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import GoodsDialogMobile from './dialog/GoodsDialogMobile';
+import DialogGoodsMobile from '../../dialog/DialogGoodsMobile';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderDatePickerField from '../../validate/DatePickerField';
@@ -396,7 +396,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 							>
 								상품찾기
 							</ButtonBase>
-							<GoodsDialogMobile
+							<DialogGoodsMobile
 								open={open}
 								replaceField={replaceField}
 								handleClose={closeGoods}

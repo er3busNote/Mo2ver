@@ -20,7 +20,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import GoodsDialogMobile from './dialog/GoodsDialogMobile';
+import GoodsDialogMobile from '../../dialog/DialogGoodsMobile';
 import RenderTextField from '../../validate/TextField';
 import RenderSelectField from '../../validate/SelectField';
 import RenderUploadField from '../../validate/UploadField';
@@ -253,7 +253,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 							</TableCell>
 							<TableCell sx={uploadTd} align="left">
 								<Controller
-									name="displayImg"
+									name="displayFile"
 									control={control}
 									render={({ field, fieldState, formState }) => (
 										<RenderUploadField
@@ -271,7 +271,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 							</TableCell>
 							<TableCell sx={uploadTd} align="left">
 								<Controller
-									name="eventImg"
+									name="eventFile"
 									control={control}
 									render={({ field, fieldState, formState }) => (
 										<RenderUploadField

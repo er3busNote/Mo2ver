@@ -2,12 +2,12 @@ import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../../../api';
-import { GoodsData, CategoryData } from '../../../../api/types';
-import useCategoryInfo from '../../../../hooks/category/useCategoryInfo';
-import useGoodsSearchPageList from '../../../../hooks/goods/useGoodsSearchPageList';
-import SearchInput from '../../../input/SearchInput';
-import ButtonDialog from '../../../button/ButtonDialog';
+import Api from '../../api';
+import { GoodsData, CategoryData } from '../../api/types';
+import useCategoryInfo from '../../hooks/category/useCategoryInfo';
+import useGoodsSearchPageList from '../../hooks/goods/useGoodsSearchPageList';
+import SearchInput from '../input/SearchInput';
+import ButtonDialog from '../button/ButtonDialog';
 import {
 	Box,
 	Grid,
@@ -28,7 +28,6 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { isMobile } from 'react-device-detect';
 
 interface DialogProps {
 	open: boolean;
@@ -40,7 +39,7 @@ interface DialogProps {
 	base: SxProps<Theme>;
 }
 
-const GoodsDialogMobile: FC<DialogProps> = ({
+const DialogGoodsPC: FC<DialogProps> = ({
 	open,
 	goods,
 	category,
@@ -176,38 +175,30 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 		handleClose();
 	};
 
-	const checkBox: SxProps<Theme> = {
-		minWidth: '42px',
-		'& .MuiSvgIcon-root': {
-			fontSize: 18,
-		},
-	};
 	const selectForm: SxProps<Theme> = {
-		width: 90,
+		width: 120,
 		'.MuiInputLabel-shrink': {
 			ml: 1,
 			mt: 0.5,
 		},
-		overflowX: 'visible',
 	};
 	const selectLabel: SxProps<Theme> = {
 		mt: -1,
 		ml: 1,
-		fontSize: { xs: '11px', sm: '12px' },
+		fontSize: { sm: '13px', lg: '14px' },
 	};
 	const selectInput: SxProps<Theme> = {
 		'.MuiSelect-select': {
-			py: 1,
-			fontSize: { xs: '11px', sm: '12px' },
+			py: 1.5,
+			fontSize: { sm: '13px', lg: '14px' },
 		},
 	};
 	const menuText: SxProps<Theme> = {
-		fontSize: { xs: '12px', sm: '13px' },
-		minHeight: '30px',
+		fontSize: { sm: '13px', lg: '14px' },
 	};
 
 	const customList = (items: readonly GoodsData[]) => (
-		<Paper sx={{ width: 210, height: 180, overflow: 'auto' }}>
+		<Paper sx={{ width: 250, height: 230, overflow: 'auto' }}>
 			<List dense component="div" role="list">
 				{items.map((value: GoodsData, index: number) => {
 					const labelId = `transfer-list-item-${value.goodsCode}-label`;
@@ -217,32 +208,24 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 							key={index}
 							role="listitem"
 							onClick={handleToggle(value)}
-							sx={{ px: 0.5, py: 0 }}
+							sx={{ py: 0 }}
 						>
-							<ListItemIcon sx={{ minWidth: '42px' }}>
+							<ListItemIcon>
 								<Checkbox
 									checked={checked.indexOf(value) !== -1}
 									tabIndex={-1}
 									disableRipple
-									sx={checkBox}
 									inputProps={{
 										'aria-labelledby': labelId,
 									}}
 								/>
 							</ListItemIcon>
-							<ListItemText
-								id={labelId}
-								primaryTypographyProps={{
-									style: { fontSize: 14 },
-								}}
-								primary={value.goodsCode}
-							/>
+							<ListItemText id={labelId} primary={value.goodsCode} />
 							<ListItemText
 								id={labelId}
 								primaryTypographyProps={{
 									style: {
 										width: '45px',
-										fontSize: 14,
 										textOverflow: 'ellipsis',
 										whiteSpace: 'nowrap',
 										overflowX: 'hidden',
@@ -257,12 +240,18 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 		</Paper>
 	);
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog
+			open={open}
+			onClose={handleClose}
+			sx={{ '.MuiDialog-paper': { minWidth: '680px' } }}
+		>
 			<DialogTitle sx={header}>상품찾기</DialogTitle>
 			<DialogContent sx={{ pb: 0 }}>
 				<Box sx={base}>
-					<Box sx={{ pb: 0.5, display: 'flex', justifyContent: 'center' }}>
-						<Box sx={{ pt: 1, px: 0.5 }}>
+					<Box
+						sx={{ pt: 1, pb: 0.5, display: 'flex', justifyContent: 'center' }}
+					>
+						<Box sx={{ px: 1 }}>
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>대분류</InputLabel>
 								<Select
@@ -280,7 +269,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								</Select>
 							</FormControl>
 						</Box>
-						<Box sx={{ pt: 1, px: 0.5 }}>
+						<Box sx={{ px: 1 }}>
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>중분류</InputLabel>
 								<Select
@@ -299,7 +288,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								</Select>
 							</FormControl>
 						</Box>
-						<Box sx={{ pt: 1, px: 0.5 }}>
+						<Box sx={{ px: 1 }}>
 							<FormControl sx={selectForm}>
 								<InputLabel sx={selectLabel}>소분류</InputLabel>
 								<Select
@@ -328,7 +317,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 						/>
 						<ButtonDialog
 							buttonType="search"
-							device="mobile"
+							device="pc"
 							variant="outlined"
 							onClick={() => searchClick(keyword)}
 						>
@@ -340,22 +329,13 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 						spacing={2}
 						justifyContent="center"
 						alignItems="center"
-						sx={{
-							display: isMobile ? 'grid' : 'flex',
-							width: isMobile ? '100%' : '316px',
-						}}
 					>
 						<Grid item>{customList(left)}</Grid>
-						<Grid item sx={{ pl: isMobile ? '4px !important' : '12px' }}>
-							<Grid
-								container
-								direction={isMobile ? 'row-reverse' : 'column'}
-								alignItems="center"
-								justifyContent="center"
-							>
+						<Grid item>
+							<Grid container direction="column" alignItems="center">
 								<ButtonDialog
 									buttonType="moveall"
-									device="mobile"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleAllRight}
@@ -365,7 +345,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								</ButtonDialog>
 								<ButtonDialog
 									buttonType="moveselected"
-									device="mobile"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedRight}
@@ -375,7 +355,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								</ButtonDialog>
 								<ButtonDialog
 									buttonType="moveselected"
-									device="mobile"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleCheckedLeft}
@@ -385,7 +365,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 								</ButtonDialog>
 								<ButtonDialog
 									buttonType="moveall"
-									device="mobile"
+									device="pc"
 									variant="outlined"
 									size="small"
 									onClick={handleAllLeft}
@@ -417,7 +397,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 			<DialogActions sx={{ justifyContent: 'center' }}>
 				<ButtonDialog
 					buttonType="select"
-					device="mobile"
+					device="pc"
 					variant="outlined"
 					onClick={handleSelect}
 				>
@@ -425,7 +405,7 @@ const GoodsDialogMobile: FC<DialogProps> = ({
 				</ButtonDialog>
 				<ButtonDialog
 					buttonType="cancel"
-					device="mobile"
+					device="pc"
 					variant="outlined"
 					onClick={handleClose}
 				>
@@ -441,4 +421,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	category: bindActionCreators(Api.category, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(GoodsDialogMobile);
+export default connect(null, mapDispatchToProps)(DialogGoodsPC);

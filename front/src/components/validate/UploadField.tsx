@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, ChangeEvent } from 'react';
+import React, { FC, useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
@@ -10,10 +10,12 @@ import { connect } from 'react-redux';
 import Api from '../../api';
 import useCSRFToken from '../../hooks/useCSRFToken';
 import useFieInfo from '../../hooks/cmmn/useFileInfo';
-import { Box, Button, IconButton, FormHelperText } from '@mui/material';
+import DialogImage from '../../components/dialog/DialogImage';
+import { Box, IconButton, FormHelperText } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -43,6 +45,7 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 }) => {
 	const csrfData = useCSRFToken({ member });
 	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	const [open, setOpen] = useState<boolean>(false);
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
 			onChange(dataFiles[0].fileAttachCode);
@@ -55,6 +58,18 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 		if (selectedFiles) {
 			setFiles(selectedFiles);
 		}
+	};
+
+	const handleInput = () => {
+		fileInputRef.current?.click();
+	};
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false); // Dialog 닫기
 	};
 
 	const uploadBox: SxProps<Theme> = {
@@ -70,26 +85,29 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 	return (
 		<Box sx={uploadBox}>
 			<Box>
-				<Button
-					component="label"
-					variant="contained"
-					startIcon={<CloudUploadIcon />}
-					sx={{
-						px: { xs: '10px', sm: '12px', lg: '16px' },
-						py: { xs: '3px', sm: '4px' },
-						fontSize: { xs: '7px', sm: '8px', md: '11px', lg: '12px' },
-					}}
-					disabled={value !== ''}
-				>
-					Upload file
-					<VisuallyHiddenInput
-						type="file"
-						ref={fileInputRef}
-						name={name}
-						accept="image/png, image/jpeg"
-						onChange={handleFiles}
-					/>
-				</Button>
+				<IconButton size="small" disabled={value !== ''} onClick={handleInput}>
+					<CloudUploadIcon />
+				</IconButton>
+				<VisuallyHiddenInput
+					type="file"
+					ref={fileInputRef}
+					name={name}
+					accept="image/png, image/jpeg"
+					onChange={handleFiles}
+				/>
+				{value !== '' && (
+					<>
+						<IconButton size="small" onClick={() => handleOpen()}>
+							<ImageSearchIcon />
+						</IconButton>
+						<DialogImage
+							open={open}
+							file={value}
+							image={image}
+							handleClose={handleClose}
+						/>
+					</>
+				)}
 				{value !== '' && (
 					<IconButton
 						size="small"
