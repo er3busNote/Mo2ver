@@ -13,7 +13,6 @@ public class ImageInfo {
 
     private String base64Image;
     private Integer goodsImageAttachFile;
-    private String goodsImageExtension;
     private Character basicImageYesNo;
 
     private static String getEncryptor(Integer id) {
@@ -28,7 +27,6 @@ public class ImageInfo {
     public static ImageInfo of(EventImage eventImage) {
         return ImageInfo.builder()
                 .goodsImageAttachFile(eventImage.getGoodsImageAttachFile())
-                .goodsImageExtension(eventImage.getGoodsImageExtension())
                 .basicImageYesNo(eventImage.getBasicImageYesNo())
                 .build();
     }

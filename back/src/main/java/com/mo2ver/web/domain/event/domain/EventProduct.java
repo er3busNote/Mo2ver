@@ -73,6 +73,14 @@ public class EventProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
+    public static EventProduct from(EventManage eventManage) {
+        return EventProduct.builder()
+                .eventManageNo(eventManage)
+                .register(eventManage.getRegister())
+                .updater(eventManage.getUpdater())
+                .build();
+    }
+
     public static EventProduct of(EventManage eventManage, EventImageProductInfo eventImageProductInfo, Member currentUser) {
         return EventProduct.builder()
                 .eventManageNo(eventManage)

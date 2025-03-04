@@ -104,11 +104,11 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                                 list(Projections.constructor(ImageInfo.class,
                                         Expressions.constant(""),
                                         eventImage.goodsImageAttachFile,
-                                        eventImage.goodsImageExtension,
                                         eventImage.basicImageYesNo
                                 )),
                                 eventManage.eventYesNo,
                                 list(Projections.constructor(EventImageProductInfo.class,
+                                        eventProduct.eventProductId,
                                         eventProduct.productCode,
                                         eventProduct.productName,
                                         eventProduct.sortSequence

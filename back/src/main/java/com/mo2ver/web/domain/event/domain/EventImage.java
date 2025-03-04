@@ -44,9 +44,6 @@ public class EventImage {
     @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
 
-    @Column(name = "GD_IMG_EXT", columnDefinition = "CHAR(20) COMMENT '상품이미지확장자'")
-    private String goodsImageExtension;
-
     @Column(name = "BSC_IMG_YN", columnDefinition = "CHAR(1) COMMENT '기본이미지여부'")
     private Character basicImageYesNo;
 
@@ -68,11 +65,18 @@ public class EventImage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventImage of(EventManage eventManage, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
+    public static EventImage from(EventManage eventManage) {
+        return EventImage.builder()
+                .eventManageNo(eventManage)
+                .register(eventManage.getRegister())
+                .updater(eventManage.getUpdater())
+                .build();
+    }
+
+    public static EventImage of(EventManage eventManage, Integer goodsImageAttachFile, Character basicImageYesNo, Member currentUser) {
         return EventImage.builder()
                 .eventManageNo(eventManage)
                 .goodsImageAttachFile(goodsImageAttachFile)
-                .goodsImageExtension(fileExtension)
                 .basicImageYesNo(basicImageYesNo)
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

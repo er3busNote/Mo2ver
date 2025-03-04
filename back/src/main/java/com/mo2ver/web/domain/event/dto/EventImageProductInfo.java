@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class EventImageProductInfo {
 
+    private Long id;
     private String goodsCode;
     private String goodsName;
     private Integer sortSequence;

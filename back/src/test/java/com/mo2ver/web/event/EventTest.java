@@ -1,6 +1,7 @@
 package com.mo2ver.web.event;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
+import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -94,27 +93,39 @@ public class EventTest extends CsrfConfigTest {
 
         EventImageInfo eventImageInfo = this.getEventImageInfo();
 
-        MockMultipartFile file1 = new MockMultipartFile("displayFile", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
-        MockMultipartFile file2 = new MockMultipartFile("eventFile", "file2.txt", "image/png", "Test file content 2".getBytes());
-
-        MockPart jsonEventProduct = new MockPart("eventProduct", objectMapper.writeValueAsString(eventImageInfo).getBytes());
-        jsonEventProduct.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-
-        mockMvc.perform(multipart("/event/upload")
-                        .file(file1)
-                        .file(file2)
-                        .part(jsonEventProduct)
+        mockMvc.perform(post("/event/create")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventImageInfo)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    @DisplayName("이벤트 이미지정보 수정 확인")
+    public void updateEventImageTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        EventImageInfo eventImageInfo = this.getEventImageInfo();
+
+        mockMvc.perform(patch("/event/update")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventImageInfo)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     private EventImageInfo getEventImageInfo() {
         return EventImageInfo.builder()
+                .eventNo(24L)
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
+                .displayFile(FileAttachInfo.from(100011))
+                .eventFile(FileAttachInfo.from(100012))
                 .useyn('Y')
                 .goods(Arrays.asList(
                         this.getEventProductInfo(1),
