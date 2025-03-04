@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class EventImageProductInfo {
 
     private String goodsCode;

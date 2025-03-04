@@ -1,6 +1,7 @@
 package com.mo2ver.web.event;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
+import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
@@ -25,8 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,7 +48,7 @@ public class EventTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("이벤트 상세 정보 확인")
-    public void findEventDetailTest() throws Exception {
+    public void findEventInfoTest() throws Exception {
 
         Pageable pageable = PageRequest.of(0, 12, Sort.Direction.DESC, "eventManageNo");
         Page<EventResponse> pages = eventService.findEventlist(pageable);
@@ -60,6 +60,29 @@ public class EventTest extends CsrfConfigTest {
                         .param("size", "12"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("이벤트 상세 정보 관리자 조회")
+    public void findEventDetailTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        EventRequest eventRequest = this.getEventRequest();
+
+        mockMvc.perform(post("/event/detail")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventRequest)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    private EventRequest getEventRequest() {
+        return EventRequest.builder()
+                .eventManageNo(24L)
+                .build();
     }
 
     @Test

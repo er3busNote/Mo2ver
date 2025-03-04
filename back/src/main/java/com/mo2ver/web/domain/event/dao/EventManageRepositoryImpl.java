@@ -1,10 +1,16 @@
 package com.mo2ver.web.domain.event.dao;
 
 import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.dto.EventImageInfo;
+import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
+import com.mo2ver.web.domain.event.dto.ImageInfo;
+import com.mo2ver.web.domain.event.dto.QEventImageInfo;
+import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.QEventDetailResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -23,6 +29,8 @@ import static com.mo2ver.web.domain.goods.domain.QPrice.price;
 import static com.mo2ver.web.domain.event.domain.QEventManage.eventManage;
 import static com.mo2ver.web.domain.event.domain.QEventProduct.eventProduct;
 import static com.mo2ver.web.domain.event.domain.QEventImage.eventImage;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 public class EventManageRepositoryImpl extends QuerydslRepositorySupport implements EventManageRepositoryCustom {
 
@@ -76,5 +84,36 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .where(builder);
         List<EventManage> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
+    }
+
+    public EventImageInfo findEventDetail(EventRequest eventRequest) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(eventManage.eventManageNo.eq(eventRequest.getEventManageNo()));
+
+        return queryFactory
+                .selectFrom(eventManage)
+                .leftJoin(eventManage.eventImageList, eventImage)
+                .leftJoin(eventManage.eventProductList, eventProduct)
+                .where(builder)
+                .transform(groupBy(eventManage.eventManageNo).list(
+                        new QEventImageInfo(
+                                eventManage.eventManageNo,
+                                eventManage.subject,
+                                eventManage.eventStartDate,
+                                eventManage.eventEndDate,
+                                list(Projections.constructor(ImageInfo.class,
+                                        Expressions.constant(""),
+                                        eventImage.goodsImageAttachFile,
+                                        eventImage.goodsImageExtension,
+                                        eventImage.basicImageYesNo
+                                )),
+                                eventManage.eventYesNo,
+                                list(Projections.constructor(EventImageProductInfo.class,
+                                        eventProduct.productCode,
+                                        eventProduct.productName,
+                                        eventProduct.sortSequence
+                                ))
+                        ))
+                ).stream().findFirst().orElse(null);
     }
 }

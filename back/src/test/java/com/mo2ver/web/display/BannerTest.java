@@ -38,6 +38,7 @@ public class BannerTest extends CsrfConfigTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
     @Test
     @DisplayName("배너 이미지 상세 정보 조회")
     public void findBannerImagesDetailTest() throws Exception {

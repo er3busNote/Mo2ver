@@ -6,6 +6,7 @@ import com.mo2ver.web.domain.event.dao.EventImageRepository;
 import com.mo2ver.web.domain.event.dao.EventManageRepository;
 import com.mo2ver.web.domain.event.domain.EventImage;
 import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
@@ -40,6 +41,11 @@ public class EventService {
     public Page<EventResponse> findEventlist(Pageable pageable) {
         Page<EventManage> event = this.eventManageRepository.findByAll(pageable);
         return event.map(EventResponse::of);
+    }
+
+    @Transactional
+    public EventImageInfo findEventDetail(EventRequest eventRequest) {
+        return this.eventManageRepository.findEventDetail(eventRequest);
     }
 
     @Transactional

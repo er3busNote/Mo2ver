@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.event.api;
 
+import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
@@ -58,6 +59,14 @@ public class EventController {
         Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventManageNo");
         Page<EventResponse> pages = eventService.findEventlist(pageable);
         return ResponseEntity.ok().body(pages);
+    }
+
+    @PostMapping("/detail")
+    public ResponseEntity<EventImageInfo> eventDetail(
+            @RequestBody @Valid EventRequest eventRequest,
+            @CurrentUser Member currentUser
+    ) {
+        return ResponseEntity.ok().body(eventService.findEventDetail(eventRequest));
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
