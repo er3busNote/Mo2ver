@@ -12,7 +12,7 @@ const code = (instance: AxiosInstance) => {
 				instance
 					.post('code/list', groupCodelist, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {

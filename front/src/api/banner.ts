@@ -42,7 +42,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.post('banner/goods/detail', bannerData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -60,7 +60,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.post('banner/images/detail', bannerData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -78,7 +78,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.post('banner/goods/create', goodsDisplayData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -96,7 +96,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.patch('banner/goods/update', goodsDisplayData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -114,7 +114,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.post('banner/images/create', BannerImageData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -132,7 +132,7 @@ const banner = (instance: AxiosInstance) => {
 				instance
 					.patch('banner/images/update', BannerImageData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -148,7 +148,7 @@ const banner = (instance: AxiosInstance) => {
 			instance
 				.post('banner/upload', formData, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 						'Content-Type': 'multipart/form-data',
 					},
 				})

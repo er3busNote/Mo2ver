@@ -7,10 +7,14 @@ const isEmpty = (value: any) => {
 	return false;
 };
 
+const isNotEmpty = (value: any) => {
+	return !isEmpty(value);
+};
+
 const isEmail =
 	/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const isPassword =
 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-export { isEmpty, isEmail, isPassword };
+export { isEmpty, isNotEmpty, isEmail, isPassword };

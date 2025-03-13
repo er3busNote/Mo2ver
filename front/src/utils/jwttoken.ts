@@ -1,10 +1,9 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { getSessionStorage, clearSessionStorage } from './storage';
+import { getCookie } from './cookie';
+import { isEmpty } from './validation';
 
-// [Case - 2] : access token + refresh token way
-const JWT_USERNAME = 'username';
-const JWT_ACCESS_TOKEN = 'access_token';
-const JWT_REFRESH_TOKEN = 'refresh_token';
+const JWT_ACCESS_TOKEN = 'accessToken';
+const JWT_REFRESH_TOKEN_EXPIRATION = 'refreshTokenExpiration';
 
 interface CustomJwtPayload extends JwtPayload {
 	auth: string;
@@ -20,7 +19,7 @@ const isAdminRole = (token: string): boolean => {
 	}
 };
 
-const isTokenExpired = (token: string): boolean => {
+const isAccessTokenExpired = (token: string): boolean => {
 	try {
 		const decoded: CustomJwtPayload = jwtDecode(token);
 		if ((decoded?.exp as number) < Date.now() / 1000) return true;
@@ -29,39 +28,29 @@ const isTokenExpired = (token: string): boolean => {
 		return false;
 	}
 };
+const isRefreshTokenExpired = (): boolean => {
+	const refreshTokenExpiration = getCookie(JWT_REFRESH_TOKEN_EXPIRATION);
+	if (isEmpty(refreshTokenExpiration)) return true;
+	const refreshTokenExpirationDate = new Date(refreshTokenExpiration);
+	return refreshTokenExpirationDate.getTime() < Date.now();
+};
 
-const getAccessToken = (): string | null => getSessionStorage(JWT_ACCESS_TOKEN);
-const getRefreshToken = (): string | null =>
-	getSessionStorage(JWT_REFRESH_TOKEN);
+const getAccessToken = (): string =>
+	localStorage.getItem(JWT_ACCESS_TOKEN) ?? '';
+const setAccessToken = (token: string): void => {
+	localStorage.setItem(JWT_ACCESS_TOKEN, token);
+};
 
-const isAdmin = (): boolean => isAdminRole(getAccessToken() as string);
-
+const isAdmin = (): boolean => isAdminRole(getAccessToken());
 const isAuthenticated = (): boolean => {
-	if (!!getAccessToken() && !isTokenExpired(getAccessToken() as string)) {
+	const accessToken = getAccessToken();
+	if (!!accessToken && !isAccessTokenExpired(accessToken)) {
 		return true;
 	}
-	if (
-		isTokenExpired(getAccessToken() as string) &&
-		!isTokenExpired(getRefreshToken() as string)
-	) {
+	if (isAccessTokenExpired(accessToken) && !isRefreshTokenExpired()) {
 		return true;
 	}
-	clearAuthenticated();
 	return false;
 };
 
-const clearAuthenticated = (): void => {
-	clearSessionStorage(JWT_USERNAME);
-	clearSessionStorage(JWT_ACCESS_TOKEN);
-	clearSessionStorage(JWT_REFRESH_TOKEN);
-};
-
-export {
-	JWT_USERNAME,
-	JWT_ACCESS_TOKEN,
-	JWT_REFRESH_TOKEN,
-	isAdmin,
-	getAccessToken,
-	isAuthenticated,
-	clearAuthenticated,
-};
+export { getAccessToken, setAccessToken, isAdmin, isAuthenticated };

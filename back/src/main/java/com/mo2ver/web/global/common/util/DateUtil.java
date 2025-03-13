@@ -2,14 +2,17 @@ package com.mo2ver.web.global.common.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 public class DateUtil {
     public static final String DATE_PATTERN = "yyyy-MM-dd";
     public static final String DATE_FORMAT = "yyyyMMdd";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
+    public static final String DATE_TIME_UTC_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmssSSS";
 
@@ -49,6 +52,18 @@ public class DateUtil {
     public static String getCurrentDateTime(String pattern) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.now().format(formatter);
+    }
+    
+    /**
+     * 현재 날짜와 시간을 UTC 형식으로 반환
+     * @param targetDate 날짜/시간 포멧
+     * @return 현재 날짜와 시간
+     */
+    public static String getTargetDateTimeUTCFormat(Date targetDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_UTC_PATTERN);
+        return targetDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime().format(formatter);
     }
 
     /**

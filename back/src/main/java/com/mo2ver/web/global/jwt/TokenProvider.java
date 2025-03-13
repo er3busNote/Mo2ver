@@ -2,6 +2,7 @@ package com.mo2ver.web.global.jwt;
 
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.global.common.properties.JwtProperties;
+import com.mo2ver.web.global.common.util.DateUtil;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -133,5 +134,15 @@ public class TokenProvider implements InitializingBean {
             logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
+    }
+
+    public String getTokenExpiration(String token) {
+        Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(signkey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+        return DateUtil.getTargetDateTimeUTCFormat(claims.getExpiration());
     }
 }

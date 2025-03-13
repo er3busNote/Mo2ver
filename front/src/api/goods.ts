@@ -57,7 +57,7 @@ const goods = (instance: AxiosInstance) => {
 				instance
 					.post('goods/create', goodsRegisterData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {

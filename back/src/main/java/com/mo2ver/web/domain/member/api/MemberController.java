@@ -12,8 +12,10 @@ import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
+import com.mo2ver.web.global.jwt.dto.request.TokenRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,10 @@ import java.net.URI;
 @RequestMapping(value = "/member")
 public class MemberController {
 
+    private static final String JWT_REFRESH_TOKEN = "refreshToken";
+    private static final String JWT_REFRESH_TOKEN_EXPIRATION = "refreshTokenExpiration";
+    private static final String XSRF_TOKEN = "XSRF-TOKEN";
+
     private final MemberService memberService;
     private final ErrorHandler errorHandler;
     private final TokenProvider tokenProvider;
@@ -61,13 +67,23 @@ public class MemberController {
         SecurityContextHolder.getContext().setAuthentication(authentication);   // --> Authenticated (인증)
 
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+        String refreshTokenExpiration = tokenProvider.getTokenExpiration(tokenInfo.getRefreshtoken());
+
+        ResponseCookie refreshTokenCookie = createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
+        ResponseCookie refreshTokenExpirationCookie = createCookie(JWT_REFRESH_TOKEN_EXPIRATION, refreshTokenExpiration, false);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        headers.add(HttpHeaders.SET_COOKIE, refreshTokenExpirationCookie.toString());
 
         return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
+                .headers(headers)
                 .body(tokenInfo);
     }
 
     @PatchMapping("/refresh")
-    public ResponseEntity authRefresh(@RequestBody @Valid TokenInfo tokenInfo,
+    public ResponseEntity authRefresh(@RequestBody @Valid TokenRequest tokenRequest,
+                                      @CookieValue(name = JWT_REFRESH_TOKEN, required = false) String refreshToken,
                                       Errors errors) {
         if (errors.hasErrors()) {
             return badRequest(errorHandler.buildError(ErrorCode.JSON_MAPPING_INVALID, ErrorInfo.builder()
@@ -76,7 +92,7 @@ public class MemberController {
         }
 
         // Refresh Token - Expired
-        if (!tokenProvider.validateToken(tokenInfo.getRefreshtoken(), false)) {
+        if (!tokenProvider.validateToken(refreshToken, false)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.FORBIDDEN.value())
@@ -85,15 +101,15 @@ public class MemberController {
         }
 
         // Access Token - Expired
-        if (!tokenProvider.validateToken(tokenInfo.getAccesstoken(), false)) {
-            Authentication authentication = tokenProvider.getAuthentication(tokenInfo.getRefreshtoken());
-            TokenInfo refreshtokenInfo = tokenProvider.refreshToken(authentication, tokenInfo.getRefreshtoken());
+        if (!tokenProvider.validateToken(tokenRequest.getAccesstoken(), false)) {
+            Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+            TokenInfo refreshtokenInfo = tokenProvider.refreshToken(authentication, refreshToken);
 
             return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
                     .body(refreshtokenInfo);
         }
 
-        return ResponseEntity.ok().body(tokenInfo);
+        return ResponseEntity.ok().body(tokenRequest);
     }
 
     @PostMapping("/signup")
@@ -143,12 +159,8 @@ public class MemberController {
     public ResponseEntity csrtToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
-            ResponseCookie csrfCookie = ResponseCookie.from("XSRF-TOKEN", csrf.getToken())
-                    .path("/")
-                    .secure(true)
-                    .sameSite("None")
-                    .build();
-            response.setHeader("Set-Cookie", csrfCookie.toString());
+            ResponseCookie csrfCookie = createCookie(XSRF_TOKEN, csrf.getToken(), true);
+            response.setHeader(HttpHeaders.SET_COOKIE, csrfCookie.toString());
             return ResponseEntity.ok().body(CsrfResponse.builder()
                     .csrfToken(csrf.getToken())
                     .build());
@@ -157,6 +169,16 @@ public class MemberController {
                 .status(HttpStatus.NOT_FOUND.value())
                 .message("CSRF Token이 존재하지 않습니다")
                 .build());
+    }
+
+    private ResponseCookie createCookie(String key, String token, boolean isHttpOnly) {
+        return ResponseCookie.from(key, token)
+                .httpOnly(isHttpOnly)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // 7일 유지
+                .build();
     }
 
     private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {

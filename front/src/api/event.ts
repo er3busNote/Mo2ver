@@ -43,7 +43,7 @@ const event = (instance: AxiosInstance) => {
 				instance
 					.post('event/detail', bannerData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -61,7 +61,7 @@ const event = (instance: AxiosInstance) => {
 				instance
 					.post('event/create', eventDisplayData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -79,7 +79,7 @@ const event = (instance: AxiosInstance) => {
 				instance
 					.patch('event/update', eventDisplayData, {
 						headers: {
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {
@@ -95,7 +95,7 @@ const event = (instance: AxiosInstance) => {
 			instance
 				.post('event/upload', formData, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 						'Content-Type': 'multipart/form-data',
 					},
 				})

@@ -11,9 +11,7 @@ interface SignUpData {
 }
 
 interface TokenData {
-	username: string;
 	accesstoken: string;
-	refreshtoken: string;
 }
 
 interface CSRFData {

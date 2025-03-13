@@ -7,12 +7,6 @@ import {
 	tokenSuccess,
 	toastMessage,
 } from '../store/index';
-import {
-	JWT_USERNAME,
-	JWT_ACCESS_TOKEN,
-	JWT_REFRESH_TOKEN,
-} from '../utils/jwttoken';
-import { setSessionStorage, clearSessionStorage } from '../utils/storage';
 import { LoginData, SignUpData, TokenData, CSRFData } from './types';
 
 const member = (instance: AxiosInstance) => {
@@ -22,16 +16,13 @@ const member = (instance: AxiosInstance) => {
 			instance
 				.post('member/login', userData, {
 					headers: {
-						//Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
 				.then((response: AxiosResponse) => {
 					console.log(response.data);
-					const tokenData = {
-						username: response.data.username,
+					const tokenData: TokenData = {
 						accesstoken: response.data.accesstoken,
-						refreshtoken: response.data.refreshtoken,
 					};
 					dispatch(
 						toastMessage({
@@ -40,12 +31,8 @@ const member = (instance: AxiosInstance) => {
 						})
 					);
 					dispatch(loginSuccess(tokenData.accesstoken));
-					setSessionStorage(JWT_USERNAME, tokenData.username);
-					setSessionStorage(JWT_ACCESS_TOKEN, tokenData.accesstoken);
-					setSessionStorage(JWT_REFRESH_TOKEN, tokenData.refreshtoken);
 				})
 				.catch((error: AxiosError) => {
-					console.log(csrfData);
 					console.log(error.response);
 					const { status, data } = error.response as AxiosResponse;
 					if (status === 400) {
@@ -74,9 +61,6 @@ const member = (instance: AxiosInstance) => {
 					dispatch(loginFailure(error.message));
 				}),
 		logout: () => (dispatch: Dispatch) => {
-			clearSessionStorage(JWT_USERNAME);
-			clearSessionStorage(JWT_ACCESS_TOKEN);
-			clearSessionStorage(JWT_REFRESH_TOKEN);
 			dispatch(logoutSuccess());
 		},
 		// 회원가입 API : <baseURL>/member/signup
@@ -85,8 +69,7 @@ const member = (instance: AxiosInstance) => {
 				instance
 					.post('member/signup', userData, {
 						headers: {
-							//Cookie: 'XSRF-TOKEN=' + csrfData.csrfToken,
-							'X-XSRF-TOKEN': csrfData.csrfToken,
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
 					.then((response: AxiosResponse) => {

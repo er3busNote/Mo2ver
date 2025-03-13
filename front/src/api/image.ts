@@ -14,7 +14,7 @@ const image = (instance: AxiosInstance) => {
 			instance
 				.post('file/upload', formData, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 						'Content-Type': 'multipart/form-data',
 					},
 				})

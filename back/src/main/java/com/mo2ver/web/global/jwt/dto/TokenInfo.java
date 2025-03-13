@@ -9,16 +9,11 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class TokenInfo {
 
-    @NotEmpty
     private String username;
 
-    @NotEmpty
     private String accesstoken;
 
-    @NotEmpty
     private String refreshtoken;
 }

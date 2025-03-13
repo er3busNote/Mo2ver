@@ -22,7 +22,7 @@ const cart = (instance: AxiosInstance) => {
 			instance
 				.post('cart/add', cartData, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
 				.then((response: AxiosResponse) => {
@@ -38,7 +38,7 @@ const cart = (instance: AxiosInstance) => {
 			instance
 				.put('cart/update', cartData, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
 				.then((response: AxiosResponse) => {
@@ -54,7 +54,7 @@ const cart = (instance: AxiosInstance) => {
 			instance
 				.delete(`cart/delete/${goodsCode}`, {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
 				.then((response: AxiosResponse) => {
@@ -70,7 +70,7 @@ const cart = (instance: AxiosInstance) => {
 			instance
 				.delete('cart/delete', {
 					headers: {
-						'X-XSRF-TOKEN': csrfData.csrfToken,
+						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
 				.then((response: AxiosResponse) => {
