@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess, toastMessage } from '../store/index';
+import { handleResponse, handleError } from './common/handler';
 
 const category = (instance: AxiosInstance) => {
 	return {
@@ -17,26 +17,14 @@ const category = (instance: AxiosInstance) => {
 									'?upperCategoryCode=' +
 									upperCategoryCode
 					)
-					.then((response: AxiosResponse) => {
-						dispatch(tokenSuccess(response.data));
-						return response.data;
-					})
-					.catch((error: AxiosError) => {
-						dispatch(toastMessage({ message: error.message, type: 'error' }));
-						return error.response?.data;
-					}),
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 카테고리 리스트 API : <baseURL>/category/list
 		list: () => (dispatch: Dispatch) =>
 			instance
 				.get('category/list')
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };
 

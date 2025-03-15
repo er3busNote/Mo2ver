@@ -109,6 +109,12 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		csrfData,
 	});
 
+	const methods = useForm<VideoFormDisplayValues>({
+		mode: 'onChange',
+		defaultValues: videoDisplayValues,
+		resolver: yupResolver(videoDisplaySchema),
+	});
+
 	const submitForm = (
 		data: VideoFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
@@ -126,12 +132,6 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		console.log(csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 	};
-
-	const methods = useForm<VideoFormDisplayValues>({
-		mode: 'onChange',
-		defaultValues: videoDisplayValues,
-		resolver: yupResolver(videoDisplaySchema),
-	});
 
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>

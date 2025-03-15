@@ -1,10 +1,10 @@
 import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Controller, useFormContext } from 'react-hook-form';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
 import { CodeData } from '../../../api/types';
-import { Controller, useFormContext } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,

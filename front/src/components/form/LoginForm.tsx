@@ -1,8 +1,6 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
 	Avatar,
 	Button,
@@ -17,21 +15,6 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import RenderTextField from '../validate/TextField';
 import { LoginFormValues } from './types';
 
-const schema = yup
-	.object({
-		username: yup
-			.string()
-			.required('아이디를 입력해주세요')
-			.min(3, '3자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		password: yup
-			.string()
-			.required('비밀번호를 입력해주세요')
-			.min(8, '8자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-	})
-	.required();
-
 interface LoginProp {
 	onSubmit: (
 		data: LoginFormValues,
@@ -44,9 +27,7 @@ const LoginForm: FC<LoginProp> = ({ onSubmit }): JSX.Element => {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
-	} = useForm<LoginFormValues>({
-		resolver: yupResolver(schema),
-	});
+	} = useFormContext<LoginFormValues>();
 
 	const loginForm: SxProps<Theme> = {
 		mt: 0,

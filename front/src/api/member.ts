@@ -1,10 +1,10 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
+import { handleResponse } from './common/handler';
 import {
 	loginSuccess,
 	loginFailure,
 	logoutSuccess,
-	tokenSuccess,
 	toastMessage,
 } from '../store/index';
 import { LoginData, SignUpData, TokenData, CSRFData } from './types';
@@ -109,10 +109,7 @@ const member = (instance: AxiosInstance) => {
 		refresh: (tokenData: TokenData) => (dispatch: Dispatch) =>
 			instance
 				.patch('member/refresh', tokenData)
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
 				.catch((error: AxiosError) => {
 					dispatch(loginFailure(error.message));
 					return error.response?.data;
@@ -121,10 +118,7 @@ const member = (instance: AxiosInstance) => {
 		csrf: () => (dispatch: Dispatch) =>
 			instance
 				.get('member/csrf-token')
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
 				.catch((error: AxiosError) => {
 					return error.response?.data;
 				}),

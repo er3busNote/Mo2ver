@@ -7,11 +7,11 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import { GoodsData } from '../../../api/types';
 import { changeNext, menuActive } from '../../../store/index';
 import { TitleInfo } from '../../../store/types';
 import { CodeData } from '../../../api/types';
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import ButtonBase from '../../button/ButtonBase';
 import {
 	Box,

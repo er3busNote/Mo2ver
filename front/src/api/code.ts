@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess, toastMessage } from '../store/index';
+import { handleResponse, handleError } from './common/handler';
 import { CSRFData } from './types';
 
 const code = (instance: AxiosInstance) => {
@@ -15,14 +15,8 @@ const code = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => {
-						dispatch(tokenSuccess(response.data));
-						return response.data;
-					})
-					.catch((error: AxiosError) => {
-						dispatch(toastMessage({ message: error.message, type: 'error' }));
-						return error.response?.data;
-					}),
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };
 

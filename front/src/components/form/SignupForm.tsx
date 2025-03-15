@@ -1,8 +1,6 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
 	Avatar,
 	Button,
@@ -16,36 +14,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import RenderTextField from '../validate/TextField';
 import { SignupFormValues } from './types';
-import { isEmail, isPassword } from '../../utils/validation';
-
-const schema = yup
-	.object({
-		username: yup
-			.string()
-			.required('아이디를 입력해주세요')
-			.min(3, '3자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-		password: yup
-			.string()
-			.required('비밀번호를 입력해주세요')
-			.min(8, '8자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다')
-			.matches(
-				isPassword,
-				'비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.'
-			),
-		repeat_password: yup
-			.string()
-			.required('비밀번호를 입력해주세요')
-			.oneOf([yup.ref('password')], '패스워드가 일치하지 않습니다'),
-		email: yup
-			.string()
-			.required('이메일을 입력해주세요')
-			.matches(isEmail, '유효하지 않은 이메일 주소입니다')
-			.min(5, '5자 이상 입력해주세요!')
-			.max(50, '입력 범위가 초과되었습니다'),
-	})
-	.required();
 
 interface SignupProp {
 	onSubmit: (
@@ -59,9 +27,7 @@ const SignupForm: FC<SignupProp> = ({ onSubmit }): JSX.Element => {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
-	} = useForm<SignupFormValues>({
-		resolver: yupResolver(schema),
-	});
+	} = useFormContext<SignupFormValues>();
 
 	const signupForm: SxProps<Theme> = {
 		mt: 0,

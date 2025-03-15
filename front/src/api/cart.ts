@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess, toastMessage } from '../store/index';
+import { handleResponse, handleError } from './common/handler';
 import { CSRFData, CartData } from './types';
 
 const cart = (instance: AxiosInstance) => {
@@ -9,14 +9,8 @@ const cart = (instance: AxiosInstance) => {
 		list: () => (dispatch: Dispatch) =>
 			instance
 				.get('cart/list')
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 장바구니 추가 API : <baseURL>/cart/add
 		add: (cartData: CartData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
@@ -25,14 +19,8 @@ const cart = (instance: AxiosInstance) => {
 						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 장바구니 수정 API : <baseURL>/cart/update
 		update: (cartData: CartData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
@@ -41,14 +29,8 @@ const cart = (instance: AxiosInstance) => {
 						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 장바구니 삭제 API : <baseURL>/cart/delete
 		delete: (goodsCode: string, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
@@ -57,14 +39,8 @@ const cart = (instance: AxiosInstance) => {
 						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 장바구니 전체 삭제 API : <baseURL>/cart/deleteAll
 		deleteAll: (csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
@@ -73,14 +49,8 @@ const cart = (instance: AxiosInstance) => {
 						'X-XSRF-TOKEN': csrfData?.csrfToken,
 					},
 				})
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };
 

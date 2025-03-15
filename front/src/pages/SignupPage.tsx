@@ -1,5 +1,8 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -8,6 +11,36 @@ import { SignUpData } from '../api/types';
 import useCSRFToken from '../hooks/useCSRFToken';
 import SignupForm from '../components/form/SignupForm';
 import { SignupFormValues } from '../components/form/types';
+import { isEmail, isPassword } from '../utils/validation';
+
+const signupSchema = yup
+	.object({
+		username: yup
+			.string()
+			.required('아이디를 입력해주세요')
+			.min(3, '3자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+		password: yup
+			.string()
+			.required('비밀번호를 입력해주세요')
+			.min(8, '8자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다')
+			.matches(
+				isPassword,
+				'비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.'
+			),
+		repeat_password: yup
+			.string()
+			.required('비밀번호를 입력해주세요')
+			.oneOf([yup.ref('password')], '패스워드가 일치하지 않습니다'),
+		email: yup
+			.string()
+			.required('이메일을 입력해주세요')
+			.matches(isEmail, '유효하지 않은 이메일 주소입니다')
+			.min(5, '5자 이상 입력해주세요!')
+			.max(50, '입력 범위가 초과되었습니다'),
+	})
+	.required();
 
 interface LocationState {
 	from: string;
@@ -22,6 +55,11 @@ const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 	const navigate = useNavigate();
 	const csrfData = useCSRFToken({ member });
 	const redirectTo = (location.state as LocationState)?.from || '/';
+
+	const methods = useForm<SignupFormValues>({
+		resolver: yupResolver(signupSchema),
+	});
+
 	const submitForm = async (
 		data: SignupFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -35,7 +73,12 @@ const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 		if (event) event.preventDefault(); // 새로고침 방지
 		navigate(redirectTo);
 	};
-	return <SignupForm onSubmit={submitForm} />;
+
+	return (
+		<FormProvider {...methods}>
+			<SignupForm onSubmit={submitForm} />
+		</FormProvider>
+	);
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

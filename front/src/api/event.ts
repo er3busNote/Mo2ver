@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess, toastMessage } from '../store/index';
+import { handleResponse, handleError } from './common/handler';
 import {
 	CSRFData,
 	EventRequestData,
@@ -16,26 +16,14 @@ const event = (instance: AxiosInstance) => {
 				.get(
 					`event/info/${eventCode}?page=${pageData.page}&size=${pageData.size}`
 				)
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 리스트 API : <baseURL>/event/list
 		list: (pageData: PageData) => (dispatch: Dispatch) =>
 			instance
 				.get(`event/list?page=${pageData.page}&size=${pageData.size}`)
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 상세 정보 API : <baseURL>/event/detail
 		detail:
 			(bannerData: EventRequestData, csrfData: CSRFData) =>
@@ -46,14 +34,8 @@ const event = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => {
-						dispatch(tokenSuccess(response.data));
-						return response.data;
-					})
-					.catch((error: AxiosError) => {
-						dispatch(toastMessage({ message: error.message, type: 'error' }));
-						return error.response?.data;
-					}),
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 정보 추가 API : <baseURL>/event/create
 		create:
 			(eventDisplayData: EventDisplayData, csrfData: CSRFData) =>
@@ -64,14 +46,8 @@ const event = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => {
-						dispatch(tokenSuccess(response.data));
-						return response.data;
-					})
-					.catch((error: AxiosError) => {
-						dispatch(toastMessage({ message: error.message, type: 'error' }));
-						return error.response?.data;
-					}),
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 정보 수정 API : <baseURL>/event/updata
 		update:
 			(eventDisplayData: EventDisplayData, csrfData: CSRFData) =>
@@ -82,14 +58,8 @@ const event = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => {
-						dispatch(tokenSuccess(response.data));
-						return response.data;
-					})
-					.catch((error: AxiosError) => {
-						dispatch(toastMessage({ message: error.message, type: 'error' }));
-						return error.response?.data;
-					}),
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 이미지 업로드 API : <baseURL>/event/upload
 		upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
@@ -99,14 +69,8 @@ const event = (instance: AxiosInstance) => {
 						'Content-Type': 'multipart/form-data',
 					},
 				})
-				.then((response: AxiosResponse) => {
-					dispatch(tokenSuccess(response.data));
-					return response.data;
-				})
-				.catch((error: AxiosError) => {
-					dispatch(toastMessage({ message: error.message, type: 'error' }));
-					return error.response?.data;
-				}),
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };
 
