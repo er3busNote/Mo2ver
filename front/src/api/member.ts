@@ -20,9 +20,9 @@ const member = (instance: AxiosInstance) => {
 					},
 				})
 				.then((response: AxiosResponse) => {
-					console.log(response.data);
 					const tokenData: TokenData = {
 						accesstoken: response.data.accesstoken,
+						expiration: response.data.expiration,
 					};
 					dispatch(
 						toastMessage({
@@ -30,7 +30,7 @@ const member = (instance: AxiosInstance) => {
 							type: 'success',
 						})
 					);
-					dispatch(loginSuccess(tokenData.accesstoken));
+					dispatch(loginSuccess(tokenData));
 				})
 				.catch((error: AxiosError) => {
 					console.log(error.response);

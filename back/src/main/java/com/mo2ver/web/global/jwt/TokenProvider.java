@@ -54,6 +54,16 @@ public class TokenProvider implements InitializingBean {
                 .username(authentication.getName())
                 .accesstoken(accesstoken)
                 .refreshtoken(refreshtoken)
+                .expiration(this.getTokenExpiration(refreshtoken))
+                .build();
+    }
+
+    public TokenInfo accessToken(Authentication authentication, String accesstoken, String refreshtoken) {
+        return TokenInfo.builder()
+                .username(authentication.getName())
+                .accesstoken(accesstoken)
+                .refreshtoken(refreshtoken)
+                .expiration(this.getTokenExpiration(refreshtoken))
                 .build();
     }
 
@@ -64,6 +74,7 @@ public class TokenProvider implements InitializingBean {
                 .username(authentication.getName())
                 .accesstoken(accesstoken)
                 .refreshtoken(refreshtoken)
+                .expiration(this.getTokenExpiration(refreshtoken))
                 .build();
     }
 
@@ -116,7 +127,7 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
-    public boolean validateToken(String token, boolean isException) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(signkey)
@@ -127,7 +138,6 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
-            if(isException) throw new ExpiredJwtException(null, null, e.getMessage());
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -143,6 +153,6 @@ public class TokenProvider implements InitializingBean {
                     .parseClaimsJws(token)
                     .getBody();
 
-        return DateUtil.getTargetDateTimeUTCFormat(claims.getExpiration());
+        return DateUtil.toLocalString(claims.getExpiration());
     }
 }

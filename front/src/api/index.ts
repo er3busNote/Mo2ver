@@ -12,11 +12,9 @@ import image from './image';
 // 인스턴스 API 생성
 const createInstance = () => {
 	const instance = axios.create({
-		//baseURL: '/api', // [Case 1] CRA Proxy → X
-		baseURL: process.env.REACT_APP_API_URL, // [Case 2.1] Server CORS Origin → O
-		withCredentials: true, // [Case 2.2] Client CORS 요청 시 쿠키 포함 여부 설정
+		baseURL: process.env.REACT_APP_API_URL, // [Server] CORS Origin
+		withCredentials: true, // [Client] CORS 요청 시 쿠키 포함 여부 설정
 	});
-	//delete axios.defaults.headers.common['X-XSRF-TOKEN'];
 
 	return setInterceptors(instance);
 };

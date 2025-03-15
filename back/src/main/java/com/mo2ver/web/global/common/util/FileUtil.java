@@ -4,6 +4,7 @@ import com.mo2ver.web.global.common.properties.ImagesProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,18 +17,25 @@ public class FileUtil {
 
     private final ImagesProperties imagesProperties;
 
-    public Path getUploadDirectory(String directoryPath) {
-        Path folderPath = Paths.get(imagesProperties.getFilepath());
+    private static String filepath;
+
+    @PostConstruct
+    public void init() {
+        filepath = imagesProperties.getFilepath();
+    }
+
+    public static Path getUploadDirectory(String directoryPath) {
+        Path folderPath = Paths.get(filepath);
         Path uploadDirectory = folderPath.resolve(directoryPath);
-        this.createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
+        createDirectory(uploadDirectory.toString()); // 업로드할 디렉토리가 없으면 생성
         return uploadDirectory;
     }
 
-    public File getTargetFile(String targetFilePath) {
+    public static File getTargetFile(String targetFilePath) {
         return new File(PROJECT_DIRECTORY + "/" + targetFilePath);
     }
 
-    public String getFileExtension(String fileName) {
+    public static String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf(".");
         if (lastDotIndex > 0) {
             return fileName.substring(lastDotIndex + 1);
@@ -35,7 +43,7 @@ public class FileUtil {
         return "";
     }
 
-    public String removeFileExtension(String fileName) {
+    public static String removeFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf(".");
         if (lastDotIndex > 0) {
             return fileName.substring(0, lastDotIndex);
@@ -43,7 +51,7 @@ public class FileUtil {
         return fileName;
     }
 
-    private void createDirectory(String uploadDirectory) {
+    private static void createDirectory(String uploadDirectory) {
         File directory = new File(uploadDirectory);
         if (!directory.exists()) {
             directory.mkdirs();

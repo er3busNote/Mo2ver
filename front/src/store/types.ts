@@ -4,6 +4,7 @@ interface MemberState {
 	isAuthenticated: boolean;
 	isLoading: boolean;
 	errorMessage: string;
+	expiration: string;
 }
 
 interface TokenState {

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -28,13 +29,22 @@ public class CryptoUtil {
 
     private final CryptoProperties cryptoProperties;
 
+    private static String password;
+    private static String salt;
+
+    @PostConstruct
+    public void init() {
+        password = cryptoProperties.getPassword();
+        salt = cryptoProperties.getSalt();
+    }
+
     // 참고 (Java AES Encryption and Decryption) : https://howtodoinjava.com/java/java-security/aes-256-encryption-decryption/
-    public void encryptFile(MultipartFile file, File targetFile) throws Exception {
+    public static void encryptFile(MultipartFile file, File targetFile) throws Exception {
         // 파일 읽기
         byte[] fileBytes = file.getBytes();
 
         // 키 생성
-        SecretKey key = generateKey(cryptoProperties.getPassword(), cryptoProperties.getSalt());
+        SecretKey key = generateKey(password, salt);
 
         // 초기화 벡터 생성
         SecureRandom secureRandom = new SecureRandom();
@@ -54,12 +64,12 @@ public class CryptoUtil {
         }
     }
 
-    public byte[] decryptFile(String inputFilePath) throws Exception {
+    public static byte[] decryptFile(String inputFilePath) throws Exception {
         // 암호화된 파일 읽기
         byte[] encryptedFileBytesWithIV = Files.readAllBytes(Paths.get(inputFilePath));
 
         // 키 생성
-        SecretKey key = generateKey(cryptoProperties.getPassword(), cryptoProperties.getSalt());
+        SecretKey key = generateKey(password, salt);
 
         // 초기화 벡터 추출
         byte[] iv = new byte[IV_LENGTH];
@@ -74,7 +84,7 @@ public class CryptoUtil {
         return cipher.doFinal(encryptedFileBytesWithIV, IV_LENGTH, encryptedFileBytesWithIV.length - IV_LENGTH);
     }
 
-    private SecretKey generateKey(String password, String salt) throws Exception {
+    private static SecretKey generateKey(String password, String salt) throws Exception {
         // PBKDF2 키 생성
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), ITERATIONS, KEY_SIZE);

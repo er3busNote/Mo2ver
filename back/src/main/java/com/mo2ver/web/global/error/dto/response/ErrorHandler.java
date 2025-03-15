@@ -4,8 +4,6 @@ import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-
 @Component
 public class ErrorHandler {
 

@@ -13,10 +13,9 @@ public enum ErrorCode {
     JSON_MAPPING_INVALID("CM_006", "JSON 포멧이 일치하지 않습니다.", 400),
     FILETYPE_MAPPING_INVALID("CM_007", "지원되지 않는 파일타입입니다.", 400),
     REPOSITORY_MAPPING_INVALID("CM_008", "Repository 포멧이 일치하지 않습니다.", 400),
-    TOKEN_ACCESS_DENIED("CM_009", "Access Token이 만료되었습니다.", 401),
-    DATA_MOT_FOUND("CM_010", "DATA가 존재하지 않습니다.", 404),
-    SIGNUP_USERNAME_VALUE_INVALID("CM_011", "해당 이름이 이미 존재합니다.", 422),
-    SIGNUP_EMAIL_VALUE_INVALID("CM_012", "해당 아이디가 이미 존재합니다.", 422),
+    DATA_MOT_FOUND("CM_009", "DATA가 존재하지 않습니다.", 404),
+    SIGNUP_USERNAME_VALUE_INVALID("CM_010", "해당 이름이 이미 존재합니다.", 422),
+    SIGNUP_EMAIL_VALUE_INVALID("CM_011", "해당 아이디가 이미 존재합니다.", 422),
     INTERNAL_SERVER_ERROR("CM_100", "서버 에러.", 500),
     SQL_QUERY_INVALID("CM_101", "SQL 쿼리상의 문제가 발생했습니다.", 500),;
 

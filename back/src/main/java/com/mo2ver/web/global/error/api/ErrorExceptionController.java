@@ -10,7 +10,6 @@ import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -44,17 +43,7 @@ public class ErrorExceptionController {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleRuntimeException(RuntimeException e) {
-        Throwable throwable = e.getCause();
-        if (throwable instanceof ExpiredJwtException) {
-            return this.getExpiredJwtException((ExpiredJwtException) throwable);
-        }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
-                .message(e.getMessage())
-                .build());
-    }
-
-    private ErrorResponse getExpiredJwtException(ExpiredJwtException e) {
-        return errorHandler.buildError(ErrorCode.TOKEN_ACCESS_DENIED, ErrorInfo.builder()
                 .message(e.getMessage())
                 .build());
     }

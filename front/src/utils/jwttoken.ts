@@ -1,5 +1,4 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { getCookie } from './cookie';
 import { isEmpty } from './validation';
 
 const JWT_ACCESS_TOKEN = 'accessToken';
@@ -29,7 +28,7 @@ const isAccessTokenExpired = (token: string): boolean => {
 	}
 };
 const isRefreshTokenExpired = (): boolean => {
-	const refreshTokenExpiration = getCookie(JWT_REFRESH_TOKEN_EXPIRATION);
+	const refreshTokenExpiration = getRefreshTokenExpiration();
 	if (isEmpty(refreshTokenExpiration)) return true;
 	const refreshTokenExpirationDate = new Date(refreshTokenExpiration);
 	return refreshTokenExpirationDate.getTime() < Date.now();
@@ -37,9 +36,12 @@ const isRefreshTokenExpired = (): boolean => {
 
 const getAccessToken = (): string =>
 	localStorage.getItem(JWT_ACCESS_TOKEN) ?? '';
-const setAccessToken = (token: string): void => {
+const setAccessToken = (token: string): void =>
 	localStorage.setItem(JWT_ACCESS_TOKEN, token);
-};
+const getRefreshTokenExpiration = (): string =>
+	localStorage.getItem(JWT_REFRESH_TOKEN_EXPIRATION) ?? '';
+const setRefreshTokenExpiration = (expiration: string): void =>
+	localStorage.setItem(JWT_REFRESH_TOKEN_EXPIRATION, expiration);
 
 const isAdmin = (): boolean => isAdminRole(getAccessToken());
 const isAuthenticated = (): boolean => {
@@ -53,4 +55,10 @@ const isAuthenticated = (): boolean => {
 	return false;
 };
 
-export { getAccessToken, setAccessToken, isAdmin, isAuthenticated };
+export {
+	getAccessToken,
+	setAccessToken,
+	setRefreshTokenExpiration,
+	isAdmin,
+	isAuthenticated,
+};

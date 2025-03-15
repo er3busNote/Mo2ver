@@ -16,4 +16,6 @@ public class TokenInfo {
     private String accesstoken;
 
     private String refreshtoken;
+
+    private String expiration;
 }

@@ -10,6 +10,7 @@ import {
 } from './types';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { TokenData } from '../api/types';
 
 // 1.1. 인증 관련 State
 const memberinitialState: MemberState = {
@@ -17,6 +18,7 @@ const memberinitialState: MemberState = {
 	isAuthenticated: false,
 	isLoading: false,
 	errorMessage: '',
+	expiration: '',
 };
 
 // 1.1. authSlice : action + reducer → slice
@@ -24,21 +26,24 @@ const authSlice = createSlice({
 	name: 'member',
 	initialState: memberinitialState,
 	reducers: {
-		loginSuccess: (state: MemberState, action: PayloadAction<string>) => {
+		loginSuccess: (state: MemberState, action: PayloadAction<TokenData>) => {
 			state.isAuthenticated = true;
 			state.isLoading = false;
-			state.token = action.payload;
+			state.token = action.payload.accesstoken;
+			state.expiration = action.payload.expiration;
 		},
 		loginFailure: (state: MemberState, action: PayloadAction<string>) => {
 			state.isAuthenticated = false;
 			state.isLoading = false;
 			state.token = '';
 			state.errorMessage = action.payload || 'Something went wrong.';
+			state.expiration = '';
 		},
 		logoutSuccess: (state: MemberState) => {
 			state.isAuthenticated = false;
 			state.isLoading = true;
 			state.token = '';
+			state.expiration = '';
 		},
 	},
 });

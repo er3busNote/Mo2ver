@@ -6,7 +6,7 @@ import { CookiesProvider } from 'react-cookie';
 import { SnackbarProvider } from 'notistack';
 import persistedReducer, { RootState } from './store';
 import { MemberState } from './store/types';
-import { setAccessToken } from './utils/jwttoken';
+import { setAccessToken, setRefreshTokenExpiration } from './utils/jwttoken';
 import RootRoutes from './routes/index';
 import './App.css';
 
@@ -22,6 +22,7 @@ const authMiddleware: Middleware = (store) => (next) => (action: AnyAction) => {
 		].includes(action.type)
 	) {
 		setAccessToken((state.auth as MemberState).token);
+		setRefreshTokenExpiration((state.auth as MemberState).expiration);
 	}
 
 	return result;
@@ -58,5 +59,7 @@ const App: FC = (): JSX.Element => {
 		</div>
 	);
 };
+
+export { store };
 
 export default App;

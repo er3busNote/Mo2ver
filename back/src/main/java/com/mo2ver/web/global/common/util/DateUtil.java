@@ -12,7 +12,8 @@ public class DateUtil {
     public static final String DATE_FORMAT = "yyyyMMdd";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
-    public static final String DATE_TIME_UTC_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String DATE_TIME_ISO_UTC_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String DATE_TIME_LOCAL_TIME_ZONE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmssSSS";
 
@@ -55,12 +56,24 @@ public class DateUtil {
     }
     
     /**
-     * 현재 날짜와 시간을 UTC 형식으로 반환
+     * 지정된 날짜와 시간을 UTC 형식으로 반환 (ISO 8601 표준 시간 포맷 사용)
      * @param targetDate 날짜/시간 포멧
      * @return 현재 날짜와 시간
      */
-    public static String getTargetDateTimeUTCFormat(Date targetDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_UTC_PATTERN);
+    public static String toUtcString(Date targetDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_ISO_UTC_PATTERN);
+        return targetDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime().format(formatter);
+    }
+
+    /**
+     * 지정된 날짜와 시간을 로컬 타임존 기준으로 반환
+     * @param targetDate 날짜/시간 포멧
+     * @return 현재 날짜와 시간
+     */
+    public static String toLocalString(Date targetDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_LOCAL_TIME_ZONE_PATTERN);
         return targetDate.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime().format(formatter);

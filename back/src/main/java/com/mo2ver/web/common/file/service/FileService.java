@@ -30,9 +30,7 @@ public class FileService {
     private static final String FILE_DIRECTORY = "cmmn";
 
     private final FileRepository fileRepository;
-    private final FileUtil fileUtil;
     private final JasyptUtil jasyptUtil;
-    private final CryptoUtil cryptoUtil;
     private final ObjectStorageUtil objectStorageUtil;
 
     @Autowired
@@ -46,7 +44,7 @@ public class FileService {
             if('Y' == file.getCloudYn()){
                 return this.objectStorageUtil.downloadFile(file.getFilePath());
             } else {
-                return this.cryptoUtil.decryptFile(file.getFilePath());
+                return CryptoUtil.decryptFile(file.getFilePath());
             }
         } else {
             throw new IOException("해당되는 파일을 찾을 수 없습니다.");
@@ -55,14 +53,14 @@ public class FileService {
 
     @Transactional
     public FileInfo saveFile(MultipartFile file, String targetFolder, Member currentUser) throws Exception {
-        Path uploadDirectory = this.fileUtil.getUploadDirectory(this.getDirectory(targetFolder));
+        Path uploadDirectory = FileUtil.getUploadDirectory(this.getDirectory(targetFolder));
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
         Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
-        String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
-        String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
+        String fileExtension = FileUtil.getFileExtension(Objects.requireNonNull(fileName));
+        String fileNameWithoutExtension = FileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, this.getFilePath(uploadDirectory), contentType, fileSize, 'N', currentUser));
-        this.cryptoUtil.encryptFile(file, this.fileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
+        CryptoUtil.encryptFile(file, FileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
         return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
     }
 
@@ -72,8 +70,8 @@ public class FileService {
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
         Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
-        String fileExtension = this.fileUtil.getFileExtension(Objects.requireNonNull(fileName));
-        String fileNameWithoutExtension = this.fileUtil.removeFileExtension(fileName);
+        String fileExtension = FileUtil.getFileExtension(Objects.requireNonNull(fileName));
+        String fileNameWithoutExtension = FileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, bucketPath, contentType, fileSize, 'Y', currentUser));
         this.objectStorageUtil.uploadFile(file, bucketPath);
         return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);

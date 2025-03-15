@@ -6,9 +6,9 @@ import axios, {
 	AxiosError,
 	AxiosResponse,
 } from 'axios';
-import { useDispatch } from 'react-redux';
+import { store } from '../../App';
 import { loginSuccess, logoutSuccess } from '../../store/index';
-import { TokenData } from '../types';
+import { TokenData, TokenRequestData } from '../types';
 import { getAccessToken, isAuthenticated } from '../../utils/jwttoken';
 
 const API_MEMBER_REFRESH_TOKEN = 'member/refresh';
@@ -32,39 +32,43 @@ const setInterceptors = (instance: AxiosInstance) => {
 		(response: AxiosResponse) => response,
 		async (error: AxiosError): Promise<AxiosResponse> => {
 			const { status, config } = error.response as AxiosResponse;
-			const dispatch = useDispatch();
 			const headers = config.headers as AxiosResponseHeaders;
 			const accessToken = getAccessToken();
 			// -> Access Token 인증 실패 (UNAUTHORIZED : status === 401)
 			if (status === 401 && isAuthenticated()) {
-				const tokenData: TokenData = {
+				const tokenRequestData: TokenRequestData = {
 					accesstoken: accessToken,
 				};
 				const { status, data } = await axios.patch(
 					[config.baseURL, API_MEMBER_REFRESH_TOKEN].join(
 						isProduction ? '' : '/'
 					),
-					tokenData
+					tokenRequestData,
+					{
+						withCredentials: true,
+					}
 				); // O
 				if (status === 201) {
-					dispatch(loginSuccess(data.accesstoken));
-					headers.Authorization = ['Bearer', accessToken].join(' ');
+					const tokenData: TokenData = {
+						accesstoken: data.accesstoken,
+						expiration: data.expiration,
+					};
+					store.dispatch(loginSuccess(tokenData));
+					headers.Authorization = ['Bearer', data.accesstoken].join(' ');
 				}
 				return axios(config);
 			}
 
 			// -> Refresh Token 인증 실패 (FORBIDDEN : status === 403)
-			if (status === 403) {
-				if (config.url === API_MEMBER_REFRESH_TOKEN) {
-					dispatch(logoutSuccess());
-					window.location.href = '/auth/login';
-					return axios(config);
-				}
+			if (status === 403 && !isAuthenticated()) {
+				store.dispatch(logoutSuccess());
+				window.location.href = '/auth/login';
+				return axios(config);
 			}
 
 			// -> 서버 오류 (INTERNAL_SERVER_ERROR : status === 500)
 			if (status === 500) {
-				dispatch(logoutSuccess());
+				store.dispatch(logoutSuccess());
 				window.location.href = '/auth/login';
 				return axios(config);
 			}

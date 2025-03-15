@@ -12,6 +12,11 @@ interface SignUpData {
 
 interface TokenData {
 	accesstoken: string;
+	expiration: string;
+}
+
+interface TokenRequestData {
+	accesstoken: string;
 }
 
 interface CSRFData {
@@ -371,6 +376,7 @@ export type {
 	LoginData,
 	SignUpData,
 	TokenData,
+	TokenRequestData,
 	CSRFData,
 	ImageData,
 	GoodsData,
