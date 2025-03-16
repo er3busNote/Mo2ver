@@ -8,11 +8,15 @@ import {
 	Card,
 	Grid,
 	Fade,
+	Chip,
 	IconButton,
 	CardMedia,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/free-mode';
 
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -50,32 +54,41 @@ const CarouselFade: FC<CarouselFadeProps> = ({ url }): JSX.Element => {
 const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [index, setIndex] = useState(0);
+	const [displayIndex, setDisplayIndex] = useState(0);
 	const [fadeIn, setFadeIn] = useState(true);
-	const content = SLIDE_INFO[index];
+	const content = SLIDE_INFO[displayIndex];
 	const numSlides = SLIDE_INFO.length;
+
+	const bannerDisplayMenu = Object.keys(bannerDisplayData);
 
 	const onAutoFadeIn = (newIndex: number) => {
 		setTimeout(() => {
-			setIndex(newIndex);
+			setDisplayIndex(newIndex);
 			setFadeIn(true);
 		}, 300);
 	};
 
 	useEffect(() => {
 		const rotation = setInterval(() => {
-			const newIndex = (index + 1 + numSlides) % numSlides;
+			const newIndex = (displayIndex + 1 + numSlides) % numSlides;
 			setFadeIn(false);
 			onAutoFadeIn(newIndex);
 		}, 5000);
 		return () => clearInterval(rotation);
-	}, [index, setIndex, setFadeIn, onAutoFadeIn]);
+	}, [displayIndex, setDisplayIndex, setFadeIn, onAutoFadeIn]);
 
 	const goodsClick = (code: string) => {
 		//dispatch(menuActive('/goods/' + code + '/detail'));
 		//navigate('/goods/' + code + '/detail');
 	};
 
+	const displayMenu: SxProps<Theme> = {
+		mt: 1,
+		mb: 1.5,
+	};
+	const chip: SxProps<Theme> = {
+		whiteSpace: 'nowrap',
+	};
 	const label: SxProps<Theme> = {
 		fontSize: '0.8rem',
 	};
@@ -105,6 +118,31 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 					추천 상품
 				</Typography>
 			</Box>
+			{bannerDisplayMenu.length > 0 && (
+				<Box sx={displayMenu}>
+					<Swiper
+						slidesPerView={10}
+						spaceBetween={8}
+						freeMode={true}
+						grabCursor={true}
+						className="displaySwiper"
+					>
+						{bannerDisplayMenu.map((type, index) => (
+							<SwiperSlide key={index}>
+								<Chip
+									label={type}
+									sx={chip}
+									clickable
+									color="primary"
+									size="medium"
+									onClick={() => setDisplayIndex(index)}
+									variant={displayIndex === index ? 'filled' : 'outlined'}
+								/>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Box>
+			)}
 			<Box
 				sx={{
 					display: 'flex',
@@ -182,7 +220,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -201,7 +239,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -220,7 +258,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -243,7 +281,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -262,7 +300,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}
@@ -281,7 +319,7 @@ const PopularPC: FC<PopularProps> = ({ bannerDisplayData }): JSX.Element => {
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={{ width: '120px', height: '100px' }}

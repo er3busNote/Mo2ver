@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { menuActive } from '../../store/index';
 import ButtonTag from '../button/ButtonTag';
-import { Box, Grid, IconButton, CardMedia, Typography } from '@mui/material';
+import {
+	Box,
+	Grid,
+	Chip,
+	Stack,
+	IconButton,
+	CardMedia,
+	Typography,
+} from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 
 const SLIDE_INFO = [
@@ -22,29 +30,46 @@ const PopularMobile: FC<PopularProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [index, setIndex] = useState(0);
-	const content = SLIDE_INFO[index];
+	const [displayIndex, setDisplayIndex] = useState(0);
+	const content = SLIDE_INFO[displayIndex];
 	const numSlides = SLIDE_INFO.length;
+
+	const bannerDisplayMenu = Object.keys(bannerDisplayData);
 
 	const onAutoFadeIn = (newIndex: number) => {
 		setTimeout(() => {
-			setIndex(newIndex);
+			setDisplayIndex(newIndex);
 		}, 300);
 	};
 
 	useEffect(() => {
 		const rotation = setInterval(() => {
-			const newIndex = (index + 1 + numSlides) % numSlides;
+			const newIndex = (displayIndex + 1 + numSlides) % numSlides;
 			onAutoFadeIn(newIndex);
 		}, 5000);
 		return () => clearInterval(rotation);
-	}, [index, setIndex, onAutoFadeIn]);
+	}, [displayIndex, setDisplayIndex, onAutoFadeIn]);
 
 	const goodsClick = (code: string) => {
 		//dispatch(menuActive('/goods/' + code + '/detail'));
 		//navigate('/goods/' + code + '/detail');
 	};
 
+	const displayMenu: SxProps<Theme> = {
+		mt: 1.8,
+		mb: 1.5,
+		height: '30px',
+	};
+	const stack: SxProps<Theme> = {
+		overflowX: 'auto',
+		overflowY: 'hidden',
+		whiteSpace: 'nowrap',
+		'&::-webkit-scrollbar': { display: 'none' },
+	};
+	const chip: SxProps<Theme> = {
+		fontSize: '0.7rem',
+		flexShrink: 0,
+	};
 	const label: SxProps<Theme> = {
 		fontSize: '0.8rem',
 	};
@@ -78,6 +103,24 @@ const PopularMobile: FC<PopularProps> = ({
 					추천 상품
 				</Typography>
 			</Box>
+			{bannerDisplayMenu.length > 0 && (
+				<Box sx={displayMenu}>
+					<Stack direction="row" spacing={1} sx={stack}>
+						{bannerDisplayMenu.map((type, index) => (
+							<Chip
+								key={index}
+								label={type}
+								sx={chip}
+								clickable
+								color="primary"
+								size="small"
+								onClick={() => setDisplayIndex(index)}
+								variant={displayIndex === index ? 'filled' : 'outlined'}
+							/>
+						))}
+					</Stack>
+				</Box>
+			)}
 			<Box
 				sx={{
 					display: 'flex',
@@ -176,7 +219,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}
@@ -195,7 +238,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}
@@ -214,7 +257,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}
@@ -237,7 +280,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}
@@ -256,7 +299,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}
@@ -275,7 +318,7 @@ const PopularMobile: FC<PopularProps> = ({
 							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
 								<IconButton
 									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(index))}
+									onClick={() => goodsClick(String(displayIndex))}
 								>
 									<CardMedia
 										sx={infoImage}

@@ -35,6 +35,11 @@
   padding-top: 18px;
 }
 
+/* Swipe : PC Style */
+.displaySwiper .swiper-slide {
+  width: auto !important;
+}
+
 /* Calendar : Date Picker Style */
 .MuiPickersPopper-root .MuiPickersYear-yearButton {
   margin: 0;
