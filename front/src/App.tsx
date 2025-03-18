@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 import logger from 'redux-logger';
-import { configureStore, Middleware, AnyAction } from '@reduxjs/toolkit';
+import {
+	configureStore,
+	Middleware,
+	Dispatch,
+	AnyAction,
+} from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
 import { SnackbarProvider } from 'notistack';
@@ -32,7 +37,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const middlewares = [authMiddleware];
 
 if (!isProduction) {
-	middlewares.push(logger);
+	middlewares.push(
+		logger as unknown as Middleware<unknown, any, Dispatch<AnyAction>>
+	);
 }
 
 const store = configureStore({

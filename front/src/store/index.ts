@@ -10,7 +10,7 @@ import {
 } from './types';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { TokenData } from '../api/types';
+import { TokenData } from '@api/types';
 
 // 1.1. 인증 관련 State
 const memberinitialState: MemberState = {

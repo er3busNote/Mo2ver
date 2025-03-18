@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import AppContent from '../components/common/AppContent';
-import AdminContent from '../components/admin/AdminContent';
+import AppContent from '@layouts/AppContent';
+import AdminContent from '@layouts/admin/AdminContent';
 import {
 	Home,
 	Login,
@@ -23,7 +23,7 @@ import {
 	AdminEvent,
 	AdminEventGoods,
 	NotFound,
-} from '../pages/index';
+} from '@pages/index';
 import PrivateRoute from './auth';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './route.css';

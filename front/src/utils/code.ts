@@ -1,4 +1,4 @@
-import { CodeData } from '../api/types';
+import { CodeData } from '@api/types';
 import { isEmpty } from './validation';
 
 const keyMap = {

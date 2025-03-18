@@ -141,7 +141,7 @@ const RenderSelectChipField: FC<RenderSelectChipFieldProps> = ({
 				}
 				renderOption={(props, option, { selected }) => {
 					return (
-						<MenuItem key={option} value={option} sx={menuText} {...props}>
+						<MenuItem {...props} value={option} sx={menuText}>
 							{option}
 						</MenuItem>
 					);

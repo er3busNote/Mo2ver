@@ -24,7 +24,7 @@ const RenderNumberField: FC<RenderNumberFieldProps> = ({
 			| FocusEvent<HTMLInputElement, Element>
 			| PointerEvent<Element>
 			| KeyboardEvent<Element>,
-		newValue: number | undefined
+		newValue: number | null
 	) => {
 		onChange(newValue);
 	};

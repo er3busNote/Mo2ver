@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
-import { getAccessToken, isAuthenticated, isAdmin } from '../utils/jwttoken';
+import { getAccessToken, isAuthenticated, isAdmin } from '@utils/jwttoken';
 
 interface LocationState {
 	from: string;

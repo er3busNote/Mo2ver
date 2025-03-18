@@ -20,7 +20,7 @@
     "dayjs": "^1.11.10",
     "jwt-decode": "^3.1.2",
     "moment": "^2.30.1",
-    "notistack": "^3.0.1",
+    "notistack": "^3.0.2",
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
     "react-device-detect": "^2.2.3",
@@ -61,6 +61,7 @@
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.7.1",
+    "react-app-rewired": "^2.2.1",
     "redux-logger": "^3.0.6",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
@@ -71,11 +72,11 @@
     "webpack-dev-server": "^4.10.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "webpack --mode production --config webpack.config.js",
-    "build:react": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "build:react": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
     "dev": "webpack --mode development",
     "serve": "webpack-dev-server --mode development --open --stats-error-details",
     "lint": "eslint --ext .ts,.tsx ./src --fix"
