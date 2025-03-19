@@ -6,7 +6,7 @@ import axios, {
 	AxiosError,
 	AxiosResponse,
 } from 'axios';
-import { store } from 'App';
+import { store } from '@App';
 import { loginSuccess, logoutSuccess } from '@store/index';
 import { TokenData, TokenRequestData } from '@api/types';
 import { getAccessToken, isAuthenticated } from '@utils/jwttoken';
