@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { tokenSuccess, toastMessage } from '../../store/index';
+import { tokenSuccess, toastMessage } from '@store/index';
 
 const handleResponse = (response: AxiosResponse, dispatch: Dispatch) => {
 	dispatch(tokenSuccess(response.data));

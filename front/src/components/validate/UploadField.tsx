@@ -7,10 +7,10 @@ import {
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../api';
-import useCSRFToken from '../../hooks/useCSRFToken';
-import useFieInfo from '../../hooks/cmmn/useFileInfo';
-import DialogImage from '../../components/dialog/DialogImage';
+import Api from '@api/index';
+import useCSRFToken from '@hooks/useCSRFToken';
+import useFieInfo from '@hooks/cmmn/useFileInfo';
+import DialogImage from '@components/dialog/DialogImage';
 import { Box, IconButton, FormHelperText } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
 import ClearIcon from '@mui/icons-material/Clear';

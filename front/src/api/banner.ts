@@ -3,7 +3,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
 import {
 	CSRFData,
-	GoodsDisplayData,
+	BannerGoodsData,
 	BannerImageData,
 	BannerRequestData,
 	PageData,
@@ -49,10 +49,10 @@ const banner = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 상품 전시 정보 추가 API : <baseURL>/banner/goods/create
 		goodsCreate:
-			(goodsDisplayData: GoodsDisplayData, csrfData: CSRFData) =>
+			(bannerGoodsData: BannerGoodsData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('banner/goods/create', goodsDisplayData, {
+					.post('banner/goods/create', bannerGoodsData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -61,10 +61,10 @@ const banner = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 상품 전시 정보 수정 API : <baseURL>/banner/goods/updata
 		goodsUpdate:
-			(goodsDisplayData: GoodsDisplayData, csrfData: CSRFData) =>
+			(bannerGoodsData: BannerGoodsData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.patch('banner/goods/update', goodsDisplayData, {
+					.patch('banner/goods/update', bannerGoodsData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -73,10 +73,10 @@ const banner = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 배너 이미지 정보 추가 API : <baseURL>/banner/images/create
 		imagesCreate:
-			(BannerImageData: BannerImageData, csrfData: CSRFData) =>
+			(bannerImageData: BannerImageData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('banner/images/create', BannerImageData, {
+					.post('banner/images/create', bannerImageData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -85,10 +85,10 @@ const banner = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 배너 이미지 정보 수정 API : <baseURL>/banner/images/updata
 		imagesUpdate:
-			(BannerImageData: BannerImageData, csrfData: CSRFData) =>
+			(bannerImageData: BannerImageData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.patch('banner/images/update', BannerImageData, {
+					.patch('banner/images/update', bannerImageData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},

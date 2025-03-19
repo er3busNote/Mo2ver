@@ -11,14 +11,14 @@ import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '../../store/index';
-import { TitleInfo } from '../../store/types';
-import { CartData, CartPageData } from '../../api/types';
-import Api from '../../api';
-import useImageUrl from '../../hooks/useImageUrl';
-import AppSubStepHeader from '../../layouts/AppSubStepHeader';
-import NumberInput from '../../components/input/NumberInput';
-import ButtonCart from '../../components/button/ButtonCart';
+import { changeNext, menuActive } from '@store/index';
+import { TitleInfo } from '@store/types';
+import { CartData, CartPageData } from '@api/types';
+import Api from '@api/index';
+import useImageUrl from '@hooks/useImageUrl';
+import AppSubStepHeader from '@layouts/AppSubStepHeader';
+import NumberInput from '@components/input/NumberInput';
+import ButtonCart from '@components/button/ButtonCart';
 import {
 	Box,
 	Card,

@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^7.1.0",
     "@svgr/webpack": "^6.5.1",
     "@types/crypto-js": "^4.1.1",
     "@types/lodash": "^4.14.191",
@@ -61,7 +62,6 @@
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.7.1",
-    "react-app-rewired": "^2.2.1",
     "redux-logger": "^3.0.6",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
@@ -72,11 +72,11 @@
     "webpack-dev-server": "^4.10.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "craco start",
     "build": "webpack --mode production --config webpack.config.js",
-    "build:react": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject",
+    "build:react": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "dev": "webpack --mode development",
     "serve": "webpack-dev-server --mode development --open --stats-error-details",
     "lint": "eslint --ext .ts,.tsx ./src --fix"

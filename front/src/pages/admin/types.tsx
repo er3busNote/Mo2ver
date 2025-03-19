@@ -13,7 +13,7 @@ interface BannerImageDetailValues {
 	useyn: string;
 }
 
-interface BannerFormImageValues {
+interface BannerImageFormValues {
 	title: string;
 	startDate: Dayjs;
 	endDate: Dayjs;
@@ -24,14 +24,14 @@ interface BannerFormImageValues {
 	bnnrImg: Array<BannerImageDetailValues>;
 }
 
-interface GoodsDisplayDetailValues {
+interface BannerGoodsDetailValues {
 	goodsCode: string;
 	goodsName: string;
 	salePrice: number;
 	sortSequence: number;
 }
 
-interface GoodsFormDisplayValues {
+interface BannerGoodsFormValues {
 	title: string;
 	startDate: Dayjs;
 	endDate: Dayjs;
@@ -39,7 +39,7 @@ interface GoodsFormDisplayValues {
 	type: string;
 	code: string;
 	useyn: string;
-	goods: Array<GoodsDisplayDetailValues>;
+	goods: Array<BannerGoodsDetailValues>;
 }
 
 interface EventDisplayDetailValues {
@@ -59,7 +59,7 @@ interface EventFormDisplayValues {
 	goods: Array<EventDisplayDetailValues>;
 }
 
-interface VideoFormDisplayValues {
+interface BannerVideoFormValues {
 	title: string;
 	startDate: Dayjs;
 	endDate: Dayjs;
@@ -71,11 +71,11 @@ interface VideoFormDisplayValues {
 
 export type {
 	CategoryFormValues,
-	BannerFormImageValues,
+	BannerImageFormValues,
 	BannerImageDetailValues,
-	GoodsFormDisplayValues,
-	GoodsDisplayDetailValues,
+	BannerGoodsFormValues,
+	BannerGoodsDetailValues,
+	BannerVideoFormValues,
 	EventFormDisplayValues,
 	EventDisplayDetailValues,
-	VideoFormDisplayValues,
 };

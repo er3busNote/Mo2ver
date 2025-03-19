@@ -1,30 +1,15 @@
-import React, {
-	FC,
-	useRef,
-	useState,
-	useEffect,
-	BaseSyntheticEvent,
-} from 'react';
+import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-	Control,
-	Controller,
-	useFormContext,
-	useFieldArray,
-} from 'react-hook-form';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
-	Fade,
 	Grid,
-	Modal,
-	Backdrop,
 	Typography,
-	InputBase,
 	Table,
 	TableHead,
 	TableBody,
@@ -35,134 +20,34 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
 import RenderUploadField from '@components/validate/UploadField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
-import { BannerFormImageValues } from '@pages/admin/types';
+import { BannerImageFormValues } from '@pages/admin/types';
 // import _ from 'lodash';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
+const fontSize_sm = '13px';
+const fontSize_lg = '14px';
+
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerProp {
+interface BannerImageProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	type: 'Create' | 'Update';
 	onSubmit: (
-		data: BannerFormImageValues,
+		data: BannerImageFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-interface ModalProps {
-	index: number;
-	control: Control<BannerFormImageValues> | undefined;
-	open: boolean;
-	handleClose: () => void;
-	style: SxProps<Theme>;
-	header: SxProps<Theme>;
-	base: SxProps<Theme>;
-}
-
-const TitleModal: FC<ModalProps> = ({
-	index,
-	control,
-	open,
-	handleClose,
-	style,
-	header,
-	base,
-}): JSX.Element => {
-	return (
-		<Modal
-			open={open}
-			onClose={handleClose}
-			closeAfterTransition
-			slots={{ backdrop: Backdrop }}
-			slotProps={{
-				backdrop: {
-					timeout: 500,
-				},
-			}}
-		>
-			<Fade in={open}>
-				<Box sx={style}>
-					<Typography variant="h6" component="h2" sx={header}>
-						배너내용 - {index}번째
-					</Typography>
-					<Box sx={base}>
-						<Controller
-							name={`bnnrImg.${index}.title`}
-							control={control}
-							render={({ field, fieldState, formState }) => (
-								<RenderTextField
-									type="text"
-									label="배너내용을 입력해주세요"
-									field={field}
-									fieldState={fieldState}
-									formState={formState}
-								/>
-							)}
-						/>
-					</Box>
-				</Box>
-			</Fade>
-		</Modal>
-	);
-};
-
-const CnntUrlModal: FC<ModalProps> = ({
-	index,
-	control,
-	open,
-	handleClose,
-	style,
-	header,
-	base,
-}): JSX.Element => {
-	return (
-		<Modal
-			open={open}
-			onClose={handleClose}
-			closeAfterTransition
-			slots={{ backdrop: Backdrop }}
-			slotProps={{
-				backdrop: {
-					timeout: 500,
-				},
-			}}
-		>
-			<Fade in={open}>
-				<Box sx={style}>
-					<Typography variant="h6" component="h2" sx={header}>
-						연결 URL - {index}번째
-					</Typography>
-					<Box sx={base}>
-						<Controller
-							name={`bnnrImg.${index}.cnntUrl`}
-							control={control}
-							render={({ field, fieldState, formState }) => (
-								<RenderTextField
-									type="text"
-									label="URL을 입력해주세요"
-									field={field}
-									fieldState={fieldState}
-									formState={formState}
-								/>
-							)}
-						/>
-					</Box>
-				</Box>
-			</Fade>
-		</Modal>
-	);
-};
-
-const BannerFormImageMobile: FC<BannerProp> = ({
+const BannerImageFormPC: FC<BannerImageProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -172,15 +57,13 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const watchValue = useRef<string>('BN');
-	const [titleOpen, setTitleOpen] = useState(false);
-	const [cnntUrlOpen, setCnntUrlOpen] = useState(false);
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<BannerFormImageValues>();
+	} = useFormContext<BannerImageFormValues>();
 
 	const { fields, append, remove } = useFieldArray({
 		control,
@@ -219,11 +102,6 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 		}
 	}, [watch('type')]);
 
-	const openTitle = () => setTitleOpen(true);
-	const closeTitle = () => setTitleOpen(false);
-	const openCnntUrl = () => setCnntUrlOpen(true);
-	const closeCnntUrl = () => setCnntUrlOpen(false);
-
 	const cancelClick = () => {
 		const titleData: TitleInfo = {
 			title: title,
@@ -237,40 +115,39 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 	};
 
 	const conditionTh: SxProps<Theme> = {
-		px: 1,
+		px: 2,
 		py: 1.5,
-		width: '20%',
-		fontSize: { xs: '11px', sm: '13px' },
+		width: 120,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
-		pl: 1.5,
-		pr: 0,
-		fontSize: { xs: '12px', sm: '13px' },
+		px: 2,
+		pt: 0.8,
+		pb: 1.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
-		px: { xs: 1, sm: 2 },
-		py: 1,
-		fontSize: { xs: '11px', sm: '12px' },
+		px: 2,
+		py: 1.2,
+		minWidth: '47px',
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
-		px: 1.5,
+		px: 2,
 		py: 0.5,
 		border: tableBorder,
-		fontSize: { xs: '11px', sm: '12px' },
-	};
-	const dateHorizonIcon: SxProps<Theme> = {
-		px: 0.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
-			py: 1.5,
+			py: 2,
 		},
 		'.MuiFormControl-root': {
 			mt: 0.5,
@@ -278,51 +155,14 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 		},
 		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
 			{
-				top: '-3px',
-				ml: 0.5,
+				top: '0px',
+				ml: 1,
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '3px',
-				ml: 1,
+				top: '2px',
+				ml: 2,
 			},
-	};
-	const modalStyle: SxProps<Theme> = {
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		width: { xs: 300, sm: 400 },
-		bgcolor: 'background.paper',
-		border: '2px solid #000',
-		boxShadow: 24,
-	};
-	const inputBase: SxProps<Theme> = {
-		fontSize: '12px',
-		fontWeight: 'bold',
-		color: '#000',
-		'.MuiInputBase-readOnly': {
-			textAlign: 'center',
-		},
-	};
-	const inputHeader: SxProps<Theme> = {
-		px: 2,
-		color: '#fff',
-		fontSize: '0.9rem',
-		fontWeight: 'bold',
-		lineHeight: '38px',
-		bgcolor: '#363b74',
-	};
-	const inputBody: SxProps<Theme> = {
-		px: 4,
-		py: 1,
-		'.MuiFormControl-root': {
-			width: '100% !important',
-			overflowX: 'visible',
-		},
-		'.MuiFormLabel-root': {
-			left: '10px !important',
-		},
 	};
 	return (
 		<Box
@@ -373,9 +213,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 											/>
 										)}
 									/>
-									<Typography component="span" sx={dateHorizonIcon}>
-										-
-									</Typography>
+									<HorizontalRuleIcon />
 									<Controller
 										name="endDate"
 										control={control}
@@ -413,10 +251,8 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 											)}
 										/>
 									</TableCell>
-								</TableRow>
-								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										템플릿
+										템플릿 유형
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -437,7 +273,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										전시코드
+										전시상태코드
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -445,7 +281,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 											control={control}
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
-													label="전시코드"
+													label="전시상태코드"
 													datas={renameKeys(groupCodeData, 'BN003')}
 													field={field}
 													fieldState={fieldState}
@@ -454,12 +290,10 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 											)}
 										/>
 									</TableCell>
-								</TableRow>
-								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
 										전시여부
 									</TableCell>
-									<TableCell colSpan={3} sx={conditionTd} align="left">
+									<TableCell sx={conditionTd} align="left">
 										<Controller
 											name="useyn"
 											control={control}
@@ -492,13 +326,13 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 						component="h1"
 						variant="h6"
 						color="inherit"
-						sx={{ fontSize: '16px', fontWeight: 'bold' }}
+						sx={{ fontWeight: 'bold' }}
 					>
 						배너이미지
 					</Typography>
 				</Box>
-				<Box sx={{ display: 'flex' }}>
-					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
+				<Box>
+					<Grid container spacing={1}>
 						<Grid item>
 							<ButtonBase
 								type="submit"
@@ -555,20 +389,18 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 						{fields.map((field, index) => (
 							<TableRow key={field.id}>
 								<TableCell sx={dataTd} align="center">
-									<InputBase
-										sx={inputBase}
-										placeholder={`${index}`}
-										onClick={openTitle}
-										readOnly={true}
-									/>
-									<TitleModal
-										index={index}
+									<Controller
+										name={`bnnrImg.${index}.title`}
 										control={control}
-										open={titleOpen}
-										handleClose={closeTitle}
-										style={modalStyle}
-										header={inputHeader}
-										base={inputBody}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="text"
+												label="배너내용을 입력해주세요"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
 									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
@@ -585,20 +417,18 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
-									<InputBase
-										sx={inputBase}
-										placeholder={'click'}
-										onClick={openCnntUrl}
-										readOnly={true}
-									/>
-									<CnntUrlModal
-										index={index}
+									<Controller
+										name={`bnnrImg.${index}.cnntUrl`}
 										control={control}
-										open={cnntUrlOpen}
-										handleClose={closeCnntUrl}
-										style={modalStyle}
-										header={inputHeader}
-										base={inputBody}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="text"
+												label="URL을 입력해주세요"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
 									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
@@ -628,7 +458,7 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 			<Box sx={{ pt: 2 }}>
 				<ButtonBase
 					buttonType="cancel"
-					device="mobile"
+					device="pc"
 					variant="outlined"
 					onClick={cancelClick}
 				>
@@ -639,4 +469,4 @@ const BannerFormImageMobile: FC<BannerProp> = ({
 	);
 };
 
-export default BannerFormImageMobile;
+export default BannerImageFormPC;

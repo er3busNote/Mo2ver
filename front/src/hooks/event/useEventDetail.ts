@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { EventRequestData, EventDisplayData, CSRFData } from '../../api/types';
+import { EventRequestData, EventDisplayData, CSRFData } from '@api/types';
 
 interface EventDetailProps {
 	event: ActionCreatorsMapObject;

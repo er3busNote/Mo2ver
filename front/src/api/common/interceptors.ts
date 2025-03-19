@@ -6,10 +6,10 @@ import axios, {
 	AxiosError,
 	AxiosResponse,
 } from 'axios';
-import { store } from '../../App';
-import { loginSuccess, logoutSuccess } from '../../store/index';
-import { TokenData, TokenRequestData } from '../types';
-import { getAccessToken, isAuthenticated } from '../../utils/jwttoken';
+import { store } from 'App';
+import { loginSuccess, logoutSuccess } from '@store/index';
+import { TokenData, TokenRequestData } from '@api/types';
+import { getAccessToken, isAuthenticated } from '@utils/jwttoken';
 
 const API_MEMBER_REFRESH_TOKEN = 'member/refresh';
 

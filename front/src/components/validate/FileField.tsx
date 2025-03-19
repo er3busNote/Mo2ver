@@ -7,10 +7,10 @@ import {
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { FileData } from '../../api/types';
-import Api from '../../api';
-import useCSRFToken from '../../hooks/useCSRFToken';
-import useFieInfo from '../../hooks/cmmn/useFileInfo';
+import { FileData } from '@api/types';
+import Api from '@api/index';
+import useCSRFToken from '@hooks/useCSRFToken';
+import useFieInfo from '@hooks/cmmn/useFileInfo';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { Close, FileUploadOutlined } from '@mui/icons-material';

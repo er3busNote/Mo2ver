@@ -32,7 +32,7 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import StarsIcon from '@mui/icons-material/Stars';
-import { EventDetailData } from '../../../api/types';
+import { EventDetailData } from '@api/types';
 
 interface EventDetailProps {
 	title: string;

@@ -1,7 +1,7 @@
 import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
@@ -23,9 +23,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
-import RenderUploadField from '@components/validate/UploadField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
-import { BannerFormImageValues } from '@pages/admin/types';
+import { BannerVideoFormValues } from '@pages/admin/types';
 // import _ from 'lodash';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
@@ -36,45 +35,32 @@ const fontSize_lg = '14px';
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerProp {
+interface BannerVideoProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	type: 'Create' | 'Update';
 	onSubmit: (
-		data: BannerFormImageValues,
+		data: BannerVideoFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const BannerFormImagePC: FC<BannerProp> = ({
+const BannerVideoFormPC: FC<BannerVideoProp> = ({
 	title,
 	description,
 	groupCodeData,
-	type,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('BN');
+	const watchValue = useRef<string>('VD');
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<BannerFormImageValues>();
-
-	const { fields, append, remove } = useFieldArray({
-		control,
-		name: 'bnnrImg',
-	});
-	const addNewField = () => {
-		append({ title: '', cnntUrl: '', file: '', useyn: '' });
-	};
-	const removeField = () => {
-		remove(-1);
-	};
+	} = useFormContext<BannerVideoFormValues>();
 
 	useEffect(() => {
 		const type = watch('type');
@@ -86,15 +72,15 @@ const BannerFormImagePC: FC<BannerProp> = ({
 				prevDescription: description,
 			};
 			switch (type) {
+				case 'BN':
+					dispatch(changeNext(titleData));
+					dispatch(menuActive('/admin/banner/image'));
+					navigate('/admin/banner/image');
+					break;
 				case 'GD':
 					dispatch(changeNext(titleData));
 					dispatch(menuActive('/admin/banner/goods'));
 					navigate('/admin/banner/goods');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
 					break;
 				default:
 					break;
@@ -103,15 +89,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 	}, [watch('type')]);
 
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		// 페이지 이동
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -153,16 +131,14 @@ const BannerFormImagePC: FC<BannerProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
-			{
-				top: '0px',
-				ml: 1,
-			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
-			{
-				top: '2px',
-				ml: 2,
-			},
+		'label[id$="title-label"]': {
+			top: '0px',
+			ml: 1,
+		},
+		'label[id$="title-label"][data-shrink="true"]': {
+			top: '2px',
+			ml: 2,
+		},
 	};
 	return (
 		<Box
@@ -265,7 +241,6 @@ const BannerFormImagePC: FC<BannerProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
-													readonly={type === 'Update'}
 												/>
 											)}
 										/>
@@ -328,7 +303,7 @@ const BannerFormImagePC: FC<BannerProp> = ({
 						color="inherit"
 						sx={{ fontWeight: 'bold' }}
 					>
-						배너이미지
+						동영상
 					</Typography>
 				</Box>
 				<Box>
@@ -344,26 +319,6 @@ const BannerFormImagePC: FC<BannerProp> = ({
 								저장
 							</ButtonBase>
 						</Grid>
-						<Grid item>
-							<ButtonBase
-								buttonType="add"
-								size="small"
-								variant="outlined"
-								onClick={addNewField}
-							>
-								추가
-							</ButtonBase>
-						</Grid>
-						<Grid item>
-							<ButtonBase
-								buttonType="search"
-								size="small"
-								variant="outlined"
-								onClick={removeField}
-							>
-								삭제
-							</ButtonBase>
-						</Grid>
 					</Grid>
 				</Box>
 			</Box>
@@ -372,86 +327,15 @@ const BannerFormImagePC: FC<BannerProp> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								배너내용
+								동영상내용
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								배너이미지
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								URL
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								전시여부
+								동영상
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((field, index) => (
-							<TableRow key={field.id}>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.title`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="배너내용을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.file`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderUploadField
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.cnntUrl`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="URL을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.useyn`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderSelectField
-												label="전시여부"
-												datas={[
-													{ value: '', label: '전체' },
-													{ value: 'Y', label: '예' },
-													{ value: 'N', label: '아니오' },
-												]}
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-							</TableRow>
-						))}
+						<></>
 					</TableBody>
 				</Table>
 			</TableContainer>
@@ -469,4 +353,4 @@ const BannerFormImagePC: FC<BannerProp> = ({
 	);
 };
 
-export default BannerFormImagePC;
+export default BannerVideoFormPC;

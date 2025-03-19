@@ -20,32 +20,28 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
-import { VideoFormDisplayValues } from '@pages/admin/types';
+import { BannerVideoFormValues } from '@pages/admin/types';
 // import _ from 'lodash';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
-const fontSize_sm = '13px';
-const fontSize_lg = '14px';
-
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface VideoProp {
+interface BannerVideoProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	onSubmit: (
-		data: VideoFormDisplayValues,
+		data: BannerVideoFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const VideoFormDisplayPC: FC<VideoProp> = ({
+const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -60,7 +56,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<VideoFormDisplayValues>();
+	} = useFormContext<BannerVideoFormValues>();
 
 	useEffect(() => {
 		const type = watch('type');
@@ -89,55 +85,64 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 	}, [watch('type')]);
 
 	const cancelClick = () => {
-		// 페이지 이동
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/admin/banner'));
+		navigate('/admin/banner');
 	};
 
 	const conditionTh: SxProps<Theme> = {
-		px: 2,
+		px: 1,
 		py: 1.5,
-		width: 120,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		width: '20%',
+		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
-		px: 2,
-		pt: 0.8,
-		pb: 1.5,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		pl: 1.5,
+		pr: 0,
+		fontSize: { xs: '12px', sm: '13px' },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
-		px: 2,
-		py: 1.2,
-		minWidth: '47px',
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		px: { xs: 1, sm: 2 },
+		py: 1,
+		fontSize: { xs: '11px', sm: '12px' },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
-		px: 2,
+		px: 1.5,
 		py: 0.5,
 		border: tableBorder,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		fontSize: { xs: '11px', sm: '12px' },
+	};
+	const dateHorizonIcon: SxProps<Theme> = {
+		px: 0.5,
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
-			py: 2,
+			py: 1.5,
 		},
 		'.MuiFormControl-root': {
 			mt: 0.5,
 			overflowX: 'visible',
 		},
 		'label[id$="title-label"]': {
-			top: '0px',
-			ml: 1,
+			top: '-3px',
+			ml: 0.5,
 		},
 		'label[id$="title-label"][data-shrink="true"]': {
-			top: '2px',
-			ml: 2,
+			top: '3px',
+			ml: 1,
 		},
 	};
 	return (
@@ -189,7 +194,9 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 											/>
 										)}
 									/>
-									<HorizontalRuleIcon />
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
 									<Controller
 										name="endDate"
 										control={control}
@@ -227,8 +234,10 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 											)}
 										/>
 									</TableCell>
+								</TableRow>
+								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										템플릿 유형
+										템플릿
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -248,7 +257,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										전시상태코드
+										전시코드
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -256,7 +265,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 											control={control}
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
-													label="전시상태코드"
+													label="전시코드"
 													datas={renameKeys(groupCodeData, 'BN003')}
 													field={field}
 													fieldState={fieldState}
@@ -265,6 +274,8 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 											)}
 										/>
 									</TableCell>
+								</TableRow>
+								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
 										전시여부
 									</TableCell>
@@ -301,13 +312,13 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 						component="h1"
 						variant="h6"
 						color="inherit"
-						sx={{ fontWeight: 'bold' }}
+						sx={{ fontSize: '16px', fontWeight: 'bold' }}
 					>
 						동영상
 					</Typography>
 				</Box>
-				<Box>
-					<Grid container spacing={1}>
+				<Box sx={{ display: 'flex' }}>
+					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
 						<Grid item>
 							<ButtonBase
 								type="submit"
@@ -342,7 +353,7 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 			<Box sx={{ pt: 2 }}>
 				<ButtonBase
 					buttonType="cancel"
-					device="pc"
+					device="mobile"
 					variant="outlined"
 					onClick={cancelClick}
 				>
@@ -353,4 +364,4 @@ const VideoFormDisplayPC: FC<VideoProp> = ({
 	);
 };
 
-export default VideoFormDisplayPC;
+export default BannerVideoFormMobile;

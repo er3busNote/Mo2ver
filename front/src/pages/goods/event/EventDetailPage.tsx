@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { TitleState } from '../../../store/types';
+import { TitleState } from '@store/types';
 import EventDetail from './EventDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 

@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, BannerPageData } from '../../api/types';
+import { PageData, BannerPageData } from '@api/types';
 
 interface BannerListProps {
 	banner: ActionCreatorsMapObject;

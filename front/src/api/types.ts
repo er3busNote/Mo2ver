@@ -202,7 +202,7 @@ interface BannerImageData {
 	bnnrImg: Array<BannerImageDetailData>;
 }
 
-interface GoodsDisplayDetailData {
+interface BannerGoodsDetailData {
 	id?: number;
 	goodsCode: string;
 	goodsName: string;
@@ -210,7 +210,7 @@ interface GoodsDisplayDetailData {
 	sortSequence: number;
 }
 
-interface GoodsDisplayData {
+interface BannerGoodsData {
 	bannerNo?: number;
 	title: string;
 	startDate: string;
@@ -219,7 +219,7 @@ interface GoodsDisplayData {
 	type: string;
 	code: string;
 	useyn: string;
-	goods: Array<GoodsDisplayDetailData>;
+	goods: Array<BannerGoodsDetailData>;
 }
 
 // 5. Event Type
@@ -391,8 +391,7 @@ export type {
 	BannerRequestData,
 	BannerPageData,
 	BannerImageData,
-	BannerImageDetailData,
-	GoodsDisplayData,
+	BannerGoodsData,
 	EventData,
 	EventRequestData,
 	EventPageData,

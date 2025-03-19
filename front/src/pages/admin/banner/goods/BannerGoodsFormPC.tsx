@@ -33,8 +33,8 @@ import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
 import {
-	GoodsFormDisplayValues,
-	GoodsDisplayDetailValues,
+	BannerGoodsFormValues,
+	BannerGoodsDetailValues,
 } from '@pages/admin/types';
 // import _ from 'lodash';
 import { renameKeys } from '@utils/code';
@@ -46,18 +46,18 @@ const fontSize_lg = '14px';
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface GoodsProp {
+interface BannerGoodsProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	type: 'Create' | 'Update';
 	onSubmit: (
-		data: GoodsFormDisplayValues,
+		data: BannerGoodsFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const GoodsFormDisplayPC: FC<GoodsProp> = ({
+const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -74,7 +74,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<GoodsFormDisplayValues>();
+	} = useFormContext<BannerGoodsFormValues>();
 
 	const { fields, replace } = useFieldArray({
 		control,
@@ -418,7 +418,7 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((data: GoodsDisplayDetailValues, index: number) => (
+						{fields.map((data: BannerGoodsDetailValues, index: number) => (
 							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
 									{data.goodsCode}
@@ -463,4 +463,4 @@ const GoodsFormDisplayPC: FC<GoodsProp> = ({
 	);
 };
 
-export default GoodsFormDisplayPC;
+export default BannerGoodsFormPC;

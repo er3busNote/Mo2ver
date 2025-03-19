@@ -9,14 +9,14 @@ import { TitleState } from '@store/types';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
-import VideoFormDisplayPC from './VideoFormDisplayPC';
-import VideoFormDisplayMobile from './VideoFormDisplayMobile';
+import BannerVideoFormPC from './BannerVideoFormPC';
+import BannerVideoFormMobile from './BannerVideoFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { VideoFormDisplayValues } from '../../types';
+import { BannerVideoFormValues } from '@pages/admin/types';
 // import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
-const videoDisplaySchema = yup
+const bannerVideoSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -82,7 +82,7 @@ interface BannerDispatchProps {
 	member: ActionCreatorsMapObject;
 }
 
-const videoDisplayValues: VideoFormDisplayValues = {
+const bannerVideoValues: BannerVideoFormValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
@@ -109,14 +109,14 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		csrfData,
 	});
 
-	const methods = useForm<VideoFormDisplayValues>({
+	const methods = useForm<BannerVideoFormValues>({
 		mode: 'onChange',
-		defaultValues: videoDisplayValues,
-		resolver: yupResolver(videoDisplaySchema),
+		defaultValues: bannerVideoValues,
+		resolver: yupResolver(bannerVideoSchema),
 	});
 
 	const submitForm = (
-		data: VideoFormDisplayValues,
+		data: BannerVideoFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const videoFormData = {
@@ -137,7 +137,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			<FormProvider {...methods}>
 				{isDesktop && (
-					<VideoFormDisplayPC
+					<BannerVideoFormPC
 						title={title}
 						description={description}
 						groupCodeData={groupCodeData}
@@ -145,7 +145,7 @@ const BannerVideoPage: FC<BannerDispatchProps> = ({
 					/>
 				)}
 				{isMobile && (
-					<VideoFormDisplayMobile
+					<BannerVideoFormMobile
 						title={title}
 						description={description}
 						groupCodeData={groupCodeData}

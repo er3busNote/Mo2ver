@@ -7,16 +7,24 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { GoodsData } from '@api/types';
+import {
+	Control,
+	Controller,
+	useFormContext,
+	useFieldArray,
+} from 'react-hook-form';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
+	Fade,
 	Grid,
+	Modal,
+	Backdrop,
 	Typography,
+	InputBase,
 	Table,
 	TableHead,
 	TableBody,
@@ -27,34 +35,134 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import DialogGoodsMobile from '@components/dialog/DialogGoodsMobile';
 import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
+import RenderUploadField from '@components/validate/UploadField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
-import {
-	GoodsFormDisplayValues,
-	GoodsDisplayDetailValues,
-} from '@pages/admin/types';
+import { BannerImageFormValues } from '@pages/admin/types';
 // import _ from 'lodash';
-import { isMobile } from 'react-device-detect';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface GoodsProp {
+interface BannerImageProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	type: 'Create' | 'Update';
 	onSubmit: (
-		data: GoodsFormDisplayValues,
+		data: BannerImageFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const GoodsFormDisplayMobile: FC<GoodsProp> = ({
+interface ModalProps {
+	index: number;
+	control: Control<BannerImageFormValues> | undefined;
+	open: boolean;
+	handleClose: () => void;
+	style: SxProps<Theme>;
+	header: SxProps<Theme>;
+	base: SxProps<Theme>;
+}
+
+const TitleModal: FC<ModalProps> = ({
+	index,
+	control,
+	open,
+	handleClose,
+	style,
+	header,
+	base,
+}): JSX.Element => {
+	return (
+		<Modal
+			open={open}
+			onClose={handleClose}
+			closeAfterTransition
+			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				backdrop: {
+					timeout: 500,
+				},
+			}}
+		>
+			<Fade in={open}>
+				<Box sx={style}>
+					<Typography variant="h6" component="h2" sx={header}>
+						배너내용 - {index}번째
+					</Typography>
+					<Box sx={base}>
+						<Controller
+							name={`bnnrImg.${index}.title`}
+							control={control}
+							render={({ field, fieldState, formState }) => (
+								<RenderTextField
+									type="text"
+									label="배너내용을 입력해주세요"
+									field={field}
+									fieldState={fieldState}
+									formState={formState}
+								/>
+							)}
+						/>
+					</Box>
+				</Box>
+			</Fade>
+		</Modal>
+	);
+};
+
+const CnntUrlModal: FC<ModalProps> = ({
+	index,
+	control,
+	open,
+	handleClose,
+	style,
+	header,
+	base,
+}): JSX.Element => {
+	return (
+		<Modal
+			open={open}
+			onClose={handleClose}
+			closeAfterTransition
+			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				backdrop: {
+					timeout: 500,
+				},
+			}}
+		>
+			<Fade in={open}>
+				<Box sx={style}>
+					<Typography variant="h6" component="h2" sx={header}>
+						연결 URL - {index}번째
+					</Typography>
+					<Box sx={base}>
+						<Controller
+							name={`bnnrImg.${index}.cnntUrl`}
+							control={control}
+							render={({ field, fieldState, formState }) => (
+								<RenderTextField
+									type="text"
+									label="URL을 입력해주세요"
+									field={field}
+									fieldState={fieldState}
+									formState={formState}
+								/>
+							)}
+						/>
+					</Box>
+				</Box>
+			</Fade>
+		</Modal>
+	);
+};
+
+const BannerImageFormMobile: FC<BannerImageProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -63,29 +171,26 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('GD');
-	const [open, setOpen] = useState(false);
+	const watchValue = useRef<string>('BN');
+	const [titleOpen, setTitleOpen] = useState(false);
+	const [cnntUrlOpen, setCnntUrlOpen] = useState(false);
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<GoodsFormDisplayValues>();
+	} = useFormContext<BannerImageFormValues>();
 
-	const { fields, replace } = useFieldArray({
+	const { fields, append, remove } = useFieldArray({
 		control,
-		name: 'goods',
+		name: 'bnnrImg',
 	});
-	const replaceField = (productData: readonly GoodsData[]) => {
-		replace(
-			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
-				goodsCode,
-				goodsName,
-				salePrice,
-				sortSequence: i + 1,
-			}))
-		);
+	const addNewField = () => {
+		append({ title: '', cnntUrl: '', file: '', useyn: '' });
+	};
+	const removeField = () => {
+		remove(-1);
 	};
 
 	useEffect(() => {
@@ -98,10 +203,10 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 				prevDescription: description,
 			};
 			switch (type) {
-				case 'BN':
+				case 'GD':
 					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
+					dispatch(menuActive('/admin/banner/goods'));
+					navigate('/admin/banner/goods');
 					break;
 				case 'VD':
 					dispatch(changeNext(titleData));
@@ -114,8 +219,10 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		}
 	}, [watch('type')]);
 
-	const openGoods = () => setOpen(true);
-	const closeGoods = () => setOpen(false);
+	const openTitle = () => setTitleOpen(true);
+	const closeTitle = () => setTitleOpen(false);
+	const openCnntUrl = () => setCnntUrlOpen(true);
+	const closeCnntUrl = () => setCnntUrlOpen(false);
 
 	const cancelClick = () => {
 		const titleData: TitleInfo = {
@@ -158,19 +265,6 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		border: tableBorder,
 		fontSize: { xs: '11px', sm: '12px' },
 	};
-	const dataTdNum: SxProps<Theme> = {
-		px: isMobile ? 0 : 1,
-		width: isMobile ? '94px' : '130px',
-		'.MuiFormControl-root': {
-			height: '34px',
-		},
-		'.MuiFormHelperText-root': {
-			display: 'none',
-		},
-		'.MuiInputBase-root': {
-			overflowY: 'hidden',
-		},
-	};
 	const dateHorizonIcon: SxProps<Theme> = {
 		px: 0.5,
 	};
@@ -182,18 +276,37 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"]': {
-			top: '-3px',
-			ml: 0.5,
-		},
-		'label[id$="title-label"][data-shrink="true"]': {
-			top: '3px',
-			ml: 1,
+		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
+			{
+				top: '-3px',
+				ml: 0.5,
+			},
+		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
+			{
+				top: '3px',
+				ml: 1,
+			},
+	};
+	const modalStyle: SxProps<Theme> = {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: { xs: 300, sm: 400 },
+		bgcolor: 'background.paper',
+		border: '2px solid #000',
+		boxShadow: 24,
+	};
+	const inputBase: SxProps<Theme> = {
+		fontSize: '12px',
+		fontWeight: 'bold',
+		color: '#000',
+		'.MuiInputBase-readOnly': {
+			textAlign: 'center',
 		},
 	};
 	const inputHeader: SxProps<Theme> = {
 		px: 2,
-		py: 0.5,
 		color: '#fff',
 		fontSize: '0.9rem',
 		fontWeight: 'bold',
@@ -201,8 +314,15 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 		bgcolor: '#363b74',
 	};
 	const inputBody: SxProps<Theme> = {
-		px: isMobile ? 0 : 2,
+		px: 4,
 		py: 1,
+		'.MuiFormControl-root': {
+			width: '100% !important',
+			overflowX: 'visible',
+		},
+		'.MuiFormLabel-root': {
+			left: '10px !important',
+		},
 	};
 	return (
 		<Box
@@ -339,7 +459,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 									<TableCell sx={conditionTh} align="center" component="th">
 										전시여부
 									</TableCell>
-									<TableCell sx={conditionTd} align="left">
+									<TableCell colSpan={3} sx={conditionTd} align="left">
 										<Controller
 											name="useyn"
 											control={control}
@@ -374,7 +494,7 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 						color="inherit"
 						sx={{ fontSize: '16px', fontWeight: 'bold' }}
 					>
-						상품전시
+						배너이미지
 					</Typography>
 				</Box>
 				<Box sx={{ display: 'flex' }}>
@@ -392,20 +512,23 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 						</Grid>
 						<Grid item>
 							<ButtonBase
+								buttonType="add"
+								size="small"
+								variant="outlined"
+								onClick={addNewField}
+							>
+								추가
+							</ButtonBase>
+						</Grid>
+						<Grid item>
+							<ButtonBase
 								buttonType="search"
 								size="small"
 								variant="outlined"
-								onClick={openGoods}
+								onClick={removeField}
 							>
-								상품찾기
+								삭제
 							</ButtonBase>
-							<DialogGoodsMobile
-								open={open}
-								replaceField={replaceField}
-								handleClose={closeGoods}
-								header={inputHeader}
-								base={inputBody}
-							/>
 						</Grid>
 					</Grid>
 				</Box>
@@ -415,39 +538,81 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								상품코드
+								배너내용
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								상품명
+								배너이미지
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								판매가
+								URL
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								노출순서
+								전시여부
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((data: GoodsDisplayDetailValues, index: number) => (
-							<TableRow key={index}>
+						{fields.map((field, index) => (
+							<TableRow key={field.id}>
 								<TableCell sx={dataTd} align="center">
-									{data.goodsCode}
+									<InputBase
+										sx={inputBase}
+										placeholder={`${index}`}
+										onClick={openTitle}
+										readOnly={true}
+									/>
+									<TitleModal
+										index={index}
+										control={control}
+										open={titleOpen}
+										handleClose={closeTitle}
+										style={modalStyle}
+										header={inputHeader}
+										base={inputBody}
+									/>
 								</TableCell>
 								<TableCell sx={dataTd} align="center">
-									{data.goodsName}
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									{data.salePrice.toLocaleString()}
-								</TableCell>
-								<TableCell sx={dataTdNum} align="center">
 									<Controller
-										name={`goods.${index}.sortSequence`}
+										name={`bnnrImg.${index}.file`}
 										control={control}
 										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="number"
-												label="노출순서"
+											<RenderUploadField
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									<InputBase
+										sx={inputBase}
+										placeholder={'click'}
+										onClick={openCnntUrl}
+										readOnly={true}
+									/>
+									<CnntUrlModal
+										index={index}
+										control={control}
+										open={cnntUrlOpen}
+										handleClose={closeCnntUrl}
+										style={modalStyle}
+										header={inputHeader}
+										base={inputBody}
+									/>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									<Controller
+										name={`bnnrImg.${index}.useyn`}
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderSelectField
+												label="전시여부"
+												datas={[
+													{ value: '', label: '전체' },
+													{ value: 'Y', label: '예' },
+													{ value: 'N', label: '아니오' },
+												]}
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
@@ -474,4 +639,4 @@ const GoodsFormDisplayMobile: FC<GoodsProp> = ({
 	);
 };
 
-export default GoodsFormDisplayMobile;
+export default BannerImageFormMobile;

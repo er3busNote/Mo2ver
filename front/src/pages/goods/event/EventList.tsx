@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '../../../store/index';
-import { TitleInfo } from '../../../store/types';
-import Api from '../../../api';
-import useImageUrl from '../../../hooks/useImageUrl';
-import useEventPageList from '../../../hooks/event/useEventPageList';
-import AppSubHeader from '../../../layouts/AppSubHeader';
+import { changeNext, menuActive } from '@store/index';
+import { TitleInfo } from '@store/types';
+import Api from '@api/index';
+import useImageUrl from '@hooks/useImageUrl';
+import useEventPageList from '@hooks/event/useEventPageList';
+import AppSubHeader from '@layouts/AppSubHeader';
 import {
 	Box,
 	Grid,
@@ -20,7 +20,7 @@ import {
 	Skeleton,
 } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import { EventData } from '../../../api/types';
+import { EventData } from '@api/types';
 import moment from 'moment';
 
 interface EventListProps {

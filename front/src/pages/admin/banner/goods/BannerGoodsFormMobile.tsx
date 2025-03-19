@@ -1,7 +1,14 @@
-import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import React, {
+	FC,
+	useRef,
+	useState,
+	useEffect,
+	BaseSyntheticEvent,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
+import { GoodsData } from '@api/types';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
@@ -20,43 +27,66 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import DialogGoodsMobile from '@components/dialog/DialogGoodsMobile';
 import RenderTextField from '@components/validate/TextField';
 import RenderSelectField from '@components/validate/SelectField';
 import RenderDatePickerField from '@components/validate/DatePickerField';
-import { VideoFormDisplayValues } from '@pages/admin/types';
+import {
+	BannerGoodsFormValues,
+	BannerGoodsDetailValues,
+} from '@pages/admin/types';
 // import _ from 'lodash';
+import { isMobile } from 'react-device-detect';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface VideoProp {
+interface BannerGoodsProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	type: 'Create' | 'Update';
 	onSubmit: (
-		data: VideoFormDisplayValues,
+		data: BannerGoodsFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const VideoFormDisplayMobile: FC<VideoProp> = ({
+const BannerGoodsFormMobile: FC<BannerGoodsProp> = ({
 	title,
 	description,
 	groupCodeData,
+	type,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('VD');
+	const watchValue = useRef<string>('GD');
+	const [open, setOpen] = useState(false);
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<VideoFormDisplayValues>();
+	} = useFormContext<BannerGoodsFormValues>();
+
+	const { fields, replace } = useFieldArray({
+		control,
+		name: 'goods',
+	});
+	const replaceField = (productData: readonly GoodsData[]) => {
+		replace(
+			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
+				goodsCode,
+				goodsName,
+				salePrice,
+				sortSequence: i + 1,
+			}))
+		);
+	};
 
 	useEffect(() => {
 		const type = watch('type');
@@ -73,16 +103,19 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 					dispatch(menuActive('/admin/banner/image'));
 					navigate('/admin/banner/image');
 					break;
-				case 'GD':
+				case 'VD':
 					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/goods'));
-					navigate('/admin/banner/goods');
+					dispatch(menuActive('/admin/banner/video'));
+					navigate('/admin/banner/video');
 					break;
 				default:
 					break;
 			}
 		}
 	}, [watch('type')]);
+
+	const openGoods = () => setOpen(true);
+	const closeGoods = () => setOpen(false);
 
 	const cancelClick = () => {
 		const titleData: TitleInfo = {
@@ -125,6 +158,19 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 		border: tableBorder,
 		fontSize: { xs: '11px', sm: '12px' },
 	};
+	const dataTdNum: SxProps<Theme> = {
+		px: isMobile ? 0 : 1,
+		width: isMobile ? '94px' : '130px',
+		'.MuiFormControl-root': {
+			height: '34px',
+		},
+		'.MuiFormHelperText-root': {
+			display: 'none',
+		},
+		'.MuiInputBase-root': {
+			overflowY: 'hidden',
+		},
+	};
 	const dateHorizonIcon: SxProps<Theme> = {
 		px: 0.5,
 	};
@@ -144,6 +190,19 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 			top: '3px',
 			ml: 1,
 		},
+	};
+	const inputHeader: SxProps<Theme> = {
+		px: 2,
+		py: 0.5,
+		color: '#fff',
+		fontSize: '0.9rem',
+		fontWeight: 'bold',
+		lineHeight: '38px',
+		bgcolor: '#363b74',
+	};
+	const inputBody: SxProps<Theme> = {
+		px: isMobile ? 0 : 2,
+		py: 1,
 	};
 	return (
 		<Box
@@ -250,6 +309,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
+													readonly={type === 'Update'}
 												/>
 											)}
 										/>
@@ -314,7 +374,7 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 						color="inherit"
 						sx={{ fontSize: '16px', fontWeight: 'bold' }}
 					>
-						동영상
+						상품전시
 					</Typography>
 				</Box>
 				<Box sx={{ display: 'flex' }}>
@@ -330,6 +390,23 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 								저장
 							</ButtonBase>
 						</Grid>
+						<Grid item>
+							<ButtonBase
+								buttonType="search"
+								size="small"
+								variant="outlined"
+								onClick={openGoods}
+							>
+								상품찾기
+							</ButtonBase>
+							<DialogGoodsMobile
+								open={open}
+								replaceField={replaceField}
+								handleClose={closeGoods}
+								header={inputHeader}
+								base={inputBody}
+							/>
+						</Grid>
 					</Grid>
 				</Box>
 			</Box>
@@ -338,15 +415,48 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								동영상내용
+								상품코드
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								동영상
+								상품명
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								판매가
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
+								노출순서
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<></>
+						{fields.map((data: BannerGoodsDetailValues, index: number) => (
+							<TableRow key={index}>
+								<TableCell sx={dataTd} align="center">
+									{data.goodsCode}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.goodsName}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.salePrice.toLocaleString()}
+								</TableCell>
+								<TableCell sx={dataTdNum} align="center">
+									<Controller
+										name={`goods.${index}.sortSequence`}
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="number"
+												label="노출순서"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</TableContainer>
@@ -364,4 +474,4 @@ const VideoFormDisplayMobile: FC<VideoProp> = ({
 	);
 };
 
-export default VideoFormDisplayMobile;
+export default BannerGoodsFormMobile;

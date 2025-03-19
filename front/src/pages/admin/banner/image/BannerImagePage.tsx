@@ -12,14 +12,14 @@ import { BannerRequestData, BannerImageData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
 import useBannerImagesDetail from '@hooks/banner/useBannerImagesDetail';
-import BannerFormImagePC from './BannerFormImagePC';
-import BannerFormImageMobile from './BannerFormImageMobile';
+import BannerImageFormPC from './BannerImageFormPC';
+import BannerImageFormMobile from './BannerImageFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { BannerFormImageValues } from '../../types';
+import { BannerImageFormValues } from '@pages/admin/types';
 //import { merge } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
-const bnnrImageSchema = yup
+const bannerImageSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -97,7 +97,7 @@ interface BannerDispatchProps {
 	banner: ActionCreatorsMapObject;
 }
 
-const bnnrImageValues: BannerFormImageValues = {
+const bannerImageValues: BannerImageFormValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
@@ -134,10 +134,10 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			? 'Update'
 			: 'Create';
 
-	const methods = useForm<BannerFormImageValues>({
+	const methods = useForm<BannerImageFormValues>({
 		mode: 'onChange',
-		defaultValues: bnnrImageValues,
-		resolver: yupResolver(bnnrImageSchema),
+		defaultValues: bannerImageValues,
+		resolver: yupResolver(bannerImageSchema),
 	});
 
 	if (componentType === 'Update') {
@@ -170,7 +170,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 	}
 
 	const submitForm = async (
-		data: BannerFormImageValues,
+		data: BannerImageFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const bannerFormData: BannerImageData = {
@@ -202,7 +202,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
-						<BannerFormImagePC
+						<BannerImageFormPC
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
@@ -211,7 +211,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 						/>
 					)}
 					{isMobile && (
-						<BannerFormImageMobile
+						<BannerImageFormMobile
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}

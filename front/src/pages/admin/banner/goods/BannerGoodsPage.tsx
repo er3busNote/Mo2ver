@@ -8,18 +8,18 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { BannerRequestData, GoodsDisplayData } from '@api/types';
+import { BannerRequestData, BannerGoodsData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
 import useBannerGoodsDetail from '@hooks/banner/useBannerGoodsDetail';
-import GoodsFormDisplayPC from './GoodsFormDisplayPC';
-import GoodsFormDisplayMobile from './GoodsFormDisplayMobile';
+import BannerGoodsFormPC from './BannerGoodsFormPC';
+import BannerGoodsFormMobile from './BannerGoodsFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { GoodsFormDisplayValues } from '../../types';
+import { BannerGoodsFormValues } from '@pages/admin/types';
 //import { merge } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
-const goodsDisplaySchema = yup
+const bannerGoodsSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -101,7 +101,7 @@ interface BannerDispatchProps {
 	banner: ActionCreatorsMapObject;
 }
 
-const goodsDisplayValues: GoodsFormDisplayValues = {
+const bannerGoodsValues: BannerGoodsFormValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
@@ -138,10 +138,10 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 			? 'Update'
 			: 'Create';
 
-	const methods = useForm<GoodsFormDisplayValues>({
+	const methods = useForm<BannerGoodsFormValues>({
 		mode: 'onChange',
-		defaultValues: goodsDisplayValues,
-		resolver: yupResolver(goodsDisplaySchema),
+		defaultValues: bannerGoodsValues,
+		resolver: yupResolver(bannerGoodsSchema),
 	});
 
 	if (componentType === 'Update') {
@@ -174,10 +174,10 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 	}
 
 	const submitForm = async (
-		data: GoodsFormDisplayValues,
+		data: BannerGoodsFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const goodsFormData: GoodsDisplayData = {
+		const bannerFormData: BannerGoodsData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),
@@ -188,14 +188,14 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 			goods: data.goods,
 		};
 		if (componentType === 'Update') {
-			goodsFormData.bannerNo = bannerNo;
+			bannerFormData.bannerNo = bannerNo;
 		}
-		console.log(goodsFormData);
+		console.log(bannerFormData);
 		console.log(csrfData);
 		if (componentType === 'Create')
-			await banner.goodsCreate(goodsFormData, csrfData);
+			await banner.goodsCreate(bannerFormData, csrfData);
 		if (componentType === 'Update')
-			await banner.goodsUpdate(goodsFormData, csrfData);
+			await banner.goodsUpdate(bannerFormData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
@@ -206,7 +206,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
-						<GoodsFormDisplayPC
+						<BannerGoodsFormPC
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
@@ -215,7 +215,7 @@ const BannerGoodsPage: FC<BannerDispatchProps> = ({
 						/>
 					)}
 					{isMobile && (
-						<GoodsFormDisplayMobile
+						<BannerGoodsFormMobile
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}

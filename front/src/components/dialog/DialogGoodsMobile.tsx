@@ -2,10 +2,10 @@ import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import Api from '../../api';
-import { GoodsData, CategoryData } from '../../api/types';
-import useCategoryInfo from '../../hooks/category/useCategoryInfo';
-import useGoodsSearchPageList from '../../hooks/goods/useGoodsSearchPageList';
+import Api from '@api/index';
+import { GoodsData, CategoryData } from '@api/types';
+import useCategoryInfo from '@hooks/category/useCategoryInfo';
+import useGoodsSearchPageList from '@hooks/goods/useGoodsSearchPageList';
 import SearchInput from '../input/SearchInput';
 import ButtonDialog from '../button/ButtonDialog';
 import {
