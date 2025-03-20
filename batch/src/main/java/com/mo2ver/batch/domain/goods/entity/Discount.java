@@ -1,4 +1,4 @@
-package com.mo2ver.batch.domain.goods.domain;
+package com.mo2ver.batch.domain.goods.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

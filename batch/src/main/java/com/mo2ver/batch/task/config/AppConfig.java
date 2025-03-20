@@ -1,4 +1,4 @@
-package com.mo2ver.batch.global.configs;
+package com.mo2ver.batch.task.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

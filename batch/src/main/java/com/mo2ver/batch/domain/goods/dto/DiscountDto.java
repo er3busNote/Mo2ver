@@ -1,6 +1,6 @@
 package com.mo2ver.batch.domain.goods.dto;
 
-import com.mo2ver.batch.domain.goods.domain.Goods;
+import com.mo2ver.batch.domain.goods.entity.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

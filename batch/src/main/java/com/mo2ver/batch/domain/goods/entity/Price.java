@@ -1,8 +1,6 @@
-package com.mo2ver.batch.domain.goods.domain;
+package com.mo2ver.batch.domain.goods.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@IdClass(PriceCompositeKey.class)
+@IdClass(PriceId.class)
 @Table(name = "GD_PRC")
 @Getter @Setter
 @EqualsAndHashCode(of = {"goodsCode", "applyDate"})

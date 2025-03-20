@@ -1,6 +1,6 @@
-package com.mo2ver.batch.global.common.service;
+package com.mo2ver.batch.common.utils;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -14,15 +14,15 @@ import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
-@Service
-public class CryptoService {
+@Component
+public class CryptoUtil {
 
     private static final int ITERATIONS = 10000;
     private static final int KEY_SIZE = 256;
     private static final int IV_LENGTH = 16;
 
     // 참고 (Java AES Encryption and Decryption) : https://howtodoinjava.com/java/java-security/aes-256-encryption-decryption/
-    public void encryptFile(String inputFilePath, String outputFilePath, String password, String salt) throws Exception {
+    public static void encryptFile(String inputFilePath, String outputFilePath, String password, String salt) throws Exception {
         // 파일 읽기
         byte[] fileBytes = Files.readAllBytes(Paths.get(inputFilePath));
 
@@ -47,7 +47,7 @@ public class CryptoService {
         }
     }
 
-    public void decryptFile(String inputFilePath, String outputFilePath, String password, String salt) throws Exception {
+    public static void decryptFile(String inputFilePath, String outputFilePath, String password, String salt) throws Exception {
         // 암호화된 파일 읽기
         byte[] encryptedFileBytesWithIV = Files.readAllBytes(Paths.get(inputFilePath));
 
@@ -68,7 +68,7 @@ public class CryptoService {
         Files.write(Paths.get(outputFilePath), decryptedFileBytes);
     }
 
-    private SecretKey generateKey(String password, String salt) throws Exception {
+    private static SecretKey generateKey(String password, String salt) throws Exception {
         // PBKDF2 키 생성
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), ITERATIONS, KEY_SIZE);

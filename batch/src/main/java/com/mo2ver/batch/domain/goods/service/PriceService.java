@@ -1,8 +1,7 @@
 package com.mo2ver.batch.domain.goods.service;
 
-import com.mo2ver.batch.domain.goods.dao.PriceRepository;
-import com.mo2ver.batch.domain.goods.domain.Goods;
-import com.mo2ver.batch.domain.goods.domain.Price;
+import com.mo2ver.batch.domain.goods.repository.PriceRepository;
+import com.mo2ver.batch.domain.goods.entity.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

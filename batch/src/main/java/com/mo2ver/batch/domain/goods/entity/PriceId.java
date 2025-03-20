@@ -1,4 +1,4 @@
-package com.mo2ver.batch.domain.goods.domain;
+package com.mo2ver.batch.domain.goods.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class PriceCompositeKey implements Serializable {
+public class PriceId implements Serializable {
     private String goodsCode;
     private LocalDateTime applyDate;
 }

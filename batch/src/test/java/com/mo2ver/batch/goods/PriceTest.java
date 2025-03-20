@@ -1,6 +1,6 @@
 package com.mo2ver.batch.goods;
 
-import com.mo2ver.batch.global.configs.PriceConfig;
+import com.mo2ver.batch.task.config.PriceConfig;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;

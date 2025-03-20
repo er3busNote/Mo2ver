@@ -1,4 +1,4 @@
-package com.mo2ver.batch.global.common.properties;
+package com.mo2ver.batch.common.properties;
 
 import lombok.Getter;
 import lombok.Setter;
