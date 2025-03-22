@@ -50,11 +50,9 @@ public class BannerManage {
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
     private Character displayYesNo;
 
-    @Builder.Default
     @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BannerDetail> bannerDetailList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BannerProduct> bannerProductList = new ArrayList<>();
 

@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -53,19 +54,29 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity authLogin(@RequestBody @Valid LoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);   // --> Authenticated (인증)
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);   // --> Authenticated (인증)
 
-        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+            TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        ResponseCookie refreshTokenCookie = CookieUtil.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
+            ResponseCookie refreshTokenCookie = CookieUtil.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
 
-        return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
-                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(tokenInfo);
+            return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
+                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                    .body(tokenInfo);
+
+        } catch (BadCredentialsException e) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseHandler.builder()
+                            .status(HttpStatus.UNAUTHORIZED.value())
+                            .message("아이디 또는 비밀번호가 틀렸습니다.")
+                            .build());
+        }
     }
 
     @PatchMapping("/refresh")

@@ -41,11 +41,9 @@ public class EventManage {
     @Column(name = "EVT_YN", columnDefinition = "CHAR(1) COMMENT '이벤트진행여부'")
     private Character eventYesNo;
 
-    @Builder.Default
     @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventProduct> eventProductList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventImage> eventImageList = new ArrayList<>();
 

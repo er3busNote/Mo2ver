@@ -79,11 +79,9 @@ public class Goods {
     }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
     private Price price;
 
-    @Builder.Default
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Discount> goodsDiscountList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoodsImage> goodsImageList = new ArrayList<>();
 

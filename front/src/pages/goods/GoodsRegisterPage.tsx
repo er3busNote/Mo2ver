@@ -329,7 +329,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 		console.log(csrfData);
 		await goods.create(registerFormData, csrfData);
 		if (registerForm) registerForm.preventDefault(); // 새로고침 방지
-		navigate('/register');
+		navigate('/profile');
 	};
 
 	const methods = useForm<RegisterFormValues>({
