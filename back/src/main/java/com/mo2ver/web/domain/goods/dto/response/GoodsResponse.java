@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.goods.dto.response;
 
-import com.mo2ver.web.domain.goods.domain.Goods;
+import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import lombok.*;
 

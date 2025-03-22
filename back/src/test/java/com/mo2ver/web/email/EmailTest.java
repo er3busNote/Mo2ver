@@ -2,7 +2,7 @@ package com.mo2ver.web.email;
 
 import com.mo2ver.web.global.common.dto.EmailInfo;
 import com.mo2ver.web.global.common.dto.EmailDetailInfo;
-import com.mo2ver.web.global.common.util.EmailUtil;
+import com.mo2ver.web.global.common.utils.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

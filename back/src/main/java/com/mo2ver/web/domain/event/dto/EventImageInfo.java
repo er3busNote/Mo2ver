@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.dto;
 
-import com.mo2ver.web.global.common.util.ObjectUtil;
+import com.mo2ver.web.global.common.utils.ObjectUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

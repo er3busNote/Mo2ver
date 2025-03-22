@@ -29,6 +29,7 @@ public class CartInfo {
     private int[] optionPrice;
     private long[] optionId;
 
+    @Builder.Default
     private boolean check = true;
 
     public void totalPriceCalc() {

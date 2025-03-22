@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.dto;
 
-import com.mo2ver.web.domain.display.domain.BannerManage;
+import com.mo2ver.web.domain.display.entity.BannerManage;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 

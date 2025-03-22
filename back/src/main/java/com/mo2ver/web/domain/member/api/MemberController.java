@@ -6,7 +6,7 @@ import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.validation.MemberValidator;
 import com.mo2ver.web.global.common.dto.response.CsrfResponse;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
-import com.mo2ver.web.global.common.util.CookieUtil;
+import com.mo2ver.web.global.common.utils.CookieUtil;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.dto.ErrorCode;

@@ -2,7 +2,7 @@ package com.mo2ver.web.global.jwt;
 
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.global.common.properties.JwtProperties;
-import com.mo2ver.web.global.common.util.DateUtil;
+import com.mo2ver.web.global.common.utils.DateUtil;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

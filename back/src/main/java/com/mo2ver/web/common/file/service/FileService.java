@@ -1,11 +1,11 @@
 package com.mo2ver.web.common.file.service;
 
-import com.mo2ver.web.common.file.dao.FileRepository;
-import com.mo2ver.web.common.file.domain.File;
+import com.mo2ver.web.common.file.repository.FileRepository;
+import com.mo2ver.web.common.file.entity.File;
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
-import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.global.common.util.*;
+import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.global.common.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

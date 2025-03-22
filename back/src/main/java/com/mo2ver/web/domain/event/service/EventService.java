@@ -1,14 +1,14 @@
 package com.mo2ver.web.domain.event.service;
 
 import com.mo2ver.web.common.file.service.FileService;
-import com.mo2ver.web.domain.event.dao.EventImageRepository;
-import com.mo2ver.web.domain.event.dao.EventManageRepository;
-import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.repository.EventImageRepository;
+import com.mo2ver.web.domain.event.repository.EventManageRepository;
+import com.mo2ver.web.domain.event.entity.EventManage;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

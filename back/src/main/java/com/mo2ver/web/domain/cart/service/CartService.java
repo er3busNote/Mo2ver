@@ -1,9 +1,9 @@
 package com.mo2ver.web.domain.cart.service;
 
-import com.mo2ver.web.domain.cart.dao.CartRepository;
+import com.mo2ver.web.domain.cart.repository.CartRepository;
 import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

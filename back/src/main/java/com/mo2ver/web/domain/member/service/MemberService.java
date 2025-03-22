@@ -1,8 +1,8 @@
 package com.mo2ver.web.domain.member.service;
 
-import com.mo2ver.web.domain.member.dao.MemberRepository;
-import com.mo2ver.web.domain.member.domain.Member;
-import com.mo2ver.web.domain.member.domain.MemberRole;
+import com.mo2ver.web.domain.member.repository.MemberRepository;
+import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.member.entity.MemberRole;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

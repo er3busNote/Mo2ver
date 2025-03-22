@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.dto.response;
 
-import com.mo2ver.web.domain.event.domain.EventManage;
+import com.mo2ver.web.domain.event.entity.EventManage;
 import com.mo2ver.web.domain.event.dto.ImageInfo;
 import lombok.*;
 

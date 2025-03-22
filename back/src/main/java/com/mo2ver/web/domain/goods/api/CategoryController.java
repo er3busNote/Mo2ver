@@ -1,11 +1,11 @@
 package com.mo2ver.web.domain.goods.api;
 
-import com.mo2ver.web.domain.goods.domain.Category;
+import com.mo2ver.web.domain.goods.entity.Category;
 import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
 import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
 import com.mo2ver.web.domain.goods.service.CategoryService;
-import com.mo2ver.web.domain.member.domain.CurrentUser;
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.CurrentUser;
+import com.mo2ver.web.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

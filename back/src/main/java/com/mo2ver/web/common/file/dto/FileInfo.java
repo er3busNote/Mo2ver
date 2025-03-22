@@ -1,6 +1,6 @@
 package com.mo2ver.web.common.file.dto;
 
-import com.mo2ver.web.common.file.domain.File;
+import com.mo2ver.web.common.file.entity.File;
 import lombok.*;
 
 @Data

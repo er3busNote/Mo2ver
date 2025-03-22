@@ -1,7 +1,7 @@
 package com.mo2ver.web.goods;
 
-import com.mo2ver.web.domain.goods.domain.Category;
-import com.mo2ver.web.domain.goods.domain.QCategory;
+import com.mo2ver.web.domain.goods.entity.Category;
+import com.mo2ver.web.domain.goods.entity.QCategory;
 import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
 import com.mo2ver.web.domain.goods.dto.response.QCategoryResponse;
 import com.querydsl.core.Tuple;
@@ -26,7 +26,7 @@ import com.querydsl.sql.MySQLTemplates;
 
 import java.util.List;
 
-import static com.mo2ver.web.domain.goods.domain.QCategory.*;
+import static com.mo2ver.web.domain.goods.entity.QCategory.*;
 import static com.querydsl.sql.SQLExpressions.select;
 import static com.querydsl.sql.SQLExpressions.unionAll;
 

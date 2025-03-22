@@ -3,7 +3,7 @@ package com.mo2ver.web.domain.member.api;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.Member;
 
 import java.io.IOException;
 

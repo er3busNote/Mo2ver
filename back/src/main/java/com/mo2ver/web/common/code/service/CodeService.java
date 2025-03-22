@@ -1,6 +1,6 @@
 package com.mo2ver.web.common.code.service;
 
-import com.mo2ver.web.common.code.dao.CodeRepository;
+import com.mo2ver.web.common.code.repository.CodeRepository;
 import com.mo2ver.web.common.code.dto.response.CodeResponse;
 import com.mo2ver.web.common.code.dto.response.GroupCodeResponse;
 import lombok.RequiredArgsConstructor;

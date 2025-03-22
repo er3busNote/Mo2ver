@@ -1,8 +1,8 @@
 package com.mo2ver.web.domain.event.dto;
 
-import com.mo2ver.web.domain.event.domain.EventImage;
-import com.mo2ver.web.global.common.util.BeanUtil;
-import com.mo2ver.web.global.common.util.JasyptUtil;
+import com.mo2ver.web.domain.event.entity.EventImage;
+import com.mo2ver.web.global.common.utils.BeanUtil;
+import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 
 @Data

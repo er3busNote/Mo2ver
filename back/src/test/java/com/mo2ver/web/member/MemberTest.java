@@ -1,6 +1,6 @@
 package com.mo2ver.web.member;
 
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;

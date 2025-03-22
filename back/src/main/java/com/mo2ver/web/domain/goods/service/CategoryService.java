@@ -1,10 +1,10 @@
 package com.mo2ver.web.domain.goods.service;
 
-import com.mo2ver.web.domain.goods.dao.CategoryRepository;
-import com.mo2ver.web.domain.goods.domain.Category;
+import com.mo2ver.web.domain.goods.repository.CategoryRepository;
+import com.mo2ver.web.domain.goods.entity.Category;
 import com.mo2ver.web.domain.goods.dto.request.CategoryDetailRequest;
 import com.mo2ver.web.domain.goods.dto.response.CategoryResponse;
-import com.mo2ver.web.domain.member.domain.Member;
+import com.mo2ver.web.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

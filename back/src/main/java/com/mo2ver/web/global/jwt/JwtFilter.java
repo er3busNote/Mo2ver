@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.jwt;
 
-import com.mo2ver.web.global.common.util.CookieUtil;
+import com.mo2ver.web.global.common.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
