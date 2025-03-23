@@ -14,9 +14,12 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static com.mo2ver.web.common.code.entity.QCode.code;
 import static com.mo2ver.web.domain.display.entity.QBannerDetail.bannerDetail;
 import static com.mo2ver.web.domain.display.entity.QBannerManage.bannerManage;
 import static com.mo2ver.web.domain.display.entity.QBannerProduct.bannerProduct;
@@ -106,7 +109,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
         builder.and(bannerDetail.useYesNo.eq('Y'));
         builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
 
-        return queryFactory
+        return convertCodeToCodeName(queryFactory
                 .selectFrom(bannerManage)
                 .innerJoin(bannerManage.bannerDetailList, bannerDetail)
                 .where(builder)
@@ -120,7 +123,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                                 bannerDetail.bannerContents,
                                 bannerDetail.sortSequence
                         )))
-                );
+                ));
     }
 
     public Map<String, List<BannerProductResponse>> findGroupBannerProduct() {
@@ -139,7 +142,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 .then(price.salePrice)
                 .otherwise(price.supplyPrice);
 
-        return queryFactory
+        return convertCodeToCodeName(queryFactory
                 .selectFrom(bannerManage)
                 .innerJoin(bannerManage.bannerProductList, bannerProduct)
                 .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
@@ -162,6 +165,23 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                                 salePrice,
                                 bannerProduct.sortSequence
                         )))
-                );
+                ));
+    }
+
+    private <T> Map<String, List<T>> convertCodeToCodeName(Map<String, List<T>> finalResult) {
+        return finalResult.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> { // Key 변환: code.commonCode → code.commonCodeName
+                            String commonCode = entry.getKey();
+                            return queryFactory
+                                    .select(code.commonCodeName)
+                                    .from(code)
+                                    .where(code.commonCode.eq(commonCode))
+                                    .fetchOne();
+                        },
+                        Map.Entry::getValue, // Value는 변경 없이 유지
+                        (existing, replacement) -> existing, // Key 충돌 시 기존 값 유지
+                        LinkedHashMap::new // 순서를 유지하기 위해 LinkedHashMap 사용
+                ));
     }
 }
