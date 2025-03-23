@@ -1,13 +1,15 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { menuActive } from '@store/index';
+import { changeNext, menuActive } from '@store/index';
+import { TitleInfo } from '@store/types';
 import ButtonTag from '@components/button/ButtonTag';
 import {
 	Box,
 	Grid,
 	Chip,
 	Stack,
+	Divider,
 	IconButton,
 	CardMedia,
 	Typography,
@@ -21,20 +23,34 @@ const SLIDE_INFO = [
 	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
+const KEYWORD_INFO: Array<string> = [
+	'#반팔 티셔츠',
+	'#반바지',
+	'#리넨 팬츠',
+	'#슬리퍼',
+	'#카드지갑',
+];
+
 interface PopularProps {
+	title: string;
+	description: string;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
 const PopularMobile: FC<PopularProps> = ({
+	title,
+	description,
 	bannerDisplayData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [displayIndex, setDisplayIndex] = useState(0);
 	const content = SLIDE_INFO[displayIndex];
-	const numSlides = SLIDE_INFO.length;
+	const slideLength = SLIDE_INFO.length;
 
 	const bannerDisplayMenu = Object.keys(bannerDisplayData);
+	const bannerLength = bannerDisplayMenu.length;
+	const numSlides = bannerLength > 0 ? bannerLength : slideLength;
 
 	const onAutoFadeIn = (newIndex: number) => {
 		setTimeout(() => {
@@ -51,8 +67,17 @@ const PopularMobile: FC<PopularProps> = ({
 	}, [displayIndex, setDisplayIndex, onAutoFadeIn]);
 
 	const goodsClick = (code: string) => {
-		//dispatch(menuActive('/goods/' + code + '/detail'));
-		//navigate('/goods/' + code + '/detail');
+		if (bannerLength > 0) {
+			const titleData: TitleInfo = {
+				title: title,
+				description: description,
+				prevTitle: title,
+				prevDescription: description,
+			};
+			dispatch(changeNext(titleData));
+			dispatch(menuActive('/goods/' + code + '/detail'));
+			navigate('/goods/' + code + '/detail');
+		}
 	};
 
 	const displayMenu: SxProps<Theme> = {
@@ -103,7 +128,7 @@ const PopularMobile: FC<PopularProps> = ({
 					추천 상품
 				</Typography>
 			</Box>
-			{bannerDisplayMenu.length > 0 && (
+			{bannerLength > 0 && (
 				<Box sx={displayMenu}>
 					<Stack direction="row" spacing={1} sx={stack}>
 						{bannerDisplayMenu.map((type, index) => (
@@ -142,7 +167,7 @@ const PopularMobile: FC<PopularProps> = ({
 								color: '#1992DF',
 							}}
 						>
-							남성패션
+							{bannerLength > 0 ? bannerDisplayMenu[displayIndex] : '남성패션'}
 						</Typography>
 					</Box>
 					<Box
@@ -165,177 +190,51 @@ const PopularMobile: FC<PopularProps> = ({
 									HOT 키워드
 								</Typography>
 							</Grid>
-							<Grid item>
-								<ButtonTag
-									buttonType="popular"
-									device="mobile"
-									variant="outlined"
-								>
-									#반팔 티셔츠
-								</ButtonTag>
-							</Grid>
-							<Grid item>
-								<ButtonTag
-									buttonType="popular"
-									device="mobile"
-									variant="outlined"
-								>
-									#반바지
-								</ButtonTag>
-							</Grid>
-							<Grid item>
-								<ButtonTag
-									buttonType="popular"
-									device="mobile"
-									variant="outlined"
-								>
-									#리넨 팬츠
-								</ButtonTag>
-							</Grid>
-							<Grid item>
-								<ButtonTag
-									buttonType="popular"
-									device="mobile"
-									variant="outlined"
-								>
-									#슬리퍼
-								</ButtonTag>
-							</Grid>
-							<Grid item>
-								<ButtonTag
-									buttonType="popular"
-									device="mobile"
-									variant="outlined"
-								>
-									#카드지갑
-								</ButtonTag>
-							</Grid>
+							{KEYWORD_INFO.map((keyword, index) => (
+								<Grid key={index} item>
+									<ButtonTag
+										buttonType="popular"
+										device="mobile"
+										variant="outlined"
+									>
+										{keyword}
+									</ButtonTag>
+								</Grid>
+							))}
 						</Grid>
 					</Box>
 				</Box>
 				<Box sx={{ width: { xs: '70%', sm: '80%' } }}>
-					<Box sx={{ borderBottom: '1px solid #ddd' }}>
-						<Grid container spacing={1} justifyContent="center" sx={{ pt: 2 }}>
-							<Grid item>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
+					{Array.from(new Array(2)).map((_, i) => (
+						<Box key={i}>
+							<Grid container spacing={1} justifyContent="center">
+								{Array.from(new Array(3)).map((_, j) => (
+									<Grid key={j} item>
+										<IconButton
+											sx={{
+												display: j == 2 ? { xs: 'none', sm: 'block' } : 'block',
+											}}
+											onClick={() => goodsClick(String(displayIndex))}
+										>
+											<CardMedia
+												sx={infoImage}
+												component="img"
+												image={content}
+												alt="Image"
+											/>
+											<Typography variant="subtitle2" sx={label}>
+												남성상의
+											</Typography>
+											<Typography variant="subtitle2" sx={info}>
+												29,900원
+											</Typography>
+										</IconButton>
+									</Grid>
+								))}
 							</Grid>
-							<Grid item>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
-							</Grid>
-							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
-							</Grid>
-						</Grid>
-					</Box>
-					<Box>
-						<Grid container spacing={1} justifyContent="center" sx={{ pt: 2 }}>
-							<Grid item>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
-							</Grid>
-							<Grid item>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
-							</Grid>
-							<Grid item sx={{ display: { xs: 'none', sm: 'block' } }}>
-								<IconButton
-									sx={{ display: 'block' }}
-									onClick={() => goodsClick(String(displayIndex))}
-								>
-									<CardMedia
-										sx={infoImage}
-										component="img"
-										image={content}
-										alt="Image"
-									/>
-									<Typography variant="subtitle2" sx={label}>
-										남성상의
-									</Typography>
-									<Typography variant="subtitle2" sx={info}>
-										29,900원
-									</Typography>
-								</IconButton>
-							</Grid>
-						</Grid>
-					</Box>
+							{i == 0 && <Divider variant="middle" />}
+						</Box>
+					))}
 				</Box>
 			</Box>
 		</React.Fragment>

@@ -2,10 +2,11 @@ import React, { FC } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
+import { TitleState } from '@store/types';
 import Api from '@api/index';
 import { FileData } from '@api/types';
 import useBannerDisplayList from '@hooks/banner/useBannerDisplayList';
-import { Paper, Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Divider, useTheme, useMediaQuery } from '@mui/material';
 import BannerPC from './banner/BannerPC';
 import BannerMobile from './banner/BannerMobile';
 import PopularPC from './popular/PopularPC';
@@ -16,16 +17,25 @@ import { BrowserView, MobileView } from 'react-device-detect';
 const files: Array<FileData> = [];
 
 interface HomeProps {
+	title: string;
+	description: string;
 	image: ActionCreatorsMapObject;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
 interface HomeDispatchProps {
+	title: string;
+	description: string;
 	banner: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
 
-const HomePC: FC<HomeProps> = ({ image, bannerDisplayData }): JSX.Element => {
+const HomePC: FC<HomeProps> = ({
+	title,
+	description,
+	image,
+	bannerDisplayData,
+}): JSX.Element => {
 	return (
 		<>
 			<BannerPC />
@@ -36,12 +46,21 @@ const HomePC: FC<HomeProps> = ({ image, bannerDisplayData }): JSX.Element => {
 					display: 'inline-flex',
 					flexDirection: 'column',
 					justifyContent: 'flex-start',
-					height: 450,
 				}}
 			>
-				<PopularPC bannerDisplayData={bannerDisplayData} />
+				<PopularPC
+					title={title}
+					description={description}
+					bannerDisplayData={bannerDisplayData}
+				/>
 			</Box>
-			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+			<Box
+				sx={{
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+			>
 				<Box
 					sx={{
 						p: 2,
@@ -64,6 +83,8 @@ const HomePC: FC<HomeProps> = ({ image, bannerDisplayData }): JSX.Element => {
 };
 
 const HomeMobile: FC<HomeProps> = ({
+	title,
+	description,
 	image,
 	bannerDisplayData,
 }): JSX.Element => {
@@ -77,13 +98,25 @@ const HomeMobile: FC<HomeProps> = ({
 					display: 'inline-flex',
 					flexDirection: 'column',
 					justifyContent: 'flex-start',
-					height: { xs: 362, sm: 396 },
+					height: { xs: 374, sm: 396 },
 				}}
 			>
-				<PopularMobile bannerDisplayData={bannerDisplayData} />
+				<PopularMobile
+					title={title}
+					description={description}
+					bannerDisplayData={bannerDisplayData}
+				/>
 			</Box>
+			<Divider variant="middle" />
 			<MobileView>
-				<Box sx={{ p: 2, pb: 12, width: '100%', bgcolor: '#fafafa' }}>
+				<Box
+					sx={{
+						p: 2,
+						pb: 12,
+						width: '100%',
+						bgcolor: '#fafafa',
+					}}
+				>
 					<HorizontalScroll
 						slidesPerView={2}
 						spaceBetween={30}
@@ -94,7 +127,14 @@ const HomeMobile: FC<HomeProps> = ({
 				</Box>
 			</MobileView>
 			<BrowserView>
-				<Box sx={{ p: 2, pb: 8, width: '100%', bgcolor: '#fafafa' }}>
+				<Box
+					sx={{
+						p: 2,
+						pb: 8,
+						width: '100%',
+						bgcolor: '#fafafa',
+					}}
+				>
 					<HorizontalScroll
 						slidesPerView={3}
 						spaceBetween={30}
@@ -108,32 +148,47 @@ const HomeMobile: FC<HomeProps> = ({
 	);
 };
 
-const HomePage: FC<HomeDispatchProps> = ({ banner, image }): JSX.Element => {
+const HomePage: FC<HomeDispatchProps> = ({
+	title,
+	description,
+	banner,
+	image,
+}): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const bannerDisplayData = useBannerDisplayList({ banner });
 	return (
-		<Paper
-			sx={{ width: '100%', /*height: '105%',*/ position: 'absolute' }}
-			component="div"
-			square
-			variant="outlined"
-		>
+		<Box sx={{ width: '100%', position: 'absolute' }}>
 			{isDesktop && (
-				<HomePC image={image} bannerDisplayData={bannerDisplayData} />
+				<HomePC
+					title={title}
+					description={description}
+					image={image}
+					bannerDisplayData={bannerDisplayData}
+				/>
 			)}
 			{isMobile && (
-				<HomeMobile image={image} bannerDisplayData={bannerDisplayData} />
+				<HomeMobile
+					title={title}
+					description={description}
+					image={image}
+					bannerDisplayData={bannerDisplayData}
+				/>
 			)}
-		</Paper>
+		</Box>
 	);
 };
+
+const mapStateToProps = (state: any) => ({
+	title: (state.title as TitleState).title,
+	description: (state.title as TitleState).description,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	banner: bindActionCreators(Api.banner, dispatch),
 	image: bindActionCreators(Api.image, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -108,7 +108,12 @@ const CarouselSlide: FC<CarouselSlideProps> = ({ url }): JSX.Element => {
 				overflow: 'hidden',
 			}}
 		>
-			<CardMedia component="img" image={url} alt="Image" />
+			<CardMedia
+				component="img"
+				image={url}
+				sx={{ height: '100%' }}
+				alt="Image"
+			/>
 		</Card>
 	);
 };
