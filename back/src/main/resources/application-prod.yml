@@ -1,9 +1,12 @@
 server:
   port: ${PORT}
   ssl:
-    key-store: keystore.p12
-    key-store-type: PKCS12
-    key-store-password: ${KEY_STORE_PASSWORD}
+    certificate: fullchain.pem
+    certificate-private-key: privkey.pem
+    #key-store: keystore.p12
+    #key-store-type: PKCS12
+    #key-store-password: ${KEY_STORE_PASSWORD}
+    #key-alias: mo2ver
   error:
     include-exception: false      # Response 에 Exception 을 표시할지
     include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)
