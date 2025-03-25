@@ -1,10 +1,7 @@
 package com.mo2ver.web.domain.display.repository;
 
 import com.mo2ver.web.domain.display.dto.*;
-import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
-import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
-import com.mo2ver.web.domain.display.dto.response.QBannerDetailResponse;
-import com.mo2ver.web.domain.display.dto.response.QBannerProductResponse;
+import com.mo2ver.web.domain.display.dto.response.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -14,6 +11,7 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,6 +164,42 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                                 bannerProduct.sortSequence
                         )))
                 ));
+    }
+
+    public Map<String, List<String>> findGroupBannerKeyword() {
+        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
+        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(bannerManage.displayYesNo.eq('Y'));
+        builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
+        builder.and(goods.keyword.isNotNull());
+
+        return convertCodeToCodeName(processGroupKeywords(queryFactory
+                .selectFrom(bannerManage)
+                .innerJoin(bannerManage.bannerProductList, bannerProduct)
+                .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
+                .where(builder)
+                .orderBy(bannerManage.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
+                .transform(groupBy(bannerManage.displayConditionCode).as(
+                        list(goods.keyword))
+                )));
+    }
+
+    private Map<String, List<String>> processGroupKeywords(Map<String, List<String>> groupKeywords) {
+        return groupKeywords.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> processKeywords(entry.getValue()) // # 기준으로 분리 후 중복 제거
+                ));
+    }
+
+    private List<String> processKeywords(List<String> keywords) {
+        return keywords.stream()
+                .flatMap(keyword -> Arrays.stream(keyword.split("#")))
+                .filter(keyword -> keyword != null && !keyword.trim().isEmpty())
+                .distinct() // 중복 제거
+                .collect(Collectors.toList()); // 리스트 변환
     }
 
     private <T> Map<String, List<T>> convertCodeToCodeName(Map<String, List<T>> finalResult) {

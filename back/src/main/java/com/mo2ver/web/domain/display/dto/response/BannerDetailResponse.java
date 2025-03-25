@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.display.dto.response;
 
+import com.mo2ver.web.global.common.utils.BeanUtil;
+import com.mo2ver.web.global.common.utils.JasyptUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
@@ -13,16 +15,21 @@ public class BannerDetailResponse {
 
     private String displayStartDate;
     private String displayEndDate;
-    private Integer imageAttachFile;
+    private String imageAttachFile;
     private String connectUrl;
     private String bannerContents;
     private Integer sortSequence;
+
+    private static String getEncryptor(Integer id) {
+        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
+        return jasyptUtil.encrypt(String.valueOf(id));
+    }
 
     @QueryProjection
     public BannerDetailResponse(Date displayStartDate, Date displayEndDate, Integer imageAttachFile, String connectUrl, String bannerContents, Integer sortSequence) {
         this.displayStartDate = formatter.format(displayStartDate);
         this.displayEndDate = formatter.format(displayEndDate);
-        this.imageAttachFile = imageAttachFile;
+        this.imageAttachFile = getEncryptor(imageAttachFile);
         this.connectUrl = connectUrl;
         this.bannerContents = bannerContents;
         this.sortSequence = sortSequence;

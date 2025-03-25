@@ -45,6 +45,7 @@ public class BannerService {
     public Map<String, Map<String, List<Object>>> findBannerDisplay() {
         Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerManageRepository.findGroupBannerDetail();
         Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerManageRepository.findGroupBannerProduct();
+        Map<String, List<String>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
 
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 
@@ -56,6 +57,11 @@ public class BannerService {
         for (String productKey : bannerProductGroupResponse.keySet()) {
             bannerDisplay.computeIfAbsent(productKey, k -> new HashMap<>())
                     .put("product", new ArrayList<>(bannerProductGroupResponse.get(productKey)));
+        }
+
+        for (String keywordKey : bannerKeywordGroupResponse.keySet()) {
+            bannerDisplay.computeIfAbsent(keywordKey, k -> new HashMap<>())
+                    .put("keyword", new ArrayList<>(bannerKeywordGroupResponse.get(keywordKey)));
         }
 
         return bannerDisplay;
