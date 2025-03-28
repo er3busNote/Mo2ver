@@ -23,7 +23,7 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { ReactComponent as MainIcon } from '@assets/logo.svg';
+import MainIcon from '@assets/logo.svg?react';
 
 const searchDatas = [
 	{ id: 1, keyword: '삼성전자' },

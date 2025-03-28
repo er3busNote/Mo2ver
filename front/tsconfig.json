@@ -35,7 +35,8 @@
   },
   "include": [
     "src/**/*",
-    "src/utils/custom.d.ts"
+    "src/utils/custom.d.ts",
+    "vite.config.ts",
   ],
   "exclude": [
     "node_modules",
