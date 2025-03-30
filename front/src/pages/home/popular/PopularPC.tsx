@@ -1,8 +1,10 @@
 import React, { FC, useState, useEffect, SyntheticEvent } from 'react';
+import { ActionCreatorsMapObject } from 'redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
+import useImageUrl from '@hooks/useImageUrl';
 import ButtonTag from '@components/button/ButtonTag';
 import {
 	Box,
@@ -18,9 +20,14 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-//import { Swiper, SwiperSlide } from 'swiper/react';
-//import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
 //import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+
+const groupSize = 6;
+const subGroupSize = 3;
 
 const SLIDE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -30,16 +37,17 @@ const SLIDE_INFO = [
 ];
 
 const KEYWORD_INFO: Array<string> = [
-	'#반팔 티셔츠',
-	'#반바지',
-	'#리넨 팬츠',
-	'#슬리퍼',
-	'#카드지갑',
+	'반팔 티셔츠',
+	'반바지',
+	'리넨 팬츠',
+	'슬리퍼',
+	'카드지갑',
 ];
 
 interface PopularProps {
 	title: string;
 	description: string;
+	image: ActionCreatorsMapObject;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
@@ -68,6 +76,7 @@ const CarouselFade: FC<CarouselFadeProps> = ({ url }): JSX.Element => {
 const PopularPC: FC<PopularProps> = ({
 	title,
 	description,
+	image,
 	bannerDisplayData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -80,6 +89,24 @@ const PopularPC: FC<PopularProps> = ({
 	const bannerDisplayMenu = Object.keys(bannerDisplayData);
 	const bannerLength = bannerDisplayMenu.length;
 	const numSlides = bannerLength > 0 ? bannerLength : slideLength;
+	const bannerDisplayKey = bannerDisplayMenu[displayIndex];
+	const bannerDisplayKeywordInfo =
+		bannerLength > 0 &&
+		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'keyword')
+			? bannerDisplayData[bannerDisplayKey]['keyword']
+					.filter((keyword) => typeof keyword === 'string')
+					.map((keyword) => keyword as string)
+			: KEYWORD_INFO;
+	const bannerDisplayDetailInfo =
+		bannerLength > 0 &&
+		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'detail')
+			? bannerDisplayData[bannerDisplayKey]['detail']
+			: '';
+	const bannerDisplayProductInfo =
+		bannerLength > 0 &&
+		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'product')
+			? bannerDisplayData[bannerDisplayKey]['product']
+			: '';
 
 	const onAutoFadeIn = (newIndex: number) => {
 		setTimeout(() => {
@@ -128,6 +155,13 @@ const PopularPC: FC<PopularProps> = ({
 	const info: SxProps<Theme> = {
 		fontSize: '0.9rem',
 		fontWeight: 'bold',
+	};
+	const productLabel: SxProps<Theme> = {
+		width: '110px',
+		fontSize: '0.8rem',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
 	};
 
 	return (
@@ -206,10 +240,10 @@ const PopularPC: FC<PopularProps> = ({
 								color: '#1992DF',
 							}}
 						>
-							{bannerLength > 0 ? bannerDisplayMenu[displayIndex] : '남성패션'}
+							{bannerLength > 0 ? bannerDisplayKey : '남성패션'}
 						</Typography>
 					</Box>
-					<Box sx={{ pt: 14, px: 7, display: 'grid' }}>
+					<Box sx={{ pt: 10, px: 7, display: 'grid' }}>
 						<Grid container spacing={1}>
 							<Grid item>
 								<Typography
@@ -222,14 +256,14 @@ const PopularPC: FC<PopularProps> = ({
 									HOT 키워드
 								</Typography>
 							</Grid>
-							{KEYWORD_INFO.map((keyword, index) => (
+							{bannerDisplayKeywordInfo.map((keyword, index) => (
 								<Grid key={index} item>
 									<ButtonTag
 										buttonType="popular"
 										device="pc"
 										variant="outlined"
 									>
-										{keyword}
+										#{keyword}
 									</ButtonTag>
 								</Grid>
 							))}
@@ -239,44 +273,140 @@ const PopularPC: FC<PopularProps> = ({
 				<Box sx={{ width: '30%' }}>
 					<Fade in={fadeIn}>
 						<Box>
-							<CarouselFade url={content} />
+							{bannerDisplayDetailInfo ? (
+								<Swiper
+									slidesPerView={1}
+									pagination={{ clickable: true }}
+									modules={[Pagination]}
+								>
+									{bannerDisplayDetailInfo.map((detail, index) => (
+										<SwiperSlide key={index}>
+											<CarouselFade
+												url={useImageUrl({
+													image: image,
+													file: (detail as Record<string, any>).imageAttachFile,
+												})}
+											/>
+										</SwiperSlide>
+									))}
+								</Swiper>
+							) : (
+								<CarouselFade url={content} />
+							)}
 						</Box>
 					</Fade>
 				</Box>
 				<Box sx={{ width: '50%' }}>
-					{Array.from(new Array(2)).map((_, i) => (
-						<Box key={i}>
-							<Grid
-								container
-								spacing={1}
-								justifyContent="center"
-								sx={{ pt: 2 }}
-							>
-								{Array.from(new Array(3)).map((_, j) => (
-									<Grid key={j} item>
-										<IconButton
-											sx={{ display: 'block' }}
-											onClick={() => goodsClick(String(displayIndex))}
-										>
-											<CardMedia
-												sx={{ width: '120px', height: '100px' }}
-												component="img"
-												image={content}
-												alt="Image"
-											/>
-											<Typography variant="subtitle2" sx={label}>
-												남성상의
-											</Typography>
-											<Typography variant="subtitle2" sx={info}>
-												29,900원
-											</Typography>
-										</IconButton>
-									</Grid>
-								))}
-							</Grid>
-							{i == 0 && <Divider variant="middle" sx={{ height: 10 }} />}
-						</Box>
-					))}
+					{bannerDisplayProductInfo ? (
+						<Swiper
+							slidesPerView={1}
+							pagination={{ clickable: true }}
+							modules={[Pagination]}
+							style={{ height: '100%' }}
+						>
+							{Array.from({
+								length: Math.ceil(bannerDisplayProductInfo.length / groupSize),
+							}).map((_, groupIndex) => {
+								const group = bannerDisplayProductInfo.slice(
+									groupIndex * groupSize,
+									(groupIndex + 1) * groupSize
+								);
+								return (
+									<SwiperSlide key={groupIndex}>
+										{Array.from({
+											length: Math.ceil(group.length / subGroupSize),
+										}).map((_, subGroupIndex) => (
+											<Box key={subGroupIndex}>
+												{subGroupIndex == 1 && (
+													<Divider variant="middle" sx={{ height: 10 }} />
+												)}
+												<Grid
+													container
+													spacing={1}
+													justifyContent="center"
+													sx={{ pt: 2 }}
+												>
+													{group
+														.slice(
+															subGroupIndex * subGroupSize,
+															(subGroupIndex + 1) * subGroupSize
+														)
+														.map((product, itemIndex) => (
+															<Grid key={itemIndex} item>
+																<IconButton
+																	sx={{ borderRadius: '4px', display: 'block' }}
+																	onClick={() =>
+																		goodsClick(
+																			(product as Record<string, any>).goodsCode
+																		)
+																	}
+																>
+																	<CardMedia
+																		sx={{ width: '120px', height: '100px' }}
+																		component="img"
+																		image={useImageUrl({
+																			image: image,
+																			file: (product as Record<string, any>)
+																				.goodsImageAttachFile,
+																		})}
+																		alt="Image"
+																	/>
+																	<Typography
+																		variant="subtitle2"
+																		sx={productLabel}
+																	>
+																		{(product as Record<string, any>).goodsName}
+																	</Typography>
+																	<Typography variant="subtitle2" sx={info}>
+																		{(
+																			product as Record<string, any>
+																		).salePrice.toLocaleString()}
+																		원
+																	</Typography>
+																</IconButton>
+															</Grid>
+														))}
+												</Grid>
+											</Box>
+										))}
+									</SwiperSlide>
+								);
+							})}
+						</Swiper>
+					) : (
+						Array.from(new Array(2)).map((_, i) => (
+							<Box key={i}>
+								<Grid
+									container
+									spacing={1}
+									justifyContent="center"
+									sx={{ pt: 2 }}
+								>
+									{Array.from(new Array(3)).map((_, j) => (
+										<Grid key={j} item>
+											<IconButton
+												sx={{ borderRadius: '4px', display: 'block' }}
+											>
+												<CardMedia
+													sx={{ width: '120px', height: '100px' }}
+													component="img"
+													image={content}
+													alt="Image"
+												/>
+												<Typography variant="subtitle2" sx={label}>
+													남성상의
+												</Typography>
+												<Typography variant="subtitle2" sx={info}>
+													29,900원
+												</Typography>
+											</IconButton>
+										</Grid>
+									))}
+								</Grid>
+								{i == 0 && <Divider variant="middle" sx={{ height: 10 }} />}
+							</Box>
+						))
+					)}
 				</Box>
 			</Box>
 		</React.Fragment>

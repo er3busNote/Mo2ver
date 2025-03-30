@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { FileData } from '../api/types';
-import useImageUrl from '../hooks/useImageUrl';
+import { FileData } from '@api/types';
+import useImageUrl from '@hooks/useImageUrl';
 import { Box, Card, CardMedia, CardActionArea } from '@mui/material';
 import DialogImage from './dialog/DialogImage';
 import { SxProps, Theme } from '@mui/material/styles';

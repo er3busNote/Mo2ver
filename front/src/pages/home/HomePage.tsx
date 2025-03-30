@@ -51,6 +51,7 @@ const HomePC: FC<HomeProps> = ({
 				<PopularPC
 					title={title}
 					description={description}
+					image={image}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			</Box>
@@ -104,6 +105,7 @@ const HomeMobile: FC<HomeProps> = ({
 				<PopularMobile
 					title={title}
 					description={description}
+					image={image}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			</Box>
