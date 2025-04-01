@@ -163,7 +163,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 ));
     }
 
-    public Map<String, List<Map<String, Integer>>> findGroupBannerKeyword() {
+    public Map<String, List<BannerKeywordResponse>> findGroupBannerKeyword() {
         StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
         StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
 
@@ -183,7 +183,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 )));
     }
 
-    private Map<String, List<Map<String, Integer>>> processGroupKeywords(Map<String, List<String>> groupKeywords) {
+    private Map<String, List<BannerKeywordResponse>> processGroupKeywords(Map<String, List<String>> groupKeywords) {
         return groupKeywords.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -191,20 +191,14 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 ));
     }
 
-    private List<Map<String, Integer>> processKeywords(List<String> keywords) {
+    private List<BannerKeywordResponse> processKeywords(List<String> keywords) {
         return keywords.stream()
                 .flatMap(keyword -> Arrays.stream(keyword.split("#")))  // # 기준 으로 분리
                 .filter(keyword -> keyword != null && !keyword.trim().isEmpty())    // 빈 값 제거
                 .collect(Collectors.groupingBy(keyword -> keyword, Collectors.summingInt(x -> 1))) // 개수 카운트
                 .entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())) // 내림차순 정렬
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1, // 병합 함수 (중복 키 없도록 설정)
-                        LinkedHashMap::new // 순서 유지
-                )).entrySet().stream()
-                .map(entry -> Collections.singletonMap(entry.getKey(), entry.getValue()))
+                .map(entry -> BannerKeywordResponse.of(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 

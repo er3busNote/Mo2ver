@@ -9,6 +9,7 @@ import com.mo2ver.web.domain.display.entity.BannerManage;
 import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
 import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
+import com.mo2ver.web.domain.display.dto.response.BannerKeywordResponse;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class BannerService {
     public Map<String, Map<String, List<Object>>> findBannerDisplay() {
         Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerManageRepository.findGroupBannerDetail();
         Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerManageRepository.findGroupBannerProduct();
-        Map<String, List<Map<String, Integer>>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
+        Map<String, List<BannerKeywordResponse>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
 
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 

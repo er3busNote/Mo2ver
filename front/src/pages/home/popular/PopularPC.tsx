@@ -94,7 +94,7 @@ const PopularPC: FC<PopularProps> = ({
 		bannerLength > 0 &&
 		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'keyword')
 			? bannerDisplayData[bannerDisplayKey]['keyword']
-					.map((obj) => Object.keys(obj).pop())
+					.map((obj) => (obj as Record<string, number>).keyword)
 					.slice(0, 5)
 			: KEYWORD_INFO;
 	const bannerDisplayDetailInfo =
