@@ -11,10 +11,7 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.mo2ver.web.common.code.entity.QCode.code;
@@ -166,7 +163,7 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 ));
     }
 
-    public Map<String, List<String>> findGroupBannerKeyword() {
+    public Map<String, List<Map<String, Integer>>> findGroupBannerKeyword() {
         StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
         StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
 
@@ -186,20 +183,29 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 )));
     }
 
-    private Map<String, List<String>> processGroupKeywords(Map<String, List<String>> groupKeywords) {
+    private Map<String, List<Map<String, Integer>>> processGroupKeywords(Map<String, List<String>> groupKeywords) {
         return groupKeywords.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> processKeywords(entry.getValue()) // # 기준으로 분리 후 중복 제거
+                        entry -> processKeywords(entry.getValue())
                 ));
     }
 
-    private List<String> processKeywords(List<String> keywords) {
+    private List<Map<String, Integer>> processKeywords(List<String> keywords) {
         return keywords.stream()
-                .flatMap(keyword -> Arrays.stream(keyword.split("#")))
-                .filter(keyword -> keyword != null && !keyword.trim().isEmpty())
-                .distinct() // 중복 제거
-                .collect(Collectors.toList()); // 리스트 변환
+                .flatMap(keyword -> Arrays.stream(keyword.split("#")))  // # 기준 으로 분리
+                .filter(keyword -> keyword != null && !keyword.trim().isEmpty())    // 빈 값 제거
+                .collect(Collectors.groupingBy(keyword -> keyword, Collectors.summingInt(x -> 1))) // 개수 카운트
+                .entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())) // 내림차순 정렬
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, // 병합 함수 (중복 키 없도록 설정)
+                        LinkedHashMap::new // 순서 유지
+                )).entrySet().stream()
+                .map(entry -> Collections.singletonMap(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
     private <T> Map<String, List<T>> convertCodeToCodeName(Map<String, List<T>> finalResult) {

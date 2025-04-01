@@ -45,7 +45,7 @@ public class BannerService {
     public Map<String, Map<String, List<Object>>> findBannerDisplay() {
         Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerManageRepository.findGroupBannerDetail();
         Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerManageRepository.findGroupBannerProduct();
-        Map<String, List<String>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
+        Map<String, List<Map<String, Integer>>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
 
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 

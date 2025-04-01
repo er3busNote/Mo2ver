@@ -67,8 +67,8 @@ const PopularMobile: FC<PopularProps> = ({
 		bannerLength > 0 &&
 		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'keyword')
 			? bannerDisplayData[bannerDisplayKey]['keyword']
-					.filter((keyword) => typeof keyword === 'string')
-					.map((keyword) => keyword as string)
+					.map((obj) => Object.keys(obj).pop())
+					.slice(0, 5)
 			: KEYWORD_INFO;
 	const bannerDisplayProductInfo =
 		bannerLength > 0 &&
@@ -86,7 +86,7 @@ const PopularMobile: FC<PopularProps> = ({
 		const rotation = setInterval(() => {
 			const newIndex = (displayIndex + 1 + numSlides) % numSlides;
 			onAutoFadeIn(newIndex);
-		}, 155000);
+		}, 5000);
 		return () => clearInterval(rotation);
 	}, [displayIndex, setDisplayIndex, onAutoFadeIn]);
 

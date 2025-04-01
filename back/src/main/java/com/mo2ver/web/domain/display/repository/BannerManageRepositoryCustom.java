@@ -12,5 +12,5 @@ public interface BannerManageRepositoryCustom {
     GoodsDisplayInfo findBannerProduct(BannerInfo bannerInfo);
     Map<String, List<BannerDetailResponse>> findGroupBannerDetail();
     Map<String, List<BannerProductResponse>> findGroupBannerProduct();
-    Map<String, List<String>> findGroupBannerKeyword();
+    Map<String, List<Map<String, Integer>>> findGroupBannerKeyword();
 }
