@@ -24,6 +24,12 @@ const goods = (instance: AxiosInstance) => {
 				)
 				.then((response: AxiosResponse) => handleResponse(response, dispatch))
 				.catch((error: AxiosError) => handleError(error, dispatch)),
+		// 상품 인기 검색어 API : <baseURL>/goods/list/rank/${count}
+		rank: (count: number) => (dispatch: Dispatch) =>
+			instance
+				.get(`goods/list/rank/${count}`)
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 상품 검색 API : <baseURL>/goods/search
 		search: (goodsSearchPage: GoodsSearchPage) => (dispatch: Dispatch) =>
 			instance

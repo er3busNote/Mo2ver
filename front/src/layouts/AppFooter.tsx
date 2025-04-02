@@ -17,7 +17,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
-import { CategoryDataGroup } from '@api/types';
+import { GoodsData, CategoryDataGroup } from '@api/types';
 import { isAdmin } from '@utils/jwttoken';
 import { isMobile, BrowserView, MobileView } from 'react-device-detect';
 
@@ -25,6 +25,7 @@ interface AppFooterProps {
 	width: number;
 	title: string;
 	description: string;
+	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
 
@@ -32,6 +33,7 @@ const AppFooter: FC<AppFooterProps> = ({
 	width,
 	title,
 	description,
+	goodsRankData,
 	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -92,6 +94,7 @@ const AppFooter: FC<AppFooterProps> = ({
 					<AppSearchItemsMobile
 						openSearch={openSearch}
 						setSearchOpen={setSearchOpen}
+						goodsRankData={goodsRankData}
 					/>
 					<BottomNavigation value={value} onChange={handleChange}>
 						<BottomNavigationAction

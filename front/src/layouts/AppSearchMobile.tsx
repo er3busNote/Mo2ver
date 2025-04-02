@@ -24,25 +24,18 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { GoodsData } from '@api/types';
 import { BrowserView, MobileView } from 'react-device-detect';
 import MainIcon from '@assets/logo.svg?react';
-
-const searchDatas = [
-	{ id: 1, keyword: '삼성전자' },
-	{ id: 2, keyword: '모니터' },
-	{ id: 3, keyword: '3060' },
-	{ id: 4, keyword: 'b660m' },
-	{ id: 5, keyword: '노트북' },
-	{ id: 6, keyword: '애플' },
-	{ id: 7, keyword: 'b550' },
-	{ id: 8, keyword: 'cpu' },
-	{ id: 9, keyword: 'ddr5-4800' },
-	{ id: 10, keyword: 'h610m' },
-];
 
 interface AppSearchProps {
 	title: string;
 	description: string;
+	goodsRankData: Array<GoodsData>;
+}
+
+interface AppSearchItemsProps {
+	goodsRankData: Array<GoodsData>;
 }
 
 const SearchDivider: FC = (): JSX.Element => {
@@ -65,7 +58,9 @@ const SearchDivider: FC = (): JSX.Element => {
 	);
 };
 
-const AppSearchItemsPC: FC = (): JSX.Element => {
+const AppSearchItemsPC: FC<AppSearchItemsProps> = ({
+	goodsRankData,
+}): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const recentClick = () => {
 		setOpen(false);
@@ -106,9 +101,9 @@ const AppSearchItemsPC: FC = (): JSX.Element => {
 			<Box>
 				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
 					{open &&
-						searchDatas.map((data: any) => (
+						goodsRankData.map((data: GoodsData, index: number) => (
 							<MenuItem
-								key={data.id}
+								key={index}
 								dense
 								sx={{
 									px: 2,
@@ -117,9 +112,16 @@ const AppSearchItemsPC: FC = (): JSX.Element => {
 							>
 								<ListItemText
 									primaryTypographyProps={{
-										style: { fontSize: 12 },
+										sx: {
+											fontSize: 12,
+											whiteSpace: 'nowrap',
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											maxWidth: 200,
+											display: 'block',
+										},
 									}}
-									primary={data.id + '. ' + data.keyword}
+									primary={index + 1 + '. ' + data.goodsName}
 								/>
 							</MenuItem>
 						))}
@@ -158,6 +160,7 @@ const AppSearchItemsPC: FC = (): JSX.Element => {
 const AppSearchMobile: FC<AppSearchProps> = ({
 	title,
 	description,
+	goodsRankData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -288,6 +291,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 									<AppSearchItemsMobile
 										openSearch={openSearch}
 										setSearchOpen={setSearchOpen}
+										goodsRankData={goodsRankData}
 									/>
 									<Box>
 										<Paper
@@ -404,7 +408,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 													elevation={0}
 													sx={{ mt: -1, border: '#ddd 1px solid' }}
 												>
-													<AppSearchItemsPC />
+													<AppSearchItemsPC goodsRankData={goodsRankData} />
 												</Paper>
 											</Popper>
 										</Box>

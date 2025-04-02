@@ -18,6 +18,7 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@store/types';
 import Api from '@api/index';
+import useGoodsRankList from '@hooks/goods/useGoodsRankList';
 import useCategoryGroupList from '@hooks/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
 //import AppHeaderBar from './AppHeaderBar';
@@ -39,7 +40,7 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '@utils/theme';
-import { CategoryDataGroup } from '@api/types';
+import { GoodsData, CategoryDataGroup } from '@api/types';
 import { isDesktop } from 'react-device-detect';
 
 const mdTheme = createTheme(contentTheme);
@@ -49,6 +50,7 @@ const drawerMenuWidth = 200;
 interface AppProps {
 	title: string;
 	description: string;
+	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
 
@@ -59,12 +61,14 @@ interface LayoutDefaultProps {
 	type: 'success' | 'info' | 'warning' | 'error' | undefined;
 	message: string;
 	children?: ReactElement;
+	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 }
 
 const AppPC: FC<AppProps> = ({
 	title,
 	description,
+	goodsRankData,
 	categoryData,
 }): JSX.Element => {
 	const location = useLocation();
@@ -97,7 +101,11 @@ const AppPC: FC<AppProps> = ({
 				{isDesktop && (
 					<AppHeader width={'940px'} title={title} description={description} />
 				)}
-				<AppSearchPC title={title} description={description} />
+				<AppSearchPC
+					title={title}
+					description={description}
+					goodsRankData={goodsRankData}
+				/>
 			</Box>
 			<AppHeaderMenu
 				scrolled={scrolled}
@@ -125,6 +133,7 @@ const AppPC: FC<AppProps> = ({
 const AppMobile: FC<AppProps> = ({
 	title,
 	description,
+	goodsRankData,
 	categoryData,
 }): JSX.Element => {
 	return (
@@ -133,7 +142,11 @@ const AppMobile: FC<AppProps> = ({
 				<AppHeader width={'100%'} title={title} description={description} />
 			)}
 			{/* {isMobile && <AppHeaderBar description={description} />} */}
-			<AppSearchMobile title={title} description={description} />
+			<AppSearchMobile
+				title={title}
+				description={description}
+				goodsRankData={goodsRankData}
+			/>
 			<AppMenuMobile
 				title={title}
 				description={description}
@@ -150,6 +163,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	type,
 	message,
 	children,
+	goods,
 	category,
 }): JSX.Element => {
 	const theme = useTheme();
@@ -158,6 +172,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 
 	const dispatch = useDispatch();
 	const [index, setIndex] = useState<number>(0);
+	const goodsRankData = useGoodsRankList({ count: 10, goods });
 	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
@@ -204,6 +219,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppPC
 						title={title}
 						description={description}
+						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
 				)}
@@ -211,6 +227,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppMobile
 						title={title}
 						description={description}
+						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
 				)}
@@ -219,6 +236,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					width={drawerMenuWidth}
 					title={title}
 					description={description}
+					goodsRankData={goodsRankData}
 					categoryData={categoryData}
 				/>
 			</Box>
@@ -250,6 +268,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 });
 

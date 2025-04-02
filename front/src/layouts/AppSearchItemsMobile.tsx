@@ -26,6 +26,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import ErrorIcon from '@mui/icons-material/Error';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { GoodsData } from '@api/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -34,19 +35,6 @@ import 'swiper/css/pagination';
 const drawerSearchLimit = 600;
 const drawerSearchWidth = 250;
 const drawerSearchHeight = 480;
-
-const searchDatas = [
-	{ id: 1, keyword: '삼성전자' },
-	{ id: 2, keyword: '모니터' },
-	{ id: 3, keyword: '3060' },
-	{ id: 4, keyword: 'b660m' },
-	{ id: 5, keyword: '노트북' },
-	{ id: 6, keyword: '애플' },
-	{ id: 7, keyword: 'b550' },
-	{ id: 8, keyword: 'cpu' },
-	{ id: 9, keyword: 'ddr5-4800' },
-	{ id: 10, keyword: 'h610m' },
-];
 
 const RecommendButton = styled(Button)<ButtonProps>(({ theme }) => ({
 	boxShadow: 'none',
@@ -67,9 +55,16 @@ interface SearchProps {
 	header: SxProps<Theme>;
 }
 
+interface SearchPopularProps {
+	base: SxProps<Theme>;
+	header: SxProps<Theme>;
+	goodsRankData: Array<GoodsData>;
+}
+
 interface AppSearchItemsMobileProps {
 	openSearch: boolean;
 	setSearchOpen: Dispatch<SetStateAction<boolean>>;
+	goodsRankData: Array<GoodsData>;
 }
 
 const SearchRecent: FC<SearchProps> = ({ base, header }): JSX.Element => {
@@ -117,7 +112,11 @@ const SearchRecent: FC<SearchProps> = ({ base, header }): JSX.Element => {
 	);
 };
 
-const SearchPopular: FC<SearchProps> = ({ base, header }): JSX.Element => {
+const SearchPopular: FC<SearchPopularProps> = ({
+	base,
+	header,
+	goodsRankData,
+}): JSX.Element => {
 	return (
 		<Paper sx={base}>
 			<Typography variant="h2" align="center" sx={header}>
@@ -125,33 +124,42 @@ const SearchPopular: FC<SearchProps> = ({ base, header }): JSX.Element => {
 			</Typography>
 			<Box>
 				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
-					{searchDatas.map((data: any) => (
-						<MenuItem key={data.id} dense>
-							<Box
-								sx={{
-									px: 1,
-									py: 1,
-									width: '100%',
-									borderBottom: '1px solid #EAEAEA',
-								}}
-							>
-								<Breadcrumbs separator="" aria-label="breadcrumb">
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 14, fontWeight: 500 },
-										}}
-										primary={data.id}
-									/>
-									<ListItemText
-										primaryTypographyProps={{
-											style: { fontSize: 14, fontWeight: 'bold' },
-										}}
-										primary={data.keyword}
-									/>
-								</Breadcrumbs>
-							</Box>
-						</MenuItem>
-					))}
+					{goodsRankData &&
+						goodsRankData.map((data: GoodsData, index: number) => (
+							<MenuItem key={index} dense>
+								<Box
+									sx={{
+										px: 1,
+										py: 1,
+										width: '100%',
+										borderBottom: '1px solid #EAEAEA',
+									}}
+								>
+									<Breadcrumbs separator="" aria-label="breadcrumb">
+										<ListItemText
+											primaryTypographyProps={{
+												style: { fontSize: 14, fontWeight: 500 },
+											}}
+											primary={index + 1}
+										/>
+										<ListItemText
+											primaryTypographyProps={{
+												sx: {
+													fontSize: 14,
+													fontWeight: 'bold',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													maxWidth: 150,
+													display: 'block',
+												},
+											}}
+											primary={data.goodsName}
+										/>
+									</Breadcrumbs>
+								</Box>
+							</MenuItem>
+						))}
 				</MenuList>
 			</Box>
 		</Paper>
@@ -178,6 +186,7 @@ const SearchRecommend: FC<SearchProps> = ({ base, header }): JSX.Element => {
 const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 	openSearch,
 	setSearchOpen,
+	goodsRankData,
 }): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
@@ -299,7 +308,11 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 							<SearchRecent base={searchBase} header={searchHeader} />
 						</SwiperSlide>
 						<SwiperSlide>
-							<SearchPopular base={searchBase} header={searchHeader} />
+							<SearchPopular
+								base={searchBase}
+								header={searchHeader}
+								goodsRankData={goodsRankData}
+							/>
 						</SwiperSlide>
 						<SwiperSlide>
 							<SearchRecommend base={searchBase} header={searchHeader} />
