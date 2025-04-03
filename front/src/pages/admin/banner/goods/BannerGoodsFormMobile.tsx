@@ -405,6 +405,7 @@ const BannerGoodsFormMobile: FC<BannerGoodsProp> = ({
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
+								goodsSaveData={watch('goods')}
 							/>
 						</Grid>
 					</Grid>

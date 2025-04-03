@@ -28,6 +28,8 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { BannerGoodsDetailValues } from '@pages/admin/types';
+import { not, intersection, union } from '@utils/set';
 
 interface DialogProps {
 	open: boolean;
@@ -37,6 +39,7 @@ interface DialogProps {
 	handleClose: () => void;
 	header: SxProps<Theme>;
 	base: SxProps<Theme>;
+	goodsSaveData: Array<BannerGoodsDetailValues>;
 }
 
 const DialogGoodsPC: FC<DialogProps> = ({
@@ -47,6 +50,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 	handleClose,
 	header,
 	base,
+	goodsSaveData,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState('');
 	const [goodsName, setGoodsName] = useState<string>('');
@@ -77,10 +81,30 @@ const DialogGoodsPC: FC<DialogProps> = ({
 	const [right, setRight] = useState<readonly GoodsData[]>([]);
 	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
 
+	const leftChecked = intersection(checked, left);
+	const rightChecked = intersection(checked, right);
+
 	useEffect(() => {
 		setLeft(goodsData.content ?? []);
-		setRight([]);
-	}, [goodsData]);
+		setRight(
+			goodsSaveData
+				? union(
+						right,
+						goodsSaveData.map((item: BannerGoodsDetailValues) => ({
+							goodsCode: item.goodsCode,
+							goodsName: item.goodsName,
+							goodsBrand: '',
+							goodsGender: '',
+							goodsYear: '',
+							supplyPrice: 0,
+							salePrice: item.salePrice,
+							imageList: [],
+						})),
+						'goodsCode'
+				  )
+				: []
+		);
+	}, [goodsData, goodsSaveData]);
 
 	useEffect(() => {
 		if (
@@ -129,16 +153,6 @@ const DialogGoodsPC: FC<DialogProps> = ({
 		if (value && value === String(page)) setPage(page);
 	};
 
-	const not = (a: readonly GoodsData[], b: readonly GoodsData[]) => {
-		return a.filter((value) => b.indexOf(value) === -1);
-	};
-	const intersection = (a: readonly GoodsData[], b: readonly GoodsData[]) => {
-		return a.filter((value) => b.indexOf(value) !== -1);
-	};
-
-	const leftChecked = intersection(checked, left);
-	const rightChecked = intersection(checked, right);
-
 	const handleToggle = (value: GoodsData) => () => {
 		const currentIndex = checked.indexOf(value);
 		const newChecked = [...checked];
@@ -152,21 +166,21 @@ const DialogGoodsPC: FC<DialogProps> = ({
 		setChecked(newChecked);
 	};
 	const handleAllRight = () => {
-		setRight(right.concat(left));
+		setRight(union(right, left, 'goodsCode'));
 		setLeft([]);
 	};
 	const handleCheckedRight = () => {
-		setRight(right.concat(leftChecked));
+		setRight(union(right, leftChecked, 'goodsCode'));
 		setLeft(not(left, leftChecked));
 		setChecked(not(checked, leftChecked));
 	};
 	const handleCheckedLeft = () => {
-		setLeft(left.concat(rightChecked));
+		setLeft(union(left, rightChecked, 'goodsCode'));
 		setRight(not(right, rightChecked));
 		setChecked(not(checked, rightChecked));
 	};
 	const handleAllLeft = () => {
-		setLeft(left.concat(right));
+		setLeft(union(left, right, 'goodsCode'));
 		setRight([]);
 	};
 
