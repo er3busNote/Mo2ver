@@ -28,9 +28,9 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DialogGoodsMobile from '@components/dialog/DialogGoodsMobile';
-import RenderTextField from '@components/validate/TextField';
-import RenderSelectField from '@components/validate/SelectField';
-import RenderDatePickerField from '@components/validate/DatePickerField';
+import RenderTextField from '@components/field/TextField';
+import RenderSelectField from '@components/field/SelectField';
+import RenderDatePickerField from '@components/field/DatePickerField';
 import {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,

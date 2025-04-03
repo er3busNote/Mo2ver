@@ -29,9 +29,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import DialogGoodsPC from '@components/dialog/DialogGoodsPC';
-import RenderTextField from '@components/validate/TextField';
-import RenderSelectField from '@components/validate/SelectField';
-import RenderDatePickerField from '@components/validate/DatePickerField';
+import RenderTextField from '@components/field/TextField';
+import RenderSelectField from '@components/field/SelectField';
+import RenderDatePickerField from '@components/field/DatePickerField';
 import {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,

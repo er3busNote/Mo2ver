@@ -12,7 +12,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import RenderTextField from '@components/validate/TextField';
+import RenderTextField from '@components/field/TextField';
 import { LoginFormValues } from '@pages/types';
 
 interface LoginProp {

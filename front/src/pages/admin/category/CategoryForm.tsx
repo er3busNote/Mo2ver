@@ -10,8 +10,8 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import RenderTextField from '@components/validate/TextField';
-import RenderRadioField from '@components/validate/RadioField';
+import RenderTextField from '@components/field/TextField';
+import RenderRadioField from '@components/field/RadioField';
 import { CategoryFormValues } from '@pages/admin/types';
 
 const fontSize_xs = '12px';
