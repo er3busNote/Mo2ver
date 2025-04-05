@@ -50,6 +50,9 @@ const AdminIcon = [
 	ReceiptLongIcon,
 ];
 
+const AdminColor = ['#1A73E8', '#3C8039', '#A250F5'];
+const AdminBgColor = ['#E8F0FE', '#E6f4EA', '#F3E8FD'];
+
 declare module 'react' {
 	interface CSSProperties {
 		'--tree-view-color'?: string;
@@ -182,10 +185,10 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 		setOpen(!open);
 	};
 
-	const openMenuClick = (path: string, index: number) => {
+	const openMenuClick = (path: string, code: string) => {
 		dispatch(menuActive(path)); // 1. close → open : 해당 Root 메뉴를 Active(활성화)
-		setExpanded([String(index)]);
-		setSelected(String(index));
+		setExpanded([code]);
+		setSelected(code);
 		setOpen(!open);
 	};
 
@@ -251,18 +254,13 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 			/>
 			<Box sx={{ display: 'none' }}>
 				{menus &&
-					menus.map((menu: SubMenuInfo) => {
-						const IconComponent = AdminIcon[menu.index - 1];
+					menus.map((menu: SubMenuInfo, index: number) => {
+						const IconComponent = AdminIcon[index];
 						return (
-							<Grow
-								key={menu.index}
-								in={!open && menu.isShow}
-								appear={menu.isShow}
-								timeout={menu.index * 300}
-							>
+							<Grow key={index} in={!open} timeout={(index + 1) * 300}>
 								<ListItemButton
 									selected={menu.isActive}
-									onClick={() => openMenuClick(menu.path, menu.index)}
+									onClick={() => openMenuClick(menu.path, menu.code)}
 								>
 									<ListItemIcon>
 										<IconComponent fontSize="small" color="disabled" />
@@ -275,7 +273,6 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 			<Box sx={{ display: 'block' }}>
 				<TreeView
 					aria-label="menu"
-					defaultExpanded={['1']}
 					defaultCollapseIcon={<ArrowDropDownIcon />}
 					defaultExpandIcon={<ArrowRightIcon />}
 					defaultEndIcon={<div style={{ width: 24 }} />}
@@ -286,34 +283,30 @@ const AdminMenuMobile: FC<AdminMenuProps> = ({
 					onNodeSelect={handleSelect}
 				>
 					{menus &&
-						menus.map((menu: SubMenuInfo) => {
+						menus.map((menu: SubMenuInfo, i: number) => {
 							return (
 								<StyledTreeItem
-									key={menu.index}
-									nodeId={String(menu.index)}
-									labelText={menu.description}
-									labelIcon={AdminIcon[menu.index - 1]}
+									key={i}
+									nodeId={menu.code}
+									labelText={menu.name}
+									labelIcon={AdminIcon[i]}
 								>
 									{menu.subMenu &&
-										menu.subMenu.map((submenu: SubMenuInfo) => {
+										menu.subMenu.map((submenu: SubMenuInfo, j: number) => {
 											return (
 												<StyledTreeItem
-													key={submenu.index}
-													nodeId={String(submenu.index)}
-													labelText={submenu.description}
-													labelIcon={AdminIcon[submenu.index - 1]}
+													key={j}
+													nodeId={submenu.code}
+													labelText={submenu.name}
+													labelIcon={AdminIcon[i + j + 3]}
 													// labelInfo={String(submenu.count).replace(
 													// 	/(.)(?=(\d{3})+$)/g,
 													// 	'$1,'
 													// )}
-													color={submenu.color}
-													bgColor={submenu.bgColor}
+													color={AdminColor[i + j]}
+													bgColor={AdminBgColor[i + j]}
 													onClick={() =>
-														activeMenuClick(
-															menu.description,
-															submenu.description,
-															menu.path
-														)
+														activeMenuClick(menu.name, submenu.name, menu.path)
 													}
 												/>
 											);

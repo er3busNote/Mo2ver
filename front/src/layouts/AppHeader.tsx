@@ -134,7 +134,7 @@ const AppHeader: FC<AppHeaderProps> = ({
 								</Typography>
 							</IconButton>
 						)}
-						{isAdmin() && (
+						{isAuthenticated() && isAdmin() && (
 							<IconButton
 								onClick={() =>
 									activeMenuClick('관리자', '어드민페이지', '/admin')

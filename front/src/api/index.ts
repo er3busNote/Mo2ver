@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { setInterceptors } from './common/interceptors';
 import code from './code';
+import menu from './menu';
 import member from './member';
 import goods from './goods';
 import category from './category';
@@ -22,6 +23,7 @@ const instance = createInstance();
 
 const api = {
 	code: code(instance),
+	menu: menu(instance),
 	member: member(instance),
 	goods: goods(instance),
 	category: category(instance),

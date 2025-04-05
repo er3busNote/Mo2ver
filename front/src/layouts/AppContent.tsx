@@ -18,6 +18,7 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@store/types';
 import Api from '@api/index';
+import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
 import useGoodsRankList from '@hooks/goods/useGoodsRankList';
 import useCategoryGroupList from '@hooks/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
@@ -61,6 +62,7 @@ interface LayoutDefaultProps {
 	type: 'success' | 'info' | 'warning' | 'error' | undefined;
 	message: string;
 	children?: ReactElement;
+	menu: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 }
@@ -163,6 +165,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	type,
 	message,
 	children,
+	menu,
 	goods,
 	category,
 }): JSX.Element => {
@@ -172,11 +175,12 @@ const AppContent: FC<LayoutDefaultProps> = ({
 
 	const dispatch = useDispatch();
 	const [index, setIndex] = useState<number>(0);
+	const menuData = useGroupMenuList({ menuType: 0, menu });
 	const goodsRankData = useGoodsRankList({ count: 10, goods });
 	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
-		dispatch(menuLotate('user')); // 메뉴 변경 : admin → user
+		dispatch(menuLotate(menuData)); // 메뉴 변경 : admin → user
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				const idx = event.state.idx;
@@ -196,7 +200,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 		return () => {
 			window.removeEventListener('popstate', handlePopstate);
 		};
-	}, [dispatch, index, setIndex]);
+	}, [dispatch, index, setIndex, menuData]);
 
 	const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {
@@ -268,6 +272,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	menu: bindActionCreators(Api.menu, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 });

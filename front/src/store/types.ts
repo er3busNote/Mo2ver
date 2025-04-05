@@ -27,16 +27,11 @@ interface TitleState extends TitleInfo {
 }
 
 interface MenuInfo {
-	index: number;
+	code: string;
 	name: string;
 	path: string;
-	title: string;
 	description: string;
 	isActive: boolean;
-	isShow: boolean;
-	count?: number;
-	color?: string;
-	bgColor?: string;
 }
 
 interface SubMenuInfo extends MenuInfo {

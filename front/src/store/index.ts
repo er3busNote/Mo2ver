@@ -5,6 +5,7 @@ import {
 	TitleInfo,
 	TitleState,
 	MenuState,
+	SubMenuInfo,
 	ToastInfo,
 	ToastState,
 } from './types';
@@ -104,109 +105,14 @@ const titleSlice = createSlice({
 });
 
 // 2.2. 메뉴 관련 State
-const userMenuinitialState: MenuState = {
-	menus: [
-		{
-			index: 1,
-			name: 'EVENT',
-			path: '/event',
-			title: 'event',
-			description: '이벤트',
-			subMenu: [],
-			isActive: true,
-			isShow: true,
-		},
-		{
-			index: 2,
-			name: 'NOTICE',
-			path: '/notice',
-			title: 'Notice',
-			description: '공지사항',
-			subMenu: [],
-			isActive: false,
-			isShow: true,
-		},
-	],
-};
-
-const adminMenuinitialState: MenuState = {
-	menus: [
-		{
-			index: 1,
-			name: 'CATEGORY',
-			path: '/cagetory',
-			title: 'Category',
-			description: '카테고리 관리',
-			subMenu: [
-				{
-					index: 4,
-					name: 'ITEM',
-					path: '/item',
-					title: 'Item',
-					description: '상품 목록',
-					isActive: false,
-					isShow: true,
-					count: 2,
-					color: '#1A73E8',
-					bgColor: '#E8F0FE',
-				},
-			],
-			isActive: true,
-			isShow: true,
-		},
-		{
-			index: 2,
-			name: 'BANNER',
-			path: '/banner',
-			title: 'Banner',
-			description: '배너 관리',
-			subMenu: [
-				{
-					index: 5,
-					name: 'MAIN',
-					path: '/main',
-					title: 'Main',
-					description: '메인 전시',
-					isActive: false,
-					isShow: true,
-					count: 1,
-					color: '#3C8039',
-					bgColor: '#E6f4EA',
-				},
-			],
-			isActive: false,
-			isShow: true,
-		},
-		{
-			index: 3,
-			name: 'EVENT',
-			path: '/event',
-			title: 'Event',
-			description: '이벤트 관리',
-			subMenu: [
-				{
-					index: 7,
-					name: 'ITEM',
-					path: '/item',
-					title: 'Item',
-					description: '이벤트 목록',
-					isActive: false,
-					isShow: true,
-					count: 2,
-					color: '#A250F5',
-					bgColor: '#F3E8FD',
-				},
-			],
-			isActive: true,
-			isShow: true,
-		},
-	],
+const menuinitialState: MenuState = {
+	menus: [],
 };
 
 // 2.2. menuSlice : action + reducer → slice
 const menuSlice = createSlice({
 	name: 'menu',
-	initialState: userMenuinitialState,
+	initialState: menuinitialState,
 	reducers: {
 		menuActive: (state: MenuState, action: PayloadAction<string>) => {
 			state.menus.forEach((menu) => {
@@ -222,12 +128,11 @@ const menuSlice = createSlice({
 				menu.isActive = action.payload;
 			});
 		},
-		menuLotate: (state: MenuState, action: PayloadAction<string>) => {
-			if (action.payload === 'admin') {
-				state.menus = adminMenuinitialState.menus;
-			} else {
-				state.menus = userMenuinitialState.menus;
-			}
+		menuLotate: (
+			state: MenuState,
+			action: PayloadAction<Array<SubMenuInfo>>
+		) => {
+			state.menus = action.payload;
 		},
 	},
 });

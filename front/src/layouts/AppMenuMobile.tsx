@@ -308,8 +308,8 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 						/>
 					</Grid>
 					{menus &&
-						menus.map((menu: SubMenuInfo) => (
-							<Grid item key={menu.index}>
+						menus.map((menu: SubMenuInfo, index: number) => (
+							<Grid item key={index}>
 								<Grid container spacing={1}>
 									<Grid item>
 										<Box
@@ -321,7 +321,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 											<IconButton
 												onClick={() =>
 													activeMenuClick(
-														menu.title,
+														menu.name,
 														menu.description,
 														menu.path
 													)
@@ -336,7 +336,7 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 														fontWeight: 'bold',
 													}}
 												>
-													{menu.description}
+													{menu.name}
 												</Typography>
 											</IconButton>
 										</Box>

@@ -11,11 +11,8 @@ const category = (instance: AxiosInstance) => {
 				instance
 					.get(
 						upperCategoryCode === undefined || upperCategoryCode === ''
-							? 'category/info/' + categoryLevel
-							: 'category/info/' +
-									categoryLevel +
-									'?upperCategoryCode=' +
-									upperCategoryCode
+							? `category/info/${categoryLevel}`
+							: `category/info/${categoryLevel}?upperCategoryCode=${upperCategoryCode}`
 					)
 					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),

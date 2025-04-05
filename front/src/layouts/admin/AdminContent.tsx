@@ -7,9 +7,13 @@ import React, {
 	ReactElement,
 } from 'react';
 import { Outlet } from 'react-router';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { changePrev, changePrevNext, menuLotate } from '@store/index';
 import { TitleState } from '@store/types';
+import Api from '@api/index';
+import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
@@ -33,6 +37,7 @@ interface LayoutDefaultProps {
 	title: string;
 	description: string;
 	children?: ReactElement;
+	menu: ActionCreatorsMapObject;
 }
 
 const AdminPC: FC<AdminProps> = ({ open, setOpen, children }): JSX.Element => {
@@ -71,6 +76,7 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 	title,
 	description,
 	children,
+	menu,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -79,9 +85,10 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState<boolean>(true);
 	const [index, setIndex] = useState<number>(0);
+	const menuData = useGroupMenuList({ menuType: 1, menu });
 
 	useEffect(() => {
-		dispatch(menuLotate('admin')); // 메뉴 변경 : user → admin
+		dispatch(menuLotate(menuData)); // 메뉴 변경 : user → admin
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				const idx = event.state.idx;
@@ -101,7 +108,7 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 		return () => {
 			window.removeEventListener('popstate', handlePopstate);
 		};
-	}, [dispatch, index, setIndex]);
+	}, [dispatch, index, setIndex, menuData]);
 
 	return (
 		<ThemeProvider theme={mdTheme}>
@@ -128,4 +135,8 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-export default connect(mapStateToProps, null)(AdminContent);
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	menu: bindActionCreators(Api.menu, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminContent);

@@ -378,15 +378,15 @@ const AppMenuPC: FC<AppMenuProps> = ({
 						/>
 					</Grid>
 					{menus &&
-						menus.map((menu: SubMenuInfo) => (
-							<Grid item key={menu.index}>
+						menus.map((menu: SubMenuInfo, index: number) => (
+							<Grid item key={index}>
 								<Grid container spacing={1}>
 									<Grid item>
 										<Box sx={{ px: '20px', py: '10px' }}>
 											<IconButton
 												onClick={() =>
 													activeMenuClick(
-														menu.title,
+														menu.name,
 														menu.description,
 														menu.path
 													)
@@ -398,7 +398,7 @@ const AppMenuPC: FC<AppMenuProps> = ({
 													align="center"
 													sx={{ fontSize: menuFontSize, fontWeight: 'bold' }}
 												>
-													{menu.description}
+													{menu.name}
 												</Typography>
 											</IconButton>
 										</Box>
