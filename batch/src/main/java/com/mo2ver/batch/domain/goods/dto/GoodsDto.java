@@ -33,7 +33,7 @@ public class GoodsDto {
 
     private String updater;
 
-    public static GoodsDto toDto(
+    public static GoodsDto of(
             DataDto dataDto, String goodsName, String brandName,
             String largeCategoryCode, String mediumCategoryCode, String smallCategoryCode
     ) {

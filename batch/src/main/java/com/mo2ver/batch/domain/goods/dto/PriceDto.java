@@ -49,7 +49,7 @@ public class PriceDto {
 
     private String updater;
 
-    public static PriceDto toDto(Goods goods) {
+    public static PriceDto of(Goods goods) {
         Timestamp startDate = getRandomTimestamp();
         Timestamp endDate = getRandomTimestampAfter(startDate);
         BigDecimal supplyPrice = getRandomBigDecimal();

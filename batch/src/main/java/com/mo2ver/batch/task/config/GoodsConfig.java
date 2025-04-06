@@ -5,7 +5,8 @@ import com.mo2ver.batch.domain.goods.entity.Goods;
 import com.mo2ver.batch.domain.goods.dto.DataDto;
 import com.mo2ver.batch.domain.goods.dto.GoodsDto;
 import com.mo2ver.batch.domain.goods.service.GoodsService;
-import com.mo2ver.batch.task.listener.ChunkListener;
+import com.mo2ver.batch.task.listener.ChunkItemListener;
+import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import com.mo2ver.batch.task.reader.CsvFileItemReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +39,12 @@ public class GoodsConfig {
     private final GoodsRepository goodsRepository;
     private final GoodsService goodsService;
     private final CsvFileItemReader csvFileItemReader;
-    private final ChunkListener chunkListener;
+    private final TotalCountStepListener totalCountStepListener;
+    private final ChunkItemListener chunkItemListener;
 
     @Bean
     public ItemProcessor<DataDto, Goods> itemProcessor() {
-        return dataDto -> modelMapper.map(GoodsDto.toDto(
+        return dataDto -> modelMapper.map(GoodsDto.of(
                 dataDto,
                 goodsService.goodsName(dataDto.getProductDisplayName()),
                 goodsService.brandName(dataDto.getProductDisplayName()),
@@ -72,7 +74,8 @@ public class GoodsConfig {
                 .reader(csvFileItemReader)
                 .processor(itemProcessor())
                 .writer(itemWriter())
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .allowStartIfComplete(true)
                 .build();
     }

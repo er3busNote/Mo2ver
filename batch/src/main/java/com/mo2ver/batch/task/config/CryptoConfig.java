@@ -1,7 +1,8 @@
 package com.mo2ver.batch.task.config;
 
 import com.mo2ver.batch.domain.goods.dto.DataDto;
-import com.mo2ver.batch.task.listener.ChunkListener;
+import com.mo2ver.batch.task.listener.ChunkItemListener;
+import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import com.mo2ver.batch.task.processor.CryptoItemDecProcessor;
 import com.mo2ver.batch.task.processor.CryptoItemEncProcessor;
 import com.mo2ver.batch.task.reader.CsvFileItemReader;
@@ -42,7 +43,8 @@ public class CryptoConfig {
     private final CryptoItemDecProcessor cryptoItemDecProcessor;
     private final CryptoItemEncWriter cryptoItemEncWriter;
     private final CryptoItemDecWriter cryptoItemDecWriter;
-    private final ChunkListener chunkListener;
+    private final TotalCountStepListener totalCountStepListener;
+    private final ChunkItemListener chunkItemListener;
 
     @Bean
     public Job cryptoJob() {
@@ -73,7 +75,8 @@ public class CryptoConfig {
                 .reader(csvFileItemReader)
                 .processor(cryptoItemEncProcessor)
                 .writer(cryptoItemEncWriter)
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .build();
     }
 
@@ -84,7 +87,8 @@ public class CryptoConfig {
                 .reader(csvFileItemReader)
                 .processor(cryptoItemDecProcessor)
                 .writer(cryptoItemDecWriter)
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .build();
     }
 

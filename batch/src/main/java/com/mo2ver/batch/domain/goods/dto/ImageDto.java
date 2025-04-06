@@ -28,7 +28,7 @@ public class ImageDto {
 
     private String updater;
 
-    public static ImageDto toDto(Goods goods) {
+    public static ImageDto of(Goods goods) {
         Integer filepath = Integer.parseInt(goods.getGoodsCode()) - 1000000000;
         return ImageDto.builder()
                 .goodsCode(goods)

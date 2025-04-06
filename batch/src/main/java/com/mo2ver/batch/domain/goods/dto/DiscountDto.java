@@ -40,7 +40,7 @@ public class DiscountDto {
 
     private String updater;
 
-    public static DiscountDto toDto(Goods goods) {
+    public static DiscountDto of(Goods goods) {
         LocalDateTime startDate = getRandomDateTime();
         LocalDateTime endDate = getRandomDateTimeAfter(startDate);
         Character rateYesNo = getRandomYesNo();

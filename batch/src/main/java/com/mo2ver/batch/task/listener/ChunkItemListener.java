@@ -7,22 +7,25 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ChunkListener extends ChunkListenerSupport {
+public class ChunkItemListener extends ChunkListenerSupport {
 
-    private static final Integer TOTAL_SIZE = 44446;
+    private int totalItemCount;
 
     @Override
     public void beforeChunk(ChunkContext context) {
-        context.getStepContext().getStepExecution().getExecutionContext().putInt("totalItemCount", TOTAL_SIZE);
+        this.totalItemCount = context.getStepContext().getStepExecution().getExecutionContext().getInt("totalItemCount", 0);
     }
 
     @Override
     public void afterChunk(ChunkContext context) {
         int currentItemCount = context.getStepContext().getStepExecution().getReadCount();
-        int totalItemCount = context.getStepContext().getStepExecution().getExecutionContext().getInt("totalItemCount");
 
-        double progress = (double) currentItemCount / totalItemCount * 100;
-        log.info("Progress: " + progress + "%");
+        if (totalItemCount > 0) {
+            double progress = (double) currentItemCount / totalItemCount * 100;
+            log.info("Progress: " + progress + "%");
+        } else {
+            log.warn("총 아이템 수가 0입니다. 진행률 계산이 불가능합니다.");
+        }
     }
 
     @Override

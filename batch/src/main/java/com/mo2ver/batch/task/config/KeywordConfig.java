@@ -1,10 +1,12 @@
 package com.mo2ver.batch.task.config;
 
-import com.mo2ver.batch.domain.goods.repository.GoodsRepository;
 import com.mo2ver.batch.domain.goods.entity.Goods;
-import com.mo2ver.batch.domain.goods.service.PriceService;
+import com.mo2ver.batch.domain.goods.repository.GoodsRepository;
 import com.mo2ver.batch.task.listener.ChunkItemListener;
 import com.mo2ver.batch.task.listener.TotalCountStepListener;
+import com.mo2ver.batch.task.processor.KeywordItemProcessor;
+import com.mo2ver.batch.task.reader.JpaKeywordItemReader;
+import com.mo2ver.batch.task.writer.JpaKeywordItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -20,33 +22,34 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
-import static com.mo2ver.batch.task.config.PriceSyncConfig.JOB_NAME;
+import static com.mo2ver.batch.task.config.KeywordConfig.JOB_NAME;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "job.name", havingValue = JOB_NAME)
-public class PriceSyncConfig {
+public class KeywordConfig {
 
-    public static final String JOB_NAME = "priceSyncJob";
-    public static final String STEP_NAME = "priceSyncStep";
+    public static final String JOB_NAME = "keywordJob";
+    public static final String STEP_NAME = "keywordStep";
     private static final Integer CHUNK_SIZE = 100;
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final GoodsRepository goodsRepository;
-    private final PriceService priceService;
+    private final JpaKeywordItemReader jpaKeywordItemReader;
+    private final KeywordItemProcessor keywordItemProcessor;
+    private final JpaKeywordItemWriter jpaKeywordItemWriter;
     private final TotalCountStepListener totalCountStepListener;
     private final ChunkItemListener chunkItemListener;
 
     @Bean
     public RepositoryItemReader<Goods> goodsPagingReader() {
         return new RepositoryItemReaderBuilder<Goods>()
-                .name("goodsPagingReader")
+                .name("goodsKeywordPagingReader")
                 .repository(goodsRepository)
-                .methodName("findAll")
+                .methodName("findByKeywordIsNull")
                 .pageSize(CHUNK_SIZE)
                 .sorts(Collections.singletonMap("goodsCode", Sort.Direction.ASC))
                 .build();
@@ -54,26 +57,26 @@ public class PriceSyncConfig {
 
     @Bean
     public ItemWriter<Goods> itemWriter() {
-        return items -> priceService.updatePriceApplyDateForGoodsCode(items.stream()
-                .map(item -> (Goods) item)
-                .collect(Collectors.toList()));
+        return goodsRepository::saveAll;
     }
 
     @Bean
-    public Job priceJob() {
+    public Job keywordJob() {
         return jobBuilderFactory.get(JOB_NAME)
-                .start(priceStep())
+                .start(keywordStep())
                 .build();
     }
 
     @Bean
-    public Step priceStep() {
+    public Step keywordStep() {
         return stepBuilderFactory.get(STEP_NAME)
                 .<Goods, Goods>chunk(CHUNK_SIZE)
-                .reader(goodsPagingReader())
-                .writer(itemWriter())
+                .reader(jpaKeywordItemReader)
+                .processor(keywordItemProcessor)
+                .writer(jpaKeywordItemWriter)
                 .listener(totalCountStepListener)
                 .listener(chunkItemListener)
+                .allowStartIfComplete(true)
                 .build();
     }
 }

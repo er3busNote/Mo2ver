@@ -5,7 +5,8 @@ import com.mo2ver.batch.domain.goods.repository.ImageRepository;
 import com.mo2ver.batch.domain.goods.entity.Goods;
 import com.mo2ver.batch.domain.goods.entity.Image;
 import com.mo2ver.batch.domain.goods.dto.ImageDto;
-import com.mo2ver.batch.task.listener.ChunkListener;
+import com.mo2ver.batch.task.listener.ChunkItemListener;
+import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -41,7 +42,8 @@ public class ImageConfig {
     private final ModelMapper modelMapper;
     private final GoodsRepository goodsRepository;
     private final ImageRepository imageRepository;
-    private final ChunkListener chunkListener;
+    private final TotalCountStepListener totalCountStepListener;
+    private final ChunkItemListener chunkItemListener;
 
     @Bean
     public RepositoryItemReader<Goods> goodsPagingReader() {
@@ -56,7 +58,7 @@ public class ImageConfig {
 
     @Bean
     public ItemProcessor<Goods, Image> itemProcessor() {
-        return goods -> modelMapper.map(ImageDto.toDto(goods), Image.class);
+        return goods -> modelMapper.map(ImageDto.of(goods), Image.class);
     }
 
     @Bean
@@ -78,7 +80,8 @@ public class ImageConfig {
                 .reader(goodsPagingReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .build();
     }
 }

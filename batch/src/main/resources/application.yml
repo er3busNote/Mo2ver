@@ -65,6 +65,8 @@ spring:
 #logging:
 #  level:
 #    org:
+#      springframework:
+#        batch: DEBUG
 #      hibernate:
 #        SQL: DEBUG
 #        type:

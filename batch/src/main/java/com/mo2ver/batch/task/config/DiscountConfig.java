@@ -5,7 +5,8 @@ import com.mo2ver.batch.domain.goods.repository.GoodsRepository;
 import com.mo2ver.batch.domain.goods.entity.Discount;
 import com.mo2ver.batch.domain.goods.entity.Goods;
 import com.mo2ver.batch.domain.goods.dto.DiscountDto;
-import com.mo2ver.batch.task.listener.ChunkListener;
+import com.mo2ver.batch.task.listener.ChunkItemListener;
+import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -49,7 +50,8 @@ public class DiscountConfig {
     private final ModelMapper modelMapper;
     private final GoodsRepository goodsRepository;
     private final DiscountRepository discountRepository;
-    private final ChunkListener chunkListener;
+    private final TotalCountStepListener totalCountStepListener;
+    private final ChunkItemListener chunkItemListener;
 
     @Bean
     public RepositoryItemReader<Goods> goodsPagingReader() {
@@ -64,7 +66,7 @@ public class DiscountConfig {
 
     @Bean
     public ItemProcessor<Goods, Discount> itemProcessor() {
-        return goods -> modelMapper.map(DiscountDto.toDto(goods), Discount.class);
+        return goods -> modelMapper.map(DiscountDto.of(goods), Discount.class);
     }
 
     @Bean
@@ -105,7 +107,8 @@ public class DiscountConfig {
                 .reader(goodsPagingReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .build();
     }
 }

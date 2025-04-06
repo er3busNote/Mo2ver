@@ -5,7 +5,8 @@ import com.mo2ver.batch.domain.goods.repository.PriceRepository;
 import com.mo2ver.batch.domain.goods.entity.Goods;
 import com.mo2ver.batch.domain.goods.entity.Price;
 import com.mo2ver.batch.domain.goods.dto.PriceDto;
-import com.mo2ver.batch.task.listener.ChunkListener;
+import com.mo2ver.batch.task.listener.ChunkItemListener;
+import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -48,7 +49,8 @@ public class PriceConfig {
     private final ModelMapper modelMapper;
     private final GoodsRepository goodsRepository;
     private final PriceRepository priceRepository;
-    private final ChunkListener chunkListener;
+    private final TotalCountStepListener totalCountStepListener;
+    private final ChunkItemListener chunkItemListener;
 
     @Bean
     public RepositoryItemReader<Goods> goodsPagingReader() {
@@ -63,7 +65,7 @@ public class PriceConfig {
 
     @Bean
     public ItemProcessor<Goods, Price> itemProcessor() {
-        return goods -> modelMapper.map(PriceDto.toDto(goods), Price.class);
+        return goods -> modelMapper.map(PriceDto.of(goods), Price.class);
     }
 
     @Bean
@@ -104,7 +106,8 @@ public class PriceConfig {
                 .reader(goodsPagingReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
-                .listener(chunkListener)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
                 .build();
     }
 }
