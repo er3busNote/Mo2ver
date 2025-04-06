@@ -10,10 +10,10 @@ import javax.persistence.EntityManagerFactory;
 public class JpaKeywordItemReader  extends JpaPagingItemReader<Goods> {
 
     public JpaKeywordItemReader(EntityManagerFactory entityManagerFactory) {
-        super.setQueryString("SELECT g FROM Goods g WHERE g.keyword IS NULL");
+        super.setName("goodsKeywordPagingReader");
+        super.setQueryString("SELECT g FROM Goods g WHERE g.keyword IS NULL ORDER BY g.goodsCode ASC");
         super.setEntityManagerFactory(entityManagerFactory);
         super.setPageSize(100);
         super.setSaveState(true);
-        super.setName("goodsKeywordPagingReader");
     }
 }

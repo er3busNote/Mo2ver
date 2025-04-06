@@ -5,8 +5,8 @@ import com.mo2ver.batch.domain.goods.repository.GoodsRepository;
 import com.mo2ver.batch.task.listener.ChunkItemListener;
 import com.mo2ver.batch.task.listener.TotalCountStepListener;
 import com.mo2ver.batch.task.processor.KeywordItemProcessor;
-import com.mo2ver.batch.task.reader.JpaKeywordItemReader;
-import com.mo2ver.batch.task.writer.JpaKeywordItemWriter;
+import com.mo2ver.batch.task.reader.KeywordItemReader;
+import com.mo2ver.batch.task.writer.KeywordItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -38,9 +38,9 @@ public class KeywordConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final GoodsRepository goodsRepository;
-    private final JpaKeywordItemReader jpaKeywordItemReader;
+    private final KeywordItemReader keywordItemReader;
     private final KeywordItemProcessor keywordItemProcessor;
-    private final JpaKeywordItemWriter jpaKeywordItemWriter;
+    private final KeywordItemWriter keywordItemWriter;
     private final TotalCountStepListener totalCountStepListener;
     private final ChunkItemListener chunkItemListener;
 
@@ -70,10 +70,10 @@ public class KeywordConfig {
     @Bean
     public Step keywordStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<Goods, Goods>chunk(CHUNK_SIZE)
-                .reader(jpaKeywordItemReader)
+                .<String, Goods>chunk(CHUNK_SIZE)
+                .reader(keywordItemReader)
                 .processor(keywordItemProcessor)
-                .writer(jpaKeywordItemWriter)
+                .writer(keywordItemWriter)
                 .listener(totalCountStepListener)
                 .listener(chunkItemListener)
                 .allowStartIfComplete(true)
