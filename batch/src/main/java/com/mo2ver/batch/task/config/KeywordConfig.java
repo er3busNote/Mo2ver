@@ -4,8 +4,11 @@ import com.mo2ver.batch.domain.goods.entity.Goods;
 import com.mo2ver.batch.domain.goods.repository.GoodsRepository;
 import com.mo2ver.batch.task.listener.ChunkItemListener;
 import com.mo2ver.batch.task.listener.TotalCountStepListener;
+import com.mo2ver.batch.task.processor.JpaKeywordItemProcessor;
 import com.mo2ver.batch.task.processor.KeywordItemProcessor;
+import com.mo2ver.batch.task.reader.JpaKeywordItemReader;
 import com.mo2ver.batch.task.reader.KeywordItemReader;
+import com.mo2ver.batch.task.writer.JpaKeywordItemWriter;
 import com.mo2ver.batch.task.writer.KeywordItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,9 @@ public class KeywordConfig {
     private final KeywordItemReader keywordItemReader;
     private final KeywordItemProcessor keywordItemProcessor;
     private final KeywordItemWriter keywordItemWriter;
+    private final JpaKeywordItemReader jpaKeywordItemReader;
+    private final JpaKeywordItemProcessor jpaKeywordItemProcessor;
+    private final JpaKeywordItemWriter jpaKeywordItemWriter;
     private final TotalCountStepListener totalCountStepListener;
     private final ChunkItemListener chunkItemListener;
 
@@ -63,7 +69,7 @@ public class KeywordConfig {
     @Bean
     public Job keywordJob() {
         return jobBuilderFactory.get(JOB_NAME)
-                .start(keywordStep())
+                .start(keywordJpaStep())
                 .build();
     }
 
@@ -74,6 +80,19 @@ public class KeywordConfig {
                 .reader(keywordItemReader)
                 .processor(keywordItemProcessor)
                 .writer(keywordItemWriter)
+                .listener(totalCountStepListener)
+                .listener(chunkItemListener)
+                .allowStartIfComplete(true)
+                .build();
+    }
+
+    @Bean
+    public Step keywordJpaStep() {
+        return stepBuilderFactory.get(STEP_NAME)
+                .<Goods, Goods>chunk(CHUNK_SIZE)
+                .reader(jpaKeywordItemReader)
+                .processor(jpaKeywordItemProcessor)
+                .writer(jpaKeywordItemWriter)
                 .listener(totalCountStepListener)
                 .listener(chunkItemListener)
                 .allowStartIfComplete(true)
