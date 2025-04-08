@@ -12,31 +12,28 @@ public class FilterInfo {
     private boolean isJoin;         // Join 여부
 
     public static <T> FilterInfo of(String column, T value, boolean isJoin) {
+        FilterInfo.FilterInfoBuilder builder = FilterInfo.builder().isJoin(isJoin);
         switch (column) {
             case "goodsName":
-                return FilterInfo.builder()
+                return builder
                         .column(column)
                         .value(String.format("%%%s%%", value))
                         .operation(Operation.LIKE)
-                        .isJoin(isJoin)
                         .build();
             case "minPrice":
-                return FilterInfo.builder()
+                return builder
                         .column("salePrice")
                         .value(value)
                         .operation(Operation.GTE)
-                        .isJoin(isJoin)
                         .build();
             case "maxPrice":
-                return FilterInfo.builder()
+                return builder
                         .column("salePrice")
                         .value(value)
                         .operation(Operation.LTE)
-                        .isJoin(isJoin)
                         .build();
             default:
-                return FilterInfo.builder()
-                        .build();
+                return builder.build();
         }
     }
 }
