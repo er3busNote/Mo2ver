@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CartService {
 
-    protected final CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     public CartResponse addCart(CartInfo cartInfo, Member currentUser){
         return cartRepository.save(cartInfo, currentUser);

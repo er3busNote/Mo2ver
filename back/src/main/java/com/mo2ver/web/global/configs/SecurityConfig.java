@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/menu/**", "/member/**", "/category/**", "/goods/**", "/cart/**", "/banner/**", "/event/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/menu/**", "/member/**", "/category/**", "/goods/**", "/cart/**", "/banner/**", "/event/**", "/search/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
                 .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**").permitAll()

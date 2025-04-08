@@ -16,7 +16,7 @@ public class CachingConfig {
     public CacheManager cacheManager() {
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
         cacheManager.setAllowNullValues(false);
-        cacheManager.setCacheNames(Arrays.asList("cartList"));
+        cacheManager.setCacheNames(Arrays.asList("cartList", "recentList"));
         return cacheManager;
     }
 }
