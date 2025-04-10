@@ -7,7 +7,7 @@ import com.mo2ver.web.domain.search.dto.FilterInfo;
 import com.mo2ver.web.domain.search.dto.request.SearchGoodsRequest;
 import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
 import com.mo2ver.web.domain.search.repository.SearchRepository;
-import com.mo2ver.web.domain.search.validation.CustomSpecification;
+import com.mo2ver.web.domain.search.specification.CustomSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

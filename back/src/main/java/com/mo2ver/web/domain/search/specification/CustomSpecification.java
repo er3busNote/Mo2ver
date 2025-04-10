@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.search.validation;
+package com.mo2ver.web.domain.search.specification;
 
 import com.mo2ver.web.domain.search.dto.FilterInfo;
 import com.mo2ver.web.domain.search.dto.Operation;
