@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EventImageInfo {
 
-    @NotNull(groups = EventImageInfo.Update.class)
+    @NotNull(groups = Update.class)
     private Long eventNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")

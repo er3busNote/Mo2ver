@@ -81,9 +81,9 @@ public class BannerController {
         Long bannerManageNo = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
         return ResponseEntity.created(URI.create("/goods/" + bannerManageNo))
                 .body(ResponseHandler.builder()
-                .status(HttpStatus.CREATED.value())
-                .message("상품전시정보가 저장되었습니다")
-                .build());
+                        .status(HttpStatus.CREATED.value())
+                        .message("상품전시정보가 저장되었습니다")
+                        .build());
     }
 
     @PatchMapping("/goods/update")
