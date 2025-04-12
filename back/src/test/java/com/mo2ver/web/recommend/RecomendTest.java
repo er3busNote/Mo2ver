@@ -1,4 +1,4 @@
-package com.mo2ver.web.search;
+package com.mo2ver.web.recommend;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;

@@ -1,10 +1,10 @@
-package com.mo2ver.web.domain.search.service;
+package com.mo2ver.web.domain.recommend.service;
 
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.entity.Review;
 import com.mo2ver.web.domain.goods.repository.ReviewRepository;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
+import com.mo2ver.web.domain.recommend.dto.response.RecommendGoodsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class RecommendService {
 
     private final ReviewRepository reviewRepository;
 
-    public List<SearchGoodsResponse> findRecommendCosineSimilarity(Integer count, Member currentUser) {
+    public List<RecommendGoodsResponse> findRecommendCosineSimilarity(Integer count, Member currentUser) {
         String memberNo = currentUser.getMemberNo();
 
         // 1. 모든 사용자의 평가 수집하기
@@ -63,7 +63,7 @@ public class RecommendService {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        return recommendedGoods.stream().map(SearchGoodsResponse::of).collect(Collectors.toList());
+        return recommendedGoods.stream().map(RecommendGoodsResponse::of).collect(Collectors.toList());
     }
 
     private <T> double calculateCosineSimilarity(Map<T, Integer> ratings1, Map<T, Integer> ratings2) {

@@ -1,9 +1,9 @@
-package com.mo2ver.web.domain.search.api;
+package com.mo2ver.web.domain.recommend.api;
 
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
-import com.mo2ver.web.domain.search.service.RecommendService;
+import com.mo2ver.web.domain.recommend.dto.response.RecommendGoodsResponse;
+import com.mo2ver.web.domain.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class RecommendController {
      * @return 상품 목록
      */
     @GetMapping("/rank/{count}")
-    public ResponseEntity<List<SearchGoodsResponse>> recommendCosineSimilarity(
+    public ResponseEntity<List<RecommendGoodsResponse>> recommendCosineSimilarity(
             @PathVariable Integer count,
             @CurrentUser Member currentUser
     ) {
