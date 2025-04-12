@@ -104,10 +104,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
                 .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/cart/list").hasAnyRole("USER")                               // 3.1) 장바구니 목록
-                .mvcMatchers(HttpMethod.POST, "/cart/**", "/search/**", "/review/**").hasAnyRole("USER")    // 3.2) 장바구니, 추천, 리뷰 추가
-                .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**").hasAnyRole("USER")                   // 3.3) 장바구니, 리뷰 수정
-                .mvcMatchers(HttpMethod.DELETE, "/cart/**", "/review/**").hasAnyRole("USER")                // 3.4) 장바구니, 리뷰 삭제
+                .mvcMatchers(HttpMethod.GET, "/cart/list", "/recommend/**").hasAnyRole("USER")  // 3.1) 장바구니, 추천 목록
+                .mvcMatchers(HttpMethod.POST, "/cart/**", "/review/**").hasAnyRole("USER")      // 3.2) 장바구니, 리뷰 추가
+                .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**").hasAnyRole("USER")       // 3.3) 장바구니, 리뷰 수정
+                .mvcMatchers(HttpMethod.DELETE, "/cart/**", "/review/**").hasAnyRole("USER")    // 3.4) 장바구니, 리뷰 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
