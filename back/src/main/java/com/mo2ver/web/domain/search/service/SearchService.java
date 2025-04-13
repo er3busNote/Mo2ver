@@ -27,6 +27,7 @@ public class SearchService {
 
     @Transactional
     public Page<SearchGoodsResponse> findGoodsSearch(SearchGoodsRequest searchGoodsRequest, Pageable pageable) {
+        searchGoodsRequest.update();    // 값이 없을 때, 기본값 세팅
 
         List<FilterInfo> filters = new ArrayList<>();
         filters.add(FilterInfo.of("goodsName", searchGoodsRequest.getKeyword(), false));

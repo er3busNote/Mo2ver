@@ -32,9 +32,7 @@ public class SearchTest extends CsrfConfigTest {
         MvcResult result = mockMvc.perform(get("/search/goods")
                         .param("page", "0")
                         .param("size", "12")
-                        .param("keyword", "테")
-                        .param("minPrice", "170000")
-                        .param("maxPrice", "180000"))
+                        .param("keyword", "테"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
