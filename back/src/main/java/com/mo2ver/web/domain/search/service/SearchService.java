@@ -9,11 +9,15 @@ import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
 import com.mo2ver.web.domain.search.repository.SearchRepository;
 import com.mo2ver.web.domain.search.specification.CustomSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SearchService {
@@ -21,14 +25,33 @@ public class SearchService {
     private final SearchRepository searchRepository;
     private final GoodsRepository goodsRepository;
 
-    public List<SearchGoodsResponse> findGoodsSearch(SearchGoodsRequest searchGoodsRequest) {
+    @Transactional
+    public Page<SearchGoodsResponse> findGoodsSearch(SearchGoodsRequest searchGoodsRequest, Pageable pageable) {
 
         List<FilterInfo> filters = new ArrayList<>();
-        filters.add(FilterInfo.of("goodsName", searchGoodsRequest.getName(), false));
+        filters.add(FilterInfo.of("goodsName", searchGoodsRequest.getKeyword(), false));
         filters.add(FilterInfo.of("minPrice", searchGoodsRequest.getMinPrice(), true));
         filters.add(FilterInfo.of("maxPrice", searchGoodsRequest.getMaxPrice(), true));
 
-        List<Goods> goods = this.goodsRepository.findAll(CustomSpecification.bySearchJoinQuery(filters, Goods.class, Price.class));
-        return goods.stream().map(SearchGoodsResponse::of).collect(Collectors.toList());
+        Page<Goods> goods = this.goodsRepository.findAll(CustomSpecification.bySearchJoinQuery(filters, Goods.class, Price.class), pageable);
+        return goods.map(SearchGoodsResponse::of);
+    }
+
+    public void saveSearchForUser(String userId, String keyword) {
+        List<String> recentList = searchRepository.saveSearchForUser(userId, keyword);
+        log.info("Repository updateRecentList {} => {}", userId, recentList);
+    }
+
+    public void saveSearchForGuest(String clientId, String keyword) {
+        List<String> recentList = searchRepository.saveSearchForGuest(clientId, keyword);
+        log.info("Repository updateRecentList {} => {}", clientId, recentList);
+    }
+
+    public List<String> getRecentForUser(String userId) {
+        return searchRepository.findByUser(userId);
+    }
+
+    public List<String> getRecentForGuest(String clientId) {
+        return searchRepository.findByGuest(clientId);
     }
 }
