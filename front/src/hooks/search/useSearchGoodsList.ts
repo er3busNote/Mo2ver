@@ -45,7 +45,7 @@ const useSearchGoodsList = ({
 	const setKeywordData = useCallback(
 		debounce((inputText: string) => {
 			setKeyword(inputText);
-		}, 1000),
+		}, 1000 * 60),
 		[]
 	);
 
