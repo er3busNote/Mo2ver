@@ -1,8 +1,11 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
+import { GoodsData } from '@api/types';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import {
 	Box,
 	Grid,
@@ -23,12 +26,12 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { GoodsData } from '@api/types';
 import MainIcon from '@assets/logo.svg?react';
 
 interface AppSearchProps {
 	title: string;
 	description: string;
+	search: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 }
 
@@ -152,6 +155,7 @@ const AppSearchItems: FC<AppSearchItemsProps> = ({
 const AppSearchPC: FC<AppSearchProps> = ({
 	title,
 	description,
+	search,
 	goodsRankData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -159,7 +163,13 @@ const AppSearchPC: FC<AppSearchProps> = ({
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
+	const [userInput, setUserInput] = useState('');
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+	const [data, setPage, setKeywordData] = useSearchGoodsList({
+		search,
+		keyword,
+		setKeyword,
+	});
 
 	// (Diff) focus는 focusing하는 boolean값 ↔ open은 list를 출력하는 boolean값
 	const showAnchorEl = (event: ChangeEvent<HTMLInputElement>) => {
@@ -181,7 +191,8 @@ const AppSearchPC: FC<AppSearchProps> = ({
 			setFocus(true);
 			showAnchorEl(event); // Popper Open
 		}
-		setKeyword(text);
+		setUserInput(text);
+		setKeywordData(text);
 	};
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
@@ -189,13 +200,10 @@ const AppSearchPC: FC<AppSearchProps> = ({
 			event.preventDefault();
 		}
 	};
-	const searchClick = (text: string) => {
-		setKeyword(text);
-		closeAnchorEl(); // → Popper Close
-	};
 
 	const cancelClick = () => {
-		setKeyword('');
+		setUserInput('');
+		setKeywordData('');
 		setFocus(false);
 		closeAnchorEl(); // → Popper 닫기
 	};
@@ -281,7 +289,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 										<InputBase
 											sx={inputBase}
 											placeholder="오늘 뭐 괜찮은 옷 있을까?"
-											value={keyword}
+											value={userInput}
 											onChange={searchOnChange}
 											onKeyPress={searchOnKeyPress}
 										/>

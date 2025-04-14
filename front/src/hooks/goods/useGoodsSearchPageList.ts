@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsSearchPage, CategoryPageData } from '@api/types';
+import { GoodsSearchPage, GoodsPageData } from '@api/types';
 
 interface GoodsSearchProps {
 	goodsName: string;
@@ -22,10 +22,10 @@ const useGoodsSearchPageList = ({
 	mediumCategoryCode,
 	smallCategoryCode,
 	goods,
-}: GoodsSearchProps): [CategoryPageData, Dispatch<SetStateAction<number>>] => {
+}: GoodsSearchProps): [GoodsPageData, Dispatch<SetStateAction<number>>] => {
 	const [page, setPage] = useState(0);
-	const [data, setData] = useState<CategoryPageData>(
-		new Object() as CategoryPageData
+	const [data, setData] = useState<GoodsPageData>(
+		new Object() as GoodsPageData
 	);
 
 	const fetchAndSetData = useCallback(async () => {

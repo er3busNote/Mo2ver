@@ -8,6 +8,7 @@ import category from './category';
 import banner from './banner';
 import event from './event';
 import cart from './cart';
+import search from './search';
 import image from './image';
 
 // 인스턴스 API 생성
@@ -30,6 +31,7 @@ const api = {
 	banner: banner(instance),
 	event: event(instance),
 	cart: cart(instance),
+	search: search(instance),
 	image: image(instance),
 };
 

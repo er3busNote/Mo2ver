@@ -1,6 +1,7 @@
 import React, { FC, useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { ActionCreatorsMapObject } from 'redux';
 import AppFooterMenu from './AppFooterMenu';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { changeNext, menuActive } from '@store/index';
@@ -25,6 +26,7 @@ interface AppFooterProps {
 	width: number;
 	title: string;
 	description: string;
+	search: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
@@ -33,6 +35,7 @@ const AppFooter: FC<AppFooterProps> = ({
 	width,
 	title,
 	description,
+	search,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -92,6 +95,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						categoryData={categoryData}
 					/>
 					<AppSearchItemsMobile
+						search={search}
 						openSearch={openSearch}
 						setSearchOpen={setSearchOpen}
 						goodsRankData={goodsRankData}

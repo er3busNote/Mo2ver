@@ -51,6 +51,7 @@ const drawerMenuWidth = 200;
 interface AppProps {
 	title: string;
 	description: string;
+	search: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
@@ -65,11 +66,13 @@ interface LayoutDefaultProps {
 	menu: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
+	search: ActionCreatorsMapObject;
 }
 
 const AppPC: FC<AppProps> = ({
 	title,
 	description,
+	search,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -106,6 +109,7 @@ const AppPC: FC<AppProps> = ({
 				<AppSearchPC
 					title={title}
 					description={description}
+					search={search}
 					goodsRankData={goodsRankData}
 				/>
 			</Box>
@@ -135,6 +139,7 @@ const AppPC: FC<AppProps> = ({
 const AppMobile: FC<AppProps> = ({
 	title,
 	description,
+	search,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -147,6 +152,7 @@ const AppMobile: FC<AppProps> = ({
 			<AppSearchMobile
 				title={title}
 				description={description}
+				search={search}
 				goodsRankData={goodsRankData}
 			/>
 			<AppMenuMobile
@@ -168,6 +174,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	menu,
 	goods,
 	category,
+	search,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -223,6 +230,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppPC
 						title={title}
 						description={description}
+						search={search}
 						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
@@ -231,6 +239,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppMobile
 						title={title}
 						description={description}
+						search={search}
 						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
@@ -240,6 +249,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					width={drawerMenuWidth}
 					title={title}
 					description={description}
+					search={search}
 					goodsRankData={goodsRankData}
 					categoryData={categoryData}
 				/>
@@ -275,6 +285,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	menu: bindActionCreators(Api.menu, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
+	search: bindActionCreators(Api.search, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContent);

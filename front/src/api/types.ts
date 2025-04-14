@@ -87,18 +87,7 @@ interface GoodsSearchPage {
 	smallCategoryCode: string;
 }
 
-// 3. Category Type
-interface CategoryData {
-	categoryCode: string;
-	categoryName: string;
-	upperCategoryCode: string;
-	sortSequence: number;
-	categoryLevel: number;
-	sortOrdinal: string;
-	useYesNo: string;
-}
-
-interface CategoryPageData {
+interface GoodsPageData {
 	content: Array<GoodsData>;
 	empty: boolean;
 	first: boolean;
@@ -124,6 +113,17 @@ interface CategoryPageData {
 	};
 	totalElements: number;
 	totalPages: number;
+}
+
+// 3. Category Type
+interface CategoryData {
+	categoryCode: string;
+	categoryName: string;
+	upperCategoryCode: string;
+	sortSequence: number;
+	categoryLevel: number;
+	sortOrdinal: string;
+	useYesNo: string;
 }
 
 interface CategoryDataInfo {
@@ -351,6 +351,13 @@ interface CartPageData {
 	cartList: Array<CartData>;
 }
 
+// 7. Search Type
+interface KeywordSearchPage {
+	page: number;
+	size: number;
+	keyword: string;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -384,7 +391,7 @@ export type {
 	GoodsPage,
 	GoodsSearchPage,
 	CategoryData,
-	CategoryPageData,
+	GoodsPageData,
 	CategoryDataInfo,
 	CategoryDataGroup,
 	BannerData,
@@ -400,6 +407,7 @@ export type {
 	EventDisplayData,
 	CartData,
 	CartPageData,
+	KeywordSearchPage,
 	PageData,
 	CodeData,
 	FileData,

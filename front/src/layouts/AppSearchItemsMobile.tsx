@@ -6,6 +6,9 @@ import React, {
 	ChangeEvent,
 	KeyboardEvent,
 } from 'react';
+import { ActionCreatorsMapObject } from 'redux';
+import { GoodsData } from '@api/types';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import {
 	Box,
 	Paper,
@@ -26,7 +29,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import ErrorIcon from '@mui/icons-material/Error';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { GoodsData } from '@api/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -62,6 +64,7 @@ interface SearchPopularProps {
 }
 
 interface AppSearchItemsMobileProps {
+	search: ActionCreatorsMapObject;
 	openSearch: boolean;
 	setSearchOpen: Dispatch<SetStateAction<boolean>>;
 	goodsRankData: Array<GoodsData>;
@@ -184,6 +187,7 @@ const SearchRecommend: FC<SearchProps> = ({ base, header }): JSX.Element => {
 };
 
 const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
+	search,
 	openSearch,
 	setSearchOpen,
 	goodsRankData,
@@ -191,6 +195,12 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
+	const [userInput, setUserInput] = useState('');
+	const [data, setPage, setKeywordData] = useSearchGoodsList({
+		search,
+		keyword,
+		setKeyword,
+	});
 
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const text = event.currentTarget.value;
@@ -202,7 +212,8 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 			setFocus(true);
 			setOpen(true);
 		}
-		setKeyword(text);
+		setUserInput(text);
+		setKeywordData(text);
 	};
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
@@ -210,13 +221,10 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 			event.preventDefault();
 		}
 	};
-	const searchClick = (text: string) => {
-		setKeyword(text);
-		setOpen(false);
-	};
 
 	const cancelClick = () => {
-		setKeyword('');
+		setUserInput('');
+		setKeywordData('');
 		setFocus(false);
 		setOpen(false);
 	};
@@ -280,7 +288,7 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 								<InputBase
 									sx={inputBase}
 									placeholder="무슨 옷 입을까?"
-									value={keyword}
+									value={userInput}
 									onChange={searchOnChange}
 									onKeyPress={searchOnKeyPress}
 								/>

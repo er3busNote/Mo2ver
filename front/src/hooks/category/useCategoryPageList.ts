@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsPage, CategoryPageData } from '@api/types';
+import { GoodsPage, GoodsPageData } from '@api/types';
 
 interface GoodsListProps {
 	categoryCode: string;
@@ -18,10 +18,10 @@ const useCategoryPageList = ({
 	categoryCode,
 	categoryType,
 	goods,
-}: GoodsListProps): [CategoryPageData, Dispatch<SetStateAction<number>>] => {
+}: GoodsListProps): [GoodsPageData, Dispatch<SetStateAction<number>>] => {
 	const [page, setPage] = useState(0);
-	const [data, setData] = useState<CategoryPageData>(
-		new Object() as CategoryPageData
+	const [data, setData] = useState<GoodsPageData>(
+		new Object() as GoodsPageData
 	);
 
 	const fetchAndSetData = useCallback(async () => {
