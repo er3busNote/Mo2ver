@@ -10,8 +10,11 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
+import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo, MenuState, SubMenuInfo } from '@store/types';
+import { CategoryData, CategoryDataGroup } from '@api/types';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import {
 	Box,
 	Grid,
@@ -37,7 +40,6 @@ import { ClickAwayListener } from '@mui/base';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { CategoryData, CategoryDataGroup } from '@api/types';
 import { divideArray } from '@utils/divide';
 
 const menuFontSize = '15px';
@@ -48,6 +50,7 @@ interface AppHeaderMenuProps {
 	scrolled: boolean;
 	title: string;
 	description: string;
+	search: ActionCreatorsMapObject;
 	categoryData: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
@@ -351,53 +354,42 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	scrolled,
 	title,
 	description,
+	search,
 	categoryData,
 	menus,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
-	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-	// (Diff) focus는 focusing하는 boolean값 ↔ open은 list를 출력하는 boolean값
-	const showAnchorEl = (event: ChangeEvent<HTMLInputElement>) => {
-		setAnchorEl(event.currentTarget);
-		setOpen(true);
-	};
-	const closeAnchorEl = () => {
-		setAnchorEl(null);
-		setOpen(false);
-	};
+	const [userInput, setUserInput] = useState('');
+	const [data, setPage, setKeywordData] = useSearchGoodsList({
+		search,
+		keyword,
+		setKeyword,
+	});
 
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const text = event.currentTarget.value;
 		if (text === '') {
 			setFocus(false);
-			closeAnchorEl(); // → Popper Close
 		} else {
 			// fetchData(0, text); // 초기화
 			setFocus(true);
-			showAnchorEl(event); // Popper Open
 		}
-		setKeyword(text);
+		setUserInput(text);
+		setKeywordData(text);
 	};
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
-			closeAnchorEl(); // → Popper Close
 			event.preventDefault();
 		}
 	};
-	const searchClick = (text: string) => {
-		setKeyword(text);
-		closeAnchorEl(); // → Popper Close
-	};
 
 	const cancelClick = () => {
-		setKeyword('');
+		setUserInput('');
+		setKeywordData('');
 		setFocus(false);
-		closeAnchorEl(); // → Popper 닫기
 	};
 
 	const activeMenuClick = (
@@ -510,7 +502,7 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 									<InputBase
 										sx={inputBase}
 										placeholder="오늘 뭐 괜찮은 옷 있을까?"
-										value={keyword}
+										value={userInput}
 										onChange={searchOnChange}
 										onKeyPress={searchOnKeyPress}
 									/>

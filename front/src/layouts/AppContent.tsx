@@ -117,6 +117,7 @@ const AppPC: FC<AppProps> = ({
 				scrolled={scrolled}
 				title={title}
 				description={description}
+				search={search}
 				categoryData={categoryData}
 			/>
 			{location.pathname === '/' ? (
