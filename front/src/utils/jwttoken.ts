@@ -1,5 +1,5 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { isEmpty } from './validation';
+import { isEmpty } from 'lodash';
 
 const JWT_ACCESS_TOKEN = 'accessToken';
 const JWT_REFRESH_TOKEN_EXPIRATION = 'refreshTokenExpiration';

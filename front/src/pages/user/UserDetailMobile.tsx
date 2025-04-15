@@ -29,6 +29,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
+import { without } from 'lodash';
 
 type Position = 'relative' | 'absolute' | 'fixed';
 type DetailType = 'Delivery' | 'Register';
@@ -69,7 +70,7 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 		if (!isAnimating) {
 			setAnimating(true);
 			setDetail(item);
-			setButton(DETAIL.filter((i) => i !== item));
+			setButton(without(DETAIL, item));
 		}
 	};
 

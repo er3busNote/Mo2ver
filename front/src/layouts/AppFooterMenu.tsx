@@ -28,6 +28,7 @@ import {
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { has } from 'lodash';
 
 declare module 'react' {
 	interface CSSProperties {
@@ -238,16 +239,12 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 										ldata.categoryCode,
 										'L',
 										middleCategoryData &&
-											Object.keys(middleCategoryData).includes(
-												ldata.categoryCode
-											)
+											has(middleCategoryData, ldata.categoryCode)
 									)
 								}
 							>
 								{middleCategoryData &&
-									Object.keys(middleCategoryData).includes(
-										ldata.categoryCode
-									) &&
+									has(middleCategoryData, ldata.categoryCode) &&
 									middleCategoryData[ldata.categoryCode].map(
 										(mdata: CategoryData, i: number) => {
 											return (
@@ -262,16 +259,12 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 															mdata.categoryCode,
 															'M',
 															smallCategoryData &&
-																Object.keys(smallCategoryData).includes(
-																	mdata.categoryCode
-																)
+																has(smallCategoryData, mdata.categoryCode)
 														)
 													}
 												>
 													{smallCategoryData &&
-														Object.keys(smallCategoryData).includes(
-															mdata.categoryCode
-														) &&
+														has(smallCategoryData, mdata.categoryCode) &&
 														smallCategoryData[mdata.categoryCode].map(
 															(sdata: CategoryData, j: number) => {
 																return (

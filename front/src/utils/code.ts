@@ -1,5 +1,5 @@
 import { CodeData } from '@api/types';
-import { isEmpty } from './validation';
+import { isEmpty, has } from 'lodash';
 
 const keyMap = {
 	commonCode: 'value',
@@ -19,7 +19,7 @@ const renameKeys = (
 	key: string
 ) => {
 	if (isEmpty(codeDatalist)) return [];
-	if (codeDatalist && !Object.keys(codeDatalist).includes(key)) return [];
+	if (codeDatalist && !has(codeDatalist, key)) return [];
 	if (codeDatalist && codeDatalist[key]) {
 		return codeDatalist[key].map((item: CodeData) => renameKey(item));
 	}

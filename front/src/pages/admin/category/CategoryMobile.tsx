@@ -11,6 +11,7 @@ import {
 import CategoryForm from './CategoryForm';
 import { CategoryData } from '@api/types';
 import { CategoryFormValues } from '@pages/admin/types';
+import { has, filter } from 'lodash';
 
 interface CategoryProps {
 	onSubmit: (
@@ -114,21 +115,22 @@ const CategoryMobile: FC<CategoryProps> = ({
 	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
 	const treeCategoryData = () => {
 		// 대 카테고리
-		const largeCategoyData = categoryData.filter(
-			(data) => data.categoryLevel === 1 && data.useYesNo === 'Y'
-		);
+		const largeCategoyData = filter(categoryData, {
+			categoryLevel: 1,
+			useYesNo: 'Y',
+		});
 		setLargeCategoyData(largeCategoyData);
 		// 중/소 카테고리
 		const middleCategoyData = new Object() as CategoryDataInfo;
 		const smallCategoyData = new Object() as CategoryDataInfo;
 		categoryData.forEach((data) => {
 			if (data.categoryLevel === 2) {
-				if (!Object.keys(middleCategoyData).includes(data.upperCategoryCode)) {
+				if (!has(middleCategoyData, data.upperCategoryCode)) {
 					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
 				}
 				middleCategoyData[data.upperCategoryCode].push(data);
 			} else if (data.categoryLevel === 3) {
-				if (!Object.keys(smallCategoyData).includes(data.upperCategoryCode)) {
+				if (!has(smallCategoyData, data.upperCategoryCode)) {
 					smallCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
 				}
 				smallCategoyData[data.upperCategoryCode].push(data);
@@ -176,9 +178,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 										labelText={ldata.categoryName}
 									>
 										{middleCategoyData &&
-											Object.keys(middleCategoyData).includes(
-												ldata.categoryCode
-											) &&
+											has(middleCategoyData, ldata.categoryCode) &&
 											middleCategoyData[ldata.categoryCode].map(
 												(mdata: CategoryData, m: number) => (
 													<StyledTreeItem
@@ -187,9 +187,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 														labelText={mdata.categoryName}
 													>
 														{smallCategoyData &&
-															Object.keys(smallCategoyData).includes(
-																mdata.categoryCode
-															) &&
+															has(smallCategoyData, mdata.categoryCode) &&
 															smallCategoyData[mdata.categoryCode].map(
 																(sdata: CategoryData, s: number) => (
 																	<StyledTreeItem

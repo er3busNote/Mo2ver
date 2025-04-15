@@ -1,8 +1,10 @@
+import { difference, intersection, unionBy } from 'lodash';
+
 const not = <T>(source: readonly T[], target: readonly T[]) => {
-	return source.filter((value) => target.indexOf(value) === -1);
+	return difference(source, target);
 };
-const intersection = <T>(source: readonly T[], target: readonly T[]) => {
-	return source.filter((value) => target.indexOf(value) !== -1);
+const intersect = <T>(source: readonly T[], target: readonly T[]) => {
+	return intersection(source, target);
 };
 
 const union = <T, K extends keyof T>(
@@ -10,12 +12,7 @@ const union = <T, K extends keyof T>(
 	source: readonly T[],
 	key: K
 ) => {
-	return target.concat(
-		source.filter(
-			(sourceItem) =>
-				!target.some((targetItem) => targetItem[key] === sourceItem[key])
-		)
-	);
+	return unionBy(target, source, key);
 };
 
-export { not, intersection, union };
+export { not, intersect, union };

@@ -7,26 +7,13 @@ import {
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { KeywordSearchPage, GoodsPageData } from '@api/types';
-import { isNotEmpty } from '@utils/validation';
+import { isEmpty, debounce } from 'lodash';
 
 interface GoodsSearchProps {
 	keyword: string;
 	setKeyword: Dispatch<SetStateAction<string>>;
 	search: ActionCreatorsMapObject;
 }
-
-const debounce = <T extends (...args: any[]) => void>(
-	callback: T,
-	delay: number
-): ((...args: Parameters<T>) => void) => {
-	let timerId: ReturnType<typeof setTimeout> | null = null;
-	return (...args) => {
-		if (timerId) clearTimeout(timerId);
-		timerId = setTimeout(() => {
-			callback(...args);
-		}, delay);
-	};
-};
 
 const useSearchGoodsList = ({
 	keyword,
@@ -50,7 +37,7 @@ const useSearchGoodsList = ({
 	);
 
 	const fetchAndSetData = useCallback(async () => {
-		if (isNotEmpty(keyword)) {
+		if (!isEmpty(keyword)) {
 			const keywordSearchPage: KeywordSearchPage = {
 				page: page,
 				size: 12,

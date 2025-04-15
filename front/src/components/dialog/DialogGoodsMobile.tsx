@@ -30,7 +30,8 @@ import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerGoodsDetailValues } from '@pages/admin/types';
 import { isMobile } from 'react-device-detect';
-import { not, intersection, union } from '@utils/set';
+import { not, intersect, union } from '@utils/set';
+import { some, indexOf, includes } from 'lodash';
 
 interface DialogProps {
 	open: boolean;
@@ -82,8 +83,8 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 	const [right, setRight] = useState<readonly GoodsData[]>([]);
 	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
 
-	const leftChecked = intersection(checked, left);
-	const rightChecked = intersection(checked, right);
+	const leftChecked = intersect(checked, left);
+	const rightChecked = intersect(checked, right);
 
 	useEffect(() => {
 		setLeft(goodsData.content ?? []);
@@ -109,18 +110,20 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 
 	useEffect(() => {
 		if (
-			!mediumCategoryData
-				.map((data: CategoryData) => data.categoryCode)
-				.includes(mediumCategoryCode)
+			!some(
+				mediumCategoryData,
+				(data: CategoryData) => data.categoryCode === mediumCategoryCode
+			)
 		) {
 			setMediumCategoryCode(
 				mediumCategoryData.length > 0 ? mediumCategoryData[0].categoryCode : ''
 			);
 		}
 		if (
-			!smallCategoryData
-				.map((data: CategoryData) => data.categoryCode)
-				.includes(smallCategoryCode)
+			!some(
+				smallCategoryData,
+				(data: CategoryData) => data.categoryCode === smallCategoryCode
+			)
 		) {
 			setSmallCategoryCode(
 				smallCategoryData.length > 0 ? smallCategoryData[0].categoryCode : ''
@@ -155,7 +158,7 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 	};
 
 	const handleToggle = (value: GoodsData) => () => {
-		const currentIndex = checked.indexOf(value);
+		const currentIndex = indexOf(checked, value);
 		const newChecked = [...checked];
 
 		if (currentIndex === -1) {
@@ -235,7 +238,7 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 						>
 							<ListItemIcon sx={{ minWidth: '42px' }}>
 								<Checkbox
-									checked={checked.indexOf(value) !== -1}
+									checked={includes(checked, value)}
 									tabIndex={-1}
 									disableRipple
 									sx={checkBox}

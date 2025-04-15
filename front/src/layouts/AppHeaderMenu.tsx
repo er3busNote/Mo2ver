@@ -41,6 +41,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { divideArray } from '@utils/divide';
+import { has } from 'lodash';
 
 const menuFontSize = '15px';
 
@@ -137,17 +138,9 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
 	// 중 카테고리 → 3등분
-	let divideData = new Array([
-		new Array<CategoryData>(),
-		new Array<CategoryData>(),
-		new Array<CategoryData>(),
-	]);
-	if (
-		hover !== '' &&
-		middleCategoryData &&
-		Object.keys(middleCategoryData).includes(hover)
-	) {
-		divideData = divideArray(middleCategoryData[hover]);
+	let divideData: Array<Array<CategoryData>> = [[], [], []];
+	if (hover !== '' && middleCategoryData && has(middleCategoryData, hover)) {
+		divideData = divideArray(middleCategoryData[hover], 3);
 	}
 
 	const showClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -190,7 +183,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 	const submenu: SxProps<Theme> = {
 		display:
 			hover === '' || // → 처음 랜더링 시, 깜빡이는 현상 방지
-			(middleCategoryData && !Object.keys(middleCategoryData).includes(hover))
+			(middleCategoryData && !has(middleCategoryData, hover))
 				? 'none'
 				: 'inline-flex',
 	};
@@ -280,7 +273,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 						</Paper>
 						<Box sx={{ width: menuWidthSize, ...submenu, ...overflowChildren }}>
 							<Paper sx={overflowTable}>
-								{divideData.map((divide: any, k: number) => (
+								{divideData.map((divide: Array<CategoryData>, k: number) => (
 									<Paper
 										key={k}
 										id={'sub-menu'}
@@ -307,9 +300,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 													/>
 												</MenuItem>
 												{smallCategoryData &&
-													Object.keys(smallCategoryData).includes(
-														mdata.categoryCode
-													) &&
+													has(smallCategoryData, mdata.categoryCode) &&
 													smallCategoryData[mdata.categoryCode].map(
 														(sdata: CategoryData, j: number) => (
 															<MenuItem

@@ -24,6 +24,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
 import { isDesktop } from 'react-device-detect';
+import { has } from 'lodash';
 
 interface AppMenuProps {
 	title: string;
@@ -69,7 +70,7 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 
 	const targetData =
 		middleCategoyData &&
-		Object.keys(middleCategoyData).includes(largeCategory.categoryCode) &&
+		has(middleCategoyData, largeCategory.categoryCode) &&
 		middleCategoyData[largeCategory.categoryCode];
 
 	const handleClick = (

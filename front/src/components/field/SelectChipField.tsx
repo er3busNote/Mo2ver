@@ -13,6 +13,7 @@ import {
 	FormHelperText,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { without } from 'lodash';
 
 const fontSize_xs = '11px';
 const fontSize_sm = '12px';
@@ -46,7 +47,7 @@ const RenderSelectChipField: FC<RenderSelectChipFieldProps> = ({
 	};
 
 	const handleDeleteChip = (chipToDelete: string) => {
-		onChange(value.filter((chip: string) => chip !== chipToDelete));
+		onChange(without(value, chipToDelete));
 	};
 
 	const selectForm: SxProps<Theme> = {

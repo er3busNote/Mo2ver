@@ -1,21 +1,19 @@
-const divideArray = (data: any) => {
-	const length = data.length;
+const divideArray = <T>(data: T[], count: number): T[][] => {
+	const result: T[][] = [];
+	const baseSize = Math.floor(data.length / count);
+	let remainder = data.length % count;
 
-	if (length === 1) {
-		return [[data[0]], [], []];
-	} else if (length === 2) {
-		return [[data[0]], [data[1]], []];
-	} else if (length === 3) {
-		return [[data[0]], [data[1]], [data[2]]];
-	} else if (length > 3) {
-		const chunkSize = Math.floor(length / 3);
-		const firstChunk = data.slice(0, chunkSize);
-		const secondChunk = data.slice(chunkSize, chunkSize * 2);
-		const thirdChunk = data.slice(chunkSize * 2);
-		return [firstChunk, secondChunk, thirdChunk];
+	let start = 0;
+
+	for (let i = 0; i < count; i++) {
+		const extra = remainder > 0 ? 1 : 0;
+		const end = start + baseSize + extra;
+		result.push(data.slice(start, end));
+		start = end;
+		remainder--;
 	}
 
-	return [[], [], []];
+	return result;
 };
 
 export { divideArray };
