@@ -52,6 +52,7 @@ interface AppProps {
 	title: string;
 	description: string;
 	search: ActionCreatorsMapObject;
+	recommend: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
@@ -67,12 +68,14 @@ interface LayoutDefaultProps {
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
 	search: ActionCreatorsMapObject;
+	recommend: ActionCreatorsMapObject;
 }
 
 const AppPC: FC<AppProps> = ({
 	title,
 	description,
 	search,
+	recommend,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -110,6 +113,7 @@ const AppPC: FC<AppProps> = ({
 					title={title}
 					description={description}
 					search={search}
+					recommend={recommend}
 					goodsRankData={goodsRankData}
 				/>
 			</Box>
@@ -141,6 +145,7 @@ const AppMobile: FC<AppProps> = ({
 	title,
 	description,
 	search,
+	recommend,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -154,6 +159,7 @@ const AppMobile: FC<AppProps> = ({
 				title={title}
 				description={description}
 				search={search}
+				recommend={recommend}
 				goodsRankData={goodsRankData}
 			/>
 			<AppMenuMobile
@@ -176,6 +182,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	goods,
 	category,
 	search,
+	recommend,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -232,6 +239,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 						title={title}
 						description={description}
 						search={search}
+						recommend={recommend}
 						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
@@ -241,6 +249,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 						title={title}
 						description={description}
 						search={search}
+						recommend={recommend}
 						goodsRankData={goodsRankData}
 						categoryData={categoryData}
 					/>
@@ -251,6 +260,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					title={title}
 					description={description}
 					search={search}
+					recommend={recommend}
 					goodsRankData={goodsRankData}
 					categoryData={categoryData}
 				/>
@@ -287,6 +297,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
 	search: bindActionCreators(Api.search, dispatch),
+	recommend: bindActionCreators(Api.recommend, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContent);

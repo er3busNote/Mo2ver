@@ -5,7 +5,9 @@ import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { GoodsData } from '@api/types';
+import { isAuthenticated } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
+import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
 	Grid,
@@ -32,6 +34,7 @@ interface AppSearchProps {
 	title: string;
 	description: string;
 	search: ActionCreatorsMapObject;
+	recommend: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 }
 
@@ -47,11 +50,8 @@ const SearchDivider: FC = (): JSX.Element => {
 				variant="middle"
 				sx={{
 					ml: '5px',
-					mr: '-2px',
-					mt: '10px',
-					mb: 0,
+					mb: '1px',
 					height: '0.6rem',
-					display: 'inline-flex',
 					borderColor: '#E1E3E3',
 				}}
 			/>
@@ -156,6 +156,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 	title,
 	description,
 	search,
+	recommend,
 	goodsRankData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -169,6 +170,11 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		search,
 		keyword,
 		setKeyword,
+	});
+	const recommendRankData = useRecommendRankList({
+		count: 5,
+		isAuthenticated: isAuthenticated(),
+		recommend,
 	});
 
 	// (Diff) focus는 focusing하는 boolean값 ↔ open은 list를 출력하는 boolean값
@@ -325,66 +331,45 @@ const AppSearchPC: FC<AppSearchProps> = ({
 								justifyContent: 'flex-end',
 							}}
 						>
-							<Grid container spacing={1} sx={{ width: 400 }}>
-								<Grid item>
-									<Typography
-										color="#666"
-										align="center"
-										sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
-									>
-										추천검색어
-									</Typography>
+							{isAuthenticated() && recommendRankData && (
+								<Grid container spacing={1} sx={{ width: 400 }}>
+									<Grid item>
+										<Typography
+											color="#666"
+											align="center"
+											sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
+										>
+											추천검색어
+										</Typography>
+									</Grid>
+									{recommendRankData.length === 0 ? (
+										<Grid item>
+											<Typography
+												color="#999"
+												align="center"
+												sx={{ fontSize: searchFontSize }}
+											>
+												추천검색어가 없습니다.
+											</Typography>
+										</Grid>
+									) : (
+										recommendRankData.map((data: GoodsData, index: number) => (
+											<Grid key={index} item sx={{ display: 'flex' }}>
+												<Typography
+													color="#999"
+													align="center"
+													sx={{ fontSize: searchFontSize }}
+												>
+													{data.goodsName}
+												</Typography>
+												{recommendRankData.length - 1 > index && (
+													<SearchDivider />
+												)}
+											</Grid>
+										))
+									)}
 								</Grid>
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										설기획세트
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										ddr5-4800
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										HP Z 모니터
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										rtx 3080ti
-									</Typography>
-								</Grid>
-								<SearchDivider />
-								<Grid item>
-									<Typography
-										color="#999"
-										align="center"
-										sx={{ fontSize: searchFontSize }}
-									>
-										6900xt
-									</Typography>
-								</Grid>
-							</Grid>
+							)}
 						</Box>
 					</Grid>
 				</Grid>

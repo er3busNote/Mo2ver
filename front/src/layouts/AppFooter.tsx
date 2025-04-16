@@ -27,6 +27,7 @@ interface AppFooterProps {
 	title: string;
 	description: string;
 	search: ActionCreatorsMapObject;
+	recommend: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
 	categoryData: CategoryDataGroup;
 }
@@ -36,6 +37,7 @@ const AppFooter: FC<AppFooterProps> = ({
 	title,
 	description,
 	search,
+	recommend,
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
@@ -96,6 +98,7 @@ const AppFooter: FC<AppFooterProps> = ({
 					/>
 					<AppSearchItemsMobile
 						search={search}
+						recommend={recommend}
 						openSearch={openSearch}
 						setSearchOpen={setSearchOpen}
 						goodsRankData={goodsRankData}

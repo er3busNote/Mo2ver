@@ -8,7 +8,9 @@ import React, {
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { GoodsData } from '@api/types';
+import { isAuthenticated } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
+import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
 	Paper,
@@ -63,8 +65,15 @@ interface SearchPopularProps {
 	goodsRankData: Array<GoodsData>;
 }
 
+interface SearchRecommendProps {
+	base: SxProps<Theme>;
+	header: SxProps<Theme>;
+	recommendRankData: Array<GoodsData>;
+}
+
 interface AppSearchItemsMobileProps {
 	search: ActionCreatorsMapObject;
+	recommend: ActionCreatorsMapObject;
 	openSearch: boolean;
 	setSearchOpen: Dispatch<SetStateAction<boolean>>;
 	goodsRankData: Array<GoodsData>;
@@ -169,18 +178,22 @@ const SearchPopular: FC<SearchPopularProps> = ({
 	);
 };
 
-const SearchRecommend: FC<SearchProps> = ({ base, header }): JSX.Element => {
+const SearchRecommend: FC<SearchRecommendProps> = ({
+	base,
+	header,
+	recommendRankData,
+}): JSX.Element => {
 	return (
 		<Paper sx={base}>
 			<Typography variant="h2" align="center" sx={header}>
 				추천 검색어
 			</Typography>
 			<Box sx={{ p: 2 }}>
-				<RecommendButton variant="outlined">설기획세트</RecommendButton>
-				<RecommendButton variant="outlined">ddr5-4800</RecommendButton>
-				<RecommendButton variant="outlined">HP Z 모니터</RecommendButton>
-				<RecommendButton variant="outlined">rtx 3080ti</RecommendButton>
-				<RecommendButton variant="outlined">6900xt</RecommendButton>
+				{recommendRankData.map((data: GoodsData, index: number) => (
+					<RecommendButton key={index} variant="outlined">
+						{data.goodsName}
+					</RecommendButton>
+				))}
 			</Box>
 		</Paper>
 	);
@@ -188,6 +201,7 @@ const SearchRecommend: FC<SearchProps> = ({ base, header }): JSX.Element => {
 
 const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 	search,
+	recommend,
 	openSearch,
 	setSearchOpen,
 	goodsRankData,
@@ -200,6 +214,11 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 		search,
 		keyword,
 		setKeyword,
+	});
+	const recommendRankData = useRecommendRankList({
+		count: 5,
+		isAuthenticated: isAuthenticated(),
+		recommend,
 	});
 
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -323,7 +342,11 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 							/>
 						</SwiperSlide>
 						<SwiperSlide>
-							<SearchRecommend base={searchBase} header={searchHeader} />
+							<SearchRecommend
+								base={searchBase}
+								header={searchHeader}
+								recommendRankData={recommendRankData}
+							/>
 						</SwiperSlide>
 					</Swiper>
 				</Box>

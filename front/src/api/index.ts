@@ -9,6 +9,7 @@ import banner from './banner';
 import event from './event';
 import cart from './cart';
 import search from './search';
+import recommend from './recommend';
 import image from './image';
 
 // 인스턴스 API 생성
@@ -32,6 +33,7 @@ const api = {
 	event: event(instance),
 	cart: cart(instance),
 	search: search(instance),
+	recommend: recommend(instance),
 	image: image(instance),
 };
 
