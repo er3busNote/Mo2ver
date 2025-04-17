@@ -6,7 +6,7 @@ import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { GoodsData } from '@api/types';
-import { isAuthenticated } from '@utils/jwttoken';
+import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
@@ -97,7 +97,7 @@ const AppSearchItemsPC: FC<AppSearchItemsProps> = ({
 							px: 3,
 							fontSize: { xs: '11px', sm: '13px' },
 						}}
-						secondary={'인기검색어'}
+						secondary={'인기상품'}
 					/>
 				</ListItemButton>
 			</Box>
@@ -182,7 +182,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 	});
 	const recommendRankData = useRecommendRankList({
 		count: 5,
-		isAuthenticated: isAuthenticated(),
+		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
 	});
 
@@ -433,50 +433,50 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 							</Box>
 						</Grid>
 					</Grid>
-				</BrowserView>
-				<Box sx={{ pb: '10px' }}>
-					{isAuthenticated() && recommendRankData && (
-						<Grid
-							container
-							spacing={1}
-							sx={{ justifyContent: 'center', width: '100%' }}
-						>
-							<Grid item>
-								<Typography
-									color="#666"
-									align="center"
-									sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
-								>
-									추천검색어
-								</Typography>
-							</Grid>
-							{recommendRankData.length === 0 ? (
+					<Box sx={{ pb: '10px' }}>
+						{isAuthenticated() && !isAdmin() && recommendRankData && (
+							<Grid
+								container
+								spacing={1}
+								sx={{ justifyContent: 'center', width: '100%' }}
+							>
 								<Grid item>
 									<Typography
-										color="#999"
+										color="#666"
 										align="center"
-										sx={{ fontSize: searchFontSize }}
+										sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
 									>
-										추천검색어가 없습니다.
+										추천상품
 									</Typography>
 								</Grid>
-							) : (
-								recommendRankData.map((data: GoodsData, index: number) => (
-									<Grid key={index} item sx={{ display: 'flex' }}>
+								{recommendRankData.length === 0 ? (
+									<Grid item>
 										<Typography
 											color="#999"
 											align="center"
 											sx={{ fontSize: searchFontSize }}
 										>
-											{data.goodsName}
+											추천상품이 없습니다.
 										</Typography>
-										{recommendRankData.length - 1 > index && <SearchDivider />}
 									</Grid>
-								))
-							)}
-						</Grid>
-					)}
-				</Box>
+								) : (
+									recommendRankData.map((data: GoodsData, index: number) => (
+										<Grid key={index} item sx={{ display: 'flex' }}>
+											<Typography
+												color="#999"
+												align="center"
+												sx={{ fontSize: searchFontSize }}
+											>
+												{data.goodsName}
+											</Typography>
+											{recommendRankData.length - 1 > index && <SearchDivider />}
+										</Grid>
+									))
+								)}
+							</Grid>
+						)}
+					</Box>
+				</BrowserView>
 			</Box>
 		</Paper>
 	);

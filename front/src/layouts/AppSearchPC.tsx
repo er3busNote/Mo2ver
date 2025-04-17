@@ -5,7 +5,7 @@ import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { GoodsData } from '@api/types';
-import { isAuthenticated } from '@utils/jwttoken';
+import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
@@ -89,7 +89,7 @@ const AppSearchItems: FC<AppSearchItemsProps> = ({
 				>
 					<ListItemText
 						secondaryTypographyProps={{ px: 3, fontSize: '14px' }}
-						secondary={'인기검색어'}
+						secondary={'인기상품'}
 					/>
 				</ListItemButton>
 			</Box>
@@ -173,7 +173,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 	});
 	const recommendRankData = useRecommendRankList({
 		count: 5,
-		isAuthenticated: isAuthenticated(),
+		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
 	});
 
@@ -331,7 +331,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 								justifyContent: 'flex-end',
 							}}
 						>
-							{isAuthenticated() && recommendRankData && (
+							{isAuthenticated() && !isAdmin() && recommendRankData && (
 								<Grid container spacing={1} sx={{ width: 400 }}>
 									<Grid item>
 										<Typography
@@ -339,7 +339,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 											align="center"
 											sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
 										>
-											추천검색어
+											추천상품
 										</Typography>
 									</Grid>
 									{recommendRankData.length === 0 ? (
@@ -349,7 +349,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 												align="center"
 												sx={{ fontSize: searchFontSize }}
 											>
-												추천검색어가 없습니다.
+												추천상품이 없습니다.
 											</Typography>
 										</Grid>
 									) : (

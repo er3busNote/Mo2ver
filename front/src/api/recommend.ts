@@ -4,7 +4,7 @@ import { handleResponse, handleError } from './common/handler';
 
 const recommend = (instance: AxiosInstance) => {
 	return {
-		// 추천 검색어 API : <baseURL>/recommend/rank
+		// 추천 상품 API : <baseURL>/recommend/rank
 		rank: (count: number) => (dispatch: Dispatch) =>
 			instance
 				.get(`recommend/rank/${count}`)

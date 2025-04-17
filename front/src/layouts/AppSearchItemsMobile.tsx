@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { GoodsData } from '@api/types';
-import { isAuthenticated } from '@utils/jwttoken';
+import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
@@ -59,16 +59,10 @@ interface SearchProps {
 	header: SxProps<Theme>;
 }
 
-interface SearchPopularProps {
+interface SearchGoodsProps {
 	base: SxProps<Theme>;
 	header: SxProps<Theme>;
-	goodsRankData: Array<GoodsData>;
-}
-
-interface SearchRecommendProps {
-	base: SxProps<Theme>;
-	header: SxProps<Theme>;
-	recommendRankData: Array<GoodsData>;
+	goodsData: Array<GoodsData>;
 }
 
 interface AppSearchItemsMobileProps {
@@ -124,20 +118,20 @@ const SearchRecent: FC<SearchProps> = ({ base, header }): JSX.Element => {
 	);
 };
 
-const SearchPopular: FC<SearchPopularProps> = ({
+const SearchPopular: FC<SearchGoodsProps> = ({
 	base,
 	header,
-	goodsRankData,
+	goodsData,
 }): JSX.Element => {
 	return (
 		<Paper sx={base}>
 			<Typography variant="h2" align="center" sx={header}>
-				인기 검색어
+				인기 상품
 			</Typography>
 			<Box>
 				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
-					{goodsRankData &&
-						goodsRankData.map((data: GoodsData, index: number) => (
+					{goodsData &&
+						goodsData.map((data: GoodsData, index: number) => (
 							<MenuItem key={index} dense>
 								<Box
 									sx={{
@@ -178,21 +172,25 @@ const SearchPopular: FC<SearchPopularProps> = ({
 	);
 };
 
-const SearchRecommend: FC<SearchRecommendProps> = ({
+const SearchRecommend: FC<SearchGoodsProps> = ({
 	base,
 	header,
-	recommendRankData,
+	goodsData,
 }): JSX.Element => {
 	return (
 		<Paper sx={base}>
 			<Typography variant="h2" align="center" sx={header}>
-				추천 검색어
+				추천 상품
 			</Typography>
 			<Box sx={{ p: 2 }}>
-				{recommendRankData.map((data: GoodsData, index: number) => (
-					<RecommendButton key={index} variant="outlined">
-						{data.goodsName}
-					</RecommendButton>
+				{isAuthenticated() &&
+					!isAdmin() &&
+					goodsData &&
+					goodsData.length === 0 &&
+					goodsData.map((data: GoodsData, index: number) => (
+						<RecommendButton key={index} variant="outlined">
+							{data.goodsName}
+						</RecommendButton>
 				))}
 			</Box>
 		</Paper>
@@ -217,7 +215,7 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 	});
 	const recommendRankData = useRecommendRankList({
 		count: 5,
-		isAuthenticated: isAuthenticated(),
+		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
 	});
 
@@ -338,14 +336,14 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 							<SearchPopular
 								base={searchBase}
 								header={searchHeader}
-								goodsRankData={goodsRankData}
+								goodsData={goodsRankData}
 							/>
 						</SwiperSlide>
 						<SwiperSlide>
 							<SearchRecommend
 								base={searchBase}
 								header={searchHeader}
-								recommendRankData={recommendRankData}
+								goodsData={recommendRankData}
 							/>
 						</SwiperSlide>
 					</Swiper>
