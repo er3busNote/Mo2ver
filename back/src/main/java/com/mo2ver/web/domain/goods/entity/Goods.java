@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -63,8 +64,8 @@ public class Goods {
     @Column(name = "SUMM_INFO", columnDefinition = "VARCHAR(200) COMMENT '요약정보'")
     private String summaryInfo;
 
-    @Column(name = "REVW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
-    private Integer reviewCount;
+    @Column(name = "VIEW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
+    private Integer viewCount;
 
 //    @OneToOne(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private Price priceCode;
@@ -121,6 +122,10 @@ public class Goods {
         this.goodsImageList.addAll(this.createGoodsImageList(goodsImageAttachRequest.getGoodsImg(), currentUser));
 
         this.sortGoodsImageList();
+    }
+
+    public void update() {
+        this.viewCount = Optional.ofNullable(this.viewCount).orElse(0) + 1;
     }
 
     private void createOrUpdateGoods(GoodsImageRequest goodsImageRequest, Member currentUser) {

@@ -40,6 +40,7 @@ public class GoodsService {
     @Transactional
     public GoodsResponse findGoods(String id) {
         Goods goods = this.goodsRepository.findByGoodsCode(id);
+        goods.update(); // 조회수 증가
         return GoodsResponse.of(goods);
     }
 

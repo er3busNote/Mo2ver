@@ -5,7 +5,10 @@ import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -22,6 +25,7 @@ public class GoodsResponse {
     private BigDecimal supplyPrice;
     private BigDecimal salePrice;
     private List<ImageInfo> imageList;
+    private List<String> keywordList;
 
     public static GoodsResponse of(Goods goods) {
         return GoodsResponse.builder()
@@ -36,6 +40,15 @@ public class GoodsResponse {
                         .filter(image -> image.getBasicImageYesNo() == 'Y')   // innerJoin 할때, 조건을 추가로 붙여야 함..
                         .map(ImageInfo::of)
                         .collect(Collectors.toList()))
+                .keywordList(getKeywordList(goods.getKeyword()))
                 .build();
+    }
+
+    public static List<String> getKeywordList(String keyword) {
+        return Optional.ofNullable(keyword)
+                .map(s -> Arrays.stream(s.split("#"))
+                        .filter(token -> !token.isEmpty())
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
     }
 }
