@@ -72,7 +72,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
                 .innerJoin(goods.price, price)
                 .innerJoin(goods.goodsImageList, goodsImage)
                 .where(builder)
-                .orderBy(goods.reviewCount.desc())
+                .orderBy(goods.viewCount.desc())
                 .limit(count)
                 .fetch();
     }
