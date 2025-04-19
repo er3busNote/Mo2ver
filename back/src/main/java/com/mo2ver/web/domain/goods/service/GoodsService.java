@@ -2,17 +2,15 @@ package com.mo2ver.web.domain.goods.service;
 
 import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
+import com.mo2ver.web.domain.goods.entity.*;
 import com.mo2ver.web.domain.goods.repository.*;
-import com.mo2ver.web.domain.goods.entity.Discount;
-import com.mo2ver.web.domain.goods.entity.Goods;
-import com.mo2ver.web.domain.goods.entity.GoodsImage;
-import com.mo2ver.web.domain.goods.entity.Price;
 import com.mo2ver.web.domain.goods.dto.request.CategoryPageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -39,7 +37,7 @@ public class GoodsService {
 
     @Transactional
     public GoodsResponse findGoods(String id) {
-        Goods goods = this.goodsRepository.findByGoodsCode(id);
+        Goods goods = this.findGoodsById(id);
         goods.update(); // 조회수 증가
         return GoodsResponse.of(goods);
     }
@@ -88,6 +86,12 @@ public class GoodsService {
     }
 
     @Transactional
+    public void updateImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+        Goods goods = this.findGoodsById(goodsImageAttachRequest.getGoodsCode());
+        goods.update(goodsImageAttachRequest, currentUser);
+    }
+
+    @Transactional
     public String saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
         Price price = this.priceRepository.save(Price.of(goodsImageRequest, currentUser));
         if ('Y' == goodsImageRequest.getSalePeriodYesNo()) this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageRequest, currentUser));
@@ -98,6 +102,11 @@ public class GoodsService {
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
         return price.getGoodsCode().getGoodsCode();
+    }
+
+    private Goods findGoodsById(String goodsCode) {
+        return this.goodsRepository.findById(goodsCode)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
     private Character getBasicImageYesNo(int i) {

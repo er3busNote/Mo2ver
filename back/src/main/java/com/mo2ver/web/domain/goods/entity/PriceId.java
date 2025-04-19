@@ -6,14 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
-@EqualsAndHashCode(of = {"goodsCode", "applyDate"})
+@EqualsAndHashCode(of = {"goodsCode", "memberNo"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class PriceId implements Serializable {
     @Column(name = "GD_CD")
     protected String goodsCode;
-    @Column(name = "APPL_DT")
-    protected LocalDateTime applyDate;
+    @Column(name = "MBR_NO")
+    protected String memberNo;
 }

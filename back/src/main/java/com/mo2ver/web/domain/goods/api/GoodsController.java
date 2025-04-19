@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,6 +90,19 @@ public class GoodsController {
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("상품정보가 저장되었습니다")
+                        .build());
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<ResponseHandler> updateEvent(
+            @RequestBody @Validated(GoodsImageAttachRequest.Update.class) GoodsImageAttachRequest goodsImageAttachRequest,
+            @CurrentUser Member currentUser
+    ) {
+        goodsService.updateImageGoods(goodsImageAttachRequest, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("상품정보가 수정되었습니다")
                         .build());
     }
 

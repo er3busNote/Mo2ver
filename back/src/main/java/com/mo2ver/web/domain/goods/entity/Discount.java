@@ -16,10 +16,7 @@ import java.time.ZoneId;
 @Table(
         name = "GD_DIS_PRC",    // 상품할인가격
         indexes={
-                @Index(
-                        name="FK_GD_TO_GD_DIS_PRC",
-                        columnList="GD_CD"
-                )
+                @Index(name="FK_GD_TO_GD_DIS_PRC", columnList="GD_CD")
         }
 )
 @Getter @Setter
@@ -32,14 +29,12 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsPriceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_GD_TO_GD_DIS_PRC",
-                    foreignKeyDefinition = "FOREIGN KEY (GD_CD) REFERENCES GD(GD_CD) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_GD_TO_GD_DIS_PRC"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
     private Goods goodsCode;

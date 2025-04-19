@@ -13,10 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "CMM_CD",    // 공통코드
         indexes={
-                @Index(
-                        name="FK_CMM_CD_GRP_TO_CMM_CD",
-                        columnList="CMM_GRP_CD"
-                )
+                @Index(name="FK_CMM_CD_GRP_TO_CMM_CD", columnList="CMM_GRP_CD")
         }
 )
 @Getter @Setter
@@ -28,14 +25,12 @@ public class Code implements Serializable {
     @Column(name = "CMM_CD", columnDefinition = "CHAR(5) COMMENT '공통코드'")
     private String commonCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "CMM_GRP_CD",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_CMM_GRP_CD",
-                    foreignKeyDefinition = "FOREIGN KEY (CMM_GRP_CD) REFERENCES CMM_CD_GRP(CMM_GRP_CD) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_CMM_GRP_CD"),
             columnDefinition = "CHAR(5) COMMENT '공통그룹코드'"
     )
     private GroupCode commonGroupCode;

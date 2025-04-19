@@ -13,13 +13,9 @@ import java.util.Set;
 
 @Entity
 @Table(
-        name = "MEMBER",    // 회원
+        name = "MBR",    // 회원
         indexes={
-                @Index(
-                        name="UK_LOGIN_ID",
-                        columnList="LOGIN_ID",
-                        unique = true
-                )
+                @Index(name="UK_LOGIN_ID", columnList="LOGIN_ID", unique = true)
         }
 )
 @Getter @Setter
@@ -34,8 +30,11 @@ public class Member {
     private String memberNo;
 
     @ElementCollection(fetch = FetchType.EAGER) // OneToMany (1:N 관계)
+    @CollectionTable(
+            name = "MBR_ROLE",
+            joinColumns = @JoinColumn(name = "MBR_NO", foreignKey = @ForeignKey(name = "FK_MBR_ROLE_ID"))
+    )
     @Enumerated(EnumType.STRING)
-    @JoinColumn(foreignKey = @ForeignKey(name="FK_MEMBER_ROLE_ID"))
     @Column(name = "ROLE", nullable = false, columnDefinition = "VARCHAR(12) COMMENT '사용자권한'")
     private Set<MemberRole> roles;
 

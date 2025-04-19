@@ -14,10 +14,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "DP_BNNR_PRD",   // 전시배너상품
         indexes={
-                @Index(
-                        name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD",
-                        columnList = "BNNR_MNG_NO"
-                )
+                @Index(name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD", columnList = "BNNR_MNG_NO")
         }
 )
 @Getter @Setter
@@ -30,14 +27,12 @@ public class BannerProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long bannerProductId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "BNNR_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD",
-                    foreignKeyDefinition = "FOREIGN KEY (BNNR_MNG_NO) REFERENCES DP_BNNR_MNG(BNNR_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
     private BannerManage bannerManageNo;

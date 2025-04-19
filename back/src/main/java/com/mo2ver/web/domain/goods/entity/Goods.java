@@ -7,13 +7,16 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,16 +70,10 @@ public class Goods {
     @Column(name = "VIEW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
     private Integer viewCount;
 
-//    @OneToOne(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Price priceCode;
-//
-//    @OneToOne(mappedBy = "applyDate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Price priceDate;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumns(value = {
             @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
-            @JoinColumn(name = "REG_DT", referencedColumnName = "APPL_DT", insertable = false, updatable = false)
+            @JoinColumn(name = "MBR_NO", referencedColumnName = "MBR_NO", insertable = false, updatable = false)
     }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
     private Price price;
 
@@ -113,13 +110,28 @@ public class Goods {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
         this.goodsCondition = "10";
         this.register = currentUser.getMemberNo();
-        this.updateDate = LocalDateTime.now();
 
         this.price = this.createGoodsPrice(goodsImageAttachRequest, currentUser);
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             this.goodsDiscountList.addAll(this.createGoodsDiscountList(goodsImageAttachRequest, currentUser));
         }
         this.goodsImageList.addAll(this.createGoodsImageList(goodsImageAttachRequest.getGoodsImg(), currentUser));
+
+        this.sortGoodsImageList();
+    }
+
+    public void update(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+        this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
+
+        this.price = this.createGoodsPrice(goodsImageAttachRequest, currentUser);
+        if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
+            int oldDiscountSize = this.goodsDiscountList.size();
+            this.goodsDiscountList.addAll(this.updateGoodsDiscountList(goodsImageAttachRequest, currentUser));
+            this.goodsDiscountList.subList(0, oldDiscountSize).clear();
+        }
+        int oldImageSize = this.goodsImageList.size();
+        this.goodsImageList.addAll(this.updateGoodsImageList(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode(), currentUser));
+        this.goodsImageList.subList(0, oldImageSize).clear();
 
         this.sortGoodsImageList();
     }
@@ -153,6 +165,36 @@ public class Goods {
         return fileAttachInfoList.stream()
                 .map(info -> GoodsImage.of(this, Integer.parseInt(getDecryptor(info.getFileAttachCode())), info.getFileExtension(), currentUser))
                 .collect(Collectors.toList());
+    }
+
+    private List<Discount> updateGoodsDiscountList(GoodsImageRequest goodsImageRequest, Member currentUser) {
+        Discount discount = this.goodsDiscountList.stream()
+                .filter(it -> it.getGoodsCode().getGoodsCode().equals(goodsImageRequest.getGoodsCode()))
+                .findFirst()
+                .orElseGet(() -> Discount.of(this, goodsImageRequest, currentUser));
+        discount.setStartDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        discount.setEndDate(goodsImageRequest.getDiscountEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        discount.setDiscountPrice(goodsImageRequest.getDiscountPrice());
+        discount.setMaxLimitAmount(goodsImageRequest.getMaxLimitAmount());
+        discount.setMaxLimitYesNo(goodsImageRequest.getMaxLimitYesNo());
+        discount.setRateYesNo(goodsImageRequest.getRateYesNo());
+        discount.setUpdater(this.updater);
+        return Collections.singletonList(discount);
+    }
+
+    private List<GoodsImage> updateGoodsImageList(List<FileAttachInfo> fileAttachInfoList, String goodsCode, Member currentUser) {
+        return fileAttachInfoList.stream()
+                .map(info -> this.updateGoodsImage(info, goodsCode, currentUser))
+                .collect(Collectors.toList());
+    }
+
+    private GoodsImage updateGoodsImage(FileAttachInfo info, String goodsCode, Member currentUser) {
+        GoodsImage goodsImage = this.goodsImageList.stream()
+                .filter(it -> it.getGoodsImageAttachFile().equals(Integer.parseInt(getDecryptor(info.getFileAttachCode()))) && it.getGoodsCode().getGoodsCode().equals(goodsCode))
+                .findFirst()
+                .orElseGet(() -> GoodsImage.of(this, Integer.parseInt(getDecryptor(info.getFileAttachCode())), info.getFileExtension(), currentUser));
+        goodsImage.setUpdater(this.updater);
+        return goodsImage;
     }
 
     private void sortGoodsImageList() {

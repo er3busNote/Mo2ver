@@ -104,6 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
                 .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**").permitAll()
+                .mvcMatchers(HttpMethod.PATCH, "/goods/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/cart/list", "/recommend/**").hasAnyRole("USER")  // 3.1) 장바구니, 추천 목록
                 .mvcMatchers(HttpMethod.POST, "/cart/**", "/review/**").hasAnyRole("USER")      // 3.2) 장바구니, 리뷰 추가
                 .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**").hasAnyRole("USER")       // 3.3) 장바구니, 리뷰 수정

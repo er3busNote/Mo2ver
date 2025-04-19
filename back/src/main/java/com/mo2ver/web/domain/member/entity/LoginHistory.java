@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "LOGIN_HISTORY")  // 로그인이력
+@Table(name = "LOGIN_HIS")  // 로그인이력
 @Getter @Setter
 @EqualsAndHashCode(of = "loginHistoryManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
@@ -19,14 +19,12 @@ public class LoginHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long loginHistoryManageNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_MBR_NO_TO_LOGIN_HISTORY",
-                    foreignKeyDefinition = "FOREIGN KEY (MBR_NO) REFERENCES MEMBER(MBR_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_MBR_NO_TO_LOGIN_HIS"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member memberNo;

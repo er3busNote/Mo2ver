@@ -15,10 +15,7 @@ import java.util.Date;
 @Table(
         name = "TERMS_AGR",     // 약관동의
         indexes={
-                @Index(
-                        name="FK_MBR_TO_TERMS_AGR",
-                        columnList="MBR_NO"
-                )
+                @Index(name="FK_MBR_TO_TERMS_AGR", columnList="MBR_NO")
         }
 )
 @Getter @Setter
@@ -27,27 +24,23 @@ import java.util.Date;
 public class TermsAgree implements Serializable {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "TERMS_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_TERMS_MNG_TO_TERMS_AGR",
-                    foreignKeyDefinition = "FOREIGN KEY (TERMS_MNG_NO) REFERENCES TERMS_MNG(TERMS_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_TERMS_MNG_TO_TERMS_AGR"),
             columnDefinition = "BIGINT(20) COMMENT '약관관리번호'"
     )
     private TermsManage termsManageNo;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_MBR_TO_TERMS_AGR",
-                    foreignKeyDefinition = "FOREIGN KEY (MBR_NO) REFERENCES MEMBER(MBR_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_TERMS_AGR"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member memberNo;

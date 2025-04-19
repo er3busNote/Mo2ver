@@ -89,6 +89,24 @@ public class GoodsTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("상품 이미지정보 수정 확인")
+    public void updateGoodsImageTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        GoodsImageRequest goodsImageRequest = this.getGoodsImageInfo();
+        GoodsImageAttachRequest goodsImageAttachRequest = this.getGoodsImageAttachInfo(goodsImageRequest);
+
+        mockMvc.perform(patch("/goods/update")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(goodsImageAttachRequest)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("상품 이미지정보 첨부파일 저장 확인")
     public void createGoodsImageUploadTest() throws Exception {
 
@@ -115,7 +133,8 @@ public class GoodsTest extends CsrfConfigTest {
 
     private GoodsImageRequest getGoodsImageInfo() {
         return GoodsImageRequest.builder()
-                .goodsName("테스트")
+                .goodsCode("1000000009")
+                .goodsName("테스트2")
                 .largeCategoryCode("C001000000")
                 .mediumCategoryCode("C001001000")
                 .smallCategoryCode("C001001001")
@@ -132,21 +151,22 @@ public class GoodsTest extends CsrfConfigTest {
                 .supplyPrice(new BigDecimal(181899))
                 .salePrice(new BigDecimal(172804))
                 .maxBuyQuantity(10)
-                .discountPrice(new BigDecimal(7000))
+                .discountPrice(new BigDecimal(7500))
                 .discountStartDate(new Date())
                 .discountEndDate(new Date())
-                .rateYesNo('N')
+                .rateYesNo('Y')
                 .maxLimitYesNo('N')
-                .maxLimitAmount(new BigDecimal(0))
+                .maxLimitAmount(new BigDecimal(2))
                 .build();
     }
 
     private GoodsImageAttachRequest getGoodsImageAttachInfo(GoodsImageRequest goodsImageRequest) {
-        return (GoodsImageAttachRequest) GoodsImageAttachRequest.builder()
+        return GoodsImageAttachRequest.builder()
                 .goodsImg(Arrays.asList(
-                        FileAttachInfo.from(123, "image1.png", "image/png", 2048, ".png"),
-                        FileAttachInfo.from(124, "image2.jpg", "image/jpeg", 1024, ".jpg")
+                        FileAttachInfo.from(127, "image1.png", "image/png", 2048, ".png"),
+                        FileAttachInfo.from(128, "image2.jpg", "image/jpeg", 1024, ".jpg")
                 ))
+                .goodsCode(goodsImageRequest.getGoodsCode())
                 .goodsName(goodsImageRequest.getGoodsName())
                 .largeCategoryCode(goodsImageRequest.getLargeCategoryCode())
                 .mediumCategoryCode(goodsImageRequest.getMediumCategoryCode())

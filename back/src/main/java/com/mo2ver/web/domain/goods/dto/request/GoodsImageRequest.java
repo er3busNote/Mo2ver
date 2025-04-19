@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -20,6 +21,9 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GoodsImageRequest {
+
+    @NotBlank(groups = Update.class)
+    private String goodsCode;
 
     @NotBlank(message = "상품명이 존재하지 않습니다")
     private String goodsName;
@@ -92,4 +96,6 @@ public class GoodsImageRequest {
     private Character maxLimitYesNo;
 
     private BigDecimal maxLimitAmount;
+
+    public interface Update extends Default {}
 }

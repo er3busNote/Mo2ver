@@ -13,10 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "EVT_IMG",    // 상품이미지
         indexes={
-                @Index(
-                        name="FK_EVT_MNG_TO_EVT_IMG",
-                        columnList="EVT_MNG_NO"
-                )
+                @Index(name="FK_EVT_MNG_TO_EVT_IMG", columnList="EVT_MNG_NO")
         }
 )
 @Getter @Setter
@@ -29,14 +26,12 @@ public class EventImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long eventImageManageNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "EVT_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_EVT_MNG_TO_EVT_IMG",
-                    foreignKeyDefinition = "FOREIGN KEY (EVT_MNG_NO) REFERENCES EVT_MNG(EVT_MNG_NO) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_EVT_MNG_TO_EVT_IMG"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
     private EventManage eventManageNo;

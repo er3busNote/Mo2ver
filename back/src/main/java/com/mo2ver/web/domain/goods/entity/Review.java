@@ -16,10 +16,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "GD_REVW",    // 상품리뷰
         indexes={
-                @Index(
-                        name="FK_GD_TO_GD_REVW",
-                        columnList="GD_CD"
-                )
+                @Index(name="FK_GD_TO_GD_REVW", columnList="GD_CD")
         }
 )
 @Getter @Setter
@@ -32,14 +29,12 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsReviewNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "FK_GD_TO_GD_REVW",
-                    foreignKeyDefinition = "FOREIGN KEY (GD_CD) REFERENCES GD(GD_CD) ON UPDATE RESTRICT ON DELETE RESTRICT"),
+            foreignKey = @ForeignKey(name = "FK_GD_TO_GD_REVW"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
     private Goods goodsCode;

@@ -11,9 +11,11 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
 import static com.mo2ver.web.domain.goods.entity.QPrice.price;
+import static com.mo2ver.web.domain.goods.entity.QDiscount.discount;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
 
 public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements GoodsRepositoryCustom {
@@ -23,6 +25,16 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
     public GoodsRepositoryImpl(JPAQueryFactory queryFactory) {
         super(Goods.class);
         this.queryFactory = queryFactory;
+    }
+
+    public Optional<Goods> findByGoodsCode(String goodsCode) {
+        Goods result = queryFactory.selectFrom(goods)
+                .leftJoin(goods.price, price)
+                .leftJoin(goods.goodsDiscountList, discount).fetchJoin()
+                .leftJoin(goods.goodsImageList, goodsImage)
+                .where(goods.goodsCode.eq(goodsCode))
+                .fetchOne();
+        return Optional.ofNullable(result);
     }
 
     public Page<Goods> findByGoodsName(Pageable pageable, GoodsSearchRequest goodsSearchRequest) {
