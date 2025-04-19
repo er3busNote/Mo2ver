@@ -77,6 +77,16 @@ public class Goods {
     }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
     private Price price;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "MBR_NO",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD"),
+            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+    )
+    private Member memberNo;
+
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Discount> goodsDiscountList = new ArrayList<>();
 
@@ -109,9 +119,10 @@ public class Goods {
     public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
         this.goodsCondition = "10";
+        this.memberNo = currentUser;
         this.register = currentUser.getMemberNo();
 
-        this.price = this.createGoodsPrice(goodsImageAttachRequest, currentUser);
+        this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             this.goodsDiscountList.addAll(this.createGoodsDiscountList(goodsImageAttachRequest, currentUser));
         }
@@ -123,7 +134,7 @@ public class Goods {
     public void update(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
 
-        this.price = this.createGoodsPrice(goodsImageAttachRequest, currentUser);
+        this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             int oldDiscountSize = this.goodsDiscountList.size();
             this.goodsDiscountList.addAll(this.updateGoodsDiscountList(goodsImageAttachRequest, currentUser));
@@ -153,7 +164,7 @@ public class Goods {
         this.updater = currentUser.getMemberNo();
     }
 
-    private Price createGoodsPrice(GoodsImageRequest goodsImageRequest, Member currentUser) {
+    private Price createOrUpdateGoodsPrice(GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Price.of(this, goodsImageRequest, currentUser);
     }
 

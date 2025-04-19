@@ -54,7 +54,7 @@ public class Member {
     private LocalDateTime passwordChangeDate;
 
     @Column(name = "TMP_PWD_ISSU_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '임시비밀번호발급일시'")
-    private LocalDateTime TempPasswordIssueDate;
+    private LocalDateTime tempPasswordIssueDate;
 
     @Column(name= "LOGIN_FAIL_CNT", columnDefinition = "INT(11) COMMENT '로그인실패횟수'")
     private Integer loginFailCount;

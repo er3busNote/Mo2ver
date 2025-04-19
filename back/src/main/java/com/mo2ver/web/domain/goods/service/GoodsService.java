@@ -10,6 +10,7 @@ import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class GoodsService {
     private static final String GOODS_DIRECTORY = "goods";
 
     private final FileService fileService;
+    private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
     private final PriceRepository priceRepository;
     private final DiscountRepository discountRepository;
@@ -81,7 +83,8 @@ public class GoodsService {
 
     @Transactional
     public String saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
-        Goods goods = new Goods(goodsImageAttachRequest, currentUser);
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        Goods goods = new Goods(goodsImageAttachRequest, member);
         return this.goodsRepository.save(goods).getGoodsCode();
     }
 
@@ -89,6 +92,7 @@ public class GoodsService {
     public void updateImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         Goods goods = this.findGoodsById(goodsImageAttachRequest.getGoodsCode());
         goods.update(goodsImageAttachRequest, currentUser);
+        this.goodsRepository.save(goods);
     }
 
     @Transactional
@@ -102,6 +106,11 @@ public class GoodsService {
             this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
         return price.getGoodsCode().getGoodsCode();
+    }
+
+    private Member findMemberById(String memberNo) {
+        return this.memberRepository.findById(memberNo)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
 
     private Goods findGoodsById(String goodsCode) {

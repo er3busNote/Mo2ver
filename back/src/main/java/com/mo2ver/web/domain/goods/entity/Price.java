@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "GD_PRC")    // 상품가격
@@ -39,7 +40,7 @@ public class Price implements Persistable<PriceId> {
             name = "MBR_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_PRC_MBR"),
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_PRC_MBR_NO"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member memberNo;
@@ -94,17 +95,18 @@ public class Price implements Persistable<PriceId> {
         return priceId;
     }
 
-    // 새로운 엔티티 판단 전략 재정의 (현재는 ForeignKey를 걸어주었기 때문에 의미없음)
+    // 새로운 엔티티 판단 전략 재정의
     @Override
     public boolean isNew() {
         return priceId == null || goodsCode == null || memberNo == null;
     }
 
     public static Price of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
-        PriceId priceId = new PriceId(goods.getGoodsCode(), currentUser.getMemberNo());
+        PriceId priceId = goods.getPrice() == null || goods.getPrice().isNew() ? new PriceId(goods.getGoodsCode(), currentUser.getMemberNo()) : Objects.requireNonNull(goods.getPrice()).getPriceId();
         return Price.builder()
                 .priceId(priceId)
                 .goodsCode(goods)
+                .memberNo(currentUser)
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
                 .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())

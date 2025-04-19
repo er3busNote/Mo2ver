@@ -26,9 +26,9 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member saveAuth(Member member) {
+    public void saveAuth(Member member) {
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
-        return this.memberRepository.save(member);
+        this.memberRepository.save(member);
     }
 
     public Member memberNoForUpdate() {
