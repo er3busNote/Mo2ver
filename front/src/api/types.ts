@@ -42,6 +42,7 @@ interface GoodsData {
 	supplyPrice: number;
 	salePrice: number;
 	imageList: Array<ImageData>;
+	keywordList: Array<string>;
 }
 
 interface GoodsRegisterData {

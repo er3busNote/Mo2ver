@@ -35,6 +35,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { isEmpty } from 'lodash';
 
 const drawerSearchLimit = 600;
 const drawerSearchWidth = 250;
@@ -185,13 +186,12 @@ const SearchRecommend: FC<SearchGoodsProps> = ({
 			<Box sx={{ p: 2 }}>
 				{isAuthenticated() &&
 					!isAdmin() &&
-					goodsData &&
-					goodsData.length === 0 &&
+					!isEmpty(goodsData) &&
 					goodsData.map((data: GoodsData, index: number) => (
 						<RecommendButton key={index} variant="outlined">
 							{data.goodsName}
 						</RecommendButton>
-				))}
+					))}
 			</Box>
 		</Paper>
 	);

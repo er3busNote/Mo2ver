@@ -29,6 +29,7 @@ import {
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
+import { isEmpty } from 'lodash';
 
 interface GoodsProps {
 	title: string;
@@ -139,6 +140,12 @@ const GoodsDetail: FC<GoodsProps> = ({
 		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
 		fontWeight: 'bold',
 		color: 'blue',
+	};
+	const infoHashTag: SxProps<Theme> = {
+		py: 1,
+		display: 'flex',
+		flexWrap: 'wrap',
+		gap: '5px 0px',
 	};
 	const infoDelivery: SxProps<Theme> = {
 		px: 2,
@@ -371,26 +378,19 @@ const GoodsDetail: FC<GoodsProps> = ({
 										</TableBody>
 									</Table>
 								</TableContainer>
-								<Box sx={{ py: 1, display: 'flex' }}>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#방한
-									</ButtonTag>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#보온
-									</ButtonTag>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#숏패딩
-									</ButtonTag>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#파카
-									</ButtonTag>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#점퍼
-									</ButtonTag>
-									<ButtonTag buttonType="detail" variant="outlined">
-										#패딩
-									</ButtonTag>
-								</Box>
+								{!isEmpty(data.keywordList) && (
+									<Box sx={infoHashTag}>
+										{data.keywordList.map((keyword: string, index: number) => (
+											<ButtonTag
+												key={index}
+												buttonType="detail"
+												variant="outlined"
+											>
+												#{keyword}
+											</ButtonTag>
+										))}
+									</Box>
+								)}
 							</Box>
 						</Box>
 						<Box sx={gridItem}>

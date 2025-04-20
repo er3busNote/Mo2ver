@@ -29,6 +29,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import MainIcon from '@assets/logo.svg?react';
+import { isEmpty } from 'lodash';
 
 interface AppSearchProps {
 	title: string;
@@ -342,7 +343,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 											추천상품
 										</Typography>
 									</Grid>
-									{recommendRankData.length === 0 ? (
+									{isEmpty(recommendRankData) ? (
 										<Grid item>
 											<Typography
 												color="#999"

@@ -17,6 +17,7 @@ const useGoodsDetail = ({ goods, code }: GoodsProps): GoodsData => {
 		supplyPrice: 0,
 		salePrice: 0,
 		imageList: [],
+		keywordList: [],
 	});
 
 	const fetchAndSetData = useCallback(async () => {

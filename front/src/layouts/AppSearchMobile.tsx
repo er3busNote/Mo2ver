@@ -31,6 +31,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { BrowserView, MobileView } from 'react-device-detect';
 import MainIcon from '@assets/logo.svg?react';
+import { isEmpty } from 'lodash';
 
 interface AppSearchProps {
 	title: string;
@@ -449,7 +450,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 										추천상품
 									</Typography>
 								</Grid>
-								{recommendRankData.length === 0 ? (
+								{isEmpty(recommendRankData) ? (
 									<Grid item>
 										<Typography
 											color="#999"
@@ -469,7 +470,9 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 											>
 												{data.goodsName}
 											</Typography>
-											{recommendRankData.length - 1 > index && <SearchDivider />}
+											{recommendRankData.length - 1 > index && (
+												<SearchDivider />
+											)}
 										</Grid>
 									))
 								)}
