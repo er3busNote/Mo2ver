@@ -8,6 +8,8 @@ import { ImageData, CartData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
+import ReviewSummary from './review/ReviewSummary';
+import ReviewCard from './review/ReviewCard';
 import ButtonTag from '@components/button/ButtonTag';
 import ButtonGoods from '@components/button/ButtonGoods';
 import {
@@ -527,6 +529,10 @@ const GoodsDetail: FC<GoodsProps> = ({
 					</Box>
 				</Grid>
 			</Grid>
+			<Box sx={{ mt: -3, px: 5 }}>
+				<ReviewSummary></ReviewSummary>
+				<ReviewCard></ReviewCard>
+			</Box>
 		</Box>
 	);
 };
