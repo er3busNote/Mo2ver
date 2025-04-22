@@ -20,7 +20,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import RestoreIcon from '@mui/icons-material/Restore';
 import { GoodsData, CategoryDataGroup } from '@api/types';
 import { isAdmin } from '@utils/jwttoken';
-import { isMobile, BrowserView, MobileView } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 
 interface AppFooterProps {
 	width: number;
@@ -43,6 +43,7 @@ const AppFooter: FC<AppFooterProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 	const [value, setValue] = useState('home');
 	const [openMenu, setMenuOpen] = useState<boolean>(false);
 	const [openSearch, setSearchOpen] = useState<boolean>(false);
@@ -86,7 +87,7 @@ const AppFooter: FC<AppFooterProps> = ({
 				zIndex: 1,
 			}}
 		>
-			<MobileView>
+			{isMobile ? (
 				<Paper square>
 					<AppFooterMenu
 						open={openMenu}
@@ -172,8 +173,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						/>
 					</BottomNavigation>
 				</Paper>
-			</MobileView>
-			<BrowserView>
+			) : (
 				<Paper
 					sx={{
 						bgcolor: '#383838',
@@ -185,7 +185,7 @@ const AppFooter: FC<AppFooterProps> = ({
 						<Copyright title={title} description={description} color="#fff" />
 					</Box>
 				</Paper>
-			</BrowserView>
+			)}
 		</Box>
 	);
 };

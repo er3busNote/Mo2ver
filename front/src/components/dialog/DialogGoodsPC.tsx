@@ -100,6 +100,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							supplyPrice: 0,
 							salePrice: item.salePrice,
 							imageList: [],
+							keywordList: [],
 						})),
 						'goodsCode'
 				  )

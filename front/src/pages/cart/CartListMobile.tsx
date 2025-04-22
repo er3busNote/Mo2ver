@@ -36,12 +36,7 @@ import {
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import {
-	isMobile,
-	isBrowser,
-	BrowserView,
-	MobileView,
-} from 'react-device-detect';
+import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 
 interface CartDataProps {
 	title: string;
@@ -85,6 +80,8 @@ const CartList: FC<CartDataProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
+	const isDesktop = useIsDesktop();
 
 	const goodsClick = (code: string) => {
 		const titleData: TitleInfo = {
@@ -244,7 +241,7 @@ const CartList: FC<CartDataProps> = ({
 											<Table size="small">
 												<TableBody>
 													<TableRow>
-														{isBrowser && (
+														{isDesktop && (
 															<TableCell sx={labelCell}>
 																<Typography component="span" sx={label}>
 																	상품명
@@ -258,7 +255,7 @@ const CartList: FC<CartDataProps> = ({
 														</TableCell>
 													</TableRow>
 													<TableRow>
-														{isBrowser && (
+														{isDesktop && (
 															<TableCell sx={labelCell}>
 																<Typography component="span" sx={label}>
 																	브랜드
@@ -272,7 +269,7 @@ const CartList: FC<CartDataProps> = ({
 														</TableCell>
 													</TableRow>
 													<TableRow>
-														{isBrowser && (
+														{isDesktop && (
 															<TableCell sx={priceCell}>
 																<Typography component="span" sx={label}>
 																	판매가
@@ -286,7 +283,7 @@ const CartList: FC<CartDataProps> = ({
 														</TableCell>
 													</TableRow>
 													<TableRow>
-														{isBrowser && (
+														{isDesktop && (
 															<TableCell sx={priceCell}>
 																<Typography component="span" sx={label}>
 																	할인가
@@ -377,6 +374,7 @@ const CartTotal: FC<CartTotalProps> = ({
 	membershipMileage,
 	//totalCalcMileage,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
 	const totalDiscountPrice = totalSupplyPrice - totalSalePrice; // 할인 금액
 	const totalCalcPrice = totalSalePrice + deliveryPrice; // 총 결제 예상 금액
 	const totalCalcMileage = productMileage + membershipMileage; // 총 적립 마일리지
@@ -467,7 +465,7 @@ const CartTotal: FC<CartTotalProps> = ({
 		<Box>
 			<Box sx={clacBox}>
 				<TableContainer>
-					<MobileView>
+					{isMobile ? (
 						<Table size="small">
 							<TableBody>
 								<TableRow sx={rowItem}>
@@ -538,8 +536,7 @@ const CartTotal: FC<CartTotalProps> = ({
 								</TableRow>
 							</TableBody>
 						</Table>
-					</MobileView>
-					<BrowserView>
+					) : (
 						<Table size="small">
 							<TableBody>
 								<TableRow>
@@ -665,10 +662,10 @@ const CartTotal: FC<CartTotalProps> = ({
 								</TableRow>
 							</TableBody>
 						</Table>
-					</BrowserView>
+					)}
 				</TableContainer>
 			</Box>
-			<MobileView>
+			{isMobile && (
 				<Box sx={totalBox}>
 					<TableContainer>
 						<Table size="small">
@@ -704,7 +701,7 @@ const CartTotal: FC<CartTotalProps> = ({
 						</Table>
 					</TableContainer>
 				</Box>
-			</MobileView>
+			)}
 		</Box>
 	);
 };
@@ -719,6 +716,8 @@ const CartListMobile: FC<CartListProps> = ({
 	onCartUpdate,
 	onCartDelete,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
+
 	const calculateTotalSupplyPrice = (cartData: Array<CartData>) => {
 		return cartData.reduce((total, item) => total + (item.supplyPrice ?? 0), 0);
 	};

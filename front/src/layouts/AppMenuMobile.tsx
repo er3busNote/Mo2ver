@@ -23,7 +23,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@context/MobileContext';
 import { has } from 'lodash';
 
 interface AppMenuProps {
@@ -66,6 +66,7 @@ const AppMenu: FC<AppMenuDetailProps> = ({
 	middleCategoyData,
 	menuClick,
 }): JSX.Element => {
+	const isDesktop = useIsDesktop();
 	const [open, setOpen] = useState<boolean>(false);
 
 	const targetData =

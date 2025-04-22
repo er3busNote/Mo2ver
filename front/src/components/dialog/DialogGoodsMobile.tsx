@@ -29,7 +29,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerGoodsDetailValues } from '@pages/admin/types';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 import { not, intersect, union } from '@utils/set';
 import { some, indexOf, includes } from 'lodash';
 
@@ -54,6 +54,7 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 	base,
 	goodsSaveData,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
 	const [keyword, setKeyword] = useState('');
 	const [goodsName, setGoodsName] = useState<string>('');
 	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
@@ -101,6 +102,7 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 							supplyPrice: 0,
 							salePrice: item.salePrice,
 							imageList: [],
+							keywordList: [],
 						})),
 						'goodsCode'
 				  )

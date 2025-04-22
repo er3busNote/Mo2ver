@@ -21,6 +21,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { isEmpty, has } from 'lodash';
 
 const groupSize = 4;
 const subGroupSize = 2;
@@ -64,15 +65,15 @@ const PopularMobile: FC<PopularProps> = ({
 	const numSlides = bannerLength > 0 ? bannerLength : slideLength;
 	const bannerDisplayKey = bannerDisplayMenu[displayIndex];
 	const bannerDisplayKeywordInfo =
-		bannerLength > 0 &&
-		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'keyword')
+		!isEmpty(bannerDisplayData) &&
+		has(bannerDisplayData[bannerDisplayKey], 'keyword')
 			? bannerDisplayData[bannerDisplayKey]['keyword']
 					.map((obj) => (obj as Record<string, number>).keyword)
 					.slice(0, 5)
 			: KEYWORD_INFO;
 	const bannerDisplayProductInfo =
-		bannerLength > 0 &&
-		Object.hasOwn(bannerDisplayData[bannerDisplayKey], 'product')
+		!isEmpty(bannerDisplayData) &&
+		has(bannerDisplayData[bannerDisplayKey], 'product')
 			? bannerDisplayData[bannerDisplayKey]['product']
 			: '';
 

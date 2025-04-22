@@ -9,6 +9,7 @@ import {
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
 import { SnackbarProvider } from 'notistack';
+import { MobileProvider } from '@context/MobileContext';
 import persistedReducer, { RootState } from './store';
 import { MemberState } from './store/types';
 import { setAccessToken, setRefreshTokenExpiration } from './utils/jwttoken';
@@ -59,7 +60,9 @@ const App: FC = (): JSX.Element => {
 					anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
 				>
 					<CookiesProvider>
-						<RootRoutes />
+						<MobileProvider>
+							<RootRoutes />
+						</MobileProvider>
 					</CookiesProvider>
 				</SnackbarProvider>
 			</Provider>

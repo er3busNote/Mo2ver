@@ -42,7 +42,7 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '@utils/theme';
 import { GoodsData, CategoryDataGroup } from '@api/types';
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@context/MobileContext';
 
 const mdTheme = createTheme(contentTheme);
 
@@ -80,6 +80,7 @@ const AppPC: FC<AppProps> = ({
 	categoryData,
 }): JSX.Element => {
 	const location = useLocation();
+	const isDesktop = useIsDesktop();
 	const [scrolled, setScrolled] = useState(false);
 
 	const handleScroll = () => {
@@ -149,6 +150,7 @@ const AppMobile: FC<AppProps> = ({
 	goodsRankData,
 	categoryData,
 }): JSX.Element => {
+	const isDesktop = useIsDesktop();
 	return (
 		<>
 			{isDesktop && (

@@ -13,8 +13,7 @@ import useCSRFToken from '@hooks/useCSRFToken';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { RegisterFormValues } from '@pages/types';
-import { isMobile } from 'react-device-detect';
-// import _ from 'lodash';
+import { useIsMobile } from '@context/MobileContext';
 import dayjs, { Dayjs } from 'dayjs';
 
 const steps = ['상품등록', '등록완료'];
@@ -262,6 +261,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	image,
 	onSubmit,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
 	return (
 		<Box
 			sx={{

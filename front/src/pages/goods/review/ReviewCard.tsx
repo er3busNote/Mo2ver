@@ -11,9 +11,10 @@ import {
 	TextField,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 
 const ReviewCard: FC = () => {
+	const isMobile = useIsMobile();
 	const [showReplyInput, setShowReplyInput] = useState(false);
 	const [replyText, setReplyText] = useState('');
 

@@ -36,7 +36,7 @@ import {
 	BannerGoodsDetailValues,
 } from '@pages/admin/types';
 // import _ from 'lodash';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
@@ -63,6 +63,7 @@ const BannerGoodsFormMobile: FC<BannerGoodsProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 	const watchValue = useRef<string>('GD');
 	const [open, setOpen] = useState(false);
 

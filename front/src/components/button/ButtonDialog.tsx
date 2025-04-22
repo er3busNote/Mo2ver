@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { Button } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 
 interface ButtonDialogProps {
 	type?: 'button' | 'submit' | 'reset'; // HTML 기본 type 속성
@@ -41,6 +41,7 @@ const ButtonDialog: FC<ButtonDialogProps> = ({
 	onClick,
 	children,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
 	const getButtonSx = (): SxProps<Theme> => {
 		const baseStyle = {
 			px: device === 'mobile' ? 2 : 4,

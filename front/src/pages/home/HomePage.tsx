@@ -12,7 +12,7 @@ import BannerMobile from './banner/BannerMobile';
 import PopularPC from './popular/PopularPC';
 import PopularMobile from './popular/PopularMobile';
 import HorizontalScroll from '@components/HorizontalScroll';
-import { BrowserView, MobileView } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 
 const files: Array<FileData> = [];
 
@@ -89,6 +89,7 @@ const HomeMobile: FC<HomeProps> = ({
 	image,
 	bannerDisplayData,
 }): JSX.Element => {
+	const isMobile = useIsMobile();
 	return (
 		<>
 			<BannerMobile />
@@ -110,7 +111,7 @@ const HomeMobile: FC<HomeProps> = ({
 				/>
 			</Box>
 			<Divider variant="middle" />
-			<MobileView>
+			{isMobile ? (
 				<Box
 					sx={{
 						p: 2,
@@ -127,8 +128,7 @@ const HomeMobile: FC<HomeProps> = ({
 						type="display"
 					/>
 				</Box>
-			</MobileView>
-			<BrowserView>
+			) : (
 				<Box
 					sx={{
 						p: 2,
@@ -145,7 +145,7 @@ const HomeMobile: FC<HomeProps> = ({
 						type="display"
 					/>
 				</Box>
-			</BrowserView>
+			)}
 		</>
 	);
 };

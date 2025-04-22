@@ -7,7 +7,7 @@ import {
 	LinearProgress,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 
 const ratingCounts: Record<number, number> = {
 	5: 13,
@@ -18,6 +18,8 @@ const ratingCounts: Record<number, number> = {
 };
 
 const ReviewSummary: FC = () => {
+	const isMobile = useIsMobile();
+
 	const getRatingPercentage = (star: number): number => {
 		const total = Object.values(ratingCounts).reduce(
 			(sum, count) => sum + count,

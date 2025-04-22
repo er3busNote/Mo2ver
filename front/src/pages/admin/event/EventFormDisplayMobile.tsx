@@ -20,7 +20,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import GoodsDialogMobile from '@components/dialog/DialogGoodsMobile';
+import DialogGoodsMobile from '@components/dialog/DialogGoodsMobile';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/UploadField';
@@ -29,8 +29,7 @@ import {
 	EventFormDisplayValues,
 	EventDisplayDetailValues,
 } from '@pages/admin/types';
-// import _ from 'lodash';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
@@ -52,6 +51,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 	const [open, setOpen] = useState(false);
 
 	const {
@@ -348,12 +348,13 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 							>
 								상품찾기
 							</ButtonBase>
-							<GoodsDialogMobile
+							<DialogGoodsMobile
 								open={open}
 								replaceField={replaceField}
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
+								goodsSaveData={watch('goods')}
 							/>
 						</Grid>
 					</Grid>

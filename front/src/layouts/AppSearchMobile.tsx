@@ -29,7 +29,7 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { BrowserView, MobileView } from 'react-device-detect';
+import { useIsMobile } from '@context/MobileContext';
 import MainIcon from '@assets/logo.svg?react';
 import { isEmpty } from 'lodash';
 
@@ -170,6 +170,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
@@ -262,8 +263,8 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 	};
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
-			<Box>
-				<MobileView>
+			{isMobile ? (
+				<Box>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '60%', height: '100px' }}>
 							<IconButton
@@ -337,8 +338,9 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 							</Box>
 						</Grid>
 					</Grid>
-				</MobileView>
-				<BrowserView>
+				</Box>
+			) : (
+				<Box>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
 							<IconButton
@@ -479,8 +481,8 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 							</Grid>
 						)}
 					</Box>
-				</BrowserView>
-			</Box>
+				</Box>
+			)}
 		</Paper>
 	);
 };

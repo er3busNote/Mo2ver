@@ -21,7 +21,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import GoodsDialogPC from '@components/dialog/DialogGoodsPC';
+import DialogGoodsPC from '@components/dialog/DialogGoodsPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/UploadField';
@@ -340,12 +340,13 @@ const EventFormDisplayPC: FC<EventProp> = ({
 							>
 								상품찾기
 							</ButtonBase>
-							<GoodsDialogPC
+							<DialogGoodsPC
 								open={open}
 								replaceField={replaceField}
 								handleClose={closeGoods}
 								header={inputHeader}
 								base={inputBody}
+								goodsSaveData={watch('goods')}
 							/>
 						</Grid>
 					</Grid>
