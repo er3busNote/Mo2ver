@@ -1,9 +1,6 @@
 package com.mo2ver.web.domain.goods.dto.request;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,8 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoodsReviewRequest {
 
     @NotNull(groups = Update.class)

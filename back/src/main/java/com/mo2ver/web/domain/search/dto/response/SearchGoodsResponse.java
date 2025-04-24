@@ -1,33 +1,27 @@
 package com.mo2ver.web.domain.search.dto.response;
 
+import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.goods.entity.Goods;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
-
-@Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class SearchGoodsResponse {
-
-    private String goodsCode;
-    private String goodsName;
-    private String goodsBrand;
-    private String goodsGender;
-    private String goodsYear;
-    private BigDecimal supplyPrice;
-    private BigDecimal salePrice;
+public class SearchGoodsResponse extends GoodsResponse {
 
     public static SearchGoodsResponse of(Goods goods) {
+        GoodsResponse goodsResponse = GoodsResponse.of(goods);
         return SearchGoodsResponse.builder()
-                .goodsCode(goods.getGoodsCode())
-                .goodsName(goods.getGoodsName())
-                .goodsBrand(goods.getGoodsBrand())
-                .goodsGender(goods.getGoodsGender())
-                .goodsYear(goods.getGoodsYear())
-                .supplyPrice(goods.getPrice().getSupplyPrice())
-                .salePrice(goods.getPrice().getSalePrice())
+                .goodsCode(goodsResponse.getGoodsCode())
+                .goodsName(goodsResponse.getGoodsName())
+                .goodsBrand(goodsResponse.getGoodsBrand())
+                .goodsGender(goodsResponse.getGoodsGender())
+                .goodsYear(goodsResponse.getGoodsYear())
+                .supplyPrice(goodsResponse.getSupplyPrice())
+                .salePrice(goodsResponse.getSalePrice())
+                .imageList(goodsResponse.getImageList())
+                .keywordList(goodsResponse.getKeywordList())
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.goods.dto.response;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoodsResponse {
