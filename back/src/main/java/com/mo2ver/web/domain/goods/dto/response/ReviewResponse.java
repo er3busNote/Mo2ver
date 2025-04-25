@@ -28,6 +28,21 @@ public class ReviewResponse {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
+    public static ReviewResponse of(Review review) {
+        return ReviewResponse.builder()
+                .goodsReviewNo(review.getGoodsReviewNo())
+                .imageAttachFile(getEncryptor(review.getImageAttachFile()))
+                .reviewContents(review.getReviewContents())
+                .rating(review.getRating())
+                .memberName(review.getUpdater().getMemberName())
+                .reviewResponseList(
+                        review.getReviewList().stream()
+                                .map(ReviewResponse::of)
+                                .collect(Collectors.toList())
+                )
+                .build();
+    }
+
     public static ReviewResponse of(Review review, Map<Long, List<Review>> childrenMap) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())

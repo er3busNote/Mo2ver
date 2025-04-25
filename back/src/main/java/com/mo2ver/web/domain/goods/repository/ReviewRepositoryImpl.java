@@ -33,6 +33,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .selectFrom(review)
                 .where(review.upperReviewNo.goodsReviewNo.isNull())
                 .where(builder)
+                .orderBy(review.goodsReviewNo.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
