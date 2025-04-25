@@ -11,6 +11,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -39,8 +41,9 @@ public class Review {
     )
     private Goods goodsCode;
 
-    @Column(name = "UPPR_REVW_NO", columnDefinition = "CHAR(10) COMMENT '상위상품리뷰번호'")
-    private Long upperReviewNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UPPR_REVW_NO", columnDefinition = "CHAR(10) COMMENT '상위상품리뷰번호'")
+    private Review upperReviewNo;
 
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
     private Integer imageAttachFile;
@@ -54,9 +57,12 @@ public class Review {
     @Column(name = "DEL_YN", columnDefinition = "CHAR(1) COMMENT '삭제유무'")
     private Character delYesNo;
 
+    @OneToMany(mappedBy = "upperReviewNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewList = new ArrayList<>();
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
-    private String register;
+    private Member register;
 
     @Builder.Default
     @Column(name = "REG_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '등록일시'")
@@ -65,7 +71,7 @@ public class Review {
 
     @Column(name = "UPDR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '수정자'")
     @NotBlank
-    private String updater;
+    private Member updater;
 
     @Builder.Default
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
@@ -79,7 +85,7 @@ public class Review {
 
     public Review(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.createOrUpdateReview(goodsReviewRequest, goods, currentUser);
-        this.register = currentUser.getMemberNo();
+        this.register = currentUser;
     }
 
     public void update(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
@@ -92,11 +98,17 @@ public class Review {
 
     private void createOrUpdateReview(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.goodsCode = goods;
-        this.upperReviewNo = goodsReviewRequest.getUpperReviewNo();
+        this.upperReviewNo = Review.of(goodsReviewRequest);
         this.imageAttachFile = Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg()));
         this.reviewContents = goodsReviewRequest.getReviewContents();
         this.rating = goodsReviewRequest.getRating();
         this.delYesNo = 'N';
-        this.updater = currentUser.getMemberNo();
+        this.updater = currentUser;
+    }
+
+    private static Review of(GoodsReviewRequest goodsReviewRequest) {
+        return Review.builder()
+                .goodsReviewNo(goodsReviewRequest.getReviewNo())
+                .build();
     }
 }

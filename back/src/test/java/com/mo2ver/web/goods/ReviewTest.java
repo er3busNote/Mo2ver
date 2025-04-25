@@ -68,8 +68,8 @@ public class ReviewTest extends CsrfConfigTest {
                 .goodsCode("1000000004")
                 .upperReviewNo(null)
                 .reviewImg(FileAttachInfo.from(100011))
-                .reviewContents("테스트2")
-                .rating(6)
+                .reviewContents("테스트")
+                .rating(7)
                 .build();
     }
 

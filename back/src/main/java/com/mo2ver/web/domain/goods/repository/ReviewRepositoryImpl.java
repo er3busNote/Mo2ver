@@ -14,7 +14,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static com.mo2ver.web.domain.goods.entity.QReview.review;
-import static com.mo2ver.web.domain.member.entity.QMember.member;
 
 public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements ReviewRepositoryCustom {
 
@@ -33,14 +32,14 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
         JPAQuery<ReviewResponse> query = queryFactory
                 .select(new QReviewResponse(
                         review.goodsReviewNo,
-                        review.upperReviewNo,
                         review.imageAttachFile,
                         review.reviewContents,
                         review.rating,
-                        member.memberName
+                        review.updater,
+                        review.reviewList
                 ))
                 .from(review)
-                .innerJoin(member).on(review.updater.eq(member.memberNo))
+                .groupBy(review.goodsReviewNo)
                 .where(builder);
         List<ReviewResponse> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);

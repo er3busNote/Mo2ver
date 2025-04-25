@@ -26,7 +26,7 @@ public class RecommendService {
         // 1. 모든 사용자의 평가 수집하기
         Map<String, Map<Goods, Integer>> userRatingsMap = new HashMap<>();
         for (Review review : reviewRepository.findByDelYesNo('N')) {
-            String reviewMemberNo = review.getUpdater();
+            String reviewMemberNo = review.getUpdater().getMemberNo();
             Goods reviewGoods = review.getGoodsCode();
             Integer reviewRating = review.getRating();
 
