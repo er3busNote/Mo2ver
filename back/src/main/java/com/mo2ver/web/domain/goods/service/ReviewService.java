@@ -7,6 +7,7 @@ import com.mo2ver.web.domain.goods.entity.Review;
 import com.mo2ver.web.domain.goods.repository.GoodsRepository;
 import com.mo2ver.web.domain.goods.repository.ReviewRepository;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
     private final ReviewRepository reviewRepository;
 
@@ -31,22 +33,30 @@ public class ReviewService {
 
     @Transactional
     public Long saveReview(GoodsReviewRequest goodsReviewRequest, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
         Goods goods = this.findGoodsById(goodsReviewRequest.getGoodsCode());
-        Review review = new Review(goodsReviewRequest, goods, currentUser);
+        Review review = new Review(goodsReviewRequest, goods, member);
         return this.reviewRepository.save(review).getGoodsReviewNo();
     }
 
     @Transactional
     public void updateReview(GoodsReviewRequest goodsReviewRequest, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
         Goods goods = this.findGoodsById(goodsReviewRequest.getGoodsCode());
         Review review = this.findReviewById(goodsReviewRequest.getReviewNo());
-        review.update(goodsReviewRequest, goods, currentUser);
+        review.update(goodsReviewRequest, goods, member);
+        this.reviewRepository.save(review);
     }
 
     @Transactional
     public void deleteReview(Long id) {
         Review review = this.findReviewById(id);
         review.delete();
+    }
+
+    private Member findMemberById(String memberNo) {
+        return this.memberRepository.findById(memberNo)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
 
     private Goods findGoodsById(String goodsCode) {

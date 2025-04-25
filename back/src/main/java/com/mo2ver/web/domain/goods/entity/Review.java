@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,9 @@ import java.util.List;
 @Table(
         name = "GD_REVW",    // 상품리뷰
         indexes={
-                @Index(name="FK_GD_TO_GD_REVW", columnList="GD_CD")
+                @Index(name="FK_GD_TO_GD_REVW", columnList="GD_CD"),
+                @Index(name="FK_MBR_TO_GD_REVW_REGR", columnList="REGR"),
+                @Index(name="FK_MBR_TO_GD_REVW_UPDR", columnList="UPDR")
         }
 )
 @Getter @Setter
@@ -42,7 +43,12 @@ public class Review {
     private Goods goodsCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UPPR_REVW_NO", columnDefinition = "CHAR(10) COMMENT '상위상품리뷰번호'")
+    @JoinColumn(
+            name = "UPPR_REVW_NO",
+            referencedColumnName = "GD_REVW_NO",
+            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT),
+            columnDefinition = "CHAR(10) COMMENT '상위상품리뷰번호'"
+    )
     private Review upperReviewNo;
 
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
@@ -60,8 +66,13 @@ public class Review {
     @OneToMany(mappedBy = "upperReviewNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
-    @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
-    @NotBlank
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "REGR",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW_REGR"),
+            columnDefinition = "VARCHAR(30) COMMENT '등록자'"
+    )
     private Member register;
 
     @Builder.Default
@@ -69,8 +80,13 @@ public class Review {
     @CreationTimestamp  // INSERT 시 자동으로 값을 채워줌
     private LocalDateTime registerDate = LocalDateTime.now();
 
-    @Column(name = "UPDR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '수정자'")
-    @NotBlank
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "UPDR",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW_UPDR"),
+            columnDefinition = "VARCHAR(30) COMMENT '수정자'"
+    )
     private Member updater;
 
     @Builder.Default
@@ -98,7 +114,7 @@ public class Review {
 
     private void createOrUpdateReview(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.goodsCode = goods;
-        this.upperReviewNo = Review.of(goodsReviewRequest);
+        this.upperReviewNo = Review.of(goodsReviewRequest, goods, currentUser);
         this.imageAttachFile = Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg()));
         this.reviewContents = goodsReviewRequest.getReviewContents();
         this.rating = goodsReviewRequest.getRating();
@@ -106,9 +122,15 @@ public class Review {
         this.updater = currentUser;
     }
 
-    private static Review of(GoodsReviewRequest goodsReviewRequest) {
+    private static Review of(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         return Review.builder()
                 .goodsReviewNo(goodsReviewRequest.getReviewNo())
+                .goodsCode(goods)
+                .imageAttachFile(Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg())))
+                .reviewContents(goodsReviewRequest.getReviewContents())
+                .rating(goodsReviewRequest.getRating())
+                .register(currentUser)
+                .updater(currentUser)
                 .build();
     }
 }

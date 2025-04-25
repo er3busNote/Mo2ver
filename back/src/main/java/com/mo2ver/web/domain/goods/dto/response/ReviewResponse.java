@@ -1,14 +1,13 @@
 package com.mo2ver.web.domain.goods.dto.response;
 
 import com.mo2ver.web.domain.goods.entity.Review;
-import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
-import com.mo2ver.web.global.common.utils.ObjectUtil;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -29,25 +28,15 @@ public class ReviewResponse {
         return jasyptUtil.encrypt(String.valueOf(id));
     }
 
-    @QueryProjection
-    public ReviewResponse(Long goodsReviewNo, Integer imageAttachFile, String reviewContents, Integer rating, Member updator, List<Review> reviewList) {
-        this.goodsReviewNo = goodsReviewNo;
-        this.imageAttachFile = getEncryptor(imageAttachFile);
-        this.reviewContents = reviewContents;
-        this.rating = rating;
-        this.memberName = updator.getMemberName();
-        this.reviewResponseList = reviewList.stream().filter(ObjectUtil::nonAllFieldsNull).map(ReviewResponse::of).collect(Collectors.toList());
-    }
-
-    private static ReviewResponse of(Review review) {
+    public static ReviewResponse of(Review review, Map<Long, List<Review>> childrenMap) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
                 .imageAttachFile(getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
                 .memberName(review.getUpdater().getMemberName())
-                .reviewResponseList(review.getReviewList().stream()
-                        .map(ReviewResponse::of)
+                .reviewResponseList(childrenMap.getOrDefault(review.getGoodsReviewNo(), Collections.emptyList()).stream()
+                        .map(r -> ReviewResponse.of(r, childrenMap))
                         .collect(Collectors.toList()))
                 .build();
     }
