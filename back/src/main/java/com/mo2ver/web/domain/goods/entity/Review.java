@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,7 @@ import java.util.List;
         name = "GD_REVW",    // 상품리뷰
         indexes={
                 @Index(name="FK_GD_TO_GD_REVW", columnList="GD_CD"),
-                @Index(name="FK_MBR_TO_GD_REVW_REGR", columnList="REGR"),
-                @Index(name="FK_MBR_TO_GD_REVW_UPDR", columnList="UPDR")
+                @Index(name="FK_MBR_TO_GD_REVW", columnList="MBR_NO")
         }
 )
 @Getter @Setter
@@ -51,6 +51,15 @@ public class Review {
     )
     private Review upperReviewNo;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "MBR_NO",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW"),
+            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+    )
+    private Member memberNo;
+
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
     private Integer imageAttachFile;
 
@@ -66,28 +75,18 @@ public class Review {
     @OneToMany(mappedBy = "upperReviewNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "REGR",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW_REGR"),
-            columnDefinition = "VARCHAR(30) COMMENT '등록자'"
-    )
-    private Member register;
+    @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
+    @NotBlank
+    private String register;
 
     @Builder.Default
     @Column(name = "REG_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '등록일시'")
     @CreationTimestamp  // INSERT 시 자동으로 값을 채워줌
     private LocalDateTime registerDate = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "UPDR",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW_UPDR"),
-            columnDefinition = "VARCHAR(30) COMMENT '수정자'"
-    )
-    private Member updater;
+    @Column(name = "UPDR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '수정자'")
+    @NotBlank
+    private String updater;
 
     @Builder.Default
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
@@ -101,7 +100,8 @@ public class Review {
 
     public Review(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.createOrUpdateReview(goodsReviewRequest, goods, currentUser);
-        this.register = currentUser;
+        this.memberNo = currentUser;
+        this.register = currentUser.getMemberNo();
     }
 
     public void update(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
@@ -119,18 +119,19 @@ public class Review {
         this.reviewContents = goodsReviewRequest.getReviewContents();
         this.rating = goodsReviewRequest.getRating();
         this.delYesNo = 'N';
-        this.updater = currentUser;
+        this.updater = currentUser.getMemberNo();
     }
 
     private static Review of(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         return Review.builder()
                 .goodsReviewNo(goodsReviewRequest.getReviewNo())
                 .goodsCode(goods)
+                .memberNo(currentUser)
                 .imageAttachFile(Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg())))
                 .reviewContents(goodsReviewRequest.getReviewContents())
                 .rating(goodsReviewRequest.getRating())
-                .register(currentUser)
-                .updater(currentUser)
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
                 .build();
     }
 }

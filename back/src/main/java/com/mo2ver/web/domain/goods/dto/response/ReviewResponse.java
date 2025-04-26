@@ -34,7 +34,7 @@ public class ReviewResponse {
                 .imageAttachFile(getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
-                .memberName(review.getUpdater().getMemberName())
+                .memberName(review.getMemberNo().getMemberName())
                 .reviewResponseList(
                         review.getReviewList().stream()
                                 .map(ReviewResponse::of)
@@ -49,7 +49,7 @@ public class ReviewResponse {
                 .imageAttachFile(getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
-                .memberName(review.getUpdater().getMemberName())
+                .memberName(review.getMemberNo().getMemberName())
                 .reviewResponseList(childrenMap.getOrDefault(review.getGoodsReviewNo(), Collections.emptyList()).stream()
                         .map(r -> ReviewResponse.of(r, childrenMap))
                         .collect(Collectors.toList()))
