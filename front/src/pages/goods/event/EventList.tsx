@@ -1,13 +1,10 @@
-import React, { FC, ChangeEvent } from 'react';
+import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect, useDispatch } from 'react-redux';
+import { ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
-import Api from '@api/index';
 import useImageUrl from '@hooks/useImageUrl';
-import useEventPageList from '@hooks/event/useEventPageList';
 import AppSubHeader from '@layouts/AppSubHeader';
 import {
 	Box,
@@ -20,14 +17,15 @@ import {
 	Skeleton,
 } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import { EventData } from '@api/types';
+import { EventData, EventPageData } from '@api/types';
 import moment from 'moment';
 
 interface EventListProps {
 	title: string;
 	description: string;
-	event: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
+	eventData: EventPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 }
 
 interface EventGridProps {
@@ -134,11 +132,10 @@ const EventGrid: FC<EventGridProps> = ({
 const EventList: FC<EventListProps> = ({
 	title,
 	description,
-	event,
 	image,
+	eventData,
+	setPage,
 }): JSX.Element => {
-	const [eventData, setPage] = useEventPageList({ event });
-
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
 		const value = (event.target as HTMLButtonElement).textContent as any;
 		if (value && value === String(page)) setPage(page);
@@ -156,25 +153,22 @@ const EventList: FC<EventListProps> = ({
 				/>
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				<Pagination
-					count={eventData.totalPages - 1}
-					variant="outlined"
-					color="primary"
-					siblingCount={0}
-					boundaryCount={1}
-					hidePrevButton
-					hideNextButton
-					onChange={pageChange}
-					size="small"
-				/>
+				{eventData.totalPages && (
+					<Pagination
+						count={eventData.totalPages - 1}
+						variant="outlined"
+						color="primary"
+						siblingCount={0}
+						boundaryCount={1}
+						hidePrevButton
+						hideNextButton
+						onChange={pageChange}
+						size="small"
+					/>
+				)}
 			</Box>
 		</Box>
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	event: bindActionCreators(Api.event, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(EventList);
+export default EventList;

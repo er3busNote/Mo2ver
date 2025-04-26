@@ -12,8 +12,14 @@ import lombok.*;
 public class ImageInfo {
 
     private String base64Image;
-    private Integer goodsImageAttachFile;
+    private String goodsImageAttachFile;
     private Character basicImageYesNo;
+
+    public ImageInfo(String base64Image, Integer goodsImageAttachFile, Character basicImageYesNo) {
+        this.base64Image = base64Image;
+        this.goodsImageAttachFile = goodsImageAttachFile != null ? String.valueOf(goodsImageAttachFile) : null;
+        this.basicImageYesNo = basicImageYesNo;
+    }
 
     private static String getEncryptor(Integer id) {
         JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
@@ -21,12 +27,12 @@ public class ImageInfo {
     }
 
     public static String from(ImageInfo imageInfo) {
-        return getEncryptor(imageInfo.getGoodsImageAttachFile());
+        return getEncryptor(Integer.valueOf(imageInfo.getGoodsImageAttachFile()));
     }
 
     public static ImageInfo of(EventImage eventImage) {
         return ImageInfo.builder()
-                .goodsImageAttachFile(eventImage.getGoodsImageAttachFile())
+                .goodsImageAttachFile(getEncryptor(eventImage.getGoodsImageAttachFile()))
                 .basicImageYesNo(eventImage.getBasicImageYesNo())
                 .build();
     }

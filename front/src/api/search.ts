@@ -1,15 +1,15 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { KeywordSearchPage } from './types';
+import { PageData } from './types';
 
 const search = (instance: AxiosInstance) => {
 	return {
 		// 상품 검색 API : <baseURL>/search/goods
-		goods: (keywordSearchPage: KeywordSearchPage) => (dispatch: Dispatch) =>
+		goods: (keyword: string, pageData: PageData) => (dispatch: Dispatch) =>
 			instance
 				.get(
-					`search/goods?page=${keywordSearchPage.page}&size=${keywordSearchPage.size}&keyword=${keywordSearchPage.keyword}`
+					`search/goods?page=${pageData.page}&size=${pageData.size}&keyword=${keyword}`
 				)
 				.then((response: AxiosResponse) => handleResponse(response, dispatch))
 				.catch((error: AxiosError) => handleError(error, dispatch)),

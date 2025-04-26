@@ -1,12 +1,7 @@
-import React, { FC } from 'react';
-import { useParams } from 'react-router-dom';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
-import Api from '@api/index';
-import { ImageData, CartData } from '@api/types';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { ActionCreatorsMapObject } from 'redux';
+import { GoodsData, CartData, ReviewPageData, ImageData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
-import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
 import ReviewSummary from './review/ReviewSummary';
 import ReviewCard from './review/ReviewCard';
@@ -31,50 +26,46 @@ import {
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 
 interface GoodsProps {
 	title: string;
 	description: string;
-	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
+	goodsData: GoodsData;
+	reviewData: ReviewPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 	onCartAdd: (cartData: CartData) => void;
 }
 
 const GoodsDetail: FC<GoodsProps> = ({
 	title,
 	description,
-	goods,
 	image,
+	goodsData,
+	reviewData,
+	setPage,
 	onCartAdd,
 }): JSX.Element => {
-	const { id } = useParams();
-	const code = id ?? '';
-	const data = useGoodsDetail({ goods, code });
-
 	const addCartClick = () => {
 		const cartData: CartData = {
-			goodsCode: data.goodsCode,
-			goodsName: data.goodsName,
-			goodsBrand: data.goodsBrand,
-			goodsGender: data.goodsGender,
-			goodsYear: data.goodsYear,
-			supplyPrice: data.supplyPrice,
-			salePrice: data.salePrice,
-			image:
-				data.imageList.length > 0
-					? data.imageList[0]
-					: (new Object() as ImageData),
+			goodsCode: goodsData.goodsCode,
+			goodsName: goodsData.goodsName,
+			goodsBrand: goodsData.goodsBrand,
+			goodsGender: goodsData.goodsGender,
+			goodsYear: goodsData.goodsYear,
+			supplyPrice: goodsData.supplyPrice,
+			salePrice: goodsData.salePrice,
+			image: get(goodsData, ['imageList', 0], new Object() as ImageData),
 			amount: 1,
-			totalPrice: data.salePrice,
+			totalPrice: goodsData.salePrice,
 		};
 		onCartAdd(cartData);
 	};
 
-	const file =
-		data.imageList.length > 0
-			? String(data.imageList[0].goodsImageAttachFile)
-			: '';
+	const file = String(
+		get(goodsData, ['imageList', 0, 'goodsImageAttachFile'], '')
+	);
 
 	const gridItem: SxProps<Theme> = {
 		py: 0.5,
@@ -183,12 +174,12 @@ const GoodsDetail: FC<GoodsProps> = ({
 			<GoodsSubHeader
 				title={title}
 				description={description}
-				subtitle={data.goodsName}
+				subtitle={goodsData.goodsName}
 			/>
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={6} lg={6}>
 					<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
-						{file !== '' ? (
+						{!isEmpty(file) ? (
 							<CardMedia
 								component="img"
 								width="100%"
@@ -261,16 +252,16 @@ const GoodsDetail: FC<GoodsProps> = ({
 													</Breadcrumbs>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													{data ? (
+													{goodsData ? (
 														<Breadcrumbs
 															sx={infoBreadcrumbs}
 															aria-label="breadcrumb"
 														>
 															<Typography component="span" sx={info}>
-																{data.goodsBrand}
+																{goodsData.goodsBrand}
 															</Typography>
 															<Typography component="span" sx={info}>
-																{data.goodsCode}
+																{goodsData.goodsCode}
 															</Typography>
 														</Breadcrumbs>
 													) : (
@@ -293,16 +284,16 @@ const GoodsDetail: FC<GoodsProps> = ({
 													</Breadcrumbs>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													{data ? (
+													{goodsData ? (
 														<Breadcrumbs
 															sx={infoBreadcrumbs}
 															aria-label="breadcrumb"
 														>
 															<Typography component="span" sx={info}>
-																{data.goodsYear}
+																{goodsData.goodsYear}
 															</Typography>
 															<Typography component="span" sx={info}>
-																{data.goodsGender}
+																{goodsData.goodsGender}
 															</Typography>
 														</Breadcrumbs>
 													) : (
@@ -380,17 +371,19 @@ const GoodsDetail: FC<GoodsProps> = ({
 										</TableBody>
 									</Table>
 								</TableContainer>
-								{!isEmpty(data.keywordList) && (
+								{!isEmpty(goodsData.keywordList) && (
 									<Box sx={infoHashTag}>
-										{data.keywordList.map((keyword: string, index: number) => (
-											<ButtonTag
-												key={index}
-												buttonType="detail"
-												variant="outlined"
-											>
-												#{keyword}
-											</ButtonTag>
-										))}
+										{goodsData.keywordList.map(
+											(keyword: string, index: number) => (
+												<ButtonTag
+													key={index}
+													buttonType="detail"
+													variant="outlined"
+												>
+													#{keyword}
+												</ButtonTag>
+											)
+										)}
 									</Box>
 								)}
 							</Box>
@@ -472,9 +465,9 @@ const GoodsDetail: FC<GoodsProps> = ({
 													</Typography>
 												</TableCell>
 												<TableCell sx={infoCell}>
-													{data ? (
+													{goodsData ? (
 														<Typography component="span" sx={infoOriginPrice}>
-															{data.supplyPrice.toLocaleString()}원
+															{goodsData.supplyPrice.toLocaleString()}원
 														</Typography>
 													) : (
 														<Skeleton animation="wave" />
@@ -500,9 +493,9 @@ const GoodsDetail: FC<GoodsProps> = ({
 															59,390원
 														</Typography>
 													</Breadcrumbs>*/}
-													{data ? (
+													{goodsData ? (
 														<Typography component="span" sx={infoDiscountPrice}>
-															{data.salePrice.toLocaleString()}원
+															{goodsData.salePrice.toLocaleString()}원
 														</Typography>
 													) : (
 														<Skeleton animation="wave" />
@@ -537,9 +530,4 @@ const GoodsDetail: FC<GoodsProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	goods: bindActionCreators(Api.goods, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(GoodsDetail);
+export default GoodsDetail;

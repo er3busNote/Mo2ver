@@ -72,48 +72,20 @@ interface GoodsRegisterData {
 	maxLimitAmount: number;
 }
 
-interface GoodsPage {
-	page: number;
-	size: number;
+interface GoodsPage extends PageData {
 	categoryCode: string;
 	categoryType: string;
 }
 
-interface GoodsSearchPage {
-	page: number;
-	size: number;
+interface GoodsSearchPage extends PageData {
 	goodsName: string;
 	largeCategoryCode: string;
 	mediumCategoryCode: string;
 	smallCategoryCode: string;
 }
 
-interface GoodsPageData {
+interface GoodsPageData extends PageableData {
 	content: Array<GoodsData>;
-	empty: boolean;
-	first: boolean;
-	last: boolean;
-	number: number;
-	numberOfElements: number;
-	pageable: {
-		offset: number;
-		pageNumber: number;
-		pageSize: number;
-		paged: boolean;
-		sort: {
-			empty: boolean;
-			sorted: boolean;
-			unsorted: boolean;
-		};
-	};
-	size: number;
-	sort: {
-		empty: boolean;
-		sorted: boolean;
-		unsorted: boolean;
-	};
-	totalElements: number;
-	totalPages: number;
 }
 
 // 3. Category Type
@@ -137,7 +109,30 @@ interface CategoryDataGroup {
 	smallCategoryData: CategoryDataInfo;
 }
 
-// 4. Banner Type
+// 4. Review Type
+interface ReviewData {
+	goodsReviewNo: number;
+	imageAttachFile: string;
+	reviewContents: string;
+	rating: number;
+	memberName: string;
+	reviewResponseList: Array<ReviewData>;
+}
+
+interface ReviewRequestData {
+	reviewNo?: number;
+	goodsCode: string;
+	upperReviewNo: number;
+	reviewImg: string;
+	reviewContents: string;
+	rating: number;
+}
+
+interface ReviewPageData extends PageableData {
+	content: Array<ReviewData>;
+}
+
+// 5. Banner Type
 interface BannerData {
 	bannerManageNo: number;
 	subject: string;
@@ -155,32 +150,8 @@ interface BannerRequestData {
 	displayTemplateCode: string;
 }
 
-interface BannerPageData {
+interface BannerPageData extends PageableData {
 	content: Array<BannerData>;
-	empty: boolean;
-	first: boolean;
-	last: boolean;
-	number: number;
-	numberOfElements: number;
-	pageable: {
-		offset: number;
-		pageNumber: number;
-		pageSize: number;
-		paged: boolean;
-		sort: {
-			empty: boolean;
-			sorted: boolean;
-			unsorted: boolean;
-		};
-	};
-	size: number;
-	sort: {
-		empty: boolean;
-		sorted: boolean;
-		unsorted: boolean;
-	};
-	totalElements: number;
-	totalPages: number;
 }
 
 interface BannerImageDetailData {
@@ -223,7 +194,7 @@ interface BannerGoodsData {
 	goods: Array<BannerGoodsDetailData>;
 }
 
-// 5. Event Type
+// 6. Event Type
 interface EventData {
 	eventManageNo: number;
 	subject: string;
@@ -239,39 +210,15 @@ interface EventRequestData {
 	eventManageNo: number;
 }
 
-interface EventPageData {
+interface EventPageData extends PageableData {
 	content: Array<EventData>;
-	empty: boolean;
-	first: boolean;
-	last: boolean;
-	number: number;
-	numberOfElements: number;
-	pageable: {
-		offset: number;
-		pageNumber: number;
-		pageSize: number;
-		paged: boolean;
-		sort: {
-			empty: boolean;
-			sorted: boolean;
-			unsorted: boolean;
-		};
-	};
-	size: number;
-	sort: {
-		empty: boolean;
-		sorted: boolean;
-		unsorted: boolean;
-	};
-	totalElements: number;
-	totalPages: number;
 }
 
-interface EventDetailData {
+interface EventProductData {
 	subject: string;
 	eventStartDate: number;
 	eventEndDate: number;
-	goodsImageAttachFile: number;
+	goodsImageAttachFile: string;
 	goodsImageExtension: string;
 	goodsCode: string;
 	goodsName: string;
@@ -281,44 +228,21 @@ interface EventDetailData {
 	supplyPrice: number;
 	salePrice: number;
 	sortSequence: number;
+	keywordList: Array<string>;
 }
 
-interface EventDetailPageData {
-	content: Array<EventDetailData>;
-	empty: boolean;
-	first: boolean;
-	last: boolean;
-	number: number;
-	numberOfElements: number;
-	pageable: {
-		offset: number;
-		pageNumber: number;
-		pageSize: number;
-		paged: boolean;
-		sort: {
-			empty: boolean;
-			sorted: boolean;
-			unsorted: boolean;
-		};
-	};
-	size: number;
-	sort: {
-		empty: boolean;
-		sorted: boolean;
-		unsorted: boolean;
-	};
-	totalElements: number;
-	totalPages: number;
+interface EventProductPageData extends PageableData {
+	content: Array<EventProductData>;
 }
 
-interface EventDisplayDetailData {
+interface EventDetailProductData {
 	goodsCode: string;
 	goodsName: string;
 	salePrice: number;
 	sortSequence: number;
 }
 
-interface EventDisplayData {
+interface EventDetailData {
 	eventNo?: number;
 	title: string;
 	startDate: string;
@@ -326,10 +250,10 @@ interface EventDisplayData {
 	displayFile: string;
 	eventFile: string;
 	useyn: string;
-	goods: Array<EventDisplayDetailData>;
+	goods: Array<EventDetailProductData>;
 }
 
-// 6. Cart Type
+// 7. Cart Type
 interface CartData {
 	goodsCode: string;
 	goodsName?: string;
@@ -352,17 +276,37 @@ interface CartPageData {
 	cartList: Array<CartData>;
 }
 
-// 7. Search Type
-interface KeywordSearchPage {
-	page: number;
-	size: number;
-	keyword: string;
-}
-
 // 0. ETC Type
 interface PageData {
 	page: number;
 	size: number;
+}
+
+interface PageableData {
+	empty: boolean;
+	first: boolean;
+	last: boolean;
+	number: number;
+	numberOfElements: number;
+	pageable: {
+		offset: number;
+		pageNumber: number;
+		pageSize: number;
+		paged: boolean;
+		sort: {
+			empty: boolean;
+			sorted: boolean;
+			unsorted: boolean;
+		};
+	};
+	size: number;
+	sort: {
+		empty: boolean;
+		sorted: boolean;
+		unsorted: boolean;
+	};
+	totalElements: number;
+	totalPages: number;
 }
 
 interface CodeData {
@@ -395,6 +339,9 @@ export type {
 	GoodsPageData,
 	CategoryDataInfo,
 	CategoryDataGroup,
+	ReviewData,
+	ReviewRequestData,
+	ReviewPageData,
 	BannerData,
 	BannerRequestData,
 	BannerPageData,
@@ -403,12 +350,11 @@ export type {
 	EventData,
 	EventRequestData,
 	EventPageData,
+	EventProductData,
+	EventProductPageData,
 	EventDetailData,
-	EventDetailPageData,
-	EventDisplayData,
 	CartData,
 	CartPageData,
-	KeywordSearchPage,
 	PageData,
 	CodeData,
 	FileData,

@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { EventRequestData, EventDisplayData } from '@api/types';
+import { EventRequestData, EventDetailData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useEventDetail from '@hooks/event/useEventDetail';
 import EventFormDisplayPC from './EventFormDisplayPC';
@@ -123,10 +123,7 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const [eventNo, setEventNo] = useState<number>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType =
-		location.state?.bannerManageNo && location.state?.displayTemplateCode
-			? 'Update'
-			: 'Create';
+	const componentType = location.state?.eventManageNo ? 'Update' : 'Create';
 
 	const methods = useForm<EventFormDisplayValues>({
 		mode: 'onChange',
@@ -164,7 +161,7 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 		data: EventFormDisplayValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const eventFormData: EventDisplayData = {
+		const eventFormData: EventDetailData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),
@@ -176,12 +173,8 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 		if (componentType === 'Update') {
 			eventFormData.eventNo = eventNo;
 		}
-		console.log(eventFormData);
-		console.log(csrfData);
-		if (componentType === 'Create')
-			await event.imagesCreate(eventFormData, csrfData);
-		if (componentType === 'Update')
-			await event.imagesUpdate(eventFormData, csrfData);
+		if (componentType === 'Create') await event.create(eventFormData, csrfData);
+		if (componentType === 'Update') await event.update(eventFormData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/event');
 	};

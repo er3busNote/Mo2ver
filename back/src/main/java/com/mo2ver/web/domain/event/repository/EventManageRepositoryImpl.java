@@ -1,18 +1,21 @@
 package com.mo2ver.web.domain.event.repository;
 
+import com.mo2ver.web.domain.event.dto.response.EventProductResponse;
 import com.mo2ver.web.domain.event.entity.EventManage;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import com.mo2ver.web.domain.event.dto.ImageInfo;
 import com.mo2ver.web.domain.event.dto.QEventImageInfo;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
-import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
-import com.mo2ver.web.domain.event.dto.response.QEventDetailResponse;
+import com.mo2ver.web.domain.event.dto.response.QEventProductResponse;
+import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.member.entity.MemberRole;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -41,7 +44,7 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
         this.queryFactory = queryFactory;
     }
 
-    public Page<EventDetailResponse> findById(Integer id, Pageable pageable) {
+    public Page<EventProductResponse> findById(Integer id, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(eventManage.eventManageNo.eq(Long.valueOf(id)));
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
@@ -53,15 +56,16 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .then(price.salePrice)
                 .otherwise(price.supplyPrice);
 
-        JPAQuery<EventDetailResponse> query = queryFactory
-                .select(new QEventDetailResponse(
+        JPAQuery<EventProductResponse> query = queryFactory
+                .select(new QEventProductResponse(
                         eventManage.subject,
                         eventManage.eventStartDate, eventManage.eventEndDate,
                         goodsImage.goodsImageAttachFile, goodsImage.goodsImageExtension,
                         goods.goodsCode, goods.goodsName, goods.goodsBrand,
                         goods.goodsGender, goods.goodsYear,
                         price.supplyPrice, salePrice,
-                        eventProduct.sortSequence
+                        eventProduct.sortSequence,
+                        goods.keyword
                 ))
                 .from(eventManage)
                 .innerJoin(eventManage.eventProductList, eventProduct)
@@ -69,14 +73,19 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
                 .where(builder);
-        List<EventDetailResponse> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<EventProductResponse> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
-    public Page<EventManage> findByAll(Pageable pageable) {
+    public Page<EventManage> findByAll(Pageable pageable, Member currentUser) {
+        StringTemplate eventStartDate = Expressions.stringTemplate("DATE({0})", eventManage.eventStartDate);
+        StringTemplate eventEndDate = Expressions.stringTemplate("DATE({0})", eventManage.eventEndDate);
+
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(eventManage.eventYesNo.eq('Y'));
-        builder.and(Expressions.currentDate().between(eventManage.eventStartDate, eventManage.eventEndDate));
+        if(currentUser.getRoles().contains(MemberRole.USER)) {
+            builder.and(Expressions.currentDate().stringValue().between(eventStartDate, eventEndDate));
+        }
         builder.and(eventImage.basicImageYesNo.eq('Y'));
 
         JPAQuery<EventManage> query = queryFactory.selectFrom(eventManage)
@@ -94,6 +103,8 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                 .selectFrom(eventManage)
                 .leftJoin(eventManage.eventImageList, eventImage)
                 .leftJoin(eventManage.eventProductList, eventProduct)
+                .leftJoin(goods).on(eventProduct.productCode.eq(goods.goodsCode))
+                .leftJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .where(builder)
                 .transform(groupBy(eventManage.eventManageNo).list(
                         new QEventImageInfo(
@@ -111,6 +122,8 @@ public class EventManageRepositoryImpl extends QuerydslRepositorySupport impleme
                                         eventProduct.eventProductId,
                                         eventProduct.productCode,
                                         eventProduct.productName,
+                                        price.supplyPrice,
+                                        price.salePrice,
                                         eventProduct.sortSequence
                                 ))
                         ))

@@ -5,6 +5,7 @@ import menu from './menu';
 import member from './member';
 import goods from './goods';
 import category from './category';
+import review from './review';
 import banner from './banner';
 import event from './event';
 import cart from './cart';
@@ -29,6 +30,7 @@ const api = {
 	member: member(instance),
 	goods: goods(instance),
 	category: category(instance),
+	review: review(instance),
 	banner: banner(instance),
 	event: event(instance),
 	cart: cart(instance),

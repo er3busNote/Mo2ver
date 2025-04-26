@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { KeywordSearchPage, GoodsPageData } from '@api/types';
+import { GoodsPageData, PageData } from '@api/types';
 import { isEmpty, debounce } from 'lodash';
 
 interface GoodsSearchProps {
@@ -38,12 +38,11 @@ const useSearchGoodsList = ({
 
 	const fetchAndSetData = useCallback(async () => {
 		if (!isEmpty(keyword)) {
-			const keywordSearchPage: KeywordSearchPage = {
+			const pageData: PageData = {
 				page: page,
 				size: 12,
-				keyword: keyword,
 			};
-			const data = await search.goods(keywordSearchPage);
+			const data = await search.goods(keyword, pageData);
 			setData(data);
 		} else {
 			setData(new Object() as GoodsPageData);

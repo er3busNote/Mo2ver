@@ -1,13 +1,10 @@
-import React, { FC, ChangeEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect, useDispatch } from 'react-redux';
+import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
-import Api from '@api/index';
 import useImageUrl from '@hooks/useImageUrl';
-import useCategoryPageList from '@hooks/category/useCategoryPageList';
 import AppSubHeader from '@layouts/AppSubHeader';
 import {
 	Box,
@@ -21,13 +18,14 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import { GoodsData } from '@api/types';
+import { GoodsData, GoodsPageData } from '@api/types';
 
 interface GoodsListProps {
 	title: string;
 	description: string;
-	goods: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
+	goodsData: GoodsPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 }
 
 interface GoodsGridProps {
@@ -158,18 +156,10 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 const GoodsList: FC<GoodsListProps> = ({
 	title,
 	description,
-	goods,
 	image,
+	goodsData,
+	setPage,
 }): JSX.Element => {
-	const { code, type } = useParams();
-	const categoryCode = code ?? '';
-	const categoryType = type ?? '';
-	const [goodsData, setPage] = useCategoryPageList({
-		goods,
-		categoryCode,
-		categoryType,
-	});
-
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
 		const value = (event.target as HTMLButtonElement).textContent as any;
 		if (value && value === String(page)) setPage(page);
@@ -203,9 +193,4 @@ const GoodsList: FC<GoodsListProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	goods: bindActionCreators(Api.goods, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(GoodsList);
+export default GoodsList;

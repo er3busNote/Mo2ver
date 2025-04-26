@@ -1,17 +1,24 @@
-import React, { FC } from 'react';
-import { Dispatch } from '@reduxjs/toolkit';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@store/types';
-import { CartData } from '@api/types';
 import Api from '@api/index';
+import { TitleState } from '@store/types';
+import { GoodsData, CartData, ReviewPageData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
+import useGoodsDetail from '@hooks/goods/useGoodsDetail';
+import useReviewPageList from '@hooks/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface GoodsDetailProps {
 	title: string;
 	description: string;
+	image: ActionCreatorsMapObject;
+	goodsData: GoodsData;
+	reviewData: ReviewPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 	onCartAdd: (cartData: CartData) => void;
 }
 
@@ -19,12 +26,19 @@ interface GoodsDetailDispatchProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
+	goods: ActionCreatorsMapObject;
+	review: ActionCreatorsMapObject;
 	cart: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
 }
 
 const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	title,
 	description,
+	image,
+	goodsData,
+	reviewData,
+	setPage,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -37,6 +51,10 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 			<GoodsDetail
 				title={title}
 				description={description}
+				image={image}
+				goodsData={goodsData}
+				reviewData={reviewData}
+				setPage={setPage}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -46,6 +64,8 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	title,
 	description,
+	image,
+	goodsData,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -58,6 +78,10 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 			<GoodsDetail
 				title={title}
 				description={description}
+				image={image}
+				goodsData={goodsData}
+				reviewData={reviewData}
+				setPage={setPage}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -68,11 +92,19 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	title,
 	description,
 	member,
+	goods,
+	review,
 	cart,
+	image,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const { id } = useParams();
+	const code = id ?? '';
+	const goodsData = useGoodsDetail({ goods, code });
+	const [reviewData, setPage] = useReviewPageList({ review, code });
 
 	const csrfData = useCSRFToken({ member });
 	const cartAdd = async (cartData: CartData) => {
@@ -84,6 +116,10 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 				<GoodsDetailPC
 					title={title}
 					description={description}
+					image={image}
+					goodsData={goodsData}
+					reviewData={reviewData}
+					setPage={setPage}
 					onCartAdd={cartAdd}
 				/>
 			)}
@@ -91,6 +127,10 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 				<GoodsDetailMobile
 					title={title}
 					description={description}
+					image={image}
+					goodsData={goodsData}
+					reviewData={reviewData}
+					setPage={setPage}
 					onCartAdd={cartAdd}
 				/>
 			)}
@@ -103,9 +143,12 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
+	goods: bindActionCreators(Api.goods, dispatch),
+	review: bindActionCreators(Api.review, dispatch),
 	cart: bindActionCreators(Api.cart, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsDetailPage);

@@ -6,20 +6,20 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, EventDetailPageData } from '@api/types';
+import { PageData, ReviewPageData } from '@api/types';
 
-interface EventListProps {
+interface ReviewListProps {
 	code: string;
-	event: ActionCreatorsMapObject;
+	review: ActionCreatorsMapObject;
 }
 
-const useEventDetailPageList = ({
-	event,
+const useReviewPageList = ({
+	review,
 	code,
-}: EventListProps): [EventDetailPageData, Dispatch<SetStateAction<number>>] => {
+}: ReviewListProps): [ReviewPageData, Dispatch<SetStateAction<number>>] => {
 	const [page, setPage] = useState(0);
-	const [data, setData] = useState<EventDetailPageData>(
-		new Object() as EventDetailPageData
+	const [data, setData] = useState<ReviewPageData>(
+		new Object() as ReviewPageData
 	);
 
 	const fetchAndSetData = useCallback(async () => {
@@ -27,7 +27,7 @@ const useEventDetailPageList = ({
 			page: page,
 			size: 12,
 		};
-		const data = await event.info(code, pageData);
+		const data = await review.list(code, pageData);
 		setData(data);
 	}, [page]);
 
@@ -38,4 +38,4 @@ const useEventDetailPageList = ({
 	return [data, setPage];
 };
 
-export default useEventDetailPageList;
+export default useReviewPageList;

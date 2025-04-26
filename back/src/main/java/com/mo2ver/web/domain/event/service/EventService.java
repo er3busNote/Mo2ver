@@ -1,11 +1,9 @@
 package com.mo2ver.web.domain.event.service;
 
-import com.mo2ver.web.common.file.service.FileService;
-import com.mo2ver.web.domain.event.repository.EventImageRepository;
+import com.mo2ver.web.domain.event.dto.response.EventProductResponse;
 import com.mo2ver.web.domain.event.repository.EventManageRepository;
 import com.mo2ver.web.domain.event.entity.EventManage;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
-import com.mo2ver.web.domain.event.dto.response.EventDetailResponse;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -23,20 +21,22 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class EventService {
 
-    private static final String EVENT_DIRECTORY = "event";
-
-    private final FileService fileService;
     private final EventManageRepository eventManageRepository;
-    private final EventImageRepository eventImageRepository;
 
     @Transactional
-    public Page<EventDetailResponse> findEvent(Integer id, Pageable pageable) {
+    public EventResponse findEvent(Integer id) {
+        EventManage eventManage = this.findEventManageById(id.longValue());
+        return EventResponse.of(eventManage);
+    }
+
+    @Transactional
+    public Page<EventProductResponse> findEvent(Integer id, Pageable pageable) {
         return this.eventManageRepository.findById(id, pageable);
     }
 
     @Transactional
-    public Page<EventResponse> findEventlist(Pageable pageable) {
-        Page<EventManage> event = this.eventManageRepository.findByAll(pageable);
+    public Page<EventResponse> findEventlist(Pageable pageable, Member currentUser) {
+        Page<EventManage> event = this.eventManageRepository.findByAll(pageable, currentUser);
         return event.map(EventResponse::of);
     }
 

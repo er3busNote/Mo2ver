@@ -1,15 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
+import Api from '@api/index';
 import { TitleState } from '@store/types';
+import { EventPageData } from '@api/types';
+import useEventPageList from '@hooks/event/useEventPageList';
 import EventList from './EventList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface EventProps {
 	title: string;
 	description: string;
+	image: ActionCreatorsMapObject;
+	eventData: EventPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 }
 
-const EventPC: FC<EventProps> = ({ title, description }): JSX.Element => {
+interface EventDispatchProps {
+	title: string;
+	description: string;
+	event: ActionCreatorsMapObject;
+	image: ActionCreatorsMapObject;
+}
+
+const EventPC: FC<EventProps> = ({
+	title,
+	description,
+	image,
+	eventData,
+	setPage,
+}): JSX.Element => {
 	return (
 		<Box
 			sx={{
@@ -17,12 +38,24 @@ const EventPC: FC<EventProps> = ({ title, description }): JSX.Element => {
 				display: 'inline-block',
 			}}
 		>
-			<EventList title={title} description={description} />
+			<EventList
+				title={title}
+				description={description}
+				image={image}
+				eventData={eventData}
+				setPage={setPage}
+			/>
 		</Box>
 	);
 };
 
-const EventMobile: FC<EventProps> = ({ title, description }): JSX.Element => {
+const EventMobile: FC<EventProps> = ({
+	title,
+	description,
+	image,
+	eventData,
+	setPage,
+}): JSX.Element => {
 	return (
 		<Box
 			sx={{
@@ -30,19 +63,49 @@ const EventMobile: FC<EventProps> = ({ title, description }): JSX.Element => {
 				display: 'inline-block',
 			}}
 		>
-			<EventList title={title} description={description} />
+			<EventList
+				title={title}
+				description={description}
+				image={image}
+				eventData={eventData}
+				setPage={setPage}
+			/>
 		</Box>
 	);
 };
 
-const EventPage: FC<EventProps> = ({ title, description }): JSX.Element => {
+const EventPage: FC<EventDispatchProps> = ({
+	title,
+	description,
+	event,
+	image,
+}): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const [eventData, setPage] = useEventPageList({ event });
+
 	return (
 		<>
-			{isDesktop && <EventPC title={title} description={description} />}
-			{isMobile && <EventMobile title={title} description={description} />}
+			{isDesktop && (
+				<EventPC
+					title={title}
+					description={description}
+					image={image}
+					eventData={eventData}
+					setPage={setPage}
+				/>
+			)}
+			{isMobile && (
+				<EventMobile
+					title={title}
+					description={description}
+					image={image}
+					eventData={eventData}
+					setPage={setPage}
+				/>
+			)}
 		</>
 	);
 };
@@ -52,4 +115,9 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-export default connect(mapStateToProps, null)(EventPage);
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	event: bindActionCreators(Api.event, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

@@ -14,6 +14,7 @@ import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
+	Link,
 	MenuItem,
 	InputLabel,
 	FormControl,
@@ -76,6 +77,22 @@ const EventMobile: FC<EventProps> = ({
 		dispatch(changeNext(titleData));
 		dispatch(menuActive('/admin/event/goods'));
 		navigate('/admin/event/goods');
+	};
+
+	const updateClick = (eventManageNo: number) => {
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		dispatch(changeNext(titleData));
+		dispatch(menuActive('/admin/event/goods'));
+		navigate('/admin/event/goods', {
+			state: {
+				eventManageNo: eventManageNo,
+			},
+		});
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -284,6 +301,9 @@ const EventMobile: FC<EventProps> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
+								번호
+							</TableCell>
+							<TableCell sx={dataTh} align="center" component="th">
 								제목
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
@@ -303,6 +323,15 @@ const EventMobile: FC<EventProps> = ({
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
 										{data.eventManageNo}
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										<Link
+											component="button"
+											variant="body2"
+											onClick={() => updateClick(data.eventManageNo)}
+										>
+											{data.subject}
+										</Link>
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										{moment(data.eventStartDate).format('YYYY-MM-DD')} ~{' '}

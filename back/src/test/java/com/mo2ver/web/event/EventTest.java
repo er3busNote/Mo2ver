@@ -3,18 +3,11 @@ package com.mo2ver.web.event;
 import com.mo2ver.web.auth.CsrfConfigTest;
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
-import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
-import com.mo2ver.web.domain.event.service.EventService;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -22,8 +15,6 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,16 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class EventTest extends CsrfConfigTest {
 
-    @Autowired
-    private EventService eventService;
-
     @Test
     @DisplayName("이벤트 리스트 정보 확인")
     public void findEventListTest() throws Exception {
 
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
         mockMvc.perform(get("/event/list")
                         .param("page", "0")
-                        .param("size", "12"))
+                        .param("size", "12")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -49,14 +42,27 @@ public class EventTest extends CsrfConfigTest {
     @DisplayName("이벤트 상세 정보 확인")
     public void findEventInfoTest() throws Exception {
 
-        Pageable pageable = PageRequest.of(0, 12, Sort.Direction.DESC, "eventManageNo");
-        Page<EventResponse> pages = eventService.findEventlist(pageable);
-        List<EventResponse> listEventResponse = pages.get().collect(Collectors.toList());
-        EventResponse eventResponse = listEventResponse.get(0);
+        Integer eventManageNo = 25;
 
-        mockMvc.perform(get("/event/info/{id}", eventResponse.getEventManageNo())
+        mockMvc.perform(get("/event/info/{eventManageNo}", eventManageNo))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("이벤트 상세 정보 확인")
+    public void findEventInfoProductTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        Integer eventManageNo = 25;
+
+        mockMvc.perform(get("/event/product/{eventManageNo}", eventManageNo)
                         .param("page", "0")
-                        .param("size", "12"))
+                        .param("size", "12")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

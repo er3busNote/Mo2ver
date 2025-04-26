@@ -14,6 +14,7 @@ import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
+	Link,
 	MenuItem,
 	InputLabel,
 	FormControl,
@@ -76,6 +77,43 @@ const BannerMobile: FC<BannerProps> = ({
 		dispatch(changeNext(titleData));
 		dispatch(menuActive('/admin/banner/image'));
 		navigate('/admin/banner/image');
+	};
+
+	const updateClick = (bannerManageNo: number, type: string) => {
+		const titleData: TitleInfo = {
+			title: title,
+			description: description,
+			prevTitle: title,
+			prevDescription: description,
+		};
+		if (type === 'BN') {
+			dispatch(changeNext(titleData));
+			dispatch(menuActive('/admin/banner/image'));
+			navigate('/admin/banner/image', {
+				state: {
+					bannerManageNo: bannerManageNo,
+					displayTemplateCode: type,
+				},
+			});
+		} else if (type === 'GD') {
+			dispatch(changeNext(titleData));
+			dispatch(menuActive('/admin/banner/goods'));
+			navigate('/admin/banner/goods', {
+				state: {
+					bannerManageNo: bannerManageNo,
+					displayTemplateCode: type,
+				},
+			});
+		} else if (type === 'VD') {
+			dispatch(changeNext(titleData));
+			dispatch(menuActive('/admin/banner/video'));
+			navigate('/admin/banner/video', {
+				state: {
+					bannerManageNo: bannerManageNo,
+					displayTemplateCode: type,
+				},
+			});
+		}
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -308,7 +346,18 @@ const BannerMobile: FC<BannerProps> = ({
 										{data.bannerManageNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
-										배경이미지
+										<Link
+											component="button"
+											variant="body2"
+											onClick={() =>
+												updateClick(
+													data.bannerManageNo,
+													data.displayTemplateCode
+												)
+											}
+										>
+											{data.subject}
+										</Link>
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}

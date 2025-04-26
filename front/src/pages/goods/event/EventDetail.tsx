@@ -1,13 +1,16 @@
-import React, { FC, useState, ChangeEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect, useDispatch } from 'react-redux';
+import React, {
+	FC,
+	useState,
+	ChangeEvent,
+	Dispatch,
+	SetStateAction,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
-import Api from '@api/index';
 import useImageUrl from '@hooks/useImageUrl';
-import useEventDetailPageList from '@hooks/event/useEventDetailPageList';
 import EventSubHeader from '../cmmn/EventSubHeader';
 import {
 	Box,
@@ -32,20 +35,23 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import StarsIcon from '@mui/icons-material/Stars';
-import { EventDetailData } from '@api/types';
+import { EventData, EventProductData, EventProductPageData } from '@api/types';
+import { isEmpty, get } from 'lodash';
 
 interface EventDetailProps {
 	title: string;
 	description: string;
-	event: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
+	eventData: EventData;
+	eventProductData: EventProductPageData;
+	setPage: Dispatch<SetStateAction<number>>;
 }
 
 interface GoodsProps {
 	title: string;
 	description: string;
 	image: ActionCreatorsMapObject;
-	goodsData: Array<EventDetailData>;
+	goodsData: Array<EventProductData>;
 }
 
 const GoodsGrid: FC<GoodsProps> = ({
@@ -72,8 +78,8 @@ const GoodsGrid: FC<GoodsProps> = ({
 	return (
 		<Grid container spacing={3}>
 			{goodsData &&
-				goodsData.map((data: EventDetailData, index: number) => {
-					const file = String(data.goodsImageAttachFile);
+				goodsData.map((data: EventProductData, index: number) => {
+					const file = data.goodsImageAttachFile;
 					return (
 						<Grid key={index} item xs={6} md={3} lg={3}>
 							<Card
@@ -240,6 +246,12 @@ const GoodsRow: FC<GoodsProps> = ({
 		display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
 		color: 'blue',
 	};
+	const infoHashTag: SxProps<Theme> = {
+		py: 1,
+		display: 'flex',
+		flexWrap: 'wrap',
+		gap: '5px 0px',
+	};
 	const infoTag: SxProps<Theme> = {
 		mr: 1,
 		px: 1.5,
@@ -281,7 +293,10 @@ const GoodsRow: FC<GoodsProps> = ({
 		width: { xs: '50%', sm: '30%', md: '30%', lg: '30%' },
 	};
 	const productBox: SxProps<Theme> = {
-		display: { xs: 'none', sm: 'block', md: 'block', lg: 'block' },
+		display: { xs: 'none', sm: 'block', md: 'flex', lg: 'flex' },
+	};
+	const priceBox: SxProps<Theme> = {
+		px: 2,
 	};
 
 	return (
@@ -289,11 +304,8 @@ const GoodsRow: FC<GoodsProps> = ({
 			<Table size="small">
 				<TableBody>
 					{goodsData &&
-						goodsData.map((data: EventDetailData, index: number) => {
-							const file =
-								String(data.goodsImageAttachFile) +
-								'.' +
-								data.goodsImageExtension;
+						goodsData.map((data: EventProductData, index: number) => {
+							const file = data.goodsImageAttachFile;
 							return (
 								<TableRow key={index} sx={rowItem}>
 									<TableCell sx={cardBox}>
@@ -464,40 +476,25 @@ const GoodsRow: FC<GoodsProps> = ({
 														</TableRow>
 													</TableBody>
 												</Table>
-												<Box
-													sx={{
-														py: 1,
-														display: {
-															xs: 'none',
-															sm: 'none',
-															md: 'flex',
-															lg: 'flex',
-														},
-													}}
-												>
-													<Button sx={infoTag} variant="outlined">
-														#방한
-													</Button>
-													<Button sx={infoTag} variant="outlined">
-														#보온
-													</Button>
-													<Button sx={infoTag} variant="outlined">
-														#숏패딩
-													</Button>
-													<Button sx={infoTag} variant="outlined">
-														#파카
-													</Button>
-													<Button sx={infoTag} variant="outlined">
-														#점퍼
-													</Button>
-													<Button sx={infoTag} variant="outlined">
-														#패딩
-													</Button>
-												</Box>
+												{!isEmpty(data.keywordList) && (
+													<Box sx={infoHashTag}>
+														{data.keywordList.map(
+															(keyword: string, index: number) => (
+																<Button
+																	key={index}
+																	sx={infoTag}
+																	variant="outlined"
+																>
+																	#{keyword}
+																</Button>
+															)
+														)}
+													</Box>
+												)}
 											</Box>
 										</Box>
 									</TableCell>
-									<TableCell>
+									<TableCell sx={priceBox}>
 										<Box sx={subItem}>
 											<Box sx={{ py: 1 }}>
 												<Typography component="span" sx={titleInfo}>
@@ -599,14 +596,15 @@ const GoodsRow: FC<GoodsProps> = ({
 const EventDetail: FC<EventDetailProps> = ({
 	title,
 	description,
-	event,
 	image,
+	eventData,
+	eventProductData,
+	setPage,
 }): JSX.Element => {
-	const { id } = useParams();
-	const code = id ?? '';
-	const [eventDetailData, setPage] = useEventDetailPageList({ event, code });
 	const [branch, setSwitch] = useState(true);
-	const file = String(code + '2.png');
+	const file = String(
+		get(eventData, ['imageList', 0, 'goodsImageAttachFile'], '')
+	);
 
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
 		const value = (event.target as HTMLButtonElement).textContent as any;
@@ -646,38 +644,35 @@ const EventDetail: FC<EventDetailProps> = ({
 							image={image}
 							title={title}
 							description={description}
-							goodsData={eventDetailData.content}
+							goodsData={eventProductData.content}
 						/>
 					) : (
 						<GoodsRow
 							image={image}
 							title={title}
 							description={description}
-							goodsData={eventDetailData.content}
+							goodsData={eventProductData.content}
 						/>
 					)}
 				</Box>
 				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<Pagination
-						count={eventDetailData.totalPages - 1}
-						variant="outlined"
-						color="primary"
-						siblingCount={0}
-						boundaryCount={1}
-						hidePrevButton
-						hideNextButton
-						onChange={pageChange}
-						size="small"
-					/>
+					{eventProductData.totalPages && (
+						<Pagination
+							count={eventProductData.totalPages - 1}
+							variant="outlined"
+							color="primary"
+							siblingCount={0}
+							boundaryCount={1}
+							hidePrevButton
+							hideNextButton
+							onChange={pageChange}
+							size="small"
+						/>
+					)}
 				</Box>
 			</Box>
 		</Box>
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	event: bindActionCreators(Api.event, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(EventDetail);
+export default EventDetail;
