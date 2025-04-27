@@ -5,6 +5,8 @@ import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,7 +19,7 @@ public class ImageInfo {
 
     public ImageInfo(String base64Image, Integer goodsImageAttachFile, Character basicImageYesNo) {
         this.base64Image = base64Image;
-        this.goodsImageAttachFile = goodsImageAttachFile != null ? String.valueOf(goodsImageAttachFile) : null;
+        this.goodsImageAttachFile = String.valueOf(Optional.ofNullable(goodsImageAttachFile).orElse(0));
         this.basicImageYesNo = basicImageYesNo;
     }
 
