@@ -66,6 +66,8 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	description,
 	image,
 	goodsData,
+	reviewData,
+	setPage,
 	onCartAdd,
 }): JSX.Element => {
 	return (

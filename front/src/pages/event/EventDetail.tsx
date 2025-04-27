@@ -11,13 +11,14 @@ import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
-import EventSubHeader from '../cmmn/EventSubHeader';
+import EventSubHeader from './cmmn/EventSubHeader';
+import ButtonTag from '@components/button/ButtonTag';
+import ButtonGoods from '@components/button/ButtonGoods';
 import {
 	Box,
 	Grid,
 	Link,
 	Card,
-	Button,
 	Rating,
 	Breadcrumbs,
 	CardContent,
@@ -252,21 +253,6 @@ const GoodsRow: FC<GoodsProps> = ({
 		flexWrap: 'wrap',
 		gap: '5px 0px',
 	};
-	const infoTag: SxProps<Theme> = {
-		mr: 1,
-		px: 1.5,
-		py: 0.5,
-		minWidth: 10,
-		fontSize: '10px',
-		fontWeight: 'bold',
-		border: '1px solid #e8e8e8',
-		color: '#b2b2b2',
-		'&:hover': {
-			color: '#b2b2b2',
-			bgcolor: '#f3f3f3',
-			border: '1px solid #e8e8e8',
-		},
-	};
 	const infoOriginPrice: SxProps<Theme> = {
 		fontSize: { xs: '14px', sm: '15px', lg: '16px' },
 		fontWeight: 'bold',
@@ -480,13 +466,13 @@ const GoodsRow: FC<GoodsProps> = ({
 													<Box sx={infoHashTag}>
 														{data.keywordList.map(
 															(keyword: string, index: number) => (
-																<Button
+																<ButtonTag
 																	key={index}
-																	sx={infoTag}
+																	buttonType="detail"
 																	variant="outlined"
 																>
 																	#{keyword}
-																</Button>
+																</ButtonTag>
 															)
 														)}
 													</Box>
@@ -562,26 +548,13 @@ const GoodsRow: FC<GoodsProps> = ({
 											</Box>
 										</Box>
 										<Box>
-											<Button
-												sx={{
-													mt: 2,
-													px: { xs: 3, sm: 4, md: 5, lg: 6 },
-													py: 1,
-													width: '100%',
-													fontSize: '14px',
-													fontWeight: 'bold',
-													bgcolor: '#000',
-													border: '1px solid #000',
-													borderRadius: 0,
-													color: '#fff',
-													'&:hover': {
-														bgcolor: '#0f0f0f',
-													},
-												}}
+											<ButtonGoods
+												buttonType="buynow"
 												variant="outlined"
+												isEvent={true}
 											>
 												바로 구매
-											</Button>
+											</ButtonGoods>
 										</Box>
 									</TableCell>
 								</TableRow>
@@ -616,18 +589,20 @@ const EventDetail: FC<EventDetailProps> = ({
 			<EventSubHeader
 				title={title}
 				description={description}
-				subtitle={'Live From Space'}
+				subtitle={eventData.subject}
 				change={false}
 				branch={branch}
 				setSwitch={setSwitch}
 			/>
 			<Box sx={{ m: 3 }}>
-				<CardMedia
-					component="img"
-					width="100%"
-					image={useImageUrl({ image, file })}
-					sx={{ p: 1.5 }}
-				/>
+				{!isEmpty(file) && (
+					<CardMedia
+						component="img"
+						width="100%"
+						image={useImageUrl({ image, file })}
+						sx={{ p: 1.5 }}
+					/>
+				)}
 			</Box>
 			<EventSubHeader
 				title={title}

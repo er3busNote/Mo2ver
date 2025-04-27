@@ -17,6 +17,7 @@ interface ButtonGoodsProps {
 		| 'warning';
 	fullWidth?: boolean; // 버튼의 너비
 	disabled?: boolean; // 버튼 비활성화 여부
+	isEvent?: boolean; // 이벤트 버튼 여부
 	onClick?: () => void;
 	children?: ReactNode;
 }
@@ -29,6 +30,7 @@ const ButtonGoods: FC<ButtonGoodsProps> = ({
 	color = 'primary',
 	fullWidth = false,
 	disabled = false,
+	isEvent = false,
 	onClick,
 	children,
 }): JSX.Element => {
@@ -41,6 +43,11 @@ const ButtonGoods: FC<ButtonGoodsProps> = ({
 
 		const widthStyle = {
 			width: device === 'mobile' ? '100%' : 'auto',
+		};
+
+		const eventStyle = {
+			px: isEvent ? { xs: 3, sm: 4, md: 5, lg: 6 } : 0,
+			width: isEvent ? '100%' : '48%',
 		};
 
 		switch (buttonType) {
@@ -61,9 +68,9 @@ const ButtonGoods: FC<ButtonGoodsProps> = ({
 				};
 			case 'buynow':
 				return {
+					...eventStyle,
 					mt: 2,
 					py: 1,
-					width: '48%',
 					fontSize: '14px',
 					fontWeight: 'bold',
 					bgcolor: '#000',

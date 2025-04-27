@@ -42,7 +42,8 @@ const EventSubHeader: FC<EventSubHeaderProps> = ({
 	return (
 		<Box
 			sx={{
-				px: { xs: 4, sm: 10 },
+				mx: { xs: 3, sm: 3 },
+				px: { xs: 3, sm: 6 },
 				pt: 2,
 				pb: 1,
 				display: 'flex',
