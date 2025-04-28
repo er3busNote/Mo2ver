@@ -8,6 +8,7 @@ import lombok.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class ReviewResponse {
 
     private Long goodsReviewNo;
+    private String goodsCode;
     private String imageAttachFile;
     private String reviewContents;
     private Integer rating;
@@ -31,7 +33,8 @@ public class ReviewResponse {
     public static ReviewResponse of(Review review) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
-                .imageAttachFile(getEncryptor(review.getImageAttachFile()))
+                .goodsCode(review.getGoodsCode().getGoodsCode())
+                .imageAttachFile(getReviewAttachImg(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
                 .memberName(review.getMemberNo().getMemberName())
@@ -46,7 +49,7 @@ public class ReviewResponse {
     public static ReviewResponse of(Review review, Map<Long, List<Review>> childrenMap) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
-                .imageAttachFile(getEncryptor(review.getImageAttachFile()))
+                .imageAttachFile(getReviewAttachImg(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
                 .memberName(review.getMemberNo().getMemberName())
@@ -54,5 +57,11 @@ public class ReviewResponse {
                         .map(r -> ReviewResponse.of(r, childrenMap))
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    private static String getReviewAttachImg(Integer reviewAttachImg) {
+        return Optional.ofNullable(reviewAttachImg)
+                .map(ReviewResponse::getEncryptor)
+                .orElse("");
     }
 }

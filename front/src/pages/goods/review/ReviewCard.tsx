@@ -1,4 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import { ActionCreatorsMapObject } from 'redux';
+import { ReviewData, ReviewRequestData } from '@api/types';
+import useImageUrl from '@hooks/useImageUrl';
+import ReviewInput from '@components/input/ReviewInput';
 import {
 	Box,
 	Card,
@@ -8,30 +12,44 @@ import {
 	Avatar,
 	Rating,
 	Button,
-	TextField,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';
+import { isEmpty, get } from 'lodash';
 
-const ReviewCard: FC = () => {
+const IMAGE_INFO =
+	'https://ix-marketing.imgix.net/autotagging.png?auto=format,compress&w=1246';
+
+interface ReviewCardProps {
+	image: ActionCreatorsMapObject;
+	reviewData: ReviewData;
+	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
+}
+
+const ReviewCard: FC<ReviewCardProps> = ({
+	image,
+	reviewData,
+	onReplySubmit,
+}) => {
 	const isMobile = useIsMobile();
-	const [showReplyInput, setShowReplyInput] = useState(false);
-	const [replyText, setReplyText] = useState('');
-
-	const handleReplyToggle = () => {
-		setShowReplyInput((prev) => !prev);
-	};
+	const [reviewContents, setReviewContents] = useState<string>('');
 
 	const handleReplySubmit = () => {
-		console.log('답글 내용:', replyText);
-		// TODO: 실제 답글 전송 로직 추가
-		setReplyText('');
-		setShowReplyInput(false);
+		onReplySubmit({
+			goodsCode: reviewData.goodsCode,
+			upperReviewNo: reviewData.goodsReviewNo,
+			reviewImg: '',
+			reviewContents: reviewContents,
+			rating: 0,
+		});
 	};
+
+	const file = String(get(reviewData, 'imageAttachFile', ''));
 
 	const infoCard: SxProps<Theme> = {
 		mt: 2,
 		mb: 6,
+		ml: isEmpty(reviewData.reviewResponseList) ? 0 : 4,
 		p: 2,
 		backgroundColor: '#f3e5f5', // 연보라
 		borderTop: '2px solid #ce93d8',
@@ -85,14 +103,21 @@ const ReviewCard: FC = () => {
 					ml={2}
 				>
 					<Box sx={infoImg}>
-						<CardMedia
-							component="img"
-							image={
-								'https://ix-marketing.imgix.net/autotagging.png?auto=format,compress&w=1246​'
-							}
-							alt="리뷰 이미지"
-							sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-						/>
+						{!isEmpty(file) ? (
+							<CardMedia
+								component="img"
+								image={useImageUrl({ image, file })}
+								alt="리뷰 이미지"
+								sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+							/>
+						) : (
+							<CardMedia
+								component="img"
+								image={IMAGE_INFO}
+								alt="리뷰 이미지"
+								sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+							/>
+						)}
 					</Box>
 					<Button variant="text" size="small" color="secondary">
 						신고하기
@@ -102,32 +127,20 @@ const ReviewCard: FC = () => {
 
 			<Divider sx={{ my: 2 }} />
 
-			<Box mt={1}>
-				<Button size="small" onClick={handleReplyToggle}>
-					{showReplyInput ? '닫기' : '답글달기'}
-				</Button>
-			</Box>
+			<ReviewInput
+				setReviewContents={setReviewContents}
+				onReplySubmit={handleReplySubmit}
+			></ReviewInput>
 
-			{showReplyInput && (
-				<Box mt={2} display="flex" alignItems="flex-start" gap={1}>
-					<TextField
-						multiline
-						rows={4}
-						fullWidth
-						variant="outlined"
-						value={replyText}
-						onChange={(e) => setReplyText(e.target.value)}
-						placeholder="답글을 입력하세요"
-						sx={{ backgroundColor: '#fff', borderRadius: 1 }}
-					/>
-					<Button
-						variant="contained"
-						onClick={handleReplySubmit}
-						sx={{ height: '100%', whiteSpace: 'nowrap' }}
-					>
-						확인
-					</Button>
-				</Box>
+			{reviewData.reviewResponseList.map(
+				(reviewSubData: ReviewData, index: number) => (
+					<ReviewCard
+						key={index}
+						image={image}
+						reviewData={reviewSubData}
+						onReplySubmit={onReplySubmit}
+					></ReviewCard>
+				)
 			)}
 		</Card>
 	);

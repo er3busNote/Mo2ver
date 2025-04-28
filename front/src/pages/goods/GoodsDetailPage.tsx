@@ -5,7 +5,12 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@store/types';
-import { GoodsData, CartData, ReviewPageData } from '@api/types';
+import {
+	GoodsData,
+	CartData,
+	ReviewPageData,
+	ReviewRequestData,
+} from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import useReviewPageList from '@hooks/review/useReviewPageList';
@@ -19,6 +24,7 @@ interface GoodsDetailProps {
 	goodsData: GoodsData;
 	reviewData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
+	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
 	onCartAdd: (cartData: CartData) => void;
 }
 
@@ -39,6 +45,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	goodsData,
 	reviewData,
 	setPage,
+	onReviewAdd,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -53,8 +60,9 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 				description={description}
 				image={image}
 				goodsData={goodsData}
-				reviewData={reviewData}
+				reviewPageData={reviewData}
 				setPage={setPage}
+				onReviewAdd={onReviewAdd}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -68,6 +76,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	goodsData,
 	reviewData,
 	setPage,
+	onReviewAdd,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -82,8 +91,9 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 				description={description}
 				image={image}
 				goodsData={goodsData}
-				reviewData={reviewData}
+				reviewPageData={reviewData}
 				setPage={setPage}
+				onReviewAdd={onReviewAdd}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -106,9 +116,13 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const { id } = useParams();
 	const code = id ?? '';
 	const goodsData = useGoodsDetail({ goods, code });
-	const [reviewData, setPage] = useReviewPageList({ review, code });
+	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
 
 	const csrfData = useCSRFToken({ member });
+	const onReviewAdd = async (reviewInfo: ReviewRequestData) => {
+		await review.create(reviewInfo, csrfData);
+		setReload(true);
+	};
 	const cartAdd = async (cartData: CartData) => {
 		await cart.add(cartData, csrfData);
 	};
@@ -122,6 +136,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					goodsData={goodsData}
 					reviewData={reviewData}
 					setPage={setPage}
+					onReviewAdd={onReviewAdd}
 					onCartAdd={cartAdd}
 				/>
 			)}
@@ -133,6 +148,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					goodsData={goodsData}
 					reviewData={reviewData}
 					setPage={setPage}
+					onReviewAdd={onReviewAdd}
 					onCartAdd={cartAdd}
 				/>
 			)}

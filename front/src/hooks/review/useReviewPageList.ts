@@ -16,8 +16,13 @@ interface ReviewListProps {
 const useReviewPageList = ({
 	review,
 	code,
-}: ReviewListProps): [ReviewPageData, Dispatch<SetStateAction<number>>] => {
+}: ReviewListProps): [
+	ReviewPageData,
+	Dispatch<SetStateAction<number>>,
+	Dispatch<SetStateAction<boolean>>
+] => {
 	const [page, setPage] = useState(0);
+	const [reload, setReload] = useState(false);
 	const [data, setData] = useState<ReviewPageData>(
 		new Object() as ReviewPageData
 	);
@@ -29,13 +34,14 @@ const useReviewPageList = ({
 		};
 		const data = await review.list(code, pageData);
 		setData(data);
-	}, [page]);
+		setReload(false);
+	}, [page, reload]);
 
 	useEffect(() => {
 		fetchAndSetData();
 	}, [fetchAndSetData]);
 
-	return [data, setPage];
+	return [data, setPage, setReload];
 };
 
 export default useReviewPageList;

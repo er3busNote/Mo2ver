@@ -20,6 +20,7 @@ import {
 	Link,
 	Card,
 	Rating,
+	Pagination,
 	Breadcrumbs,
 	CardContent,
 	CardMedia,
@@ -34,7 +35,6 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import Pagination from '@mui/material/Pagination';
 import StarsIcon from '@mui/icons-material/Stars';
 import { EventData, EventProductData, EventProductPageData } from '@api/types';
 import { isEmpty, get } from 'lodash';

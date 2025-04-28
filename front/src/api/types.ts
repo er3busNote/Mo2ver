@@ -112,6 +112,7 @@ interface CategoryDataGroup {
 // 4. Review Type
 interface ReviewData {
 	goodsReviewNo: number;
+	goodsCode: string;
 	imageAttachFile: string;
 	reviewContents: string;
 	rating: number;
@@ -122,8 +123,8 @@ interface ReviewData {
 interface ReviewRequestData {
 	reviewNo?: number;
 	goodsCode: string;
-	upperReviewNo: number;
-	reviewImg: string;
+	upperReviewNo?: number | undefined;
+	reviewImg?: string;
 	reviewContents: string;
 	rating: number;
 }

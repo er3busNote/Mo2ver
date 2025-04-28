@@ -7,12 +7,14 @@ import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(
@@ -114,8 +116,12 @@ public class Review {
 
     private void createOrUpdateReview(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.goodsCode = goods;
-        this.upperReviewNo = Review.of(goodsReviewRequest, goods, currentUser);
-        this.imageAttachFile = Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg()));
+        if (goodsReviewRequest.getUpperReviewNo() != null) {
+            this.upperReviewNo = Review.of(goodsReviewRequest, goods, currentUser);
+        }
+        if (StringUtils.hasText(goodsReviewRequest.getReviewImg())) {
+            this.imageAttachFile = getReviewAttachImg(goodsReviewRequest.getReviewImg());
+        }
         this.reviewContents = goodsReviewRequest.getReviewContents();
         this.rating = goodsReviewRequest.getRating();
         this.delYesNo = 'N';
@@ -124,14 +130,21 @@ public class Review {
 
     private static Review of(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         return Review.builder()
-                .goodsReviewNo(goodsReviewRequest.getReviewNo())
+                .goodsReviewNo(goodsReviewRequest.getUpperReviewNo())
                 .goodsCode(goods)
                 .memberNo(currentUser)
-                .imageAttachFile(Integer.parseInt(getDecryptor(goodsReviewRequest.getReviewImg())))
+                //.imageAttachFile(getReviewAttachImg(goodsReviewRequest.getReviewImg()))
                 .reviewContents(goodsReviewRequest.getReviewContents())
                 .rating(goodsReviewRequest.getRating())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
+    }
+
+    private static Integer getReviewAttachImg(String reviewImg) {
+        return Optional.ofNullable(reviewImg)
+                .map(Review::getDecryptor)
+                .map(Integer::parseInt)
+                .orElse(null);
     }
 }
