@@ -1,4 +1,4 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { ReviewData, ReviewRequestData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
@@ -8,13 +8,11 @@ import {
 	Card,
 	CardMedia,
 	Typography,
-	Divider,
 	Avatar,
 	Rating,
-	Button,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 import { isEmpty, get } from 'lodash';
 
 const IMAGE_INFO =
@@ -24,14 +22,19 @@ interface ReviewCardProps {
 	image: ActionCreatorsMapObject;
 	reviewData: ReviewData;
 	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
+	isRoot: boolean;
+	depth: number;
 }
 
 const ReviewCard: FC<ReviewCardProps> = ({
 	image,
 	reviewData,
 	onReplySubmit,
+	isRoot,
+	depth,
 }) => {
 	const isMobile = useIsMobile();
+	const isDesktop = useIsDesktop();
 	const [reviewContents, setReviewContents] = useState<string>('');
 
 	const handleReplySubmit = () => {
@@ -47,18 +50,25 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	const file = String(get(reviewData, 'imageAttachFile', ''));
 
 	const infoCard: SxProps<Theme> = {
-		mt: 2,
-		mb: 6,
-		ml: isEmpty(reviewData.reviewResponseList) ? 0 : 4,
-		p: 2,
+		ml: depth * 4,
+		pt: isRoot ? 2 : 0,
+		px: isRoot ? 2 : 0,
 		backgroundColor: '#f3e5f5', // 연보라
-		borderTop: '2px solid #ce93d8',
-		borderBottom: '2px solid #ce93d8',
+		borderTop: isRoot ? '2px solid #ce93d8' : 'none',
+		borderBottom: isRoot ? '2px solid #ce93d8' : 'none',
 		borderLeft: 'none',
 		borderRight: 'none',
+		boxShadow: 'none',
 		borderRadius: 0,
 	};
-
+	const infoUser: SxProps<Theme> = {
+		fontSize: isMobile ? '13px' : '15px',
+	};
+	const infoText: SxProps<Theme> = {
+		fontSize: isMobile ? '13px' : '15px',
+		whiteSpace: 'pre-line',
+		textAlign: 'left',
+	};
 	const infoImg: SxProps<Theme> = {
 		width: 80,
 		height: 80,
@@ -68,31 +78,21 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		backgroundColor: '#ddd',
 	};
 
-	const infoUser: SxProps<Theme> = {
-		fontSize: isMobile ? '13px' : '15px',
-	};
-
-	const infoText: SxProps<Theme> = {
-		fontSize: isMobile ? '13px' : '15px',
-		whiteSpace: 'pre-line',
-		textAlign: 'left',
-	};
-
 	return (
 		<Card sx={infoCard}>
 			<Box display="flex" justifyContent="space-between">
 				<Box display="flex" flexDirection="column" flex={1} pr={2}>
 					<Box display="flex" alignItems="center">
-						<Avatar />
+						{isDesktop && <Avatar />}
 						<Box ml={2}>
 							<Typography sx={infoUser} variant="subtitle1">
-								사용자
+								{reviewData.memberName}
 							</Typography>
-							<Rating value={3} readOnly size="small" />
+							<Rating value={reviewData.rating} readOnly size="small" />
 						</Box>
 					</Box>
 					<Box ml={1}>
-						<Typography sx={infoText}>테스트</Typography>
+						<Typography sx={infoText}>{reviewData.reviewContents}</Typography>
 					</Box>
 				</Box>
 				<Box
@@ -119,13 +119,8 @@ const ReviewCard: FC<ReviewCardProps> = ({
 							/>
 						)}
 					</Box>
-					<Button variant="text" size="small" color="secondary">
-						신고하기
-					</Button>
 				</Box>
 			</Box>
-
-			<Divider sx={{ my: 2 }} />
 
 			<ReviewInput
 				setReviewContents={setReviewContents}
@@ -139,6 +134,8 @@ const ReviewCard: FC<ReviewCardProps> = ({
 						image={image}
 						reviewData={reviewSubData}
 						onReplySubmit={onReplySubmit}
+						isRoot={false}
+						depth={depth + 1}
 					></ReviewCard>
 				)
 			)}

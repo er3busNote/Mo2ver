@@ -575,12 +575,11 @@ const GoodsDetail: FC<GoodsProps> = ({
 				<ReviewSummary></ReviewSummary>
 			</Box>
 			<Box sx={reviewCard}>
-				{isEmpty(reviewPageData.content) ? (
-					<ReviewInput
-						setReviewContents={setReviewContents}
-						onReplySubmit={handleReplySubmit}
-					></ReviewInput>
-				) : (
+				<ReviewInput
+					setReviewContents={setReviewContents}
+					onReplySubmit={handleReplySubmit}
+				></ReviewInput>
+				{!isEmpty(reviewPageData.content) && (
 					<Box>
 						{reviewPageData.content &&
 							reviewPageData.content.map(
@@ -590,6 +589,8 @@ const GoodsDetail: FC<GoodsProps> = ({
 										image={image}
 										reviewData={reviewData}
 										onReplySubmit={onReplySubmit}
+										isRoot={true}
+										depth={0}
 									></ReviewCard>
 								)
 							)}

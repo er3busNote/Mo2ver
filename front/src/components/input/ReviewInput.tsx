@@ -1,5 +1,6 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, Divider, TextField } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 
 interface ReviewInputProps {
 	setReviewContents: Dispatch<SetStateAction<string>>;
@@ -21,16 +22,29 @@ const ReviewInput: FC<ReviewInputProps> = ({
 		setShowReplyInput(false);
 	};
 
+	const reviewButton: SxProps<Theme> = {
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		width: '100%',
+	};
+
 	return (
 		<Box>
-			<Box mt={1}>
+			<Box sx={reviewButton}>
+				<Box sx={{ flexGrow: 1 }} />
 				<Button size="small" onClick={handleReplyToggle}>
 					{showReplyInput ? '닫기' : '답글달기'}
 				</Button>
+				<Button variant="text" size="small" color="secondary">
+					신고하기
+				</Button>
 			</Box>
 
+			<Divider sx={{ mt: 1, mb: 2 }} />
+
 			{showReplyInput && (
-				<Box mt={2} display="flex" alignItems="flex-start" gap={1}>
+				<Box my={2} display="flex" alignItems="flex-start" gap={1}>
 					<TextField
 						multiline
 						rows={4}
