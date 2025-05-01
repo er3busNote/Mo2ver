@@ -1,25 +1,34 @@
-import React, { FC, useRef, useState, useEffect } from 'react';
-import { ActionCreatorsMapObject } from 'redux';
+import React, { FC, useState, useEffect, useRef, ChangeEvent } from 'react';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { connect } from 'react-redux';
+import Api from '@api/index';
+import useCSRFToken from '@hooks/useCSRFToken';
+import useFieInfo from '@hooks/cmmn/useFileInfo';
 import { ReviewData, ReviewRequestData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
 import ReviewInput from '@components/input/ReviewInput';
 import {
 	Box,
-	Card,
 	CardMedia,
 	TextField,
 	Typography,
 	Avatar,
 	Rating,
 } from '@mui/material';
-import { SxProps, Theme } from '@mui/material/styles';
+import { styled, SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 import { isEmpty, get } from 'lodash';
+
+const HiddenInput = styled('input')({
+	display: 'none',
+});
 
 const IMAGE_INFO =
 	'https://ix-marketing.imgix.net/autotagging.png?auto=format,compress&w=1246';
 
 interface ReviewCardProps {
+	member: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 	reviewData: ReviewData;
 	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
@@ -28,6 +37,7 @@ interface ReviewCardProps {
 }
 
 const ReviewCard: FC<ReviewCardProps> = ({
+	member,
 	image,
 	reviewData,
 	onReplySubmit,
@@ -36,20 +46,33 @@ const ReviewCard: FC<ReviewCardProps> = ({
 }) => {
 	const isMobile = useIsMobile();
 	const isDesktop = useIsDesktop();
+
+	const csrfData = useCSRFToken({ member });
+	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+
 	const textRef = useRef<HTMLDivElement>(null);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [isEditingRating, setIsEditingRating] = useState(false);
 	const [isEditingText, setIsEditingText] = useState<boolean>(false);
 	const [reviewContents, setReviewContents] = useState<string>('');
 
+	const [file, setFile] = useState<string>(reviewData.imageAttachFile || '');
 	const [rating, setRating] = useState<number>(reviewData.rating || 0);
 	const [text, setText] = useState<string>(reviewData.reviewContents || '');
 	const [imageUrl, setImageUrl] = useState<string>(IMAGE_INFO);
 
-	const file = String(get(reviewData, 'imageAttachFile', ''));
-
 	useEffect(() => {
 		if (!isEmpty(file)) setImageUrl(useImageUrl({ image, file }));
 	}, [file, rating, text]);
+
+	useEffect(() => {
+		setFile(reviewData.imageAttachFile || '');
+		setRating(reviewData.rating || 0);
+		setText(reviewData.reviewContents);
+		if (!isEmpty(file)) {
+			setImageUrl(useImageUrl({ image, file }));
+		}
+	}, [reviewData]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent | TouchEvent) => {
@@ -70,6 +93,23 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		};
 	}, [isEditingText]);
 
+	useEffect(() => {
+		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
+			setImageUrl(useImageUrl({ image, file: dataFiles[0].fileAttachCode }));
+		}
+	}, [dataFiles]);
+
+	const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
+		const selectedFiles = event.target.files;
+		if (selectedFiles) {
+			setFiles(selectedFiles);
+		}
+	};
+
+	const handleInputClick = () => {
+		fileInputRef.current?.click();
+	};
+
 	const handleReplySubmit = () => {
 		onReplySubmit({
 			goodsCode: reviewData.goodsCode,
@@ -85,12 +125,6 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		pt: isRoot ? 2 : 0,
 		px: isRoot ? 2 : 0,
 		backgroundColor: '#f3e5f5', // 연보라
-		borderTop: isRoot ? '2px solid #ce93d8' : 'none',
-		borderBottom: isRoot ? '2px solid #ce93d8' : 'none',
-		borderLeft: 'none',
-		borderRight: 'none',
-		boxShadow: 'none',
-		borderRadius: 0,
 	};
 	const infoUser: SxProps<Theme> = {
 		fontSize: isMobile ? '13px' : '15px',
@@ -122,9 +156,15 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		overflow: 'hidden',
 		backgroundColor: '#ddd',
 	};
+	const infoCardImg: SxProps<Theme> = {
+		width: '100%',
+		height: '100%',
+		objectFit: 'cover',
+		cursor: 'pointer',
+	};
 
 	return (
-		<Card sx={infoCard}>
+		<Box sx={infoCard}>
 			<Box display="flex" justifyContent="space-between">
 				<Box display="flex" flexDirection="column" flex={1} pr={2}>
 					<Box display="flex" alignItems="center">
@@ -194,13 +234,30 @@ const ReviewCard: FC<ReviewCardProps> = ({
 							component="img"
 							image={imageUrl}
 							alt="리뷰 이미지"
-							sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+							onClick={handleInputClick}
+							sx={infoCardImg}
 						/>
+						<HiddenInput
+							ref={fileInputRef}
+							type="file"
+							accept="image/*"
+							style={{ display: 'none' }}
+							onChange={handleFiles}
+						/>
+						<Typography
+							variant="caption"
+							display="block"
+							mt={1}
+							color="textSecondary"
+						>
+							이미지를 클릭하면 변경할 수 있어요
+						</Typography>
 					</Box>
 				</Box>
 			</Box>
 
 			<ReviewInput
+				setRating={setRating}
 				setReviewContents={setReviewContents}
 				onReplySubmit={handleReplySubmit}
 			></ReviewInput>
@@ -209,6 +266,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 				(reviewSubData: ReviewData, index: number) => (
 					<ReviewCard
 						key={index}
+						member={member}
 						image={image}
 						reviewData={reviewSubData}
 						onReplySubmit={onReplySubmit}
@@ -217,8 +275,13 @@ const ReviewCard: FC<ReviewCardProps> = ({
 					></ReviewCard>
 				)
 			)}
-		</Card>
+		</Box>
 	);
 };
 
-export default ReviewCard;
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
+	image: bindActionCreators(Api.image, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(ReviewCard);

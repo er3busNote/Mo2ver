@@ -1,5 +1,5 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
-import { Box, Button, Divider, TextField } from '@mui/material';
+import { Box, Button, Divider, TextField, Rating } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';
 
@@ -9,11 +9,13 @@ const fontSize_md = '13px';
 const fontSize_lg = '13px';
 
 interface ReviewInputProps {
+	setRating: Dispatch<SetStateAction<number>>;
 	setReviewContents: Dispatch<SetStateAction<string>>;
 	onReplySubmit: () => void;
 }
 
 const ReviewInput: FC<ReviewInputProps> = ({
+	setRating,
 	setReviewContents,
 	onReplySubmit,
 }) => {
@@ -59,33 +61,46 @@ const ReviewInput: FC<ReviewInputProps> = ({
 			<Divider sx={{ mt: 1, mb: 2 }} />
 
 			{showReplyInput && (
-				<Box my={2} display="flex" alignItems="flex-start" gap={1}>
-					<TextField
-						multiline
-						rows={isMobile ? 2 : 4}
-						fullWidth
-						variant="outlined"
-						onChange={(event) => setReviewContents(event.target.value)}
-						placeholder="답글을 입력하세요"
-						sx={infoTextEdit}
-						inputProps={{
-							sx: {
-								fontSize: {
-									xs: fontSize_xs,
-									sm: fontSize_sm,
-									md: fontSize_md,
-									lg: fontSize_lg,
-								},
-							},
-						}}
+				<Box>
+					<Rating
+						size={isMobile ? 'small' : 'medium'}
+						onChange={(_, newValue) => setRating(newValue || 0)}
 					/>
-					<Button
-						variant="contained"
-						onClick={handleReplySubmit}
-						sx={{ height: '100%', whiteSpace: 'nowrap' }}
+					<Box
+						mt={0.5}
+						mb={2}
+						pb={2}
+						display="flex"
+						alignItems="flex-start"
+						gap={1}
 					>
-						확인
-					</Button>
+						<TextField
+							multiline
+							rows={isMobile ? 2 : 4}
+							fullWidth
+							variant="outlined"
+							onChange={(event) => setReviewContents(event.target.value)}
+							placeholder="답글을 입력하세요"
+							sx={infoTextEdit}
+							inputProps={{
+								sx: {
+									fontSize: {
+										xs: fontSize_xs,
+										sm: fontSize_sm,
+										md: fontSize_md,
+										lg: fontSize_lg,
+									},
+								},
+							}}
+						/>
+						<Button
+							variant="contained"
+							onClick={handleReplySubmit}
+							sx={{ height: '100%', whiteSpace: 'nowrap' }}
+						>
+							확인
+						</Button>
+					</Box>
 				</Box>
 			)}
 		</Box>

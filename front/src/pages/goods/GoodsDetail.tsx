@@ -1,24 +1,16 @@
-import React, {
-	FC,
-	useState,
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import {
 	GoodsData,
 	CartData,
-	ReviewData,
 	ReviewPageData,
 	ReviewRequestData,
 	ImageData,
 } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
+import ReviewList from './review/ReviewList';
 import ReviewSummary from './review/ReviewSummary';
-import ReviewCard from './review/ReviewCard';
-import ReviewInput from '@components/input/ReviewInput';
 import ButtonTag from '@components/button/ButtonTag';
 import ButtonGoods from '@components/button/ButtonGoods';
 import {
@@ -27,7 +19,6 @@ import {
 	Link,
 	Paper,
 	Rating,
-	Pagination,
 	Breadcrumbs,
 	CardMedia,
 	Typography,
@@ -44,7 +35,7 @@ import StarsIcon from '@mui/icons-material/Stars';
 import { useIsMobile } from '@context/MobileContext';
 import { isEmpty, get } from 'lodash';
 
-interface GoodsProps {
+interface GoodsDetailProps {
 	title: string;
 	description: string;
 	image: ActionCreatorsMapObject;
@@ -55,7 +46,7 @@ interface GoodsProps {
 	onCartAdd: (cartData: CartData) => void;
 }
 
-const GoodsDetail: FC<GoodsProps> = ({
+const GoodsDetail: FC<GoodsDetailProps> = ({
 	title,
 	description,
 	image,
@@ -66,21 +57,6 @@ const GoodsDetail: FC<GoodsProps> = ({
 	onCartAdd,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
-	const [reviewContents, setReviewContents] = useState('');
-
-	const onReplySubmit = (reviewInfo: ReviewRequestData) => {
-		onReviewAdd(reviewInfo);
-	};
-
-	const handleReplySubmit = () => {
-		const reviewInfo: ReviewRequestData = {
-			goodsCode: goodsData.goodsCode,
-			reviewImg: '',
-			reviewContents: reviewContents,
-			rating: 0,
-		};
-		onReviewAdd(reviewInfo);
-	};
 
 	const addCartClick = () => {
 		const cartData: CartData = {
@@ -101,11 +77,6 @@ const GoodsDetail: FC<GoodsProps> = ({
 	const file = String(
 		get(goodsData, ['imageList', 0, 'goodsImageAttachFile'], '')
 	);
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
 
 	const gridItem: SxProps<Theme> = {
 		py: 0.5,
@@ -575,42 +546,12 @@ const GoodsDetail: FC<GoodsProps> = ({
 				<ReviewSummary></ReviewSummary>
 			</Box>
 			<Box sx={reviewCard}>
-				<ReviewInput
-					setReviewContents={setReviewContents}
-					onReplySubmit={handleReplySubmit}
-				></ReviewInput>
-				{!isEmpty(reviewPageData.content) && (
-					<Box>
-						{reviewPageData.content &&
-							reviewPageData.content.map(
-								(reviewData: ReviewData, index: number) => (
-									<ReviewCard
-										key={index}
-										image={image}
-										reviewData={reviewData}
-										onReplySubmit={onReplySubmit}
-										isRoot={true}
-										depth={0}
-									></ReviewCard>
-								)
-							)}
-						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-							{reviewPageData.totalPages && (
-								<Pagination
-									count={reviewPageData.totalPages - 1}
-									variant="outlined"
-									color="primary"
-									siblingCount={0}
-									boundaryCount={1}
-									hidePrevButton
-									hideNextButton
-									onChange={pageChange}
-									size="small"
-								/>
-							)}
-						</Box>
-					</Box>
-				)}
+				<ReviewList
+					goodsCode={goodsData.goodsCode}
+					reviewPageData={reviewPageData}
+					setPage={setPage}
+					onReviewAdd={onReviewAdd}
+				></ReviewList>
 			</Box>
 		</Box>
 	);
