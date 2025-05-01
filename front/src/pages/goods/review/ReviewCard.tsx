@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState, useEffect } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { ReviewData, ReviewRequestData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
@@ -7,6 +7,7 @@ import {
 	Box,
 	Card,
 	CardMedia,
+	TextField,
 	Typography,
 	Avatar,
 	Rating,
@@ -35,7 +36,39 @@ const ReviewCard: FC<ReviewCardProps> = ({
 }) => {
 	const isMobile = useIsMobile();
 	const isDesktop = useIsDesktop();
+	const textRef = useRef<HTMLDivElement>(null);
+	const [isEditingRating, setIsEditingRating] = useState(false);
+	const [isEditingText, setIsEditingText] = useState<boolean>(false);
 	const [reviewContents, setReviewContents] = useState<string>('');
+
+	const [rating, setRating] = useState<number>(reviewData.rating || 0);
+	const [text, setText] = useState<string>(reviewData.reviewContents || '');
+	const [imageUrl, setImageUrl] = useState<string>(IMAGE_INFO);
+
+	const file = String(get(reviewData, 'imageAttachFile', ''));
+
+	useEffect(() => {
+		if (!isEmpty(file)) setImageUrl(useImageUrl({ image, file }));
+	}, [file, rating, text]);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+			const target = event.target as Node;
+			if (
+				isEditingText &&
+				textRef.current &&
+				!textRef.current.contains(target)
+			) {
+				setIsEditingText(false);
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutside);
+		document.addEventListener('touchstart', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('touchstart', handleClickOutside);
+		};
+	}, [isEditingText]);
 
 	const handleReplySubmit = () => {
 		onReplySubmit({
@@ -46,8 +79,6 @@ const ReviewCard: FC<ReviewCardProps> = ({
 			rating: 0,
 		});
 	};
-
-	const file = String(get(reviewData, 'imageAttachFile', ''));
 
 	const infoCard: SxProps<Theme> = {
 		ml: depth * 4,
@@ -64,10 +95,24 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	const infoUser: SxProps<Theme> = {
 		fontSize: isMobile ? '13px' : '15px',
 	};
+	const infoRating: SxProps<Theme> = {
+		cursor: 'pointer',
+	};
 	const infoText: SxProps<Theme> = {
 		fontSize: isMobile ? '13px' : '15px',
 		whiteSpace: 'pre-line',
 		textAlign: 'left',
+		cursor: 'pointer',
+	};
+	const infoTextEdit: SxProps<Theme> = {
+		backgroundColor: '#fff',
+		'.MuiInputBase-root': {
+			px: isMobile ? 1.5 : 2,
+			py: isMobile ? 1 : 2,
+		},
+	};
+	const infoTextEditInput: SxProps<Theme> = {
+		fontSize: isMobile ? '11px' : '13px',
 	};
 	const infoImg: SxProps<Theme> = {
 		width: 80,
@@ -88,11 +133,53 @@ const ReviewCard: FC<ReviewCardProps> = ({
 							<Typography sx={infoUser} variant="subtitle1">
 								{reviewData.memberName}
 							</Typography>
-							<Rating value={reviewData.rating} readOnly size="small" />
+							{isEditingRating ? (
+								<Rating
+									size="small"
+									value={rating}
+									onChange={(event, newValue) => {
+										event.preventDefault();
+										setRating(newValue || 0);
+										setIsEditingRating(false);
+									}}
+									autoFocus
+								/>
+							) : (
+								<>
+									{isMobile ? (
+										<Rating
+											size="small"
+											value={rating}
+											onChange={(_, newValue) => setRating(newValue || 0)}
+										/>
+									) : (
+										<Box
+											onClick={() => setIsEditingRating(true)}
+											sx={infoRating}
+										>
+											<Rating size="small" value={rating} readOnly />
+										</Box>
+									)}
+								</>
+							)}
 						</Box>
 					</Box>
-					<Box ml={1}>
-						<Typography sx={infoText}>{reviewData.reviewContents}</Typography>
+					<Box ml={1} ref={textRef}>
+						{isEditingText ? (
+							<TextField
+								fullWidth
+								multiline
+								value={text}
+								onChange={(event) => setText(event.target.value)}
+								autoFocus
+								sx={infoTextEdit}
+								inputProps={{ sx: infoTextEditInput }}
+							/>
+						) : (
+							<Typography onClick={() => setIsEditingText(true)} sx={infoText}>
+								{text}
+							</Typography>
+						)}
 					</Box>
 				</Box>
 				<Box
@@ -103,21 +190,12 @@ const ReviewCard: FC<ReviewCardProps> = ({
 					ml={2}
 				>
 					<Box sx={infoImg}>
-						{!isEmpty(file) ? (
-							<CardMedia
-								component="img"
-								image={useImageUrl({ image, file })}
-								alt="리뷰 이미지"
-								sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-							/>
-						) : (
-							<CardMedia
-								component="img"
-								image={IMAGE_INFO}
-								alt="리뷰 이미지"
-								sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-							/>
-						)}
+						<CardMedia
+							component="img"
+							image={imageUrl}
+							alt="리뷰 이미지"
+							sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+						/>
 					</Box>
 				</Box>
 			</Box>

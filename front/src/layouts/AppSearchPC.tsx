@@ -354,6 +354,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 											</Typography>
 										</Grid>
 									) : (
+										recommendRankData &&
 										recommendRankData.map((data: GoodsData, index: number) => (
 											<Grid key={index} item sx={{ display: 'flex' }}>
 												<Typography

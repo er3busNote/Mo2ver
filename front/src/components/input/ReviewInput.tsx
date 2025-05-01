@@ -1,6 +1,12 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { Box, Button, Divider, TextField } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { useIsMobile } from '@context/MobileContext';
+
+const fontSize_xs = '11px';
+const fontSize_sm = '12px';
+const fontSize_md = '13px';
+const fontSize_lg = '13px';
 
 interface ReviewInputProps {
 	setReviewContents: Dispatch<SetStateAction<string>>;
@@ -11,6 +17,7 @@ const ReviewInput: FC<ReviewInputProps> = ({
 	setReviewContents,
 	onReplySubmit,
 }) => {
+	const isMobile = useIsMobile();
 	const [showReplyInput, setShowReplyInput] = useState(false);
 
 	const handleReplyToggle = () => {
@@ -27,6 +34,14 @@ const ReviewInput: FC<ReviewInputProps> = ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
+	};
+	const infoTextEdit: SxProps<Theme> = {
+		backgroundColor: '#fff',
+		borderRadius: 1,
+		'.MuiInputBase-root': {
+			px: isMobile ? 1.5 : 2,
+			py: isMobile ? 1 : 2,
+		},
 	};
 
 	return (
@@ -47,12 +62,22 @@ const ReviewInput: FC<ReviewInputProps> = ({
 				<Box my={2} display="flex" alignItems="flex-start" gap={1}>
 					<TextField
 						multiline
-						rows={4}
+						rows={isMobile ? 2 : 4}
 						fullWidth
 						variant="outlined"
-						onChange={(e) => setReviewContents(e.target.value)}
+						onChange={(event) => setReviewContents(event.target.value)}
 						placeholder="답글을 입력하세요"
-						sx={{ backgroundColor: '#fff', borderRadius: 1 }}
+						sx={infoTextEdit}
+						inputProps={{
+							sx: {
+								fontSize: {
+									xs: fontSize_xs,
+									sm: fontSize_sm,
+									md: fontSize_md,
+									lg: fontSize_lg,
+								},
+							},
+						}}
 					/>
 					<Button
 						variant="contained"
