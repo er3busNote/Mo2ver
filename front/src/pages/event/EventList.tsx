@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -6,6 +6,7 @@ import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubHeader from '@layouts/AppSubHeader';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Grid,
@@ -16,7 +17,6 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
 import { EventData, EventPageData } from '@api/types';
 import moment from 'moment';
 
@@ -136,11 +136,6 @@ const EventList: FC<EventListProps> = ({
 	eventData,
 	setPage,
 }): JSX.Element => {
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
-
 	return (
 		<Box>
 			<AppSubHeader title={title} description={description} />
@@ -154,17 +149,7 @@ const EventList: FC<EventListProps> = ({
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 				{eventData.totalPages && (
-					<Pagination
-						count={eventData.totalPages - 1}
-						variant="outlined"
-						color="primary"
-						siblingCount={0}
-						boundaryCount={1}
-						hidePrevButton
-						hideNextButton
-						onChange={pageChange}
-						size="small"
-					/>
+					<PageNavigator count={eventData.totalPages} setPage={setPage} />
 				)}
 			</Box>
 		</Box>

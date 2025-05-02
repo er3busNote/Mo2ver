@@ -19,11 +19,11 @@ import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import NumberInput from '@components/input/NumberInput';
 import ButtonCart from '@components/button/ButtonCart';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Card,
 	Checkbox,
-	Pagination,
 	Breadcrumbs,
 	CardMedia,
 	CardActionArea,
@@ -37,6 +37,7 @@ import {
 import { pink } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile, useIsDesktop } from '@context/MobileContext';
+import { sumBy } from 'lodash';
 
 interface CartDataProps {
 	title: string;
@@ -718,13 +719,11 @@ const CartListMobile: FC<CartListProps> = ({
 }): JSX.Element => {
 	const isMobile = useIsMobile();
 
-	const calculateTotalSupplyPrice = (cartData: Array<CartData>) => {
-		return cartData.reduce((total, item) => total + (item.supplyPrice ?? 0), 0);
-	};
+	const calculateTotalSupplyPrice = (cartData: Array<CartData>) =>
+		sumBy(cartData, (item) => item.supplyPrice ?? 0);
 
-	const calculateTotalOptionCount = (cartData: Array<CartData>) => {
-		return cartData.reduce((total, item) => total + (item.amount ?? 0), 0);
-	};
+	const calculateTotalOptionCount = (cartData: Array<CartData>) =>
+		sumBy(cartData, (item) => item.amount ?? 0);
 
 	const totalSalePrice = cartPageData.cartTotal ?? 0;
 	const totalSupplyPrice = cartPageData.cartList
@@ -734,11 +733,6 @@ const CartListMobile: FC<CartListProps> = ({
 	const totalOptionCount = cartPageData.cartList
 		? calculateTotalOptionCount(cartPageData.cartList)
 		: 0;
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
 
 	return (
 		<Box sx={{ mb: 10 }}>
@@ -753,17 +747,7 @@ const CartListMobile: FC<CartListProps> = ({
 					onCartDelete={onCartDelete}
 				/>
 				<Box sx={{ mt: 2, display: 'none', justifyContent: 'center' }}>
-					<Pagination
-						count={1}
-						variant="outlined"
-						color="primary"
-						siblingCount={2}
-						boundaryCount={2}
-						hidePrevButton
-						hideNextButton
-						onChange={pageChange}
-						size="small"
-					/>
+					<PageNavigator count={1} setPage={setPage} />
 				</Box>
 			</Box>
 			<Box sx={{ mx: 3, my: 2 }}>

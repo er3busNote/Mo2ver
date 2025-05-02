@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { menuActive } from '@store/index';
 import SearchInput from '@components/input/SearchInput';
 import ButtonDelivery from '@components/button/ButtonDelivery';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Tab,
@@ -14,7 +15,6 @@ import {
 	Stack,
 	Rating,
 	IconButton,
-	Pagination,
 	Breadcrumbs,
 	CardMedia,
 	CardActionArea,
@@ -75,11 +75,6 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
 	const goodsClick = (code: string) => {
 		//dispatch(menuActive('/goods/' + code + '/detail'));
 		//navigate('/goods/' + code + '/detail');
-	};
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
 	};
 
 	const rowItem: SxProps<Theme> = {
@@ -389,17 +384,7 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
 				</Table>
 			</TableContainer>
 			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-				<Pagination
-					count={1}
-					variant="outlined"
-					color="primary"
-					siblingCount={2}
-					boundaryCount={2}
-					hidePrevButton
-					hideNextButton
-					onChange={pageChange}
-					size="small"
-				/>
+				<PageNavigator count={1} setPage={setPage} />
 			</Box>
 		</Box>
 	);

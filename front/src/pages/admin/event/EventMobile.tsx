@@ -1,17 +1,10 @@
-import React, {
-	FC,
-	useState,
-	useEffect,
-	MouseEvent,
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
+import TablePageNavigator from '@components/pagination/TablePageNavigator';
 import {
 	Box,
 	Link,
@@ -25,7 +18,6 @@ import {
 	TableRow,
 	TableCell,
 	TableFooter,
-	TablePagination,
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -34,7 +26,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { EventData, EventPageData } from '@api/types';
-// import _ from 'lodash';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -58,14 +49,8 @@ const EventMobile: FC<EventProps> = ({
 	const navigate = useNavigate();
 	const [keyword, setKeyword] = useState('');
 	const [useyn, setUseyn] = useState('');
-	const [newPage, setNewPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(0);
 	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
-
-	useEffect(() => {
-		setRowsPerPage(eventPageData.numberOfElements);
-	}, [eventPageData.size]);
 
 	const registerClick = () => {
 		const titleData: TitleInfo = {
@@ -107,20 +92,6 @@ const EventMobile: FC<EventProps> = ({
 	};
 	const handleEndChange = (newValue: Dayjs | null) => {
 		setEndDate(newValue);
-	};
-
-	const handleChangePage = (
-		event: MouseEvent<HTMLButtonElement> | null,
-		newPage: number
-	) => {
-		setPage(newPage);
-		setNewPage(newPage);
-	};
-	const handleChangeRowsPerPage = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setNewPage(0);
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -348,20 +319,12 @@ const EventMobile: FC<EventProps> = ({
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							{eventPageData.totalElements && rowsPerPage && (
-								<TablePagination
-									rowsPerPageOptions={[eventPageData.size]}
-									count={eventPageData.totalElements}
-									rowsPerPage={rowsPerPage}
-									page={newPage}
-									SelectProps={{
-										inputProps: {
-											'aria-label': 'rows per page',
-										},
-										native: false,
-									}}
-									onPageChange={handleChangePage}
-									onRowsPerPageChange={handleChangeRowsPerPage}
+							{eventPageData.totalElements && (
+								<TablePageNavigator
+									size={eventPageData.size}
+									totalElements={eventPageData.totalElements}
+									numberOfElements={eventPageData.numberOfElements}
+									setPage={setPage}
 								/>
 							)}
 						</TableRow>

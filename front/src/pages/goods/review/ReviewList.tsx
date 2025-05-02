@@ -1,8 +1,9 @@
-import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { ReviewData, ReviewPageData, ReviewRequestData } from '@api/types';
 import ReviewCard from '@components/card/ReviewCard';
 import ReviewInput from '@components/input/ReviewInput';
-import { Box, Pagination } from '@mui/material';
+import PageNavigator from '@components/pagination/PageNavigator';
+import { Box } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { isEmpty } from 'lodash';
 
@@ -21,11 +22,6 @@ const ReviewList: FC<ReviewListProps> = ({
 	onReviewAdd,
 	onReviewMod,
 }) => {
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page - 1);
-	};
-
 	const infoCard: SxProps<Theme> = {
 		borderTop: '2px solid #ce93d8',
 		borderBottom: '2px solid #ce93d8',
@@ -54,16 +50,9 @@ const ReviewList: FC<ReviewListProps> = ({
 						)}
 					<Box mb={2} sx={{ display: 'flex', justifyContent: 'center' }}>
 						{reviewPageData.totalPages && (
-							<Pagination
+							<PageNavigator
 								count={reviewPageData.totalPages}
-								variant="outlined"
-								color="primary"
-								siblingCount={0}
-								boundaryCount={1}
-								hidePrevButton
-								hideNextButton
-								onChange={pageChange}
-								size="small"
+								setPage={setPage}
 							/>
 						)}
 					</Box>

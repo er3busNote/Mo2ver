@@ -1,10 +1,4 @@
-import React, {
-	FC,
-	useState,
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -14,13 +8,13 @@ import useImageUrl from '@hooks/useImageUrl';
 import EventSubHeader from './cmmn/EventSubHeader';
 import ButtonTag from '@components/button/ButtonTag';
 import ButtonGoods from '@components/button/ButtonGoods';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Grid,
 	Link,
 	Card,
 	Rating,
-	Pagination,
 	Breadcrumbs,
 	CardContent,
 	CardMedia,
@@ -579,11 +573,6 @@ const EventDetail: FC<EventDetailProps> = ({
 		get(eventData, ['imageList', 0, 'goodsImageAttachFile'], '')
 	);
 
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
-
 	return (
 		<Box sx={{ mb: 10 }}>
 			<EventSubHeader
@@ -632,16 +621,9 @@ const EventDetail: FC<EventDetailProps> = ({
 				</Box>
 				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 					{eventProductData.totalPages && (
-						<Pagination
-							count={eventProductData.totalPages - 1}
-							variant="outlined"
-							color="primary"
-							siblingCount={0}
-							boundaryCount={1}
-							hidePrevButton
-							hideNextButton
-							onChange={pageChange}
-							size="small"
+						<PageNavigator
+							count={eventProductData.totalPages}
+							setPage={setPage}
 						/>
 					)}
 				</Box>

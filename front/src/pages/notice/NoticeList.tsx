@@ -1,8 +1,8 @@
-import React, { FC, useState, ChangeEvent } from 'react';
+import React, { FC, useState } from 'react';
 import AppSubHeader from '@layouts/AppSubHeader';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
-	Pagination,
 	Table,
 	TableHead,
 	TableBody,
@@ -22,11 +22,6 @@ const NoticeList: FC<NoticeListProps> = ({
 	description,
 }): JSX.Element => {
 	const [page, setPage] = useState(0);
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
 
 	const thHeader: SxProps<Theme> = {
 		px: { xs: 0, sm: 2 },
@@ -99,17 +94,7 @@ const NoticeList: FC<NoticeListProps> = ({
 				</TableContainer>
 			</Box>
 			<Box sx={{ mb: 10, display: 'flex', justifyContent: 'center' }}>
-				<Pagination
-					count={1}
-					variant="outlined"
-					color="primary"
-					siblingCount={2}
-					boundaryCount={2}
-					hidePrevButton
-					hideNextButton
-					onChange={pageChange}
-					size="small"
-				/>
+				<PageNavigator count={1} setPage={setPage} />
 			</Box>
 		</Box>
 	);

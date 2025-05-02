@@ -6,8 +6,9 @@ import Api from '@api/index';
 import { GoodsData, CategoryData } from '@api/types';
 import useCategoryInfo from '@hooks/category/useCategoryInfo';
 import useGoodsSearchPageList from '@hooks/goods/useGoodsSearchPageList';
-import SearchInput from '../input/SearchInput';
-import ButtonDialog from '../button/ButtonDialog';
+import SearchInput from '@components/input/SearchInput';
+import ButtonDialog from '@components/button/ButtonDialog';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Grid,
@@ -24,7 +25,6 @@ import {
 	MenuItem,
 	InputLabel,
 	FormControl,
-	Pagination,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -153,10 +153,6 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 	};
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setKeyword(event.currentTarget.value as string);
-	};
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
 	};
 
 	const handleToggle = (value: GoodsData) => () => {
@@ -418,17 +414,7 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 					</Grid>
 					<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
 						{goodsData.totalPages && (
-							<Pagination
-								count={goodsData.totalPages - 1}
-								variant="outlined"
-								color="primary"
-								siblingCount={2}
-								boundaryCount={2}
-								hidePrevButton
-								hideNextButton
-								onChange={pageChange}
-								size="small"
-							/>
+							<PageNavigator count={goodsData.totalPages} setPage={setPage} />
 						)}
 					</Box>
 				</Box>

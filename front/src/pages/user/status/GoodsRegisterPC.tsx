@@ -2,6 +2,7 @@ import React, { FC, useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import SearchInput from '@components/input/SearchInput';
 import ButtonGoods from '@components/button/ButtonGoods';
+import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
 	Grid,
@@ -11,7 +12,6 @@ import {
 	MenuItem,
 	InputLabel,
 	FormControl,
-	Pagination,
 	Table,
 	TableHead,
 	TableBody,
@@ -40,11 +40,6 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 	const [progress, setProgress] = useState('');
 	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
-
-	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
-		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
-	};
 
 	const handleProgressChange = (event: SelectChangeEvent) => {
 		setProgress(event.target.value as string);
@@ -271,17 +266,7 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 				</Table>
 			</TableContainer>
 			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-				<Pagination
-					count={1}
-					variant="outlined"
-					color="primary"
-					siblingCount={2}
-					boundaryCount={2}
-					hidePrevButton
-					hideNextButton
-					onChange={pageChange}
-					size="small"
-				/>
+				<PageNavigator count={1} setPage={setPage} />
 			</Box>
 		</Box>
 	);
