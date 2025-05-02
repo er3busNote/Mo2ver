@@ -1,4 +1,5 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
+import { ReviewRequestData } from '@api/types';
 import { Box, Button, Divider, TextField, Rating } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';
@@ -9,25 +10,34 @@ const fontSize_md = '13px';
 const fontSize_lg = '13px';
 
 interface ReviewInputProps {
-	setRating: Dispatch<SetStateAction<number>>;
-	setReviewContents: Dispatch<SetStateAction<string>>;
-	onReplySubmit: () => void;
+	goodsCode: string;
+	upperReviewNo?: number;
+	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
 }
 
 const ReviewInput: FC<ReviewInputProps> = ({
-	setRating,
-	setReviewContents,
+	goodsCode,
+	upperReviewNo,
 	onReplySubmit,
 }) => {
 	const isMobile = useIsMobile();
-	const [showReplyInput, setShowReplyInput] = useState(false);
+	const [rating, setRating] = useState<number>(0);
+	const [reviewContents, setReviewContents] = useState<string>('');
+	const [showReplyInput, setShowReplyInput] = useState<boolean>(false);
 
 	const handleReplyToggle = () => {
 		setShowReplyInput((prev) => !prev);
 	};
 
 	const handleReplySubmit = () => {
-		onReplySubmit();
+		const reviewInfo: ReviewRequestData = {
+			goodsCode: goodsCode,
+			upperReviewNo: upperReviewNo,
+			reviewImg: '',
+			reviewContents: reviewContents,
+			rating: rating,
+		};
+		onReplySubmit(reviewInfo);
 		setShowReplyInput(false);
 	};
 

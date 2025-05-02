@@ -1,10 +1,4 @@
-import React, {
-	FC,
-	useState,
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { ReviewData, ReviewPageData, ReviewRequestData } from '@api/types';
 import ReviewCard from '@components/card/ReviewCard';
 import ReviewInput from '@components/input/ReviewInput';
@@ -17,6 +11,7 @@ interface ReviewListProps {
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
+	onReviewMod: (reviewInfo: ReviewRequestData) => void;
 }
 
 const ReviewList: FC<ReviewListProps> = ({
@@ -24,27 +19,11 @@ const ReviewList: FC<ReviewListProps> = ({
 	reviewPageData,
 	setPage,
 	onReviewAdd,
+	onReviewMod,
 }) => {
-	const [rating, setRating] = useState<number>(0);
-	const [reviewContents, setReviewContents] = useState<string>('');
-
-	const onReplySubmit = (reviewInfo: ReviewRequestData) => {
-		onReviewAdd(reviewInfo);
-	};
-
-	const handleReplySubmit = () => {
-		const reviewInfo: ReviewRequestData = {
-			goodsCode: goodsCode,
-			reviewImg: '',
-			reviewContents: reviewContents,
-			rating: rating,
-		};
-		onReviewAdd(reviewInfo);
-	};
-
 	const pageChange = (event: ChangeEvent<unknown>, page: number) => {
 		const value = (event.target as HTMLButtonElement).textContent as any;
-		if (value && value === String(page)) setPage(page);
+		if (value && value === String(page)) setPage(page - 1);
 	};
 
 	const infoCard: SxProps<Theme> = {
@@ -55,9 +34,8 @@ const ReviewList: FC<ReviewListProps> = ({
 	return (
 		<>
 			<ReviewInput
-				setRating={setRating}
-				setReviewContents={setReviewContents}
-				onReplySubmit={handleReplySubmit}
+				goodsCode={goodsCode}
+				onReplySubmit={onReviewAdd}
 			></ReviewInput>
 			{!isEmpty(reviewPageData.content) && (
 				<Box sx={infoCard}>
@@ -67,16 +45,17 @@ const ReviewList: FC<ReviewListProps> = ({
 								<ReviewCard
 									key={index}
 									reviewData={reviewData}
-									onReplySubmit={onReplySubmit}
+									onReplySubmit={onReviewAdd}
+									onReplyModify={onReviewMod}
 									isRoot={true}
 									depth={0}
 								></ReviewCard>
 							)
 						)}
-					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+					<Box mb={2} sx={{ display: 'flex', justifyContent: 'center' }}>
 						{reviewPageData.totalPages && (
 							<Pagination
-								count={reviewPageData.totalPages - 1}
+								count={reviewPageData.totalPages}
 								variant="outlined"
 								color="primary"
 								siblingCount={0}

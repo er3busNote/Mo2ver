@@ -25,6 +25,7 @@ interface GoodsDetailProps {
 	reviewData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
+	onReviewMod: (reviewInfo: ReviewRequestData) => void;
 	onCartAdd: (cartData: CartData) => void;
 }
 
@@ -46,6 +47,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	reviewData,
 	setPage,
 	onReviewAdd,
+	onReviewMod,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -63,6 +65,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 				reviewPageData={reviewData}
 				setPage={setPage}
 				onReviewAdd={onReviewAdd}
+				onReviewMod={onReviewMod}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -77,6 +80,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	reviewData,
 	setPage,
 	onReviewAdd,
+	onReviewMod,
 	onCartAdd,
 }): JSX.Element => {
 	return (
@@ -94,6 +98,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 				reviewPageData={reviewData}
 				setPage={setPage}
 				onReviewAdd={onReviewAdd}
+				onReviewMod={onReviewMod}
 				onCartAdd={onCartAdd}
 			/>
 		</Box>
@@ -123,6 +128,10 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 		await review.create(reviewInfo, csrfData);
 		setReload(true);
 	};
+	const onReviewMod = async (reviewInfo: ReviewRequestData) => {
+		await review.update(reviewInfo, csrfData);
+		setReload(true);
+	};
 	const cartAdd = async (cartData: CartData) => {
 		await cart.add(cartData, csrfData);
 	};
@@ -137,6 +146,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					reviewData={reviewData}
 					setPage={setPage}
 					onReviewAdd={onReviewAdd}
+					onReviewMod={onReviewMod}
 					onCartAdd={cartAdd}
 				/>
 			)}
@@ -149,6 +159,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					reviewData={reviewData}
 					setPage={setPage}
 					onReviewAdd={onReviewAdd}
+					onReviewMod={onReviewMod}
 					onCartAdd={cartAdd}
 				/>
 			)}

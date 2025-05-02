@@ -43,6 +43,7 @@ interface GoodsDetailProps {
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
+	onReviewMod: (reviewInfo: ReviewRequestData) => void;
 	onCartAdd: (cartData: CartData) => void;
 }
 
@@ -54,6 +55,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	reviewPageData,
 	setPage,
 	onReviewAdd,
+	onReviewMod,
 	onCartAdd,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
@@ -551,6 +553,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 					reviewPageData={reviewPageData}
 					setPage={setPage}
 					onReviewAdd={onReviewAdd}
+					onReviewMod={onReviewMod}
 				></ReviewList>
 			</Box>
 		</Box>

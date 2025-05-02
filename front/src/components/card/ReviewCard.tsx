@@ -1,4 +1,11 @@
-import React, { FC, useState, useEffect, useRef, ChangeEvent } from 'react';
+import React, {
+	FC,
+	useState,
+	useEffect,
+	useRef,
+	ChangeEvent,
+	MutableRefObject,
+} from 'react';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +25,7 @@ import {
 } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile, useIsDesktop } from '@context/MobileContext';
-import { isEmpty, get } from 'lodash';
+import { isEmpty } from 'lodash';
 
 const HiddenInput = styled('input')({
 	display: 'none',
@@ -32,6 +39,7 @@ interface ReviewCardProps {
 	image: ActionCreatorsMapObject;
 	reviewData: ReviewData;
 	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
+	onReplyModify: (reviewInfo: ReviewRequestData) => void;
 	isRoot: boolean;
 	depth: number;
 }
@@ -41,6 +49,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	image,
 	reviewData,
 	onReplySubmit,
+	onReplyModify,
 	isRoot,
 	depth,
 }) => {
@@ -52,26 +61,26 @@ const ReviewCard: FC<ReviewCardProps> = ({
 
 	const textRef = useRef<HTMLDivElement>(null);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const [isEditingRating, setIsEditingRating] = useState(false);
+	const [isEditingRating, setIsEditingRating] = useState<boolean>(false);
 	const [isEditingText, setIsEditingText] = useState<boolean>(false);
-	const [reviewContents, setReviewContents] = useState<string>('');
 
-	const [file, setFile] = useState<string>(reviewData.imageAttachFile || '');
-	const [rating, setRating] = useState<number>(reviewData.rating || 0);
-	const [text, setText] = useState<string>(reviewData.reviewContents || '');
+	const [file, setFile] = useState<string>('');
+	const [text, setText] = useState<string>('');
 	const [imageUrl, setImageUrl] = useState<string>(IMAGE_INFO);
+
+	const latestTextRef: MutableRefObject<string> = useRef<string>(text);
+
+	useEffect(() => {
+		latestTextRef.current = text;
+	}, [text]);
 
 	useEffect(() => {
 		if (!isEmpty(file)) setImageUrl(useImageUrl({ image, file }));
-	}, [file, rating, text]);
+	}, [file]);
 
 	useEffect(() => {
 		setFile(reviewData.imageAttachFile || '');
-		setRating(reviewData.rating || 0);
-		setText(reviewData.reviewContents);
-		if (!isEmpty(file)) {
-			setImageUrl(useImageUrl({ image, file }));
-		}
+		setText(reviewData.reviewContents || '');
 	}, [reviewData]);
 
 	useEffect(() => {
@@ -82,6 +91,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 				textRef.current &&
 				!textRef.current.contains(target)
 			) {
+				handleReplyContentsSubmit();
 				setIsEditingText(false);
 			}
 		};
@@ -95,7 +105,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
-			setImageUrl(useImageUrl({ image, file: dataFiles[0].fileAttachCode }));
+			handleReplyFileAttachSubmit(dataFiles[0].fileAttachCode);
 		}
 	}, [dataFiles]);
 
@@ -110,14 +120,37 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		fileInputRef.current?.click();
 	};
 
-	const handleReplySubmit = () => {
-		onReplySubmit({
+	const handleReplyRatingSubmit = (rating: number) => {
+		const reviewInfo: ReviewRequestData = {
+			reviewNo: reviewData.goodsReviewNo,
 			goodsCode: reviewData.goodsCode,
-			upperReviewNo: reviewData.goodsReviewNo,
-			reviewImg: '',
-			reviewContents: reviewContents,
-			rating: 0,
-		});
+			reviewImg: file,
+			reviewContents: reviewData.reviewContents,
+			rating: rating,
+		};
+		onReplyModify(reviewInfo);
+	};
+
+	const handleReplyContentsSubmit = () => {
+		const reviewInfo: ReviewRequestData = {
+			reviewNo: reviewData.goodsReviewNo,
+			goodsCode: reviewData.goodsCode,
+			reviewImg: reviewData.imageAttachFile,
+			reviewContents: latestTextRef.current,
+			rating: reviewData.rating,
+		};
+		onReplyModify(reviewInfo);
+	};
+
+	const handleReplyFileAttachSubmit = (fileAttachCode: string) => {
+		const reviewInfo: ReviewRequestData = {
+			reviewNo: reviewData.goodsReviewNo,
+			goodsCode: reviewData.goodsCode,
+			reviewImg: fileAttachCode,
+			reviewContents: reviewData.reviewContents,
+			rating: reviewData.rating,
+		};
+		onReplyModify(reviewInfo);
 	};
 
 	const infoCard: SxProps<Theme> = {
@@ -176,10 +209,10 @@ const ReviewCard: FC<ReviewCardProps> = ({
 							{isEditingRating ? (
 								<Rating
 									size="small"
-									value={rating}
+									value={reviewData.rating}
 									onChange={(event, newValue) => {
 										event.preventDefault();
-										setRating(newValue || 0);
+										handleReplyRatingSubmit(newValue || 0);
 										setIsEditingRating(false);
 									}}
 									autoFocus
@@ -189,15 +222,18 @@ const ReviewCard: FC<ReviewCardProps> = ({
 									{isMobile ? (
 										<Rating
 											size="small"
-											value={rating}
-											onChange={(_, newValue) => setRating(newValue || 0)}
+											value={reviewData.rating}
+											onChange={(event, newValue) => {
+												event.preventDefault();
+												handleReplyRatingSubmit(newValue || 0);
+											}}
 										/>
 									) : (
 										<Box
 											onClick={() => setIsEditingRating(true)}
 											sx={infoRating}
 										>
-											<Rating size="small" value={rating} readOnly />
+											<Rating size="small" value={reviewData.rating} readOnly />
 										</Box>
 									)}
 								</>
@@ -257,9 +293,9 @@ const ReviewCard: FC<ReviewCardProps> = ({
 			</Box>
 
 			<ReviewInput
-				setRating={setRating}
-				setReviewContents={setReviewContents}
-				onReplySubmit={handleReplySubmit}
+				goodsCode={reviewData.goodsCode}
+				upperReviewNo={reviewData.goodsReviewNo}
+				onReplySubmit={onReplySubmit}
 			></ReviewInput>
 
 			{reviewData.reviewResponseList.map(
@@ -270,6 +306,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 						image={image}
 						reviewData={reviewSubData}
 						onReplySubmit={onReplySubmit}
+						onReplyModify={onReplyModify}
 						isRoot={false}
 						depth={depth + 1}
 					></ReviewCard>

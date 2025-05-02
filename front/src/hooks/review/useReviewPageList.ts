@@ -30,7 +30,7 @@ const useReviewPageList = ({
 	const fetchAndSetData = useCallback(async () => {
 		const pageData: PageData = {
 			page: page,
-			size: 12,
+			size: 6,
 		};
 		const data = await review.list(code, pageData);
 		setData(data);
