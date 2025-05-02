@@ -14,7 +14,7 @@ import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import { TitleInfo, MenuState, SubMenuInfo } from '@store/types';
 import { CategoryData, CategoryDataGroup } from '@api/types';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import {
 	Box,
 	Grid,
@@ -354,7 +354,7 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
 	const [userInput, setUserInput] = useState('');
-	const [data, setPage, setKeywordData] = useSearchGoodsList({
+	const { setKeywordData } = useSearchGoodsList({
 		search,
 		keyword,
 		setKeyword,
@@ -365,7 +365,6 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 		if (text === '') {
 			setFocus(false);
 		} else {
-			// fetchData(0, text); // 초기화
 			setFocus(true);
 		}
 		setUserInput(text);
@@ -374,6 +373,15 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
 			event.preventDefault();
+			const titleData: TitleInfo = {
+				title: '검색',
+				description: '검색',
+				prevTitle: title,
+				prevDescription: description,
+			};
+			dispatch(changeNext(titleData));
+			dispatch(menuActive(`/goods/search/${userInput}`));
+			navigate(`/goods/search/${userInput}`);
 		}
 	};
 

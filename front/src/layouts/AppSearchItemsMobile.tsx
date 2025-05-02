@@ -9,7 +9,7 @@ import React, {
 import { ActionCreatorsMapObject } from 'redux';
 import { GoodsData } from '@api/types';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
@@ -204,11 +204,10 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 	setSearchOpen,
 	goodsRankData,
 }): JSX.Element => {
-	const [open, setOpen] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [keyword, setKeyword] = useState('');
 	const [userInput, setUserInput] = useState('');
-	const [data, setPage, setKeywordData] = useSearchGoodsList({
+	const { setKeywordData } = useSearchGoodsList({
 		search,
 		keyword,
 		setKeyword,
@@ -223,18 +222,14 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 		const text = event.currentTarget.value;
 		if (text === '') {
 			setFocus(false);
-			setOpen(false);
 		} else {
-			// fetchData(0, text); // 초기화
 			setFocus(true);
-			setOpen(true);
 		}
 		setUserInput(text);
 		setKeywordData(text);
 	};
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
-			setOpen(false);
 			event.preventDefault();
 		}
 	};
@@ -243,7 +238,6 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 		setUserInput('');
 		setKeywordData('');
 		setFocus(false);
-		setOpen(false);
 	};
 
 	const toggleDrawer = () => {

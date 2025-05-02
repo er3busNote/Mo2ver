@@ -7,7 +7,9 @@ import Api from '@api/index';
 import { TitleState } from '@store/types';
 import { GoodsPageData } from '@api/types';
 import useCategoryPageList from '@hooks/category/useCategoryPageList';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
 import GoodsList from './GoodsList';
+import NotFound from '../NotFound';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 interface GoodsProps {
@@ -22,6 +24,7 @@ interface GoodsDispatchProps {
 	title: string;
 	description: string;
 	goods: ActionCreatorsMapObject;
+	search: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }
 
@@ -75,25 +78,16 @@ const GoodsMobile: FC<GoodsProps> = ({
 	);
 };
 
-const GoodsPage: FC<GoodsDispatchProps> = ({
+const GoodsDataLoaded: FC<GoodsProps> = ({
 	title,
 	description,
-	goods,
 	image,
+	goodsData,
+	setPage,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-	const { code, type } = useParams();
-	const categoryCode = code ?? '';
-	const categoryType = type ?? '';
-	const [goodsData, setPage] = useCategoryPageList({
-		goods,
-		categoryCode,
-		categoryType,
-	});
-
 	return (
 		<>
 			{isDesktop && (
@@ -118,6 +112,48 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 	);
 };
 
+const GoodsPage: FC<GoodsDispatchProps> = ({
+	title,
+	description,
+	goods,
+	search,
+	image,
+}): JSX.Element => {
+	const { code, type, keyword } = useParams();
+	if (type && code) {
+		const [goodsData, setPage] = useCategoryPageList({
+			goods,
+			categoryCode: code,
+			categoryType: type,
+		});
+		return (
+			<GoodsDataLoaded
+				title={title}
+				description={description}
+				image={image}
+				goodsData={goodsData}
+				setPage={setPage}
+			/>
+		);
+	} else if (keyword) {
+		const [goodsData, setPage] = useSearchGoodsList({
+			search,
+			keyword,
+		});
+		return (
+			<GoodsDataLoaded
+				title={title}
+				description={description}
+				image={image}
+				goodsData={goodsData}
+				setPage={setPage}
+			/>
+		);
+	} else {
+		return <NotFound />;
+	}
+};
+
 const mapStateToProps = (state: any) => ({
 	title: (state.title as TitleState).title,
 	description: (state.title as TitleState).description,
@@ -125,6 +161,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	goods: bindActionCreators(Api.goods, dispatch),
+	search: bindActionCreators(Api.search, dispatch),
 	image: bindActionCreators(Api.image, dispatch),
 });
 

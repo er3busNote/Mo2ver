@@ -52,6 +52,7 @@ const MainRoutes: FC = (): JSX.Element => {
 			<Route path="/auth/*" element={<AuthRoutes />} />
 			<Route element={<PrivateRoute role={'user'} />}>
 				<Route path="/goods/:type/:code" element={<Goods />} />
+				<Route path="/goods/search/:keyword" element={<Goods />} />
 				<Route path="/goods/:id/detail" element={<GoodsDetail />} />
 				<Route path="/event" element={<Event />} />
 				<Route path="/event/:id/detail" element={<EventDetail />} />

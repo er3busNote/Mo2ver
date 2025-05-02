@@ -23,7 +23,6 @@ interface EventDetailProps {
 interface EventDetailDispatchProps {
 	title: string;
 	description: string;
-	member: ActionCreatorsMapObject;
 	event: ActionCreatorsMapObject;
 	image: ActionCreatorsMapObject;
 }

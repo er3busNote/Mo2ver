@@ -6,7 +6,7 @@ import { changeNext, menuActive } from '@store/index';
 import { TitleInfo } from '@store/types';
 import { GoodsData } from '@api/types';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
+import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
@@ -167,7 +167,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 	const [keyword, setKeyword] = useState('');
 	const [userInput, setUserInput] = useState('');
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-	const [data, setPage, setKeywordData] = useSearchGoodsList({
+	const { setKeywordData } = useSearchGoodsList({
 		search,
 		keyword,
 		setKeyword,
@@ -178,7 +178,6 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		recommend,
 	});
 
-	// (Diff) focus는 focusing하는 boolean값 ↔ open은 list를 출력하는 boolean값
 	const showAnchorEl = (event: ChangeEvent<HTMLInputElement>) => {
 		setAnchorEl(event.currentTarget);
 		setOpen(true);
@@ -192,19 +191,27 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		const text = event.currentTarget.value;
 		if (text === '') {
 			setFocus(false);
-			closeAnchorEl(); // → Popper Close
+			closeAnchorEl();
 		} else {
-			// fetchData(0, text); // 초기화
 			setFocus(true);
-			showAnchorEl(event); // Popper Open
+			showAnchorEl(event);
 		}
 		setUserInput(text);
 		setKeywordData(text);
 	};
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
-			closeAnchorEl(); // → Popper Close
+			closeAnchorEl();
 			event.preventDefault();
+			const titleData: TitleInfo = {
+				title: '검색',
+				description: '검색',
+				prevTitle: title,
+				prevDescription: description,
+			};
+			dispatch(changeNext(titleData));
+			dispatch(menuActive(`/goods/search/${userInput}`));
+			navigate(`/goods/search/${userInput}`);
 		}
 	};
 
@@ -212,7 +219,7 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		setUserInput('');
 		setKeywordData('');
 		setFocus(false);
-		closeAnchorEl(); // → Popper 닫기
+		closeAnchorEl();
 	};
 
 	const activeClick = (
