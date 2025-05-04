@@ -31,8 +31,8 @@ public class FileController {
     @GetMapping("/image")
     public ResponseEntity fileImage(@RequestParam String id) {
         try {
-            String fileAttachCode = JasyptUtil.toDecrypt(id);
-            byte[] bannerImageBytes = fileService.findFile(fileAttachCode);
+            Integer attachFile = JasyptUtil.getDecryptor(id);
+            byte[] bannerImageBytes = fileService.findFile(attachFile);
             ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
             Tika tika = new Tika();
             String tikaMimeType = tika.detect(bannerImageBytes);

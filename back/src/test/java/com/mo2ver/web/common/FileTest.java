@@ -57,6 +57,18 @@ public class FileTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("공통 이미지정보 다운로드 확인")
+    public void findFileImageTest() throws Exception {
+
+        String fileAttachId = FileAttachInfo.from(100016);
+
+        mockMvc.perform(get("/file/image")
+                        .param("id", fileAttachId))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("공통 이미지정보 버킷 다운로드 확인")
     public void findFileImageBucketTest() throws Exception {
 

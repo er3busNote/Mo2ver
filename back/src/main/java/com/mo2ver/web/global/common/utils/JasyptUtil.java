@@ -31,7 +31,7 @@ public class JasyptUtil {
         return encrypt(String.valueOf(attachFile));
     }
 
-    public static String toDecrypt(String attachFile) {
+    private static String toDecrypt(String attachFile) {
         return decrypt(attachFile.replace(" ", "+"));
     }
 

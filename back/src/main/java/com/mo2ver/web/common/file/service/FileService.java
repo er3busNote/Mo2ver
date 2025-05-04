@@ -36,8 +36,8 @@ public class FileService {
     private Environment environment;
 
     @Transactional
-    public byte[] findFile(String fileAttachCode) throws Exception {
-        Optional<File> info = this.fileRepository.findById(Long.parseLong(fileAttachCode));
+    public byte[] findFile(Integer attachFile) throws Exception {
+        Optional<File> info = this.fileRepository.findById(attachFile.longValue());
         if (info.isPresent()) {
             File file = info.get();
             if('Y' == file.getCloudYn()){
