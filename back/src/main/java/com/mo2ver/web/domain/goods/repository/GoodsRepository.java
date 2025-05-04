@@ -13,11 +13,11 @@ public interface GoodsRepository extends JpaRepository<Goods, String>, GoodsRepo
     @EntityGraph(attributePaths = {"price", "goodsImageList"})
     Optional<Goods> findByGoodsCode(String goodsCode);
     @EntityGraph(attributePaths = {"price", "goodsImageList"})
-    Page<Goods> findAll(Pageable paging);
+    Page<Goods> findAll(Pageable pageable);
     @EntityGraph(attributePaths = {"price", "goodsImageList"})
-    Page<Goods> findByLargeCategoryCode(Pageable paging, String largeCategoryCode);
+    Page<Goods> findByLargeCategoryCode(Pageable pageable, String largeCategoryCode);
     @EntityGraph(attributePaths = {"price", "goodsImageList"})
-    Page<Goods> findByMediumCategoryCode(Pageable paging, String mediumCategoryCode);
+    Page<Goods> findByMediumCategoryCode(Pageable pageable, String mediumCategoryCode);
     @EntityGraph(attributePaths = {"price", "goodsImageList"})
-    Page<Goods> findBySmallCategoryCode(Pageable paging, String smallCategoryCode);
+    Page<Goods> findBySmallCategoryCode(Pageable pageable, String smallCategoryCode);
 }

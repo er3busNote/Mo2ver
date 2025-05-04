@@ -35,7 +35,7 @@ public class EventProduct {
             foreignKey = @ForeignKey(name = "FK_EVT_MNG_TO_EVT_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
-    private EventManage eventManageNo;
+    private Event eventManageNo;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;
@@ -68,17 +68,17 @@ public class EventProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventProduct from(EventManage eventManage) {
+    public static EventProduct from(Event event) {
         return EventProduct.builder()
-                .eventManageNo(eventManage)
-                .register(eventManage.getRegister())
-                .updater(eventManage.getUpdater())
+                .eventManageNo(event)
+                .register(event.getRegister())
+                .updater(event.getUpdater())
                 .build();
     }
 
-    public static EventProduct of(EventManage eventManage, EventImageProductInfo eventImageProductInfo, Member currentUser) {
+    public static EventProduct of(Event event, EventImageProductInfo eventImageProductInfo, Member currentUser) {
         return EventProduct.builder()
-                .eventManageNo(eventManage)
+                .eventManageNo(event)
                 .productCode(eventImageProductInfo.getGoodsCode())
                 .productName(eventImageProductInfo.getGoodsName())
                 .sortSequence(eventImageProductInfo.getSortSequence())

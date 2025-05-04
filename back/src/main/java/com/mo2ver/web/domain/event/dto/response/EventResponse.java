@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.event.dto.response;
 
-import com.mo2ver.web.domain.event.entity.EventManage;
+import com.mo2ver.web.domain.event.entity.Event;
 import com.mo2ver.web.domain.event.dto.ImageInfo;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -25,16 +25,16 @@ public class EventResponse {
     private Date registerDate;
     private List<ImageInfo> imageList;
 
-    public static EventResponse of(EventManage eventManage) {
+    public static EventResponse of(Event event) {
         return EventResponse.builder()
-                .eventManageNo(eventManage.getEventManageNo())
-                .subject(eventManage.getSubject())
-                .eventStartDate(eventManage.getEventStartDate())
-                .eventEndDate(eventManage.getEventEndDate())
-                .eventYesNo(eventManage.getEventYesNo())
-                .register(eventManage.getRegister())
-                .registerDate(Timestamp.valueOf(eventManage.getRegisterDate()))
-                .imageList(eventManage.getEventImageList().stream()
+                .eventManageNo(event.getEventManageNo())
+                .subject(event.getSubject())
+                .eventStartDate(event.getEventStartDate())
+                .eventEndDate(event.getEventEndDate())
+                .eventYesNo(event.getEventYesNo())
+                .register(event.getRegister())
+                .registerDate(Timestamp.valueOf(event.getRegisterDate()))
+                .imageList(event.getEventImages().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')
                         .map(ImageInfo::of)
                         .collect(Collectors.toList()))

@@ -1,8 +1,8 @@
 package com.mo2ver.web.domain.event.service;
 
 import com.mo2ver.web.domain.event.dto.response.EventProductResponse;
-import com.mo2ver.web.domain.event.repository.EventManageRepository;
-import com.mo2ver.web.domain.event.entity.EventManage;
+import com.mo2ver.web.domain.event.entity.Event;
+import com.mo2ver.web.domain.event.repository.EventRepository;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.EventResponse;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
@@ -21,44 +21,44 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class EventService {
 
-    private final EventManageRepository eventManageRepository;
+    private final EventRepository eventRepository;
 
     @Transactional
     public EventResponse findEvent(Integer id) {
-        EventManage eventManage = this.findEventManageById(id.longValue());
-        return EventResponse.of(eventManage);
+        Event event = this.findEventManageById(id.longValue());
+        return EventResponse.of(event);
     }
 
     @Transactional
     public Page<EventProductResponse> findEvent(Integer id, Pageable pageable) {
-        return this.eventManageRepository.findById(id, pageable);
+        return this.eventRepository.findById(id, pageable);
     }
 
     @Transactional
     public Page<EventResponse> findEventlist(Pageable pageable, Member currentUser) {
-        Page<EventManage> event = this.eventManageRepository.findByAll(pageable, currentUser);
+        Page<Event> event = this.eventRepository.findByAll(pageable, currentUser);
         return event.map(EventResponse::of);
     }
 
     @Transactional
     public EventImageInfo findEventDetail(EventRequest eventRequest) {
-        return this.eventManageRepository.findEventDetail(eventRequest);
+        return this.eventRepository.findEventDetail(eventRequest);
     }
 
     @Transactional
     public Long saveImageEvent(EventImageInfo eventImageInfo, Member currentUser) {
-        EventManage eventManage = new EventManage(eventImageInfo, currentUser);
-        return this.eventManageRepository.save(eventManage).getEventManageNo();
+        Event event = new Event(eventImageInfo, currentUser);
+        return this.eventRepository.save(event).getEventManageNo();
     }
 
     @Transactional
     public void updateImageEvent(EventImageInfo eventImageInfo, Member currentUser) {
-        EventManage eventManage = this.findEventManageById(eventImageInfo.getEventNo());
-        eventManage.update(eventImageInfo, currentUser);
+        Event event = this.findEventManageById(eventImageInfo.getEventNo());
+        event.update(eventImageInfo, currentUser);
     }
     
-    private EventManage findEventManageById(long id) {
-        return this.eventManageRepository.findById(id)
+    private Event findEventManageById(long id) {
+        return this.eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 이벤트정보 입니다."));
     }
 }

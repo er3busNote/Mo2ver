@@ -37,7 +37,7 @@ public class GoodsResponse {
                 .goodsYear(goods.getGoodsYear())
                 .supplyPrice(goods.getPrice().getSupplyPrice())
                 .salePrice(goods.getPrice().getSalePrice())
-                .imageList(goods.getGoodsImageList().stream()
+                .imageList(goods.getGoodsImages().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')   // innerJoin 할때, 조건을 추가로 붙여야 함..
                         .map(ImageInfo::of)
                         .collect(Collectors.toList()))

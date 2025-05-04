@@ -2,7 +2,6 @@ package com.mo2ver.web.domain.goods.entity;
 
 import com.mo2ver.web.domain.goods.dto.request.GoodsReviewRequest;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(
@@ -75,7 +73,7 @@ public class Review {
     private Character delYesNo;
 
     @OneToMany(mappedBy = "upperReviewNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviewList = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -94,11 +92,6 @@ public class Review {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
-
-    private static String getDecryptor(String attachFile) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
-    }
 
     public Review(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.createOrUpdateReview(goodsReviewRequest, goods, currentUser);
@@ -120,7 +113,7 @@ public class Review {
             this.upperReviewNo = Review.of(goodsReviewRequest, goods, currentUser);
         }
         if (StringUtils.hasText(goodsReviewRequest.getReviewImg())) {
-            this.imageAttachFile = getReviewAttachImg(goodsReviewRequest.getReviewImg());
+            this.imageAttachFile = JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg());
         }
         this.reviewContents = goodsReviewRequest.getReviewContents();
         this.rating = goodsReviewRequest.getRating();
@@ -133,18 +126,11 @@ public class Review {
                 .goodsReviewNo(goodsReviewRequest.getUpperReviewNo())
                 .goodsCode(goods)
                 .memberNo(currentUser)
-                //.imageAttachFile(getReviewAttachImg(goodsReviewRequest.getReviewImg()))
+                .imageAttachFile(JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg()))
                 .reviewContents(goodsReviewRequest.getReviewContents())
                 .rating(goodsReviewRequest.getRating())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
-    }
-
-    private static Integer getReviewAttachImg(String reviewImg) {
-        return Optional.ofNullable(reviewImg)
-                .map(Review::getDecryptor)
-                .map(Integer::parseInt)
-                .orElse(null);
     }
 }

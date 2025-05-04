@@ -15,8 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.mo2ver.web.common.code.entity.QCode.code;
+import static com.mo2ver.web.domain.display.entity.QBanner.banner;
 import static com.mo2ver.web.domain.display.entity.QBannerDetail.bannerDetail;
-import static com.mo2ver.web.domain.display.entity.QBannerManage.bannerManage;
 import static com.mo2ver.web.domain.display.entity.QBannerProduct.bannerProduct;
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
@@ -24,33 +24,33 @@ import static com.mo2ver.web.domain.goods.entity.QPrice.price;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom {
+public class BannerRepositoryImpl implements BannerRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public BannerManageRepositoryImpl(JPAQueryFactory queryFactory) {
+    public BannerRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
 
     public BannerImageInfo findBannerDetail(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
-        builder.and(bannerManage.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
+        builder.and(banner.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(banner.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
-                .selectFrom(bannerManage)
-                .leftJoin(bannerManage.bannerDetailList, bannerDetail)
+                .selectFrom(banner)
+                .leftJoin(banner.bannerDetails, bannerDetail)
                 .where(builder)
-                .transform(groupBy(bannerManage.bannerManageNo).list(
+                .transform(groupBy(banner.bannerManageNo).list(
                         new QBannerImageInfo(
-                                bannerManage.bannerManageNo,
-                                bannerManage.subject,
-                                bannerManage.displayStartDate,
-                                bannerManage.displayEndDate,
+                                banner.bannerManageNo,
+                                banner.subject,
+                                banner.displayStartDate,
+                                banner.displayEndDate,
                                 Expressions.constant(""),
-                                bannerManage.displayTemplateCode,
-                                bannerManage.displayConditionCode,
-                                bannerManage.displayYesNo,
+                                banner.displayTemplateCode,
+                                banner.displayConditionCode,
+                                banner.displayYesNo,
                                 list(Projections.constructor(BannerImageDetailInfo.class,
                                         bannerDetail.bannerDetailId,
                                         bannerDetail.bannerContents,
@@ -64,25 +64,25 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
 
     public GoodsDisplayInfo findBannerProduct(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
-        builder.and(bannerManage.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
+        builder.and(banner.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(banner.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
-                .selectFrom(bannerManage)
-                .leftJoin(bannerManage.bannerProductList, bannerProduct)
+                .selectFrom(banner)
+                .leftJoin(banner.bannerProducts, bannerProduct)
                 .leftJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
                 .leftJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .where(builder)
-                .transform(groupBy(bannerManage.bannerManageNo).list(
+                .transform(groupBy(banner.bannerManageNo).list(
                         new QGoodsDisplayInfo(
-                                bannerManage.bannerManageNo,
-                                bannerManage.subject,
-                                bannerManage.displayStartDate,
-                                bannerManage.displayEndDate,
+                                banner.bannerManageNo,
+                                banner.subject,
+                                banner.displayStartDate,
+                                banner.displayEndDate,
                                 Expressions.constant(""),
-                                bannerManage.displayTemplateCode,
-                                bannerManage.displayConditionCode,
-                                bannerManage.displayYesNo,
+                                banner.displayTemplateCode,
+                                banner.displayConditionCode,
+                                banner.displayYesNo,
                                 list(Projections.constructor(GoodsDisplayProductInfo.class,
                                         bannerProduct.bannerProductId,
                                         bannerProduct.productCode,
@@ -96,23 +96,23 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
     }
 
     public Map<String, List<BannerDetailResponse>> findGroupBannerDetail() {
-        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
-        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
+        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", banner.displayStartDate);
+        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", banner.displayEndDate);
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.displayYesNo.eq('Y'));
+        builder.and(banner.displayYesNo.eq('Y'));
         builder.and(bannerDetail.useYesNo.eq('Y'));
         builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
 
         return convertCodeToCodeName(queryFactory
-                .selectFrom(bannerManage)
-                .innerJoin(bannerManage.bannerDetailList, bannerDetail)
+                .selectFrom(banner)
+                .innerJoin(banner.bannerDetails, bannerDetail)
                 .where(builder)
-                .orderBy(bannerManage.bannerManageNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
-                .transform(groupBy(bannerManage.displayConditionCode).as(
+                .orderBy(banner.bannerManageNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
+                .transform(groupBy(banner.displayConditionCode).as(
                         list(new QBannerDetailResponse(
-                                bannerManage.displayStartDate,
-                                bannerManage.displayEndDate,
+                                banner.displayStartDate,
+                                banner.displayEndDate,
                                 bannerDetail.imageAttachFile,
                                 bannerDetail.connectUrl,
                                 bannerDetail.bannerContents,
@@ -122,11 +122,11 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
     }
 
     public Map<String, List<BannerProductResponse>> findGroupBannerProduct() {
-        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
-        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
+        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", banner.displayStartDate);
+        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", banner.displayEndDate);
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.displayYesNo.eq('Y'));
+        builder.and(banner.displayYesNo.eq('Y'));
         builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
 
@@ -138,17 +138,17 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
                 .otherwise(price.supplyPrice);
 
         return convertCodeToCodeName(queryFactory
-                .selectFrom(bannerManage)
-                .innerJoin(bannerManage.bannerProductList, bannerProduct)
+                .selectFrom(banner)
+                .innerJoin(banner.bannerProducts, bannerProduct)
                 .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
                 .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
                 .where(builder)
-                .orderBy(bannerManage.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
-                .transform(groupBy(bannerManage.displayConditionCode).as(
+                .orderBy(banner.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
+                .transform(groupBy(banner.displayConditionCode).as(
                         list(new QBannerProductResponse(
-                                bannerManage.displayStartDate,
-                                bannerManage.displayEndDate,
+                                banner.displayStartDate,
+                                banner.displayEndDate,
                                 goodsImage.goodsImageAttachFile,
                                 goodsImage.goodsImageExtension,
                                 goods.goodsCode,
@@ -164,21 +164,21 @@ public class BannerManageRepositoryImpl implements BannerManageRepositoryCustom 
     }
 
     public Map<String, List<BannerKeywordResponse>> findGroupBannerKeyword() {
-        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayStartDate);
-        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", bannerManage.displayEndDate);
+        StringTemplate displayStartDate = Expressions.stringTemplate("DATE({0})", banner.displayStartDate);
+        StringTemplate displayEndDate = Expressions.stringTemplate("DATE({0})", banner.displayEndDate);
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bannerManage.displayYesNo.eq('Y'));
+        builder.and(banner.displayYesNo.eq('Y'));
         builder.and(Expressions.currentDate().stringValue().between(displayStartDate, displayEndDate));
         builder.and(goods.keyword.isNotNull());
 
         return convertCodeToCodeName(processGroupKeywords(queryFactory
-                .selectFrom(bannerManage)
-                .innerJoin(bannerManage.bannerProductList, bannerProduct)
+                .selectFrom(banner)
+                .innerJoin(banner.bannerProducts, bannerProduct)
                 .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
                 .where(builder)
-                .orderBy(bannerManage.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
-                .transform(groupBy(bannerManage.displayConditionCode).as(
+                .orderBy(banner.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
+                .transform(groupBy(banner.displayConditionCode).as(
                         list(goods.keyword))
                 )));
     }

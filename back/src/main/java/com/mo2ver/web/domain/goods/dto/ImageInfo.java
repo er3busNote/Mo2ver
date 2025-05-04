@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.goods.dto;
 
 import com.mo2ver.web.domain.goods.entity.GoodsImage;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +28,9 @@ public class ImageInfo {
     private Integer sortSequence;
     private Character useYesNo;
 
-    private static String getEncryptor(Integer id) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.encrypt(String.valueOf(id));
-    }
-
     public static ImageInfo of(GoodsImage goodsImage) {
         return ImageInfo.builder()
-                .goodsImageAttachFile(getEncryptor(goodsImage.getGoodsImageAttachFile()))
+                .goodsImageAttachFile(JasyptUtil.getEncryptor(goodsImage.getGoodsImageAttachFile()))
                 .goodsImageExtension(goodsImage.getGoodsImageExtension())
                 .basicImageYesNo(goodsImage.getBasicImageYesNo())
                 .sortSequence(goodsImage.getSortSequence())

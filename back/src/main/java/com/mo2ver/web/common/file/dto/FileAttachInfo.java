@@ -1,6 +1,5 @@
 package com.mo2ver.web.common.file.dto;
 
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 
@@ -16,22 +15,23 @@ public class FileAttachInfo {
     private Integer fileSize;
     private String fileExtension;
 
-    private static String getEncryptor(Integer id) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.encrypt(String.valueOf(id));
-    }
-
     public static FileAttachInfo from(Integer fileAttachCode, String fileName, String fileType, Integer fileSize, String fileExtension) {
-        return new FileAttachInfo(getEncryptor(fileAttachCode), fileName, fileType, fileSize, fileExtension);
+        return new FileAttachInfo(JasyptUtil.getEncryptor(fileAttachCode), fileName, fileType, fileSize, fileExtension);
     }
 
     public static String from(Integer fileAttachCode) {
-        return getEncryptor(fileAttachCode);
+        return JasyptUtil.getEncryptor(fileAttachCode);
+    }
+
+    public static FileAttachInfo of(Integer fileAttachCode) {
+        return FileAttachInfo.builder()
+                .fileAttachCode(JasyptUtil.getEncryptor(fileAttachCode))
+                .build();
     }
 
     public static FileAttachInfo of(FileInfo fileInfo) {
         return FileAttachInfo.builder()
-                .fileAttachCode(getEncryptor(fileInfo.getFileCode()))
+                .fileAttachCode(JasyptUtil.getEncryptor(fileInfo.getFileCode()))
                 .fileName(fileInfo.getFileName())
                 .fileType(fileInfo.getFileType())
                 .fileSize(fileInfo.getFileSize())

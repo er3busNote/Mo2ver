@@ -30,8 +30,8 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
     public Optional<Goods> findByGoodsCode(String goodsCode) {
         Goods result = queryFactory.selectFrom(goods)
                 .leftJoin(goods.price, price)
-                .leftJoin(goods.goodsDiscountList, discount).fetchJoin()
-                .leftJoin(goods.goodsImageList, goodsImage)
+                .leftJoin(goods.goodsDiscounts, discount).fetchJoin()
+                .leftJoin(goods.goodsImages, goodsImage)
                 .where(goods.goodsCode.eq(goodsCode))
                 .fetchOne();
         return Optional.ofNullable(result);
@@ -71,7 +71,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
         JPAQuery<Goods> query = queryFactory.selectFrom(goods)
                 .innerJoin(goods.price, price)
-                .innerJoin(goods.goodsImageList, goodsImage)
+                .innerJoin(goods.goodsImages, goodsImage)
                 .where(builder);
         List<Goods> content = getQuerydsl().applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
@@ -82,7 +82,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
         return queryFactory.selectFrom(goods)
                 .innerJoin(goods.price, price)
-                .innerJoin(goods.goodsImageList, goodsImage)
+                .innerJoin(goods.goodsImages, goodsImage)
                 .where(builder)
                 .orderBy(goods.viewCount.desc())
                 .limit(count)

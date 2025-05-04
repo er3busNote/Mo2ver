@@ -2,7 +2,6 @@ package com.mo2ver.web.domain.display.entity;
 
 import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,7 +36,7 @@ public class BannerDetail {
             foreignKey = @ForeignKey(name = "FK_DP_BNNR_MNG_TO_DP_BNNR_DTL"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private BannerManage bannerManageNo;
+    private Banner bannerManageNo;
 
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;
@@ -75,24 +74,19 @@ public class BannerDetail {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    private static String getDecryptor(String attachFile) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
-    }
-
-    public static BannerDetail from(BannerManage bannerManage) {
+    public static BannerDetail from(Banner banner) {
         return BannerDetail.builder()
-                .bannerManageNo(bannerManage)
+                .bannerManageNo(banner)
                 .sortSequence(1)
-                .register(bannerManage.getRegister())
-                .updater(bannerManage.getUpdater())
+                .register(banner.getRegister())
+                .updater(banner.getUpdater())
                 .build();
     }
 
-    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailInfo bannerImageDetailInfo, Member currentUser) {
+    public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Member currentUser) {
         return BannerDetail.builder()
-                .bannerManageNo(bannerManage)
-                .imageAttachFile(Integer.parseInt(getDecryptor(bannerImageDetailInfo.getFile())))
+                .bannerManageNo(banner)
+                .imageAttachFile(JasyptUtil.getDecryptor(bannerImageDetailInfo.getFile()))
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())
                 .bannerContents(bannerImageDetailInfo.getTitle())
                 .sortSequence(1)
@@ -102,9 +96,9 @@ public class BannerDetail {
                 .build();
     }
 
-    public static BannerDetail of(BannerManage bannerManage, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
+    public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
-                .bannerManageNo(bannerManage)
+                .bannerManageNo(banner)
                 .detailSequence(index)
                 .imageAttachFile(imageAttachFile)
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())

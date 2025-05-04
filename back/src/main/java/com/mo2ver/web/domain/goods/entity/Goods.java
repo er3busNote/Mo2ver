@@ -4,7 +4,6 @@ import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -88,10 +87,10 @@ public class Goods {
     private Member memberNo;
 
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Discount> goodsDiscountList = new ArrayList<>();
+    private List<Discount> goodsDiscounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GoodsImage> goodsImageList = new ArrayList<>();
+    private List<GoodsImage> goodsImages = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -111,11 +110,6 @@ public class Goods {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    private static String getDecryptor(String attachFile) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
-    }
-
     public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
         this.goodsCondition = "10";
@@ -124,11 +118,11 @@ public class Goods {
 
         this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
-            this.goodsDiscountList.addAll(this.createGoodsDiscountList(goodsImageAttachRequest, currentUser));
+            this.goodsDiscounts.addAll(this.createGoodsDiscounts(goodsImageAttachRequest, currentUser));
         }
-        this.goodsImageList.addAll(this.createGoodsImageList(goodsImageAttachRequest.getGoodsImg(), currentUser));
+        this.goodsImages.addAll(this.createGoodsImages(goodsImageAttachRequest.getGoodsImg(), currentUser));
 
-        this.sortGoodsImageList();
+        this.sortGoodsImages();
     }
 
     public void update(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
@@ -136,15 +130,15 @@ public class Goods {
 
         this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
-            int oldDiscountSize = this.goodsDiscountList.size();
-            this.goodsDiscountList.addAll(this.updateGoodsDiscountList(goodsImageAttachRequest, currentUser));
-            this.goodsDiscountList.subList(0, oldDiscountSize).clear();
+            int oldDiscountSize = this.goodsDiscounts.size();
+            this.goodsDiscounts.addAll(this.updateGoodsDiscounts(goodsImageAttachRequest, currentUser));
+            this.goodsDiscounts.subList(0, oldDiscountSize).clear();
         }
-        int oldImageSize = this.goodsImageList.size();
-        this.goodsImageList.addAll(this.updateGoodsImageList(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode(), currentUser));
-        this.goodsImageList.subList(0, oldImageSize).clear();
+        int oldImageSize = this.goodsImages.size();
+        this.goodsImages.addAll(this.updateGoodsImages(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode(), currentUser));
+        this.goodsImages.subList(0, oldImageSize).clear();
 
-        this.sortGoodsImageList();
+        this.sortGoodsImages();
     }
 
     public void update() {
@@ -168,18 +162,18 @@ public class Goods {
         return Price.of(this, goodsImageRequest, currentUser);
     }
 
-    private List<Discount> createGoodsDiscountList(GoodsImageRequest goodsImageRequest, Member currentUser) {
+    private List<Discount> createGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Collections.singletonList(Discount.of(this, goodsImageRequest, currentUser));
     }
 
-    private List<GoodsImage> createGoodsImageList(List<FileAttachInfo> fileAttachInfoList, Member currentUser) {
-        return fileAttachInfoList.stream()
-                .map(info -> GoodsImage.of(this, Integer.parseInt(getDecryptor(info.getFileAttachCode())), info.getFileExtension(), currentUser))
+    private List<GoodsImage> createGoodsImages(List<FileAttachInfo> listFileAttachInfo, Member currentUser) {
+        return listFileAttachInfo.stream()
+                .map(info -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser))
                 .collect(Collectors.toList());
     }
 
-    private List<Discount> updateGoodsDiscountList(GoodsImageRequest goodsImageRequest, Member currentUser) {
-        Discount discount = this.goodsDiscountList.stream()
+    private List<Discount> updateGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
+        Discount discount = this.goodsDiscounts.stream()
                 .filter(it -> it.getGoodsCode().getGoodsCode().equals(goodsImageRequest.getGoodsCode()))
                 .findFirst()
                 .orElseGet(() -> Discount.of(this, goodsImageRequest, currentUser));
@@ -193,24 +187,24 @@ public class Goods {
         return Collections.singletonList(discount);
     }
 
-    private List<GoodsImage> updateGoodsImageList(List<FileAttachInfo> fileAttachInfoList, String goodsCode, Member currentUser) {
-        return fileAttachInfoList.stream()
+    private List<GoodsImage> updateGoodsImages(List<FileAttachInfo> listFileAttachInfo, String goodsCode, Member currentUser) {
+        return listFileAttachInfo.stream()
                 .map(info -> this.updateGoodsImage(info, goodsCode, currentUser))
                 .collect(Collectors.toList());
     }
 
     private GoodsImage updateGoodsImage(FileAttachInfo info, String goodsCode, Member currentUser) {
-        GoodsImage goodsImage = this.goodsImageList.stream()
-                .filter(it -> it.getGoodsImageAttachFile().equals(Integer.parseInt(getDecryptor(info.getFileAttachCode()))) && it.getGoodsCode().getGoodsCode().equals(goodsCode))
+        GoodsImage goodsImage = this.goodsImages.stream()
+                .filter(it -> it.getGoodsImageAttachFile().equals(JasyptUtil.getDecryptor(info.getFileAttachCode())) && it.getGoodsCode().getGoodsCode().equals(goodsCode))
                 .findFirst()
-                .orElseGet(() -> GoodsImage.of(this, Integer.parseInt(getDecryptor(info.getFileAttachCode())), info.getFileExtension(), currentUser));
+                .orElseGet(() -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser));
         goodsImage.setUpdater(this.updater);
         return goodsImage;
     }
 
-    private void sortGoodsImageList() {
+    private void sortGoodsImages() {
         int index = 1;
-        for (GoodsImage goodsImage : this.goodsImageList) {
+        for (GoodsImage goodsImage : this.goodsImages) {
             if(index == 1) goodsImage.setBasicImageYesNo('Y');
             else goodsImage.setBasicImageYesNo('N');
             goodsImage.setSortSequence(index++);

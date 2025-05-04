@@ -2,10 +2,10 @@ package com.mo2ver.web.domain.display.service;
 
 import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.common.file.service.FileService;
+import com.mo2ver.web.domain.display.entity.Banner;
 import com.mo2ver.web.domain.display.repository.BannerDetailRepository;
-import com.mo2ver.web.domain.display.repository.BannerManageRepository;
+import com.mo2ver.web.domain.display.repository.BannerRepository;
 import com.mo2ver.web.domain.display.entity.BannerDetail;
-import com.mo2ver.web.domain.display.entity.BannerManage;
 import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
 import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
@@ -33,20 +33,20 @@ public class BannerService {
     private static final String BANNER_DIRECTORY = "banner";
 
     private final FileService fileService;
-    private final BannerManageRepository bannerManageRepository;
+    private final BannerRepository bannerRepository;
     private final BannerDetailRepository bannerDetailRepository;
 
     @Transactional
     public Page<BannerInfo> findBannerlist(Pageable pageable) {
-        Page<BannerManage> manage = this.bannerManageRepository.findAll(pageable);
+        Page<Banner> manage = this.bannerRepository.findAll(pageable);
         return manage.map(BannerInfo::of);
     }
 
     @Transactional
     public Map<String, Map<String, List<Object>>> findBannerDisplay() {
-        Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerManageRepository.findGroupBannerDetail();
-        Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerManageRepository.findGroupBannerProduct();
-        Map<String, List<BannerKeywordResponse>> bannerKeywordGroupResponse = this.bannerManageRepository.findGroupBannerKeyword();
+        Map<String, List<BannerDetailResponse>> bannerDetailGroupResponse = this.bannerRepository.findGroupBannerDetail();
+        Map<String, List<BannerProductResponse>> bannerProductGroupResponse = this.bannerRepository.findGroupBannerProduct();
+        Map<String, List<BannerKeywordResponse>> bannerKeywordGroupResponse = this.bannerRepository.findGroupBannerKeyword();
 
         Map<String, Map<String, List<Object>>> bannerDisplay = new HashMap<>();
 
@@ -70,54 +70,54 @@ public class BannerService {
 
     @Transactional
     public BannerImageInfo findBannerImagesDetail(BannerInfo bannerInfo) {
-        return this.bannerManageRepository.findBannerDetail(bannerInfo);
+        return this.bannerRepository.findBannerDetail(bannerInfo);
     }
 
     @Transactional
     public GoodsDisplayInfo findBannerGoodsDetail(BannerInfo bannerInfo) {
-        return this.bannerManageRepository.findBannerProduct(bannerInfo);
+        return this.bannerRepository.findBannerProduct(bannerInfo);
     }
 
     @Transactional
     public Long saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        BannerManage bannerManage = new BannerManage(goodsDisplayInfo, currentUser);
-        return this.bannerManageRepository.save(bannerManage).getBannerManageNo();
+        Banner banner = new Banner(goodsDisplayInfo, currentUser);
+        return this.bannerRepository.save(banner).getBannerManageNo();
     }
 
     @Transactional
     public void updateGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        BannerManage bannerManage = this.findBannerManageById(goodsDisplayInfo.getBannerNo());
-        bannerManage.update(goodsDisplayInfo, currentUser);
+        Banner banner = this.findBannerManageById(goodsDisplayInfo.getBannerNo());
+        banner.update(goodsDisplayInfo, currentUser);
     }
 
     @Transactional
     public Long saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
-        BannerManage bannerManage = new BannerManage(bannerImageInfo, currentUser);
-        return this.bannerManageRepository.save(bannerManage).getBannerManageNo();
+        Banner banner = new Banner(bannerImageInfo, currentUser);
+        return this.bannerRepository.save(banner).getBannerManageNo();
     }
 
     @Transactional
     public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
-        BannerManage bannerManage = this.findBannerManageById(bannerImageInfo.getBannerNo());
-        bannerManage.update(bannerImageInfo, currentUser);
+        Banner banner = this.findBannerManageById(bannerImageInfo.getBannerNo());
+        banner.update(bannerImageInfo, currentUser);
     }
 
     @Transactional
     public Long saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
-        BannerManage bannerManage = this.bannerManageRepository.save(BannerManage.of(bannerImageInfo, currentUser));
+        Banner banner = this.bannerRepository.save(Banner.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
             BannerImageDetailInfo bannerImageDetailInfo = listBannerImageDetailInfo.get(i);
             log.info("bannerImageInfo => {}", bannerImageDetailInfo.getTitle());
             MultipartFile file = files.get(i);
             FileInfo fileInfo = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
-            this.bannerDetailRepository.save(BannerDetail.of(bannerManage, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
+            this.bannerDetailRepository.save(BannerDetail.of(banner, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
         }
-        return bannerManage.getBannerManageNo();
+        return banner.getBannerManageNo();
     }
 
-    private BannerManage findBannerManageById(long id) {
-        return this.bannerManageRepository.findById(id)
+    private Banner findBannerManageById(long id) {
+        return this.bannerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 배너정보 입니다."));
     }
 }

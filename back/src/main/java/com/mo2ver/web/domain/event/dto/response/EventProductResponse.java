@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.event.dto.response;
 
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -27,17 +26,12 @@ public class EventProductResponse {
     private Integer sortSequence;
     private List<String> keywordList;
 
-    private static String getEncryptor(Integer id) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.encrypt(String.valueOf(id));
-    }
-
     @QueryProjection
     public EventProductResponse(String subject, Date eventStartDate, Date eventEndDate, Integer goodsImageAttachFile, String goodsImageExtension, String goodsCode, String goodsName, String goodsBrand, String goodsGender, String goodsYear, BigDecimal supplyPrice, BigDecimal salePrice, Integer sortSequence, String keyword) {
         this.subject = subject;
         this.eventStartDate = eventStartDate;
         this.eventEndDate = eventEndDate;
-        this.goodsImageAttachFile = getEncryptor(goodsImageAttachFile);
+        this.goodsImageAttachFile = JasyptUtil.getEncryptor(goodsImageAttachFile);
         this.goodsImageExtension = goodsImageExtension;
         this.goodsCode = goodsCode;
         this.goodsName = goodsName;

@@ -3,7 +3,6 @@ package com.mo2ver.web.domain.event.entity;
 import com.mo2ver.web.domain.event.dto.EventImageInfo;
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @Getter @Setter
 @EqualsAndHashCode(of = "eventManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class EventManage {
+public class Event {
 
     @Id
     @Column(name = "EVT_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'")
@@ -42,10 +41,10 @@ public class EventManage {
     private Character eventYesNo;
 
     @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventProduct> eventProductList = new ArrayList<>();
+    private List<EventProduct> eventProducts = new ArrayList<>();
 
     @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventImage> eventImageList = new ArrayList<>();
+    private List<EventImage> eventImages = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -65,39 +64,34 @@ public class EventManage {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    private static String getDecryptor(String attachFile) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.decrypt(attachFile.replace(" ", "+"));
-    }
-
-    public EventManage(EventImageInfo eventImageInfo, Member currentUser) {
-        this.createOrUpdateEventManage(eventImageInfo, currentUser);
+    public Event(EventImageInfo eventImageInfo, Member currentUser) {
+        this.createOrUpdateEvent(eventImageInfo, currentUser);
         this.register = currentUser.getMemberNo();
 
-        this.eventImageList.add(this.createEventImage(eventImageInfo.getDisplayFile(), 'Y', currentUser));
-        this.eventImageList.add(this.createEventImage(eventImageInfo.getEventFile(), 'N', currentUser));
+        this.eventImages.add(this.createEventImage(eventImageInfo.getDisplayFile(), 'Y', currentUser));
+        this.eventImages.add(this.createEventImage(eventImageInfo.getEventFile(), 'N', currentUser));
 
-        this.eventProductList.addAll(this.createEventProductList(eventImageInfo.getGoods(), currentUser));
+        this.eventProducts.addAll(this.createEventProducts(eventImageInfo.getGoods(), currentUser));
 
-        this.sortEventProductList();
+        this.sortEventProducts();
     }
 
     public void update(EventImageInfo eventImageInfo, Member currentUser) {
-        this.createOrUpdateEventManage(eventImageInfo, currentUser);
+        this.createOrUpdateEvent(eventImageInfo, currentUser);
 
-        int oldImageSize = this.eventImageList.size();
-        this.eventImageList.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y'));
-        this.eventImageList.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N'));
-        this.eventImageList.subList(0, oldImageSize).clear();
+        int oldImageSize = this.eventImages.size();
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y'));
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N'));
+        this.eventImages.subList(0, oldImageSize).clear();
 
-        int oldProductSize = this.eventProductList.size();
-        this.eventProductList.addAll(this.updateEventProductList(eventImageInfo.getGoods()));
-        this.eventProductList.subList(0, oldProductSize).clear();
+        int oldProductSize = this.eventProducts.size();
+        this.eventProducts.addAll(this.updateEventProducts(eventImageInfo.getGoods()));
+        this.eventProducts.subList(0, oldProductSize).clear();
 
-        this.sortEventProductList();
+        this.sortEventProducts();
     }
 
-    private void createOrUpdateEventManage(EventImageInfo eventImageInfo, Member currentUser) {
+    private void createOrUpdateEvent(EventImageInfo eventImageInfo, Member currentUser) {
         this.subject = eventImageInfo.getTitle();
         this.eventStartDate = eventImageInfo.getStartDate();
         this.eventEndDate = eventImageInfo.getEndDate();
@@ -106,33 +100,33 @@ public class EventManage {
     }
 
     private EventImage createEventImage(String attachFile, Character basicImageYesNo, Member currentUser) {
-        return EventImage.of(this, Integer.parseInt(getDecryptor(attachFile)), basicImageYesNo, currentUser);
+        return EventImage.of(this, JasyptUtil.getDecryptor(attachFile), basicImageYesNo, currentUser);
     }
 
-    private List<EventProduct> createEventProductList(List<EventImageProductInfo> eventImageProductInfoList, Member currentUser) {
-        return eventImageProductInfoList.stream()
+    private List<EventProduct> createEventProducts(List<EventImageProductInfo> eventImageProducts, Member currentUser) {
+        return eventImageProducts.stream()
                 .map(info -> EventProduct.of(this, info, currentUser))
                 .collect(Collectors.toList());
     }
 
     private EventImage updateEventImage(String attachFile, Character basicImageYesNo) {
-        EventImage eventImage = this.eventImageList.stream()
+        EventImage eventImage = this.eventImages.stream()
                 .filter(it -> it.getBasicImageYesNo() == basicImageYesNo)
                 .findFirst()
                 .orElseGet(() -> EventImage.from(this));
-        eventImage.setGoodsImageAttachFile(Integer.parseInt(getDecryptor(attachFile)));
+        eventImage.setGoodsImageAttachFile(JasyptUtil.getDecryptor(attachFile));
         if(basicImageYesNo != eventImage.getBasicImageYesNo()) eventImage.setBasicImageYesNo(basicImageYesNo);
         return eventImage;
     }
 
-    private List<EventProduct> updateEventProductList(List<EventImageProductInfo> eventImageProductInfoList) {
-        return eventImageProductInfoList.stream()
+    private List<EventProduct> updateEventProducts(List<EventImageProductInfo> eventImageProducts) {
+        return eventImageProducts.stream()
                 .map(this::createOrUpdateEventProduct)
                 .collect(Collectors.toList());
     }
 
     private EventProduct createOrUpdateEventProduct(EventImageProductInfo eventImageProductInfo) {
-        EventProduct eventProduct = this.eventProductList.stream()
+        EventProduct eventProduct = this.eventProducts.stream()
                 .filter(it -> it.getEventProductId().equals(eventImageProductInfo.getId()))
                 .findFirst()
                 .orElseGet(() -> EventProduct.from(this));
@@ -142,9 +136,9 @@ public class EventManage {
         return eventProduct;
     }
 
-    private void sortEventProductList() {
+    private void sortEventProducts() {
         int index = 1;
-        for (EventProduct eventProduct: this.eventProductList) {
+        for (EventProduct eventProduct: this.eventProducts) {
             eventProduct.setSortSequence(index++);
         }
     }

@@ -30,7 +30,6 @@ public class FileService {
     private static final String FILE_DIRECTORY = "cmmn";
 
     private final FileRepository fileRepository;
-    private final JasyptUtil jasyptUtil;
     private final ObjectStorageUtil objectStorageUtil;
 
     @Autowired
@@ -103,9 +102,5 @@ public class FileService {
 
     private String getBucketPath() {
         return DateUtil.getCurrentDate() + "/" + UUID.randomUUID();
-    }
-
-    public String getFileAttachCode(String id) {
-        return jasyptUtil.decrypt(id.replace(" ", "+"));
     }
 }

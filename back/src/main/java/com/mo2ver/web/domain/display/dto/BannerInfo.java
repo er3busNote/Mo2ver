@@ -1,6 +1,6 @@
 package com.mo2ver.web.domain.display.dto;
 
-import com.mo2ver.web.domain.display.entity.BannerManage;
+import com.mo2ver.web.domain.display.entity.Banner;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -27,17 +27,17 @@ public class BannerInfo {
     private String register;
     private Date registerDate;
 
-    public static BannerInfo of(BannerManage bannerManage) {
+    public static BannerInfo of(Banner banner) {
         return BannerInfo.builder()
-                .bannerManageNo(bannerManage.getBannerManageNo())
-                .subject(bannerManage.getSubject())
-                .displayStartDate(bannerManage.getDisplayStartDate())
-                .displayEndDate(bannerManage.getDisplayEndDate())
-                .displayTemplateCode(bannerManage.getDisplayTemplateCode())
-                .displayConditionCode(bannerManage.getDisplayConditionCode())
-                .displayYesNo(bannerManage.getDisplayYesNo())
-                .register(bannerManage.getRegister())
-                .registerDate(Timestamp.valueOf(bannerManage.getRegisterDate()))
+                .bannerManageNo(banner.getBannerManageNo())
+                .subject(banner.getSubject())
+                .displayStartDate(banner.getDisplayStartDate())
+                .displayEndDate(banner.getDisplayEndDate())
+                .displayTemplateCode(banner.getDisplayTemplateCode())
+                .displayConditionCode(banner.getDisplayConditionCode())
+                .displayYesNo(banner.getDisplayYesNo())
+                .register(banner.getRegister())
+                .registerDate(Timestamp.valueOf(banner.getRegisterDate()))
                 .build();
     }
 }

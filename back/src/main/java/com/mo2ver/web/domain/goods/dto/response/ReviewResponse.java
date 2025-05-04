@@ -1,14 +1,12 @@
 package com.mo2ver.web.domain.goods.dto.response;
 
 import com.mo2ver.web.domain.goods.entity.Review;
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -25,21 +23,16 @@ public class ReviewResponse {
     private String memberName;
     private List<ReviewResponse> reviewResponseList;
 
-    private static String getEncryptor(Integer id) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.encrypt(String.valueOf(id));
-    }
-
     public static ReviewResponse of(Review review) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
                 .goodsCode(review.getGoodsCode().getGoodsCode())
-                .imageAttachFile(getReviewAttachImg(review.getImageAttachFile()))
+                .imageAttachFile(JasyptUtil.getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
                 .memberName(review.getMemberNo().getMemberName())
                 .reviewResponseList(
-                        review.getReviewList().stream()
+                        review.getReviews().stream()
                                 .map(ReviewResponse::of)
                                 .collect(Collectors.toList())
                 )
@@ -49,7 +42,7 @@ public class ReviewResponse {
     public static ReviewResponse of(Review review, Map<Long, List<Review>> childrenMap) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
-                .imageAttachFile(getReviewAttachImg(review.getImageAttachFile()))
+                .imageAttachFile(JasyptUtil.getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
                 .memberName(review.getMemberNo().getMemberName())
@@ -57,11 +50,5 @@ public class ReviewResponse {
                         .map(r -> ReviewResponse.of(r, childrenMap))
                         .collect(Collectors.toList()))
                 .build();
-    }
-
-    private static String getReviewAttachImg(Integer reviewAttachImg) {
-        return Optional.ofNullable(reviewAttachImg)
-                .map(ReviewResponse::getEncryptor)
-                .orElse("");
     }
 }

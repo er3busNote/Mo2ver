@@ -4,6 +4,7 @@ import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.common.file.validation.ValidFileList;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.global.common.utils.JasyptUtil;
 import com.mo2ver.web.global.error.dto.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
@@ -30,7 +31,7 @@ public class FileController {
     @GetMapping("/image")
     public ResponseEntity fileImage(@RequestParam String id) {
         try {
-            String fileAttachCode = fileService.getFileAttachCode(id);
+            String fileAttachCode = JasyptUtil.toDecrypt(id);
             byte[] bannerImageBytes = fileService.findFile(fileAttachCode);
             ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
             Tika tika = new Tika();

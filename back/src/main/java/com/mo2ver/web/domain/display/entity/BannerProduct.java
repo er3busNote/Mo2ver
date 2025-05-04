@@ -35,7 +35,7 @@ public class BannerProduct {
             foreignKey = @ForeignKey(name = "FK_DP_BNNR_MNG_TO_DP_BNNR_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private BannerManage bannerManageNo;
+    private Banner bannerManageNo;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;
@@ -64,17 +64,17 @@ public class BannerProduct {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerProduct from(BannerManage bannerManage) {
+    public static BannerProduct from(Banner banner) {
         return BannerProduct.builder()
-                .bannerManageNo(bannerManage)
-                .register(bannerManage.getRegister())
-                .updater(bannerManage.getUpdater())
+                .bannerManageNo(banner)
+                .register(banner.getRegister())
+                .updater(banner.getUpdater())
                 .build();
     }
 
-    public static BannerProduct of(BannerManage bannerManage, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
+    public static BannerProduct of(Banner banner, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
         return BannerProduct.builder()
-                .bannerManageNo(bannerManage)
+                .bannerManageNo(banner)
                 .productCode(goodsDisplayProductInfo.getGoodsCode())
                 .productName(goodsDisplayProductInfo.getGoodsName())
                 .sortSequence(goodsDisplayProductInfo.getSortSequence())

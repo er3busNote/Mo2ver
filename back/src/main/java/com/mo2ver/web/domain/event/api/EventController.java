@@ -9,7 +9,6 @@ import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
-import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -91,13 +90,5 @@ public class EventController {
                         .status(HttpStatus.OK.value())
                         .message("이벤트정보가 수정되었습니다")
                         .build());
-    }
-
-    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
-        return ResponseEntity.unprocessableEntity().body(response);
     }
 }

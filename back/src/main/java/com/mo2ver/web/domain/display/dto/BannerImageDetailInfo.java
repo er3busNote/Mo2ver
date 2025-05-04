@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.display.dto;
 
-import com.mo2ver.web.global.common.utils.BeanUtil;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 
@@ -16,16 +15,11 @@ public class BannerImageDetailInfo {
     private String file;
     private Character useyn;
 
-    private static String getEncryptor(Integer id) {
-        JasyptUtil jasyptUtil = BeanUtil.getBean(JasyptUtil.class);
-        return jasyptUtil.encrypt(String.valueOf(id));
-    }
-
     public BannerImageDetailInfo(Long id, String title, String cnntUrl, Integer attachFile, Character useyn) {
         this.id = id;
         this.title = title;
         this.cnntUrl = cnntUrl;
-        this.file = getEncryptor(attachFile);
+        this.file = JasyptUtil.getEncryptor(attachFile);
         this.useyn = useyn;
     }
 }
