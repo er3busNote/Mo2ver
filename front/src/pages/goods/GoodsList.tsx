@@ -2,8 +2,6 @@ import React, { FC, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubHeader from '@layouts/AppSubHeader';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -19,6 +17,7 @@ import {
 	Skeleton,
 } from '@mui/material';
 import { GoodsData, GoodsPageData } from '@api/types';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 
 interface GoodsListProps {
 	title: string;
@@ -45,15 +44,13 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/goods/' + code + '/detail'));
-		navigate('/goods/' + code + '/detail');
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (

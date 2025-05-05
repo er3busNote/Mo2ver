@@ -2,12 +2,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { EventData } from '@api/types';
 
-interface GoodsProps {
+interface EventProps {
 	code: string;
 	event: ActionCreatorsMapObject;
 }
 
-const useEventInfo = ({ event, code }: GoodsProps): EventData => {
+const useEventInfo = ({ event, code }: EventProps): EventData => {
 	const [data, setData] = useState<EventData>({
 		eventManageNo: 0,
 		subject: '',

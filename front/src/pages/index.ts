@@ -13,11 +13,13 @@ import Notice from './notice/NoticePage';
 import AdminDashboard from './admin/DashboardPage';
 import AdminCategory from './admin/category/CategoryPage';
 import AdminBanner from './admin/banner/BannerPage';
-import AdminBannerImage from './admin/banner/image/BannerImagePage';
-import AdminBannerGoods from './admin/banner/goods/BannerGoodsPage';
-import AdminBannerVideo from './admin/banner/video/BannerVideoPage';
+import AdminBannerImageForm from './admin/banner/form/image/BannerImageFormPage';
+import AdminBannerGoodsForm from './admin/banner/form/goods/BannerGoodsFormPage';
+import AdminBannerVideoForm from './admin/banner/form/video/BannerVideoFormPage';
 import AdminEvent from './admin/event/EventPage';
-import AdminEventGoods from './admin/event/EventGoodsPage';
+import AdminEventForm from './admin/event/form/EventFormPage';
+import AdminNotice from './admin/notice/NoticePage';
+import AdminNoticeForm from './admin/notice/form/NoticeFormPage';
 import NotFound from './NotFound';
 
 export {
@@ -35,10 +37,12 @@ export {
 	AdminDashboard,
 	AdminCategory,
 	AdminBanner,
-	AdminBannerImage,
-	AdminBannerGoods,
-	AdminBannerVideo,
+	AdminBannerImageForm,
+	AdminBannerGoodsForm,
+	AdminBannerVideoForm,
 	AdminEvent,
-	AdminEventGoods,
+	AdminEventForm,
+	AdminNotice,
+	AdminNoticeForm,
 	NotFound,
 };

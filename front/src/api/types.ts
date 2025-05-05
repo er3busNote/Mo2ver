@@ -254,7 +254,33 @@ interface EventDetailData {
 	goods: Array<EventDetailProductData>;
 }
 
-// 7. Cart Type
+// 7. Notice Type
+interface NoticeData {
+	noticeManageNo: number;
+	subject: string;
+	contents: string;
+	noticeYesNo: string;
+	register: string;
+	registerDate: number;
+	noticeFileList: Array<ImageData>;
+}
+
+interface NoticeRequestData {
+	noticeManageNo: number;
+}
+
+interface NoticePageData extends PageableData {
+	content: Array<NoticeData>;
+}
+
+interface NoticeDetailData {
+	noticeNo?: number;
+	title: string;
+	contents: string;
+	noticeFiles: Array<FileData>;
+}
+
+// 8. Cart Type
 interface CartData {
 	goodsCode: string;
 	goodsName?: string;
@@ -354,6 +380,10 @@ export type {
 	EventProductData,
 	EventProductPageData,
 	EventDetailData,
+	NoticeData,
+	NoticeRequestData,
+	NoticePageData,
+	NoticeDetailData,
 	CartData,
 	CartPageData,
 	PageData,

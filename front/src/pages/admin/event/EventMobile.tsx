@@ -1,8 +1,6 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
 import TablePageNavigator from '@components/pagination/TablePageNavigator';
 import {
@@ -26,6 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { EventData, EventPageData } from '@api/types';
+import goToEventForm from '@navigate/admin/event/goToEventForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -53,31 +52,11 @@ const EventMobile: FC<EventProps> = ({
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const registerClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/event/goods'));
-		navigate('/admin/event/goods');
+		goToEventForm({ title, description, dispatch, navigate });
 	};
 
 	const updateClick = (eventManageNo: number) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/event/goods'));
-		navigate('/admin/event/goods', {
-			state: {
-				eventManageNo: eventManageNo,
-			},
-		});
+		goToEventForm({ title, description, dispatch, navigate, eventManageNo });
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {

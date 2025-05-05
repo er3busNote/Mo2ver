@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo, TitleState } from '@store/types';
+import { TitleState } from '@store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '@components/Title';
+import goToMenu from '@navigate/menu/goToMenu';
 
 interface AdminSubHeaderProps {
 	title: string;
@@ -20,15 +20,15 @@ const AdminSubHeader: FC<AdminSubHeaderProps> = ({
 	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: '대시보드',
 			description: '',
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin'));
-		navigate('/admin');
+			path: '/admin',
+			dispatch,
+			navigate,
+		});
 	};
 	return (
 		<Box

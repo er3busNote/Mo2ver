@@ -7,8 +7,7 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo, SubMenuInfo, MenuState } from '@store/types';
+import { SubMenuInfo, MenuState } from '@store/types';
 import {
 	Box,
 	Grid,
@@ -28,6 +27,8 @@ import {
 	ThemeProvider,
 } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
+import goToMenu from '@navigate/menu/goToMenu';
+import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { divideArray } from '@utils/divide';
 import { has } from 'lodash';
 
@@ -142,15 +143,16 @@ const AppDetail: FC<AppMenuProps> = ({
 	};
 
 	const menuClick = (nextTitle: string, code: string, type: string) => {
-		const titleData: TitleInfo = {
+		goToGoodsCategory({
+			code,
+			type,
 			title: nextTitle,
 			description: nextTitle,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(`/goods/${type}/${code}`));
-		navigate(`/goods/${type}/${code}`);
+			dispatch,
+			navigate,
+		});
 	};
 
 	const menuWidthSize = '630px';
@@ -304,15 +306,15 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (

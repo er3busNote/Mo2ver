@@ -2,8 +2,6 @@ import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { GoodsData } from '@api/types';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
@@ -28,6 +26,8 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import goToMenu from '@navigate/menu/goToMenu';
+import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import MainIcon from '@assets/logo.svg?react';
 import { isEmpty } from 'lodash';
 
@@ -203,15 +203,15 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		if (event.code === 'Enter') {
 			closeAnchorEl();
 			event.preventDefault();
-			const titleData: TitleInfo = {
+			goToGoodsSearch({
+				keyword: userInput,
 				title: '검색',
 				description: '검색',
 				prevTitle: title,
 				prevDescription: description,
-			};
-			dispatch(changeNext(titleData));
-			dispatch(menuActive(`/goods/search/${userInput}`));
-			navigate(`/goods/search/${userInput}`);
+				dispatch,
+				navigate,
+			});
 		}
 	};
 
@@ -227,15 +227,15 @@ const AppSearchPC: FC<AppSearchProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const searchFontSize = '12px';

@@ -27,10 +27,10 @@ const event = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 상세 정보 API : <baseURL>/event/detail
 		detail:
-			(eventDetailData: EventRequestData, csrfData: CSRFData) =>
+			(eventData: EventRequestData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('event/detail', eventDetailData, {
+					.post('event/detail', eventData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -49,7 +49,7 @@ const event = (instance: AxiosInstance) => {
 					})
 					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),
-		// 이벤트 정보 수정 API : <baseURL>/event/updata
+		// 이벤트 정보 수정 API : <baseURL>/event/update
 		update:
 			(eventDetailData: EventDetailData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>

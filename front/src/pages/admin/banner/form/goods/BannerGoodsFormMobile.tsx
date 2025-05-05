@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import { GoodsData } from '@api/types';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
@@ -35,7 +33,8 @@ import {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,
 } from '@pages/admin/types';
-// import _ from 'lodash';
+import goToBanner from '@navigate/admin/banner/goToBanner';
+import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { useIsMobile } from '@context/MobileContext';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
@@ -92,26 +91,7 @@ const BannerGoodsFormMobile: FC<BannerGoodsProp> = ({
 	useEffect(() => {
 		const type = watch('type');
 		if (type !== watchValue.current) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			switch (type) {
-				case 'BN':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
-					break;
-				default:
-					break;
-			}
+			goToBannerForm({ type, title, description, dispatch, navigate });
 		}
 	}, [watch('type')]);
 
@@ -119,15 +99,7 @@ const BannerGoodsFormMobile: FC<BannerGoodsProp> = ({
 	const closeGoods = () => setOpen(false);
 
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		goToBanner({ title, description, dispatch, navigate });
 	};
 
 	const conditionTh: SxProps<Theme> = {

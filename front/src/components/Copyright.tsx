@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '../store/index';
-import { TitleInfo } from '../store/types';
 import { Link, Typography, TypographyProps } from '@mui/material';
+import goToMenu from '@navigate/menu/goToMenu';
 
 interface CopyrightProps extends TypographyProps {
 	title: string;
@@ -19,15 +18,15 @@ const Copyright: FC<CopyrightProps> = ({
 	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: '홈',
 			description: '메인',
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/'));
-		navigate('/');
+			path: '/',
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (

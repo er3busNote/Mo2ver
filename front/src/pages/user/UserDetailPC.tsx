@@ -2,8 +2,6 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import UserSubHeaderPC from './cmmn/UserSubHeaderPC';
 import CartDeliveryPC from './status/CartDeliveryPC';
 import GoodsRegisterPC from './status/GoodsRegisterPC';
@@ -23,6 +21,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
 
 type Position = 'relative' | 'absolute' | 'fixed';
@@ -67,15 +66,12 @@ const UserDetailPC: FC<UserDetailProps> = ({
 	};
 
 	const registerClick = () => {
-		const titleData: TitleInfo = {
-			title: 'Register',
-			description: '상품등록',
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/register'));
-		navigate('/register');
+		goToGoodsForm({
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const logoutClick = () => {
@@ -255,8 +251,8 @@ const UserDetailPC: FC<UserDetailProps> = ({
 						{transition((style, i: number) => {
 							const DetailBox = DetailInfo[DETAIL[i]];
 							return (
-								<animated.div style={style} key={i}>
-									<DetailBox />
+								<animated.div key={i} style={style}>
+									<DetailBox title={title} description={description} />
 								</animated.div>
 							);
 						})}

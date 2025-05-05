@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '@components/Title';
+import goToMenu from '@navigate/menu/goToMenu';
 
 interface AppSubHeaderProps {
 	title: string;
@@ -20,15 +19,15 @@ const AppSubHeader: FC<AppSubHeaderProps> = ({
 	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: '홈',
 			description: '메인',
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/'));
-		navigate('/');
+			path: '/',
+			dispatch,
+			navigate,
+		});
 	};
 	return (
 		<Box

@@ -8,7 +8,6 @@ import useEventPageList from '@hooks/event/useEventPageList';
 import EventPC from './EventPC';
 import EventMobile from './EventMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-// import _ from 'lodash';
 
 interface EventDispatchProps {
 	title: string;

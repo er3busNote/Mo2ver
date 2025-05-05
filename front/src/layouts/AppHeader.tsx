@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import {
@@ -15,6 +13,7 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
+import goToMenu from '@navigate/menu/goToMenu';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 
 const headerFontSize = '12px';
@@ -40,15 +39,15 @@ const AppHeader: FC<AppHeaderProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const logoutClick = () => {

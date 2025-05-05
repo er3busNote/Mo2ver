@@ -9,6 +9,7 @@
       "@context/*": ["context/*"],
       "@hooks/*": ["hooks/*"],
       "@layouts/*": ["layouts/*"],
+      "@navigate/*": ["navigate/*"],
       "@pages/*": ["pages/*"],
       "@store/*": ["store/*"],
       "@utils/*": ["utils/*"],

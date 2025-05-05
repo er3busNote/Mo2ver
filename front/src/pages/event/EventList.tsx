@@ -2,8 +2,6 @@ import React, { FC, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubHeader from '@layouts/AppSubHeader';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -18,6 +16,7 @@ import {
 	Skeleton,
 } from '@mui/material';
 import { EventData, EventPageData } from '@api/types';
+import goToEventDetail from '@navigate/event/goToEventDetail';
 import moment from 'moment';
 
 interface EventListProps {
@@ -45,15 +44,13 @@ const EventGrid: FC<EventGridProps> = ({
 	const navigate = useNavigate();
 
 	const eventClick = (code: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/event/' + code + '/detail'));
-		navigate('/event/' + code + '/detail');
+		goToEventDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (

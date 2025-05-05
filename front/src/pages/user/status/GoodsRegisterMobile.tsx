@@ -39,8 +39,14 @@ import PriceCheckOutlinedIcon from '@mui/icons-material/PriceCheckOutlined';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
+
+interface GoodsRegisterProps {
+	title: string;
+	description: string;
+	type: string;
+	setSwitch?: () => void;
+}
 
 const UserRegisterDetail: FC = (): JSX.Element => {
 	const [page, setPage] = useState(0);
@@ -272,12 +278,9 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 	);
 };
 
-interface GoodsRegisterProps {
-	type: string;
-	setSwitch?: () => void;
-}
-
 const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
+	title,
+	description,
 	type,
 	setSwitch,
 }): JSX.Element => {
@@ -291,7 +294,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 		setKeyword('');
 	};
 
-	const title: SxProps<Theme> = {
+	const registerTitle: SxProps<Theme> = {
 		fontSize: { xs: '14px', sm: '15px' },
 		fontWeight: 'bold',
 	};
@@ -359,7 +362,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 			return (
 				<Box>
 					<Box sx={{ display: 'flex' }}>
-						<Typography component="h2" sx={title}>
+						<Typography component="h2" sx={registerTitle}>
 							나의 상품등록 현황
 						</Typography>
 					</Box>

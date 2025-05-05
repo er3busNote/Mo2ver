@@ -7,8 +7,6 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import {
 	Box,
 	Drawer,
@@ -28,6 +26,7 @@ import {
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { has } from 'lodash';
 
 declare module 'react' {
@@ -156,15 +155,16 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 		check: boolean | undefined
 	) => {
 		if (!check) {
-			const titleData: TitleInfo = {
+			goToGoodsCategory({
+				code,
+				type,
 				title: nextTitle,
 				description: nextTitle,
 				prevTitle: title,
 				prevDescription: description,
-			};
-			dispatch(changeNext(titleData));
-			dispatch(menuActive(`/goods/${type}/${code}`));
-			navigate(`/goods/${type}/${code}`);
+				dispatch,
+				navigate,
+			});
 		}
 	};
 

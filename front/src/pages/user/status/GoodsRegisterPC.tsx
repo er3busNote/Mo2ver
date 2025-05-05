@@ -29,11 +29,15 @@ import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import PriceCheckOutlinedIcon from '@mui/icons-material/PriceCheckOutlined';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
-// import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
 const fontSize_sm = '13px';
 const fontSize_lg = '13px';
+
+interface GoodsRegisterProps {
+	title: string;
+	description: string;
+}
 
 const UserRegisterDetail: FC = (): JSX.Element => {
 	const [page, setPage] = useState(0);
@@ -272,7 +276,10 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 	);
 };
 
-const GoodsRegisterPC: FC = (): JSX.Element => {
+const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
+	title,
+	description,
+}): JSX.Element => {
 	const [keyword, setKeyword] = useState('');
 
 	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -283,7 +290,7 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 		setKeyword('');
 	};
 
-	const title: SxProps<Theme> = {
+	const registerTitle: SxProps<Theme> = {
 		fontSize: { sm: '15px', lg: '16px' },
 		fontWeight: 'bold',
 	};
@@ -331,7 +338,7 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 	return (
 		<Box>
 			<Box sx={{ display: 'flex' }}>
-				<Typography component="h2" sx={title}>
+				<Typography component="h2" sx={registerTitle}>
 					나의 상품등록 현황
 				</Typography>
 			</Box>
@@ -416,7 +423,7 @@ const GoodsRegisterPC: FC = (): JSX.Element => {
 				</Grid>
 			</Box>
 			<Box sx={{ pt: 2, display: 'flex' }}>
-				<Typography component="h2" sx={title}>
+				<Typography component="h2" sx={registerTitle}>
 					상품 목록
 				</Typography>
 			</Box>

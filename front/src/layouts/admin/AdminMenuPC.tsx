@@ -14,12 +14,12 @@ import {
 	useNavigationType,
 } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo, TitleState, SubMenuInfo, MenuState } from '@store/types';
+import { menuActive } from '@store/index';
+import { TitleState, SubMenuInfo, MenuState } from '@store/types';
 import {
 	Box,
-	Grow, // Transitions
-	Slide, // Transitions
+	Grow,
+	Slide,
 	Drawer as MuiDrawer,
 	DrawerProps as MuiDrawerProps,
 	Toolbar,
@@ -49,6 +49,8 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import InfoIcon from '@mui/icons-material/Info';
 import ForumIcon from '@mui/icons-material/Forum';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import goToMenu from '@navigate/menu/goToMenu';
+import goToMenuNone from '@navigate/menu/goToMenuNone';
 
 const AdminIcon = [
 	MenuOpenIcon,
@@ -229,13 +231,13 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 
 	useEffect(() => {
 		if (location.pathname === '/admin' && navType !== 'POP') {
-			const titleData: TitleInfo = {
+			goToMenuNone({
 				title: '대시보드',
 				description: '',
 				prevTitle: '대시보드',
 				prevDescription: '',
-			};
-			dispatch(changeNext(titleData));
+				dispatch,
+			});
 		}
 	}, [location.pathname, navType]);
 
@@ -252,7 +254,7 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 	};
 
 	const openMenuClick = (path: string, code: string) => {
-		dispatch(menuActive(path)); // 1. close → open : 해당 Root 메뉴를 Active(활성화)
+		dispatch(menuActive(path));
 		setExpanded([code]);
 		setSelected(code);
 		setOpen(!open);
@@ -263,15 +265,15 @@ const AdminMenuPC: FC<AdminMenuProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path)); // 2. open → close : 해당 Root 메뉴를 Active(활성화)
-		navigate('/admin' + path);
+			path: '/admin' + path,
+			dispatch,
+			navigate,
+		});
 	};
 	return (
 		<Drawer variant="permanent" open={open} width={width}>

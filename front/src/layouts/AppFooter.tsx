@@ -4,8 +4,6 @@ import { useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
 import AppFooterMenu from './AppFooterMenu';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import {
 	Box,
 	Paper,
@@ -19,6 +17,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import RestoreIcon from '@mui/icons-material/Restore';
 import { GoodsData, CategoryDataGroup } from '@api/types';
+import goToMenu from '@navigate/menu/goToMenu';
 import { isAdmin } from '@utils/jwttoken';
 import { useIsMobile } from '@context/MobileContext';
 
@@ -57,15 +56,15 @@ const AppFooter: FC<AppFooterProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const toggleMenu = () => {

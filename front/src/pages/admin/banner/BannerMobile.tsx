@@ -1,8 +1,6 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
 import TablePageNavigator from '@components/pagination/TablePageNavigator';
 import {
@@ -26,6 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerData, BannerPageData } from '@api/types';
+import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -53,52 +52,25 @@ const BannerMobile: FC<BannerProps> = ({
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const registerClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner/image'));
-		navigate('/admin/banner/image');
+		goToBannerForm({
+			type: 'BN',
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const updateClick = (bannerManageNo: number, type: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		if (type === 'BN') {
-			dispatch(changeNext(titleData));
-			dispatch(menuActive('/admin/banner/image'));
-			navigate('/admin/banner/image', {
-				state: {
-					bannerManageNo: bannerManageNo,
-					displayTemplateCode: type,
-				},
-			});
-		} else if (type === 'GD') {
-			dispatch(changeNext(titleData));
-			dispatch(menuActive('/admin/banner/goods'));
-			navigate('/admin/banner/goods', {
-				state: {
-					bannerManageNo: bannerManageNo,
-					displayTemplateCode: type,
-				},
-			});
-		} else if (type === 'VD') {
-			dispatch(changeNext(titleData));
-			dispatch(menuActive('/admin/banner/video'));
-			navigate('/admin/banner/video', {
-				state: {
-					bannerManageNo: bannerManageNo,
-					displayTemplateCode: type,
-				},
-			});
-		}
+		goToBannerForm({
+			type,
+			title,
+			description,
+			dispatch,
+			navigate,
+			bannerManageNo,
+			displayTemplateCode: type,
+		});
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {

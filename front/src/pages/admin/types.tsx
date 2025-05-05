@@ -1,3 +1,4 @@
+import { FileData } from '@api/types';
 import { Dayjs } from 'dayjs';
 
 interface CategoryFormValues {
@@ -42,23 +43,6 @@ interface BannerGoodsFormValues {
 	goods: Array<BannerGoodsDetailValues>;
 }
 
-interface EventDisplayDetailValues {
-	goodsCode: string;
-	goodsName: string;
-	salePrice: number;
-	sortSequence: number;
-}
-
-interface EventFormDisplayValues {
-	title: string;
-	startDate: Dayjs;
-	endDate: Dayjs;
-	displayFile: string;
-	eventFile: string;
-	useyn: string;
-	goods: Array<EventDisplayDetailValues>;
-}
-
 interface BannerVideoFormValues {
 	title: string;
 	startDate: Dayjs;
@@ -69,6 +53,29 @@ interface BannerVideoFormValues {
 	useyn: string;
 }
 
+interface EventDetailValues {
+	goodsCode: string;
+	goodsName: string;
+	salePrice: number;
+	sortSequence: number;
+}
+
+interface EventFormValues {
+	title: string;
+	startDate: Dayjs;
+	endDate: Dayjs;
+	displayFile: string;
+	eventFile: string;
+	useyn: string;
+	goods: Array<EventDetailValues>;
+}
+
+interface NoticeFormValues {
+	title: string;
+	contents: string;
+	noticeFiles: Array<FileData>;
+}
+
 export type {
 	CategoryFormValues,
 	BannerImageFormValues,
@@ -76,6 +83,7 @@ export type {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,
 	BannerVideoFormValues,
-	EventFormDisplayValues,
-	EventDisplayDetailValues,
+	EventFormValues,
+	EventDetailValues,
+	NoticeFormValues,
 };

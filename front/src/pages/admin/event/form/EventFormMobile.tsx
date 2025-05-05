@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import { GoodsData } from '@api/types';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
@@ -25,10 +23,8 @@ import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import {
-	EventFormDisplayValues,
-	EventDisplayDetailValues,
-} from '@pages/admin/types';
+import { EventFormValues, EventDetailValues } from '@pages/admin/types';
+import goToEvent from '@navigate/admin/event/goToEvent';
 import { useIsMobile } from '@context/MobileContext';
 import dayjs from 'dayjs';
 
@@ -39,12 +35,12 @@ interface EventProp {
 	title: string;
 	description: string;
 	onSubmit: (
-		data: EventFormDisplayValues,
+		data: EventFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const EventFormDisplayMobile: FC<EventProp> = ({
+const EventFormMobile: FC<EventProp> = ({
 	title,
 	description,
 	onSubmit,
@@ -59,7 +55,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<EventFormDisplayValues>();
+	} = useFormContext<EventFormValues>();
 
 	const { fields, replace } = useFieldArray({
 		control,
@@ -80,15 +76,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 	const closeGoods = () => setOpen(false);
 
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/event'));
-		navigate('/admin/event');
+		goToEvent({ title, description, dispatch, navigate });
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -152,7 +140,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 	const dateHorizonIcon: SxProps<Theme> = {
 		px: 0.5,
 	};
-	const bannerForm: SxProps<Theme> = {
+	const eventForm: SxProps<Theme> = {
 		'input[type="text"]': {
 			py: 1.5,
 		},
@@ -187,7 +175,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 			component="form"
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
-			sx={bannerForm}
+			sx={eventForm}
 		>
 			<TableContainer>
 				<Table size="small" sx={{ border: tableBorder }}>
@@ -379,7 +367,7 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((data: EventDisplayDetailValues, index: number) => (
+						{fields.map((data: EventDetailValues, index: number) => (
 							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
 									{data.goodsCode}
@@ -424,4 +412,4 @@ const EventFormDisplayMobile: FC<EventProp> = ({
 	);
 };
 
-export default EventFormDisplayMobile;
+export default EventFormMobile;

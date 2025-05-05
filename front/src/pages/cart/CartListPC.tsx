@@ -11,8 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { CartData, CartPageData } from '@api/types';
 import Api from '@api/index';
 import useImageUrl from '@hooks/useImageUrl';
@@ -39,6 +37,7 @@ import {
 import { red, pink } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { sumBy } from 'lodash';
 
 interface CartDataProps {
@@ -85,15 +84,13 @@ const CartList: FC<CartDataProps> = ({
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/goods/' + code + '/detail'));
-		navigate('/goods/' + code + '/detail');
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const handleNumberChange = (

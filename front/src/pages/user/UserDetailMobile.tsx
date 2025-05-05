@@ -2,8 +2,6 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import UserSubHeaderMobile from './cmmn/UserSubHeaderMobile';
 import CartDeliveryMobile from './status/CartDeliveryMobile';
 import GoodsRegisterMobile from './status/GoodsRegisterMobile';
@@ -28,6 +26,7 @@ import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
 import { without } from 'lodash';
 
@@ -75,15 +74,12 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 	};
 
 	const registerClick = () => {
-		const titleData: TitleInfo = {
-			title: 'Register',
-			description: '상품등록',
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/register'));
-		navigate('/register');
+		goToGoodsForm({
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const logoutClick = () => {
@@ -279,11 +275,13 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 						</Box>
 						<Box sx={switchBox}>
 							<List>
-								{button.map((data: DetailType) => {
+								{button.map((data: DetailType, i: number) => {
 									const ButtonBox = DetailInfo[data];
 									return (
 										<ButtonBox
-											key={data}
+											key={i}
+											title={title}
+											description={description}
 											type={data[0] + 'L'}
 											setSwitch={() => switchClick(data)}
 										/>

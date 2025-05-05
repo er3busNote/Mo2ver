@@ -11,8 +11,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo, MenuState, SubMenuInfo } from '@store/types';
+import { MenuState, SubMenuInfo } from '@store/types';
 import { CategoryData, CategoryDataGroup } from '@api/types';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import {
@@ -40,6 +39,9 @@ import { ClickAwayListener } from '@mui/base';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import goToMenu from '@navigate/menu/goToMenu';
+import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
+import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { divideArray } from '@utils/divide';
 import { has } from 'lodash';
 
@@ -158,15 +160,16 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 	};
 
 	const menuClick = (nextTitle: string, code: string, type: string) => {
-		const titleData: TitleInfo = {
+		goToGoodsCategory({
+			code,
+			type,
 			title: nextTitle,
 			description: nextTitle,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(`/goods/${type}/${code}`));
-		navigate(`/goods/${type}/${code}`);
+			dispatch,
+			navigate,
+		});
 	};
 
 	const menuWidthSize = '630px';
@@ -373,15 +376,15 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === 'Enter') {
 			event.preventDefault();
-			const titleData: TitleInfo = {
+			goToGoodsSearch({
+				keyword: userInput,
 				title: '검색',
 				description: '검색',
 				prevTitle: title,
 				prevDescription: description,
-			};
-			dispatch(changeNext(titleData));
-			dispatch(menuActive(`/goods/search/${userInput}`));
-			navigate(`/goods/search/${userInput}`);
+				dispatch,
+				navigate,
+			});
 		}
 	};
 
@@ -396,15 +399,15 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const icon: SxProps<Theme> = {

@@ -59,7 +59,7 @@ const banner = (instance: AxiosInstance) => {
 					})
 					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),
-		// 상품 전시 정보 수정 API : <baseURL>/banner/goods/updata
+		// 상품 전시 정보 수정 API : <baseURL>/banner/goods/update
 		goodsUpdate:
 			(bannerGoodsData: BannerGoodsData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
@@ -83,7 +83,7 @@ const banner = (instance: AxiosInstance) => {
 					})
 					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),
-		// 배너 이미지 정보 수정 API : <baseURL>/banner/images/updata
+		// 배너 이미지 정보 수정 API : <baseURL>/banner/images/update
 		imagesUpdate:
 			(bannerImageData: BannerImageData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>

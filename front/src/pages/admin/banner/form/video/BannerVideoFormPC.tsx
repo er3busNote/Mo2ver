@@ -2,8 +2,6 @@ import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
@@ -20,13 +18,18 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import { BannerVideoFormValues } from '@pages/admin/types';
-// import _ from 'lodash';
+import goToBanner from '@navigate/admin/banner/goToBanner';
+import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
+
+const fontSize_sm = '13px';
+const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -41,7 +44,7 @@ interface BannerVideoProp {
 	) => void;
 }
 
-const BannerVideoFormMobile: FC<BannerVideoProp> = ({
+const BannerVideoFormPC: FC<BannerVideoProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -61,88 +64,60 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 	useEffect(() => {
 		const type = watch('type');
 		if (type !== watchValue.current) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			switch (type) {
-				case 'BN':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
-					break;
-				case 'GD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/goods'));
-					navigate('/admin/banner/goods');
-					break;
-				default:
-					break;
-			}
+			goToBannerForm({ type, title, description, dispatch, navigate });
 		}
 	}, [watch('type')]);
 
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		goToBanner({ title, description, dispatch, navigate });
 	};
 
 	const conditionTh: SxProps<Theme> = {
-		px: 1,
+		px: 2,
 		py: 1.5,
-		width: '20%',
-		fontSize: { xs: '11px', sm: '13px' },
+		width: 120,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
-		pl: 1.5,
-		pr: 0,
-		fontSize: { xs: '12px', sm: '13px' },
+		px: 2,
+		pt: 0.8,
+		pb: 1.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
-		px: { xs: 1, sm: 2 },
-		py: 1,
-		fontSize: { xs: '11px', sm: '12px' },
+		px: 2,
+		py: 1.2,
+		minWidth: '47px',
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
-		px: 1.5,
+		px: 2,
 		py: 0.5,
 		border: tableBorder,
-		fontSize: { xs: '11px', sm: '12px' },
-	};
-	const dateHorizonIcon: SxProps<Theme> = {
-		px: 0.5,
+		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
-			py: 1.5,
+			py: 2,
 		},
 		'.MuiFormControl-root': {
 			mt: 0.5,
 			overflowX: 'visible',
 		},
 		'label[id$="title-label"]': {
-			top: '-3px',
-			ml: 0.5,
+			top: '0px',
+			ml: 1,
 		},
 		'label[id$="title-label"][data-shrink="true"]': {
-			top: '3px',
-			ml: 1,
+			top: '2px',
+			ml: 2,
 		},
 	};
 	return (
@@ -194,9 +169,7 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 											/>
 										)}
 									/>
-									<Typography component="span" sx={dateHorizonIcon}>
-										-
-									</Typography>
+									<HorizontalRuleIcon />
 									<Controller
 										name="endDate"
 										control={control}
@@ -234,10 +207,8 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 											)}
 										/>
 									</TableCell>
-								</TableRow>
-								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										템플릿
+										템플릿 유형
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -257,7 +228,7 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										전시코드
+										전시상태코드
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -265,7 +236,7 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 											control={control}
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
-													label="전시코드"
+													label="전시상태코드"
 													datas={renameKeys(groupCodeData, 'BN003')}
 													field={field}
 													fieldState={fieldState}
@@ -274,8 +245,6 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 											)}
 										/>
 									</TableCell>
-								</TableRow>
-								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
 										전시여부
 									</TableCell>
@@ -312,13 +281,13 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 						component="h1"
 						variant="h6"
 						color="inherit"
-						sx={{ fontSize: '16px', fontWeight: 'bold' }}
+						sx={{ fontWeight: 'bold' }}
 					>
 						동영상
 					</Typography>
 				</Box>
-				<Box sx={{ display: 'flex' }}>
-					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
+				<Box>
+					<Grid container spacing={1}>
 						<Grid item>
 							<ButtonBase
 								type="submit"
@@ -353,7 +322,7 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 			<Box sx={{ pt: 2 }}>
 				<ButtonBase
 					buttonType="cancel"
-					device="mobile"
+					device="pc"
 					variant="outlined"
 					onClick={cancelClick}
 				>
@@ -364,4 +333,4 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 	);
 };
 
-export default BannerVideoFormMobile;
+export default BannerVideoFormPC;

@@ -8,6 +8,7 @@ import category from './category';
 import review from './review';
 import banner from './banner';
 import event from './event';
+import notice from './notice';
 import cart from './cart';
 import search from './search';
 import recommend from './recommend';
@@ -33,6 +34,7 @@ const api = {
 	review: review(instance),
 	banner: banner(instance),
 	event: event(instance),
+	notice: notice(instance),
 	cart: cart(instance),
 	search: search(instance),
 	recommend: recommend(instance),

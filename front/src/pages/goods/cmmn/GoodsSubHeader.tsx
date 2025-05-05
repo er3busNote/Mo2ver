@@ -2,11 +2,10 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Title from '@components/Title';
+import goToMenu from '@navigate/menu/goToMenu';
 
 interface GoodsSubHeaderProps {
 	title: string;
@@ -23,15 +22,15 @@ const GoodsSubHeader: FC<GoodsSubHeaderProps> = ({
 	const navigate = useNavigate();
 
 	const dashboardClick = () => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: '홈',
 			description: '',
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/'));
-		navigate('/');
+			path: '/',
+			dispatch,
+			navigate,
+		});
 	};
 	return (
 		<Box

@@ -8,18 +8,17 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { BannerRequestData, BannerImageData } from '@api/types';
+import { BannerRequestData, BannerGoodsData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
-import useBannerImagesDetail from '@hooks/banner/useBannerImagesDetail';
-import BannerImageFormPC from './BannerImageFormPC';
-import BannerImageFormMobile from './BannerImageFormMobile';
+import useBannerGoodsDetail from '@hooks/banner/useBannerGoodsDetail';
+import BannerGoodsFormPC from './BannerGoodsFormPC';
+import BannerGoodsFormMobile from './BannerGoodsFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { BannerImageFormValues } from '@pages/admin/types';
-//import { merge } from 'lodash';
+import { BannerGoodsFormValues } from '@pages/admin/types';
 import dayjs, { Dayjs } from 'dayjs';
 
-const bannerImageSchema = yup
+const bannerGoodsSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -75,17 +74,21 @@ const bannerImageSchema = yup
 		type: yup.string().required(),
 		code: yup.string().required(),
 		useyn: yup.string().required('필수항목'),
-		bnnrImg: yup
+		goods: yup
 			.array()
 			.of(
 				yup.object().shape({
-					title: yup.string().required('배너내용을 입력해주세요'),
-					cnntUrl: yup.string().required('연결할 URL을 입력해주세요'),
-					file: yup.string().required('첨부파일이 존재하질 않습니다'),
-					useyn: yup.string().required('필수항목'),
+					goodsCode: yup.string().required('상품코드'),
+					goodsName: yup.string().required('상품내용'),
+					salePrice: yup.number().required('판매가'),
+					sortSequence: yup
+						.number()
+						.typeError('정렬순서를 입력해주세요')
+						.positive('1 이상의 값을 입력해주세요')
+						.required('정렬순서'),
 				})
 			)
-			.required('이미지 정보를 입력해주세요'),
+			.required('상품 전시 정보를 선택해주세요'),
 	})
 	.required();
 
@@ -97,18 +100,18 @@ interface BannerDispatchProps {
 	banner: ActionCreatorsMapObject;
 }
 
-const bannerImageValues: BannerImageFormValues = {
+const bannerGoodsValues: BannerGoodsFormValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
 	position: '',
-	type: 'BN',
+	type: 'GD',
 	code: '',
 	useyn: 'Y',
-	bnnrImg: [{ title: '', cnntUrl: '', file: '', useyn: '' }],
+	goods: [],
 };
 
-const BannerImagePage: FC<BannerDispatchProps> = ({
+const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
 	code,
@@ -134,10 +137,10 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			? 'Update'
 			: 'Create';
 
-	const methods = useForm<BannerImageFormValues>({
+	const methods = useForm<BannerGoodsFormValues>({
 		mode: 'onChange',
-		defaultValues: bannerImageValues,
-		resolver: yupResolver(bannerImageSchema),
+		defaultValues: bannerGoodsValues,
+		resolver: yupResolver(bannerGoodsSchema),
 	});
 
 	if (componentType === 'Update') {
@@ -147,41 +150,41 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 			bannerManageNo: bannerManageNo,
 			displayTemplateCode: displayTemplateCode,
 		};
-		const imagesInfo = useBannerImagesDetail({
+		const goodsInfo = useBannerGoodsDetail({
 			banner,
 			bannerData,
 			csrfData,
 		});
-		if (imagesInfo && !isDataLoaded) {
+		if (goodsInfo && !isDataLoaded) {
 			const { reset } = methods;
 			reset({
-				title: imagesInfo.title,
-				startDate: dayjs(imagesInfo.startDate),
-				endDate: dayjs(imagesInfo.endDate),
-				position: imagesInfo.position,
-				type: imagesInfo.type,
-				code: imagesInfo.code,
-				useyn: imagesInfo.useyn,
-				bnnrImg: imagesInfo.bnnrImg,
+				title: goodsInfo.title,
+				startDate: dayjs(goodsInfo.startDate),
+				endDate: dayjs(goodsInfo.endDate),
+				position: goodsInfo.position,
+				type: goodsInfo.type,
+				code: goodsInfo.code,
+				useyn: goodsInfo.useyn,
+				goods: goodsInfo.goods,
 			});
-			if (imagesInfo.bannerNo) setBannerNo(imagesInfo.bannerNo);
+			if (goodsInfo.bannerNo) setBannerNo(goodsInfo.bannerNo);
 			setIsDataLoaded(true);
 		}
 	}
 
 	const submitForm = async (
-		data: BannerImageFormValues,
+		data: BannerGoodsFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const bannerFormData: BannerImageData = {
+		const bannerFormData: BannerGoodsData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),
 			position: data.position,
 			type: data.type,
-			code: data.code,
 			useyn: data.useyn,
-			bnnrImg: data.bnnrImg,
+			code: data.code,
+			goods: data.goods,
 		};
 		if (componentType === 'Update') {
 			bannerFormData.bannerNo = bannerNo;
@@ -189,9 +192,9 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 		console.log(bannerFormData);
 		console.log(csrfData);
 		if (componentType === 'Create')
-			await banner.imagesCreate(bannerFormData, csrfData);
+			await banner.goodsCreate(bannerFormData, csrfData);
 		if (componentType === 'Update')
-			await banner.imagesUpdate(bannerFormData, csrfData);
+			await banner.goodsUpdate(bannerFormData, csrfData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
 		navigate('/admin/banner');
 	};
@@ -202,7 +205,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
-						<BannerImageFormPC
+						<BannerGoodsFormPC
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
@@ -211,7 +214,7 @@ const BannerImagePage: FC<BannerDispatchProps> = ({
 						/>
 					)}
 					{isMobile && (
-						<BannerImageFormMobile
+						<BannerGoodsFormMobile
 							title={title}
 							description={description}
 							groupCodeData={groupCodeData}
@@ -236,4 +239,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	banner: bindActionCreators(Api.banner, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BannerImagePage);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(BannerGoodsFormPage);

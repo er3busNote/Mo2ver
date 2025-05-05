@@ -2,8 +2,6 @@ import React, { FC, useState, useEffect } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
 import ButtonTag from '@components/button/ButtonTag';
 import {
@@ -17,6 +15,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -95,15 +94,13 @@ const PopularMobile: FC<PopularProps> = ({
 
 	const goodsClick = (code: string) => {
 		if (bannerLength > 0) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			dispatch(changeNext(titleData));
-			dispatch(menuActive('/goods/' + code + '/detail'));
-			navigate('/goods/' + code + '/detail');
+			goToGoodsDetail({
+				code,
+				title,
+				description,
+				dispatch,
+				navigate,
+			});
 		}
 	};
 

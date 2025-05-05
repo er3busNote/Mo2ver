@@ -8,7 +8,6 @@ import useBannerPageList from '@hooks/banner/useBannerPageList';
 import BannerPC from './BannerPC';
 import BannerMobile from './BannerMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-// import _ from 'lodash';
 
 interface BannerDispatchProps {
 	title: string;

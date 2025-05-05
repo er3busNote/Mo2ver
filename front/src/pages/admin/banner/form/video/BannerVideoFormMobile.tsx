@@ -1,16 +1,7 @@
-import React, {
-	FC,
-	useRef,
-	useState,
-	useEffect,
-	BaseSyntheticEvent,
-} from 'react';
+import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { GoodsData } from '@api/types';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
+import { Controller, useFormContext } from 'react-hook-form';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
@@ -27,177 +18,104 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import DialogGoodsPC from '@components/dialog/DialogGoodsPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import {
-	BannerGoodsFormValues,
-	BannerGoodsDetailValues,
-} from '@pages/admin/types';
-// import _ from 'lodash';
+import { BannerVideoFormValues } from '@pages/admin/types';
+import goToBanner from '@navigate/admin/banner/goToBanner';
+import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
-
-const fontSize_sm = '13px';
-const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerGoodsProp {
+interface BannerVideoProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	type: 'Create' | 'Update';
 	onSubmit: (
-		data: BannerGoodsFormValues,
+		data: BannerVideoFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
+const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 	title,
 	description,
 	groupCodeData,
-	type,
 	onSubmit,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('GD');
-	const [open, setOpen] = useState(false);
+	const watchValue = useRef<string>('VD');
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<BannerGoodsFormValues>();
-
-	const { fields, replace } = useFieldArray({
-		control,
-		name: 'goods',
-	});
-	const replaceField = (productData: readonly GoodsData[]) => {
-		replace(
-			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
-				goodsCode,
-				goodsName,
-				salePrice,
-				sortSequence: i + 1,
-			}))
-		);
-	};
+	} = useFormContext<BannerVideoFormValues>();
 
 	useEffect(() => {
 		const type = watch('type');
 		if (type !== watchValue.current) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			switch (type) {
-				case 'BN':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/image'));
-					navigate('/admin/banner/image');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
-					break;
-				default:
-					break;
-			}
+			goToBannerForm({ type, title, description, dispatch, navigate });
 		}
 	}, [watch('type')]);
 
-	const openGoods = () => setOpen(true);
-	const closeGoods = () => setOpen(false);
-
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		goToBanner({ title, description, dispatch, navigate });
 	};
 
 	const conditionTh: SxProps<Theme> = {
-		px: 2,
+		px: 1,
 		py: 1.5,
-		width: 120,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		width: '20%',
+		fontSize: { xs: '11px', sm: '13px' },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const conditionTd: SxProps<Theme> = {
-		px: 2,
-		pt: 0.8,
-		pb: 1.5,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		pl: 1.5,
+		pr: 0,
+		fontSize: { xs: '12px', sm: '13px' },
 		border: tableBorder,
 	};
 	const dataTh: SxProps<Theme> = {
-		px: 2,
-		py: 1.2,
-		minWidth: '47px',
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		px: { xs: 1, sm: 2 },
+		py: 1,
+		fontSize: { xs: '11px', sm: '12px' },
 		bgcolor: '#EEEEEE',
 		border: tableBorder,
 		fontWeight: 'bold',
 	};
 	const dataTd: SxProps<Theme> = {
-		px: 2,
+		px: 1.5,
 		py: 0.5,
 		border: tableBorder,
-		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
+		fontSize: { xs: '11px', sm: '12px' },
 	};
-	const dataTdNum: SxProps<Theme> = {
-		width: '220px',
-		'.MuiInputBase-input': {
-			py: 2,
-		},
+	const dateHorizonIcon: SxProps<Theme> = {
+		px: 0.5,
 	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
-			py: 2,
+			py: 1.5,
 		},
 		'.MuiFormControl-root': {
 			mt: 0.5,
 			overflowX: 'visible',
 		},
 		'label[id$="title-label"]': {
-			top: '0px',
-			ml: 1,
+			top: '-3px',
+			ml: 0.5,
 		},
 		'label[id$="title-label"][data-shrink="true"]': {
-			top: '2px',
-			ml: 2,
+			top: '3px',
+			ml: 1,
 		},
-	};
-	const inputHeader: SxProps<Theme> = {
-		px: 2,
-		py: 0,
-		color: '#fff',
-		fontSize: '1.0rem',
-		fontWeight: 'bold',
-		lineHeight: '38px',
-		bgcolor: '#363b74',
-	};
-	const inputBody: SxProps<Theme> = {
-		px: 4,
-		py: 1,
 	};
 	return (
 		<Box
@@ -248,7 +166,9 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 											/>
 										)}
 									/>
-									<HorizontalRuleIcon />
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
 									<Controller
 										name="endDate"
 										control={control}
@@ -286,8 +206,10 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 											)}
 										/>
 									</TableCell>
+								</TableRow>
+								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										템플릿 유형
+										템플릿
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -300,7 +222,6 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
-													readonly={type === 'Update'}
 												/>
 											)}
 										/>
@@ -308,7 +229,7 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 								</TableRow>
 								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
-										전시상태코드
+										전시코드
 									</TableCell>
 									<TableCell sx={conditionTd} align="left">
 										<Controller
@@ -316,7 +237,7 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 											control={control}
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
-													label="전시상태코드"
+													label="전시코드"
 													datas={renameKeys(groupCodeData, 'BN003')}
 													field={field}
 													fieldState={fieldState}
@@ -325,6 +246,8 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 											)}
 										/>
 									</TableCell>
+								</TableRow>
+								<TableRow>
 									<TableCell sx={conditionTh} align="center" component="th">
 										전시여부
 									</TableCell>
@@ -361,13 +284,13 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 						component="h1"
 						variant="h6"
 						color="inherit"
-						sx={{ fontWeight: 'bold' }}
+						sx={{ fontSize: '16px', fontWeight: 'bold' }}
 					>
-						상품전시
+						동영상
 					</Typography>
 				</Box>
-				<Box>
-					<Grid container spacing={1}>
+				<Box sx={{ display: 'flex' }}>
+					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
 						<Grid item>
 							<ButtonBase
 								type="submit"
@@ -379,24 +302,6 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 								저장
 							</ButtonBase>
 						</Grid>
-						<Grid item>
-							<ButtonBase
-								buttonType="search"
-								size="small"
-								variant="outlined"
-								onClick={openGoods}
-							>
-								상품찾기
-							</ButtonBase>
-							<DialogGoodsPC
-								open={open}
-								replaceField={replaceField}
-								handleClose={closeGoods}
-								header={inputHeader}
-								base={inputBody}
-								goodsSaveData={watch('goods')}
-							/>
-						</Grid>
 					</Grid>
 				</Box>
 			</Box>
@@ -405,55 +310,22 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								상품코드
+								동영상내용
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								상품명
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								판매가
-							</TableCell>
-							<TableCell sx={dataTh} align="center" component="th">
-								노출순서
+								동영상
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((data: BannerGoodsDetailValues, index: number) => (
-							<TableRow key={index}>
-								<TableCell sx={dataTd} align="center">
-									{data.goodsCode}
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									{data.goodsName}
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									{data.salePrice.toLocaleString()}
-								</TableCell>
-								<TableCell sx={dataTdNum} align="center">
-									<Controller
-										name={`goods.${index}.sortSequence`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="number"
-												label="노출순서"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-							</TableRow>
-						))}
+						<></>
 					</TableBody>
 				</Table>
 			</TableContainer>
 			<Box sx={{ pt: 2 }}>
 				<ButtonBase
 					buttonType="cancel"
-					device="pc"
+					device="mobile"
 					variant="outlined"
 					onClick={cancelClick}
 				>
@@ -464,4 +336,4 @@ const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 	);
 };
 
-export default BannerGoodsFormPC;
+export default BannerVideoFormMobile;

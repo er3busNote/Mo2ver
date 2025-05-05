@@ -1,9 +1,14 @@
-import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import React, {
+	FC,
+	useRef,
+	useState,
+	useEffect,
+	BaseSyntheticEvent,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
+import { GoodsData } from '@api/types';
 import { CodeData } from '@api/types';
 import ButtonBase from '@components/button/ButtonBase';
 import {
@@ -21,12 +26,16 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import DialogGoodsPC from '@components/dialog/DialogGoodsPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
-import RenderUploadField from '@components/field/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import { BannerImageFormValues } from '@pages/admin/types';
-// import _ from 'lodash';
+import {
+	BannerGoodsFormValues,
+	BannerGoodsDetailValues,
+} from '@pages/admin/types';
+import goToBanner from '@navigate/admin/banner/goToBanner';
+import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 
@@ -36,18 +45,18 @@ const fontSize_lg = '14px';
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
 
-interface BannerImageProp {
+interface BannerGoodsProp {
 	title: string;
 	description: string;
 	groupCodeData: Record<string, Array<CodeData>> | undefined;
 	type: 'Create' | 'Update';
 	onSubmit: (
-		data: BannerImageFormValues,
+		data: BannerGoodsFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 
-const BannerImageFormPC: FC<BannerImageProp> = ({
+const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 	title,
 	description,
 	groupCodeData,
@@ -56,62 +65,43 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const watchValue = useRef<string>('BN');
+	const watchValue = useRef<string>('GD');
+	const [open, setOpen] = useState(false);
 
 	const {
 		control,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 		watch,
-	} = useFormContext<BannerImageFormValues>();
+	} = useFormContext<BannerGoodsFormValues>();
 
-	const { fields, append, remove } = useFieldArray({
+	const { fields, replace } = useFieldArray({
 		control,
-		name: 'bnnrImg',
+		name: 'goods',
 	});
-	const addNewField = () => {
-		append({ title: '', cnntUrl: '', file: '', useyn: '' });
-	};
-	const removeField = () => {
-		remove(-1);
+	const replaceField = (productData: readonly GoodsData[]) => {
+		replace(
+			productData.map(({ goodsCode, goodsName, salePrice }, i: number) => ({
+				goodsCode,
+				goodsName,
+				salePrice,
+				sortSequence: i + 1,
+			}))
+		);
 	};
 
 	useEffect(() => {
 		const type = watch('type');
 		if (type !== watchValue.current) {
-			const titleData: TitleInfo = {
-				title: title,
-				description: description,
-				prevTitle: title,
-				prevDescription: description,
-			};
-			switch (type) {
-				case 'GD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/goods'));
-					navigate('/admin/banner/goods');
-					break;
-				case 'VD':
-					dispatch(changeNext(titleData));
-					dispatch(menuActive('/admin/banner/video'));
-					navigate('/admin/banner/video');
-					break;
-				default:
-					break;
-			}
+			goToBannerForm({ type, title, description, dispatch, navigate });
 		}
 	}, [watch('type')]);
 
+	const openGoods = () => setOpen(true);
+	const closeGoods = () => setOpen(false);
+
 	const cancelClick = () => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/admin/banner'));
-		navigate('/admin/banner');
+		goToBanner({ title, description, dispatch, navigate });
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -145,6 +135,12 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 		border: tableBorder,
 		fontSize: { sm: fontSize_sm, lg: fontSize_lg },
 	};
+	const dataTdNum: SxProps<Theme> = {
+		width: '220px',
+		'.MuiInputBase-input': {
+			py: 2,
+		},
+	};
 	const bannerForm: SxProps<Theme> = {
 		'input[type="text"]': {
 			py: 2,
@@ -153,16 +149,27 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 			mt: 0.5,
 			overflowX: 'visible',
 		},
-		'label[id$="title-label"], label[id$="bnnrImg-label"], label[id$="cnntUrl-label"]':
-			{
-				top: '0px',
-				ml: 1,
-			},
-		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
-			{
-				top: '2px',
-				ml: 2,
-			},
+		'label[id$="title-label"]': {
+			top: '0px',
+			ml: 1,
+		},
+		'label[id$="title-label"][data-shrink="true"]': {
+			top: '2px',
+			ml: 2,
+		},
+	};
+	const inputHeader: SxProps<Theme> = {
+		px: 2,
+		py: 0,
+		color: '#fff',
+		fontSize: '1.0rem',
+		fontWeight: 'bold',
+		lineHeight: '38px',
+		bgcolor: '#363b74',
+	};
+	const inputBody: SxProps<Theme> = {
+		px: 4,
+		py: 1,
 	};
 	return (
 		<Box
@@ -328,7 +335,7 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 						color="inherit"
 						sx={{ fontWeight: 'bold' }}
 					>
-						배너이미지
+						상품전시
 					</Typography>
 				</Box>
 				<Box>
@@ -346,23 +353,21 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 						</Grid>
 						<Grid item>
 							<ButtonBase
-								buttonType="add"
-								size="small"
-								variant="outlined"
-								onClick={addNewField}
-							>
-								추가
-							</ButtonBase>
-						</Grid>
-						<Grid item>
-							<ButtonBase
 								buttonType="search"
 								size="small"
 								variant="outlined"
-								onClick={removeField}
+								onClick={openGoods}
 							>
-								삭제
+								상품찾기
 							</ButtonBase>
+							<DialogGoodsPC
+								open={open}
+								replaceField={replaceField}
+								handleClose={closeGoods}
+								header={inputHeader}
+								base={inputBody}
+								goodsSaveData={watch('goods')}
+							/>
 						</Grid>
 					</Grid>
 				</Box>
@@ -372,77 +377,39 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 					<TableHead sx={{ borderTop: tableBorderHeader }}>
 						<TableRow>
 							<TableCell sx={dataTh} align="center" component="th">
-								배너내용
+								상품코드
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								배너이미지
+								상품명
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								URL
+								판매가
 							</TableCell>
 							<TableCell sx={dataTh} align="center" component="th">
-								전시여부
+								노출순서
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{fields.map((field, index) => (
-							<TableRow key={field.id}>
+						{fields.map((data: BannerGoodsDetailValues, index: number) => (
+							<TableRow key={index}>
 								<TableCell sx={dataTd} align="center">
+									{data.goodsCode}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.goodsName}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.salePrice.toLocaleString()}
+								</TableCell>
+								<TableCell sx={dataTdNum} align="center">
 									<Controller
-										name={`bnnrImg.${index}.title`}
+										name={`goods.${index}.sortSequence`}
 										control={control}
 										render={({ field, fieldState, formState }) => (
 											<RenderTextField
-												type="text"
-												label="배너내용을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.file`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderUploadField
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.cnntUrl`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="text"
-												label="URL을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-								</TableCell>
-								<TableCell sx={dataTd} align="center">
-									<Controller
-										name={`bnnrImg.${index}.useyn`}
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderSelectField
-												label="전시여부"
-												datas={[
-													{ value: '', label: '전체' },
-													{ value: 'Y', label: '예' },
-													{ value: 'N', label: '아니오' },
-												]}
+												type="number"
+												label="노출순서"
 												field={field}
 												fieldState={fieldState}
 												formState={formState}
@@ -469,4 +436,4 @@ const BannerImageFormPC: FC<BannerImageProp> = ({
 	);
 };
 
-export default BannerImageFormPC;
+export default BannerGoodsFormPC;

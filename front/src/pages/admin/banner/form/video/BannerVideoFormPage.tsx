@@ -13,7 +13,6 @@ import BannerVideoFormPC from './BannerVideoFormPC';
 import BannerVideoFormMobile from './BannerVideoFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { BannerVideoFormValues } from '@pages/admin/types';
-// import _ from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
 const bannerVideoSchema = yup
@@ -92,7 +91,7 @@ const bannerVideoValues: BannerVideoFormValues = {
 	useyn: 'Y',
 };
 
-const BannerVideoPage: FC<BannerDispatchProps> = ({
+const BannerVideoFormPage: FC<BannerDispatchProps> = ({
 	title,
 	description,
 	code,
@@ -167,4 +166,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	member: bindActionCreators(Api.member, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BannerVideoPage);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(BannerVideoFormPage);

@@ -48,6 +48,7 @@ export default defineConfig(({ mode }) => {
 				'@context': path.resolve(__dirname, 'src/context'),
 				'@hooks': path.resolve(__dirname, 'src/hooks'),
 				'@layouts': path.resolve(__dirname, 'src/layouts'),
+				'@navigate': path.resolve(__dirname, 'src/navigate'),
 				'@pages': path.resolve(__dirname, 'src/pages'),
 				'@store': path.resolve(__dirname, 'src/store'),
 				'@utils': path.resolve(__dirname, 'src/utils'),

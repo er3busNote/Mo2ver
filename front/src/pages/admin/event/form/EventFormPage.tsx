@@ -11,14 +11,13 @@ import Api from '@api/index';
 import { EventRequestData, EventDetailData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useEventDetail from '@hooks/event/useEventDetail';
-import EventFormDisplayPC from './EventFormDisplayPC';
-import EventFormDisplayMobile from './EventFormDisplayMobile';
+import EventFormPC from './EventFormPC';
+import EventFormMobile from './EventFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { EventFormDisplayValues } from '../types';
-// import _ from 'lodash';
+import { EventFormValues } from '../../types';
 import dayjs, { Dayjs } from 'dayjs';
 
-const eventDisplaySchema = yup
+const eventSchema = yup
 	.object()
 	.shape({
 		title: yup
@@ -98,7 +97,7 @@ interface EventDispatchProps {
 	event: ActionCreatorsMapObject;
 }
 
-const eventDisplayValues: EventFormDisplayValues = {
+const eventValues: EventFormValues = {
 	title: '',
 	startDate: dayjs(),
 	endDate: dayjs(),
@@ -108,7 +107,7 @@ const eventDisplayValues: EventFormDisplayValues = {
 	goods: [],
 };
 
-const EventGoodsPage: FC<EventDispatchProps> = ({
+const EventFormPage: FC<EventDispatchProps> = ({
 	title,
 	description,
 	member,
@@ -125,10 +124,10 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType = location.state?.eventManageNo ? 'Update' : 'Create';
 
-	const methods = useForm<EventFormDisplayValues>({
+	const methods = useForm<EventFormValues>({
 		mode: 'onChange',
-		defaultValues: eventDisplayValues,
-		resolver: yupResolver(eventDisplaySchema),
+		defaultValues: eventValues,
+		resolver: yupResolver(eventSchema),
 	});
 
 	if (componentType === 'Update') {
@@ -158,7 +157,7 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 	}
 
 	const submitForm = async (
-		data: EventFormDisplayValues,
+		data: EventFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const eventFormData: EventDetailData = {
@@ -185,14 +184,14 @@ const EventGoodsPage: FC<EventDispatchProps> = ({
 				(componentType === 'Update' && isDataLoaded)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
-						<EventFormDisplayPC
+						<EventFormPC
 							title={title}
 							description={description}
 							onSubmit={submitForm}
 						/>
 					)}
 					{isMobile && (
-						<EventFormDisplayMobile
+						<EventFormMobile
 							title={title}
 							description={description}
 							onSubmit={submitForm}
@@ -214,4 +213,4 @@ const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	event: bindActionCreators(Api.event, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventGoodsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EventFormPage);

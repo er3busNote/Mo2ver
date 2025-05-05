@@ -2,8 +2,6 @@ import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { changeNext, menuActive } from '@store/index';
-import { TitleInfo } from '@store/types';
 import useImageUrl from '@hooks/useImageUrl';
 import EventSubHeader from './cmmn/EventSubHeader';
 import ButtonTag from '@components/button/ButtonTag';
@@ -31,6 +29,7 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import StarsIcon from '@mui/icons-material/Stars';
 import { EventData, EventProductData, EventProductPageData } from '@api/types';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { isEmpty, get } from 'lodash';
 
 interface EventDetailProps {
@@ -59,15 +58,13 @@ const GoodsGrid: FC<GoodsProps> = ({
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/goods/' + code + '/detail'));
-		navigate('/goods/' + code + '/detail');
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (
@@ -154,15 +151,13 @@ const GoodsRow: FC<GoodsProps> = ({
 	const navigate = useNavigate();
 
 	const goodsClick = (code: string) => {
-		const titleData: TitleInfo = {
-			title: title,
-			description: description,
-			prevTitle: title,
-			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive('/goods/' + code + '/detail'));
-		navigate('/goods/' + code + '/detail');
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const rowItem: SxProps<Theme> = {

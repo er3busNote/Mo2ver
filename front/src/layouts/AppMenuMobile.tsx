@@ -1,8 +1,7 @@
 import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { TitleInfo, MenuState, SubMenuInfo } from '@store/types';
-import { changeNext, menuActive } from '@store/index';
+import { MenuState, SubMenuInfo } from '@store/types';
 import {
 	Box,
 	Grid,
@@ -23,6 +22,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
+import goToMenu from '@navigate/menu/goToMenu';
+import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { useIsDesktop } from '@context/MobileContext';
 import { has } from 'lodash';
 
@@ -170,25 +171,19 @@ const AppDetail: FC<AppMenuProps> = ({
 	};
 
 	const menuClick = (nextTitle: string, code: string, type: string) => {
-		const titleData: TitleInfo = {
+		goToGoodsCategory({
+			code,
+			type,
 			title: nextTitle,
 			description: nextTitle,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(`/goods/${type}/${code}`));
-		navigate(`/goods/${type}/${code}`);
+			dispatch,
+			navigate,
+		});
 	};
 
 	const tooltip: SxProps<Theme> = {
-		//ml: { xs: '-23px !important', sm: '-41px !important' },
-		// transform: isMobile
-		// 	? 'translate(0px, 152px) !important'
-		// 	: {
-		// 			xs: 'translate(0px, 217px) !important',
-		// 			sm: 'translate(0px, 220px) !important',
-		// 	  },
 		zIndex: 1,
 	};
 	const menu: SxProps<Theme> = {
@@ -287,15 +282,15 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 		nextDescription: string,
 		path: string
 	) => {
-		const titleData: TitleInfo = {
+		goToMenu({
 			title: nextTitle,
 			description: nextDescription,
 			prevTitle: title,
 			prevDescription: description,
-		};
-		dispatch(changeNext(titleData));
-		dispatch(menuActive(path));
-		navigate(path);
+			path,
+			dispatch,
+			navigate,
+		});
 	};
 
 	return (

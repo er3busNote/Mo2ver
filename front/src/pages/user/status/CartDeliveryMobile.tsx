@@ -1,7 +1,6 @@
 import React, { FC, useState, ChangeEvent, ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { menuActive } from '@store/index';
 import SearchInput from '@components/input/SearchInput';
 import ButtonDelivery from '@components/button/ButtonDelivery';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -40,6 +39,7 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 
 const IMAGE_INFO = [
 	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -52,6 +52,19 @@ interface TabPanelProps {
 	children?: ReactNode;
 	index: number;
 	value: number;
+}
+
+interface UserOrderDetailProps {
+	title: string;
+	description: string;
+	type: string;
+}
+
+interface CartDeliveryProps {
+	title: string;
+	description: string;
+	type: string;
+	setSwitch?: () => void;
 }
 
 const TabPanel: FC<TabPanelProps> = ({
@@ -71,18 +84,23 @@ const TabPanel: FC<TabPanelProps> = ({
 	);
 };
 
-interface UserOrderDetailProps {
-	type: string;
-}
-
-const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
+const UserOrderDetail: FC<UserOrderDetailProps> = ({
+	title,
+	description,
+	type,
+}): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [page, setPage] = useState(0);
 
 	const goodsClick = (code: string) => {
-		//dispatch(menuActive('/goods/' + code + '/detail'));
-		//navigate('/goods/' + code + '/detail');
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
 	};
 
 	const rowItem: SxProps<Theme> = {
@@ -266,12 +284,9 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({ type }): JSX.Element => {
 	);
 };
 
-interface CartDeliveryProps {
-	type: string;
-	setSwitch?: () => void;
-}
-
 const CartDeliveryMobile: FC<CartDeliveryProps> = ({
+	title,
+	description,
 	type,
 	setSwitch,
 }): JSX.Element => {
@@ -290,7 +305,7 @@ const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 		setOrderView(newValue);
 	};
 
-	const title: SxProps<Theme> = {
+	const orderTitle: SxProps<Theme> = {
 		fontSize: { xs: '14px', sm: '15px' },
 		fontWeight: 'bold',
 	};
@@ -374,7 +389,7 @@ const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 			return (
 				<Box>
 					<Box sx={{ display: 'flex' }}>
-						<Typography component="h2" sx={title}>
+						<Typography component="h2" sx={orderTitle}>
 							나의 주문/배송 현황
 						</Typography>
 					</Box>
@@ -509,13 +524,25 @@ const CartDeliveryMobile: FC<CartDeliveryProps> = ({
 								</Tabs>
 							</Box>
 							<TabPanel value={orderView} index={0}>
-								<UserOrderDetail type={'A'} />
+								<UserOrderDetail
+									title={title}
+									description={description}
+									type={'A'}
+								/>
 							</TabPanel>
 							<TabPanel value={orderView} index={1}>
-								<UserOrderDetail type={'D'} />
+								<UserOrderDetail
+									title={title}
+									description={description}
+									type={'D'}
+								/>
 							</TabPanel>
 							<TabPanel value={orderView} index={2}>
-								<UserOrderDetail type={'F'} />
+								<UserOrderDetail
+									title={title}
+									description={description}
+									type={'F'}
+								/>
 							</TabPanel>
 						</Box>
 					</AccordionDetails>
