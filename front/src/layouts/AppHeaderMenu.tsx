@@ -36,9 +36,11 @@ import {
 	ThemeProvider,
 } from '@mui/material/styles';
 import { ClickAwayListener } from '@mui/base';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
+import {
+	Menu as MenuIcon,
+	Search as SearchIcon,
+	Clear as ClearIcon,
+} from '@mui/icons-material';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';

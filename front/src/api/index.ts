@@ -12,7 +12,7 @@ import notice from './notice';
 import cart from './cart';
 import search from './search';
 import recommend from './recommend';
-import image from './image';
+import file from './file';
 
 // 인스턴스 API 생성
 const createInstance = () => {
@@ -38,7 +38,7 @@ const api = {
 	cart: cart(instance),
 	search: search(instance),
 	recommend: recommend(instance),
-	image: image(instance),
+	file: file(instance),
 };
 
 export default { ...api };

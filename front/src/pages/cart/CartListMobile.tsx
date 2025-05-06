@@ -8,11 +8,9 @@ import React, {
 	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect, useDispatch } from 'react-redux';
+import { ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
 import { CartData, CartPageData } from '@api/types';
-import Api from '@api/index';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import NumberInput from '@components/input/NumberInput';
@@ -42,7 +40,7 @@ interface CartDataProps {
 	title: string;
 	description: string;
 	cartData: Array<CartData>;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
 }
@@ -65,7 +63,7 @@ interface CartListProps {
 	steps: string[];
 	setPage: Dispatch<SetStateAction<number>>;
 	cartPageData: CartPageData;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
 }
@@ -73,7 +71,7 @@ interface CartListProps {
 const CartList: FC<CartDataProps> = ({
 	title,
 	description,
-	image,
+	file,
 	cartData,
 	onCartUpdate,
 	onCartDelete,
@@ -211,7 +209,9 @@ const CartList: FC<CartDataProps> = ({
 					<TableBody>
 						{cartData ? (
 							cartData.map((data: CartData, index: number) => {
-								const file = String(data.image?.goodsImageAttachFile ?? '');
+								const attachFile = String(
+									data.image?.goodsImageAttachFile ?? ''
+								);
 								return (
 									<TableRow key={index} sx={rowItem}>
 										<Checkbox
@@ -230,7 +230,7 @@ const CartList: FC<CartDataProps> = ({
 													<CardMedia
 														component="img"
 														height="120"
-														image={useImageUrl({ image, file })}
+														image={useImageUrl({ file, attachFile })}
 													/>
 												</CardActionArea>
 											</Card>
@@ -710,7 +710,7 @@ const CartListMobile: FC<CartListProps> = ({
 	steps,
 	setPage,
 	cartPageData,
-	image,
+	file,
 	onCartUpdate,
 	onCartDelete,
 }): JSX.Element => {
@@ -738,7 +738,7 @@ const CartListMobile: FC<CartListProps> = ({
 				<CartList
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					cartData={cartPageData.cartList}
 					onCartUpdate={onCartUpdate}
 					onCartDelete={onCartDelete}
@@ -783,8 +783,4 @@ const CartListMobile: FC<CartListProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: DispatchAction) => ({
-	image: bindActionCreators(Api.image, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(CartListMobile);
+export default CartListMobile;

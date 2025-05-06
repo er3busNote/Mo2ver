@@ -21,11 +21,13 @@ import {
 } from '@mui/material';
 import { purple } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import PersonIcon from '@mui/icons-material/Person';
-import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+	Person as PersonIcon,
+	AutoFixNormalOutlined as AutoFixNormalOutlinedIcon,
+	ArrowForwardIos as ArrowForwardIosIcon,
+	ManageAccountsOutlined as ManageAccountsOutlinedIcon,
+	ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
 import { without } from 'lodash';

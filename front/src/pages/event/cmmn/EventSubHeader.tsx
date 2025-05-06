@@ -2,7 +2,7 @@ import React, { FC, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
+import { Home as HomeIcon } from '@mui/icons-material';
 import SwitchGridTabButton from './SwitchGridTabButton';
 import Title from '@components/Title';
 import goToMenu from '@navigate/menu/goToMenu';

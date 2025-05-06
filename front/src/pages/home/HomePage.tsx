@@ -19,7 +19,7 @@ const files: Array<FileData> = [];
 interface HomeProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
@@ -27,13 +27,13 @@ interface HomeDispatchProps {
 	title: string;
 	description: string;
 	banner: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const HomePC: FC<HomeProps> = ({
 	title,
 	description,
-	image,
+	file,
 	bannerDisplayData,
 }): JSX.Element => {
 	return (
@@ -51,7 +51,7 @@ const HomePC: FC<HomeProps> = ({
 				<PopularPC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			</Box>
@@ -73,7 +73,7 @@ const HomePC: FC<HomeProps> = ({
 					<HorizontalScroll
 						slidesPerView={5}
 						spaceBetween={30}
-						image={image}
+						file={file}
 						files={files}
 						type="display"
 					/>
@@ -86,7 +86,7 @@ const HomePC: FC<HomeProps> = ({
 const HomeMobile: FC<HomeProps> = ({
 	title,
 	description,
-	image,
+	file,
 	bannerDisplayData,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
@@ -106,7 +106,7 @@ const HomeMobile: FC<HomeProps> = ({
 				<PopularMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			</Box>
@@ -123,7 +123,7 @@ const HomeMobile: FC<HomeProps> = ({
 					<HorizontalScroll
 						slidesPerView={2}
 						spaceBetween={30}
-						image={image}
+						file={file}
 						files={files}
 						type="display"
 					/>
@@ -140,7 +140,7 @@ const HomeMobile: FC<HomeProps> = ({
 					<HorizontalScroll
 						slidesPerView={3}
 						spaceBetween={30}
-						image={image}
+						file={file}
 						files={files}
 						type="display"
 					/>
@@ -154,7 +154,7 @@ const HomePage: FC<HomeDispatchProps> = ({
 	title,
 	description,
 	banner,
-	image,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -167,7 +167,7 @@ const HomePage: FC<HomeDispatchProps> = ({
 				<HomePC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			)}
@@ -175,7 +175,7 @@ const HomePage: FC<HomeDispatchProps> = ({
 				<HomeMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					bannerDisplayData={bannerDisplayData}
 				/>
 			)}
@@ -190,7 +190,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	banner: bindActionCreators(Api.banner, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

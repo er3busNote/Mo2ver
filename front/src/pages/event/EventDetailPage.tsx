@@ -14,7 +14,7 @@ import { Box, useTheme, useMediaQuery } from '@mui/material';
 interface EventDetailProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	eventData: EventData;
 	eventProductData: EventProductPageData;
 	setPage: Dispatch<SetStateAction<number>>;
@@ -24,13 +24,13 @@ interface EventDetailDispatchProps {
 	title: string;
 	description: string;
 	event: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const EventDetailPC: FC<EventDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	eventProductData,
 	setPage,
@@ -45,7 +45,7 @@ const EventDetailPC: FC<EventDetailProps> = ({
 			<EventDetail
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				eventData={eventData}
 				eventProductData={eventProductData}
 				setPage={setPage}
@@ -57,7 +57,7 @@ const EventDetailPC: FC<EventDetailProps> = ({
 const EventDetailMobile: FC<EventDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	eventProductData,
 	setPage,
@@ -72,7 +72,7 @@ const EventDetailMobile: FC<EventDetailProps> = ({
 			<EventDetail
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				eventData={eventData}
 				eventProductData={eventProductData}
 				setPage={setPage}
@@ -85,7 +85,7 @@ const EventDetailPage: FC<EventDetailDispatchProps> = ({
 	title,
 	description,
 	event,
-	image,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -102,7 +102,7 @@ const EventDetailPage: FC<EventDetailDispatchProps> = ({
 				<EventDetailPC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					eventData={eventData}
 					eventProductData={eventProductData}
 					setPage={setPage}
@@ -112,7 +112,7 @@ const EventDetailPage: FC<EventDetailDispatchProps> = ({
 				<EventDetailMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					eventData={eventData}
 					eventProductData={eventProductData}
 					setPage={setPage}
@@ -129,7 +129,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	event: bindActionCreators(Api.event, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetailPage);

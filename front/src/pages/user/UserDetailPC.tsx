@@ -18,9 +18,11 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import PersonIcon from '@mui/icons-material/Person';
-import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import {
+	Person as PersonIcon,
+	AutoFixNormalOutlined as AutoFixNormalOutlinedIcon,
+	ArrowForwardIos as ArrowForwardIosIcon,
+} from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
 

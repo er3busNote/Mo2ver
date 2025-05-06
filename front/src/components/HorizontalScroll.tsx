@@ -5,35 +5,32 @@ import useImageUrl from '@hooks/useImageUrl';
 import { Box, Card, CardMedia, CardActionArea } from '@mui/material';
 import DialogImage from './dialog/DialogImage';
 import { SxProps, Theme } from '@mui/material/styles';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/font';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 
-const fontSize_xs = '11px';
-const fontSize_sm = '13px';
-const fontSize_lg = '13px';
-
 interface CarouselSlideProps {
-	file: string;
+	attachFile: string;
 	name: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	size: string;
 }
 
 interface HorizontalScrollProps {
 	slidesPerView: number;
 	spaceBetween: number;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	files: Array<FileData> | undefined;
 	type?: 'deault' | 'display';
 	size?: 'deault' | 'small';
 }
 
 const CarouselSlide: FC<CarouselSlideProps> = ({
-	image,
 	file,
+	attachFile,
 	name,
 	size,
 }): JSX.Element => {
@@ -68,16 +65,16 @@ const CarouselSlide: FC<CarouselSlideProps> = ({
 								? { xs: 60, sm: 80, md: 80, lg: 80 }
 								: { xs: 120, sm: 140, md: 140, lg: 160 },
 					}}
-					image={useImageUrl({ image, file })}
+					image={useImageUrl({ file, attachFile })}
 					onClick={() => handleOpen()}
 					alt="Image"
 				/>
 			</CardActionArea>
 			<DialogImage
 				open={open}
-				file={file}
+				attachFile={attachFile}
 				name={name}
-				image={image}
+				file={file}
 				handleClose={handleClose}
 			/>
 		</Card>
@@ -87,7 +84,7 @@ const CarouselSlide: FC<CarouselSlideProps> = ({
 const HorizontalScroll: FC<HorizontalScrollProps> = ({
 	slidesPerView,
 	spaceBetween,
-	image,
+	file,
 	files,
 	type = 'default',
 	size = 'default',
@@ -107,12 +104,12 @@ const HorizontalScroll: FC<HorizontalScrollProps> = ({
 					modules={[FreeMode, Pagination]}
 					className="bannerSwiper"
 				>
-					{files.map((file: FileData, index: number) => (
+					{files.map((fileData: FileData, index: number) => (
 						<SwiperSlide key={index}>
 							<CarouselSlide
-								image={image}
-								file={file.fileAttachCode}
-								name={file.fileName}
+								file={file}
+								attachFile={fileData.fileAttachCode}
+								name={fileData.fileName}
 								size={size}
 							/>
 						</SwiperSlide>

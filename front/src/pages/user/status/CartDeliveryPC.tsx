@@ -26,11 +26,13 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import StarsIcon from '@mui/icons-material/Stars';
-import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import RestoreIcon from '@mui/icons-material/Restore';
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
+import {
+	Stars as StarsIcon,
+	GradingOutlined as GradingOutlinedIcon,
+	LocalShippingOutlined as LocalShippingOutlinedIcon,
+	Restore as RestoreIcon,
+	CreditCardOutlined as CreditCardOutlinedIcon,
+} from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 
 const IMAGE_INFO = [

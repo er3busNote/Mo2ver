@@ -9,41 +9,36 @@ import { ActionCreatorsMapObject } from 'redux';
 import { FileData, CSRFData } from '@api/types';
 
 interface FileProps {
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	csrfData: CSRFData;
 }
 
-const useFileInfo = ({
-	image,
-	csrfData,
-}: FileProps): [Array<FileData>, Dispatch<SetStateAction<FileList>>] => {
+interface FileResultProps {
+	data: Array<FileData>;
+	files: FileList;
+	setFiles: Dispatch<SetStateAction<FileList>>;
+}
+
+const useFileInfo = ({ file, csrfData }: FileProps): FileResultProps => {
 	const [files, setFiles] = useState<FileList>(new DataTransfer().files);
-	const [data, setData] = useState<Array<FileData>>([
-		{
-			fileAttachCode: '',
-			fileName: '',
-			fileType: '',
-			fileSize: 0,
-			fileExtension: '',
-		},
-	]);
+	const [data, setData] = useState<Array<FileData>>([]);
 
 	const fetchAndSetData = useCallback(async () => {
 		if (files && files.length > 0) {
 			const formData = new FormData();
-			Array.from(files).forEach((file) => {
-				formData.append('files', file);
+			Array.from(files).forEach((fileData) => {
+				formData.append('files', fileData);
 			});
-			const data = await image.upload(formData, csrfData);
+			const data = await file.upload(formData, csrfData);
 			setData(data);
-		}
-	}, [files]);
+		} else setData([]);
+	}, [files, csrfData.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();
 	}, [fetchAndSetData]);
 
-	return [data, setFiles];
+	return { data, files, setFiles };
 };
 
 export default useFileInfo;

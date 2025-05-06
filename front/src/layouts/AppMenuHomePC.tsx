@@ -19,7 +19,7 @@ import {
 	Typography,
 	ListItemText,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import {
 	SxProps,
 	Theme,

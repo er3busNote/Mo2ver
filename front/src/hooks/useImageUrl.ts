@@ -1,11 +1,11 @@
 import { ActionCreatorsMapObject } from 'redux';
 
 interface ImageUrlProps {
-	file: string;
-	image: ActionCreatorsMapObject;
+	attachFile: string;
+	file: ActionCreatorsMapObject;
 }
 
-const useImageUrl = ({ image, file }: ImageUrlProps): string =>
-	image.info(file);
+const useImageUrl = ({ file, attachFile }: ImageUrlProps): string =>
+	file.info(attachFile);
 
 export default useImageUrl;

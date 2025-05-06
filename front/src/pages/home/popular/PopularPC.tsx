@@ -46,7 +46,7 @@ const KEYWORD_INFO: Array<string> = [
 interface PopularProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
@@ -75,7 +75,7 @@ const CarouselFade: FC<CarouselFadeProps> = ({ url }): JSX.Element => {
 const PopularPC: FC<PopularProps> = ({
 	title,
 	description,
-	image,
+	file,
 	bannerDisplayData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -282,8 +282,9 @@ const PopularPC: FC<PopularProps> = ({
 										<SwiperSlide key={index}>
 											<CarouselFade
 												url={useImageUrl({
-													image: image,
-													file: (detail as Record<string, any>).imageAttachFile,
+													file: file,
+													attachFile: (detail as Record<string, any>)
+														.imageAttachFile,
 												})}
 											/>
 										</SwiperSlide>
@@ -344,9 +345,10 @@ const PopularPC: FC<PopularProps> = ({
 																		sx={{ width: '120px', height: '100px' }}
 																		component="img"
 																		image={useImageUrl({
-																			image: image,
-																			file: (product as Record<string, any>)
-																				.goodsImageAttachFile,
+																			file: file,
+																			attachFile: (
+																				product as Record<string, any>
+																			).goodsImageAttachFile,
 																		})}
 																		alt="Image"
 																	/>

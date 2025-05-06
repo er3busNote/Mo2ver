@@ -35,7 +35,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
-import RenderUploadField from '@components/field/UploadField';
+import RenderUploadField from '@components/field/file/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import { BannerImageFormValues } from '@pages/admin/types';
 import goToBanner from '@navigate/admin/banner/goToBanner';

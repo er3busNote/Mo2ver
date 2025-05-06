@@ -5,8 +5,7 @@ import {
 } from '@mui/base/Unstable_NumberInput';
 import { blue, grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
 const StyledInputRoot = styled('div')(({ theme }) => ({
 	fontWeight: '400',

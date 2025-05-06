@@ -12,7 +12,7 @@ import { Box, useTheme, useMediaQuery } from '@mui/material';
 interface EventProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	eventData: EventPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
@@ -21,13 +21,13 @@ interface EventDispatchProps {
 	title: string;
 	description: string;
 	event: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const EventPC: FC<EventProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	setPage,
 }): JSX.Element => {
@@ -41,7 +41,7 @@ const EventPC: FC<EventProps> = ({
 			<EventList
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				eventData={eventData}
 				setPage={setPage}
 			/>
@@ -52,7 +52,7 @@ const EventPC: FC<EventProps> = ({
 const EventMobile: FC<EventProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	setPage,
 }): JSX.Element => {
@@ -66,7 +66,7 @@ const EventMobile: FC<EventProps> = ({
 			<EventList
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				eventData={eventData}
 				setPage={setPage}
 			/>
@@ -78,7 +78,7 @@ const EventPage: FC<EventDispatchProps> = ({
 	title,
 	description,
 	event,
-	image,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -92,7 +92,7 @@ const EventPage: FC<EventDispatchProps> = ({
 				<EventPC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					eventData={eventData}
 					setPage={setPage}
 				/>
@@ -101,7 +101,7 @@ const EventPage: FC<EventDispatchProps> = ({
 				<EventMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					eventData={eventData}
 					setPage={setPage}
 				/>
@@ -117,7 +117,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	event: bindActionCreators(Api.event, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

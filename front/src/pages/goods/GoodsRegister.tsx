@@ -11,7 +11,7 @@ interface GoodsRegisterProps {
 	slidesPerView: number;
 	spaceBetween: number;
 	category: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	onSubmit: (
 		data: RegisterFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -24,7 +24,7 @@ const GoodsRegister: FC<GoodsRegisterProps> = ({
 	slidesPerView,
 	spaceBetween,
 	category,
-	image,
+	file,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -34,7 +34,7 @@ const GoodsRegister: FC<GoodsRegisterProps> = ({
 				slidesPerView={slidesPerView}
 				spaceBetween={spaceBetween}
 				category={category}
-				image={image}
+				file={file}
 				onSubmit={onSubmit}
 			/>
 		</Box>

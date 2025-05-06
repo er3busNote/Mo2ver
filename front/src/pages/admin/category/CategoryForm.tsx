@@ -13,11 +13,12 @@ import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
 import RenderRadioField from '@components/field/RadioField';
 import { CategoryFormValues } from '@pages/admin/types';
-
-const fontSize_xs = '12px';
-const fontSize_sm = '12px';
-const fontSize_md = '13px';
-const fontSize_lg = '14px';
+import {
+	fontSize_xs,
+	fontSize_sm,
+	fontSize_md,
+	fontSize_lg,
+} from '@utils/font';
 
 const tableBorder = '1px solid #d2d2d2';
 

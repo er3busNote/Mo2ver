@@ -1,7 +1,7 @@
 import React, { FC, ChangeEvent } from 'react';
 import { InputBase } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
+import { Search as SearchIcon } from '@mui/icons-material';
 
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',

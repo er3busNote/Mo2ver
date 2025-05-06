@@ -15,8 +15,10 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import {
+	ArrowBackIos as ArrowBackIosIcon,
+	ArrowForwardIos as ArrowForwardIosIcon,
+} from '@mui/icons-material';
 import SwipeableViews, { SwipeableViewsProps } from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 

@@ -5,16 +5,16 @@ import { CardMedia, Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface CarouselDialogProps {
 	open: boolean;
-	file: string;
+	attachFile: string;
 	name?: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	handleClose: () => void;
 }
 
 const DialogImage: FC<CarouselDialogProps> = ({
 	open,
-	image,
 	file,
+	attachFile,
 	name,
 	handleClose,
 }): JSX.Element => {
@@ -24,7 +24,7 @@ const DialogImage: FC<CarouselDialogProps> = ({
 			<DialogContent>
 				<CardMedia
 					component="img"
-					image={useImageUrl({ image, file })}
+					image={useImageUrl({ file, attachFile })}
 					alt="Image"
 				/>
 			</DialogContent>

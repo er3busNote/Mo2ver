@@ -27,7 +27,7 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import StarsIcon from '@mui/icons-material/Stars';
+import { Stars as StarsIcon } from '@mui/icons-material';
 import { EventData, EventProductData, EventProductPageData } from '@api/types';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { isEmpty, get } from 'lodash';
@@ -35,7 +35,7 @@ import { isEmpty, get } from 'lodash';
 interface EventDetailProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	eventData: EventData;
 	eventProductData: EventProductPageData;
 	setPage: Dispatch<SetStateAction<number>>;
@@ -44,14 +44,14 @@ interface EventDetailProps {
 interface GoodsProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: Array<EventProductData>;
 }
 
 const GoodsGrid: FC<GoodsProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const GoodsGrid: FC<GoodsProps> = ({
 		<Grid container spacing={3}>
 			{goodsData &&
 				goodsData.map((data: EventProductData, index: number) => {
-					const file = data.goodsImageAttachFile;
+					const attachFile = data.goodsImageAttachFile;
 					return (
 						<Grid key={index} item xs={6} md={3} lg={3}>
 							<Card
@@ -83,7 +83,7 @@ const GoodsGrid: FC<GoodsProps> = ({
 									<CardMedia
 										component="img"
 										height="140"
-										image={useImageUrl({ image, file })}
+										image={useImageUrl({ file, attachFile })}
 									/>
 									<CardContent>
 										<Typography
@@ -144,7 +144,7 @@ const GoodsGrid: FC<GoodsProps> = ({
 const GoodsRow: FC<GoodsProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -280,7 +280,7 @@ const GoodsRow: FC<GoodsProps> = ({
 				<TableBody>
 					{goodsData &&
 						goodsData.map((data: EventProductData, index: number) => {
-							const file = data.goodsImageAttachFile;
+							const attachFile = data.goodsImageAttachFile;
 							return (
 								<TableRow key={index} sx={rowItem}>
 									<TableCell sx={cardBox}>
@@ -291,7 +291,7 @@ const GoodsRow: FC<GoodsProps> = ({
 											<CardActionArea>
 												<CardMedia
 													component="img"
-													image={useImageUrl({ image, file })}
+													image={useImageUrl({ file, attachFile })}
 													sx={{
 														height: {
 															xs: '200px',
@@ -558,13 +558,13 @@ const GoodsRow: FC<GoodsProps> = ({
 const EventDetail: FC<EventDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	eventProductData,
 	setPage,
 }): JSX.Element => {
 	const [branch, setSwitch] = useState(true);
-	const file = String(
+	const attachFile = String(
 		get(eventData, ['imageList', 0, 'goodsImageAttachFile'], '')
 	);
 
@@ -579,11 +579,11 @@ const EventDetail: FC<EventDetailProps> = ({
 				setSwitch={setSwitch}
 			/>
 			<Box sx={{ m: 3 }}>
-				{!isEmpty(file) && (
+				{!isEmpty(attachFile) && (
 					<CardMedia
 						component="img"
 						width="100%"
-						image={useImageUrl({ image, file })}
+						image={useImageUrl({ file, attachFile })}
 						sx={{ p: 1.5 }}
 					/>
 				)}
@@ -600,14 +600,14 @@ const EventDetail: FC<EventDetailProps> = ({
 				<Box sx={{ my: 2 }}>
 					{branch ? (
 						<GoodsGrid
-							image={image}
+							file={file}
 							title={title}
 							description={description}
 							goodsData={eventProductData.content}
 						/>
 					) : (
 						<GoodsRow
-							image={image}
+							file={file}
 							title={title}
 							description={description}
 							goodsData={eventProductData.content}

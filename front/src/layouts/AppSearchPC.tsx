@@ -24,8 +24,7 @@ import {
 } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
+import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import MainIcon from '@assets/logo.svg?react';

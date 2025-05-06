@@ -13,9 +13,11 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {
+	AccountCircle as AccountCircleIcon,
+	Menu as MenuIcon,
+} from '@mui/icons-material';
 import MainIcon from '@assets/logo.svg?react';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const headerFontSize = { xs: '11px', sm: '12px' };
 

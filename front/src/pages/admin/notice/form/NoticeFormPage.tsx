@@ -116,7 +116,7 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 
 	const submitForm = async (
 		data: NoticeFormValues,
-		eventForm?: BaseSyntheticEvent<object, any, any>
+		noticeForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const noticeFormData: NoticeDetailData = {
 			title: data.title,
@@ -130,8 +130,8 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 			await notice.create(noticeFormData, csrfData);
 		if (componentType === 'Update')
 			await notice.update(noticeFormData, csrfData);
-		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/event');
+		if (noticeForm) noticeForm.preventDefault(); // 새로고침 방지
+		navigate('/admin/notice');
 	};
 
 	return (

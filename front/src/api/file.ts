@@ -7,8 +7,9 @@ import { urlFormat } from '../utils/format';
 const image = (instance: AxiosInstance) => {
 	return {
 		// 이미지 매핑 API : <baseURL>/file/image/*.*
-		info: (imagefile: string) => () =>
-			urlFormat(instance.defaults.baseURL ?? '') + `file/image?id=${imagefile}`,
+		info: (attachFile: string) => () =>
+			urlFormat(instance.defaults.baseURL ?? '') +
+			`file/image?id=${attachFile}`,
 		// 이미지 업로드 API : <baseURL>/file/upload
 		upload: (formData: FormData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance

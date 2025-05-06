@@ -10,8 +10,10 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import {
+	LockOutlined as LockOutlinedIcon,
+	ArrowCircleRight as ArrowCircleRightIcon,
+} from '@mui/icons-material';
 import RenderTextField from '@components/field/TextField';
 import { LoginFormValues } from '@pages/types';
 

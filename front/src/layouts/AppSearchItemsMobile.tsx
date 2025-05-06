@@ -27,10 +27,12 @@ import {
 import Button, { ButtonProps } from '@mui/material/Button';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
-import ErrorIcon from '@mui/icons-material/Error';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+	Search as SearchIcon,
+	Clear as ClearIcon,
+	Error as ErrorIcon,
+	Delete as DeleteIcon,
+} from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';

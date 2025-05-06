@@ -31,14 +31,14 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
-import StarsIcon from '@mui/icons-material/Stars';
+import { Stars as StarsIcon } from '@mui/icons-material';
 import { useIsMobile } from '@context/MobileContext';
 import { isEmpty, get } from 'lodash';
 
 interface GoodsDetailProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: GoodsData;
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
@@ -50,7 +50,7 @@ interface GoodsDetailProps {
 const GoodsDetail: FC<GoodsDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	reviewPageData,
 	setPage,
@@ -76,7 +76,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 		onCartAdd(cartData);
 	};
 
-	const file = String(
+	const attachFile = String(
 		get(goodsData, ['imageList', 0, 'goodsImageAttachFile'], '')
 	);
 
@@ -201,12 +201,12 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={6} lg={6}>
 					<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
-						{!isEmpty(file) ? (
+						{!isEmpty(attachFile) ? (
 							<CardMedia
 								component="img"
 								width="100%"
 								height="556"
-								image={useImageUrl({ image, file })}
+								image={useImageUrl({ file, attachFile })}
 								sx={{ p: 1.5 }}
 							/>
 						) : (

@@ -20,7 +20,7 @@ import { Box, useTheme, useMediaQuery } from '@mui/material';
 interface GoodsDetailProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: GoodsData;
 	reviewData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
@@ -36,13 +36,13 @@ interface GoodsDetailDispatchProps {
 	goods: ActionCreatorsMapObject;
 	review: ActionCreatorsMapObject;
 	cart: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	reviewData,
 	setPage,
@@ -60,7 +60,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 			<GoodsDetail
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				reviewPageData={reviewData}
 				setPage={setPage}
@@ -75,7 +75,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	reviewData,
 	setPage,
@@ -93,7 +93,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 			<GoodsDetail
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				reviewPageData={reviewData}
 				setPage={setPage}
@@ -112,7 +112,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	goods,
 	review,
 	cart,
-	image,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -141,7 +141,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 				<GoodsDetailPC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					goodsData={goodsData}
 					reviewData={reviewData}
 					setPage={setPage}
@@ -154,7 +154,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 				<GoodsDetailMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					goodsData={goodsData}
 					reviewData={reviewData}
 					setPage={setPage}
@@ -177,7 +177,7 @@ const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	goods: bindActionCreators(Api.goods, dispatch),
 	review: bindActionCreators(Api.review, dispatch),
 	cart: bindActionCreators(Api.cart, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsDetailPage);

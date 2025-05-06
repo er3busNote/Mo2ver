@@ -16,6 +16,7 @@ const steps = ['장바구니', '주문/결제', '주문완료'];
 interface CartProps {
 	title: string;
 	description: string;
+	file: ActionCreatorsMapObject;
 	setPage: Dispatch<SetStateAction<number>>;
 	cartPageData: CartPageData;
 	onCartUpdate: (cartData: CartData) => void;
@@ -27,11 +28,13 @@ interface CartDispatchProps {
 	description: string;
 	member: ActionCreatorsMapObject;
 	cart: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const CartPC: FC<CartProps> = ({
 	title,
 	description,
+	file,
 	setPage,
 	cartPageData,
 	onCartUpdate,
@@ -47,6 +50,7 @@ const CartPC: FC<CartProps> = ({
 			<CartListPC
 				title={title}
 				description={description}
+				file={file}
 				steps={steps}
 				setPage={setPage}
 				cartPageData={cartPageData}
@@ -60,6 +64,7 @@ const CartPC: FC<CartProps> = ({
 const CartMobile: FC<CartProps> = ({
 	title,
 	description,
+	file,
 	setPage,
 	cartPageData,
 	onCartUpdate,
@@ -75,6 +80,7 @@ const CartMobile: FC<CartProps> = ({
 			<CartListMobile
 				title={title}
 				description={description}
+				file={file}
 				steps={steps}
 				setPage={setPage}
 				cartPageData={cartPageData}
@@ -90,6 +96,7 @@ const CartPage: FC<CartDispatchProps> = ({
 	description,
 	member,
 	cart,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -111,6 +118,7 @@ const CartPage: FC<CartDispatchProps> = ({
 				<CartPC
 					title={title}
 					description={description}
+					file={file}
 					setPage={setPage}
 					cartPageData={cartPageData}
 					onCartUpdate={cartUpdate}
@@ -121,6 +129,7 @@ const CartPage: FC<CartDispatchProps> = ({
 				<CartMobile
 					title={title}
 					description={description}
+					file={file}
 					setPage={setPage}
 					cartPageData={cartPageData}
 					onCartUpdate={cartUpdate}
@@ -139,6 +148,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
 	cart: bindActionCreators(Api.cart, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartPage);

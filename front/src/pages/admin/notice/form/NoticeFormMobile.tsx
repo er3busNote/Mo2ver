@@ -1,13 +1,11 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { FileData } from '@api/types';
+import { Controller, useFormContext } from 'react-hook-form';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
 	Grid,
-	Typography,
 	Table,
 	TableBody,
 	TableRow,
@@ -16,9 +14,9 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
+import RenderDragAndDropField from '@components/field/file/DragAndDropField';
 import { NoticeFormValues } from '@pages/admin/types';
 import goToNotice from '@navigate/admin/notice/goToNotice';
-import { useIsMobile } from '@context/MobileContext';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -39,7 +37,6 @@ const NoticeFormMobile: FC<NoticeProp> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const isMobile = useIsMobile();
 
 	const {
 		control,
@@ -111,47 +108,71 @@ const NoticeFormMobile: FC<NoticeProp> = ({
 								/>
 							</TableCell>
 						</TableRow>
+						<TableRow>
+							<TableCell sx={dataTh} align="center" component="th">
+								공지내용
+							</TableCell>
+							<TableCell colSpan={3} sx={dataTd} align="left">
+								<Controller
+									name="contents"
+									control={control}
+									render={({ field, fieldState, formState }) => (
+										<RenderTextField
+											type="text"
+											label="내용을 입력해주세요"
+											field={field}
+											fieldState={fieldState}
+											formState={formState}
+										/>
+									)}
+								/>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell sx={dataTh} align="center" component="th">
+								첨부파일
+							</TableCell>
+							<TableCell sx={dataTd} align="left">
+								<Controller
+									name="noticeFiles"
+									control={control}
+									render={({ field, fieldState, formState }) => (
+										<RenderDragAndDropField
+											field={field}
+											fieldState={fieldState}
+											formState={formState}
+										/>
+									)}
+								/>
+							</TableCell>
+						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<Box
-				sx={{ pt: 4, pb: 2, display: 'flex', justifyContent: 'space-between' }}
-			>
-				<Box>
-					<Typography
-						component="h1"
-						variant="h6"
-						color="inherit"
-						sx={{ fontSize: '16px', fontWeight: 'bold' }}
-					>
-						공지사항
-					</Typography>
-				</Box>
-				<Box sx={{ display: 'flex' }}>
-					<Grid container spacing={1} sx={{ justifyContent: 'end' }}>
-						<Grid item>
-							<ButtonBase
-								type="submit"
-								buttonType="save"
-								size="small"
-								variant="outlined"
-								disabled={isSubmitted && !isValid}
-							>
-								저장
-							</ButtonBase>
-						</Grid>
-					</Grid>
-				</Box>
-			</Box>
 			<Box sx={{ pt: 2 }}>
-				<ButtonBase
-					buttonType="cancel"
-					device="mobile"
-					variant="outlined"
-					onClick={cancelClick}
-				>
-					취소
-				</ButtonBase>
+				<Grid container spacing={1} sx={{ justifyContent: 'center' }}>
+					<Grid item>
+						<ButtonBase
+							type="submit"
+							buttonType="save"
+							device="mobile"
+							variant="outlined"
+							disabled={isSubmitted && !isValid}
+						>
+							저장
+						</ButtonBase>
+					</Grid>
+					<Grid item>
+						<ButtonBase
+							buttonType="cancel"
+							device="mobile"
+							variant="outlined"
+							onClick={cancelClick}
+						>
+							취소
+						</ButtonBase>
+					</Grid>
+				</Grid>
 			</Box>
 		</Box>
 	);

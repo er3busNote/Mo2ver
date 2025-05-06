@@ -191,7 +191,7 @@ const registerSchema = yup
 interface GoodsRegisterProps {
 	description: string;
 	category: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	onSubmit: (
 		data: RegisterFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -203,7 +203,7 @@ interface GoodsRegisterDispatchProps {
 	member: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const registerValues: RegisterFormValues = {
@@ -232,7 +232,7 @@ const registerValues: RegisterFormValues = {
 const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 	description,
 	category,
-	image,
+	file,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -248,7 +248,7 @@ const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 				slidesPerView={4}
 				spaceBetween={40}
 				category={category}
-				image={image}
+				file={file}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -258,7 +258,7 @@ const GoodsRegisterPC: FC<GoodsRegisterProps> = ({
 const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	description,
 	category,
-	image,
+	file,
 	onSubmit,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
@@ -275,7 +275,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 				slidesPerView={isMobile ? 4 : 5}
 				spaceBetween={10}
 				category={category}
-				image={image}
+				file={file}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -287,7 +287,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 	member,
 	goods,
 	category,
-	image,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -344,7 +344,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 				<GoodsRegisterPC
 					description={description}
 					category={category}
-					image={image}
+					file={file}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -352,7 +352,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 				<GoodsRegisterMobile
 					description={description}
 					category={category}
-					image={image}
+					file={file}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -368,7 +368,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	member: bindActionCreators(Api.member, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsRegisterPage);

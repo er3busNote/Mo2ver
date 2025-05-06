@@ -17,9 +17,11 @@ import {
 	ListItemText,
 } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
-import MenuIcon from '@mui/icons-material/Menu';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import {
+	Menu as MenuIcon,
+	ExpandLess as ExpandLess,
+	ExpandMore as ExpandMore,
+} from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
 import goToMenu from '@navigate/menu/goToMenu';

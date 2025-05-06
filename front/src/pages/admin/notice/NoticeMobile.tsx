@@ -9,6 +9,7 @@ import {
 	MenuItem,
 	InputLabel,
 	FormControl,
+	Typography,
 	Table,
 	TableHead,
 	TableBody,
@@ -18,9 +19,13 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { NoticeData, NoticePageData } from '@api/types';
 import goToNoticeForm from '@navigate/admin/notice/goToNoticeForm';
+import dayjs, { Dayjs } from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
@@ -42,6 +47,8 @@ const NoticeMobile: FC<NoticeProps> = ({
 	const navigate = useNavigate();
 	const [keyword, setKeyword] = useState('');
 	const [useyn, setUseyn] = useState('');
+	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
 	const registerClick = () => {
 		goToNoticeForm({ title, description, dispatch, navigate });
@@ -56,6 +63,13 @@ const NoticeMobile: FC<NoticeProps> = ({
 	};
 	const handleUseynChange = (event: SelectChangeEvent) => {
 		setUseyn(event.target.value as string);
+	};
+
+	const handleStartChange = (newValue: Dayjs | null) => {
+		setStartDate(newValue);
+	};
+	const handleEndChange = (newValue: Dayjs | null) => {
+		setEndDate(newValue);
 	};
 
 	const conditionTh: SxProps<Theme> = {
@@ -85,6 +99,31 @@ const NoticeMobile: FC<NoticeProps> = ({
 		px: 2,
 		fontSize: { xs: '11px', sm: '13px' },
 		border: tableBorder,
+	};
+	const datePicker: SxProps<Theme> = {
+		height: '37px',
+		'.MuiInputBase-input': {
+			pl: 1.5,
+			py: 2,
+			width: '60px',
+			fontSize: { xs: '12px', sm: '13px' },
+		},
+		'.MuiFormLabel-root': {
+			ml: 1,
+			mt: 0.5,
+			fontSize: { xs: '12px', sm: '13px' },
+		},
+		'.MuiInputAdornment-root': {
+			overflowX: 'visible',
+		},
+		'.MuiIconButton-root': {
+			pr: 0.5,
+			pl: 0,
+		},
+		overflowX: 'visible',
+	};
+	const dateHorizonIcon: SxProps<Theme> = {
+		px: 0.5,
 	};
 	const selectForm: SxProps<Theme> = {
 		width: 120,
@@ -141,7 +180,31 @@ const NoticeMobile: FC<NoticeProps> = ({
 						</TableRow>
 						<TableRow>
 							<TableCell sx={conditionTh} align="center" component="th">
-								전시여부
+								공지기간
+							</TableCell>
+							<TableCell sx={conditionTd} align="left">
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<DesktopDatePicker
+										label="시작날짜"
+										value={startDate}
+										onChange={(value) => handleStartChange(value)}
+										sx={datePicker}
+									/>
+									<Typography component="span" sx={dateHorizonIcon}>
+										-
+									</Typography>
+									<DesktopDatePicker
+										label="만료날짜"
+										value={dayjs(endDate)}
+										onChange={(value) => handleEndChange(value)}
+										sx={datePicker}
+									/>
+								</LocalizationProvider>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell sx={conditionTh} align="center" component="th">
+								공지여부
 							</TableCell>
 							<TableCell sx={conditionTd} align="left">
 								<FormControl sx={selectForm}>

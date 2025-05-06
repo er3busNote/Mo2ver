@@ -36,7 +36,7 @@ const IMAGE_INFO =
 
 interface ReviewCardProps {
 	member: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	reviewData: ReviewData;
 	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
 	onReplyModify: (reviewInfo: ReviewRequestData) => void;
@@ -46,7 +46,7 @@ interface ReviewCardProps {
 
 const ReviewCard: FC<ReviewCardProps> = ({
 	member,
-	image,
+	file,
 	reviewData,
 	onReplySubmit,
 	onReplyModify,
@@ -57,14 +57,14 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	const isDesktop = useIsDesktop();
 
 	const csrfData = useCSRFToken({ member });
-	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	const { data: dataFiles, setFiles } = useFieInfo({ file, csrfData });
 
 	const textRef = useRef<HTMLDivElement>(null);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [isEditingRating, setIsEditingRating] = useState<boolean>(false);
 	const [isEditingText, setIsEditingText] = useState<boolean>(false);
 
-	const [file, setFile] = useState<string>('');
+	const [attachFile, setAttachFile] = useState<string>('');
 	const [text, setText] = useState<string>('');
 	const [imageUrl, setImageUrl] = useState<string>(IMAGE_INFO);
 
@@ -75,11 +75,11 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	}, [text]);
 
 	useEffect(() => {
-		if (!isEmpty(file)) setImageUrl(useImageUrl({ image, file }));
-	}, [file]);
+		if (!isEmpty(attachFile)) setImageUrl(useImageUrl({ file, attachFile }));
+	}, [attachFile]);
 
 	useEffect(() => {
-		setFile(reviewData.imageAttachFile || '');
+		setAttachFile(reviewData.imageAttachFile || '');
 		setText(reviewData.reviewContents || '');
 	}, [reviewData]);
 
@@ -124,7 +124,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 		const reviewInfo: ReviewRequestData = {
 			reviewNo: reviewData.goodsReviewNo,
 			goodsCode: reviewData.goodsCode,
-			reviewImg: file,
+			reviewImg: attachFile,
 			reviewContents: reviewData.reviewContents,
 			rating: rating,
 		};
@@ -303,7 +303,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 					<ReviewCard
 						key={index}
 						member={member}
-						image={image}
+						file={file}
 						reviewData={reviewSubData}
 						onReplySubmit={onReplySubmit}
 						onReplyModify={onReplyModify}
@@ -318,7 +318,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(ReviewCard);

@@ -22,7 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import { HorizontalRule as HorizontalRuleIcon } from '@mui/icons-material';
 import { EventData, EventPageData } from '@api/types';
 import goToEventForm from '@navigate/admin/event/goToEventForm';
 import moment from 'moment';

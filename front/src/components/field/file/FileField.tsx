@@ -10,15 +10,19 @@ import { connect } from 'react-redux';
 import { FileData } from '@api/types';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
-import useFieInfo from '@hooks/cmmn/useFileInfo';
+import useFileInfo from '@hooks/cmmn/useFileInfo';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
-import { Close, FileUploadOutlined } from '@mui/icons-material';
-
-const fontSize_xs = '11px';
-const fontSize_sm = '12px';
-const fontSize_md = '13px';
-const fontSize_lg = '13px';
+import {
+	Close as CloseIcon,
+	FileUploadOutlined as FileUploadOutlinedIcon,
+} from '@mui/icons-material';
+import {
+	fontSize_xs,
+	fontSize_sm,
+	fontSize_md,
+	fontSize_lg,
+} from '@utils/font';
 
 const VisuallyHiddenInput = styled('input')({
 	display: 'none',
@@ -29,16 +33,16 @@ interface RenderFileFieldProps {
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
 	member: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const RenderFileField: FC<RenderFileFieldProps> = ({
 	field: { onChange, value, name },
 	member,
-	image,
+	file,
 }) => {
 	const csrfData = useCSRFToken({ member });
-	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
 			onChange([...value, ...dataFiles]);
@@ -111,11 +115,11 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 												paddingRight: '0.5rem',
 											}}
 										>
-											<Close />
+											<CloseIcon />
 										</ButtonBase>
 									)}
 									<ButtonBase>
-										<FileUploadOutlined onClick={handleCarouselInput} />
+										<FileUploadOutlinedIcon onClick={handleCarouselInput} />
 									</ButtonBase>
 								</Fragment>
 							),
@@ -145,7 +149,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(RenderFileField);

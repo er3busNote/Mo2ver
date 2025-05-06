@@ -15,7 +15,7 @@ import { Box, useTheme, useMediaQuery } from '@mui/material';
 interface GoodsProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: GoodsPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
@@ -25,13 +25,13 @@ interface GoodsDispatchProps {
 	description: string;
 	goods: ActionCreatorsMapObject;
 	search: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const GoodsPC: FC<GoodsProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	setPage,
 }): JSX.Element => {
@@ -45,7 +45,7 @@ const GoodsPC: FC<GoodsProps> = ({
 			<GoodsList
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				setPage={setPage}
 			/>
@@ -56,7 +56,7 @@ const GoodsPC: FC<GoodsProps> = ({
 const GoodsMobile: FC<GoodsProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	setPage,
 }): JSX.Element => {
@@ -70,7 +70,7 @@ const GoodsMobile: FC<GoodsProps> = ({
 			<GoodsList
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				setPage={setPage}
 			/>
@@ -81,7 +81,7 @@ const GoodsMobile: FC<GoodsProps> = ({
 const GoodsDataLoaded: FC<GoodsProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	setPage,
 }): JSX.Element => {
@@ -94,7 +94,7 @@ const GoodsDataLoaded: FC<GoodsProps> = ({
 				<GoodsPC
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					goodsData={goodsData}
 					setPage={setPage}
 				/>
@@ -103,7 +103,7 @@ const GoodsDataLoaded: FC<GoodsProps> = ({
 				<GoodsMobile
 					title={title}
 					description={description}
-					image={image}
+					file={file}
 					goodsData={goodsData}
 					setPage={setPage}
 				/>
@@ -117,7 +117,7 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 	description,
 	goods,
 	search,
-	image,
+	file,
 }): JSX.Element => {
 	const { code, type, keyword } = useParams();
 	if (type && code) {
@@ -130,7 +130,7 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 			<GoodsDataLoaded
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				setPage={setPage}
 			/>
@@ -144,7 +144,7 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 			<GoodsDataLoaded
 				title={title}
 				description={description}
-				image={image}
+				file={file}
 				goodsData={goodsData}
 				setPage={setPage}
 			/>
@@ -162,7 +162,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	goods: bindActionCreators(Api.goods, dispatch),
 	search: bindActionCreators(Api.search, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsPage);

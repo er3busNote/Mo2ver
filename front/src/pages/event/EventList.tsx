@@ -18,11 +18,12 @@ import {
 import { EventData, EventPageData } from '@api/types';
 import goToEventDetail from '@navigate/event/goToEventDetail';
 import moment from 'moment';
+import { get } from 'lodash';
 
 interface EventListProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	eventData: EventPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
@@ -30,14 +31,14 @@ interface EventListProps {
 interface EventGridProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	eventData: Array<EventData>;
 }
 
 const EventGrid: FC<EventGridProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -57,11 +58,9 @@ const EventGrid: FC<EventGridProps> = ({
 		<Grid container spacing={3}>
 			{eventData
 				? eventData.map((data: EventData, index: number) => {
-						const file =
-							data.imageList.length > 0
-								? String(data.imageList[0].goodsImageAttachFile)
-								: '';
-						//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
+						const attachFile = String(
+							get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
+						);
 						return (
 							<Grid key={index} item xs={12} md={6} lg={4}>
 								<Card
@@ -97,7 +96,7 @@ const EventGrid: FC<EventGridProps> = ({
 											component="img"
 											height="150"
 											sx={{ width: 151 }}
-											image={useImageUrl({ image, file })}
+											image={useImageUrl({ file, attachFile })}
 										/>
 									</CardActionArea>
 								</Card>
@@ -129,7 +128,7 @@ const EventGrid: FC<EventGridProps> = ({
 const EventList: FC<EventListProps> = ({
 	title,
 	description,
-	image,
+	file,
 	eventData,
 	setPage,
 }): JSX.Element => {
@@ -138,7 +137,7 @@ const EventList: FC<EventListProps> = ({
 			<AppSubHeader title={title} description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<EventGrid
-					image={image}
+					file={file}
 					title={title}
 					description={description}
 					eventData={eventData.content}

@@ -11,11 +11,13 @@ import {
 	BottomNavigationAction,
 } from '@mui/material';
 import Copyright from '@components/Copyright';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import RestoreIcon from '@mui/icons-material/Restore';
+import {
+	GridViewOutlined as GridViewOutlinedIcon,
+	SearchOutlined as SearchOutlinedIcon,
+	HomeOutlined as HomeOutlinedIcon,
+	AccountCircleOutlined as AccountCircleOutlinedIcon,
+	Restore as RestoreIcon,
+} from '@mui/icons-material';
 import { GoodsData, CategoryDataGroup } from '@api/types';
 import goToMenu from '@navigate/menu/goToMenu';
 import { isAdmin } from '@utils/jwttoken';

@@ -23,9 +23,11 @@ import {
 	TreeItemProps,
 	treeItemClasses,
 } from '@mui/x-tree-view/TreeItem';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import {
+	ArrowDropDown as ArrowDropDownIcon,
+	ArrowRight as ArrowRightIcon,
+	ChevronLeft as ChevronLeftIcon,
+} from '@mui/icons-material';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { has } from 'lodash';
 

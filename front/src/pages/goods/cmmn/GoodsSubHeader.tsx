@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
+import { Home as HomeIcon } from '@mui/icons-material';
 import Title from '@components/Title';
 import goToMenu from '@navigate/menu/goToMenu';
 

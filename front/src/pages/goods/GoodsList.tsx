@@ -18,11 +18,12 @@ import {
 } from '@mui/material';
 import { GoodsData, GoodsPageData } from '@api/types';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import { get } from 'lodash';
 
 interface GoodsListProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: GoodsPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
@@ -30,14 +31,14 @@ interface GoodsListProps {
 interface GoodsGridProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	goodsData: Array<GoodsData>;
 }
 
 const GoodsGrid: FC<GoodsGridProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -57,10 +58,9 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 		<Grid container spacing={3}>
 			{goodsData
 				? goodsData.map((data: GoodsData, index: number) => {
-						const file =
-							data.imageList.length > 0
-								? String(data.imageList[0].goodsImageAttachFile)
-								: '';
+						const attachFile = String(
+							get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
+						);
 						//const base64 = data.imageList.length > 0 ? data.imageList[0].base64Image : '';
 						return (
 							<Grid key={index} item xs={6} md={3} lg={3}>
@@ -73,7 +73,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 										<CardMedia
 											component="img"
 											height="140"
-											image={useImageUrl({ image, file })}
+											image={useImageUrl({ file, attachFile })}
 											//src={`data:image/png;base64, ${base64}`}
 										/>
 										<CardContent>
@@ -153,7 +153,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 const GoodsList: FC<GoodsListProps> = ({
 	title,
 	description,
-	image,
+	file,
 	goodsData,
 	setPage,
 }): JSX.Element => {
@@ -162,7 +162,7 @@ const GoodsList: FC<GoodsListProps> = ({
 			<AppSubHeader title={title} description={description} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<GoodsGrid
-					image={image}
+					file={file}
 					title={title}
 					description={description}
 					goodsData={goodsData.content}

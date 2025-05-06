@@ -7,12 +7,13 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import {
+	fontSize_xs,
+	fontSize_sm,
+	fontSize_md,
+	fontSize_lg,
+} from '@utils/font';
 import dayjs, { Dayjs } from 'dayjs';
-
-const fontSize_xs = '11px';
-const fontSize_sm = '12px';
-const fontSize_md = '13px';
-const fontSize_lg = '13px';
 
 interface RenderDatePickerFieldProps {
 	field: ControllerRenderProps<any, any>;

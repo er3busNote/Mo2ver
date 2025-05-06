@@ -32,13 +32,15 @@ import {
 	AccordionDetails,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import RestoreIcon from '@mui/icons-material/Restore';
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
-import BallotOutlinedIcon from '@mui/icons-material/BallotOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+	ArrowForwardIos as ArrowForwardIosIcon,
+	GradingOutlined as GradingOutlinedIcon,
+	LocalShippingOutlined as LocalShippingOutlinedIcon,
+	Restore as RestoreIcon,
+	CreditCardOutlined as CreditCardOutlinedIcon,
+	BallotOutlined as BallotOutlinedIcon,
+	ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 
 const IMAGE_INFO = [

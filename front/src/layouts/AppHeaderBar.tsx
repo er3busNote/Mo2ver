@@ -5,8 +5,10 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { Box, AppBar, Toolbar, IconButton } from '@mui/material';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import LogoutIcon from '@mui/icons-material/Logout';
+import {
+	ArrowBackIos as ArrowBackIosIcon,
+	Logout as LogoutIcon,
+} from '@mui/icons-material';
 import { isAuthenticated } from '@utils/jwttoken';
 import Title from '@components/Title';
 

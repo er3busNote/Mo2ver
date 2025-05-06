@@ -37,18 +37,20 @@ import {
 	TreeItemProps,
 	treeItemClasses,
 } from '@mui/x-tree-view/TreeItem';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import CategoryIcon from '@mui/icons-material/Category';
-import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import {
+	ManageAccounts as ManageAccountsIcon,
+	ArrowDropDown as ArrowDropDownIcon,
+	ArrowRight as ArrowRightIcon,
+	ChevronLeft as ChevronLeftIcon,
+	ChevronRight as ChevronRightIcon,
+	MenuOpen as MenuOpenIcon,
+	Category as CategoryIcon,
+	ViewCarousel as ViewCarouselIcon,
+	ViewInAr as ViewInArIcon,
+	Info as InfoIcon,
+	Forum as ForumIcon,
+	ReceiptLong as ReceiptLongIcon,
+} from '@mui/icons-material';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToMenuNone from '@navigate/menu/goToMenuNone';
 

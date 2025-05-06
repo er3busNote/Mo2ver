@@ -1,8 +1,10 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
 import { Box, Divider, IconButton } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import GridViewIcon from '@mui/icons-material/GridView';
-import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
+import {
+	GridView as GridViewIcon,
+	SplitscreenOutlined as SplitscreenOutlinedIcon,
+} from '@mui/icons-material';
 
 interface SwitchGridTabButton {
 	branch: boolean;

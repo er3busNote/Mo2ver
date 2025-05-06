@@ -24,22 +24,21 @@ import RenderRadioField from '@components/field/RadioField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectChipField from '@components/field/SelectChipField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import RenderFileField from '@components/field/FileField';
+import RenderFileField from '@components/field/file/FileField';
 import HorizontalScroll from '@components/HorizontalScroll';
 import { RegisterFormValues } from '@pages/types';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import {
+	HorizontalRule as HorizontalRuleIcon,
+	InsertPhotoOutlined as InsertPhotoOutlinedIcon,
+} from '@mui/icons-material';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/font';
 import dayjs from 'dayjs';
-
-const fontSize_xs = '11px';
-const fontSize_sm = '13px';
-const fontSize_lg = '13px';
 
 interface RegisterProp {
 	slidesPerView: number;
 	spaceBetween: number;
 	category: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	onSubmit: (
 		data: RegisterFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -50,10 +49,10 @@ const RegisterForm: FC<RegisterProp> = ({
 	slidesPerView,
 	spaceBetween,
 	category,
-	image,
+	file,
 	onSubmit,
 }): JSX.Element => {
-	const [file, setFile] = useState<string>();
+	const [attachFile, setAttachFile] = useState<string>();
 	const [files, setFiles] = useState<Array<FileData>>();
 	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
 	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
@@ -191,11 +190,11 @@ const RegisterForm: FC<RegisterProp> = ({
 		<Grid container spacing={3}>
 			<Grid item xs={12} md={6} lg={6}>
 				<Box sx={{ m: 3, border: '2px #F0F0F0 solid' }}>
-					{file ? (
+					{attachFile ? (
 						<CardMedia
 							component="img"
 							width="100%"
-							image={useImageUrl({ image, file })}
+							image={useImageUrl({ file, attachFile })}
 							sx={{ p: 1.5, objectFit: 'fill', height: { xs: 460, sm: 556 } }}
 							alt="Image"
 						/>
@@ -219,7 +218,7 @@ const RegisterForm: FC<RegisterProp> = ({
 						<HorizontalScroll
 							slidesPerView={slidesPerView}
 							spaceBetween={spaceBetween}
-							image={image}
+							file={file}
 							files={files}
 							size="small"
 						/>

@@ -9,13 +9,15 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
-import useFieInfo from '@hooks/cmmn/useFileInfo';
+import useFileInfo from '@hooks/cmmn/useFileInfo';
 import DialogImage from '@components/dialog/DialogImage';
 import { Box, IconButton, FormHelperText } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
-import ClearIcon from '@mui/icons-material/Clear';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import {
+	Clear as ClearIcon,
+	CloudUpload as CloudUploadIcon,
+	ImageSearch as ImageSearchIcon,
+} from '@mui/icons-material';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -29,22 +31,22 @@ const VisuallyHiddenInput = styled('input')({
 	width: 1,
 });
 
-interface RenderUploadFieldProps {
+interface RenderFileFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
 	member: ActionCreatorsMapObject;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
-const RenderUploadField: FC<RenderUploadFieldProps> = ({
+const RenderUploadField: FC<RenderFileFieldProps> = ({
 	field: { onChange, value, name },
 	fieldState: { error },
 	member,
-	image,
+	file,
 }) => {
 	const csrfData = useCSRFToken({ member });
-	const [dataFiles, setFiles] = useFieInfo({ image, csrfData });
+	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	const [open, setOpen] = useState<boolean>(false);
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
@@ -69,7 +71,7 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 	};
 
 	const handleClose = () => {
-		setOpen(false); // Dialog 닫기
+		setOpen(false);
 	};
 
 	const uploadBox: SxProps<Theme> = {
@@ -82,6 +84,7 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 		justifyContent: 'center',
 		color: '#d32f2f',
 	};
+
 	return (
 		<Box sx={uploadBox}>
 			<Box>
@@ -102,8 +105,8 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 						</IconButton>
 						<DialogImage
 							open={open}
-							file={value}
-							image={image}
+							attachFile={value}
+							file={file}
 							handleClose={handleClose}
 						/>
 					</>
@@ -129,7 +132,7 @@ const RenderUploadField: FC<RenderUploadFieldProps> = ({
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
-	image: bindActionCreators(Api.image, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(RenderUploadField);

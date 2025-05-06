@@ -43,14 +43,14 @@ const KEYWORD_INFO: Array<string> = [
 interface PopularProps {
 	title: string;
 	description: string;
-	image: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 	bannerDisplayData: Record<string, Record<string, Array<object>>>;
 }
 
 const PopularMobile: FC<PopularProps> = ({
 	title,
 	description,
-	image,
+	file,
 	bannerDisplayData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
@@ -278,9 +278,10 @@ const PopularMobile: FC<PopularProps> = ({
 																		sx={infoImage}
 																		component="img"
 																		image={useImageUrl({
-																			image: image,
-																			file: (product as Record<string, any>)
-																				.goodsImageAttachFile,
+																			file: file,
+																			attachFile: (
+																				product as Record<string, any>
+																			).goodsImageAttachFile,
 																		})}
 																		alt="Image"
 																	/>
