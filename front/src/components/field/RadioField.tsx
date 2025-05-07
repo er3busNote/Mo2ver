@@ -7,7 +7,7 @@ import {
 	fontSize_sm,
 	fontSize_md,
 	fontSize_lg,
-} from '@utils/font';
+} from '@utils/style';
 
 interface RadioProps {
 	value: any;

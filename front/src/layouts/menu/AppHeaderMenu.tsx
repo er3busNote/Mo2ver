@@ -2,11 +2,8 @@ import React, {
 	FC,
 	useState,
 	MouseEvent,
-	Dispatch,
 	ChangeEvent,
 	KeyboardEvent,
-	SetStateAction,
-	CSSProperties,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
@@ -14,20 +11,20 @@ import { ActionCreatorsMapObject } from 'redux';
 import { MenuState, SubMenuInfo } from '@store/types';
 import { CategoryData, CategoryDataGroup } from '@api/types';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
+import AppMenu from './AppMenu';
+import AppMenuItem from './AppMenuItem';
+import AppMenuSubItem from './AppMenuSubItem';
 import {
 	Box,
 	Grid,
 	Slide,
 	Paper,
 	Popper,
-	Divider,
 	MenuList,
-	MenuItem,
 	Collapse,
 	InputBase,
 	IconButton,
 	Typography,
-	ListItemText,
 } from '@mui/material';
 import {
 	SxProps,
@@ -41,11 +38,10 @@ import {
 	Search as SearchIcon,
 	Clear as ClearIcon,
 } from '@mui/icons-material';
-import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
-import MenuDivider from '@components/divider/MenuDivider';
 import { divideArray } from '@utils/divide';
+import { submenuWidthSize } from '@utils/style';
 import { has } from 'lodash';
 
 const menuFontSize = '15px';
@@ -66,49 +62,6 @@ interface AppHeaderDetailProps {
 	description: string;
 	categoryData: CategoryDataGroup;
 }
-
-interface AppHeaderMenuItemProps {
-	categoryCode: string;
-	categoryName: string;
-	setHover: Dispatch<SetStateAction<string>>;
-	menuClick: (title: string, code: string, type: string) => void;
-}
-
-const AppHeaderMenuItem: FC<AppHeaderMenuItemProps> = ({
-	categoryCode,
-	categoryName,
-	setHover,
-	menuClick,
-}): JSX.Element => {
-	const onMouseEnter = () => {
-		setHover(categoryCode);
-	};
-
-	const item: SxProps<Theme> = {
-		px: '24px',
-		py: '11px',
-	};
-	const font: CSSProperties = {
-		fontSize: 13,
-		fontWeight: 'bold',
-	};
-	return (
-		<Paper elevation={0} onMouseEnter={onMouseEnter}>
-			<MenuItem
-				dense
-				onClick={() => menuClick(categoryName, categoryCode, 'L')}
-				sx={item}
-			>
-				<ListItemText
-					primaryTypographyProps={{
-						style: font,
-					}}
-					primary={categoryName}
-				/>
-			</MenuItem>
-		</Paper>
-	);
-};
 
 const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 	title,
@@ -157,9 +110,6 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 		});
 	};
 
-	const menuWidthSize = '630px';
-	const submenuWidthSize = '198px';
-
 	const tooltip: SxProps<Theme> = {
 		//ml: '-41px !important',
 		zIndex: 2,
@@ -168,31 +118,8 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 		mt: '7px',
 		position: 'relative',
 	};
-	const submenu: SxProps<Theme> = {
-		display:
-			hover === '' || // → 처음 랜더링 시, 깜빡이는 현상 방지
-			(middleCategoryData && !has(middleCategoryData, hover))
-				? 'none'
-				: 'inline-flex',
-	};
 	const overflowParent: SxProps<Theme> = {
 		overflow: 'hidden',
-	};
-	const overflowChildren: SxProps<Theme> = {
-		overflowY: 'auto',
-		position: 'relative',
-	};
-	const overflowTable: SxProps<Theme> = {
-		display: 'grid',
-		gridTemplateColumns: 'repeat(3, 1fr)',
-		//gap: 2,
-		height: '100%',
-		position: 'absolute',
-	};
-	const overflowContents: SxProps<Theme> = {
-		textAlign: 'start',
-		borderRadius: 0,
-		paddingBottom: 2,
 	};
 	return (
 		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
@@ -249,7 +176,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 							<ThemeProvider theme={darkTheme}>
 								<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
 									{largeCategoryData.map((data: any, index: number) => (
-										<AppHeaderMenuItem
+										<AppMenuItem
 											key={index}
 											setHover={setHover}
 											menuClick={menuClick}
@@ -260,69 +187,14 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 								</MenuList>
 							</ThemeProvider>
 						</Paper>
-						<Box sx={{ width: menuWidthSize, ...submenu, ...overflowChildren }}>
-							<Paper sx={overflowTable}>
-								{divideData.map((divide: Array<CategoryData>, k: number) => (
-									<Paper
-										key={k}
-										id={'sub-menu'}
-										sx={{ width: submenuWidthSize, ...overflowContents }}
-									>
-										{divide.map((mdata: CategoryData, i: number) => (
-											<MenuList key={i} sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-												<MenuItem
-													dense
-													onClick={() =>
-														menuClick(
-															mdata.categoryName,
-															mdata.categoryCode,
-															'M'
-														)
-													}
-													sx={{ px: '24px', py: '11px' }}
-												>
-													<ListItemText
-														primaryTypographyProps={{
-															style: { fontSize: 14, fontWeight: 'bold' },
-														}}
-														primary={mdata.categoryName}
-													/>
-												</MenuItem>
-												{smallCategoryData &&
-													has(smallCategoryData, mdata.categoryCode) &&
-													smallCategoryData[mdata.categoryCode].map(
-														(sdata: CategoryData, j: number) => (
-															<MenuItem
-																key={j}
-																dense
-																onClick={() =>
-																	menuClick(
-																		sdata.categoryName,
-																		sdata.categoryCode,
-																		'S'
-																	)
-																}
-																sx={{
-																	px: '24px',
-																	py: 0,
-																	minHeight: 5,
-																}}
-															>
-																<ListItemText
-																	primaryTypographyProps={{
-																		style: { fontSize: 13 },
-																	}}
-																	primary={sdata.categoryName}
-																/>
-															</MenuItem>
-														)
-													)}
-											</MenuList>
-										))}
-									</Paper>
-								))}
-							</Paper>
-						</Box>
+						<AppMenuSubItem
+							title={title}
+							description={description}
+							divideData={divideData}
+							middleCategoryData={middleCategoryData}
+							smallCategoryData={smallCategoryData}
+							hover={hover}
+						/>
 					</Box>
 				</Box>
 			</Popper>
@@ -380,22 +252,6 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 		setFocus(false);
 	};
 
-	const activeMenuClick = (
-		nextTitle: string,
-		nextDescription: string,
-		path: string
-	) => {
-		goToMenu({
-			title: nextTitle,
-			description: nextDescription,
-			prevTitle: title,
-			prevDescription: description,
-			path,
-			dispatch,
-			navigate,
-		});
-	};
-
 	const icon: SxProps<Theme> = {
 		fontSize: '1.6rem',
 		color: '#72BAF5',
@@ -438,40 +294,13 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 									categoryData={categoryData}
 								/>
 							</Grid>
-							{menus &&
-								menus.map((menu: SubMenuInfo, index: number) => (
-									<Grid item key={index}>
-										<Grid container spacing={1}>
-											<Grid item>
-												<Box sx={{ px: '20px', py: '10px' }}>
-													<IconButton
-														disableRipple
-														onClick={() =>
-															activeMenuClick(
-																menu.name,
-																menu.description,
-																menu.path
-															)
-														}
-														sx={{ p: 0 }}
-													>
-														<Typography
-															color="#000"
-															align="center"
-															sx={{
-																fontSize: menuFontSize,
-																fontWeight: 'bold',
-															}}
-														>
-															{menu.description}
-														</Typography>
-													</IconButton>
-												</Box>
-											</Grid>
-											<MenuDivider />
-										</Grid>
-									</Grid>
-								))}
+							{menus && (
+								<AppMenu
+									title={title}
+									description={description}
+									menus={menus}
+								/>
+							)}
 						</Grid>
 						<Box sx={{ mr: 2, mt: '5px' }}>
 							<Collapse orientation="horizontal" in={focus} collapsedSize={270}>

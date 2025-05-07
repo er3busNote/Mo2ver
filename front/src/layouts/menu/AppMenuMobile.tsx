@@ -2,6 +2,7 @@ import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { MenuState, SubMenuInfo } from '@store/types';
+import AppMenu from './AppMenu';
 import {
 	Box,
 	Grid,
@@ -23,10 +24,8 @@ import {
 } from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@api/types';
-import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { useIsDesktop } from '@context/MobileContext';
-import MenuDivider from '@components/divider/MenuDivider';
 import { has } from 'lodash';
 
 interface AppMenuProps {
@@ -36,7 +35,7 @@ interface AppMenuProps {
 	menus?: Array<SubMenuInfo>;
 }
 
-interface AppMenuDetailProps {
+interface AppMenuItemProps {
 	largeCategory: CategoryData;
 	middleCategoyData?: CategoryDataInfo;
 	menuClick: (title: string, code: string, type: string) => void;
@@ -46,7 +45,7 @@ interface CategoryDataInfo {
 	[key: string]: Array<CategoryData>;
 }
 
-const AppMenu: FC<AppMenuDetailProps> = ({
+const AppMenuItem: FC<AppMenuItemProps> = ({
 	largeCategory,
 	middleCategoyData,
 	menuClick,
@@ -237,7 +236,7 @@ const AppDetail: FC<AppMenuProps> = ({
 					>
 						<MenuList sx={{ pl: { xs: 0, sm: 0 }, py: 0.2 }}>
 							{largeCategoryData.map((data: CategoryData, index: number) => (
-								<AppMenu
+								<AppMenuItem
 									key={index}
 									largeCategory={data}
 									middleCategoyData={middleCategoryData}
@@ -258,25 +257,6 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 	categoryData,
 	menus,
 }): JSX.Element => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-
-	const activeMenuClick = (
-		nextTitle: string,
-		nextDescription: string,
-		path: string
-	) => {
-		goToMenu({
-			title: nextTitle,
-			description: nextDescription,
-			prevTitle: title,
-			prevDescription: description,
-			path,
-			dispatch,
-			navigate,
-		});
-	};
-
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			<Box>
@@ -288,44 +268,9 @@ const AppMenuMobile: FC<AppMenuProps> = ({
 							categoryData={categoryData}
 						/>
 					</Grid>
-					{menus &&
-						menus.map((menu: SubMenuInfo, index: number) => (
-							<Grid item key={index}>
-								<Grid container spacing={1}>
-									<Grid item>
-										<Box
-											sx={{
-												px: { xs: '12px', sm: '20px' },
-												py: { xs: '6px', sm: '10px' },
-											}}
-										>
-											<IconButton
-												onClick={() =>
-													activeMenuClick(
-														menu.name,
-														menu.description,
-														menu.path
-													)
-												}
-												sx={{ p: 0 }}
-											>
-												<Typography
-													color="#000"
-													align="center"
-													sx={{
-														fontSize: { xs: '13px', sm: '14px' },
-														fontWeight: 'bold',
-													}}
-												>
-													{menu.name}
-												</Typography>
-											</IconButton>
-										</Box>
-									</Grid>
-									<MenuDivider />
-								</Grid>
-							</Grid>
-						))}
+					{menus && (
+						<AppMenu title={title} description={description} menus={menus} />
+					)}
 				</Grid>
 			</Box>
 		</Paper>

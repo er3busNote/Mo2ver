@@ -5,7 +5,7 @@ import useImageUrl from '@hooks/useImageUrl';
 import { Box, Card, CardMedia, CardActionArea } from '@mui/material';
 import DialogImage from './dialog/DialogImage';
 import { SxProps, Theme } from '@mui/material/styles';
-import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/font';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Pagination } from 'swiper/modules';
 import 'swiper/css';

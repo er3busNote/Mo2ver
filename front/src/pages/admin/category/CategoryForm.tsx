@@ -18,7 +18,7 @@ import {
 	fontSize_sm,
 	fontSize_md,
 	fontSize_lg,
-} from '@utils/font';
+} from '@utils/style';
 
 const tableBorder = '1px solid #d2d2d2';
 

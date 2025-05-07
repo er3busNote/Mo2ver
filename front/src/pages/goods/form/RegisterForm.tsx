@@ -31,7 +31,7 @@ import {
 	HorizontalRule as HorizontalRuleIcon,
 	InsertPhotoOutlined as InsertPhotoOutlinedIcon,
 } from '@mui/icons-material';
-import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/font';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import dayjs from 'dayjs';
 
 interface RegisterProp {

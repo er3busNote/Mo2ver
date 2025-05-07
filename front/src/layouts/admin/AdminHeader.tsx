@@ -14,7 +14,7 @@ import {
 	Menu as MenuIcon,
 } from '@mui/icons-material';
 import MainIcon from '@components/MainIcon';
-import { fontSize_xs, fontSize_sm } from '@utils/font';
+import { fontSize_xs, fontSize_sm } from '@utils/style';
 
 interface AdminHeaderProps {
 	title: string;

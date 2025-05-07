@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import goToMenu from '@navigate/menu/goToMenu';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import { fontSize_sm } from '@utils/font';
+import { fontSize_sm } from '@utils/style';
 
 interface AppHeaderProps {
 	width: string;

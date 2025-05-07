@@ -23,12 +23,12 @@ import useGoodsRankList from '@hooks/goods/useGoodsRankList';
 import useCategoryGroupList from '@hooks/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
 //import AppHeaderBar from './AppHeaderBar';
-import AppHeaderMenu from './AppHeaderMenu';
-import AppSearchPC from './AppSearchPC';
-import AppSearchMobile from './AppSearchMobile';
-import AppMenuPC from './AppMenuPC';
-import AppMenuHomePC from './AppMenuHomePC';
-import AppMenuMobile from './AppMenuMobile';
+import AppHeaderMenu from './menu/AppHeaderMenu';
+import AppSearchPC from './search/AppSearchPC';
+import AppSearchMobile from './search/AppSearchMobile';
+import AppMenuPC from './menu/AppMenuPC';
+import AppMenuHomePC from './menu/AppMenuHomePC';
+import AppMenuMobile from './menu/AppMenuMobile';
 import AppMain from './AppMain';
 import AppFooter from './AppFooter';
 import {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
 import AppFooterMenu from './AppFooterMenu';
-import AppSearchItemsMobile from './AppSearchItemsMobile';
+import AppSearchItemsMobile from './search/AppSearchItemsMobile';
 import {
 	Box,
 	Paper,
