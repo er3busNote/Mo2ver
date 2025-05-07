@@ -32,7 +32,7 @@ const Copyright: FC<CopyrightProps> = ({
 	return (
 		<Typography variant="body2" align="center" {...props}>
 			{'Copyright © '}
-			<Link color="inherit" onClick={() => dashboardClick()}>
+			<Link color="inherit" underline="hover" onClick={() => dashboardClick()}>
 				Er3busNote
 			</Link>{' '}
 			{new Date().getFullYear()}

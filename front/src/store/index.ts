@@ -66,7 +66,7 @@ const tokenSlice = createSlice({
 
 // 2.1. Title 관련 State
 const titleinitialState: TitleState = {
-	title: 'Home',
+	title: '대시보드',
 	description: '',
 	prevTitle: '',
 	prevDescription: '',

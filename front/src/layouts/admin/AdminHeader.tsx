@@ -1,15 +1,11 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
-import Api from '@api/index';
+import { useNavigate } from 'react-router-dom';
+import { ActionCreatorsMapObject } from 'redux';
 import {
 	Box,
 	Paper,
 	Grid,
 	Button,
-	SvgIcon,
 	IconButton,
 	Typography,
 } from '@mui/material';
@@ -17,11 +13,12 @@ import {
 	AccountCircle as AccountCircleIcon,
 	Menu as MenuIcon,
 } from '@mui/icons-material';
-import MainIcon from '@assets/logo.svg?react';
-
-const headerFontSize = { xs: '11px', sm: '12px' };
+import MainIcon from '@components/MainIcon';
+import { fontSize_xs, fontSize_sm } from '@utils/font';
 
 interface AdminHeaderProps {
+	title: string;
+	description: string;
 	member: ActionCreatorsMapObject;
 	isMobile: boolean;
 	open: boolean;
@@ -29,6 +26,8 @@ interface AdminHeaderProps {
 }
 
 const AdminHeader: FC<AdminHeaderProps> = ({
+	title,
+	description,
 	member,
 	isMobile,
 	open,
@@ -75,7 +74,7 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 							<Typography
 								color="#fff"
 								align="center"
-								sx={{ px: 1, fontSize: headerFontSize }}
+								sx={{ px: 1, fontSize: { xs: fontSize_xs, sm: fontSize_sm } }}
 							>
 								안녕하세요 Admin 님은 슈퍼유저입니다.
 							</Typography>
@@ -113,22 +112,11 @@ const AdminHeader: FC<AdminHeaderProps> = ({
 						justifyContent: 'flex-start',
 					}}
 				>
-					<IconButton component={Link} to="/admin" sx={{ p: 0 }}>
-						<SvgIcon
-							component={MainIcon}
-							color="primary"
-							sx={{ width: '5em', height: '3em' }}
-							inheritViewBox
-						/>
-					</IconButton>
+					<MainIcon type="admin" title={title} description={description} />
 				</Box>
 			</Paper>
 		</Paper>
 	);
 };
 
-const mapDispatchToProps = (dispatch: DispatchAction) => ({
-	member: bindActionCreators(Api.member, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(AdminHeader);
+export default AdminHeader;

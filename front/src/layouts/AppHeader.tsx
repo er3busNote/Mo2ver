@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { connect } from 'react-redux';
-import Api from '@api/index';
 import {
 	Box,
 	Paper,
@@ -15,8 +12,7 @@ import {
 } from '@mui/material';
 import goToMenu from '@navigate/menu/goToMenu';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-
-const headerFontSize = '12px';
+import { fontSize_sm } from '@utils/font';
 
 interface AppHeaderProps {
 	width: string;
@@ -71,22 +67,32 @@ const AppHeader: FC<AppHeaderProps> = ({
 						spacing={1}
 					>
 						{!isAuthenticated() && (
-							<IconButton component={Link} to="/auth/login" sx={{ p: 0 }}>
+							<IconButton
+								disableRipple
+								component={Link}
+								to="/auth/login"
+								sx={{ p: 0 }}
+							>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									로그인
 								</Typography>
 							</IconButton>
 						)}
 						{!isAuthenticated() && (
-							<IconButton component={Link} to="/auth/signup" sx={{ p: 0 }}>
+							<IconButton
+								disableRipple
+								component={Link}
+								to="/auth/signup"
+								sx={{ p: 0 }}
+							>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									회원가입
 								</Typography>
@@ -94,6 +100,7 @@ const AppHeader: FC<AppHeaderProps> = ({
 						)}
 						{isAuthenticated() && (
 							<IconButton
+								disableRipple
 								onClick={() =>
 									activeMenuClick('유저', 'My 프로파일', '/profile')
 								}
@@ -102,7 +109,7 @@ const AppHeader: FC<AppHeaderProps> = ({
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									My 프로파일
 								</Typography>
@@ -110,24 +117,25 @@ const AppHeader: FC<AppHeaderProps> = ({
 						)}
 						{isAuthenticated() && (
 							<IconButton
+								disableRipple
 								onClick={() => activeMenuClick('카트', '장바구니', '/cart')}
 								sx={{ p: 0 }}
 							>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									장바구니
 								</Typography>
 							</IconButton>
 						)}
 						{isAuthenticated() && (
-							<IconButton onClick={logoutClick} sx={{ p: 0 }}>
+							<IconButton disableRipple onClick={logoutClick} sx={{ p: 0 }}>
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									로그아웃
 								</Typography>
@@ -135,6 +143,7 @@ const AppHeader: FC<AppHeaderProps> = ({
 						)}
 						{isAuthenticated() && isAdmin() && (
 							<IconButton
+								disableRipple
 								onClick={() =>
 									activeMenuClick('관리자', '어드민페이지', '/admin')
 								}
@@ -143,7 +152,7 @@ const AppHeader: FC<AppHeaderProps> = ({
 								<Typography
 									color="#000"
 									align="center"
-									sx={{ fontSize: headerFontSize }}
+									sx={{ fontSize: fontSize_sm }}
 								>
 									관리자 페이지
 								</Typography>
@@ -156,8 +165,4 @@ const AppHeader: FC<AppHeaderProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	member: bindActionCreators(Api.member, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(AppHeader);
+export default AppHeader;

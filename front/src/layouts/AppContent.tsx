@@ -51,6 +51,7 @@ const drawerMenuWidth = 200;
 interface AppProps {
 	title: string;
 	description: string;
+	member: ActionCreatorsMapObject;
 	search: ActionCreatorsMapObject;
 	recommend: ActionCreatorsMapObject;
 	goodsRankData: Array<GoodsData>;
@@ -64,6 +65,7 @@ interface LayoutDefaultProps {
 	type: 'success' | 'info' | 'warning' | 'error' | undefined;
 	message: string;
 	children?: ReactElement;
+	member: ActionCreatorsMapObject;
 	menu: ActionCreatorsMapObject;
 	goods: ActionCreatorsMapObject;
 	category: ActionCreatorsMapObject;
@@ -74,6 +76,7 @@ interface LayoutDefaultProps {
 const AppPC: FC<AppProps> = ({
 	title,
 	description,
+	member,
 	search,
 	recommend,
 	goodsRankData,
@@ -108,7 +111,12 @@ const AppPC: FC<AppProps> = ({
 				}}
 			>
 				{isDesktop && (
-					<AppHeader width={'940px'} title={title} description={description} />
+					<AppHeader
+						width={'940px'}
+						title={title}
+						description={description}
+						member={member}
+					/>
 				)}
 				<AppSearchPC
 					title={title}
@@ -145,6 +153,7 @@ const AppPC: FC<AppProps> = ({
 const AppMobile: FC<AppProps> = ({
 	title,
 	description,
+	member,
 	search,
 	recommend,
 	goodsRankData,
@@ -154,7 +163,12 @@ const AppMobile: FC<AppProps> = ({
 	return (
 		<>
 			{isDesktop && (
-				<AppHeader width={'100%'} title={title} description={description} />
+				<AppHeader
+					width={'100%'}
+					title={title}
+					description={description}
+					member={member}
+				/>
 			)}
 			{/* {isMobile && <AppHeaderBar description={description} />} */}
 			<AppSearchMobile
@@ -180,6 +194,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	type,
 	message,
 	children,
+	member,
 	menu,
 	goods,
 	category,
@@ -240,6 +255,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppPC
 						title={title}
 						description={description}
+						member={member}
 						search={search}
 						recommend={recommend}
 						goodsRankData={goodsRankData}
@@ -250,6 +266,7 @@ const AppContent: FC<LayoutDefaultProps> = ({
 					<AppMobile
 						title={title}
 						description={description}
+						member={member}
 						search={search}
 						recommend={recommend}
 						goodsRankData={goodsRankData}
@@ -295,6 +312,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+	member: bindActionCreators(Api.member, dispatch),
 	menu: bindActionCreators(Api.menu, dispatch),
 	goods: bindActionCreators(Api.goods, dispatch),
 	category: bindActionCreators(Api.category, dispatch),

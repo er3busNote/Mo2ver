@@ -195,6 +195,7 @@ const AppDetail: FC<AppMenuProps> = ({
 		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
 			<ClickAwayListener onClickAway={closeAnchorEl}>
 				<IconButton
+					disableRipple
 					onClick={showClick}
 					sx={{ p: 0, mt: -1, color: 'secondary.main' }}
 				>
@@ -377,6 +378,7 @@ const AppMenuPC: FC<AppMenuProps> = ({
 									<Grid item>
 										<Box sx={{ px: '20px', py: '10px' }}>
 											<IconButton
+												disableRipple
 												onClick={() =>
 													activeMenuClick(
 														menu.name,

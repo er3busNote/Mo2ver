@@ -193,7 +193,11 @@ const AppDetail: FC<AppMenuProps> = ({
 	};
 	return (
 		<Box sx={{ px: '40px', pt: '12px', pb: '8px', bgcolor: '#EBEBEB' }}>
-			<IconButton sx={{ p: 0, mt: -1, color: 'secondary.main' }} disabled>
+			<IconButton
+				disableRipple
+				sx={{ p: 0, mt: -1, color: 'secondary.main' }}
+				disabled
+			>
 				<MenuIcon sx={{ color: '#86868A' }} />
 				<Typography
 					color="#000"
@@ -341,6 +345,7 @@ const AppMenuHomePC: FC<AppMenuProps> = ({
 									<Grid item>
 										<Box sx={{ px: '20px', py: '10px' }}>
 											<IconButton
+												disableRipple
 												onClick={() =>
 													activeMenuClick(
 														menu.name,

@@ -12,7 +12,6 @@ import {
 	Grid,
 	Paper,
 	Divider,
-	SvgIcon,
 	Typography,
 	Popper,
 	Collapse,
@@ -26,10 +25,9 @@ import {
 import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
-import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import { useIsMobile } from '@context/MobileContext';
-import MainIcon from '@assets/logo.svg?react';
+import MainIcon from '@components/MainIcon';
 import { isEmpty } from 'lodash';
 
 interface AppSearchProps {
@@ -235,22 +233,6 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 		setSearchOpen(!openSearch);
 	};
 
-	const activeClick = (
-		nextTitle: string,
-		nextDescription: string,
-		path: string
-	) => {
-		goToMenu({
-			title: nextTitle,
-			description: nextDescription,
-			prevTitle: title,
-			prevDescription: description,
-			path,
-			dispatch,
-			navigate,
-		});
-	};
-
 	const searchFontSize = '12px';
 
 	const icon: SxProps<Theme> = {
@@ -273,17 +255,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 				<Box>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '60%', height: '100px' }}>
-							<IconButton
-								onClick={() => activeClick('홈', '메인', '/')}
-								sx={{ p: 0 }}
-							>
-								<SvgIcon
-									component={MainIcon}
-									color="primary"
-									sx={{ width: '8em', height: '5em' }}
-									inheritViewBox
-								/>
-							</IconButton>
+							<MainIcon title={title} description={description} />
 						</Grid>
 						<Grid
 							item
@@ -349,17 +321,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 				<Box>
 					<Grid container>
 						<Grid item sx={{ mt: -2.5, width: '100%', height: '100px' }}>
-							<IconButton
-								onClick={() => activeClick('홈', '메인', '/')}
-								sx={{ p: 0 }}
-							>
-								<SvgIcon
-									component={MainIcon}
-									color="primary"
-									sx={{ width: '8em', height: '5em' }}
-									inheritViewBox
-								/>
-							</IconButton>
+							<MainIcon title={title} description={description} />
 						</Grid>
 						<Grid
 							item

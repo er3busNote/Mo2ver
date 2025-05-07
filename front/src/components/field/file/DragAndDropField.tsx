@@ -66,7 +66,7 @@ const RenderDragAndDropField: FC<RenderFileFieldProps> = ({
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {
 			onChange([...value, ...dataFiles]);
-		};
+		}
 	}, [dataFiles]);
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null);

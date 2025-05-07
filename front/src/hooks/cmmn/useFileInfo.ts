@@ -31,7 +31,7 @@ const useFileInfo = ({ file, csrfData }: FileProps): FileResultProps => {
 			});
 			const data = await file.upload(formData, csrfData);
 			setData(data);
-		} else setData([]);
+		}
 	}, [files, csrfData.csrfToken]);
 
 	useEffect(() => {

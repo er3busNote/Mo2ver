@@ -28,6 +28,9 @@ const mdTheme = createTheme(adminTheme);
 const drawerMenuWidth = 200;
 
 interface AdminProps {
+	title: string;
+	description: string;
+	member: ActionCreatorsMapObject;
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	children?: ReactElement;
@@ -36,14 +39,29 @@ interface AdminProps {
 interface LayoutDefaultProps {
 	title: string;
 	description: string;
+	member: ActionCreatorsMapObject;
 	children?: ReactElement;
 	menu: ActionCreatorsMapObject;
 }
 
-const AdminPC: FC<AdminProps> = ({ open, setOpen, children }): JSX.Element => {
+const AdminPC: FC<AdminProps> = ({
+	title,
+	description,
+	member,
+	open,
+	setOpen,
+	children,
+}): JSX.Element => {
 	return (
 		<>
-			<AdminHeader isMobile={false} open={open} setOpen={setOpen} />
+			<AdminHeader
+				title={title}
+				description={description}
+				member={member}
+				isMobile={false}
+				open={open}
+				setOpen={setOpen}
+			/>
 			<Box sx={{ display: 'flex' }}>
 				<AdminMenuPC open={open} setOpen={setOpen} width={drawerMenuWidth} />
 				<AdminMain>{children || <Outlet />}</AdminMain>
@@ -53,13 +71,23 @@ const AdminPC: FC<AdminProps> = ({ open, setOpen, children }): JSX.Element => {
 };
 
 const AdminMobile: FC<AdminProps> = ({
+	title,
+	description,
+	member,
 	open,
 	setOpen,
 	children,
 }): JSX.Element => {
 	return (
 		<>
-			<AdminHeader isMobile={true} open={open} setOpen={setOpen} />
+			<AdminHeader
+				title={title}
+				description={description}
+				member={member}
+				isMobile={true}
+				open={open}
+				setOpen={setOpen}
+			/>
 			<Box sx={{ display: 'flex' }}>
 				<AdminMenuMobile
 					open={open}
@@ -75,6 +103,7 @@ const AdminMobile: FC<AdminProps> = ({
 const AdminContent: FC<LayoutDefaultProps> = ({
 	title,
 	description,
+	member,
 	children,
 	menu,
 }): JSX.Element => {
@@ -115,12 +144,24 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 			<Box sx={{ flexDirection: 'column' }}>
 				<CssBaseline />
 				{isDesktop && (
-					<AdminPC open={open} setOpen={setOpen}>
+					<AdminPC
+						title={title}
+						description={description}
+						member={member}
+						open={open}
+						setOpen={setOpen}
+					>
 						{children}
 					</AdminPC>
 				)}
 				{isMobile && (
-					<AdminMobile open={open} setOpen={setOpen}>
+					<AdminMobile
+						title={title}
+						description={description}
+						member={member}
+						open={open}
+						setOpen={setOpen}
+					>
 						{children}
 					</AdminMobile>
 				)}
@@ -136,6 +177,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
+	member: bindActionCreators(Api.member, dispatch),
 	menu: bindActionCreators(Api.menu, dispatch),
 });
 
