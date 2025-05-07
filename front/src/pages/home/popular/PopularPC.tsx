@@ -24,24 +24,10 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { get, slice, map } from 'lodash';
+import { IMAGE_INFO as SLIDE_INFO, KEYWORD_INFO } from '@utils/init';
 
 const groupSize = 6;
 const subGroupSize = 3;
-
-const SLIDE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
-
-const KEYWORD_INFO: Array<string> = [
-	'반팔 티셔츠',
-	'반바지',
-	'리넨 팬츠',
-	'슬리퍼',
-	'카드지갑',
-];
 
 interface PopularProps {
 	title: string;

@@ -26,13 +26,11 @@ import {
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 import { isEmpty } from 'lodash';
+import { REVIEW_INFO as IMAGE_INFO } from '@utils/init';
 
 const HiddenInput = styled('input')({
 	display: 'none',
 });
-
-const IMAGE_INFO =
-	'https://ix-marketing.imgix.net/autotagging.png?auto=format,compress&w=1246';
 
 interface ReviewCardProps {
 	member: ActionCreatorsMapObject;

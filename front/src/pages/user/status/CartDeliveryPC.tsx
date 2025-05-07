@@ -34,13 +34,7 @@ import {
 	CreditCardOutlined as CreditCardOutlinedIcon,
 } from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
-
-const IMAGE_INFO = [
-	'https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1964970/pexels-photo-1964970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1760900/pexels-photo-1760900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
+import { IMAGE_INFO } from '@utils/init';
 
 interface TabPanelProps {
 	children?: ReactNode;

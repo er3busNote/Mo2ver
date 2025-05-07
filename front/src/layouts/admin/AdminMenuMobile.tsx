@@ -33,29 +33,10 @@ import {
 	ArrowDropDown as ArrowDropDownIcon,
 	ArrowRight as ArrowRightIcon,
 	ChevronLeft as ChevronLeftIcon,
-	MenuOpen as MenuOpenIcon,
-	Category as CategoryIcon,
-	ViewCarousel as ViewCarouselIcon,
-	ViewInAr as ViewInArIcon,
-	Info as InfoIcon,
-	Forum as ForumIcon,
-	ReceiptLong as ReceiptLongIcon,
 } from '@mui/icons-material';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToMenuNone from '@navigate/menu/goToMenuNone';
-
-const AdminIcon = [
-	MenuOpenIcon,
-	ViewCarouselIcon,
-	CategoryIcon,
-	ViewInArIcon,
-	InfoIcon,
-	ForumIcon,
-	ReceiptLongIcon,
-];
-
-const AdminColor = ['#1A73E8', '#3C8039', '#A250F5'];
-const AdminBgColor = ['#E8F0FE', '#E6f4EA', '#F3E8FD'];
+import { AdminIcon, AdminColor, AdminBgColor } from '@utils/init';
 
 declare module 'react' {
 	interface CSSProperties {

@@ -21,13 +21,7 @@ import {
 } from '@mui/icons-material';
 import SwipeableViews, { SwipeableViewsProps } from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-
-const SLIDE_INFO = [
-	'https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/1329711/pexels-photo-1329711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-	'https://images.pexels.com/photos/733745/pexels-photo-733745.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-];
+import { SLIDE_INFO } from '@utils/init';
 
 const AutoPlaySwipeableViews = autoPlay(
 	SwipeableViews
