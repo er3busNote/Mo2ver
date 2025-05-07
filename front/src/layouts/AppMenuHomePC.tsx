@@ -12,7 +12,6 @@ import {
 	Box,
 	Grid,
 	Paper,
-	Divider,
 	MenuList,
 	MenuItem,
 	IconButton,
@@ -29,6 +28,7 @@ import {
 import { CategoryData, CategoryDataGroup } from '@api/types';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
+import MenuDivider from '@components/divider/MenuDivider';
 import { divideArray } from '@utils/divide';
 import { has } from 'lodash';
 
@@ -49,24 +49,6 @@ interface AppMenuItemProps {
 	setHover: Dispatch<SetStateAction<string>>;
 	menuClick: (title: string, code: string, type: string) => void;
 }
-
-const MenuDivider: FC = (): JSX.Element => {
-	return (
-		<Box sx={{ lineHeight: '40px' }}>
-			<Divider
-				orientation="vertical"
-				variant="middle"
-				sx={{
-					mt: '22px',
-					mb: 0,
-					height: '0.8rem',
-					display: 'inline-flex',
-					borderColor: '#CCCCCC',
-				}}
-			/>
-		</Box>
-	);
-};
 
 const AppMenuItem: FC<AppMenuItemProps> = ({
 	categoryCode,

@@ -44,6 +44,7 @@ import {
 import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
+import MenuDivider from '@components/divider/MenuDivider';
 import { divideArray } from '@utils/divide';
 import { has } from 'lodash';
 
@@ -72,24 +73,6 @@ interface AppHeaderMenuItemProps {
 	setHover: Dispatch<SetStateAction<string>>;
 	menuClick: (title: string, code: string, type: string) => void;
 }
-
-const MenuDivider: FC = (): JSX.Element => {
-	return (
-		<Box sx={{ lineHeight: '40px' }}>
-			<Divider
-				orientation="vertical"
-				variant="middle"
-				sx={{
-					mt: '22px',
-					mb: 0,
-					height: '0.8rem',
-					display: 'inline-flex',
-					borderColor: '#CCCCCC',
-				}}
-			/>
-		</Box>
-	);
-};
 
 const AppHeaderMenuItem: FC<AppHeaderMenuItemProps> = ({
 	categoryCode,

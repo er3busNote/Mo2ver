@@ -8,7 +8,6 @@ import {
 	List,
 	Paper,
 	Popper,
-	Divider,
 	Collapse,
 	MenuList,
 	MenuItem,
@@ -27,6 +26,7 @@ import { CategoryData, CategoryDataGroup } from '@api/types';
 import goToMenu from '@navigate/menu/goToMenu';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { useIsDesktop } from '@context/MobileContext';
+import MenuDivider from '@components/divider/MenuDivider';
 import { has } from 'lodash';
 
 interface AppMenuProps {
@@ -45,24 +45,6 @@ interface AppMenuDetailProps {
 interface CategoryDataInfo {
 	[key: string]: Array<CategoryData>;
 }
-
-const MenuDivider: FC = (): JSX.Element => {
-	return (
-		<Box sx={{ lineHeight: { xs: '34px', sm: '40px' } }}>
-			<Divider
-				orientation="vertical"
-				variant="middle"
-				sx={{
-					mt: { xs: '18px', sm: '22px' },
-					mb: 0,
-					height: '0.8rem',
-					display: 'inline-flex',
-					borderColor: '#CCCCCC',
-				}}
-			/>
-		</Box>
-	);
-};
 
 const AppMenu: FC<AppMenuDetailProps> = ({
 	largeCategory,

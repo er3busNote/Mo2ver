@@ -10,7 +10,6 @@ import {
 	Box,
 	Grid,
 	Paper,
-	Divider,
 	Typography,
 	Popper,
 	Collapse,
@@ -25,6 +24,7 @@ import { ClickAwayListener } from '@mui/base';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
+import SearchDivider from '@components/divider/SearchDivider';
 import MainIcon from '@components/MainIcon';
 import { isEmpty } from 'lodash';
 
@@ -39,23 +39,6 @@ interface AppSearchProps {
 interface AppSearchItemsProps {
 	goodsRankData: Array<GoodsData>;
 }
-
-const SearchDivider: FC = (): JSX.Element => {
-	return (
-		<Box sx={{ lineHeight: '20px' }}>
-			<Divider
-				orientation="vertical"
-				variant="middle"
-				sx={{
-					ml: '5px',
-					mb: '1px',
-					height: '0.6rem',
-					borderColor: '#E1E3E3',
-				}}
-			/>
-		</Box>
-	);
-};
 
 const AppSearchItems: FC<AppSearchItemsProps> = ({
 	goodsRankData,
