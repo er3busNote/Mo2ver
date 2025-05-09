@@ -105,8 +105,8 @@ public class NoticeTest extends CsrfConfigTest {
                 .title("테스트")
                 .contents("테스트")
                 .noticeFiles(Arrays.asList(
-                        FileAttachInfo.of(127),
-                        FileAttachInfo.of(128)
+                        FileAttachInfo.from(127, "image1.png", "image/png", 2048, ".png"),
+                        FileAttachInfo.from(128, "image2.jpg", "image/jpeg", 1024, ".jpg")
                 ))
                 .build();
     }

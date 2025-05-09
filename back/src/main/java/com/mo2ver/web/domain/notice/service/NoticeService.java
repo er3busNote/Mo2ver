@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.notice.service;
 
+import com.mo2ver.web.common.file.entity.File;
+import com.mo2ver.web.common.file.repository.FileRepository;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.notice.dto.NoticeFileInfo;
 import com.mo2ver.web.domain.notice.dto.request.NoticeRequest;
@@ -12,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,7 @@ import javax.transaction.Transactional;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final FileRepository fileRepository;
 
     @Transactional
     public NoticeResponse findNotice(Integer id) {
@@ -46,7 +48,7 @@ public class NoticeService {
     @Transactional
     public NoticeFileInfo findNoticeDetail(NoticeRequest noticeRequest) {
         Notice notice = this.findNoticeManageById(noticeRequest.getNoticeManageNo());
-        return NoticeFileInfo.of(notice);
+        return NoticeFileInfo.of(notice, this::findFileById);
     }
 
     @Transactional
@@ -64,5 +66,10 @@ public class NoticeService {
     private Notice findNoticeManageById(long id) {
         return this.noticeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 공지사항정보 입니다."));
+    }
+
+    private File findFileById(long id) {
+        return this.fileRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 파일정보 입니다."));
     }
 }

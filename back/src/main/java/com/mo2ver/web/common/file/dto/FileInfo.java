@@ -1,6 +1,7 @@
 package com.mo2ver.web.common.file.dto;
 
 import com.mo2ver.web.common.file.entity.File;
+import com.mo2ver.web.global.common.utils.FileUtil;
 import lombok.*;
 
 @Data
@@ -16,6 +17,17 @@ public class FileInfo {
     private Integer fileSize;
     private String fileExtension;
     private String fileNameWithoutExtension;
+
+    public static FileInfo of(File file) {
+        return FileInfo.builder()
+                .fileCode(file.getFileCode().intValue())
+                .fileName(file.getFileName())
+                .filePath(file.getFilePath())
+                .fileType(file.getFileType())
+                .fileSize(file.getFileSize())
+                .fileExtension(FileUtil.getFileExtension(file.getFileName()))
+                .build();
+    }
 
     public static FileInfo of(File file, String fileExtension, String fileNameWithoutExtension) {
         return FileInfo.builder()

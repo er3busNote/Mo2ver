@@ -23,12 +23,6 @@ public class FileAttachInfo {
         return JasyptUtil.getEncryptor(fileAttachCode);
     }
 
-    public static FileAttachInfo of(Integer fileAttachCode) {
-        return FileAttachInfo.builder()
-                .fileAttachCode(JasyptUtil.getEncryptor(fileAttachCode))
-                .build();
-    }
-
     public static FileAttachInfo of(FileInfo fileInfo) {
         return FileAttachInfo.builder()
                 .fileAttachCode(JasyptUtil.getEncryptor(fileInfo.getFileCode()))

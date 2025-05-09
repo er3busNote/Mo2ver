@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.notice.entity;
 
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.notice.dto.FileInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
