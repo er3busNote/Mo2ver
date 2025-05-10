@@ -5,7 +5,7 @@ import com.mo2ver.web.common.file.validation.ValidFileList;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
-import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.type.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;

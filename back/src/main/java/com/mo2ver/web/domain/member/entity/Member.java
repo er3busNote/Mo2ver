@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.member.entity;
 
+import com.mo2ver.web.domain.member.type.MemberRole;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;

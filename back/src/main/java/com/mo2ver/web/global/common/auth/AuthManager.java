@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.common.auth;
 
-import com.mo2ver.web.domain.member.entity.MemberRole;
+import com.mo2ver.web.domain.member.type.MemberRole;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

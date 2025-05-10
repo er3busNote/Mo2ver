@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.search.dto;
+package com.mo2ver.web.domain.search.type;
 
 public enum Operation {
     GT, // GREATER_THAN

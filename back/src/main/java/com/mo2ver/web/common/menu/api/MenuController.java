@@ -2,6 +2,7 @@ package com.mo2ver.web.common.menu.api;
 
 import com.mo2ver.web.common.menu.dto.response.GroupMenuResponse;
 import com.mo2ver.web.common.menu.service.MenuService;
+import com.mo2ver.web.common.menu.type.MenuType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class MenuController {
 
     @GetMapping("/list/{menuType}")
     public ResponseEntity<List<GroupMenuResponse>> listCodeDetail(
-            @PathVariable Integer menuType
+            @PathVariable MenuType menuType
     ) {
         return ResponseEntity.ok().body(menuService.fileMenulistDetail(menuType));
     }

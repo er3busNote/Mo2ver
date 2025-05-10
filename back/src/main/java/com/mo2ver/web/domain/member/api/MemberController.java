@@ -9,7 +9,7 @@ import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.common.utils.CookieUtil;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
-import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.type.ErrorCode;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;

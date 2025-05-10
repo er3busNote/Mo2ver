@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.member.service;
 
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.member.entity.MemberRole;
+import com.mo2ver.web.domain.member.type.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

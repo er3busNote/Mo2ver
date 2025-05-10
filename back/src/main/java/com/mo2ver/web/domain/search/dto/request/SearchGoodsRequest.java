@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Data
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class SearchGoodsRequest {
@@ -16,6 +17,8 @@ public class SearchGoodsRequest {
 
     @NotBlank(message = "키워드를 입력해주세요")
     private String keyword;
+
+    private String memberNo;
 
     @Min(value = MIN_PRICE, message = "할인 가격은 0원 이상 이어야 합니다.")
     private Integer minPrice;

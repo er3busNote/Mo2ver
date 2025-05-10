@@ -2,7 +2,7 @@ package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.member.entity.MemberRole;
+import com.mo2ver.web.domain.member.type.MemberRole;
 import com.mo2ver.web.global.common.properties.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

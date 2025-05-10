@@ -2,6 +2,7 @@ package com.mo2ver.web.common.menu.service;
 
 import com.mo2ver.web.common.menu.dto.response.GroupMenuResponse;
 import com.mo2ver.web.common.menu.repository.MenuRepository;
+import com.mo2ver.web.common.menu.type.MenuType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public List<GroupMenuResponse> fileMenulistDetail(Integer menuType) {
+    public List<GroupMenuResponse> fileMenulistDetail(MenuType menuType) {
         return this.menuRepository.findGroupMenuByMenulistDetail(menuType);
     }
 }

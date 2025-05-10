@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.goods.dto.request;
 
+import com.mo2ver.web.domain.goods.type.CategoryType;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -15,5 +16,5 @@ public class CategoryPageRequest {
     private String categoryCode;
 
     @NotNull(message = "카테고리 타입이 존재하지 않습니다")
-    private Character categoryType;
+    private CategoryType categoryType;
 }

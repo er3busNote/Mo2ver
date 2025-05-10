@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.error.dto.response;
 
-import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.type.ErrorCode;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import org.springframework.stereotype.Component;
 

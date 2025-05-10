@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.goods.repository;
 
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
+import com.mo2ver.web.domain.goods.type.CategoryType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -51,18 +52,18 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
-    public Page<Goods> findByCategoryCode(Pageable pageable, String categoryCode, Character categoryType) {
+    public Page<Goods> findByCategoryCode(Pageable pageable, String categoryCode, CategoryType categoryType) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(goodsImage.basicImageYesNo.eq('Y')); // → innerJoin으로 처음에 가져오고 나서, imageList에 대해서 한번 더 쿼리조회를 하는 방식이기 때문에, ImageDto에서 2차적으로 걸러야함
 
         switch (categoryType) {
-            case 'L':
+            case LARGE:
                 builder.and(goods.largeCategoryCode.eq(categoryCode));
                 break;
-            case 'M':
+            case MEDIUM:
                 builder.and(goods.mediumCategoryCode.eq(categoryCode));
                 break;
-            case 'S':
+            case SMALL:
                 builder.and(goods.smallCategoryCode.eq(categoryCode));
                 break;
             default:

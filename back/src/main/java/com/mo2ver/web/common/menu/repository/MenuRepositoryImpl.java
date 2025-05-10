@@ -4,6 +4,7 @@ import com.mo2ver.web.common.menu.dto.response.GroupMenuResponse;
 import com.mo2ver.web.common.menu.dto.response.MenuResponse;
 import com.mo2ver.web.common.menu.dto.response.QGroupMenuResponse;
 import com.mo2ver.web.common.menu.entity.QMenu;
+import com.mo2ver.web.common.menu.type.MenuType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +22,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         this.queryFactory = queryFactory;
     }
 
-    public List<GroupMenuResponse> findGroupMenuByMenulistDetail(Integer menuType) {
+    public List<GroupMenuResponse> findGroupMenuByMenulistDetail(MenuType menuType) {
         QMenu menu = new QMenu("menu");
         QMenu submenu = new QMenu("submenu");
 
@@ -30,10 +31,10 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         builder.and(menu.menuLevel.eq(1));
 
         switch (menuType) {
-            case 0:
+            case USER:
                 builder.and(menu.menuType.eq("USER"));
                 break;
-            case 1:
+            case ADMIN:
                 builder.and(menu.menuType.eq("ADMIN"));
                 break;
             default:

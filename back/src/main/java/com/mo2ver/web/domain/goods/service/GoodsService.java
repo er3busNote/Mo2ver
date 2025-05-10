@@ -9,6 +9,7 @@ import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
+import com.mo2ver.web.domain.goods.type.CategoryType;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
@@ -52,20 +53,20 @@ public class GoodsService {
     }
 
     // @EntityGraph → 복잡한 연관 관계일수록 속도가 느려짐... → QueryDSL 구성 요소인 QuerydslRepositorySupport으로 해결함
-    private Page<Goods> useJpaRepository(Pageable pageable, String categoryCode, Character categoryType) {
+    private Page<Goods> useJpaRepository(Pageable pageable, String categoryCode, CategoryType categoryType) {
         switch(categoryType) {
-            case 'L':
+            case LARGE:
                 return this.goodsRepository.findByLargeCategoryCode(pageable, categoryCode);
-            case 'M':
+            case MEDIUM:
                 return this.goodsRepository.findByMediumCategoryCode(pageable, categoryCode);
-            case 'S':
+            case SMALL:
                 return this.goodsRepository.findBySmallCategoryCode(pageable, categoryCode);
             default:
                 return this.goodsRepository.findAll(pageable);
         }
     }
 
-    private Page<Goods> useQueryDsl(Pageable pageable, String categoryCode, Character categoryType) {
+    private Page<Goods> useQueryDsl(Pageable pageable, String categoryCode, CategoryType categoryType) {
         return this.goodsRepository.findByCategoryCode(pageable, categoryCode, categoryType);
     }
 

@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.error.dto;
+package com.mo2ver.web.global.error.type;
 
 import lombok.Getter;
 

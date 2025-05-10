@@ -9,7 +9,6 @@ import com.mo2ver.web.domain.event.dto.QEventImageInfo;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.QEventProductResponse;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.member.entity.MemberRole;
 import com.mo2ver.web.global.common.auth.AuthManager;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
@@ -19,14 +18,12 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.vavr.collection.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;

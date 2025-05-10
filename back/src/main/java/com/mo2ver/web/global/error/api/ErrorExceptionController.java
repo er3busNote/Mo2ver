@@ -9,7 +9,7 @@ import com.mo2ver.web.global.error.dto.ErrorFieldTypeInfo;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
-import com.mo2ver.web.global.error.dto.ErrorCode;
+import com.mo2ver.web.global.error.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;

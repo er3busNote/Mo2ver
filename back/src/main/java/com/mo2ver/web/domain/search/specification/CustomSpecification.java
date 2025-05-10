@@ -1,7 +1,7 @@
 package com.mo2ver.web.domain.search.specification;
 
 import com.mo2ver.web.domain.search.dto.FilterInfo;
-import com.mo2ver.web.domain.search.dto.Operation;
+import com.mo2ver.web.domain.search.type.Operation;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -37,32 +37,33 @@ public class CustomSpecification {
 
     private static <TM, TJ> void setSearchOperation(List<Predicate> predicates, FilterInfo filterInfo, CriteriaBuilder builder, Root<TM> root, Join<TM, TJ> join) {
         String column = filterInfo.getColumn();
-        String value = filterInfo.getValue().toString();
+        Object value = filterInfo.getValue();
         Operation operation = filterInfo.getOperation();
         boolean isJoin = filterInfo.isJoin();
         switch (operation) {
             case GT:
-                predicates.add(builder.greaterThan(root.get(column), value));
+                predicates.add(builder.greaterThan(root.get(column), value.toString()));
                 break;
             case LT:
-                predicates.add(builder.lessThan(root.get(column), value));
+                predicates.add(builder.lessThan(root.get(column), value.toString()));
                 break;
             case GTE:
-                if(isJoin) predicates.add(builder.greaterThanOrEqualTo(join.get(column), value));
-                else predicates.add(builder.greaterThanOrEqualTo(root.get(column), value));
+                if(isJoin) predicates.add(builder.greaterThanOrEqualTo(join.get(column), value.toString()));
+                else predicates.add(builder.greaterThanOrEqualTo(root.get(column), value.toString()));
                 break;
             case LTE:
-                if(isJoin) predicates.add(builder.lessThanOrEqualTo(join.get(column), value));
-                else predicates.add(builder.lessThanOrEqualTo(root.get(column), value));
+                if(isJoin) predicates.add(builder.lessThanOrEqualTo(join.get(column), value.toString()));
+                else predicates.add(builder.lessThanOrEqualTo(root.get(column), value.toString()));
                 break;
             case NOT_EQUAL:
                 predicates.add(builder.notEqual(root.get(column), value));
                 break;
             case EQUAL:
-                predicates.add(builder.equal(root.get(column), value));
+                if(isJoin) predicates.add(builder.equal(join.get(column), value));
+                else predicates.add(builder.equal(root.get(column), value));
                 break;
             case LIKE:
-                predicates.add(builder.like(root.get(column), value));
+                predicates.add(builder.like(root.get(column), value.toString()));
                 break;
             case IN:
                 predicates.add(builder.in(root.get(column)).value(filterInfo.getValue()));

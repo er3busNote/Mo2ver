@@ -1,5 +1,7 @@
 package com.mo2ver.web.domain.search.dto;
 
+import com.mo2ver.web.domain.search.type.Operation;
+import com.mo2ver.web.domain.search.type.SearchColumn;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,22 +13,28 @@ public class FilterInfo {
     private Operation operation;    // 연산
     private boolean isJoin;         // Join 여부
 
-    public static <T> FilterInfo of(String column, T value, boolean isJoin) {
+    public static <T> FilterInfo of(SearchColumn column, T value, boolean isJoin) {
         FilterInfo.FilterInfoBuilder builder = FilterInfo.builder().isJoin(isJoin);
         switch (column) {
-            case "goodsName":
+            case GOODS_NAME:
                 return builder
-                        .column(column)
+                        .column(column.toCamelCase())
                         .value(String.format("%%%s%%", value))
                         .operation(Operation.LIKE)
                         .build();
-            case "minPrice":
+            case MEMBER_NO:
+                return builder
+                        .column(column.toCamelCase())
+                        .value(value)
+                        .operation(Operation.EQUAL)
+                        .build();
+            case MIN_PRICE:
                 return builder
                         .column("salePrice")
                         .value(value)
                         .operation(Operation.GTE)
                         .build();
-            case "maxPrice":
+            case MAX_PRICE:
                 return builder
                         .column("salePrice")
                         .value(value)

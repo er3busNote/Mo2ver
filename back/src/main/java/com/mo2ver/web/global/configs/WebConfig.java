@@ -1,5 +1,7 @@
 package com.mo2ver.web.global.configs;
 
+import com.mo2ver.web.common.menu.converter.MenuTypeConverter;
+import com.mo2ver.web.domain.goods.converter.CategoryTypeConverter;
 import com.mo2ver.web.global.common.properties.CorsProperties;
 import com.mo2ver.web.global.common.properties.ImagesProperties;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -50,6 +53,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:" + imagesProperties.getFilepath() + "/")
                 .setCachePeriod(60 * 60 * 24 * 365);
+    }
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new MenuTypeConverter());
+        registry.addConverter(new CategoryTypeConverter());
     }
 
     @Bean
