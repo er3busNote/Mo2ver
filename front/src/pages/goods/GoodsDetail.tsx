@@ -61,24 +61,24 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	const isMobile = useIsMobile();
 	const reviewRef = useRef<HTMLDivElement | null>(null);
 
-	const tryScroll = (attempt: number) => {
-		if (attempt > 5) return;
+	const reviewScroll = (maxTries = 5, currentTry = 1, threshold = 10) => {
+		if (currentTry > maxTries) return;
 
 		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 		if (isMobile) {
-			setTimeout(() => {
+			requestAnimationFrame(() => {
 				const top = reviewRef.current?.getBoundingClientRect().top;
-				if (top && Math.abs(top) > 10) {
-					tryScroll(attempt + 1); // 재시도
+				if (top && Math.abs(top) > threshold) {
+					reviewScroll(maxTries, currentTry + 1, threshold);
 				}
-			}, 300);
+			});
 		}
 	};
 
 	const reviewFocus = (event: MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
-		tryScroll(1);
+		reviewScroll();
 	};
 
 	const addCartClick = () => {
