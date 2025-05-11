@@ -62,7 +62,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	const reviewRef = useRef<HTMLDivElement | null>(null);
 
 	const tryScroll = (attempt: number) => {
-		if (attempt > 8) return;
+		if (attempt > 5) return;
 
 		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -72,7 +72,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 				if (top && Math.abs(top) > 10) {
 					tryScroll(attempt + 1); // 재시도
 				}
-			}, 100);
+			}, 300);
 		}
 	};
 
