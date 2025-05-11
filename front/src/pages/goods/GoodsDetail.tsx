@@ -72,7 +72,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 				if (top && Math.abs(top) > 10) {
 					tryScroll(attempt + 1); // 재시도
 				}
-			}, 50);
+			}, 200);
 		}
 	};
 
