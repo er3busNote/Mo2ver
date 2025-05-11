@@ -4,6 +4,7 @@ import com.mo2ver.web.domain.goods.dto.request.CategoryPageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
+import com.mo2ver.web.domain.goods.dto.response.GoodsDetailResponse;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.goods.service.GoodsService;
 import com.mo2ver.web.domain.goods.validation.GoodsImageValidator;
@@ -42,11 +43,11 @@ public class GoodsController {
     private final GoodsImageValidator goodsImageValidator;
 
     @GetMapping("/info/{id}")
-    public ResponseEntity<GoodsResponse> infoGoods(
+    public ResponseEntity<GoodsDetailResponse> infoGoods(
             @PathVariable String id,
             @CurrentUser Member currentUser
     ) {
-        GoodsResponse goodsResponse = goodsService.findGoods(id);
+        GoodsDetailResponse goodsResponse = goodsService.findGoods(id);
         return ResponseEntity.ok().body(goodsResponse);
     }
 

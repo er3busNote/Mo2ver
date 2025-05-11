@@ -8,6 +8,7 @@ import com.mo2ver.web.domain.goods.dto.request.CategoryPageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageAttachRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
+import com.mo2ver.web.domain.goods.dto.response.GoodsDetailResponse;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.goods.type.CategoryType;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -39,10 +40,10 @@ public class GoodsService {
     private final GoodsImageRepository goodsImageRepository;
 
     @Transactional
-    public GoodsResponse findGoods(String id) {
+    public GoodsDetailResponse findGoods(String id) {
         Goods goods = this.findGoodsById(id);
         goods.update(); // 조회수 증가
-        return GoodsResponse.of(goods);
+        return GoodsDetailResponse.of(goods);
     }
 
     @Transactional
