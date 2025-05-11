@@ -81,9 +81,10 @@ const RegisterForm: FC<RegisterProp> = ({
 	useEffect(() => {
 		const goodsImg = watch('goodsImg');
 		const goods = Array.from(goodsImg) as Array<FileData>;
-		if (goods.length === 0) setFile(undefined);
-		if (goods.length > 0) setFile(goods[0].fileAttachCode);
+		if (goods.length === 0) setAttachFile(undefined);
+		if (goods.length > 0) setAttachFile(goods[0].fileAttachCode);
 		if (goods.length > 1) setFiles(goods.slice(1));
+		else setFiles([]);
 	}, [watch('goodsImg')]);
 
 	useEffect(() => {
