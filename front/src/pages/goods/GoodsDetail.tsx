@@ -61,9 +61,24 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	const isMobile = useIsMobile();
 	const reviewRef = useRef<HTMLDivElement | null>(null);
 
+	const tryScroll = (attempt: number) => {
+		if (attempt > 5) return;
+
+		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+		if (isMobile) {
+			setTimeout(() => {
+				const top = reviewRef.current?.getBoundingClientRect().top;
+				if (top && Math.abs(top) > 10) {
+					tryScroll(attempt + 1); // 재시도
+				}
+			}, 300);
+		}
+	};
+
 	const reviewFocus = (event: MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
-		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		tryScroll(1);
 	};
 
 	const addCartClick = () => {
