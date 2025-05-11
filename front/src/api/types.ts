@@ -45,6 +45,11 @@ interface GoodsData {
 	keywordList: Array<string>;
 }
 
+interface GoodsDetailData extends GoodsData {
+	averageRating: number;
+	reviewCount: number;
+}
+
 interface GoodsRegisterData {
 	goodsName: string;
 	goodsBrand: string;
@@ -359,6 +364,7 @@ export type {
 	CSRFData,
 	ImageData,
 	GoodsData,
+	GoodsDetailData,
 	GoodsRegisterData,
 	GoodsPage,
 	GoodsSearchPage,

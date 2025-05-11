@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@store/types';
 import {
-	GoodsData,
+	GoodsDetailData,
 	CartData,
 	ReviewPageData,
 	ReviewRequestData,
@@ -21,7 +21,7 @@ interface GoodsDetailProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	goodsData: GoodsData;
+	goodsData: GoodsDetailData;
 	reviewData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewRequestData) => void;

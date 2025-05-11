@@ -1,7 +1,7 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, useRef, MouseEvent, Dispatch, SetStateAction } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import {
-	GoodsData,
+	GoodsDetailData,
 	CartData,
 	ReviewPageData,
 	ReviewRequestData,
@@ -39,7 +39,7 @@ interface GoodsDetailProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	goodsData: GoodsData;
+	goodsData: GoodsDetailData;
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
@@ -59,6 +59,12 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	onCartAdd,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
+	const reviewRef = useRef<HTMLDivElement | null>(null);
+
+	const reviewFocus = (event: MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
 
 	const addCartClick = () => {
 		const cartData: CartData = {
@@ -181,8 +187,10 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 		py: 0,
 		borderBlock: 'none',
 	};
-	const reviewSummary: SxProps<Theme> = {
+	const reviewBox: SxProps<Theme> = {
 		mt: -3,
+	};
+	const reviewSummary: SxProps<Theme> = {
 		px: 5,
 	};
 	const reviewCard: SxProps<Theme> = {
@@ -380,12 +388,18 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 													>
 														<Rating
 															name="read-only"
-															value={4.8}
+															value={goodsData.averageRating}
 															sx={infoRating}
 															readOnly
 														/>
-														<Link sx={infoShow} href="/" underline="none">
-															후기 2,415개 보기
+														<Link
+															sx={infoShow}
+															href="#"
+															underline="none"
+															onClick={reviewFocus}
+														>
+															후기 {goodsData.reviewCount.toLocaleString()} 개
+															보기 ▼
 														</Link>
 													</Breadcrumbs>
 												</TableCell>
@@ -544,17 +558,19 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 					</Box>
 				</Grid>
 			</Grid>
-			<Box sx={reviewSummary}>
-				<ReviewSummary></ReviewSummary>
-			</Box>
-			<Box sx={reviewCard}>
-				<ReviewList
-					goodsCode={goodsData.goodsCode}
-					reviewPageData={reviewPageData}
-					setPage={setPage}
-					onReviewAdd={onReviewAdd}
-					onReviewMod={onReviewMod}
-				></ReviewList>
+			<Box ref={reviewRef} sx={reviewBox}>
+				<Box sx={reviewSummary}>
+					<ReviewSummary></ReviewSummary>
+				</Box>
+				<Box sx={reviewCard}>
+					<ReviewList
+						goodsCode={goodsData.goodsCode}
+						reviewPageData={reviewPageData}
+						setPage={setPage}
+						onReviewAdd={onReviewAdd}
+						onReviewMod={onReviewMod}
+					></ReviewList>
+				</Box>
 			</Box>
 		</Box>
 	);

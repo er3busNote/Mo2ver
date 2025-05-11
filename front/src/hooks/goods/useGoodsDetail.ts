@@ -1,14 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsData } from '@api/types';
+import { GoodsDetailData } from '@api/types';
 
 interface GoodsProps {
 	code: string;
 	goods: ActionCreatorsMapObject;
 }
 
-const useGoodsDetail = ({ goods, code }: GoodsProps): GoodsData => {
-	const [data, setData] = useState<GoodsData>({
+const useGoodsDetail = ({ goods, code }: GoodsProps): GoodsDetailData => {
+	const [data, setData] = useState<GoodsDetailData>({
 		goodsCode: '',
 		goodsName: '',
 		goodsBrand: '',
@@ -18,6 +18,8 @@ const useGoodsDetail = ({ goods, code }: GoodsProps): GoodsData => {
 		salePrice: 0,
 		imageList: [],
 		keywordList: [],
+		averageRating: 0.0,
+		reviewCount: 0,
 	});
 
 	const fetchAndSetData = useCallback(async () => {
