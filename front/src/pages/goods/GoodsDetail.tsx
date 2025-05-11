@@ -61,22 +61,9 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	const isMobile = useIsMobile();
 	const reviewRef = useRef<HTMLDivElement | null>(null);
 
-	const reviewScroll = (maxTries = 5, currentTry = 1, threshold = 10) => {
-		if (currentTry > maxTries) return;
-
+	const reviewScroll = () => {
+		(document.activeElement as HTMLElement | null)?.blur();
 		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-		if (isMobile) {
-			const checkScroll = () => {
-				const currentTop = reviewRef.current?.getBoundingClientRect().top;
-				if (currentTop && Math.abs(currentTop) <= threshold) return;
-				requestAnimationFrame(() => {
-					reviewScroll(maxTries, currentTry + 1, threshold);
-				});
-			};
-
-			requestAnimationFrame(checkScroll);
-		}
 	};
 
 	const reviewFocus = (event: MouseEvent<HTMLAnchorElement>) => {
