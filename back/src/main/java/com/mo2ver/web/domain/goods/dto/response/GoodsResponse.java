@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoodsResponse {
 
-    private String goodsCode;
-    private String goodsName;
-    private String goodsBrand;
-    private String goodsGender;
-    private String goodsYear;
-    private BigDecimal supplyPrice;
-    private BigDecimal salePrice;
-    private List<ImageInfo> imageList;
-    private List<String> keywordList;
+    protected String goodsCode;
+    protected String goodsName;
+    protected String goodsBrand;
+    protected String goodsGender;
+    protected String goodsYear;
+    protected BigDecimal supplyPrice;
+    protected BigDecimal salePrice;
+    protected List<ImageInfo> imageList;
+    protected List<String> keywordList;
 
     public static GoodsResponse of(Goods goods) {
         return GoodsResponse.builder()

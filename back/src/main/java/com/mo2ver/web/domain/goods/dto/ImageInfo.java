@@ -28,6 +28,15 @@ public class ImageInfo {
     private Integer sortSequence;
     private Character useYesNo;
 
+    public ImageInfo(Integer goodsImageAttachFile, String goodsImageExtension, Character basicImageYesNo, Integer sortSequence, Character useYesNo) {
+        this.base64Image = "";
+        this.goodsImageAttachFile = JasyptUtil.getEncryptor(goodsImageAttachFile);
+        this.goodsImageExtension = goodsImageExtension;
+        this.basicImageYesNo = basicImageYesNo;
+        this.sortSequence = sortSequence;
+        this.useYesNo = useYesNo;
+    }
+
     public static ImageInfo of(GoodsImage goodsImage) {
         return ImageInfo.builder()
                 .goodsImageAttachFile(JasyptUtil.getEncryptor(goodsImage.getGoodsImageAttachFile()))

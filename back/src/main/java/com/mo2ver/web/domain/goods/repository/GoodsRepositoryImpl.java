@@ -1,9 +1,13 @@
 package com.mo2ver.web.domain.goods.repository;
 
+import com.mo2ver.web.domain.goods.dto.ImageInfo;
+import com.mo2ver.web.domain.goods.dto.response.GoodsDetailResponse;
+import com.mo2ver.web.domain.goods.dto.response.QGoodsDetailResponse;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.type.CategoryType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +22,8 @@ import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
 import static com.mo2ver.web.domain.goods.entity.QPrice.price;
 import static com.mo2ver.web.domain.goods.entity.QDiscount.discount;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
+import static com.mo2ver.web.domain.goods.entity.QReview.review;
+import static com.querydsl.core.group.GroupBy.list;
 
 public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements GoodsRepositoryCustom {
 
@@ -28,12 +34,38 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         this.queryFactory = queryFactory;
     }
 
-    public Optional<Goods> findByGoodsCode(String goodsCode) {
-        Goods result = queryFactory.selectFrom(goods)
-                .leftJoin(goods.price, price)
-                .leftJoin(goods.goodsDiscounts, discount).fetchJoin()
+    public Optional<GoodsDetailResponse> findGoodsById(String goodsCode) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(goodsImage.basicImageYesNo.eq('Y'));
+        builder.and(goods.goodsCode.eq(goodsCode));
+
+        GoodsDetailResponse result = queryFactory
+                .select(new QGoodsDetailResponse(
+                        goods.goodsCode,
+                        goods.goodsName,
+                        goods.goodsBrand,
+                        goods.goodsGender,
+                        goods.goodsYear,
+                        price.supplyPrice,
+                        price.salePrice,
+                        Projections.constructor(ImageInfo.class,
+                                goodsImage.goodsImageAttachFile,
+                                goodsImage.goodsImageExtension,
+                                goodsImage.basicImageYesNo,
+                                goodsImage.sortSequence,
+                                goodsImage.useYesNo
+                        ),
+                        goods.keyword,
+                        review.rating.avg(),
+                        review.count()
+                ))
+                .from(goods)
+                .innerJoin(goods.price, price)
+                .leftJoin(goods.goodsDiscounts, discount)
                 .leftJoin(goods.goodsImages, goodsImage)
-                .where(goods.goodsCode.eq(goodsCode))
+                .leftJoin(review).on(goods.goodsCode.eq(review.goodsCode.goodsCode))
+                .where(builder)
+                .groupBy(goods.goodsCode)
                 .fetchOne();
         return Optional.ofNullable(result);
     }

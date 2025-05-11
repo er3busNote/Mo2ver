@@ -43,7 +43,8 @@ public class GoodsService {
     public GoodsDetailResponse findGoods(String id) {
         Goods goods = this.findGoodsById(id);
         goods.update(); // 조회수 증가
-        return GoodsDetailResponse.of(goods);
+        //return GoodsDetailResponse.of(goods);
+        return this.findByGoodsCode(id);
     }
 
     @Transactional
@@ -117,6 +118,11 @@ public class GoodsService {
 
     private Goods findGoodsById(String goodsCode) {
         return this.goodsRepository.findById(goodsCode)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
+    }
+
+    private GoodsDetailResponse findByGoodsCode(String goodsCode) {
+        return this.goodsRepository.findGoodsById(goodsCode)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
