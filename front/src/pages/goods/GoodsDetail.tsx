@@ -67,12 +67,15 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 		reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 		if (isMobile) {
-			requestAnimationFrame(() => {
-				const top = reviewRef.current?.getBoundingClientRect().top;
-				if (top && Math.abs(top) > threshold) {
+			const checkScroll = () => {
+				const currentTop = reviewRef.current?.getBoundingClientRect().top;
+				if (currentTop && Math.abs(currentTop) <= threshold) return;
+				requestAnimationFrame(() => {
 					reviewScroll(maxTries, currentTry + 1, threshold);
-				}
-			});
+				});
+			};
+
+			requestAnimationFrame(checkScroll);
 		}
 	};
 
