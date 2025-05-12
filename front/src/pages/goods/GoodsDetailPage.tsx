@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, useCallback, Dispatch, SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
@@ -123,20 +123,27 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const goodsData = useGoodsDetail({ goods, code });
 	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
 
-	const onReviewAdd = async (reviewInfo: ReviewRequestData) => {
-		const csrfData = useCSRFToken({ member });
-		await review.create(reviewInfo, csrfData);
-		setReload(true);
-	};
-	const onReviewMod = async (reviewInfo: ReviewRequestData) => {
-		const csrfData = useCSRFToken({ member });
-		await review.update(reviewInfo, csrfData);
-		setReload(true);
-	};
-	const cartAdd = async (cartData: CartData) => {
-		const csrfData = useCSRFToken({ member });
-		await cart.add(cartData, csrfData);
-	};
+	const csrfData = useCSRFToken({ member });
+	const onReviewAdd = useCallback(
+		async (reviewInfo: ReviewRequestData) => {
+			await review.create(reviewInfo, csrfData);
+			setReload(true);
+		},
+		[csrfData.csrfToken]
+	);
+	const onReviewMod = useCallback(
+		async (reviewInfo: ReviewRequestData) => {
+			await review.update(reviewInfo, csrfData);
+			setReload(true);
+		},
+		[csrfData.csrfToken]
+	);
+	const cartAdd = useCallback(
+		async (cartData: CartData) => {
+			await cart.add(cartData, csrfData);
+		},
+		[csrfData.csrfToken]
+	);
 	return (
 		<>
 			{isDesktop && (
