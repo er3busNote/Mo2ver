@@ -20,7 +20,10 @@ import AdminMenuMobile from './AdminMenuMobile';
 import AdminMain from './AdminMain';
 import AdminFooter from './AdminFooter';
 import { CssBaseline, Box, useTheme, useMediaQuery } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+	unstable_createMuiStrictModeTheme as createTheme,
+	ThemeProvider,
+} from '@mui/material/styles';
 import { adminTheme } from '@utils/theme';
 
 const mdTheme = createTheme(adminTheme);

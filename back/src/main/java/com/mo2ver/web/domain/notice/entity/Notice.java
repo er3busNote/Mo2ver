@@ -31,7 +31,7 @@ public class Notice {
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;
 
-    @Column(name = "NTC_CONTS", columnDefinition = "VARCHAR(100) COMMENT '공지사항내용'")
+    @Column(name = "NTC_CONTS", columnDefinition = "TEXT COMMENT '공지사항내용'")
     private String noticeContents;
 
     @Column(name = "NTC_YN", columnDefinition = "CHAR(1) COMMENT '공지여부'")

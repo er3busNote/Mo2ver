@@ -19,4 +19,10 @@ const removeFile = (fileList: FileList, indexToRemove: number): FileList => {
 	return dataTransfer.files;
 };
 
-export { mergeFile, removeFile };
+const toFileList = (files: File[]): FileList => {
+	const dataTransfer = new DataTransfer();
+	files.forEach((file) => dataTransfer.items.add(file));
+	return dataTransfer.files;
+};
+
+export { mergeFile, removeFile, toFileList };

@@ -103,7 +103,7 @@ public class NoticeTest extends CsrfConfigTest {
         return NoticeFileInfo.builder()
                 .noticeNo(1L)
                 .title("테스트")
-                .contents("테스트")
+                .contents("<p><img src=\"/api/file/image?id=SzqaURB7FhGUqJKWRSIevy0dRPET2x6YyT+/Dq/4IpNmzA+lqTU8phz6M0CxUxwu\"></p><p>테스트</p>")
                 .noticeFiles(Arrays.asList(
                         FileAttachInfo.from(127, "image1.png", "image/png", 2048, ".png"),
                         FileAttachInfo.from(128, "image2.jpg", "image/jpeg", 1024, ".jpg")

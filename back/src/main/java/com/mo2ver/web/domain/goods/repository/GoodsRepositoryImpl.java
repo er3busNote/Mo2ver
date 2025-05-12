@@ -23,7 +23,6 @@ import static com.mo2ver.web.domain.goods.entity.QPrice.price;
 import static com.mo2ver.web.domain.goods.entity.QDiscount.discount;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
 import static com.mo2ver.web.domain.goods.entity.QReview.review;
-import static com.querydsl.core.group.GroupBy.list;
 
 public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements GoodsRepositoryCustom {
 

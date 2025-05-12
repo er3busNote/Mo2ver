@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
+import RenderTextEditorField from '@components/field/TextEditorField';
 import RenderDragAndDropField from '@components/field/file/DragAndDropField';
 import { NoticeFormValues } from '@pages/admin/types';
 import goToNotice from '@navigate/admin/notice/goToNotice';
@@ -117,9 +118,7 @@ const NoticeFormMobile: FC<NoticeProp> = ({
 									name="contents"
 									control={control}
 									render={({ field, fieldState, formState }) => (
-										<RenderTextField
-											type="text"
-											label="내용을 입력해주세요"
+										<RenderTextEditorField
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
