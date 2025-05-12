@@ -14,6 +14,7 @@ import {
 	Event,
 	EventDetail,
 	Notice,
+	NoticeDetail,
 	AdminDashboard,
 	AdminCategory,
 	AdminBanner,
@@ -60,6 +61,7 @@ const MainRoutes: FC = (): JSX.Element => {
 				<Route path="/event/:id/detail" element={<EventDetail />} />
 				<Route path="/register" element={<GoodsRegister />} />
 				<Route path="/notice" element={<Notice />} />
+				<Route path="/notice/:id/detail" element={<NoticeDetail />} />
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/profile" element={<User />} />
 			</Route>

@@ -1,8 +1,11 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import AppSubHeader from '@layouts/AppSubHeader';
 import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
+	Link,
 	Table,
 	TableHead,
 	TableBody,
@@ -12,6 +15,7 @@ import {
 } from '@mui/material';
 import { NoticeData, NoticePageData } from '@api/types';
 import { SxProps, Theme } from '@mui/material/styles';
+import goToNoticeDetail from '@navigate/notice/goToNoticeDetail';
 import moment from 'moment';
 
 interface NoticeListProps {
@@ -35,6 +39,18 @@ const NoticeList: FC<NoticeListProps> = ({
 	} = noticeData;
 	const pageNumber = noticeData.pageable?.pageNumber ?? 0;
 	const pageSize = noticeData.pageable?.pageSize ?? 12;
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const noticeClick = (code: number) => {
+		goToNoticeDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
+	};
 
 	const thHeader: SxProps<Theme> = {
 		px: { xs: 0, sm: 2 },
@@ -96,7 +112,13 @@ const NoticeList: FC<NoticeListProps> = ({
 												scope="row"
 												align="center"
 											>
-												{reverseIndex}
+												<Link
+													component="button"
+													variant="body2"
+													onClick={() => noticeClick(data.noticeManageNo)}
+												>
+													{reverseIndex}
+												</Link>
 											</TableCell>
 											<TableCell align="center">{data.subject}</TableCell>
 											<TableCell align="center" sx={registerColumn}>

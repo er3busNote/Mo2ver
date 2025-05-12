@@ -123,16 +123,18 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const goodsData = useGoodsDetail({ goods, code });
 	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
 
-	const csrfData = useCSRFToken({ member });
 	const onReviewAdd = async (reviewInfo: ReviewRequestData) => {
+		const csrfData = useCSRFToken({ member });
 		await review.create(reviewInfo, csrfData);
 		setReload(true);
 	};
 	const onReviewMod = async (reviewInfo: ReviewRequestData) => {
+		const csrfData = useCSRFToken({ member });
 		await review.update(reviewInfo, csrfData);
 		setReload(true);
 	};
 	const cartAdd = async (cartData: CartData) => {
+		const csrfData = useCSRFToken({ member });
 		await cart.add(cartData, csrfData);
 	};
 	return (

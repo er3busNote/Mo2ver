@@ -10,6 +10,7 @@ import GoodsRegister from './goods/GoodsRegisterPage';
 import Event from './event/EventPage';
 import EventDetail from './event/EventDetailPage';
 import Notice from './notice/NoticePage';
+import NoticeDetail from './notice/NoticeDetailPage';
 import AdminDashboard from './admin/DashboardPage';
 import AdminCategory from './admin/category/CategoryPage';
 import AdminBanner from './admin/banner/BannerPage';
@@ -34,6 +35,7 @@ export {
 	Event,
 	EventDetail,
 	Notice,
+	NoticeDetail,
 	AdminDashboard,
 	AdminCategory,
 	AdminBanner,

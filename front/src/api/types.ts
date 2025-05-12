@@ -267,7 +267,7 @@ interface NoticeData {
 	noticeYesNo: string;
 	register: string;
 	registerDate: number;
-	noticeFileList: Array<ImageData>;
+	noticeFileList: Array<FileData>;
 }
 
 interface NoticeRequestData {
