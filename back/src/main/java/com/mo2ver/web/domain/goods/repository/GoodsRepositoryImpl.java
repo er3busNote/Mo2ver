@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
@@ -79,7 +80,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         JPAQuery<Goods> query = queryFactory.selectFrom(goods)
                 .innerJoin(goods.price, price)
                 .where(builder);
-        List<Goods> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<Goods> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
@@ -105,7 +106,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
                 .innerJoin(goods.price, price)
                 .innerJoin(goods.goodsImages, goodsImage)
                 .where(builder);
-        List<Goods> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<Goods> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 

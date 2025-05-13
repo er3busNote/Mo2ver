@@ -17,7 +17,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,11 +55,9 @@ public class FileService {
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
         Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
-        String fileExtension = FileUtil.getFileExtension(Objects.requireNonNull(fileName));
-        String fileNameWithoutExtension = FileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, this.getFilePath(uploadDirectory), contentType, fileSize, 'N', currentUser));
         CryptoUtil.encryptFile(file, FileUtil.getTargetFile(fileInfo.getFilePath()));  // 파일 저장
-        return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
+        return FileInfo.of(fileInfo);
     }
 
     @Transactional
@@ -69,11 +66,9 @@ public class FileService {
         String fileName = file.getOriginalFilename();
         String contentType = file.getContentType();
         Integer fileSize = Integer.valueOf(String.valueOf(file.getSize()));
-        String fileExtension = FileUtil.getFileExtension(Objects.requireNonNull(fileName));
-        String fileNameWithoutExtension = FileUtil.removeFileExtension(fileName);
         File fileInfo = this.fileRepository.save(File.of(fileName, bucketPath, contentType, fileSize, 'Y', currentUser));
         this.objectStorageUtil.uploadFile(file, bucketPath);
-        return FileInfo.of(fileInfo, fileExtension, fileNameWithoutExtension);
+        return FileInfo.of(fileInfo);
     }
 
     @Transactional

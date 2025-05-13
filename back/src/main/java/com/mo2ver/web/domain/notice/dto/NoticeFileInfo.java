@@ -2,21 +2,19 @@ package com.mo2ver.web.domain.notice.dto;
 
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
-import com.mo2ver.web.common.file.entity.File;
-import com.mo2ver.web.domain.notice.entity.Notice;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class NoticeFileInfo {
 
     @NotNull(groups = Update.class)
@@ -32,17 +30,11 @@ public class NoticeFileInfo {
 
     public interface Update extends Default {}
 
-    public static NoticeFileInfo of(Notice notice, Function<Long, File> fileFinder) {
-        return NoticeFileInfo.builder()
-                .noticeNo(notice.getNoticeManageNo())
-                .title(notice.getSubject())
-                .contents(notice.getNoticeContents())
-                .noticeFiles(notice.getNoticeFiles().stream()
-                        .filter(file -> file.getUseYesNo() == 'Y')
-                        .map(file -> fileFinder.apply(file.getAttachFile().longValue()))
-                        .map(FileInfo::of)
-                        .map(FileAttachInfo::of)
-                        .collect(Collectors.toList()))
-                .build();
+    @QueryProjection
+    public NoticeFileInfo(Long noticeNo, String title, String contents, List<FileInfo> fileInfoList) {
+        this.noticeNo = noticeNo;
+        this.title = title;
+        this.contents = contents;
+        this.noticeFiles = fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
     }
 }

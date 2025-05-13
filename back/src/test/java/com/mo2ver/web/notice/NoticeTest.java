@@ -35,7 +35,7 @@ public class NoticeTest extends CsrfConfigTest {
     @DisplayName("공지사항 상세 정보 확인")
     public void findNoticeInfoTest() throws Exception {
 
-        Integer noticeManageNo = 1;
+        Integer noticeManageNo = 3;
 
         mockMvc.perform(get("/notice/info/{noticeManageNo}", noticeManageNo))
                 .andDo(print())

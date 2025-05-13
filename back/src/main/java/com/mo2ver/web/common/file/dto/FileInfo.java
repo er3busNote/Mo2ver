@@ -4,10 +4,12 @@ import com.mo2ver.web.common.file.entity.File;
 import com.mo2ver.web.global.common.utils.FileUtil;
 import lombok.*;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class FileInfo {
 
     private Integer fileCode;
@@ -18,6 +20,16 @@ public class FileInfo {
     private String fileExtension;
     private String fileNameWithoutExtension;
 
+    public FileInfo(Long fileCode, String fileName, String filePath, String fileType, Integer fileSize) {
+        this.fileCode = Optional.ofNullable(fileCode).map(Long::intValue).orElse(null);
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.fileExtension = Optional.ofNullable(fileName).map(FileUtil::getFileExtension).orElse(null);
+        this.fileNameWithoutExtension = Optional.ofNullable(fileName).map(FileUtil::removeFileExtension).orElse(null);
+    }
+
     public static FileInfo of(File file) {
         return FileInfo.builder()
                 .fileCode(file.getFileCode().intValue())
@@ -26,18 +38,7 @@ public class FileInfo {
                 .fileType(file.getFileType())
                 .fileSize(file.getFileSize())
                 .fileExtension(FileUtil.getFileExtension(file.getFileName()))
-                .build();
-    }
-
-    public static FileInfo of(File file, String fileExtension, String fileNameWithoutExtension) {
-        return FileInfo.builder()
-                .fileCode(file.getFileCode().intValue())
-                .fileName(file.getFileName())
-                .filePath(file.getFilePath())
-                .fileType(file.getFileType())
-                .fileSize(file.getFileSize())
-                .fileExtension(fileExtension)
-                .fileNameWithoutExtension(fileNameWithoutExtension)
+                .fileNameWithoutExtension(FileUtil.removeFileExtension(file.getFileName()))
                 .build();
     }
 }

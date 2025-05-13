@@ -15,7 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "NTC_MNG")    // 공지사항관리
+@Table(
+        name = "NTC_MNG",   // 공지사항관리
+        indexes={
+                @Index(name="FK_MBR_TO_NTC_MNG", columnList="MBR_NO")
+        }
+)
 @Getter @Setter
 @EqualsAndHashCode(of = "noticeManageNo")
 @Builder
@@ -37,6 +42,16 @@ public class Notice {
     @Column(name = "NTC_YN", columnDefinition = "CHAR(1) COMMENT '공지여부'")
     private Character noticeYesNo;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "MBR_NO",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_NTC_MNG"),
+            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+    )
+    private Member memberNo;
+
     @OneToMany(mappedBy = "noticeManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoticeFile> noticeFiles = new ArrayList<>();
 
@@ -55,6 +70,7 @@ public class Notice {
 
     public Notice(NoticeFileInfo noticeFileInfo, Member currentUser) {
         this.createOrUpdateNotice(noticeFileInfo, currentUser);
+        this.memberNo = currentUser;
         this.register = currentUser.getMemberNo();
 
         this.noticeFiles.addAll(this.createNoticeFiles(noticeFileInfo.getNoticeFiles(), currentUser));

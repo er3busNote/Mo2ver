@@ -25,6 +25,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
@@ -73,7 +74,7 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                 .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
                 .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
                 .where(builder);
-        List<EventProductResponse> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<EventProductResponse> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
@@ -91,7 +92,7 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
         JPAQuery<Event> query = queryFactory.selectFrom(event)
                 .innerJoin(event.eventImages, eventImage)
                 .where(builder);
-        List<Event> content = getQuerydsl().applyPagination(pageable, query).fetch();
+        List<Event> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 

@@ -11,7 +11,6 @@ import {
 	ReviewPageData,
 	ReviewRequestData,
 } from '@api/types';
-import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import useReviewPageList from '@hooks/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
