@@ -38,10 +38,13 @@ const getAccessToken = (): string =>
 	localStorage.getItem(JWT_ACCESS_TOKEN) ?? '';
 const setAccessToken = (token: string): void =>
 	localStorage.setItem(JWT_ACCESS_TOKEN, token);
+const removeAccessToken = (): void => localStorage.removeItem(JWT_ACCESS_TOKEN);
 const getRefreshTokenExpiration = (): string =>
 	localStorage.getItem(JWT_REFRESH_TOKEN_EXPIRATION) ?? '';
 const setRefreshTokenExpiration = (expiration: string): void =>
 	localStorage.setItem(JWT_REFRESH_TOKEN_EXPIRATION, expiration);
+const removeRefreshTokenExpiration = (): void =>
+	localStorage.removeItem(JWT_REFRESH_TOKEN_EXPIRATION);
 
 const isAdmin = (): boolean => isAdminRole(getAccessToken());
 const isAuthenticated = (): boolean => {
@@ -58,7 +61,9 @@ const isAuthenticated = (): boolean => {
 export {
 	getAccessToken,
 	setAccessToken,
+	removeAccessToken,
 	setRefreshTokenExpiration,
+	removeRefreshTokenExpiration,
 	isAdmin,
 	isAuthenticated,
 };

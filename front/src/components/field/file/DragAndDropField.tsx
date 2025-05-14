@@ -120,6 +120,13 @@ const RenderDragAndDropField: FC<RenderFileFieldProps> = ({
 		mt: 2,
 		background: 'white',
 	};
+	const fileItem: SxProps<Theme> = {
+		whiteSpace: 'normal',
+		wordBreak: 'break-word',
+	};
+	const fileSize: SxProps<Theme> = {
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+	};
 
 	return (
 		<Fragment>
@@ -159,10 +166,10 @@ const RenderDragAndDropField: FC<RenderFileFieldProps> = ({
 								>
 									<ListItemText
 										primary={
-											<Typography variant="body2" noWrap>
+											<Typography sx={fileItem} variant="caption" noWrap>
 												{fileData.fileName}{' '}
 												<Typography
-													variant="caption"
+													sx={fileSize}
 													component="span"
 													color="text.secondary"
 												>

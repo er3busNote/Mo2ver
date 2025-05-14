@@ -265,8 +265,8 @@ interface NoticeData {
 	subject: string;
 	contents: string;
 	noticeYesNo: string;
-	register: string;
-	registerDate: number;
+	memberName: string;
+	registerDate: string;
 	noticeFileList: Array<FileData>;
 }
 

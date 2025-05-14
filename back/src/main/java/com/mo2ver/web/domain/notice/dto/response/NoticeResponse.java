@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.notice.dto.response;
 
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
+import com.mo2ver.web.global.common.utils.ObjectUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
@@ -32,6 +33,6 @@ public class NoticeResponse {
         this.noticeYesNo = noticeYesNo;
         this.memberName = memberName;
         this.registerDate = registerDate.format(formatter);
-        this.noticeFileList = fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
+        this.noticeFileList = fileInfoList.stream().filter(ObjectUtil::nonAllFieldsNull).map(FileAttachInfo::of).collect(Collectors.toList());
     }
 }

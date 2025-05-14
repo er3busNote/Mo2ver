@@ -12,11 +12,13 @@ import {
 	TableRow,
 	TableCell,
 	TableContainer,
+	useTheme,
+	useMediaQuery,
 } from '@mui/material';
 import { NoticeData, NoticePageData } from '@api/types';
 import { SxProps, Theme } from '@mui/material/styles';
+import { AttachFile as AttachFileIcon } from '@mui/icons-material';
 import goToNoticeDetail from '@navigate/notice/goToNoticeDetail';
-import moment from 'moment';
 
 interface NoticeListProps {
 	title: string;
@@ -37,6 +39,8 @@ const NoticeList: FC<NoticeListProps> = ({
 		totalPages,
 		//pageable: { pageNumber, pageSize },
 	} = noticeData;
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const pageNumber = noticeData.pageable?.pageNumber ?? 0;
 	const pageSize = noticeData.pageable?.pageSize ?? 12;
 	const dispatch = useDispatch();
@@ -65,16 +69,21 @@ const NoticeList: FC<NoticeListProps> = ({
 		display: 'table-row',
 		borderBottom: '1px #F0F0F0 solid',
 	};
-	const indexColumn: SxProps<Theme> = {
+	const rowIndex: SxProps<Theme> = {
 		width: '10%',
 	};
-	const registerColumn: SxProps<Theme> = {
+	const attachFile: SxProps<Theme> = {
 		px: { xs: 0, sm: 2 },
 		py: 1.5,
 		width: '15%',
 	};
-	const createColumn: SxProps<Theme> = {
+	const register: SxProps<Theme> = {
+		px: { xs: 0, sm: 2 },
+		py: 1.5,
 		width: '15%',
+	};
+	const registerDate: SxProps<Theme> = {
+		width: isDesktop ? '15%' : '20%',
 	};
 	return (
 		<Box>
@@ -91,8 +100,13 @@ const NoticeList: FC<NoticeListProps> = ({
 									제목
 								</TableCell>
 								<TableCell sx={thHeader} align="center">
-									작성자
+									첨부파일
 								</TableCell>
+								{isDesktop && (
+									<TableCell sx={thHeader} align="center">
+										작성자
+									</TableCell>
+								)}
 								<TableCell sx={thHeader} align="center">
 									등록일
 								</TableCell>
@@ -107,25 +121,42 @@ const NoticeList: FC<NoticeListProps> = ({
 									return (
 										<TableRow key={index} sx={rowItem}>
 											<TableCell
-												sx={indexColumn}
+												sx={rowIndex}
 												component="th"
 												scope="row"
 												align="center"
 											>
+												{reverseIndex}
+											</TableCell>
+											<TableCell align="center">
 												<Link
 													component="button"
 													variant="body2"
+													underline="none"
 													onClick={() => noticeClick(data.noticeManageNo)}
 												>
-													{reverseIndex}
+													{data.subject}
 												</Link>
 											</TableCell>
-											<TableCell align="center">{data.subject}</TableCell>
-											<TableCell align="center" sx={registerColumn}>
-												관리자
+											<TableCell align="center" sx={attachFile}>
+												{data.noticeFileList.length > 0 && (
+													<Box
+														display="flex"
+														alignItems="center"
+														justifyContent="center"
+													>
+														<AttachFileIcon fontSize="small" /> (
+														{data.noticeFileList.length})
+													</Box>
+												)}
 											</TableCell>
-											<TableCell align="center" sx={createColumn}>
-												{moment(data.registerDate).format('YYYY-MM-DD')}
+											{isDesktop && (
+												<TableCell align="center" sx={register}>
+													{data.memberName}
+												</TableCell>
+											)}
+											<TableCell align="center" sx={registerDate}>
+												{data.registerDate}
 											</TableCell>
 										</TableRow>
 									);

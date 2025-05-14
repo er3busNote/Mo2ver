@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.notice.dto;
 
 import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
+import com.mo2ver.web.global.common.utils.ObjectUtil;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -35,6 +36,6 @@ public class NoticeFileInfo {
         this.noticeNo = noticeNo;
         this.title = title;
         this.contents = contents;
-        this.noticeFiles = fileInfoList.stream().map(FileAttachInfo::of).collect(Collectors.toList());
+        this.noticeFiles = fileInfoList.stream().filter(ObjectUtil::nonAllFieldsNull).map(FileAttachInfo::of).collect(Collectors.toList());
     }
 }

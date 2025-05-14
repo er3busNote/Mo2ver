@@ -23,7 +23,7 @@ public class ObjectUtil {
 
             try {
                 Object value = field.get(obj);
-                if (value != null) {
+                if (!isEmpty(value)) {
                     return false;
                 }
             } catch (IllegalAccessException e) {
@@ -31,5 +31,16 @@ public class ObjectUtil {
             }
         }
         return true;
+    }
+
+    private static boolean isEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof String) {
+            String str = (String) value;
+            return str.trim().isEmpty();
+        }
+        return false;
     }
 }

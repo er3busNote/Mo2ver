@@ -30,6 +30,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
 import { EventData, EventProductData, EventProductPageData } from '@api/types';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { isEmpty, get } from 'lodash';
 
 interface EventDetailProps {
@@ -89,7 +90,11 @@ const GoodsGrid: FC<GoodsProps> = ({
 										<Typography
 											component="div"
 											sx={{
-												fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+												fontSize: {
+													xs: fontSize_xs,
+													sm: fontSize_sm,
+													lg: fontSize_lg,
+												},
 												fontWeight: 'bold',
 											}}
 										>
@@ -123,7 +128,11 @@ const GoodsGrid: FC<GoodsProps> = ({
 												<Typography
 													color="text.secondary"
 													sx={{
-														fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+														fontSize: {
+															xs: fontSize_xs,
+															sm: fontSize_sm,
+															lg: fontSize_lg,
+														},
 														fontWeight: 'bold',
 													}}
 												>
@@ -177,14 +186,14 @@ const GoodsRow: FC<GoodsProps> = ({
 	};
 	const descriptionInfo: SxProps<Theme> = {
 		px: 1.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline' },
 		color: '#b2b2b2',
 	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
 	};
@@ -196,14 +205,14 @@ const GoodsRow: FC<GoodsProps> = ({
 	};
 	const info: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
 	};
 	const infoSub: SxProps<Theme> = {
 		px: 0.5,
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
 		color: '#b2b2b2',
@@ -225,13 +234,13 @@ const GoodsRow: FC<GoodsProps> = ({
 	};
 	const infoLike: SxProps<Theme> = {
 		px: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: 'red',
 	};
 	const infoShow: SxProps<Theme> = {
 		px: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
 		color: 'blue',

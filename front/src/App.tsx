@@ -12,8 +12,14 @@ import { SnackbarProvider } from 'notistack';
 import { MobileProvider } from '@context/MobileContext';
 import persistedReducer, { RootState } from './store';
 import { MemberState } from './store/types';
-import { setAccessToken, setRefreshTokenExpiration } from './utils/jwttoken';
+import {
+	setAccessToken,
+	removeAccessToken,
+	setRefreshTokenExpiration,
+	removeRefreshTokenExpiration,
+} from './utils/jwttoken';
 import RootRoutes from './routes/index';
+import { isEmpty } from 'lodash';
 import './App.css';
 
 const authMiddleware: Middleware = (store) => (next) => (action: AnyAction) => {
@@ -27,8 +33,12 @@ const authMiddleware: Middleware = (store) => (next) => (action: AnyAction) => {
 			'member/logoutSuccess',
 		].includes(action.type)
 	) {
-		setAccessToken((state.auth as MemberState).token);
-		setRefreshTokenExpiration((state.auth as MemberState).expiration);
+		const token = (state.auth as MemberState).token;
+		const expiration = (state.auth as MemberState).expiration;
+		if (isEmpty(token)) removeAccessToken();
+		else setAccessToken(token);
+		if (isEmpty(expiration)) removeRefreshTokenExpiration();
+		else setRefreshTokenExpiration(expiration);
 	}
 
 	return result;
