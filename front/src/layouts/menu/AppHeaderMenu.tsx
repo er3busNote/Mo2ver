@@ -1,16 +1,9 @@
-import React, {
-	FC,
-	useState,
-	MouseEvent,
-	ChangeEvent,
-	KeyboardEvent,
-} from 'react';
+import React, { FC, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
 import { MenuState, SubMenuInfo } from '@store/types';
 import { CategoryData, CategoryDataGroup } from '@api/types';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import AppMenu from './AppMenu';
 import AppMenuItem from './AppMenuItem';
 import AppMenuSubItem from './AppMenuSubItem';
@@ -21,8 +14,6 @@ import {
 	Paper,
 	Popper,
 	MenuList,
-	Collapse,
-	InputBase,
 	IconButton,
 	Typography,
 } from '@mui/material';
@@ -33,12 +24,8 @@ import {
 	ThemeProvider,
 } from '@mui/material/styles';
 import { ClickAwayListener } from '@mui/base';
-import {
-	Menu as MenuIcon,
-	Search as SearchIcon,
-	Clear as ClearIcon,
-} from '@mui/icons-material';
-import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import SearchCard from '@components/card/SearchCard';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { divideArray } from '@utils/divide';
 import { submenuWidthSize } from '@utils/style';
@@ -210,63 +197,6 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 	categoryData,
 	menus,
 }): JSX.Element => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const [focus, setFocus] = useState(false);
-	const [keyword, setKeyword] = useState('');
-	const [userInput, setUserInput] = useState('');
-	const { setKeywordData } = useSearchGoodsList({
-		search,
-		keyword,
-		setKeyword,
-	});
-
-	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const text = event.currentTarget.value;
-		if (text === '') {
-			setFocus(false);
-		} else {
-			setFocus(true);
-		}
-		setUserInput(text);
-		setKeywordData(text);
-	};
-	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-		if (event.code === 'Enter') {
-			event.preventDefault();
-			goToGoodsSearch({
-				keyword: userInput,
-				title: '검색',
-				description: '검색',
-				prevTitle: title,
-				prevDescription: description,
-				dispatch,
-				navigate,
-			});
-		}
-	};
-
-	const cancelClick = () => {
-		setUserInput('');
-		setKeywordData('');
-		setFocus(false);
-	};
-
-	const icon: SxProps<Theme> = {
-		fontSize: '1.6rem',
-		color: '#72BAF5',
-	};
-	const inputBase: SxProps<Theme> = {
-		ml: 1,
-		pt: 0.5,
-		flex: 1,
-		fontSize: '0.8rem',
-		height: '2rem',
-		'& input::placeholder': {
-			fontSize: '15px',
-		},
-	};
-
 	return (
 		<Box
 			sx={{
@@ -303,36 +233,12 @@ const AppHeaderMenu: FC<AppHeaderMenuProps> = ({
 							)}
 						</Grid>
 						<Box sx={{ mr: 2, mt: '5px' }}>
-							<Collapse orientation="horizontal" in={focus} collapsedSize={270}>
-								<Paper
-									component="form"
-									elevation={0}
-									sx={{
-										px: '10px',
-										display: 'flex',
-										alignItems: 'center',
-										borderRadius: 5,
-										bgcolor: '#F1F1F1',
-										height: '35px',
-										width: '250px',
-									}}
-								>
-									<InputBase
-										sx={inputBase}
-										placeholder="오늘 뭐 괜찮은 옷 있을까?"
-										value={userInput}
-										onChange={searchOnChange}
-										onKeyPress={searchOnKeyPress}
-									/>
-									{focus ? (
-										<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-											<ClearIcon sx={icon} />
-										</IconButton>
-									) : (
-										<SearchIcon sx={icon} />
-									)}
-								</Paper>
-							</Collapse>
+							<SearchCard
+								title={title}
+								description={description}
+								search={search}
+								width="250px"
+							/>
 						</Box>
 					</Box>
 				</Paper>

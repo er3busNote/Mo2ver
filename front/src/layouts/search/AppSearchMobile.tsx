@@ -1,11 +1,8 @@
-import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { FC, useState, ChangeEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { GoodsData } from '@api/types';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
@@ -13,8 +10,6 @@ import {
 	Paper,
 	Typography,
 	Popper,
-	Collapse,
-	InputBase,
 	IconButton,
 	MenuList,
 	MenuItem,
@@ -22,12 +17,11 @@ import {
 	ListItemButton,
 } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
-import { SxProps, Theme } from '@mui/material/styles';
-import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
-import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
 import { useIsMobile } from '@context/MobileContext';
+import SearchCard from '@components/card/SearchCard';
 import SearchDivider from '@components/divider/SearchDivider';
 import MainIcon from '@components/MainIcon';
+import { fontSize_sm } from '@utils/style';
 import { isEmpty } from 'lodash';
 
 interface AppSearchProps {
@@ -148,20 +142,10 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 	recommend,
 	goodsRankData,
 }): JSX.Element => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const isMobile = useIsMobile();
 	const [open, setOpen] = useState(false);
-	const [focus, setFocus] = useState(false);
-	const [keyword, setKeyword] = useState('');
-	const [userInput, setUserInput] = useState('');
 	const [openSearch, setSearchOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-	const { setKeywordData } = useSearchGoodsList({
-		search,
-		keyword,
-		setKeyword,
-	});
 	const recommendRankData = useRecommendRankList({
 		count: 5,
 		isAuthenticated: isAuthenticated() && !isAdmin(),
@@ -177,38 +161,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 		setOpen(false);
 	};
 
-	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const text = event.currentTarget.value;
-		if (text === '') {
-			setFocus(false);
-			closeAnchorEl();
-		} else {
-			setFocus(true);
-			showAnchorEl(event);
-		}
-		setUserInput(text);
-		setKeywordData(text);
-	};
-	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-		if (event.code === 'Enter') {
-			closeAnchorEl();
-			event.preventDefault();
-			goToGoodsSearch({
-				keyword: userInput,
-				title: '검색',
-				description: '검색',
-				prevTitle: title,
-				prevDescription: description,
-				dispatch,
-				navigate,
-			});
-		}
-	};
-
 	const cancelClick = () => {
-		setUserInput('');
-		setKeywordData('');
-		setFocus(false);
 		closeAnchorEl();
 	};
 
@@ -216,22 +169,6 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 		setSearchOpen(!openSearch);
 	};
 
-	const searchFontSize = '12px';
-
-	const icon: SxProps<Theme> = {
-		fontSize: '1.6rem',
-		color: '#72BAF5',
-	};
-	const inputBase: SxProps<Theme> = {
-		ml: 1,
-		pt: 0.5,
-		flex: 1,
-		fontSize: '0.8rem',
-		height: { xs: '1.5rem', sm: '2rem' },
-		'& input::placeholder': {
-			fontSize: { xs: '13px', sm: '14px' },
-		},
-	};
 	return (
 		<Paper sx={{ width: '100%' }} component="div" square variant="outlined">
 			{isMobile ? (
@@ -260,42 +197,24 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 									alignItems: 'center',
 								}}
 							>
-								<Collapse
-									orientation="horizontal"
-									in={focus}
-									collapsedSize={150}
-								>
-									<AppSearchItemsMobile
+								<AppSearchItemsMobile
+									title={title}
+									description={description}
+									search={search}
+									recommend={recommend}
+									openSearch={openSearch}
+									setSearchOpen={setSearchOpen}
+									goodsRankData={goodsRankData}
+								/>
+								<Box>
+									<SearchCard
+										title={title}
+										description={description}
 										search={search}
-										recommend={recommend}
-										openSearch={openSearch}
-										setSearchOpen={setSearchOpen}
-										goodsRankData={goodsRankData}
+										toggleSearch={toggleSearch}
+										readOnly={true}
 									/>
-									<Box>
-										<Paper
-											component="form"
-											elevation={0}
-											sx={{
-												mr: 2,
-												px: '10px',
-												display: 'flex',
-												alignItems: 'center',
-												borderRadius: 5,
-												bgcolor: '#F1F1F1',
-												height: { xs: '35px', sm: '40px' },
-											}}
-										>
-											<InputBase
-												sx={inputBase}
-												placeholder="무슨 옷 입을까?"
-												onClick={toggleSearch}
-												readOnly={true}
-											/>
-											<SearchIcon sx={icon} />
-										</Paper>
-									</Box>
-								</Collapse>
+								</Box>
 							</Box>
 						</Grid>
 					</Grid>
@@ -316,74 +235,43 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 						>
 							<Box
 								sx={{
-									width: '420px',
 									height: '40px',
 									display: 'inline-flex',
 									justifyContent: 'flex-end',
 								}}
 							>
-								<Collapse
-									orientation="horizontal"
-									in={focus}
-									collapsedSize={320}
-								>
-									<ClickAwayListener onClickAway={cancelClick}>
-										<Box>
-											<Paper
-												component="form"
-												elevation={0}
-												sx={{
-													mr: 2,
-													px: '10px',
-													display: 'flex',
-													alignItems: 'center',
-													borderRadius: 5,
-													bgcolor: '#F1F1F1',
-													height: { xs: '35px', sm: '40px' },
-												}}
-											>
-												<InputBase
-													sx={inputBase}
-													placeholder="오늘 뭐 괜찮은 옷 있을까?"
-													value={userInput}
-													onChange={searchOnChange}
-													onKeyPress={searchOnKeyPress}
-												/>
-												{focus ? (
-													<IconButton
-														onClick={cancelClick}
-														sx={{ p: 0, mr: 1 }}
-													>
-														<ClearIcon sx={icon} />
-													</IconButton>
-												) : (
-													<SearchIcon sx={icon} />
-												)}
-											</Paper>
-											<Popper
-												id={'search'}
-												open={open}
-												anchorEl={anchorEl}
-												placement="bottom-start"
-												modifiers={[
-													{
-														name: 'offset',
-														options: {
-															offset: [-38, 3],
-														},
+								<ClickAwayListener onClickAway={cancelClick}>
+									<Box>
+										<SearchCard
+											title={title}
+											description={description}
+											search={search}
+											showAnchorEl={showAnchorEl}
+											closeAnchorEl={closeAnchorEl}
+										/>
+										<Popper
+											id={'search'}
+											open={open}
+											anchorEl={anchorEl}
+											placement="bottom-start"
+											modifiers={[
+												{
+													name: 'offset',
+													options: {
+														offset: [-38, 3],
 													},
-												]}
+												},
+											]}
+										>
+											<Paper
+												elevation={0}
+												sx={{ mt: -1, border: '#ddd 1px solid' }}
 											>
-												<Paper
-													elevation={0}
-													sx={{ mt: -1, border: '#ddd 1px solid' }}
-												>
-													<AppSearchItemsPC goodsRankData={goodsRankData} />
-												</Paper>
-											</Popper>
-										</Box>
-									</ClickAwayListener>
-								</Collapse>
+												<AppSearchItemsPC goodsRankData={goodsRankData} />
+											</Paper>
+										</Popper>
+									</Box>
+								</ClickAwayListener>
 							</Box>
 						</Grid>
 					</Grid>
@@ -398,7 +286,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 									<Typography
 										color="#666"
 										align="center"
-										sx={{ fontSize: searchFontSize, fontWeight: 'bold' }}
+										sx={{ fontSize: fontSize_sm, fontWeight: 'bold' }}
 									>
 										추천상품
 									</Typography>
@@ -408,7 +296,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 										<Typography
 											color="#999"
 											align="center"
-											sx={{ fontSize: searchFontSize }}
+											sx={{ fontSize: fontSize_sm }}
 										>
 											추천상품이 없습니다.
 										</Typography>
@@ -420,7 +308,7 @@ const AppSearchMobile: FC<AppSearchProps> = ({
 											<Typography
 												color="#999"
 												align="center"
-												sx={{ fontSize: searchFontSize }}
+												sx={{ fontSize: fontSize_sm }}
 											>
 												{data.goodsName}
 											</Typography>

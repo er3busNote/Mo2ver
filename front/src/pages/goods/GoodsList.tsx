@@ -75,6 +75,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 											height="140"
 											image={useImageUrl({ file, attachFile })}
 											//src={`data:image/png;base64, ${base64}`}
+											loading="lazy"
 										/>
 										<CardContent>
 											<Typography

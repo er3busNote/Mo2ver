@@ -46,7 +46,7 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 	};
 	const registerDate: SxProps<Theme> = {
 		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
-	}
+	};
 	const contents: SxProps<Theme> = {
 		fontSize: { xs: '14px', sm: '15px', lg: '17px' },
 		px: 3,
@@ -124,7 +124,8 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 																			component="span"
 																			color="text.secondary"
 																		>
-																			({(fileData.fileSize / 1024).toFixed(2)} KB)
+																			({(fileData.fileSize / 1024).toFixed(2)}{' '}
+																			KB)
 																		</Typography>
 																	</Typography>
 																}

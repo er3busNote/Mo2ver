@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { CategoryData, CategoryDataInfo, CategoryDataGroup } from '@api/types';
-import { has, filter } from 'lodash';
+import { filter, groupBy } from 'lodash';
 
 interface CategoryListProps {
 	category: ActionCreatorsMapObject;
@@ -31,24 +31,16 @@ const useCategoryGroupList = ({
 			categoryLevel: 1,
 			useYesNo: 'Y',
 		});
-		setLargeCategoryData(largeCategoyData);
 		// 중/소 카테고리
-		const middleCategoryData = new Object() as CategoryDataInfo;
-		const smallCategoryData = new Object() as CategoryDataInfo;
-		categoryData.forEach((data: CategoryData) => {
-			if (data.categoryLevel === 2) {
-				if (!has(middleCategoryData, data.upperCategoryCode)) {
-					middleCategoryData[data.upperCategoryCode] =
-						new Array<CategoryData>();
-				}
-				middleCategoryData[data.upperCategoryCode].push(data);
-			} else if (data.categoryLevel === 3) {
-				if (!has(smallCategoryData, data.upperCategoryCode)) {
-					smallCategoryData[data.upperCategoryCode] = new Array<CategoryData>();
-				}
-				smallCategoryData[data.upperCategoryCode].push(data);
-			}
-		});
+		const middleCategoryData = groupBy(
+			filter(categoryData, { categoryLevel: 2 }),
+			'upperCategoryCode'
+		);
+		const smallCategoryData = groupBy(
+			filter(categoryData, { categoryLevel: 3 }),
+			'upperCategoryCode'
+		);
+		setLargeCategoryData(largeCategoyData);
 		setMiddleCategoryData(middleCategoryData);
 		setSmallCategoryData(smallCategoryData);
 	}, []);

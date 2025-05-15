@@ -99,6 +99,8 @@ const AppFooter: FC<AppFooterProps> = ({
 						categoryData={categoryData}
 					/>
 					<AppSearchItemsMobile
+						title={title}
+						description={description}
 						search={search}
 						recommend={recommend}
 						openSearch={openSearch}

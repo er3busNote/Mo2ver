@@ -1,15 +1,14 @@
 import React, {
 	FC,
+	useRef,
 	useState,
 	Dispatch,
 	SetStateAction,
-	ChangeEvent,
-	KeyboardEvent,
+	FocusEvent,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { GoodsData } from '@api/types';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {
 	Box,
@@ -18,7 +17,6 @@ import {
 	Breadcrumbs,
 	Typography,
 	Collapse,
-	InputBase,
 	IconButton,
 	MenuList,
 	MenuItem,
@@ -27,12 +25,8 @@ import {
 import Button, { ButtonProps } from '@mui/material/Button';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
-import {
-	Search as SearchIcon,
-	Clear as ClearIcon,
-	Error as ErrorIcon,
-	Delete as DeleteIcon,
-} from '@mui/icons-material';
+import { Error as ErrorIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import SearchCard from '@components/card/SearchCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -69,6 +63,8 @@ interface SearchGoodsProps {
 }
 
 interface AppSearchItemsMobileProps {
+	title: string;
+	description: string;
 	search: ActionCreatorsMapObject;
 	recommend: ActionCreatorsMapObject;
 	openSearch: boolean;
@@ -200,66 +196,37 @@ const SearchRecommend: FC<SearchGoodsProps> = ({
 };
 
 const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
+	title,
+	description,
 	search,
 	recommend,
 	openSearch,
 	setSearchOpen,
 	goodsRankData,
 }): JSX.Element => {
+	const cardRef = useRef<HTMLDivElement>(null);
 	const [focus, setFocus] = useState(false);
-	const [keyword, setKeyword] = useState('');
-	const [userInput, setUserInput] = useState('');
-	const { setKeywordData } = useSearchGoodsList({
-		search,
-		keyword,
-		setKeyword,
-	});
 	const recommendRankData = useRecommendRankList({
 		count: 5,
 		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
 	});
 
-	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const text = event.currentTarget.value;
-		if (text === '') {
+	const handleFocus = () => setFocus(true);
+	const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
+		const nextTarget = e.relatedTarget as HTMLElement | null;
+		if (
+			cardRef.current &&
+			(!nextTarget || !cardRef.current.contains(nextTarget))
+		) {
 			setFocus(false);
-		} else {
-			setFocus(true);
 		}
-		setUserInput(text);
-		setKeywordData(text);
-	};
-	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-		if (event.code === 'Enter') {
-			event.preventDefault();
-		}
-	};
-
-	const cancelClick = () => {
-		setUserInput('');
-		setKeywordData('');
-		setFocus(false);
 	};
 
 	const toggleDrawer = () => {
 		setSearchOpen(!openSearch);
 	};
 
-	const icon: SxProps<Theme> = {
-		fontSize: '1.6rem',
-		color: '#72BAF5',
-	};
-	const inputBase: SxProps<Theme> = {
-		ml: 1,
-		pt: 0.5,
-		flex: 1,
-		fontSize: '0.8rem',
-		height: { xs: '1.5rem', sm: '2rem' },
-		'& input::placeholder': {
-			fontSize: { xs: '13px', sm: '14px' },
-		},
-	};
 	const searchBase: SxProps<Theme> = {
 		width: drawerSearchWidth,
 		height: drawerSearchHeight,
@@ -284,35 +251,17 @@ const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
 					}}
 				>
 					<Collapse orientation="horizontal" in={focus} collapsedSize={150}>
-						<Box>
-							<Paper
-								component="form"
-								elevation={0}
-								sx={{
-									mr: 2,
-									px: '10px',
-									display: 'flex',
-									alignItems: 'center',
-									borderRadius: 5,
-									bgcolor: '#F1F1F1',
-									height: '35px',
-								}}
-							>
-								<InputBase
-									sx={inputBase}
-									placeholder="무슨 옷 입을까?"
-									value={userInput}
-									onChange={searchOnChange}
-									onKeyPress={searchOnKeyPress}
-								/>
-								{focus ? (
-									<IconButton onClick={cancelClick} sx={{ p: 0, mr: 1 }}>
-										<ClearIcon sx={icon} />
-									</IconButton>
-								) : (
-									<SearchIcon sx={icon} />
-								)}
-							</Paper>
+						<Box
+							ref={cardRef}
+							tabIndex={-1} // 포커스 가능하도록
+							onFocus={handleFocus}
+							onBlur={handleBlur}
+						>
+							<SearchCard
+								title={title}
+								description={description}
+								search={search}
+							/>
 						</Box>
 					</Collapse>
 				</Box>
