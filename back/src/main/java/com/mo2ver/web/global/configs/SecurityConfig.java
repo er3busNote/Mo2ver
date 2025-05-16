@@ -100,9 +100,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/menu/**", "/member/**", "/category/**", "/goods/**", "/review/**", "/cart/**", "/banner/**", "/event/**", "/notice/**", "/search/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/menu/**", "/images/**", "/file/**", "/member/**", "/category/**", "/goods/**", "/review/**", "/cart/**", "/banner/**", "/event/**", "/notice/**", "/search/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
-                .mvcMatchers(HttpMethod.GET, "/images/**", "/file/image/**").permitAll()    // 2) 이미지 파일
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**", "/search/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/goods/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/cart/list", "/recommend/**").hasAnyRole("USER")  // 3.1) 장바구니, 추천 목록

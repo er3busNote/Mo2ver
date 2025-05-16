@@ -25,4 +25,14 @@ const toFileList = (files: File[]): FileList => {
 	return dataTransfer.files;
 };
 
-export { mergeFile, removeFile, toFileList };
+const downloadFile = (blob: Blob, filename: string) => {
+	const url = window.URL.createObjectURL(blob);
+
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename;
+	a.click();
+	window.URL.revokeObjectURL(url);
+};
+
+export { mergeFile, removeFile, toFileList, downloadFile };

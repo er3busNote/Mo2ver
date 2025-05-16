@@ -1,5 +1,6 @@
 package com.mo2ver.web.common.file.api;
 
+import com.mo2ver.web.common.file.dto.response.FileResponse;
 import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.common.file.validation.ValidFileList;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
@@ -12,6 +13,7 @@ import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +33,23 @@ public class FileController {
     @GetMapping("/image")
     public ResponseEntity fileImage(@RequestParam String id) {
         try {
-            Integer attachFile = JasyptUtil.getDecryptor(id);
-            byte[] bannerImageBytes = fileService.findFile(attachFile);
-            ByteArrayResource resource = new ByteArrayResource(bannerImageBytes);
-            Tika tika = new Tika();
-            String tikaMimeType = tika.detect(bannerImageBytes);
-            MediaType mediaType = MediaType.parseMediaType(tikaMimeType);
-            return ResponseEntity.ok().contentType(mediaType).body(resource);
+            FileResponse fileResponse = this.findFile(id);
+            return ResponseEntity.ok().contentType(fileResponse.getMediaType())
+                    .body(fileResponse.getResource());
+        } catch (Exception e) {
+            return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
+                    .message(e.getMessage())
+                    .build()));
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity downloadFile(@RequestParam String id) {
+        try {
+            FileResponse fileResponse = this.findFile(id);
+            return ResponseEntity.ok().contentType(fileResponse.getMediaType())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
+                    .body(fileResponse.getResource());
         } catch (Exception e) {
             return unprocessableEntity(errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
                     .message(e.getMessage())
@@ -69,6 +81,19 @@ public class FileController {
         }
     }
 
+    private FileResponse findFile(String id) throws Exception {
+        Integer attachFile = JasyptUtil.getDecryptor(id);
+        byte[] fileBytes = fileService.findFile(attachFile);
+        ByteArrayResource resource = new ByteArrayResource(fileBytes);
+        MediaType mediaType = this.findMediaType(fileBytes);
+        return FileResponse.of(resource, mediaType);
+    }
+
+    private MediaType findMediaType(byte[] fileBytes) {
+        Tika tika = new Tika();
+        String tikaMimeType = tika.detect(fileBytes);
+        return MediaType.parseMediaType(tikaMimeType);
+    }
 
     private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
         return ResponseEntity.badRequest().body(response);

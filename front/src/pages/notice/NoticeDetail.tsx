@@ -6,6 +6,7 @@ import {
 	ListItem,
 	ListItemText,
 	Typography,
+	IconButton,
 	Table,
 	TableBody,
 	TableRow,
@@ -16,6 +17,7 @@ import {
 } from '@mui/material';
 import { NoticeData, FileData } from '@api/types';
 import { SxProps, Theme } from '@mui/material/styles';
+import { DownloadOutlined as DownloadOutlinedIcon } from '@mui/icons-material';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { isEmpty } from 'lodash';
 
@@ -23,12 +25,14 @@ interface NoticeDetailProps {
 	title: string;
 	description: string;
 	noticeData: NoticeData;
+	onDonwloadFile: (attachFile: string, filename: string) => void;
 }
 
 const NoticeDetail: FC<NoticeDetailProps> = ({
 	title,
 	description,
 	noticeData,
+	onDonwloadFile,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -110,7 +114,22 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 											{noticeData.noticeFileList &&
 												noticeData.noticeFileList.map(
 													(fileData: FileData, index: number) => (
-														<ListItem key={index} disablePadding>
+														<ListItem
+															key={index}
+															secondaryAction={
+																<IconButton
+																	onClick={() =>
+																		onDonwloadFile(
+																			fileData.fileAttachCode,
+																			fileData.fileName
+																		)
+																	}
+																>
+																	<DownloadOutlinedIcon fontSize="small" />
+																</IconButton>
+															}
+															disablePadding
+														>
 															<ListItemText
 																primary={
 																	<Typography
