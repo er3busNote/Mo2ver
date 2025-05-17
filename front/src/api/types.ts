@@ -51,6 +51,7 @@ interface GoodsDetailData extends GoodsData {
 }
 
 interface GoodsRegisterData {
+	goodsCode?: string;
 	goodsName: string;
 	goodsBrand: string;
 	goodsGender: string;
@@ -308,6 +309,18 @@ interface CartPageData {
 	cartList: Array<CartData>;
 }
 
+// 9. Search Type
+interface SearchGoodsResuqestData {
+	keyword: string;
+	minPrice?: number;
+	maxPrice?: number;
+}
+
+interface SearchRequestData {
+	pageInfo: PageData;
+	searchGoodsRequest: SearchGoodsResuqestData;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -392,6 +405,8 @@ export type {
 	NoticeDetailData,
 	CartData,
 	CartPageData,
+	SearchGoodsResuqestData,
+	SearchRequestData,
 	PageData,
 	CodeData,
 	FileData,

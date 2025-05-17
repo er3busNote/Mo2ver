@@ -35,6 +35,7 @@ import {
 } from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { IMAGE_INFO } from '@utils/init';
+import { CartDeliveryProps } from '../types';
 
 interface TabPanelProps {
 	children?: ReactNode;
@@ -43,12 +44,6 @@ interface TabPanelProps {
 }
 
 interface UserOrderDetailProps {
-	title: string;
-	description: string;
-	type: string;
-}
-
-interface CartDeliveryProps {
 	title: string;
 	description: string;
 }
@@ -73,7 +68,6 @@ const TabPanel: FC<TabPanelProps> = ({
 const UserOrderDetail: FC<UserOrderDetailProps> = ({
 	title,
 	description,
-	type,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -402,7 +396,7 @@ const UserOrderDetail: FC<UserOrderDetailProps> = ({
 	);
 };
 
-const CartDeliveryPC: FC<CartDeliveryProps> = ({
+const CartDeliveryPC: FC<Omit<CartDeliveryProps, 'type'>> = ({
 	title,
 	description,
 }): JSX.Element => {
@@ -413,10 +407,9 @@ const CartDeliveryPC: FC<CartDeliveryProps> = ({
 		const text = event.currentTarget.value;
 		setKeyword(text);
 	};
-	const searchClick = () => {
-		setKeyword('');
-	};
+
 	const orderViewChange = (event: React.SyntheticEvent, newValue: number) => {
+		event.preventDefault();
 		setOrderView(newValue);
 	};
 

@@ -2,17 +2,19 @@ import React, { FC, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Chip, Tab, Tabs, IconButton, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { DetailType } from '../types';
 
 interface UserSubHeaderProps {
-	tab: number;
-	setTab: (value: number) => void;
+	tab: string;
+	setTab: (value: DetailType) => void;
 }
 
 const UserSubHeaderPC: FC<UserSubHeaderProps> = ({
 	tab,
 	setTab,
 }): JSX.Element => {
-	const handleChange = (event: SyntheticEvent, newValue: number) => {
+	const handleChange = (event: SyntheticEvent, newValue: DetailType) => {
+		event.preventDefault();
 		setTab(newValue);
 	};
 
@@ -62,9 +64,9 @@ const UserSubHeaderPC: FC<UserSubHeaderProps> = ({
 				}}
 			>
 				<Tabs value={tab} onChange={handleChange} sx={labelTabs}>
-					<Tab label="주문/배송내역" sx={labelTab} />
-					<Tab label="상품등록내역" sx={labelTab} />
-					<Tab label="회원정보수정" sx={labelTab} disabled />
+					<Tab label="주문/배송내역" sx={labelTab} value="Delivery" />
+					<Tab label="상품등록내역" sx={labelTab} value="Register" />
+					<Tab label="회원정보수정" sx={labelTab} value="Member" disabled />
 				</Tabs>
 			</Box>
 		</Box>

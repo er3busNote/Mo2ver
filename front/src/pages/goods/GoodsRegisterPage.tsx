@@ -1,8 +1,8 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import { TitleState } from '@store/types';
 import Api from '@api/index';
 import { GoodsRegisterData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
+import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { RegisterFormValues } from '@pages/types';
@@ -294,7 +295,50 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const navigate = useNavigate();
+	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
+	const [goodsCode, setGoodsCode] = useState<string>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+	const componentType = location.state?.goodsCode ? 'Update' : 'Create';
+
+	const methods = useForm<RegisterFormValues>({
+		mode: 'onChange',
+		defaultValues: registerValues,
+		resolver: yupResolver(registerSchema),
+	});
+
+	if (componentType === 'Update') {
+		const code = location.state?.goodsCode;
+		const goodsInfo = useGoodsDetail({ goods, code });
+		if (goodsInfo && goodsInfo.goodsCode && !isDataLoaded) {
+			const { reset } = methods;
+			reset({
+				name: goodsInfo.goodsName,
+				brand: goodsInfo.goodsBrand,
+				gender: goodsInfo.goodsGender,
+				year: Number(goodsInfo.goodsYear),
+				keyword: goodsInfo.keywordList,
+				summaryInfo: '',
+				goodsImg: [],
+				largeCategory: '',
+				mediumCategory: '',
+				smallCategory: '',
+				buyLimitYesNo: 'Y',
+				salePeriodYesNo: 'Y',
+				saleStartDate: dayjs(),
+				saleEndDate: dayjs(),
+				supplyPrice: goodsInfo.supplyPrice,
+				salePrice: goodsInfo.salePrice,
+				maxBuyQuantity: 1,
+				discountPrice: 1000,
+				discountStartDate: dayjs(),
+				discountEndDate: dayjs(),
+			});
+			if (goodsInfo.goodsCode) setGoodsCode(goodsInfo.goodsCode);
+			setIsDataLoaded(true);
+		}
+	}
+
 	const submitForm = async (
 		data: RegisterFormValues,
 		registerForm?: BaseSyntheticEvent<object, any, any>
@@ -325,38 +369,41 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 			maxLimitYesNo: 'N',
 			maxLimitAmount: 0,
 		};
-		console.log(registerFormData);
-		console.log(csrfData);
-		await goods.create(registerFormData, csrfData);
+		if (componentType === 'Update') {
+			registerFormData.goodsCode = goodsCode;
+		}
+		if (componentType === 'Create')
+			await goods.create(registerFormData, csrfData);
+		if (componentType === 'Update')
+			await goods.update(registerFormData, csrfData);
 		if (registerForm) registerForm.preventDefault(); // 새로고침 방지
 		navigate('/profile');
 	};
 
-	const methods = useForm<RegisterFormValues>({
-		mode: 'onChange',
-		defaultValues: registerValues,
-		resolver: yupResolver(registerSchema),
-	});
-
 	return (
-		<FormProvider {...methods}>
-			{isDesktop && (
-				<GoodsRegisterPC
-					description={description}
-					category={category}
-					file={file}
-					onSubmit={submitForm}
-				/>
+		<>
+			{(componentType === 'Create' ||
+				(componentType === 'Update' && isDataLoaded)) && (
+				<FormProvider {...methods}>
+					{isDesktop && (
+						<GoodsRegisterPC
+							description={description}
+							category={category}
+							file={file}
+							onSubmit={submitForm}
+						/>
+					)}
+					{isMobile && (
+						<GoodsRegisterMobile
+							description={description}
+							category={category}
+							file={file}
+							onSubmit={submitForm}
+						/>
+					)}
+				</FormProvider>
 			)}
-			{isMobile && (
-				<GoodsRegisterMobile
-					description={description}
-					category={category}
-					file={file}
-					onSubmit={submitForm}
-				/>
-			)}
-		</FormProvider>
+		</>
 	);
 };
 

@@ -1,9 +1,12 @@
-import React, { FC } from 'react';
-import { Dispatch } from '@reduxjs/toolkit';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
+import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
+import useCSRFToken from '@hooks/useCSRFToken';
+import useSearchMyGoodsList from '@hooks/search/useSearchMyGoodsList';
 import UserDetailPC from './UserDetailPC';
 import UserDetailMobile from './UserDetailMobile';
 import { Box, Paper, useTheme, useMediaQuery } from '@mui/material';
@@ -12,9 +15,26 @@ interface UserProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
+	goodsData: GoodsPageData;
+	setGoodsPage: Dispatch<SetStateAction<number>>;
+	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
 }
 
-const UserPC: FC<UserProps> = ({ title, description, member }): JSX.Element => {
+interface UserDispatchProps {
+	title: string;
+	description: string;
+	member: ActionCreatorsMapObject;
+	search: ActionCreatorsMapObject;
+}
+
+const UserPC: FC<UserProps> = ({
+	title,
+	description,
+	member,
+	goodsData,
+	setGoodsPage,
+	setSearchGoodsData,
+}): JSX.Element => {
 	return (
 		<>
 			<Box>
@@ -35,7 +55,14 @@ const UserPC: FC<UserProps> = ({ title, description, member }): JSX.Element => {
 					display: 'inline-block',
 				}}
 			>
-				<UserDetailPC title={title} description={description} member={member} />
+				<UserDetailPC
+					title={title}
+					description={description}
+					member={member}
+					goodsData={goodsData}
+					setGoodsPage={setGoodsPage}
+					setSearchGoodsData={setSearchGoodsData}
+				/>
 			</Box>
 		</>
 	);
@@ -45,6 +72,9 @@ const UserMobile: FC<UserProps> = ({
 	title,
 	description,
 	member,
+	goodsData,
+	setGoodsPage,
+	setSearchGoodsData,
 }): JSX.Element => {
 	return (
 		<Box
@@ -57,26 +87,52 @@ const UserMobile: FC<UserProps> = ({
 				title={title}
 				description={description}
 				member={member}
+				goodsData={goodsData}
+				setGoodsPage={setGoodsPage}
+				setSearchGoodsData={setSearchGoodsData}
 			/>
 		</Box>
 	);
 };
 
-const UserPage: FC<UserProps> = ({
+const UserPage: FC<UserDispatchProps> = ({
 	title,
 	description,
 	member,
+	search,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const csrfData = useCSRFToken({ member });
+	const {
+		data: goodsData,
+		setPage: setGoodsPage,
+		setSearchData: setSearchGoodsData,
+	} = useSearchMyGoodsList({ search, csrfData });
+
 	return (
 		<>
 			{isDesktop && (
-				<UserPC title={title} description={description} member={member} />
+				<UserPC
+					title={title}
+					description={description}
+					member={member}
+					goodsData={goodsData}
+					setGoodsPage={setGoodsPage}
+					setSearchGoodsData={setSearchGoodsData}
+				/>
 			)}
 			{isMobile && (
-				<UserMobile title={title} description={description} member={member} />
+				<UserMobile
+					title={title}
+					description={description}
+					member={member}
+					goodsData={goodsData}
+					setGoodsPage={setGoodsPage}
+					setSearchGoodsData={setSearchGoodsData}
+				/>
 			)}
 		</>
 	);
@@ -87,8 +143,9 @@ const mapStateToProps = (state: any) => ({
 	description: (state.title as TitleState).description,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
+	search: bindActionCreators(Api.search, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

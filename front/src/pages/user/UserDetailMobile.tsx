@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import UserSubHeaderMobile from './cmmn/UserSubHeaderMobile';
 import CartDeliveryMobile from './status/CartDeliveryMobile';
 import GoodsRegisterMobile from './status/GoodsRegisterMobile';
+import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
 import {
 	Box,
 	Grid,
@@ -30,26 +31,31 @@ import {
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
+import { Position, DetailType, DetailBoxProps } from './types';
 import { without } from 'lodash';
 
-type Position = 'relative' | 'absolute' | 'fixed';
-type DetailType = 'Delivery' | 'Register';
 const DETAIL: DetailType[] = ['Delivery', 'Register'];
-const DetailInfo = {
-	Delivery: CartDeliveryMobile,
-	Register: GoodsRegisterMobile,
+const DetailInfo: Record<DetailType, FC<DetailBoxProps>> = {
+	Delivery: CartDeliveryMobile as FC<DetailBoxProps>,
+	Register: GoodsRegisterMobile as FC<DetailBoxProps>,
 };
 
 interface UserDetailProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
+	goodsData: GoodsPageData;
+	setGoodsPage: Dispatch<SetStateAction<number>>;
+	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
 }
 
 const UserDetailMobile: FC<UserDetailProps> = ({
 	title,
 	description,
 	member,
+	goodsData,
+	setGoodsPage,
+	setSearchGoodsData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -215,10 +221,20 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 			</Box>
 			{transition((style, item: DetailType) => {
 				const DetailBox = DetailInfo[item];
+				const props =
+					item == 'Register'
+						? ({
+								title,
+								description,
+								goodsData,
+								setGoodsPage,
+								setSearchGoodsData,
+						  } as Omit<DetailBoxProps, 'type'>)
+						: ({ title, description } as Omit<DetailBoxProps, 'type'>);
 				return (
 					<animated.div style={style} key={item}>
 						<Box sx={statusBox}>
-							<DetailBox type={item[0] + 'S'} />
+							<DetailBox {...props} type={item[0] + 'S'} />
 						</Box>
 						<Box sx={buttonBox}>
 							<Grid container spacing={1}>
@@ -261,7 +277,7 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 							</Grid>
 						</Box>
 						<Box sx={detailBox}>
-							<DetailBox type={item[0] + 'A'} />
+							<DetailBox {...props} type={item[0] + 'A'} />
 							<Accordion disabled>
 								<AccordionSummary
 									expandIcon={<ExpandMoreIcon />}
@@ -277,15 +293,14 @@ const UserDetailMobile: FC<UserDetailProps> = ({
 						</Box>
 						<Box sx={switchBox}>
 							<List>
-								{button.map((data: DetailType, i: number) => {
-									const ButtonBox = DetailInfo[data];
+								{button.map((item: DetailType) => {
+									const ButtonBox = DetailInfo[item];
 									return (
 										<ButtonBox
-											key={i}
-											title={title}
-											description={description}
-											type={data[0] + 'L'}
-											setSwitch={() => switchClick(data)}
+											key={item}
+											{...props}
+											type={item[0] + 'L'}
+											setSwitch={() => switchClick(item)}
 										/>
 									);
 								})}

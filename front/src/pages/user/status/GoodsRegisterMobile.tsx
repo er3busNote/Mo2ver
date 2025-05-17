@@ -1,10 +1,13 @@
-import React, { FC, useState, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { GoodsData, SearchGoodsResuqestData } from '@api/types';
 import SearchInput from '@components/input/SearchInput';
 import ButtonGoods from '@components/button/ButtonGoods';
 import PageNavigator from '@components/pagination/PageNavigator';
 import {
 	Box,
+	Link,
 	Grid,
 	Stack,
 	Divider,
@@ -41,20 +44,28 @@ import {
 	BallotOutlined as BallotOutlinedIcon,
 	ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
+import goToGoodsForm from '@navigate/goods/goToGoodsForm';
+import { GoodsRegisterProps } from '../types';
 import dayjs, { Dayjs } from 'dayjs';
 
-interface GoodsRegisterProps {
-	title: string;
-	description: string;
-	type: string;
-	setSwitch?: () => void;
-}
-
-const UserRegisterDetail: FC = (): JSX.Element => {
-	const [page, setPage] = useState(0);
+const UserRegisterDetail: FC<
+	Omit<GoodsRegisterProps, 'type' | 'setSearchGoodsData'>
+> = ({ title, description, goodsData, setGoodsPage }): JSX.Element => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [progress, setProgress] = useState('');
 	const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 	const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+
+	const goodsRegisterClick = (code: string) => {
+		goToGoodsForm({
+			title,
+			description,
+			dispatch,
+			navigate,
+			goodsCode: code,
+		});
+	};
 
 	const handleProgressChange = (event: SelectChangeEvent) => {
 		setProgress(event.target.value as string);
@@ -236,45 +247,41 @@ const UserRegisterDetail: FC = (): JSX.Element => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<TableRow>
-							<TableCell sx={dataTd} align="center">
-								아우터 리밋 크롭 푸퍼 자켓
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								엘레강스
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								티셔츠
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								승인요청
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								2012-12-01
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell sx={dataTd} align="center">
-								박시 프린트 티셔츠
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								엘레강스
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								티셔츠
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								판매중
-							</TableCell>
-							<TableCell sx={dataTd} align="center">
-								2012-12-01
-							</TableCell>
-						</TableRow>
+						{goodsData &&
+							goodsData.content &&
+							goodsData.content.map((data: GoodsData, index: number) => (
+								<TableRow key={index}>
+									<TableCell sx={dataTd} align="center">
+										<Link
+											component="button"
+											variant="body2"
+											underline="none"
+											onClick={() => goodsRegisterClick(data.goodsCode)}
+										>
+											{data.goodsName}
+										</Link>
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										{data.goodsBrand}
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										티셔츠
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										승인요청
+									</TableCell>
+									<TableCell sx={dataTd} align="center">
+										2012-12-01
+									</TableCell>
+								</TableRow>
+							))}
 					</TableBody>
 				</Table>
 			</TableContainer>
 			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-				<PageNavigator count={1} setPage={setPage} />
+				{goodsData.totalPages && (
+					<PageNavigator count={goodsData.totalPages} setPage={setGoodsPage} />
+				)}
 			</Box>
 		</Box>
 	);
@@ -284,6 +291,9 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 	title,
 	description,
 	type,
+	goodsData,
+	setGoodsPage,
+	setSearchGoodsData,
 	setSwitch,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState('');
@@ -292,8 +302,14 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 		const text = event.currentTarget.value;
 		setKeyword(text);
 	};
-	const searchClick = () => {
-		setKeyword('');
+	const searchOnKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (event.code === 'Enter') {
+			const searchData: SearchGoodsResuqestData = {
+				keyword: keyword,
+			};
+			setGoodsPage(0);
+			setSearchGoodsData(searchData);
+		}
 	};
 
 	const registerTitle: SxProps<Theme> = {
@@ -381,7 +397,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 									</Stack>
 								</Box>
 								<Box sx={registerDetail}>
-									<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+									<IconButton sx={{ p: 0 }}>
 										<CheckroomOutlinedIcon fontSize="small" />
 										<Typography component="span" sx={registerButton}>
 											상품등록
@@ -400,7 +416,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 									</Stack>
 								</Box>
 								<Box sx={registerDetail}>
-									<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+									<IconButton sx={{ p: 0 }}>
 										<CurrencyExchangeOutlinedIcon fontSize="small" />
 										<Typography component="span" sx={registerButton}>
 											승인요청
@@ -419,7 +435,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 									</Stack>
 								</Box>
 								<Box sx={registerDetail}>
-									<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+									<IconButton sx={{ p: 0 }}>
 										<PriceCheckOutlinedIcon fontSize="small" />
 										<Typography component="span" sx={registerButton}>
 											승인완료
@@ -438,7 +454,7 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 									</Stack>
 								</Box>
 								<Box sx={registerDetail}>
-									<IconButton component={Link} to="/cart" sx={{ p: 0 }}>
+									<IconButton sx={{ p: 0 }}>
 										<RequestPageOutlinedIcon fontSize="small" />
 										<Typography component="span" sx={registerButton}>
 											판매중
@@ -467,10 +483,16 @@ const GoodsRegisterMobile: FC<GoodsRegisterProps> = ({
 							<SearchInput
 								placeholder="등록한 상품을 검색할 수 있어요!"
 								onChange={searchOnChange}
+								onKeyPress={searchOnKeyPress}
 							/>
 						</Box>
 						<Box sx={registerViewBox}>
-							<UserRegisterDetail />
+							<UserRegisterDetail
+								title={title}
+								description={description}
+								goodsData={goodsData}
+								setGoodsPage={setGoodsPage}
+							/>
 						</Box>
 					</AccordionDetails>
 				</Accordion>

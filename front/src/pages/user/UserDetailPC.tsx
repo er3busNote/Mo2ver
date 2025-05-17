@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import UserSubHeaderPC from './cmmn/UserSubHeaderPC';
 import CartDeliveryPC from './status/CartDeliveryPC';
 import GoodsRegisterPC from './status/GoodsRegisterPC';
+import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
 import {
 	Box,
 	Paper,
@@ -25,29 +26,34 @@ import {
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
+import { Position, DetailType, DetailBoxProps } from './types';
 
-type Position = 'relative' | 'absolute' | 'fixed';
-type DetailType = 'Delivery' | 'Register';
 const DETAIL: DetailType[] = ['Delivery', 'Register'];
-const DetailInfo = {
-	Delivery: CartDeliveryPC,
-	Register: GoodsRegisterPC,
+const DetailInfo: Record<DetailType, FC<Omit<DetailBoxProps, 'type'>>> = {
+	Delivery: CartDeliveryPC as FC<Omit<DetailBoxProps, 'type'>>,
+	Register: GoodsRegisterPC as FC<Omit<DetailBoxProps, 'type'>>,
 };
 
 interface UserDetailProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
+	goodsData: GoodsPageData;
+	setGoodsPage: Dispatch<SetStateAction<number>>;
+	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
 }
 
 const UserDetailPC: FC<UserDetailProps> = ({
 	title,
 	description,
 	member,
+	goodsData,
+	setGoodsPage,
+	setSearchGoodsData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [detail, setDetail] = useState(0);
+	const [detail, setDetail] = useState<DetailType>(DETAIL[0]);
 	const [isAnimating, setAnimating] = useState(false);
 	const transitionProps: UseTransitionProps = {
 		from: { position: 'relative' as Position, transform: 'translateY(200%)' },
@@ -60,7 +66,7 @@ const UserDetailPC: FC<UserDetailProps> = ({
 	};
 	const transition = useTransition(detail, transitionProps);
 
-	const switchClick = (item: number) => {
+	const switchClick = (item: DetailType) => {
 		if (!isAnimating) {
 			setAnimating(true);
 			setDetail(item);
@@ -250,11 +256,21 @@ const UserDetailPC: FC<UserDetailProps> = ({
 						</Box>
 					</Box>
 					<Box sx={statusBox}>
-						{transition((style, i: number) => {
-							const DetailBox = DetailInfo[DETAIL[i]];
+						{transition((style, item: DetailType) => {
+							const DetailBox = DetailInfo[item];
+							const props =
+								item == 'Register'
+									? ({
+											title,
+											description,
+											goodsData,
+											setGoodsPage,
+											setSearchGoodsData,
+									  } as Omit<DetailBoxProps, 'type'>)
+									: ({ title, description } as Omit<DetailBoxProps, 'type'>);
 							return (
-								<animated.div key={i} style={style}>
-									<DetailBox title={title} description={description} />
+								<animated.div key={item} style={style}>
+									<DetailBox {...props} />
 								</animated.div>
 							);
 						})}

@@ -50,6 +50,18 @@ const goods = (instance: AxiosInstance) => {
 					})
 					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),
+		// 상품 수정 API : <baseURL>/goods/update
+		update:
+			(goodsRegisterData: GoodsRegisterData, csrfData: CSRFData) =>
+			(dispatch: Dispatch) =>
+				instance
+					.patch('goods/update', goodsRegisterData, {
+						headers: {
+							'X-XSRF-TOKEN': csrfData?.csrfToken,
+						},
+					})
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };
 

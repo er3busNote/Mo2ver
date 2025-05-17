@@ -189,8 +189,6 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 		if (componentType === 'Update') {
 			bannerFormData.bannerNo = bannerNo;
 		}
-		console.log(bannerFormData);
-		console.log(csrfData);
 		if (componentType === 'Create')
 			await banner.goodsCreate(bannerFormData, csrfData);
 		if (componentType === 'Update')
