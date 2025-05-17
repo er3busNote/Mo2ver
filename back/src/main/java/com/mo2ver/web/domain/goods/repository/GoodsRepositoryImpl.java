@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.goods.repository;
 
+import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.domain.goods.dto.ImageInfo;
 import com.mo2ver.web.domain.goods.dto.response.GoodsDetailResponse;
 import com.mo2ver.web.domain.goods.dto.response.QGoodsDetailResponse;
@@ -8,6 +9,7 @@ import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.type.CategoryType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -19,11 +21,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.mo2ver.web.common.file.entity.QFile.file;
 import static com.mo2ver.web.domain.goods.entity.QGoods.goods;
 import static com.mo2ver.web.domain.goods.entity.QPrice.price;
 import static com.mo2ver.web.domain.goods.entity.QDiscount.discount;
 import static com.mo2ver.web.domain.goods.entity.QGoodsImage.goodsImage;
 import static com.mo2ver.web.domain.goods.entity.QReview.review;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements GoodsRepositoryCustom {
 
@@ -36,37 +41,62 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
     public Optional<GoodsDetailResponse> findGoodsById(String goodsCode) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(goodsImage.basicImageYesNo.eq('Y'));
+        builder.and(goodsImage.useYesNo.eq('Y'));
         builder.and(goods.goodsCode.eq(goodsCode));
 
         GoodsDetailResponse result = queryFactory
-                .select(new QGoodsDetailResponse(
-                        goods.goodsCode,
-                        goods.goodsName,
-                        goods.goodsBrand,
-                        goods.goodsGender,
-                        goods.goodsYear,
-                        price.supplyPrice,
-                        price.salePrice,
-                        Projections.constructor(ImageInfo.class,
-                                goodsImage.goodsImageAttachFile,
-                                goodsImage.goodsImageExtension,
-                                goodsImage.basicImageYesNo,
-                                goodsImage.sortSequence,
-                                goodsImage.useYesNo
-                        ),
-                        goods.keyword,
-                        review.rating.avg(),
-                        review.count()
-                ))
                 .from(goods)
                 .innerJoin(goods.price, price)
                 .leftJoin(goods.goodsDiscounts, discount)
                 .leftJoin(goods.goodsImages, goodsImage)
-                .leftJoin(review).on(goods.goodsCode.eq(review.goodsCode.goodsCode))
+                .leftJoin(file).on(goodsImage.goodsImageAttachFile.eq(file.fileCode.intValue()))
                 .where(builder)
-                .groupBy(goods.goodsCode)
-                .fetchOne();
+                .transform(groupBy(goods.goodsCode).list(
+                        new QGoodsDetailResponse(
+                                goods.goodsCode,
+                                goods.goodsName,
+                                goods.goodsBrand,
+                                goods.goodsGender,
+                                goods.goodsYear,
+                                goods.keyword,
+                                list(Projections.constructor(ImageInfo.class,
+                                        goodsImage.goodsImageAttachFile,
+                                        goodsImage.goodsImageExtension,
+                                        goodsImage.basicImageYesNo,
+                                        goodsImage.sortSequence,
+                                        goodsImage.useYesNo
+                                )),
+                                list(Projections.constructor(FileInfo.class,
+                                        file.fileCode,
+                                        file.fileName,
+                                        file.filePath,
+                                        file.fileType,
+                                        file.fileSize
+                                )),
+                                goods.summaryInfo,
+                                goods.largeCategoryCode,
+                                goods.mediumCategoryCode,
+                                goods.smallCategoryCode,
+                                price.buyLimitYesNo,
+                                price.salePeriodYesNo,
+                                price.saleStartDate,
+                                price.saleEndDate,
+                                price.supplyPrice,
+                                price.salePrice,
+                                price.maxBuyQuantity,
+                                discount.discountPrice,
+                                discount.startDate,
+                                discount.endDate,
+                                JPAExpressions.select(review.rating.avg())
+                                        .from(review)
+                                        .where(review.goodsCode.goodsCode.eq(goods.goodsCode))
+                                        .where(review.delYesNo.eq('N')),
+                                JPAExpressions.select(review.count())
+                                        .from(review)
+                                        .where(review.goodsCode.goodsCode.eq(goods.goodsCode))
+                                        .where(review.delYesNo.eq('N'))
+                        )
+                )).stream().findFirst().orElse(null);
         return Optional.ofNullable(result);
     }
 

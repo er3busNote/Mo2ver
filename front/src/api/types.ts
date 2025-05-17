@@ -46,6 +46,19 @@ interface GoodsData {
 }
 
 interface GoodsDetailData extends GoodsData {
+	goodsimageList: Array<FileData>;
+	summaryInfo: string;
+	largeCategoryCode: string;
+	mediumCategoryCode: string;
+	smallCategoryCode: string;
+	buyLimitYesNo: string;
+	salePeriodYesNo: string;
+	saleStartDate: string;
+	saleEndDate: string;
+	maxBuyQuantity: number;
+	discountPrice: number;
+	discountStartDate: string;
+	discountEndDate: string;
 	averageRating: number;
 	reviewCount: number;
 }

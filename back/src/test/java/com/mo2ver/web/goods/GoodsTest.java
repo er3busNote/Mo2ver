@@ -27,7 +27,7 @@ public class GoodsTest extends CsrfConfigTest {
     @Test
     @DisplayName("상품 상세 정보 확인")
     public void findGoodsInfoTest() throws Exception {
-        String goodCode = "1000000004";
+        String goodCode = "1000000002";
         mockMvc.perform(get("/goods/info/{goodCode}", goodCode))
                 .andDo(print())
                 .andExpect(status().isOk());

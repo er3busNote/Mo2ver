@@ -33,7 +33,7 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
 import { useIsMobile } from '@context/MobileContext';
-import { isEmpty, get } from 'lodash';
+import { isEmpty, get, find } from 'lodash';
 
 interface GoodsDetailProps {
 	title: string;
@@ -88,7 +88,11 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	};
 
 	const attachFile = String(
-		get(goodsData, ['imageList', 0, 'goodsImageAttachFile'], '')
+		get(
+			find(goodsData.imageList, { basicImageYesNo: 'Y' }),
+			'goodsImageAttachFile',
+			''
+		)
 	);
 
 	const gridItem: SxProps<Theme> = {
