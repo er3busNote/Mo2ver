@@ -45,7 +45,7 @@ public class Payment {
     @Column(name = "PAY_KEY", columnDefinition = "VARCHAR(200) COMMENT '결재인증키'")
     private String paymentKey;
 
-    @Column(name = "OD_ID", columnDefinition = "VARCHAR(64) COMMENT '주문번호'")
+    @Column(name = "ODR_ID", columnDefinition = "VARCHAR(64) COMMENT '주문번호'")
     private String orderId;
 
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '결재금액'")
