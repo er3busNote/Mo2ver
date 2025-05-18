@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.common.utils;
 
-import com.mo2ver.web.global.common.properties.OracleCloudProperties;
+import com.mo2ver.web.global.common.setting.OracleCloudSetting;
 import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class ObjectStorageUtil {
 
     private final ObjectStorage objectStorage;
-    private final OracleCloudProperties oracleCloudProperties;
+    private final OracleCloudSetting oracleCloudSetting;
 
     public void uploadFile(MultipartFile file, String objectName) throws IOException {
 
@@ -28,8 +28,8 @@ public class ObjectStorageUtil {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         PutObjectRequest request = PutObjectRequest.builder()
-                .namespaceName(oracleCloudProperties.getNamespace())
-                .bucketName(oracleCloudProperties.getBucketName())
+                .namespaceName(oracleCloudSetting.getNamespace())
+                .bucketName(oracleCloudSetting.getBucketName())
                 .objectName(objectName)
                 .putObjectBody(inputStream)
                 .contentLength((long) bytes.length)
@@ -41,8 +41,8 @@ public class ObjectStorageUtil {
 
     public byte[] downloadFile(String objectName) throws IOException {
         GetObjectRequest request = GetObjectRequest.builder()
-                .namespaceName(oracleCloudProperties.getNamespace())
-                .bucketName(oracleCloudProperties.getBucketName())
+                .namespaceName(oracleCloudSetting.getNamespace())
+                .bucketName(oracleCloudSetting.getBucketName())
                 .objectName(objectName)
                 .build();
 

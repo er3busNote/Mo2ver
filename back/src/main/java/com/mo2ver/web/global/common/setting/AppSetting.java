@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.common.properties;
+package com.mo2ver.web.global.common.setting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @Component
 @ConfigurationProperties(prefix = "init-member")
 @Getter @Setter
-public class AppProperties {
+public class AppSetting {
 
     @NotEmpty
     private String adminLoginId;

@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.common.utils;
 
-import com.mo2ver.web.global.common.properties.ImagesProperties;
+import com.mo2ver.web.global.common.setting.ImagesSetting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +15,13 @@ public class FileUtil {
 
     private static final String PROJECT_DIRECTORY = System.getProperty("user.dir");
 
-    private final ImagesProperties imagesProperties;
+    private final ImagesSetting imagesSetting;
 
     private static String filepath;
 
     @PostConstruct
     public void init() {
-        filepath = imagesProperties.getFilepath();
+        filepath = imagesSetting.getFilepath();
     }
 
     public static Path getUploadDirectory(String directoryPath) {

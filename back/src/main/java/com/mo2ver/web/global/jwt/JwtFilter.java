@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.jwt;
 
-import com.mo2ver.web.global.common.utils.CookieUtil;
+import com.mo2ver.web.global.common.cookie.CookieHelper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // TODO 전처리
         String accessToken = resolveToken(httpServletRequest);
-        String refreshToken = CookieUtil.resolveTokenFromCookie(httpServletRequest, REFRESH_TOKEN);
+        String refreshToken = CookieHelper.resolveTokenFromCookie(httpServletRequest, REFRESH_TOKEN);
 
         if (validateToken(accessToken)) {
             Authentication authentication = tokenProvider.getAuthentication(accessToken);

@@ -1,6 +1,6 @@
 package com.mo2ver.web.global.configs;
 
-import com.mo2ver.web.global.common.properties.OracleCloudProperties;
+import com.mo2ver.web.global.common.setting.OracleCloudSetting;
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.StringPrivateKeySupplier;
@@ -22,16 +22,16 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class OracleCloudConfig {
 
-    private final OracleCloudProperties oracleCloudProperties;
+    private final OracleCloudSetting oracleCloudSetting;
 
     @Bean
     public ObjectStorage objectStorageClient() {
-        String privateKey = loadPrivateKey(oracleCloudProperties.getPrivateKey());
+        String privateKey = loadPrivateKey(oracleCloudSetting.getPrivateKey());
         Supplier<InputStream> privateKeySupplier = new StringPrivateKeySupplier(privateKey);
         SimpleAuthenticationDetailsProvider provider = SimpleAuthenticationDetailsProvider.builder()
-                .tenantId(oracleCloudProperties.getTenantId())
-                .userId(oracleCloudProperties.getUserId())
-                .fingerprint(oracleCloudProperties.getFingerprint())
+                .tenantId(oracleCloudSetting.getTenantId())
+                .userId(oracleCloudSetting.getUserId())
+                .fingerprint(oracleCloudSetting.getFingerprint())
                 .region(Region.AP_SEOUL_1)
                 .privateKeySupplier(privateKeySupplier)
                 .build();

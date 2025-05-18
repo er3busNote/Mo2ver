@@ -2,8 +2,8 @@ package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.common.menu.converter.MenuTypeConverter;
 import com.mo2ver.web.domain.goods.converter.CategoryTypeConverter;
-import com.mo2ver.web.global.common.properties.CorsProperties;
-import com.mo2ver.web.global.common.properties.ImagesProperties;
+import com.mo2ver.web.global.common.setting.CorsSetting;
+import com.mo2ver.web.global.common.setting.ImagesSetting;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
@@ -31,8 +31,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
 
-    private final CorsProperties corsProperties;
-    private final ImagesProperties imagesProperties;
+    private final CorsSetting corsSetting;
+    private final ImagesSetting imagesSetting;
 
     @Autowired
     private Environment environment;
@@ -40,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(corsProperties.getUrlClient())
+                .allowedOrigins(corsSetting.getUrlClient())
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
                 //.exposedHeaders("Set-Cookie")
@@ -51,7 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:" + imagesProperties.getFilepath() + "/")
+                .addResourceLocations("file:" + imagesSetting.getFilepath() + "/")
                 .setCachePeriod(60 * 60 * 24 * 365);
     }
     @Override

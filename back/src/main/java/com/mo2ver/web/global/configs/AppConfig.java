@@ -3,7 +3,7 @@ package com.mo2ver.web.global.configs;
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.type.MemberRole;
-import com.mo2ver.web.global.common.properties.AppProperties;
+import com.mo2ver.web.global.common.setting.AppSetting;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -42,26 +42,26 @@ public class AppConfig {
             MemberService memberService;
 
             @Autowired
-            AppProperties appProperties;
+            AppSetting appSetting;
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
                 Member admin = Member.builder()
-                        .loginId(appProperties.getAdminLoginId())
+                        .loginId(appSetting.getAdminLoginId())
                         .memberName("ER3BUS")
-                        .password(appProperties.getAdminPassword())
+                        .password(appSetting.getAdminPassword())
                         .cellPhoneNumber("010XXXXXXXX")
-                        .email(appProperties.getAdminEmail())
+                        .email(appSetting.getAdminEmail())
                         .roles(Stream.of(MemberRole.ADMIN, MemberRole.MANAGER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
                         .build();
                 memberService.saveAuth(admin);
 
                 Member user = Member.builder()
-                        .loginId(appProperties.getUserLoginId())
+                        .loginId(appSetting.getUserLoginId())
                         .memberName("ER3BUS")
-                        .password(appProperties.getUserPassword())
+                        .password(appSetting.getUserPassword())
                         .cellPhoneNumber("010XXXXXXXX")
-                        .email(appProperties.getUserEmail())
+                        .email(appSetting.getUserEmail())
                         .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
                         .build();
                 memberService.saveAuth(user);

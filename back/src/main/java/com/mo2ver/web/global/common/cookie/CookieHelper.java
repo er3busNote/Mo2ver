@@ -1,6 +1,6 @@
-package com.mo2ver.web.global.common.utils;
+package com.mo2ver.web.global.common.cookie;
 
-import com.mo2ver.web.global.common.properties.JwtProperties;
+import com.mo2ver.web.global.common.setting.JwtSetting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @RequiredArgsConstructor
-public class CookieUtil {
+public class CookieHelper {
 
-    private final JwtProperties jwtProperties;
+    private final JwtSetting jwtSetting;
 
     private static long jwtRefreshtokenValidationSecond;
 
     @PostConstruct
     public void init() {
-        jwtRefreshtokenValidationSecond = jwtProperties.getJwtRefreshtokenValidationSecond();
+        jwtRefreshtokenValidationSecond = jwtSetting.getJwtRefreshtokenValidationSecond();
     }
 
     public static ResponseCookie createCookie(String key, String value, boolean isHttpOnly) {

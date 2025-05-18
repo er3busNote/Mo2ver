@@ -7,7 +7,7 @@ import com.mo2ver.web.domain.search.dto.request.SearchPageGoodsRequest;
 import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
 import com.mo2ver.web.domain.search.service.SearchService;
 import com.mo2ver.web.global.common.dto.PageInfo;
-import com.mo2ver.web.global.common.utils.CookieUtil;
+import com.mo2ver.web.global.common.cookie.CookieHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class SearchController {
 
         if (clientId == null) {
             String newClientId = UUID.randomUUID().toString();
-            ResponseCookie cookie = CookieUtil.createCookie(CLIENT_ID, newClientId, true);
+            ResponseCookie cookie = CookieHelper.createCookie(CLIENT_ID, newClientId, true);
             searchService.saveSearchForGuest(newClientId, keyword);
             return buildSearch(cookie, pageInfo, searchGoodsRequest);
         }

@@ -1,7 +1,7 @@
 package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.domain.member.service.MemberService;
-import com.mo2ver.web.global.common.properties.CorsProperties;
+import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.web.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.web.global.jwt.JwtSecurityConfig;
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final CorsProperties corsProperties;
+    private final CorsSetting corsSetting;
     private final TokenProvider tokenProvider;
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**", "/search/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/goods/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/cart/list", "/recommend/**").hasAnyRole("USER")  // 3.1) 장바구니, 추천 목록
-                .mvcMatchers(HttpMethod.POST, "/cart/**", "/review/**").hasAnyRole("USER")      // 3.2) 장바구니, 리뷰 추가
+                .mvcMatchers(HttpMethod.POST, "/cart/**", "/review/**", "/payment/**").hasAnyRole("USER")      // 3.2) 장바구니, 리뷰, 결재 추가
                 .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**").hasAnyRole("USER")       // 3.3) 장바구니, 리뷰 수정
                 .mvcMatchers(HttpMethod.DELETE, "/cart/**", "/review/**").hasAnyRole("USER")    // 3.4) 장바구니, 리뷰 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
@@ -127,7 +127,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList(corsProperties.getUrlClient()));
+        config.setAllowedOrigins(Arrays.asList(corsSetting.getUrlClient()));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Origin", "Authorization", "X-XSRF-TOKEN", "Content-Type", "Accept"));
         config.setAllowCredentials(true);   // 쿠키 요청을 허용하도록 true로 설정

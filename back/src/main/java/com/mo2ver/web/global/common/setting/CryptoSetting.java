@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.common.properties;
+package com.mo2ver.web.global.common.setting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,13 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 
 @Component
-@ConfigurationProperties(prefix = "images-setting")
+@ConfigurationProperties(prefix = "crypto-setting")
 @Getter @Setter
-public class ImagesProperties {
+public class CryptoSetting {
 
     @NotEmpty
-    private String filepath;
+    private String password;
+
+    @NotEmpty
+    private String salt;
 }

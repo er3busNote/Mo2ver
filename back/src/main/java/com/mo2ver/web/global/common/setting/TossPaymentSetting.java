@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.common.properties;
+package com.mo2ver.web.global.common.setting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,16 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 
 @Component
-@ConfigurationProperties(prefix = "cors-setting")
+@ConfigurationProperties(prefix = "toss-payment")
 @Getter @Setter
-public class CorsProperties {
+public class TossPaymentSetting {
 
     @NotEmpty
-    private String urlClient;
+    private String urlPath;
+
+    @NotEmpty
+    private String clientKey;
+
+    @NotEmpty
+    private String secretKey;
 }

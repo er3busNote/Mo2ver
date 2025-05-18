@@ -1,4 +1,4 @@
-package com.mo2ver.web.global.common.properties;
+package com.mo2ver.web.global.common.setting;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,13 +8,10 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 
 @Component
-@ConfigurationProperties(prefix = "crypto-setting")
+@ConfigurationProperties(prefix = "cors-setting")
 @Getter @Setter
-public class CryptoProperties {
+public class CorsSetting {
 
     @NotEmpty
-    private String password;
-
-    @NotEmpty
-    private String salt;
+    private String urlClient;
 }

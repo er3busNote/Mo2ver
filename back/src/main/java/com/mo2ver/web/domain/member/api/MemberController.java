@@ -6,7 +6,7 @@ import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.validation.MemberValidator;
 import com.mo2ver.web.global.common.dto.response.CsrfResponse;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
-import com.mo2ver.web.global.common.utils.CookieUtil;
+import com.mo2ver.web.global.common.cookie.CookieHelper;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.type.ErrorCode;
@@ -63,7 +63,7 @@ public class MemberController {
 
             TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-            ResponseCookie refreshTokenCookie = CookieUtil.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
+            ResponseCookie refreshTokenCookie = CookieHelper.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
 
             return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
                     .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
@@ -147,7 +147,7 @@ public class MemberController {
     public ResponseEntity csrfToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
-            ResponseCookie csrfCookie = CookieUtil.createCookie(XSRF_TOKEN, csrf.getToken(), true);
+            ResponseCookie csrfCookie = CookieHelper.createCookie(XSRF_TOKEN, csrf.getToken(), true);
             response.setHeader(HttpHeaders.SET_COOKIE, csrfCookie.toString());
             return ResponseEntity.ok().body(CsrfResponse.builder()
                     .csrfToken(csrf.getToken())

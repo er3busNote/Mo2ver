@@ -1,7 +1,7 @@
 package com.mo2ver.web.global.jwt;
 
 import com.mo2ver.web.domain.member.service.MemberService;
-import com.mo2ver.web.global.common.properties.JwtProperties;
+import com.mo2ver.web.global.common.setting.JwtSetting;
 import com.mo2ver.web.global.common.utils.DateUtil;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
@@ -34,7 +34,7 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     private final MemberService memberService;
-    private final JwtProperties jwtProperties;
+    private final JwtSetting jwtSetting;
 
     // 호출순서 : Constructor -> postConstruct -> afterPropertiesSet -> init
 
@@ -43,7 +43,7 @@ public class TokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        this.signkey = Keys.hmacShaKeyFor(jwtProperties.getJwtSecret().getBytes(StandardCharsets.UTF_8));
+        this.signkey = Keys.hmacShaKeyFor(jwtSetting.getJwtSecret().getBytes(StandardCharsets.UTF_8));
     }
 
     public TokenInfo createToken(Authentication authentication) {
@@ -79,11 +79,11 @@ public class TokenProvider implements InitializingBean {
     }
 
     public String createAccessToken(Authentication authentication) {
-        return doGenerateToken(authentication, "access", jwtProperties.getJwtAccesstokenValidationSecond() * 1000L);
+        return doGenerateToken(authentication, "access", jwtSetting.getJwtAccesstokenValidationSecond() * 1000L);
     }
 
     public String createRefreshToken(Authentication authentication) {
-        return doGenerateToken(authentication, "refresh", jwtProperties.getJwtRefreshtokenValidationSecond() * 1000L);
+        return doGenerateToken(authentication, "refresh", jwtSetting.getJwtRefreshtokenValidationSecond() * 1000L);
     }
 
     public String doGenerateToken(Authentication authentication, String tokenType, long tokenValidityInMilliseconds) {

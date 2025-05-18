@@ -95,3 +95,14 @@ oracle:
     namespace: cnocuvkcoanz
     bucket-name: bucket-20231206-2356
     private-key: mo2ver_bucket_api_key.pem
+
+toss-payment:
+  url-path: https://api.tosspayments.com/v1
+  client-key: test
+  secret-key: test
+
+sentry:
+  dsn:
+  send-default-pii: true     # 사용자 정보 포함
+  enable-tracing: false
+  environment: development
