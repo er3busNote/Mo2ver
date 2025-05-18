@@ -42,7 +42,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("결재정보 정보 승인 확인")
-    public void confirmPaymentNTest() throws Exception {
+    public void confirmPaymentTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
@@ -59,7 +59,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("결재정보 정보 취소 확인")
-    public void cancelPaymentNTest() throws Exception {
+    public void cancelPaymentTest() throws Exception {
 
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
