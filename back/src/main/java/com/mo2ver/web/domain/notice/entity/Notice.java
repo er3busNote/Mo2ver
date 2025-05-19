@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(
-        name = "NTC_MNG",   // 공지사항관리
+        name = "NTC",   // 공지사항관리
         indexes={
-                @Index(name="FK_MBR_TO_NTC_MNG", columnList="MBR_NO")
+                @Index(name="FK_MBR_TO_NTC", columnList="MBR_NO")
         }
 )
 @Getter @Setter
@@ -47,7 +47,7 @@ public class Notice {
             name = "MBR_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_NTC_MNG"),
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_NTC"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member memberNo;

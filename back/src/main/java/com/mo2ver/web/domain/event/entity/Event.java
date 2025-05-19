@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "EVT_MNG")    // 이벤트 관리
+@Table(name = "EVT")    // 이벤트 관리
 @Getter @Setter
 @EqualsAndHashCode(of = "eventManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor

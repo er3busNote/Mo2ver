@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "EVT_IMG",    // 상품이미지
         indexes={
-                @Index(name="FK_EVT_MNG_TO_EVT_IMG", columnList="EVT_MNG_NO")
+                @Index(name="FK_EVT_TO_EVT_IMG", columnList="EVT_MNG_NO")
         }
 )
 @Getter @Setter
@@ -31,7 +31,7 @@ public class EventImage {
             name = "EVT_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_EVT_MNG_TO_EVT_IMG"),
+            foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_IMG"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
     private Event eventManageNo;

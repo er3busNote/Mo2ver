@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "TERMS_MNG")      // 약관관리
+@Table(name = "TERMS")      // 약관관리
 @Getter @Setter
 @EqualsAndHashCode(of = "termsManageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class TermsManage {
+public class Terms {
 
     @Id
     @Column(name = "TERMS_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '약관관리번호'")

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "DP_BNNR_DTL", // 전시배너상세
         indexes={
-                @Index(name="FK_DP_BNNR_MNG_TO_DP_BNNR_DTL", columnList="BNNR_MNG_NO")
+                @Index(name="FK_DP_BNNR_TO_DP_BNNR_DTL", columnList="BNNR_MNG_NO")
         }
 )
 @Getter @Setter
@@ -33,7 +33,7 @@ public class BannerDetail {
             name = "BNNR_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_DP_BNNR_MNG_TO_DP_BNNR_DTL"),
+            foreignKey = @ForeignKey(name = "FK_DP_BNNR_TO_DP_BNNR_DTL"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
     private Banner bannerManageNo;

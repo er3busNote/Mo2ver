@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "DP_BNNR_MNG")    // 전시배너관리
+@Table(name = "DP_BNNR")    // 전시배너관리
 @Getter @Setter
 @EqualsAndHashCode(of = "bannerManageNo")
 @Builder @NoArgsConstructor(access = AccessLevel.PROTECTED)

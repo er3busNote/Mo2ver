@@ -29,10 +29,10 @@ public class TermsAgree implements Serializable {
             name = "TERMS_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_TERMS_MNG_TO_TERMS_AGR"),
+            foreignKey = @ForeignKey(name = "FK_TERMS_TO_TERMS_AGR"),
             columnDefinition = "BIGINT(20) COMMENT '약관관리번호'"
     )
-    private TermsManage termsManageNo;
+    private Terms termsManageNo;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)

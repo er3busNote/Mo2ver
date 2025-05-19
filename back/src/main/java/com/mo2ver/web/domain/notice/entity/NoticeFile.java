@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "NTC_FILE", // 공지사항파일관리
         indexes={
-                @Index(name="FK_NTC_MNG_TO_NTC_FILE", columnList="NTC_MNG_NO")
+                @Index(name="FK_NTC_TO_NTC_FILE", columnList="NTC_MNG_NO")
         }
 )
 @Getter @Setter
@@ -33,7 +33,7 @@ public class NoticeFile {
             name = "NTC_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_NTC_MNG_TO_NTC_FILE"),
+            foreignKey = @ForeignKey(name = "FK_NTC_TO_NTC_FILE"),
             columnDefinition = "BIGINT(20) COMMENT '공지사항관리번호'"
     )
     private Notice noticeManageNo;

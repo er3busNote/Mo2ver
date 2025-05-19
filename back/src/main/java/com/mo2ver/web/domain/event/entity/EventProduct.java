@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "EVT_PRD",   // 전시배너상품
         indexes={
-                @Index(name = "FK_EVT_MNG_TO_EVT_PRD", columnList = "EVT_MNG_NO")
+                @Index(name = "FK_EVT_TO_EVT_PRD", columnList = "EVT_MNG_NO")
         }
 )
 @Getter @Setter
@@ -32,7 +32,7 @@ public class EventProduct {
             name = "EVT_MNG_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_EVT_MNG_TO_EVT_PRD"),
+            foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
     private Event eventManageNo;
