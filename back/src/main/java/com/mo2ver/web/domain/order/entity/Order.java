@@ -4,11 +4,13 @@ import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -18,17 +20,24 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "orderCode")
+@EqualsAndHashCode(of = "orderId")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Order {
 
+//    @Id
+//    @GeneratedValue(generator = "orderCode")
+//    @GenericGenerator(name = "orderCode", strategy = "com.mo2ver.web.domain.order.entity.OrderGenerator")
+//    @Column(name = "ODR_CD", columnDefinition = "CHAR(10) COMMENT '주문코드'")
+//    private String orderCode;
+
     @Id
-    @GeneratedValue(generator = "orderCode")
-    @GenericGenerator(name = "orderCode", strategy = "com.mo2ver.web.domain.order.entity.OrderGenerator")
-    @Column(name = "ODR_CD", columnDefinition = "CHAR(10) COMMENT '주문코드'")
-    private String orderCode;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Type(type = "uuid-char")
+    @Column(name = "ODR_ID", columnDefinition = "CHAR(36) COMMENT '주문번호'", updatable = false, nullable = false)
+    private UUID orderId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
@@ -38,10 +47,7 @@ public class Order {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_ODR"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
-
-    @Column(name = "ODR_ID", columnDefinition = "VARCHAR(64) COMMENT '주문번호'")
-    private String orderId;
+    private Member member;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -60,4 +66,14 @@ public class Order {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public Order(Member currentUser) {
+        this.createOrUpdateOrder(currentUser);
+        this.member = currentUser;
+        this.register = currentUser.getMemberNo();
+    }
+
+    private void createOrUpdateOrder(Member currentUser) {
+        this.updater = currentUser.getMemberNo();
+    }
 }

@@ -19,7 +19,7 @@ import java.util.Date;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = {"termsManageNo", "memberNo"})
+@EqualsAndHashCode(of = {"terms", "member"})
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class TermsAgree implements Serializable {
 
@@ -32,7 +32,7 @@ public class TermsAgree implements Serializable {
             foreignKey = @ForeignKey(name = "FK_TERMS_TO_TERMS_AGR"),
             columnDefinition = "BIGINT(20) COMMENT '약관관리번호'"
     )
-    private Terms termsManageNo;
+    private Terms terms;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
@@ -43,7 +43,7 @@ public class TermsAgree implements Serializable {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_TERMS_AGR"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @Column(name = "AGR_YN", columnDefinition = "CHAR(1) COMMENT '동의여부'")
     @ColumnDefault("'N'")

@@ -30,7 +30,7 @@ public class ReviewResponse {
                 .imageAttachFile(JasyptUtil.getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
-                .memberName(review.getMemberNo().getMemberName())
+                .memberName(review.getMember().getMemberName())
                 .reviewResponseList(
                         review.getReviews().stream()
                                 .map(ReviewResponse::of)
@@ -45,7 +45,7 @@ public class ReviewResponse {
                 .imageAttachFile(JasyptUtil.getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())
-                .memberName(review.getMemberNo().getMemberName())
+                .memberName(review.getMember().getMemberName())
                 .reviewResponseList(childrenMap.getOrDefault(review.getGoodsReviewNo(), Collections.emptyList()).stream()
                         .map(r -> ReviewResponse.of(r, childrenMap))
                         .collect(Collectors.toList()))

@@ -36,7 +36,7 @@ public class PaymentDetail {
     @Column(name = "LST_TRN_KEY", columnDefinition = "VARCHAR(64) COMMENT '마지막거래키'")
     private String lastTransactionKey;
 
-    @Column(name = "PAY_TYPE", columnDefinition = "CHAR(10) COMMENT '결제타입'")
+    @Column(name = "PAY_TYPE", columnDefinition = "CHAR(10) COMMENT '결제유형'")
     private String paymentType;
 
     @Column(name = "CURRENCY", columnDefinition = "CHAR(10) COMMENT '통화'")

@@ -2,6 +2,8 @@ package com.mo2ver.web.domain.payment.service;
 
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
+import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.domain.payment.dto.request.TossPaymentRequest;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Base64;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -26,6 +29,7 @@ import java.util.Base64;
 public class PaymentService {
 
     private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final TossPaymentSetting tossPaymentSetting;
 
@@ -33,12 +37,13 @@ public class PaymentService {
     private Environment environment;
 
     @Transactional
-    public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
+    public PaymentResponse savePayment(PaymentRequest paymentRequest, UUID orderId, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
-        Payment payment = new Payment(PaymentInfo.of(paymentRequest.getAmount()), member);
+        Order order = this.findOrderById(orderId);
+        Payment payment = new Payment(PaymentInfo.of(paymentRequest.getAmount()), order, member);
         this.paymentRepository.save(payment);
         String clientKey = tossPaymentSetting.getClientKey();
-        return PaymentResponse.of(clientKey, payment.getOrderId(), payment.getAmount());
+        return PaymentResponse.of(clientKey, payment.getOrderId().getOrderId().toString(), payment.getAmount());
     }
 
     @Transactional
@@ -69,8 +74,13 @@ public class PaymentService {
         return this.memberRepository.findById(memberNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
+    
+    private Order findOrderById(UUID orderId) {
+        return this.orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
+    }
 
-    private Payment findPaymentByOrderId(String orderId) {
+    private Payment findPaymentByOrderId(UUID orderId) {
         return this.paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 결재정보 입니다."));
     }

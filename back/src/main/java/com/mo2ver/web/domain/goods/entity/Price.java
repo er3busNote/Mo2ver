@@ -43,7 +43,7 @@ public class Price implements Persistable<PriceId> {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_PRC_MBR_NO"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @Column(name = "SUPP_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '공급가'")
     private BigDecimal supplyPrice;
@@ -98,7 +98,7 @@ public class Price implements Persistable<PriceId> {
     // 새로운 엔티티 판단 전략 재정의
     @Override
     public boolean isNew() {
-        return priceId == null || goodsCode == null || memberNo == null;
+        return priceId == null || goodsCode == null || member == null;
     }
 
     public static Price of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
@@ -106,7 +106,7 @@ public class Price implements Persistable<PriceId> {
         return Price.builder()
                 .priceId(priceId)
                 .goodsCode(goods)
-                .memberNo(currentUser)
+                .member(currentUser)
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
                 .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())

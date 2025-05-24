@@ -84,7 +84,7 @@ public class Goods {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_GD"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Discount> goodsDiscounts = new ArrayList<>();
@@ -116,7 +116,7 @@ public class Goods {
     public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
         this.goodsCondition = "10";
-        this.memberNo = currentUser;
+        this.member = currentUser;
         this.register = currentUser.getMemberNo();
 
         this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);

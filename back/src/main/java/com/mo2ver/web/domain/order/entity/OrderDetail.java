@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "ODR_DTL", // 주문상세
         indexes={
-                @Index(name="FK_ODR_TO_ODR_DTL", columnList="ODR_CD"),
+                @Index(name="FK_ODR_TO_ODR_DTL", columnList="ODR_ID"),
                 @Index(name="FK_GD_TO_ODR_DTL", columnList="GD_CD")
         }
 )
@@ -29,13 +29,13 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
-            name = "ODR_CD",
+            name = "ODR_ID",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ODR_TO_ODR_DTL"),
-            columnDefinition = "CHAR(10) COMMENT '주문코드'"
+            columnDefinition = "CHAR(36) COMMENT '주문번호'"
     )
-    private Order orderCode;
+    private Order orderId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(

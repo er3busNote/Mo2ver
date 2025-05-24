@@ -19,8 +19,8 @@ public class PaymentInfo {
     @NotBlank(message = "결제인증 키값이 존재하지 않습니다")
     private String paymentKey;
 
-    @NotBlank(message = "주문번호가 존재하지 않습니다")
-    private String orderId;
+    @NotNull(message = "주문번호가 존재하지 않습니다")
+    private UUID orderId;
 
     @NotNull(message="결재금액을 입력해 주세요.")
     private Long amount;
@@ -29,12 +29,12 @@ public class PaymentInfo {
 
     public static PaymentInfo of(Long amount) {
         return PaymentInfo.builder()
-                .orderId(UUID.randomUUID().toString())
+                .orderId(UUID.randomUUID())
                 .amount(amount)
                 .build();
     }
 
-    public static PaymentInfo of(String paymentKey, String orderId, Long amount) {
+    public static PaymentInfo of(String paymentKey, UUID orderId, Long amount) {
         return PaymentInfo.builder()
                 .paymentKey(paymentKey)
                 .orderId(orderId)

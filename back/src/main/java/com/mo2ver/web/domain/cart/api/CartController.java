@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.cart.api;
 import com.mo2ver.web.domain.cart.dto.CartInfo;
 import com.mo2ver.web.domain.cart.dto.response.CartResponse;
 import com.mo2ver.web.domain.cart.service.CartService;
+import com.mo2ver.web.domain.inventory.service.InventoryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class CartController {
 
     private final CartService cartService;
+    private final InventoryService inventoryService;
 
     @GetMapping("/list")
     public ResponseEntity listCart(@CurrentUser Member currentUser) {
@@ -28,6 +30,7 @@ public class CartController {
                             .message("장바구니가 비어있습니다")
                             .build());
         }
+        inventoryService.validate();    // 재고관리
         return ResponseEntity.ok().body(cartService.getCartList(currentUser));
     }
 

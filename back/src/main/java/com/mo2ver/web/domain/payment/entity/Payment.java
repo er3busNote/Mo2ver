@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.payment.entity;
 
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.payment.type.PaymentType;
 import lombok.*;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "PAY",   // 결재관리
         indexes={
+                @Index(name="FK_ODR_TO_PAY", columnList="ODR_ID"),
                 @Index(name="FK_MBR_TO_PAY", columnList="MBR_NO")
         }
 )
@@ -32,6 +34,19 @@ public class Payment {
     @Column(name = "PAY_CD", columnDefinition = "CHAR(10) COMMENT '결재코드'")
     private String paymentCode;
 
+    @Column(name = "PAY_KEY", columnDefinition = "VARCHAR(200) COMMENT '결재인증키'")
+    private String paymentKey;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @JoinColumn(
+            name = "ODR_ID",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(name = "FK_ODR_TO_PAY"),
+            columnDefinition = "CHAR(36) COMMENT '주문번호'"
+    )
+    private Order orderId;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "MBR_NO",
@@ -40,13 +55,7 @@ public class Payment {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_PAY"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
-
-    @Column(name = "PAY_KEY", columnDefinition = "VARCHAR(200) COMMENT '결재인증키'")
-    private String paymentKey;
-
-    @Column(name = "ODR_ID", columnDefinition = "VARCHAR(64) COMMENT '주문번호'")
-    private String orderId;
+    private Member member;
 
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '결재금액'")
     private Long amount;
@@ -72,12 +81,12 @@ public class Payment {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Payment(PaymentInfo paymentInfo, Member currentUser) {
+    public Payment(PaymentInfo paymentInfo, Order order, Member currentUser) {
         this.createOrUpdatePayment(paymentInfo, currentUser);
-        this.orderId = paymentInfo.getOrderId();
+        this.orderId = order;
         this.amount = paymentInfo.getAmount();
         this.paymentCondition = PaymentType.PROCESS.toString();
-        this.memberNo = currentUser;
+        this.member = currentUser;
         this.register = currentUser.getMemberNo();
     }
 

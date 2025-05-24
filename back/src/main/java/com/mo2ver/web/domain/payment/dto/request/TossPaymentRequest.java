@@ -16,7 +16,7 @@ public class TossPaymentRequest {
     public static TossPaymentRequest of(PaymentInfo paymentInfo) {
         return TossPaymentRequest.builder()
                 .paymentKey(paymentInfo.getPaymentKey())
-                .orderId(paymentInfo.getOrderId())
+                .orderId(paymentInfo.getOrderId().toString())
                 .amount(paymentInfo.getAmount())
                 .build();
     }

@@ -38,7 +38,7 @@ public class Delivery {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_DLV"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank

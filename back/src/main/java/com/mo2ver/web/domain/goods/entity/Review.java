@@ -58,7 +58,7 @@ public class Review {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_REVW"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
     private Integer imageAttachFile;
@@ -95,7 +95,7 @@ public class Review {
 
     public Review(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         this.createOrUpdateReview(goodsReviewRequest, goods, currentUser);
-        this.memberNo = currentUser;
+        this.member = currentUser;
         this.register = currentUser.getMemberNo();
     }
 
@@ -125,7 +125,7 @@ public class Review {
         return Review.builder()
                 .goodsReviewNo(goodsReviewRequest.getUpperReviewNo())
                 .goodsCode(goods)
-                .memberNo(currentUser)
+                .member(currentUser)
                 .imageAttachFile(JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg()))
                 .reviewContents(goodsReviewRequest.getReviewContents())
                 .rating(goodsReviewRequest.getRating())
