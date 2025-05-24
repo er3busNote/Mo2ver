@@ -11,7 +11,7 @@ import javax.validation.groups.Default;
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class GoodsReviewRequest {
 
     @NotNull(groups = Update.class)

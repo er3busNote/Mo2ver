@@ -126,7 +126,7 @@ public class BannerController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
+    public ResponseEntity<?> uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
                                        @RequestPart(name = "bannerImage") @Valid BannerImageInfo bannerImageInfo,
                                        @CurrentUser Member currentUser,
                                        BindingResult result) {

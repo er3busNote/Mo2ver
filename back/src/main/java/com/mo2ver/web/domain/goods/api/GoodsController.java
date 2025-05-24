@@ -108,7 +108,7 @@ public class GoodsController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity uploadGoods(@RequestPart(name = "files") @Valid List<MultipartFile> files,
+    public ResponseEntity<?> uploadGoods(@RequestPart(name = "files") @Valid List<MultipartFile> files,
                                       @RequestPart(name = "goodsImage") @Valid GoodsImageRequest goodsImageRequest,
                                       @CurrentUser Member currentUser,
                                       BindingResult result) {

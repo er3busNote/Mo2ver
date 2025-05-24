@@ -31,7 +31,7 @@ public class FileController {
     private final ErrorHandler errorHandler;
 
     @GetMapping("/image")
-    public ResponseEntity fileImage(@RequestParam String id) {
+    public ResponseEntity<?> fileImage(@RequestParam String id) {
         try {
             FileResponse fileResponse = this.findFile(id);
             return ResponseEntity.ok().contentType(fileResponse.getMediaType())
@@ -44,7 +44,7 @@ public class FileController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity downloadFile(@RequestParam String id) {
+    public ResponseEntity<?> downloadFile(@RequestParam String id) {
         try {
             FileResponse fileResponse = this.findFile(id);
             return ResponseEntity.ok().contentType(fileResponse.getMediaType())
@@ -58,7 +58,7 @@ public class FileController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity uploadFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
+    public ResponseEntity<?> uploadFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
                                       @CurrentUser Member currentUser) {
         try {
             return ResponseEntity.ok().body(fileService.saveFile(files, currentUser));
@@ -70,7 +70,7 @@ public class FileController {
     }
 
     @PostMapping(value = "/upload/bucket", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity uploadBucketFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
+    public ResponseEntity<?> uploadBucketFiles(@RequestParam(name = "files") @Valid @ValidFileList List<MultipartFile> files,
                                             @CurrentUser Member currentUser) {
         try {
             return ResponseEntity.ok().body(fileService.saveBucketFile(files, currentUser));

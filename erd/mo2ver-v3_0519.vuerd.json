@@ -4,8 +4,8 @@
   "settings": {
     "width": 3500,
     "height": 3500,
-    "scrollTop": -1791.9604,
-    "scrollLeft": -1704.6215,
+    "scrollTop": -1384.9604,
+    "scrollLeft": -1777.6215,
     "zoomLevel": 0.79,
     "show": 431,
     "database": 4,
@@ -1115,6 +1115,7 @@
         "columnIds": [
           "AuGs0PRtiL6wSC9aPeZF6",
           "C-6AoSHQ_6VS3G0wCbyaK",
+          "eLggvKGbQF9OPmwYc9jte",
           "MlkSZ_pcL7i_nGaI3-JNX",
           "xXldOU9UnoAU_94lIPz5u",
           "uSiBB196wzB2BDVlmRI4F",
@@ -1128,6 +1129,7 @@
           "1-AyuQ-DX1hk4-HBLpOlQ",
           "sandJD9Zk336ilN8BoO1G",
           "j8Gmk-sK952nnM7dGb-mw",
+          "eLggvKGbQF9OPmwYc9jte",
           "MlkSZ_pcL7i_nGaI3-JNX",
           "xXldOU9UnoAU_94lIPz5u",
           "uSiBB196wzB2BDVlmRI4F",
@@ -1143,7 +1145,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1748075601654,
+          "updateAt": 1748108384161,
           "createAt": 1747665328816
         }
       },
@@ -1155,6 +1157,7 @@
           "I393Eufjw8w4TB7dW1ptA",
           "m9WPFm_q7fsAqAXGMSysc",
           "R_v3biA5zO41JJYREhmYr",
+          "KyfJ--gUpIB0mSvX_dh9K",
           "YqwZ7fBKYvsn3jT_7R0cp",
           "zl5PG7L1wRSlKAjvj_Z55",
           "ouuScmnM_P_F6mLX0p2g6",
@@ -1166,6 +1169,7 @@
           "m9WPFm_q7fsAqAXGMSysc",
           "mK210ia_NwuD4cRplbrFZ",
           "R_v3biA5zO41JJYREhmYr",
+          "KyfJ--gUpIB0mSvX_dh9K",
           "YqwZ7fBKYvsn3jT_7R0cp",
           "zl5PG7L1wRSlKAjvj_Z55",
           "ouuScmnM_P_F6mLX0p2g6",
@@ -1173,14 +1177,14 @@
         ],
         "ui": {
           "x": 1923.3482,
-          "y": 1501.7192,
+          "y": 1483.9979,
           "zIndex": 2424,
           "widthName": 60,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 1747756559093,
+          "updateAt": 1748108417681,
           "createAt": 1747666338831
         }
       },
@@ -8505,6 +8509,46 @@
           "updateAt": 1748076122332,
           "createAt": 1748075969061
         }
+      },
+      "eLggvKGbQF9OPmwYc9jte": {
+        "id": "eLggvKGbQF9OPmwYc9jte",
+        "tableId": "PUu7IZ5b7_yDBh2OhNZc8",
+        "name": "AMT",
+        "comment": "주문금액",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748108408368,
+          "createAt": 1748108369404
+        }
+      },
+      "KyfJ--gUpIB0mSvX_dh9K": {
+        "id": "KyfJ--gUpIB0mSvX_dh9K",
+        "tableId": "N8J45jGV5sokwud1e7Ais",
+        "name": "AMT",
+        "comment": "상품금액",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748108412372,
+          "createAt": 1748108398476
+        }
       }
     },
     "relationshipEntities": {
@@ -9004,7 +9048,7 @@
             "m9WPFm_q7fsAqAXGMSysc"
           ],
           "x": 1923.3482,
-          "y": 1613.7192,
+          "y": 1607.9979,
           "direction": 1
         },
         "meta": {
@@ -9023,7 +9067,7 @@
             "AuGs0PRtiL6wSC9aPeZF6"
           ],
           "x": 2424.6442,
-          "y": 1600.1829,
+          "y": 1612.1829,
           "direction": 1
         },
         "end": {
@@ -9032,7 +9076,7 @@
             "I393Eufjw8w4TB7dW1ptA"
           ],
           "x": 2293.3482,
-          "y": 1613.7192,
+          "y": 1607.9979,
           "direction": 2
         },
         "meta": {
@@ -9191,7 +9235,7 @@
             "AuGs0PRtiL6wSC9aPeZF6"
           ],
           "x": 2794.6442,
-          "y": 1600.1829,
+          "y": 1612.1829,
           "direction": 2
         },
         "end": {

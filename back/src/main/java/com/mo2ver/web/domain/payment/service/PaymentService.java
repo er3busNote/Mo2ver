@@ -37,10 +37,10 @@ public class PaymentService {
     private Environment environment;
 
     @Transactional
-    public PaymentResponse savePayment(PaymentRequest paymentRequest, UUID orderId, Member currentUser) {
+    public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
-        Order order = this.findOrderById(orderId);
-        Payment payment = new Payment(PaymentInfo.of(paymentRequest.getAmount()), order, member);
+        Order order = this.findOrderById(paymentRequest.getOrderId());
+        Payment payment = new Payment(PaymentInfo.of(order), order, member);
         this.paymentRepository.save(payment);
         String clientKey = tossPaymentSetting.getClientKey();
         return PaymentResponse.of(clientKey, payment.getOrderId().getOrderId().toString(), payment.getAmount());

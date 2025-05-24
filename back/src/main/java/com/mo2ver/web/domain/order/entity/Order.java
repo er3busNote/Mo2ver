@@ -1,6 +1,10 @@
 package com.mo2ver.web.domain.order.entity;
 
+import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.dto.OrderInfo;
+import com.mo2ver.web.domain.order.dto.request.OrderRequest;
+import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,7 +14,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -49,6 +56,12 @@ public class Order {
     )
     private Member member;
 
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '주문금액'")
+    private Long amount;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -67,13 +80,37 @@ public class Order {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Order(Member currentUser) {
+    public Order(OrderRequest orderRequest, List<Goods> goodsList, Member currentUser) {
         this.createOrUpdateOrder(currentUser);
         this.member = currentUser;
         this.register = currentUser.getMemberNo();
+
+        this.orderDetails.addAll(this.createOrderDetail(orderRequest.getGoodsOrders(), goodsList, currentUser));
+
+        this.totalPriceCalc();
     }
 
     private void createOrUpdateOrder(Member currentUser) {
         this.updater = currentUser.getMemberNo();
+    }
+
+    private List<OrderDetail> createOrderDetail(List<OrderInfo> orderInfos, List<Goods> goodsList, Member currentUser) {
+        return orderInfos.stream()
+                .map(info -> OrderDetail.of(this, info, this.getGoodsInfo(goodsList, info.getGoodsCode()), currentUser))
+                .collect(Collectors.toList());
+    }
+
+    private Goods getGoodsInfo(List<Goods> goodsList, String goodsCode) {
+        return goodsList.stream()
+                .filter(it -> it.getGoodsCode().equals(goodsCode))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
+    }
+
+    private void totalPriceCalc() {
+        this.amount = 0L;
+        for (OrderDetail orderDetail : this.orderDetails) {
+            this.amount += orderDetail.getAmount();
+        }
     }
 }

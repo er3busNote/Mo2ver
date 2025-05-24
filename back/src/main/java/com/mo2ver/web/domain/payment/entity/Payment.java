@@ -3,7 +3,7 @@ package com.mo2ver.web.domain.payment.entity;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
-import com.mo2ver.web.domain.payment.type.PaymentType;
+import com.mo2ver.web.domain.payment.type.PaymentStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -60,8 +60,8 @@ public class Payment {
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '결재금액'")
     private Long amount;
 
-    @Column(name = "PAY_CND", columnDefinition = "CHAR(10) COMMENT '결재상태'")
-    private String paymentCondition;
+    @Column(name = "PAY_STS", columnDefinition = "CHAR(10) COMMENT '결재상태'")
+    private PaymentStatus paymentStatus;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -85,7 +85,7 @@ public class Payment {
         this.createOrUpdatePayment(paymentInfo, currentUser);
         this.orderId = order;
         this.amount = paymentInfo.getAmount();
-        this.paymentCondition = PaymentType.PROCESS.toString();
+        this.paymentStatus = PaymentStatus.PROCESS;
         this.member = currentUser;
         this.register = currentUser.getMemberNo();
     }
@@ -93,12 +93,12 @@ public class Payment {
     public void confirm(PaymentInfo paymentInfo, Member currentUser) {
         this.createOrUpdatePayment(paymentInfo, currentUser);
         this.paymentKey = paymentInfo.getPaymentKey();
-        this.paymentCondition = PaymentType.CONFIRM.toString();
+        this.paymentStatus = PaymentStatus.CONFIRM;
     }
 
     public void cancel(PaymentInfo paymentInfo, Member currentUser) {
         this.createOrUpdatePayment(paymentInfo, currentUser);
-        this.paymentCondition = PaymentType.CANCEL.toString();
+        this.paymentStatus = PaymentStatus.CANCEL;
     }
 
     private void createOrUpdatePayment(PaymentInfo paymentInfo, Member currentUser) {

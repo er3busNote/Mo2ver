@@ -1,12 +1,15 @@
 package com.mo2ver.web.domain.order.entity;
 
 import com.mo2ver.web.domain.goods.entity.Goods;
+import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.dto.OrderInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -50,6 +53,9 @@ public class OrderDetail {
     @Column(name = "BUY_QTY", columnDefinition = "INT(11) COMMENT '구매수량'")
     private Integer buyQuantity;
 
+    @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '상품금액'")
+    private Long amount;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -67,4 +73,15 @@ public class OrderDetail {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static OrderDetail of(Order order, OrderInfo orderInfo, Goods goods, Member currentUser) {
+        return OrderDetail.builder()
+                .orderId(order)
+                .goodsCode(goods)
+                .buyQuantity(orderInfo.getQuantity())
+                .amount(goods.getPrice().getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
 }

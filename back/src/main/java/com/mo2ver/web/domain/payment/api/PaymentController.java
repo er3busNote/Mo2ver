@@ -1,9 +1,7 @@
 package com.mo2ver.web.domain.payment.api;
 
-import com.mo2ver.web.domain.inventory.service.InventoryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.order.service.OrderService;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,18 +24,13 @@ import java.util.UUID;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final OrderService orderService;
-    private final InventoryService inventoryService;
 
     @PostMapping("/create")
     public ResponseEntity<PaymentResponse> createPayment(
             @RequestBody @Valid PaymentRequest paymentRequest,
             @CurrentUser Member currentUser
     ) {
-        UUID orderId = orderService.saveOrder(currentUser);
-        inventoryService.validate();
-        inventoryService.update();
-        PaymentResponse paymentResponse = paymentService.savePayment(paymentRequest, orderId, currentUser);
+        PaymentResponse paymentResponse = paymentService.savePayment(paymentRequest, currentUser);
         return ResponseEntity.ok().body(paymentResponse);
     }
 

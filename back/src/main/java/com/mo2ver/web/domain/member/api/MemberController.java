@@ -53,7 +53,7 @@ public class MemberController {
     private final MemberValidator memberValidator;
 
     @PostMapping("/login")
-    public ResponseEntity authLogin(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<?> authLogin(@RequestBody @Valid LoginRequest loginRequest) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
@@ -80,7 +80,7 @@ public class MemberController {
     }
 
     @PatchMapping("/refresh")
-    public ResponseEntity authRefresh(
+    public ResponseEntity<?> authRefresh(
             @RequestBody @Valid TokenRequest tokenRequest,
             @CookieValue(name = JWT_REFRESH_TOKEN, required = false) String refreshToken
     ) {
@@ -107,7 +107,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity authSignup(@RequestBody @Valid SignupRequest signupRequest,
+    public ResponseEntity<?> authSignup(@RequestBody @Valid SignupRequest signupRequest,
                                      Errors errors) {
         UserDetailsService userDetailsService = (UserDetailsService) memberService;
         try {
@@ -144,7 +144,7 @@ public class MemberController {
     }
 
     @GetMapping("csrf-token")
-    public ResponseEntity csrfToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> csrfToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
             ResponseCookie csrfCookie = CookieHelper.createCookie(XSRF_TOKEN, csrf.getToken(), true);

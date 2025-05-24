@@ -23,7 +23,7 @@ public class CartController {
     private final InventoryService inventoryService;
 
     @GetMapping("/list")
-    public ResponseEntity listCart(@CurrentUser Member currentUser) {
+    public ResponseEntity<?> listCart(@CurrentUser Member currentUser) {
         if (cartService.isCartEmpty(currentUser)) {
             return ResponseEntity.ok().body(ResponseHandler.builder()
                             .status(HttpStatus.OK.value())
@@ -60,7 +60,7 @@ public class CartController {
     }
 
     @DeleteMapping("/delete/{goodsCode}")
-    public ResponseEntity deleteOneCart(@PathVariable String goodsCode, @CurrentUser Member currentUser) {
+    public ResponseEntity<?> deleteOneCart(@PathVariable String goodsCode, @CurrentUser Member currentUser) {
         if (cartService.isCartEmpty(currentUser)) {
             return ResponseEntity.ok().body(ResponseHandler.builder()
                     .status(HttpStatus.OK.value())

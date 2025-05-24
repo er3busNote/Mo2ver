@@ -38,7 +38,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     private PaymentRequest getPaymentRequest() {
         return PaymentRequest.builder()
-                .amount(1000L)
+                .orderId(UUID.fromString("2941da1f-ad1e-4136-a8a0-4566542ffbae"))
                 .build();
     }
 
@@ -80,7 +80,7 @@ public class PaymentTest extends CsrfConfigTest {
         return PaymentInfo.builder()
                 .paymentCode("P000000001")
                 .paymentKey("5EnNZRJGvaBX7zk2yd8ydw26XvwXkLrx9POLqKQjmAw4b0e1")
-                .orderId(UUID.fromString("c81888b5-b4da-4962-b399-355777b0ec99"))
+                .orderId(UUID.fromString("2941da1f-ad1e-4136-a8a0-4566542ffbae"))
                 .amount(1000L)
                 .build();
     }

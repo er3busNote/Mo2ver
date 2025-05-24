@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.payment.dto;
 
+import com.mo2ver.web.domain.order.entity.Order;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -27,18 +28,10 @@ public class PaymentInfo {
 
     public interface Update extends Default {}
 
-    public static PaymentInfo of(Long amount) {
+    public static PaymentInfo of(Order order) {
         return PaymentInfo.builder()
-                .orderId(UUID.randomUUID())
-                .amount(amount)
-                .build();
-    }
-
-    public static PaymentInfo of(String paymentKey, UUID orderId, Long amount) {
-        return PaymentInfo.builder()
-                .paymentKey(paymentKey)
-                .orderId(orderId)
-                .amount(amount)
+                .orderId(order.getOrderId())
+                .amount(order.getAmount())
                 .build();
     }
 }
