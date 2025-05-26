@@ -45,7 +45,7 @@ public class Payment {
             foreignKey = @ForeignKey(name = "FK_ODR_TO_PAY"),
             columnDefinition = "CHAR(36) COMMENT '주문번호'"
     )
-    private Order orderId;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
@@ -60,6 +60,7 @@ public class Payment {
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '결재금액'")
     private Long amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PAY_STS", columnDefinition = "CHAR(10) COMMENT '결재상태'")
     private PaymentStatus paymentStatus;
 
@@ -83,7 +84,7 @@ public class Payment {
 
     public Payment(PaymentInfo paymentInfo, Order order, Member currentUser) {
         this.createOrUpdatePayment(paymentInfo, currentUser);
-        this.orderId = order;
+        this.order = order;
         this.amount = paymentInfo.getAmount();
         this.paymentStatus = PaymentStatus.PROCESS;
         this.member = currentUser;

@@ -30,8 +30,7 @@ public class GoodsGenerator implements IdentifierGenerator {
                 lastGoodsNo = rs.getString(1);
                 if (lastGoodsNo != null) {
                     String goodsNo = generateNextId(lastGoodsNo);
-                    newGoods.setRegister(goodsNo);
-                    newGoods.setUpdater(goodsNo);
+                    newGoods.setGoodsCode(goodsNo);
                     return goodsNo;
                 }
             }
@@ -48,8 +47,7 @@ public class GoodsGenerator implements IdentifierGenerator {
         }
 
         String firstGoodNo = String.valueOf(FIRST_GOODS_NO + 1);
-        newGoods.setRegister(firstGoodNo);
-        newGoods.setUpdater(firstGoodNo);
+        newGoods.setGoodsCode(firstGoodNo);
         return firstGoodNo;
     }
 

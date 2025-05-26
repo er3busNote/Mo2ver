@@ -28,8 +28,7 @@ public class MemberGenerator implements IdentifierGenerator {
                 lastMemberNo = rs.getString(1);
                 if (lastMemberNo != null) {
                     String memberNo = generateNextId(lastMemberNo);
-                    newMember.setRegister(memberNo);
-                    newMember.setUpdater(memberNo);
+                    newMember.setMemberNo(memberNo);
                     return memberNo;
                 }
             }
@@ -45,8 +44,7 @@ public class MemberGenerator implements IdentifierGenerator {
             }
         }
 
-        newMember.setRegister("M000000001");
-        newMember.setUpdater("M000000001");
+        newMember.setMemberNo("M000000001");
         return "M000000001";
     }
 

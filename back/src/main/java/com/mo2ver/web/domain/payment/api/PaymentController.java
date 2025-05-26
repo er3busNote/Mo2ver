@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.payment.api;
 
+import com.mo2ver.web.domain.delivery.service.DeliveryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final DeliveryService deliveryService;
 
     @PostMapping("/create")
     public ResponseEntity<PaymentResponse> createPayment(
@@ -40,6 +42,7 @@ public class PaymentController {
             @CurrentUser Member currentUser
     ) {
         paymentService.confirmPayment(paymentInfo, currentUser);
+        deliveryService.saveDelivery(paymentInfo, currentUser);
         return ResponseEntity.ok()
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.OK.value())

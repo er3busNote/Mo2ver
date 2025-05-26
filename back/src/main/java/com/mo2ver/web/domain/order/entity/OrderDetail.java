@@ -38,7 +38,7 @@ public class OrderDetail {
             foreignKey = @ForeignKey(name = "FK_ODR_TO_ODR_DTL"),
             columnDefinition = "CHAR(36) COMMENT '주문번호'"
     )
-    private Order orderId;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
@@ -76,7 +76,7 @@ public class OrderDetail {
 
     public static OrderDetail of(Order order, OrderInfo orderInfo, Goods goods, Member currentUser) {
         return OrderDetail.builder()
-                .orderId(order)
+                .order(order)
                 .goodsCode(goods)
                 .buyQuantity(orderInfo.getQuantity())
                 .amount(goods.getPrice().getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())

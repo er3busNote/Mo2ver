@@ -43,12 +43,13 @@ public class PaymentService {
         Payment payment = new Payment(PaymentInfo.of(order), order, member);
         this.paymentRepository.save(payment);
         String clientKey = tossPaymentSetting.getClientKey();
-        return PaymentResponse.of(clientKey, payment.getOrderId().getOrderId().toString(), payment.getAmount());
+        return PaymentResponse.of(clientKey, payment.getOrder().getOrderId().toString(), payment.getAmount());
     }
 
     @Transactional
     public void confirmPayment(PaymentInfo paymentInfo, Member currentUser) {
-        Payment payment = this.findPaymentByOrderId(paymentInfo.getOrderId());
+        Order order = this.findOrderById(paymentInfo.getOrderId());
+        Payment payment = this.findPaymentByOrderId(order);
         if(environment.acceptsProfiles("test")){
             payment.confirm(paymentInfo, currentUser);
         } else {
@@ -66,7 +67,8 @@ public class PaymentService {
 
     @Transactional
     public void cancelPayment(PaymentInfo paymentInfo, Member currentUser) {
-        Payment payment = this.findPaymentByOrderId(paymentInfo.getOrderId());
+        Order order = this.findOrderById(paymentInfo.getOrderId());
+        Payment payment = this.findPaymentByOrderId(order);
         payment.cancel(paymentInfo, currentUser);
     }
 
@@ -80,8 +82,8 @@ public class PaymentService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
 
-    private Payment findPaymentByOrderId(UUID orderId) {
-        return this.paymentRepository.findByOrderId(orderId)
+    private Payment findPaymentByOrderId(Order order) {
+        return this.paymentRepository.findByOrder(order)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 결재정보 입니다."));
     }
 }

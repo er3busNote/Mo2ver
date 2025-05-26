@@ -1,6 +1,9 @@
 package com.mo2ver.web.domain.delivery.entity;
 
+import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.domain.order.entity.OrderDetail;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,12 +12,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
         name = "DLV",   // 배송관리
         indexes={
-                @Index(name="FK_MBR_TO_DLV", columnList="MBR_NO")
+                @Index(name="FK_ODR_TO_DLV", columnList="ODR_ID")
         }
 )
 @Getter @Setter
@@ -32,13 +38,16 @@ public class Delivery {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
-            name = "MBR_NO",
+            name = "ODR_ID",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_DLV"),
-            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+            foreignKey = @ForeignKey(name = "FK_ODR_TO_DLV"),
+            columnDefinition = "CHAR(36) COMMENT '주문번호'"
     )
-    private Member member;
+    private Order order;
+
+    @OneToMany(mappedBy = "deliveryCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeliveryDetail> deliveryDetails = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -57,4 +66,22 @@ public class Delivery {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public Delivery(Order order, Member currentUser) {
+        this.createOrUpdateDelivery(currentUser);
+        this.order = order;
+        this.register = currentUser.getMemberNo();
+
+        this.deliveryDetails.addAll(this.createDeliveryDetail(order.getOrderDetails(), currentUser));
+    }
+
+    private void createOrUpdateDelivery(Member currentUser) {
+        this.updater = currentUser.getMemberNo();
+    }
+
+    private List<DeliveryDetail> createDeliveryDetail(List<OrderDetail> orderDetails, Member currentUser) {
+        return orderDetails.stream()
+                .map(info -> DeliveryDetail.of(this, info, DeliveryStatus.READY, currentUser))
+                .collect(Collectors.toList());
+    }
 }

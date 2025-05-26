@@ -56,7 +56,7 @@ public class Order {
     )
     private Member member;
 
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '주문금액'")

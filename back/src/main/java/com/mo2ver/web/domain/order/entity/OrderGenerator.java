@@ -17,7 +17,7 @@ public class OrderGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(ODR_CD) FROM ODR";
-        String lastOrderNo = null;
+        String lastOrderCd = null;
         Order newOrder = (Order) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
@@ -25,12 +25,9 @@ public class OrderGenerator implements IdentifierGenerator {
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastOrderNo = rs.getString(1);
-                if (lastOrderNo != null) {
-                    String memberNo = generateNextId(lastOrderNo);
-                    newOrder.setRegister(memberNo);
-                    newOrder.setUpdater(memberNo);
-                    return memberNo;
+                lastOrderCd = rs.getString(1);
+                if (lastOrderCd != null) {
+                    return generateNextId(lastOrderCd);
                 }
             }
         } catch (SQLException e) {
@@ -45,8 +42,6 @@ public class OrderGenerator implements IdentifierGenerator {
             }
         }
 
-        newOrder.setRegister("O000000001");
-        newOrder.setUpdater("O000000001");
         return "O000000001";
     }
 

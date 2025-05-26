@@ -17,7 +17,7 @@ public class DeliveryGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(DLV_CD) FROM DLV";
-        String lastDeliveryNo = null;
+        String lastDeliveryCd = null;
         Delivery newDelivery = (Delivery) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
@@ -25,12 +25,11 @@ public class DeliveryGenerator implements IdentifierGenerator {
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastDeliveryNo = rs.getString(1);
-                if (lastDeliveryNo != null) {
-                    String memberNo = generateNextId(lastDeliveryNo);
-                    newDelivery.setRegister(memberNo);
-                    newDelivery.setUpdater(memberNo);
-                    return memberNo;
+                lastDeliveryCd = rs.getString(1);
+                if (lastDeliveryCd != null) {
+                    String deliveryCd = generateNextId(lastDeliveryCd);
+                    newDelivery.setDeliveryCode(deliveryCd);
+                    return deliveryCd;
                 }
             }
         } catch (SQLException e) {
@@ -45,8 +44,7 @@ public class DeliveryGenerator implements IdentifierGenerator {
             }
         }
 
-        newDelivery.setRegister("D000000001");
-        newDelivery.setUpdater("D000000001");
+        newDelivery.setDeliveryCode("D000000001");
         return "D000000001";
     }
 

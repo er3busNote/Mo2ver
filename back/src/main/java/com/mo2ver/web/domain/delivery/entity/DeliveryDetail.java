@@ -1,6 +1,8 @@
 package com.mo2ver.web.domain.delivery.entity;
 
-import com.mo2ver.web.domain.goods.entity.Goods;
+import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
+import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.entity.OrderDetail;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
         name = "DLV_DTL", // 배송상세
         indexes={
                 @Index(name="FK_DLV_TO_DLV_DTL", columnList="DLV_CD"),
-                @Index(name="FK_GD_TO_DLV_DTL", columnList="GD_CD")
+                @Index(name="FK_ODR_DTL_TO_DLV_DTL", columnList="ODR_DTL_ID")
         }
 )
 @Getter @Setter
@@ -23,7 +25,7 @@ import java.time.LocalDateTime;
 public class DeliveryDetail {
 
     @Id
-    @Column(name = "ODR_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배송상세관리번호'")
+    @Column(name = "DLV_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배송상세관리번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long deliveryDetailId;
 
@@ -39,16 +41,17 @@ public class DeliveryDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
     @JoinColumn(
-            name = "GD_CD",
+            name = "ODR_DTL_ID",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_GD_TO_DLV_DTL"),
-            columnDefinition = "CHAR(10) COMMENT '상품코드'"
+            foreignKey = @ForeignKey(name = "FK_ODR_DTL_TO_DLV_DTL"),
+            columnDefinition = "BIGINT(20) COMMENT '주문상세관리번호'"
     )
-    private Goods goodsCode;
+    private OrderDetail orderDetailId;
 
-    @Column(name = "DLV_CND", columnDefinition = "CHAR(10) COMMENT '배송상태'")
-    private String deliveryCondition;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DLV_STS", columnDefinition = "CHAR(10) COMMENT '배송상태'")
+    private DeliveryStatus deliveryStatus;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -67,4 +70,14 @@ public class DeliveryDetail {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static DeliveryDetail of(Delivery delivery, OrderDetail orderDetail, DeliveryStatus deliveryStatus, Member currentUser) {
+        return DeliveryDetail.builder()
+                .deliveryCode(delivery)
+                .orderDetailId(orderDetail)
+                .deliveryStatus(deliveryStatus)
+                .register(currentUser.getMemberNo())
+                .updater(currentUser.getMemberNo())
+                .build();
+    }
 }
