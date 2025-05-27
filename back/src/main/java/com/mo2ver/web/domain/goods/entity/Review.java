@@ -32,7 +32,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsReviewNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -40,7 +40,7 @@ public class Review {
             foreignKey = @ForeignKey(name = "FK_GD_TO_GD_REVW"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
-    private Goods goodsCode;
+    private Goods goods;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -49,9 +49,9 @@ public class Review {
             foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT),
             columnDefinition = "CHAR(10) COMMENT '상위상품리뷰번호'"
     )
-    private Review upperReviewNo;
+    private Review upperReview;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
@@ -72,7 +72,7 @@ public class Review {
     @Column(name = "DEL_YN", columnDefinition = "CHAR(1) COMMENT '삭제유무'")
     private Character delYesNo;
 
-    @OneToMany(mappedBy = "upperReviewNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "upperReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
@@ -108,9 +108,9 @@ public class Review {
     }
 
     private void createOrUpdateReview(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
-        this.goodsCode = goods;
+        this.goods = goods;
         if (goodsReviewRequest.getUpperReviewNo() != null) {
-            this.upperReviewNo = Review.of(goodsReviewRequest, goods, currentUser);
+            this.upperReview = Review.of(goodsReviewRequest, goods, currentUser);
         }
         if (StringUtils.hasText(goodsReviewRequest.getReviewImg())) {
             this.imageAttachFile = JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg());
@@ -124,7 +124,7 @@ public class Review {
     private static Review of(GoodsReviewRequest goodsReviewRequest, Goods goods, Member currentUser) {
         return Review.builder()
                 .goodsReviewNo(goodsReviewRequest.getUpperReviewNo())
-                .goodsCode(goods)
+                .goods(goods)
                 .member(currentUser)
                 .imageAttachFile(JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg()))
                 .reviewContents(goodsReviewRequest.getReviewContents())

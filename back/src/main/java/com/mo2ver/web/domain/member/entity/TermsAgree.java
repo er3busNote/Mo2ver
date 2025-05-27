@@ -24,7 +24,7 @@ import java.util.Date;
 public class TermsAgree implements Serializable {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "TERMS_MNG_NO",
             nullable = false,
@@ -35,7 +35,7 @@ public class TermsAgree implements Serializable {
     private Terms terms;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,

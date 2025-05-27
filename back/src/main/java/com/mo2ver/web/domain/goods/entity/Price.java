@@ -24,7 +24,7 @@ public class Price implements Persistable<PriceId> {
     private PriceId priceId;
 
     @MapsId("goodsCode")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -32,10 +32,10 @@ public class Price implements Persistable<PriceId> {
             foreignKey = @ForeignKey(name = "FK_GD_TO_GD_PRC_GD_CD"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
-    private Goods goodsCode;
+    private Goods goods;
 
     @MapsId("memberNo")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
@@ -98,14 +98,14 @@ public class Price implements Persistable<PriceId> {
     // 새로운 엔티티 판단 전략 재정의
     @Override
     public boolean isNew() {
-        return priceId == null || goodsCode == null || member == null;
+        return priceId == null || goods == null || member == null;
     }
 
     public static Price of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
         PriceId priceId = goods.getPrice() == null || goods.getPrice().isNew() ? new PriceId(goods.getGoodsCode(), currentUser.getMemberNo()) : Objects.requireNonNull(goods.getPrice()).getPriceId();
         return Price.builder()
                 .priceId(priceId)
-                .goodsCode(goods)
+                .goods(goods)
                 .member(currentUser)
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
@@ -126,7 +126,7 @@ public class Price implements Persistable<PriceId> {
         PriceId priceId = new PriceId(goods.getGoodsCode(), currentUser.getMemberNo());
         return Price.builder()
                 .priceId(priceId)
-                .goodsCode(Goods.of(goodsImageRequest, currentUser))
+                .goods(Goods.of(goodsImageRequest, currentUser))
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
                 .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())

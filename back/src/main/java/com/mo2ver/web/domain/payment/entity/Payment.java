@@ -37,7 +37,7 @@ public class Payment {
     @Column(name = "PAY_KEY", columnDefinition = "VARCHAR(200) COMMENT '결재인증키'")
     private String paymentKey;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "ODR_ID",
             nullable = false,
@@ -47,7 +47,7 @@ public class Payment {
     )
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,

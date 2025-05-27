@@ -36,7 +36,7 @@ public class Delivery {
     @Column(name = "DLV_CD", columnDefinition = "CHAR(10) COMMENT '배송코드'")
     private String deliveryCode;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "ODR_ID",
             nullable = false,
@@ -46,7 +46,7 @@ public class Delivery {
     )
     private Order order;
 
-    @OneToMany(mappedBy = "deliveryCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryDetail> deliveryDetails = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")

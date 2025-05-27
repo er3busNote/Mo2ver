@@ -71,7 +71,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .selectFrom(banner)
                 .leftJoin(banner.bannerProducts, bannerProduct)
                 .leftJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
-                .leftJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
+                .leftJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
                 .where(builder)
                 .transform(groupBy(banner.bannerManageNo).list(
                         new QGoodsDisplayInfo(
@@ -141,8 +141,8 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .selectFrom(banner)
                 .innerJoin(banner.bannerProducts, bannerProduct)
                 .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
-                .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
-                .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
+                .innerJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
+                .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goods.goodsCode))
                 .where(builder)
                 .orderBy(banner.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
                 .transform(groupBy(banner.displayConditionCode).as(

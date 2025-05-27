@@ -49,10 +49,10 @@ public class Banner {
     @Column(name = "DP_YN", columnDefinition = "CHAR(1) COMMENT '전시여부'")
     private Character displayYesNo;
 
-    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "banner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BannerDetail> bannerDetails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bannerManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "banner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BannerProduct> bannerProducts = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")

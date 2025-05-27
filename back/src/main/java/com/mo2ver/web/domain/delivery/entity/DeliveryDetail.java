@@ -29,7 +29,7 @@ public class DeliveryDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long deliveryDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "DLV_CD",
             nullable = false,
@@ -37,9 +37,9 @@ public class DeliveryDetail {
             foreignKey = @ForeignKey(name = "FK_DLV_TO_DLV_DTL"),
             columnDefinition = "CHAR(10) COMMENT '배송코드'"
     )
-    private Delivery deliveryCode;
+    private Delivery delivery;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "ODR_DTL_ID",
             nullable = false,
@@ -47,7 +47,7 @@ public class DeliveryDetail {
             foreignKey = @ForeignKey(name = "FK_ODR_DTL_TO_DLV_DTL"),
             columnDefinition = "BIGINT(20) COMMENT '주문상세관리번호'"
     )
-    private OrderDetail orderDetailId;
+    private OrderDetail orderDetail;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DLV_STS", columnDefinition = "CHAR(10) COMMENT '배송상태'")
@@ -73,8 +73,8 @@ public class DeliveryDetail {
 
     public static DeliveryDetail of(Delivery delivery, OrderDetail orderDetail, DeliveryStatus deliveryStatus, Member currentUser) {
         return DeliveryDetail.builder()
-                .deliveryCode(delivery)
-                .orderDetailId(orderDetail)
+                .delivery(delivery)
+                .orderDetail(orderDetail)
                 .deliveryStatus(deliveryStatus)
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

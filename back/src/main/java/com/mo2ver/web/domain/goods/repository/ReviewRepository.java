@@ -11,5 +11,5 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findByUpdater(String memberNo);
     List<Review> findByDelYesNo(Character delYesNo);
-    Page<Review> findByUpperReviewNoIsNullAndGoodsCodeOrderByGoodsReviewNoDesc(Goods goods, Pageable pageable);
+    Page<Review> findByUpperReviewIsNullAndGoodsOrderByGoodsReviewNoDesc(Goods goods, Pageable pageable);
 }

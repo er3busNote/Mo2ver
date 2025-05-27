@@ -29,7 +29,7 @@ public class ReviewService {
     @Transactional
     public Page<ReviewResponse> findReviewList(String goodsCode, Pageable pageable) {
         Goods goods = this.findGoodsById(goodsCode);
-        Page<Review> reviews = this.reviewRepository.findByUpperReviewNoIsNullAndGoodsCodeOrderByGoodsReviewNoDesc(goods, pageable);
+        Page<Review> reviews = this.reviewRepository.findByUpperReviewIsNullAndGoodsOrderByGoodsReviewNoDesc(goods, pageable);
         return reviews.map(ReviewResponse::of);
         //return this.reviewRepository.findByGoodsCode(goodsCode, pageable);
     }

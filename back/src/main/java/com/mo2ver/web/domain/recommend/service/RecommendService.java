@@ -27,7 +27,7 @@ public class RecommendService {
         Map<String, Map<Goods, Integer>> userRatingsMap = new HashMap<>();
         for (Review review : reviewRepository.findByDelYesNo('N')) {
             String reviewMemberNo = review.getMember().getMemberNo();
-            Goods reviewGoods = review.getGoodsCode();
+            Goods reviewGoods = review.getGoods();
             Integer reviewRating = review.getRating();
 
             userRatingsMap.computeIfAbsent(reviewMemberNo, k -> new HashMap<>())

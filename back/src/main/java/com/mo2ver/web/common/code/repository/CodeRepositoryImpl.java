@@ -24,7 +24,7 @@ public class CodeRepositoryImpl implements CodeRepositoryCustom {
     public Map<String, List<CodeResponse>> findGroupCodeByCodelist(List<String> groupCodelist) {
         return queryFactory
                 .selectFrom(groupCode)
-                .leftJoin(code).on(code.commonGroupCode.eq(groupCode))
+                .leftJoin(code).on(code.groupCode.eq(groupCode))
                 .where(groupCode.commonGroupCode.in(groupCodelist))
                 .where(code.useYesNo.eq('Y'))
                 .orderBy(groupCode.sortSequence.asc(), code.sortSequence.asc())
@@ -41,7 +41,7 @@ public class CodeRepositoryImpl implements CodeRepositoryCustom {
     public List<GroupCodeResponse> findGroupCodeByCodelistDetail(List<String> groupCodelist) {
         return queryFactory
                 .selectFrom(groupCode)
-                .leftJoin(code).on(code.commonGroupCode.eq(groupCode))
+                .leftJoin(code).on(code.groupCode.eq(groupCode))
                 .where(groupCode.commonGroupCode.in(groupCodelist))
                 .where(code.useYesNo.eq('Y'))
                 .orderBy(groupCode.sortSequence.asc(), code.sortSequence.asc())

@@ -26,7 +26,7 @@ public class GoodsImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsImageManageNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -34,7 +34,7 @@ public class GoodsImage {
             foreignKey = @ForeignKey(name = "FK_GD_TO_GD_IMG"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
-    private Goods goodsCode;
+    private Goods goods;
 
     @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
@@ -71,7 +71,7 @@ public class GoodsImage {
 
     public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, String fileExtension, Member currentUser) {
         return GoodsImage.builder()
-                .goodsCode(goods)
+                .goods(goods)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .goodsImageExtension(fileExtension)
                 .useYesNo('Y')
@@ -82,7 +82,7 @@ public class GoodsImage {
 
     public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
         return GoodsImage.builder()
-                .goodsCode(goods)
+                .goods(goods)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .goodsImageExtension(fileExtension)
                 .basicImageYesNo(basicImageYesNo)

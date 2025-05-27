@@ -42,7 +42,7 @@ public class Notice {
     @Column(name = "NTC_YN", columnDefinition = "CHAR(1) COMMENT '공지여부'")
     private Character noticeYesNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
@@ -50,9 +50,9 @@ public class Notice {
             foreignKey = @ForeignKey(name = "FK_MBR_TO_NTC"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
-    @OneToMany(mappedBy = "noticeManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoticeFile> noticeFiles = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
@@ -70,7 +70,7 @@ public class Notice {
 
     public Notice(NoticeFileInfo noticeFileInfo, Member currentUser) {
         this.createOrUpdateNotice(noticeFileInfo, currentUser);
-        this.memberNo = currentUser;
+        this.member = currentUser;
         this.register = currentUser.getMemberNo();
 
         this.noticeFiles.addAll(this.createNoticeFiles(noticeFileInfo.getNoticeFiles(), currentUser));
@@ -110,7 +110,7 @@ public class Notice {
     private NoticeFile createOrUpdateNoticeFiles(FileAttachInfo file) {
         Integer attachFile = JasyptUtil.getDecryptor(file.getFileAttachCode());
         NoticeFile noticeFile = this.noticeFiles.stream()
-                .filter(it -> it.getNoticeManageNo().getNoticeManageNo().equals(this.noticeManageNo) && it.getAttachFile().equals(attachFile))
+                .filter(it -> it.getNotice().getNoticeManageNo().equals(this.noticeManageNo) && it.getAttachFile().equals(attachFile))
                 .findFirst()
                 .orElseGet(() -> NoticeFile.from(this));
         if(attachFile != noticeFile.getAttachFile()) noticeFile.setAttachFile(attachFile);

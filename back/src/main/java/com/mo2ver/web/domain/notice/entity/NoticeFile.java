@@ -28,7 +28,7 @@ public class NoticeFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long noticeFileNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "NTC_MNG_NO",
             nullable = false,
@@ -36,7 +36,7 @@ public class NoticeFile {
             foreignKey = @ForeignKey(name = "FK_NTC_TO_NTC_FILE"),
             columnDefinition = "BIGINT(20) COMMENT '공지사항관리번호'"
     )
-    private Notice noticeManageNo;
+    private Notice notice;
 
     @Column(name = "ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '첨부파일'")
     private Integer attachFile;
@@ -67,7 +67,7 @@ public class NoticeFile {
 
     public static NoticeFile from(Notice notice) {
         return NoticeFile.builder()
-                .noticeManageNo(notice)
+                .notice(notice)
                 .register(notice.getRegister())
                 .updater(notice.getUpdater())
                 .build();
@@ -75,7 +75,7 @@ public class NoticeFile {
 
     public static NoticeFile of(Notice notice, Integer attachFile, Character useYesNo, Member currentUser) {
         return NoticeFile.builder()
-                .noticeManageNo(notice)
+                .notice(notice)
                 .attachFile(attachFile)
                 .useYesNo(useYesNo)
                 .register(currentUser.getMemberNo())

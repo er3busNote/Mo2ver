@@ -27,7 +27,7 @@ public class EventProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long eventProductId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "EVT_MNG_NO",
             nullable = false,
@@ -35,7 +35,7 @@ public class EventProduct {
             foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
-    private Event eventManageNo;
+    private Event event;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;
@@ -46,7 +46,7 @@ public class EventProduct {
     @Column(name= "SORT_SEQ", columnDefinition = "INT(11) COMMENT '정렬순서'")
     private Integer sortSequence;
 
-//    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 (N+1 문제)
+//    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "PRD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false)
 //    private Goods goods;
 
@@ -70,7 +70,7 @@ public class EventProduct {
 
     public static EventProduct from(Event event) {
         return EventProduct.builder()
-                .eventManageNo(event)
+                .event(event)
                 .register(event.getRegister())
                 .updater(event.getUpdater())
                 .build();
@@ -78,7 +78,7 @@ public class EventProduct {
 
     public static EventProduct of(Event event, EventImageProductInfo eventImageProductInfo, Member currentUser) {
         return EventProduct.builder()
-                .eventManageNo(event)
+                .event(event)
                 .productCode(eventImageProductInfo.getGoodsCode())
                 .productName(eventImageProductInfo.getGoodsName())
                 .sortSequence(eventImageProductInfo.getSortSequence())

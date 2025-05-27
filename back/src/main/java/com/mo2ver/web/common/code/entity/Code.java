@@ -25,7 +25,7 @@ public class Code implements Serializable {
     @Column(name = "CMM_CD", columnDefinition = "CHAR(5) COMMENT '공통코드'")
     private String commonCode;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "CMM_GRP_CD",
             nullable = false,
@@ -33,7 +33,7 @@ public class Code implements Serializable {
             foreignKey = @ForeignKey(name = "FK_CMM_GRP_CD"),
             columnDefinition = "CHAR(5) COMMENT '공통그룹코드'"
     )
-    private GroupCode commonGroupCode;
+    private GroupCode groupCode;
 
     @Column(name = "CMM_CD_NM", columnDefinition = "VARCHAR(50) COMMENT '공통코드명'")
     private String commonCodeName;

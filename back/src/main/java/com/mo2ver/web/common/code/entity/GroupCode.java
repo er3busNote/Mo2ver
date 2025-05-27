@@ -32,7 +32,7 @@ public class GroupCode {
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
     private Character useYesNo;
 
-    @OneToMany(mappedBy = "commonGroupCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "groupCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Code> codeList;
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")

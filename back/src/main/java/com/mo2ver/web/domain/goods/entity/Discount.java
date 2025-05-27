@@ -29,7 +29,7 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsPriceId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -37,7 +37,7 @@ public class Discount {
             foreignKey = @ForeignKey(name = "FK_GD_TO_GD_DIS_PRC"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
-    private Goods goodsCode;
+    private Goods goods;
 
     @Column(name = "STRT_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '시작일시'")
     private LocalDateTime startDate;
@@ -77,7 +77,7 @@ public class Discount {
 
     public static Discount of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
         return Discount.builder()
-                .goodsCode(goods)
+                .goods(goods)
                 .startDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .endDate(goodsImageRequest.getDiscountEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .discountPrice(goodsImageRequest.getDiscountPrice())

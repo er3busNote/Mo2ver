@@ -19,7 +19,7 @@ public class LoginHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long loginHistoryManageNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
@@ -27,7 +27,7 @@ public class LoginHistory {
             foreignKey = @ForeignKey(name = "FK_MBR_NO_TO_LOGIN_HIS"),
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
-    private Member memberNo;
+    private Member member;
 
     @Column(name = "IP_ADDR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '아이피주소'")
     @NotBlank

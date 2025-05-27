@@ -40,10 +40,10 @@ public class Event {
     @Column(name = "EVT_YN", columnDefinition = "CHAR(1) COMMENT '이벤트진행여부'")
     private Character eventYesNo;
 
-    @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventProduct> eventProducts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "eventManageNo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventImage> eventImages = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")

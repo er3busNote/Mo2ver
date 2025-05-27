@@ -26,7 +26,7 @@ public class EventImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long eventImageManageNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "EVT_MNG_NO",
             nullable = false,
@@ -34,7 +34,7 @@ public class EventImage {
             foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_IMG"),
             columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
     )
-    private Event eventManageNo;
+    private Event event;
 
     @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
@@ -62,7 +62,7 @@ public class EventImage {
 
     public static EventImage from(Event event) {
         return EventImage.builder()
-                .eventManageNo(event)
+                .event(event)
                 .register(event.getRegister())
                 .updater(event.getUpdater())
                 .build();
@@ -70,7 +70,7 @@ public class EventImage {
 
     public static EventImage of(Event event, Integer goodsImageAttachFile, Character basicImageYesNo, Member currentUser) {
         return EventImage.builder()
-                .eventManageNo(event)
+                .event(event)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .basicImageYesNo(basicImageYesNo)
                 .register(currentUser.getMemberNo())

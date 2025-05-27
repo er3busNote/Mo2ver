@@ -26,12 +26,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     public Page<ReviewResponse> findByGoodsCode(String goodCode, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(review.goodsCode.goodsCode.eq(goodCode));
+        builder.and(review.goods.goodsCode.eq(goodCode));
         builder.and(review.delYesNo.eq('N'));
 
         JPAQuery<Review> topReviewsQuery = queryFactory
                 .selectFrom(review)
-                .where(review.upperReviewNo.goodsReviewNo.isNull())
+                .where(review.upperReview.goodsReviewNo.isNull())
                 .where(builder)
                 .orderBy(review.goodsReviewNo.desc())
                 .offset(pageable.getOffset())
@@ -49,14 +49,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         // 4. 하위 리뷰들 조회
         List<Review> allChildren = queryFactory
                 .selectFrom(review)
-                .where(review.upperReviewNo.goodsReviewNo.isNotNull())
+                .where(review.upperReview.goodsReviewNo.isNotNull())
                 .where(builder)
                 .fetch();
 
         // 5. 하위 리뷰들을 상위 리뷰에 맞게 매핑
         Map<Long, List<Review>> childrenMap = allChildren.stream()
                 .collect(Collectors.groupingBy(
-                        review -> review.getUpperReviewNo().getGoodsReviewNo()
+                        review -> review.getUpperReview().getGoodsReviewNo()
                 ));
 
         // 6. 상위 리뷰에 하위 리뷰들을 매핑

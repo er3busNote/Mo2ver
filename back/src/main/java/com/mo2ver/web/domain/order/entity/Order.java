@@ -46,7 +46,7 @@ public class Order {
     @Column(name = "ODR_ID", columnDefinition = "CHAR(36) COMMENT '주문번호'", updatable = false, nullable = false)
     private UUID orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,

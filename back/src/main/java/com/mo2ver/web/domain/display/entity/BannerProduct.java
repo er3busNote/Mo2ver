@@ -27,7 +27,7 @@ public class BannerProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long bannerProductId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "BNNR_MNG_NO",
             nullable = false,
@@ -35,7 +35,7 @@ public class BannerProduct {
             foreignKey = @ForeignKey(name = "FK_DP_BNNR_TO_DP_BNNR_PRD"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private Banner bannerManageNo;
+    private Banner banner;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;
@@ -66,7 +66,7 @@ public class BannerProduct {
 
     public static BannerProduct from(Banner banner) {
         return BannerProduct.builder()
-                .bannerManageNo(banner)
+                .banner(banner)
                 .register(banner.getRegister())
                 .updater(banner.getUpdater())
                 .build();
@@ -74,7 +74,7 @@ public class BannerProduct {
 
     public static BannerProduct of(Banner banner, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
         return BannerProduct.builder()
-                .bannerManageNo(banner)
+                .banner(banner)
                 .productCode(goodsDisplayProductInfo.getGoodsCode())
                 .productName(goodsDisplayProductInfo.getGoodsName())
                 .sortSequence(goodsDisplayProductInfo.getSortSequence())

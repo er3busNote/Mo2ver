@@ -28,7 +28,7 @@ public class BannerDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long bannerDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "BNNR_MNG_NO",
             nullable = false,
@@ -36,7 +36,7 @@ public class BannerDetail {
             foreignKey = @ForeignKey(name = "FK_DP_BNNR_TO_DP_BNNR_DTL"),
             columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
     )
-    private Banner bannerManageNo;
+    private Banner banner;
 
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;
@@ -76,7 +76,7 @@ public class BannerDetail {
 
     public static BannerDetail from(Banner banner) {
         return BannerDetail.builder()
-                .bannerManageNo(banner)
+                .banner(banner)
                 .sortSequence(1)
                 .register(banner.getRegister())
                 .updater(banner.getUpdater())
@@ -85,7 +85,7 @@ public class BannerDetail {
 
     public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Member currentUser) {
         return BannerDetail.builder()
-                .bannerManageNo(banner)
+                .banner(banner)
                 .imageAttachFile(JasyptUtil.getDecryptor(bannerImageDetailInfo.getFile()))
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())
                 .bannerContents(bannerImageDetailInfo.getTitle())
@@ -98,7 +98,7 @@ public class BannerDetail {
 
     public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
-                .bannerManageNo(banner)
+                .banner(banner)
                 .detailSequence(index)
                 .imageAttachFile(imageAttachFile)
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())

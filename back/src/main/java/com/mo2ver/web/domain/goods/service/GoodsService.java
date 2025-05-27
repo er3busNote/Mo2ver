@@ -101,14 +101,14 @@ public class GoodsService {
     @Transactional
     public String saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
         Price price = this.priceRepository.save(Price.of(goodsImageRequest, currentUser));
-        if ('Y' == goodsImageRequest.getSalePeriodYesNo()) this.discountRepository.save(Discount.of(price.getGoodsCode(), goodsImageRequest, currentUser));
+        if ('Y' == goodsImageRequest.getSalePeriodYesNo()) this.discountRepository.save(Discount.of(price.getGoods(), goodsImageRequest, currentUser));
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             Character basicImageYesNo = getBasicImageYesNo(i);
             FileInfo fileInfo = this.fileService.saveFile(file, GOODS_DIRECTORY, currentUser);
-            this.goodsImageRepository.save(GoodsImage.of(price.getGoodsCode(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
+            this.goodsImageRepository.save(GoodsImage.of(price.getGoods(), fileInfo.getFileCode(), basicImageYesNo, fileInfo.getFileExtension(), i+1, currentUser));
         }
-        return price.getGoodsCode().getGoodsCode();
+        return price.getGoods().getGoodsCode();
     }
 
     private Member findMemberById(String memberNo) {

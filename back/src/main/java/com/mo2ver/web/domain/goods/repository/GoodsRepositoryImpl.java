@@ -89,11 +89,11 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
                                 discount.endDate,
                                 JPAExpressions.select(review.rating.avg())
                                         .from(review)
-                                        .where(review.goodsCode.goodsCode.eq(goods.goodsCode))
+                                        .where(review.goods.goodsCode.eq(goods.goodsCode))
                                         .where(review.delYesNo.eq('N')),
                                 JPAExpressions.select(review.count())
                                         .from(review)
-                                        .where(review.goodsCode.goodsCode.eq(goods.goodsCode))
+                                        .where(review.goods.goodsCode.eq(goods.goodsCode))
                                         .where(review.delYesNo.eq('N'))
                         )
                 )).stream().findFirst().orElse(null);

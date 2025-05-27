@@ -76,7 +76,7 @@ public class Goods {
     }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
     private Price price;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "MBR_NO",
             nullable = false,
@@ -86,13 +86,13 @@ public class Goods {
     )
     private Member member;
 
-    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Discount> goodsDiscounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoodsImage> goodsImages = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "goodsCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Review> goodsReviews = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
@@ -177,7 +177,7 @@ public class Goods {
 
     private List<Discount> updateGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
         Discount discount = this.goodsDiscounts.stream()
-                .filter(it -> it.getGoodsCode().getGoodsCode().equals(goodsImageRequest.getGoodsCode()))
+                .filter(it -> it.getGoods().getGoodsCode().equals(goodsImageRequest.getGoodsCode()))
                 .findFirst()
                 .orElseGet(() -> Discount.of(this, goodsImageRequest, currentUser));
         discount.setStartDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
@@ -198,7 +198,7 @@ public class Goods {
 
     private GoodsImage updateGoodsImage(FileAttachInfo info, String goodsCode, Member currentUser) {
         GoodsImage goodsImage = this.goodsImages.stream()
-                .filter(it -> it.getGoodsImageAttachFile().equals(JasyptUtil.getDecryptor(info.getFileAttachCode())) && it.getGoodsCode().getGoodsCode().equals(goodsCode))
+                .filter(it -> it.getGoodsImageAttachFile().equals(JasyptUtil.getDecryptor(info.getFileAttachCode())) && it.getGoods().getGoodsCode().equals(goodsCode))
                 .findFirst()
                 .orElseGet(() -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser));
         goodsImage.setUpdater(this.updater);

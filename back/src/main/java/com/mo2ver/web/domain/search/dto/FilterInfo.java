@@ -24,7 +24,7 @@ public class FilterInfo {
                         .build();
             case MEMBER_NO:
                 return builder
-                        .column(column.toCamelCase())
+                        .column("member")
                         .value(value)
                         .operation(Operation.EQUAL)
                         .build();

@@ -71,8 +71,8 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                 .from(event)
                 .innerJoin(event.eventProducts, eventProduct)
                 .innerJoin(goods).on(eventProduct.productCode.eq(goods.goodsCode))
-                .innerJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
-                .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goodsCode.goodsCode))
+                .innerJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
+                .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goods.goodsCode))
                 .where(builder);
         List<EventProductResponse> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
@@ -105,7 +105,7 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                 .leftJoin(event.eventImages, eventImage)
                 .leftJoin(event.eventProducts, eventProduct)
                 .leftJoin(goods).on(eventProduct.productCode.eq(goods.goodsCode))
-                .leftJoin(price).on(goods.goodsCode.eq(price.goodsCode.goodsCode))
+                .leftJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
                 .where(builder)
                 .transform(groupBy(event.eventManageNo).list(
                         new QEventImageInfo(

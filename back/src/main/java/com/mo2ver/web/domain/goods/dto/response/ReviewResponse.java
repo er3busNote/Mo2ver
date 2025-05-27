@@ -26,7 +26,7 @@ public class ReviewResponse {
     public static ReviewResponse of(Review review) {
         return ReviewResponse.builder()
                 .goodsReviewNo(review.getGoodsReviewNo())
-                .goodsCode(review.getGoodsCode().getGoodsCode())
+                .goodsCode(review.getGoods().getGoodsCode())
                 .imageAttachFile(JasyptUtil.getEncryptor(review.getImageAttachFile()))
                 .reviewContents(review.getReviewContents())
                 .rating(review.getRating())

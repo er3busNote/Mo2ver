@@ -30,7 +30,7 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long orderDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "ODR_ID",
             nullable = false,
@@ -40,7 +40,7 @@ public class OrderDetail {
     )
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // 지연로딩 (N+1 문제)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
             nullable = false,
@@ -48,7 +48,7 @@ public class OrderDetail {
             foreignKey = @ForeignKey(name = "FK_GD_TO_ODR_DTL"),
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
-    private Goods goodsCode;
+    private Goods goods;
 
     @Column(name = "BUY_QTY", columnDefinition = "INT(11) COMMENT '구매수량'")
     private Integer buyQuantity;
@@ -77,7 +77,7 @@ public class OrderDetail {
     public static OrderDetail of(Order order, OrderInfo orderInfo, Goods goods, Member currentUser) {
         return OrderDetail.builder()
                 .order(order)
-                .goodsCode(goods)
+                .goods(goods)
                 .buyQuantity(orderInfo.getQuantity())
                 .amount(goods.getPrice().getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
                 .register(currentUser.getMemberNo())
