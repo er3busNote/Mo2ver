@@ -25,6 +25,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
             String token = httpRequest.getParameter("token");
+            if (token != null) attributes.put("token", token);
             return token != null && tokenProvider.validateToken(token);
         }
 

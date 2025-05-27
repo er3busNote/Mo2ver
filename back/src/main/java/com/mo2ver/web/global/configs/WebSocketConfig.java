@@ -15,6 +15,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.socket.config.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 @Configuration
@@ -46,6 +47,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (StompCommand.CONNECT.equals(Objects.requireNonNull(accessor).getCommand())) {
                     String token = accessor.getFirstNativeHeader("token");
+                    if (token == null) {
+                        Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
+                        if (sessionAttributes != null) {
+                            token = (String) sessionAttributes.get("token");
+                        }
+                    }
                     Authentication auth = tokenProvider.getAuthentication(token);
                     accessor.setUser(auth);
                 }

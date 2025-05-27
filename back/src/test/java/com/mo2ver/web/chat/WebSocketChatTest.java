@@ -90,7 +90,7 @@ public class WebSocketChatTest {
                     }
                 });
 
-                // 메시지 전송
+                // 6. 메시지 전송
                 try {
                     ChatMessage message = ChatMessage.of("Hello with JWT!");
                     String json = objectMapper.writeValueAsString(message);
@@ -106,7 +106,7 @@ public class WebSocketChatTest {
             }
         };
 
-        // 6. 연결 시도
+        // 5. 연결 시도
         ListenableFuture<StompSession> connectFuture = stompClient.connect(url, sessionHandler);
         StompSession session = connectFuture.get(5, TimeUnit.SECONDS);
 
