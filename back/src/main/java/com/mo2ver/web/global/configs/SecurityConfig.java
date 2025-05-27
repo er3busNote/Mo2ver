@@ -112,6 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/notice/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/notice/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("/ws/**").permitAll() // WebSocket 엔드포인트는 인증 없이 허용
                 .anyRequest()
                 .authenticated()
                 .and()
