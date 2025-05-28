@@ -76,6 +76,8 @@ logging:
         security: DEBUG
         web:
           filter: DEBUG
+          socket: DEBUG
+        messaging: DEBUG
 
 cors-setting:
   url-client: https://mo2ver.vercel.app

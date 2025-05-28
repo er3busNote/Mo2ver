@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = {"commonCode", "commonGroupCode"})
+@EqualsAndHashCode(of = {"commonCode", "groupCode"})
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Code implements Serializable {
 

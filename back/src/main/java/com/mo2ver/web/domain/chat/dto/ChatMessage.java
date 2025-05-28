@@ -1,16 +1,21 @@
 package com.mo2ver.web.domain.chat.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.mo2ver.web.domain.chat.type.MessageType;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class ChatMessage {
-    private String content;
 
-    public static ChatMessage of(String content) {
+    private MessageType type;
+    private String message;
+
+    public static ChatMessage of(String message) {
         return ChatMessage.builder()
-                .content(content)
+                .type(MessageType.ENTER)
+                .message(message)
                 .build();
     }
 }

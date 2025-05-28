@@ -63,6 +63,8 @@ logging:
         security: DEBUG
         web:
           filter: DEBUG
+          socket: DEBUG
+        messaging: DEBUG
 
 init-member:
   admin-login-id: admin

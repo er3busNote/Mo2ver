@@ -2,6 +2,7 @@ package com.mo2ver.web.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -14,7 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
@@ -30,8 +34,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("utf-8");
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         ResponseHandler jwtresponse = ResponseHandler.builder()
                 .status(HttpStatus.FORBIDDEN.value())

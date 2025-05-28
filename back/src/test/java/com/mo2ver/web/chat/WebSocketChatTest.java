@@ -1,6 +1,5 @@
 package com.mo2ver.web.chat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo2ver.web.domain.chat.dto.ChatMessage;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
@@ -24,7 +23,6 @@ import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -38,9 +36,6 @@ public class WebSocketChatTest {
     private int port;
 
     private WebSocketStompClient stompClient;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
 
     @Autowired
     protected TokenProvider tokenProvider;
@@ -71,7 +66,7 @@ public class WebSocketChatTest {
         String url = "ws://localhost:" + port + "/ws/chat?token=" + token;
 
         // 3. 비동기 응답 처리
-        CompletableFuture<String> future = new CompletableFuture<>();
+        CompletableFuture<ChatMessage> future = new CompletableFuture<>();
 
         // 4. 세션 핸들러
         StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {
@@ -81,23 +76,15 @@ public class WebSocketChatTest {
                 session.subscribe("/topic/messages", new StompFrameHandler() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
-                        return String.class;
+                        return ChatMessage.class;
                     }
 
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
-                        future.complete((String) payload);
+                        ChatMessage chatMessage = (ChatMessage) payload;
+                        future.complete(chatMessage);
                     }
                 });
-
-                // 6. 메시지 전송
-                try {
-                    ChatMessage message = ChatMessage.of("Hello with JWT!");
-                    String json = objectMapper.writeValueAsString(message);
-                    session.send("/app/chat.send", json.getBytes(StandardCharsets.UTF_8));
-                } catch (Exception e) {
-                    future.completeExceptionally(e);
-                }
             }
 
             @Override
@@ -110,8 +97,16 @@ public class WebSocketChatTest {
         ListenableFuture<StompSession> connectFuture = stompClient.connect(url, sessionHandler);
         StompSession session = connectFuture.get(5, TimeUnit.SECONDS);
 
+        // 6. 메시지 전송
+        try {
+            ChatMessage message = ChatMessage.of("Hello with JWT!");
+            session.send("/app/chat/message", message);
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
+
         // 7. 결과 대기 및 출력
-        String response = future.get(3, TimeUnit.SECONDS);
+        ChatMessage response = future.get(5, TimeUnit.SECONDS);
         System.out.println("Received: " + response);
 
         session.disconnect();
