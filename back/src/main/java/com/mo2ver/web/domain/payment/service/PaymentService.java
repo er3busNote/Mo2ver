@@ -61,9 +61,10 @@ public class PaymentService {
                         log.info("결제 성공: {}", response);
                         payment.confirm(paymentInfo, currentUser);
                     })
-                    .onErrorResume(WebClientResponseException.class, ex -> Mono.error(new TossPaymentException("토스 오류: " + ex.getStatusText(),
-                            ex.getRawStatusCode(),
-                            ex.getResponseBodyAsString())))
+                    .onErrorResume(WebClientResponseException.class, ex ->
+                            Mono.error(new TossPaymentException("토스 오류: " + ex.getStatusText(),
+                                    ex.getRawStatusCode(),
+                                    ex.getResponseBodyAsString())))
                     .then();
         }
     }
