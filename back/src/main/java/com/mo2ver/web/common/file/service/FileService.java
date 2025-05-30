@@ -8,7 +8,6 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,9 +30,7 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final ObjectStorageUtil objectStorageUtil;
-
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     @Transactional
     public byte[] findFile(Integer attachFile) throws Exception {
@@ -85,7 +83,7 @@ public class FileService {
 
     private String getDirectory(String targetFolder) {
         String targetPath = targetFolder;
-        if(environment.acceptsProfiles("test")){
+        if(Arrays.asList(environment.getActiveProfiles()).contains("test")){
             targetPath = targetFolder + "_dev";
         }
         return targetPath + "/" + DateUtil.getCurrentDate();

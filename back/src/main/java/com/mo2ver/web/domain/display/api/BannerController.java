@@ -126,7 +126,7 @@ public class BannerController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
+    public ResponseEntity<ResponseHandler> uploadBanner(@RequestPart(name = "files") @Valid List<MultipartFile> files,
                                        @RequestPart(name = "bannerImage") @Valid BannerImageInfo bannerImageInfo,
                                        @CurrentUser Member currentUser,
                                        BindingResult result) {
@@ -150,11 +150,11 @@ public class BannerController {
         }
     }
 
-    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
-        return ResponseEntity.badRequest().body(response);
+    private ResponseEntity<ResponseHandler> badRequest(ErrorResponse response) {
+        return ResponseEntity.badRequest().body(ResponseHandler.error(response));
     }
 
-    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
-        return ResponseEntity.unprocessableEntity().body(response);
+    private ResponseEntity<ResponseHandler> unprocessableEntity(ErrorResponse response) {
+        return ResponseEntity.unprocessableEntity().body(ResponseHandler.error(response));
     }
 }

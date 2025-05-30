@@ -8,7 +8,6 @@ import com.mo2ver.web.global.jwt.JwtSecurityConfig;
 import com.mo2ver.web.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -50,11 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    @Autowired
-    private Environment environment;
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final Environment environment;
+    private final ApplicationContext applicationContext;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

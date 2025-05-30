@@ -13,13 +13,16 @@ import com.mo2ver.web.domain.payment.repository.PaymentRepository;
 import com.mo2ver.web.global.common.http.WebHttpClient;
 import com.mo2ver.web.global.common.setting.TossPaymentSetting;
 import com.mo2ver.web.global.error.exception.NotFoundException;
+import com.mo2ver.web.global.error.exception.TossPaymentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -32,9 +35,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final TossPaymentSetting tossPaymentSetting;
-
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     @Transactional
     public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
@@ -47,21 +48,23 @@ public class PaymentService {
     }
 
     @Transactional
-    public void confirmPayment(PaymentInfo paymentInfo, Member currentUser) {
+    public Mono<Void> confirmPayment(PaymentInfo paymentInfo, Member currentUser) {
         Order order = this.findOrderById(paymentInfo.getOrderId());
         Payment payment = this.findPaymentByOrderId(order);
-        if(environment.acceptsProfiles("test")){
-            payment.confirm(paymentInfo, currentUser);
+        if(Arrays.asList(environment.getActiveProfiles()).contains("test")){
+            return Mono.fromRunnable(() -> payment.confirm(paymentInfo, currentUser));
         } else {
             String url = tossPaymentSetting.getUrlPath() + "/payments/confirm";
             String authHeader = "Basic " + Base64.getEncoder().encodeToString((tossPaymentSetting.getSecretKey() + ":").getBytes());
-            WebHttpClient.post(url, authHeader, TossPaymentRequest.of(paymentInfo))
-                    .subscribe(response -> {
-                        log.info("응답: " + response);
+            return WebHttpClient.post(url, authHeader, TossPaymentRequest.of(paymentInfo))
+                    .doOnSuccess(response -> {
+                        log.info("결제 성공: {}", response);
                         payment.confirm(paymentInfo, currentUser);
-                    }, error -> {
-                        log.error("오류 발생: " + error.getMessage());
-                    });
+                    })
+                    .onErrorResume(WebClientResponseException.class, ex -> Mono.error(new TossPaymentException("토스 오류: " + ex.getStatusText(),
+                            ex.getRawStatusCode(),
+                            ex.getResponseBodyAsString())))
+                    .then();
         }
     }
 

@@ -107,7 +107,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> authSignup(@RequestBody @Valid SignupRequest signupRequest,
+    public ResponseEntity<ResponseHandler> authSignup(@RequestBody @Valid SignupRequest signupRequest,
                                      Errors errors) {
         UserDetailsService userDetailsService = (UserDetailsService) memberService;
         try {
@@ -159,11 +159,11 @@ public class MemberController {
                 .build());
     }
 
-    private ResponseEntity<ErrorResponse> badRequest(ErrorResponse response) {
-        return ResponseEntity.badRequest().body(response);
+    private ResponseEntity<ResponseHandler> badRequest(ErrorResponse response) {
+        return ResponseEntity.badRequest().body(ResponseHandler.error(response));
     }
 
-    private ResponseEntity<ErrorResponse> unprocessableEntity(ErrorResponse response) {
-        return ResponseEntity.unprocessableEntity().body(response);
+    private ResponseEntity<ResponseHandler> unprocessableEntity(ErrorResponse response) {
+        return ResponseEntity.unprocessableEntity().body(ResponseHandler.error(response));
     }
 }

@@ -11,6 +11,7 @@ import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
@@ -23,11 +24,13 @@ public class DeliveryService {
     private final OrderRepository orderRepository;
     private final DeliveryRepository deliveryRepository;
 
-    public void saveDelivery(PaymentInfo paymentInfo, Member currentUser) {
-        Member member = this.findMemberById(currentUser.getMemberNo());
-        Order order = this.findOrderById(paymentInfo.getOrderId());
-        Delivery delivery = new Delivery(order, member);
-        this.deliveryRepository.save(delivery);
+    public Mono<Void> saveDelivery(PaymentInfo paymentInfo, Member currentUser) {
+        return Mono.fromRunnable(() -> {
+            Member member = this.findMemberById(currentUser.getMemberNo());
+            Order order = this.findOrderById(paymentInfo.getOrderId());
+            Delivery delivery = new Delivery(order, member);
+            this.deliveryRepository.save(delivery);
+        });
     }
 
     private Member findMemberById(String memberNo) {

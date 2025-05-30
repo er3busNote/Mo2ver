@@ -9,7 +9,6 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -33,9 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CorsSetting corsSetting;
     private final ImagesSetting imagesSetting;
-
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
