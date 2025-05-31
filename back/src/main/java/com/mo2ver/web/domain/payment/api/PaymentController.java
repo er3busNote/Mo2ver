@@ -6,7 +6,7 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
-import com.mo2ver.web.domain.payment.service.PaymentService;
+import com.mo2ver.web.domain.payment.service.TossPaymentService;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
@@ -30,7 +30,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/payment")
 public class PaymentController {
 
-    private final PaymentService paymentService;
+    private final TossPaymentService tossPaymentService;
     private final DeliveryService deliveryService;
     private final ErrorHandler errorHandler;
 
@@ -39,7 +39,7 @@ public class PaymentController {
             @RequestBody @Valid PaymentRequest paymentRequest,
             @CurrentUser Member currentUser
     ) {
-        PaymentResponse paymentResponse = paymentService.savePayment(paymentRequest, currentUser);
+        PaymentResponse paymentResponse = tossPaymentService.savePayment(paymentRequest, currentUser);
         return ResponseEntity.ok().body(paymentResponse);
     }
 
@@ -48,7 +48,7 @@ public class PaymentController {
             @RequestBody @Valid PaymentInfo paymentInfo,
             @CurrentUser Member currentUser
     ) {
-        return paymentService.confirmPayment(paymentInfo, currentUser)
+        return tossPaymentService.confirmPayment(paymentInfo, currentUser)
                 .then(deliveryService.saveDelivery(paymentInfo, currentUser))
                 .thenReturn(ResponseEntity.ok().body(ResponseHandler.builder()
                                 .status(HttpStatus.OK.value())
@@ -71,7 +71,7 @@ public class PaymentController {
             @RequestBody @Validated(PaymentInfo.Update.class) PaymentInfo paymentInfo,
             @CurrentUser Member currentUser
     ) {
-        paymentService.cancelPayment(paymentInfo, currentUser);
+        tossPaymentService.cancelPayment(paymentInfo, currentUser);
         return ResponseEntity.ok()
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.OK.value())

@@ -103,10 +103,11 @@ oracle:
     bucket-name: bucket-20231206-2356
     private-key: mo2ver_bucket_api_key.pem
 
+# Docs 참고 : https://docs.tosspayments.com/blog/how-to-test-toss-payments
 toss-payment:
   url-path: https://api.tosspayments.com/v1
-  client-key: test
-  secret-key: test
+  client-key: test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm # 클라이언트 키, SDK에 사용하세요
+  secret-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6 # 시크릿 키, API에 사용하세요
 
 sentry:
   dsn:

@@ -1,12 +1,11 @@
 package com.mo2ver.web.domain.payment.service;
 
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
-import com.mo2ver.web.domain.payment.dto.request.TossPaymentRequest;
+import com.mo2ver.web.domain.payment.dto.request.http.TossPaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
 import com.mo2ver.web.domain.payment.entity.Payment;
 import com.mo2ver.web.domain.payment.repository.PaymentRepository;
@@ -29,9 +28,8 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PaymentService {
+public class TossPaymentService {
 
-    private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final TossPaymentSetting tossPaymentSetting;
@@ -39,9 +37,8 @@ public class PaymentService {
 
     @Transactional
     public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
-        Member member = this.findMemberById(currentUser.getMemberNo());
         Order order = this.findOrderById(paymentRequest.getOrderId());
-        Payment payment = new Payment(PaymentInfo.of(order), order, member);
+        Payment payment = new Payment(PaymentInfo.of(order), order, currentUser);
         this.paymentRepository.save(payment);
         String clientKey = tossPaymentSetting.getClientKey();
         return PaymentResponse.of(clientKey, payment.getOrder().getOrderId().toString(), payment.getAmount());
@@ -74,11 +71,6 @@ public class PaymentService {
         Order order = this.findOrderById(paymentInfo.getOrderId());
         Payment payment = this.findPaymentByOrderId(order);
         payment.cancel(paymentInfo, currentUser);
-    }
-
-    private Member findMemberById(String memberNo) {
-        return this.memberRepository.findById(memberNo)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
     
     private Order findOrderById(UUID orderId) {

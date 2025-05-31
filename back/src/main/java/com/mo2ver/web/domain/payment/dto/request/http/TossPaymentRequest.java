@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.payment.dto.request;
+package com.mo2ver.web.domain.payment.dto.request.http;
 
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import lombok.*;

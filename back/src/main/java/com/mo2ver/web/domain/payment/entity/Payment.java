@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "PAY",   // 결재관리
         indexes={
-                @Index(name="FK_ODR_TO_PAY", columnList="ODR_ID"),
-                //@Index(name="FK_MBR_TO_PAY", columnList="MBR_NO")
+                @Index(name="FK_ODR_TO_PAY", columnList="ODR_ID")
         }
 )
 @Getter @Setter
@@ -46,16 +45,6 @@ public class Payment {
             columnDefinition = "CHAR(36) COMMENT '주문번호'"
     )
     private Order order;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(
-//            name = "MBR_NO",
-//            nullable = false,
-//            updatable = false,
-//            foreignKey = @ForeignKey(name = "FK_MBR_TO_PAY"),
-//            columnDefinition = "CHAR(10) COMMENT '회원번호'"
-//    )
-//    private Member member;
 
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '결재금액'")
     private Long amount;
@@ -86,9 +75,16 @@ public class Payment {
         this.createOrUpdatePayment(paymentInfo, currentUser);
         this.order = order;
         this.amount = paymentInfo.getAmount();
-        this.paymentStatus = PaymentStatus.PROCESS;
-        //this.member = currentUser;
+        this.paymentStatus = PaymentStatus.READY;
         this.register = currentUser.getMemberNo();
+    }
+
+    public void process() {
+        this.paymentStatus = PaymentStatus.PROCESS;
+    }
+
+    public void exit() {
+        this.paymentStatus = PaymentStatus.EXIT;
     }
 
     public void confirm(PaymentInfo paymentInfo, Member currentUser) {

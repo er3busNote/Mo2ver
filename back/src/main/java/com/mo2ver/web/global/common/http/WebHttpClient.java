@@ -3,6 +3,7 @@ package com.mo2ver.web.global.common.http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,24 +25,42 @@ public class WebHttpClient {
         staticWebClient = webClient;
     }
 
-    public static String get(String apiUrl, MultiValueMap<String, String> param) {
-        String url = UriComponentsBuilder.fromUriString(apiUrl)
+    public static String get(String url, MultiValueMap<String, String> param) {
+        String apiUrl = UriComponentsBuilder.fromUriString(url)
                 .queryParams(param)
                 .build()
                 .toUriString();
 
         Mono<String> response = staticWebClient.get()
-                .uri(url)
+                .uri(apiUrl)
                 .retrieve()
                 .bodyToMono(String.class);
 
         return response.block(); // 동기식 호출
     }
 
-    public static <T> Mono<String> post(String url, String authHeader, T body) {
+    public static <T> Mono<T> get(String url, String authHeader, Class<T> responseType) {
+        return staticWebClient.get()
+                .uri(url)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .bodyToMono(responseType);
+    }
+
+    public static <T, B> Mono<T> post(String url, B body, Class<T> responseType) {
+        return staticWebClient.post()
+                .uri(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(responseType);
+    }
+
+    public static <B> Mono<String> post(String url, String authHeader, B body) {
         return staticWebClient.post()
                 .uri(url)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String.class);
