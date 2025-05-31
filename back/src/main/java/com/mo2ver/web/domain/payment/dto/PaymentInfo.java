@@ -1,7 +1,9 @@
 package com.mo2ver.web.domain.payment.dto;
 
+import com.mo2ver.web.domain.member.dto.request.AddressRequest;
 import com.mo2ver.web.domain.order.entity.Order;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,10 +11,11 @@ import javax.validation.groups.Default;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class PaymentInfo {
+public class PaymentInfo extends AddressRequest {
 
     @NotNull(groups = Update.class)
     private String paymentCode;

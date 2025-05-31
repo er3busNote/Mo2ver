@@ -9,7 +9,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -77,20 +79,23 @@ public class Member {
     @NotBlank
     private String email;
 
-    @Column(name = "ZIPCODE", columnDefinition = "CHAR(5) COMMENT '우편번호'")
-    private String zipcode;
+//    @Column(name = "ZIPCODE", columnDefinition = "CHAR(5) COMMENT '우편번호'")
+//    private String zipcode;
+//
+//    @Column(name = "ROAD_NM_BSC_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명기본주소'")
+//    private String roadNameBasicAddress;
+//
+//    @Column(name = "ROAD_NM_DTL_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명상세주소'")
+//    private String roadNameDetailAddress;
 
-    @Column(name = "ROAD_NM_BSC_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명기본주소'")
-    private String roadNameBasicAddress;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
 
     @Column(name = "EMAIL_RCP_YN", columnDefinition = "CHAR(1) COMMENT '이메일수신여부'")
     private Character emailReceptionYesNo;
 
     @Column(name = "SMS_RCP_YN", columnDefinition = "CHAR(1) COMMENT '문자수신여부'")
     private Character snsReceptionYesNo;
-
-    @Column(name = "ROAD_NM_DTL_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명상세주소'")
-    private String roadNameDetailAddress;
 
     @Column(name = "JOIN_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '가입일시'")
     private LocalDateTime joinDate;

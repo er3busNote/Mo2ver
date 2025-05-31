@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.delivery.entity;
 
 import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
+import com.mo2ver.web.domain.member.entity.Address;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.entity.OrderDetail;
@@ -20,7 +21,8 @@ import java.util.stream.Collectors;
 @Table(
         name = "DLV",   // 배송관리
         indexes={
-                @Index(name="FK_ODR_TO_DLV", columnList="ODR_ID")
+                @Index(name="FK_ODR_TO_DLV", columnList="ODR_ID"),
+                @Index(name="FK_ADDR_TO_DLV", columnList="ADDR_NO")
         }
 )
 @Getter @Setter
@@ -46,6 +48,16 @@ public class Delivery {
     )
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "ADDR_NO",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(name = "FK_ADDR_TO_DLV"),
+            columnDefinition = "BIGINT(20) COMMENT '주소록번호'"
+    )
+    private Address address;
+
     @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryDetail> deliveryDetails = new ArrayList<>();
 
@@ -67,9 +79,10 @@ public class Delivery {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Delivery(Order order, Member currentUser) {
+    public Delivery(Order order, Address address, Member currentUser) {
         this.createOrUpdateDelivery(currentUser);
         this.order = order;
+        this.address = address;
         this.register = currentUser.getMemberNo();
 
         this.deliveryDetails.addAll(this.createDeliveryDetail(order.getOrderDetails(), currentUser));
