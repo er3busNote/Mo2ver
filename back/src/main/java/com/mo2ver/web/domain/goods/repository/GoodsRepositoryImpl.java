@@ -7,6 +7,7 @@ import com.mo2ver.web.domain.goods.dto.response.QGoodsDetailResponse;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.type.CategoryType;
+import com.mo2ver.web.domain.goods.type.OptionsType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -41,12 +42,13 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
     public Optional<GoodsDetailResponse> findGoodsById(String goodsCode) {
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(price.options.optionsType.eq(OptionsType.BASIC));
         builder.and(goodsImage.useYesNo.eq('Y'));
         builder.and(goods.goodsCode.eq(goodsCode));
 
         GoodsDetailResponse result = queryFactory
                 .from(goods)
-                .innerJoin(goods.price, price)
+                .innerJoin(goods.goodsPrices, price)
                 .leftJoin(goods.goodsDiscounts, discount)
                 .leftJoin(goods.goodsImages, goodsImage)
                 .leftJoin(file).on(goodsImage.goodsImageAttachFile.eq(file.fileCode.intValue()))
@@ -106,9 +108,10 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         builder.and(goods.largeCategoryCode.eq(goodsSearchRequest.getLargeCategoryCode()));
         builder.and(goods.mediumCategoryCode.eq(goodsSearchRequest.getMediumCategoryCode()));
         builder.and(goods.smallCategoryCode.eq(goodsSearchRequest.getSmallCategoryCode()));
+        builder.and(price.options.optionsType.eq(OptionsType.BASIC));
 
         JPAQuery<Goods> query = queryFactory.selectFrom(goods)
-                .innerJoin(goods.price, price)
+                .innerJoin(goods.goodsPrices, price)
                 .where(builder);
         List<Goods> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
         return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
@@ -116,6 +119,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
     public Page<Goods> findByCategoryCode(Pageable pageable, String categoryCode, CategoryType categoryType) {
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(price.options.optionsType.eq(OptionsType.BASIC));
         builder.and(goodsImage.basicImageYesNo.eq('Y')); // → innerJoin으로 처음에 가져오고 나서, imageList에 대해서 한번 더 쿼리조회를 하는 방식이기 때문에, ImageDto에서 2차적으로 걸러야함
 
         switch (categoryType) {
@@ -133,7 +137,7 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
         }
 
         JPAQuery<Goods> query = queryFactory.selectFrom(goods)
-                .innerJoin(goods.price, price)
+                .innerJoin(goods.goodsPrices, price)
                 .innerJoin(goods.goodsImages, goodsImage)
                 .where(builder);
         List<Goods> content = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query).fetch();
@@ -142,9 +146,10 @@ public class GoodsRepositoryImpl extends QuerydslRepositorySupport implements Go
 
     public List<Goods> findByGoodsRank(Integer count) {
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(price.options.optionsType.eq(OptionsType.BASIC));
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
         return queryFactory.selectFrom(goods)
-                .innerJoin(goods.price, price)
+                .innerJoin(goods.goodsPrices, price)
                 .innerJoin(goods.goodsImages, goodsImage)
                 .where(builder)
                 .orderBy(goods.viewCount.desc())

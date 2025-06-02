@@ -69,12 +69,12 @@ public class Goods {
     @Column(name = "VIEW_CNT", columnDefinition = "INT(11) COMMENT '조회수'")
     private Integer viewCount;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumns(value = {
-            @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
-            @JoinColumn(name = "MBR_NO", referencedColumnName = "MBR_NO", insertable = false, updatable = false)
-    }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
-    private Price price;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumns(value = {
+//            @JoinColumn(name = "GD_CD", referencedColumnName = "GD_CD", insertable = false, updatable = false),
+//            @JoinColumn(name = "GD_OPT_NO", referencedColumnName = "GD_OPT_NO", insertable = false, updatable = false)
+//    }, foreignKey = @ForeignKey(name = "FK_GD_PRC_CD_TO_GD", value = ConstraintMode.NO_CONSTRAINT))
+//    private Price price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -85,6 +85,9 @@ public class Goods {
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member member;
+
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Price> goodsPrices = new ArrayList<>();
 
     @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Discount> goodsDiscounts = new ArrayList<>();
@@ -113,13 +116,13 @@ public class Goods {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+    public Goods(GoodsImageAttachRequest goodsImageAttachRequest, Options options, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
         this.goodsCondition = "10";
         this.member = currentUser;
         this.register = currentUser.getMemberNo();
 
-        this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
+        this.goodsPrices.addAll(this.createGoodsPrices(goodsImageAttachRequest, options, currentUser));
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             this.goodsDiscounts.addAll(this.createGoodsDiscounts(goodsImageAttachRequest, currentUser));
         }
@@ -128,10 +131,12 @@ public class Goods {
         this.sortGoodsImages();
     }
 
-    public void update(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
+    public void update(GoodsImageAttachRequest goodsImageAttachRequest, Options options, Member currentUser) {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
 
-        this.price = this.createOrUpdateGoodsPrice(goodsImageAttachRequest, currentUser);
+        int oldPriceSize = this.goodsPrices.size();
+        this.goodsPrices.addAll(this.updateGoodsPrices(goodsImageAttachRequest, options, currentUser));
+        this.goodsPrices.subList(0, oldPriceSize).clear();
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             int oldDiscountSize = this.goodsDiscounts.size();
             this.goodsDiscounts.addAll(this.updateGoodsDiscounts(goodsImageAttachRequest, currentUser));
@@ -161,8 +166,8 @@ public class Goods {
         this.updater = currentUser.getMemberNo();
     }
 
-    private Price createOrUpdateGoodsPrice(GoodsImageRequest goodsImageRequest, Member currentUser) {
-        return Price.of(this, goodsImageRequest, currentUser);
+    private List<Price> createGoodsPrices(GoodsImageRequest goodsImageRequest, Options options, Member currentUser) {
+        return Collections.singletonList(Price.of(this, options, goodsImageRequest, currentUser));
     }
 
     private List<Discount> createGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
@@ -172,6 +177,12 @@ public class Goods {
     private List<GoodsImage> createGoodsImages(List<FileAttachInfo> listFileAttachInfo, Member currentUser) {
         return listFileAttachInfo.stream()
                 .map(info -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser))
+                .collect(Collectors.toList());
+    }
+
+    private List<Price> updateGoodsPrices(GoodsImageRequest goodsImageRequest, Options options, Member currentUser) {
+        return this.goodsPrices.stream()
+                .map(it -> it.getOptions().equals(options) ? Price.of(this, it, options, goodsImageRequest, currentUser) : it)
                 .collect(Collectors.toList());
     }
 

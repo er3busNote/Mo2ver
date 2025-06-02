@@ -34,16 +34,16 @@ public class Price implements Persistable<PriceId> {
     )
     private Goods goods;
 
-    @MapsId("memberNo")
+    @MapsId("goodsOptionNo")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "MBR_NO",
+            name = "GD_OPT_NO",
             nullable = false,
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_GD_PRC_MBR_NO"),
-            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+            foreignKey = @ForeignKey(name = "FK_GD_OPT_TO_GD_PRC_GD_OPT_NO"),
+            columnDefinition = "BIGINT(20) COMMENT '상품옵션관리번호'"
     )
-    private Member member;
+    private Options options;
 
     @Column(name = "SUPP_PRC", columnDefinition = "DECIMAL(10,0) COMMENT '공급가'")
     private BigDecimal supplyPrice;
@@ -98,15 +98,15 @@ public class Price implements Persistable<PriceId> {
     // 새로운 엔티티 판단 전략 재정의
     @Override
     public boolean isNew() {
-        return priceId == null || goods == null || member == null;
+        return priceId == null || goods == null || options == null;
     }
 
-    public static Price of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
-        PriceId priceId = goods.getPrice() == null || goods.getPrice().isNew() ? new PriceId(goods.getGoodsCode(), currentUser.getMemberNo()) : Objects.requireNonNull(goods.getPrice()).getPriceId();
+    public static Price of(Goods goods, Options options, GoodsImageRequest goodsImageRequest, Member currentUser) {
+        PriceId priceId = new PriceId(goods.getGoodsCode(), options.getGoodsOptionNo());
         return Price.builder()
                 .priceId(priceId)
                 .goods(goods)
-                .member(currentUser)
+                .options(options)
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
                 .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())
@@ -121,12 +121,12 @@ public class Price implements Persistable<PriceId> {
                 .build();
     }
 
-    public static Price of(GoodsImageRequest goodsImageRequest, Member currentUser) {
-        Goods goods = Goods.builder().updateDate(LocalDateTime.now()).build();
-        PriceId priceId = new PriceId(goods.getGoodsCode(), currentUser.getMemberNo());
+    public static Price of(Goods goods, Price price, Options options, GoodsImageRequest goodsImageRequest, Member currentUser) {
+        PriceId priceId = price == null || price.isNew() ? new PriceId(goods.getGoodsCode(), options.getGoodsOptionNo()) : Objects.requireNonNull(price).getPriceId();
         return Price.builder()
                 .priceId(priceId)
-                .goods(Goods.of(goodsImageRequest, currentUser))
+                .goods(goods)
+                .options(options)
                 .supplyPrice(goodsImageRequest.getSupplyPrice())
                 .salePrice(goodsImageRequest.getSalePrice())
                 .maxBuyQuantity(goodsImageRequest.getMaxBuyQuantity())

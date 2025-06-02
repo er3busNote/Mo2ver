@@ -11,6 +11,7 @@ import com.mo2ver.web.domain.goods.dto.request.GoodsSearchRequest;
 import com.mo2ver.web.domain.goods.dto.response.GoodsDetailResponse;
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.goods.type.CategoryType;
+import com.mo2ver.web.domain.goods.type.OptionsType;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
@@ -36,6 +37,7 @@ public class GoodsService {
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
     private final PriceRepository priceRepository;
+    private final OptionsRepository optionsRepository;
     private final DiscountRepository discountRepository;
     private final GoodsImageRepository goodsImageRepository;
 
@@ -87,20 +89,26 @@ public class GoodsService {
     @Transactional
     public String saveImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
-        Goods goods = new Goods(goodsImageAttachRequest, member);
+        Options options = this.findOptionsByMember(member);
+        Goods goods = new Goods(goodsImageAttachRequest, options, member);
         return this.goodsRepository.save(goods).getGoodsCode();
     }
 
     @Transactional
     public void updateImageGoods(GoodsImageAttachRequest goodsImageAttachRequest, Member currentUser) {
         Goods goods = this.findGoodsById(goodsImageAttachRequest.getGoodsCode());
-        goods.update(goodsImageAttachRequest, currentUser);
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        Options options = this.findOptionsByMember(member);
+        goods.update(goodsImageAttachRequest, options, member);
         this.goodsRepository.save(goods);
     }
 
     @Transactional
     public String saveImageGoods(List<MultipartFile> files, GoodsImageRequest goodsImageRequest, Member currentUser) throws Exception {
-        Price price = this.priceRepository.save(Price.of(goodsImageRequest, currentUser));
+        Goods goods = this.findGoodsById(goodsImageRequest.getGoodsCode());
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        Options options = this.findOptionsByMember(member);
+        Price price = this.priceRepository.save(Price.of(goods, options, goodsImageRequest, currentUser));
         if ('Y' == goodsImageRequest.getSalePeriodYesNo()) this.discountRepository.save(Discount.of(price.getGoods(), goodsImageRequest, currentUser));
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
@@ -119,6 +127,11 @@ public class GoodsService {
     private Goods findGoodsById(String goodsCode) {
         return this.goodsRepository.findById(goodsCode)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
+    }
+
+    private Options findOptionsByMember(Member member) {
+        return this.optionsRepository.findByMemberAndOptionsType(member, OptionsType.BASIC)
+                .orElseGet(() -> optionsRepository.save(Options.of(member)));
     }
 
     private GoodsDetailResponse findByGoodsCode(String goodsCode) {

@@ -2,6 +2,8 @@ package com.mo2ver.web.domain.goods.dto.response;
 
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.dto.ImageInfo;
+import com.mo2ver.web.domain.goods.entity.Price;
+import com.mo2ver.web.domain.goods.type.OptionsType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -35,8 +37,14 @@ public class GoodsResponse {
                 .goodsBrand(goods.getGoodsBrand())
                 .goodsGender(goods.getGoodsGender())
                 .goodsYear(goods.getGoodsYear())
-                .supplyPrice(goods.getPrice().getSupplyPrice())
-                .salePrice(goods.getPrice().getSalePrice())
+                .supplyPrice(goods.getGoodsPrices().stream()
+                        .filter(it -> it.getOptions().getOptionsType().equals(OptionsType.BASIC))
+                        .map(Price::getSupplyPrice)
+                        .findFirst().orElse(null))
+                .salePrice(goods.getGoodsPrices().stream()
+                        .filter(it -> it.getOptions().getOptionsType().equals(OptionsType.BASIC))
+                        .map(Price::getSalePrice)
+                        .findFirst().orElse(null))
                 .imageList(goods.getGoodsImages().stream()
                         .filter(image -> image.getBasicImageYesNo() == 'Y')   // innerJoin 할때, 조건을 추가로 붙여야 함..
                         .map(ImageInfo::of)

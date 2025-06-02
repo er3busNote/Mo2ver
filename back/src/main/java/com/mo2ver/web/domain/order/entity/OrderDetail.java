@@ -79,7 +79,7 @@ public class OrderDetail {
                 .order(order)
                 .goods(goods)
                 .buyQuantity(orderInfo.getQuantity())
-                .amount(goods.getPrice().getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
+                .amount(goods.getGoodsPrices().get(0).getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();

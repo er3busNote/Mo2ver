@@ -44,7 +44,7 @@ public class ErrorExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleRuntimeException(RuntimeException e) {
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
-                .errors(e.getStackTrace())
+                //.errors(e.getStackTrace())
                 .message(e.getMessage())
                 .build());
     }
