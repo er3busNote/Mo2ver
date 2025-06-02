@@ -4,9 +4,9 @@
   "settings": {
     "width": 3500,
     "height": 3500,
-    "scrollTop": -1000.0952,
-    "scrollLeft": -1059,
-    "zoomLevel": 0.79,
+    "scrollTop": -1018.2895,
+    "scrollLeft": -1253.8451,
+    "zoomLevel": 0.82,
     "show": 431,
     "database": 4,
     "databaseName": "mo2ver",
@@ -10299,7 +10299,7 @@
     "memoEntities": {
       "3hVkCQzibTeLWSV3FARlm": {
         "id": "3hVkCQzibTeLWSV3FARlm",
-        "value": "[스키마 히스토리 내역 정리]\n\n- 가장 메인이 되는 5개의 Entity에 대해서는 아래와 같은 일렬번호를 부여함\nex) ① M000000001: 회원번호 / ② P000000001 : 결제번호 / ③ 1000000000 : 상품번호 / ④ D000000001 : 배송번호 / ⑤ O000000001 : 주문번호\n\n- 서로 성격이 같은 Entity의 정보를 가져오고자 할때, 복합키를 사용함\nex) GD_PRC (복합키) - GD (ManyToOne) / GD_OPT (ManyToOne)\n   -> 옵션/속성에 따라 가격이 달라니는 경우\n\n- 서로 성격이 다른 Entity의 정보를 가져오고자 할때는 복합키 대신, PK ID를 JOIN하여 구현함\nex) DLV_DTL - ODR_DTL(ManyToOne)\n   -> 주문상세정보의 주문갯수를 배송상세정보에 연관시켜 주어야 하는 경우\n\n- 결제관리의 ODR_ID와 배송관리의 ODR_ID는 OneToOne으로 통일함\n   -> 하나의 주문정보에 여러개의 결제내용과 배송내용이 포함되는 상황을 방지하기 위한 UNIQUE KEY 추가",
+        "value": "[스키마 히스토리 내역 정리]\n\n- 가장 메인이 되는 5개의 Entity에 대해서는 아래와 같은 일렬번호를 부여함\nex) ① M000000001: 회원번호 / ② P000000001 : 결제번호 / ③ 1000000000 : 상품번호 / ④ D000000001 : 배송번호 / ⑤ O000000001 : 주문번호\n\n- 서로 성격이 \"같은\" Entity의 정보를 가져오고자 할때는 복합키를 사용함\nex) GD_PRC (복합키) - GD (ManyToOne) / GD_OPT (ManyToOne)\n   -> 옵션/속성에 따라 가격이 달라지는 경우\n\n- 서로 성격이 \"다른\" Entity의 정보를 가져오고자 할때는 복합키 대신, PK ID를 JOIN하여 구현함\nex) DLV_DTL - ODR_DTL(ManyToOne)\n   -> 주문상세정보의 주문갯수를 배송상세정보에 연관시켜 주어야 하는 경우\n\n- 결제관리의 ODR_ID와 배송관리의 ODR_ID는 OneToOne으로 통일함\n   -> 하나의 주문정보에 여러개의 결제내역과 배송내역이 포함되는 상황을 방지하기 위한 UNIQUE KEY 추가",
         "ui": {
           "x": 1550.3156,
           "y": 938.7878,
@@ -10309,7 +10309,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1748872297644,
+          "updateAt": 1748879964731,
           "createAt": 1748860244857
         }
       }
