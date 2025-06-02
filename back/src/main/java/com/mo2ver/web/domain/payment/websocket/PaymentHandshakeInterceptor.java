@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.payment.websocket;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -10,6 +11,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class PaymentHandshakeInterceptor implements HandshakeInterceptor {
 
@@ -25,7 +27,7 @@ public class PaymentHandshakeInterceptor implements HandshakeInterceptor {
 
             if (orderId != null) {
                 attributes.put("orderId", orderId);
-                System.out.println("WebSocket orderId 수신됨: " + orderId);
+                log.info("WebSocket orderId 수신됨: " + orderId);
             }
         }
 

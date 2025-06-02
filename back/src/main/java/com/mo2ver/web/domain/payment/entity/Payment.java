@@ -79,10 +79,6 @@ public class Payment {
         this.register = currentUser.getMemberNo();
     }
 
-    public void process() {
-        this.paymentStatus = PaymentStatus.PROCESS;
-    }
-
     public void exit() {
         this.paymentStatus = PaymentStatus.EXIT;
     }

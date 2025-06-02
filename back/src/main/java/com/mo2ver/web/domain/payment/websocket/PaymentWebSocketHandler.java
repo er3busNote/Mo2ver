@@ -37,7 +37,6 @@ public class PaymentWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String orderId = (String) session.getAttributes().get("orderId");
         log.info("[" + orderId + "] 메시지 수신: " + message.getPayload());
-        this.tossPaymentService.processPayment(orderId);
     }
 
     /**

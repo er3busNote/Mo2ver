@@ -75,13 +75,6 @@ public class TossPaymentService {
     }
 
     @Transactional
-    public void processPayment(String orderId) {
-        Order order = this.findOrderById(UUID.fromString(orderId));
-        Payment payment = this.findPaymentByOrderId(order);
-        payment.process();
-    }
-
-    @Transactional
     public void exitPayment(String orderId) {
         Order order = this.findOrderById(UUID.fromString(orderId));
         Payment payment = this.findPaymentByOrderId(order);
