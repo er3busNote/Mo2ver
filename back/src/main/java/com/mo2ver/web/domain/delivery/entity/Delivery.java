@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Table(
         name = "DLV",   // 배송관리
         indexes={
+                @Index(name="UK_ODR_ID", columnList="ODR_ID", unique = true),
                 @Index(name="FK_ODR_TO_DLV", columnList="ODR_ID"),
                 @Index(name="FK_ADDR_TO_DLV", columnList="ADDR_NO")
         }
@@ -38,7 +39,7 @@ public class Delivery {
     @Column(name = "DLV_CD", columnDefinition = "CHAR(10) COMMENT '배송코드'")
     private String deliveryCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(
             name = "ODR_ID",
             nullable = false,

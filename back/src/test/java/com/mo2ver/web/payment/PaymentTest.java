@@ -38,7 +38,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     private PaymentRequest getPaymentRequest() {
         return PaymentRequest.builder()
-                .orderId(UUID.fromString("89b1f308-cd03-4cd6-ba32-81d72c3a2e0d"))
+                .orderId(UUID.fromString("444828a2-ef08-44e3-ab00-f1189cae99b3"))
                 .build();
     }
 

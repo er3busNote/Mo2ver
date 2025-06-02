@@ -1,9 +1,11 @@
 package com.mo2ver.web.domain.order.entity;
 
+import com.mo2ver.web.domain.delivery.entity.Delivery;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.OrderInfo;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
+import com.mo2ver.web.domain.payment.entity.Payment;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -55,6 +57,12 @@ public class Order {
             columnDefinition = "CHAR(10) COMMENT '회원번호'"
     )
     private Member member;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Payment payment;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Delivery delivery;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();

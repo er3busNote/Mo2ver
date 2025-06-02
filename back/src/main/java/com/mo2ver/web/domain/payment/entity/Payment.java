@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "PAY",   // 결재관리
         indexes={
+                @Index(name="UK_ODR_ID", columnList="ODR_ID", unique = true),
                 @Index(name="FK_ODR_TO_PAY", columnList="ODR_ID")
         }
 )
@@ -36,7 +37,7 @@ public class Payment {
     @Column(name = "PAY_KEY", columnDefinition = "VARCHAR(200) COMMENT '결재인증키'")
     private String paymentKey;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(
             name = "ODR_ID",
             nullable = false,
