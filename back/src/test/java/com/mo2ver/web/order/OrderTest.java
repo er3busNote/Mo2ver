@@ -39,8 +39,8 @@ public class OrderTest extends CsrfConfigTest {
     private OrderRequest getOrderRequestTest() {
         return OrderRequest.builder()
                 .goodsOrders(Arrays.asList(
-                        OrderInfo.from("1000000001", 2),
-                        OrderInfo.from("1000000002", 1)
+                        OrderInfo.from("1000000007", 2),
+                        OrderInfo.from("1000000014", 1)
                 ))
                 .build();
     }

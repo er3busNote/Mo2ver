@@ -1,6 +1,8 @@
 package com.mo2ver.web.domain.order.entity;
 
 import com.mo2ver.web.domain.goods.entity.Goods;
+import com.mo2ver.web.domain.goods.entity.Price;
+import com.mo2ver.web.domain.goods.type.OptionsType;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.OrderInfo;
 import lombok.*;
@@ -79,7 +81,11 @@ public class OrderDetail {
                 .order(order)
                 .goods(goods)
                 .buyQuantity(orderInfo.getQuantity())
-                .amount(goods.getGoodsPrices().get(0).getSalePrice().multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
+                .amount(goods.getGoodsPrices().stream()
+                        .filter(it -> it.getOptions().getOptionsType().equals(OptionsType.BASIC))
+                        .map(Price::getSalePrice)
+                        .findFirst().orElse(new BigDecimal(0))
+                        .multiply(BigDecimal.valueOf(orderInfo.getQuantity())).longValue())
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())
                 .build();
