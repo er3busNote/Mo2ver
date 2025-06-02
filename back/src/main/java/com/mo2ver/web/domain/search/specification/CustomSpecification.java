@@ -22,10 +22,11 @@ public class CustomSpecification {
         };
     }
 
-    public static <TM, TJ> Specification<TM> bySearchJoinQuery(List<FilterInfo> filterInfos, Class<TM> clazz, Class<TJ> joinClazz) {
+    public static <TM, TJ> Specification<TM> bySearchJoinQuery(List<FilterInfo> filterInfos, Class<TM> clazz, Class<TJ> joinClazz, String joinName) {
         return (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            Join<TM, TJ> join = root.join(joinClazz.getSimpleName().toLowerCase(), JoinType.LEFT);  // 클래스명(X) → 필드명(O)
+            //Join<TM, TJ> join = root.join(joinClazz.getSimpleName().toLowerCase(), JoinType.LEFT);  // 클래스명(X) → 필드명(O)
+            Join<TM, TJ> join = root.join(joinName, JoinType.LEFT);
 
             for(final FilterInfo filterInfo : filterInfos) {
                 setSearchOperation(predicates, filterInfo, builder, root, join);

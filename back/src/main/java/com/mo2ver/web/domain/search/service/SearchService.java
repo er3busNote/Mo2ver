@@ -48,7 +48,7 @@ public class SearchService {
             searchGoodsRequest.update();    // 값이 없을 때, 기본값 세팅
             filters.add(FilterInfo.of(SearchColumn.MIN_PRICE, searchGoodsRequest.getMinPrice(), true));
             filters.add(FilterInfo.of(SearchColumn.MAX_PRICE, searchGoodsRequest.getMaxPrice(), true));
-            return this.goodsRepository.findAll(CustomSpecification.bySearchJoinQuery(filters, Goods.class, Price.class), pageable);
+            return this.goodsRepository.findAll(CustomSpecification.bySearchJoinQuery(filters, Goods.class, Price.class, "goodsPrices"), pageable);
         }
         return this.goodsRepository.findAll(CustomSpecification.bySearchQuery(filters, Goods.class), pageable);
     }
