@@ -85,7 +85,7 @@ public class TossPaymentService {
     public void exitPayment(String orderId) {
         Order order = this.findOrderById(UUID.fromString(orderId));
         Payment payment = this.findPaymentByOrderId(order);
-        if (!PaymentStatus.PROCESS.equals(payment.getPaymentStatus())) {
+        if (PaymentStatus.READY.equals(payment.getPaymentStatus())) {
             payment.exit();
         }
     }
