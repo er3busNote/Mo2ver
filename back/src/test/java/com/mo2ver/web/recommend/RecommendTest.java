@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class RecomendTest extends CsrfConfigTest {
+public class RecommendTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("상품 추천 확인")
