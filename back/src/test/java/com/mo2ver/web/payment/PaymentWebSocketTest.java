@@ -23,7 +23,8 @@ public class PaymentWebSocketTest {
     @Test
     @DisplayName("WebSocket 실행 확인")
     public void sendMessageTest() throws Exception {
-        String url = "ws://localhost:" + port + "/ws/payment";
+        String orderId = "89b1f308-cd03-4cd6-ba32-81d72c3a2e0d";
+        String url = "ws://localhost:" + port + "/ws/payment?orderId=" + orderId;
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 

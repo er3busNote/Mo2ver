@@ -34,7 +34,7 @@ public class PaymentController {
     private final DeliveryService deliveryService;
     private final ErrorHandler errorHandler;
 
-    @PostMapping("/create")
+    @PostMapping("/start")
     public ResponseEntity<PaymentResponse> createPayment(
             @RequestBody @Valid PaymentRequest paymentRequest,
             @CurrentUser Member currentUser

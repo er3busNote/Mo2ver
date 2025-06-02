@@ -28,7 +28,7 @@ public class PaymentTest extends CsrfConfigTest {
 
         PaymentRequest paymentRequest = getPaymentRequest();
 
-        mockMvc.perform(post("/payment/create")
+        mockMvc.perform(post("/payment/start")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(paymentRequest)))

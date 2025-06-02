@@ -9,6 +9,7 @@ import com.mo2ver.web.domain.payment.dto.request.http.TossPaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
 import com.mo2ver.web.domain.payment.entity.Payment;
 import com.mo2ver.web.domain.payment.repository.PaymentRepository;
+import com.mo2ver.web.domain.payment.type.PaymentStatus;
 import com.mo2ver.web.global.common.http.WebHttpClient;
 import com.mo2ver.web.global.common.setting.TossPaymentSetting;
 import com.mo2ver.web.global.error.exception.NotFoundException;
@@ -71,6 +72,22 @@ public class TossPaymentService {
         Order order = this.findOrderById(paymentInfo.getOrderId());
         Payment payment = this.findPaymentByOrderId(order);
         payment.cancel(paymentInfo, currentUser);
+    }
+
+    @Transactional
+    public void processPayment(String orderId) {
+        Order order = this.findOrderById(UUID.fromString(orderId));
+        Payment payment = this.findPaymentByOrderId(order);
+        payment.process();
+    }
+
+    @Transactional
+    public void exitPayment(String orderId) {
+        Order order = this.findOrderById(UUID.fromString(orderId));
+        Payment payment = this.findPaymentByOrderId(order);
+        if (!PaymentStatus.PROCESS.equals(payment.getPaymentStatus())) {
+            payment.exit();
+        }
     }
     
     private Order findOrderById(UUID orderId) {
