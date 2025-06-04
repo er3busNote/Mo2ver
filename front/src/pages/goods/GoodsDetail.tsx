@@ -100,6 +100,17 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 		display: 'grid',
 		borderBottom: '1px #F0F0F0 solid',
 	};
+	const mainTitle: SxProps<Theme> = {
+		py: 0.5,
+		fontSize: { xs: '12px', sm: '13px', lg: '15px' },
+		fontWeight: 'bold',
+	};
+	const mainDescription: SxProps<Theme> = {
+		py: 0.5,
+		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontWeight: 'bold',
+		color: '#b2b2b2',
+	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
 		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
@@ -241,25 +252,10 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 						}}
 					>
 						<Box sx={gridItem}>
-							<Typography
-								component="span"
-								sx={{
-									py: 0.5,
-									fontSize: { xs: '12px', sm: '13px', lg: '15px' },
-									fontWeight: 'bold',
-								}}
-							>
+							<Typography component="span" sx={mainTitle}>
 								등록된 상품
 							</Typography>
-							<Typography
-								component="span"
-								sx={{
-									py: 0.5,
-									fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-									fontWeight: 'bold',
-									color: '#b2b2b2',
-								}}
-							>
+							<Typography component="span" sx={mainDescription}>
 								이 상품은 사용자가 등록된 상품으로 실제 화면과 다를 수 있습니다.
 							</Typography>
 						</Box>

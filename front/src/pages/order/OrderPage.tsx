@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
-import OrderListPC from './OrderListPC';
-import OrderListMobile from './OrderListMobile';
+import OrderListPC from './form/OrderFormPC';
+import OrderListMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];
