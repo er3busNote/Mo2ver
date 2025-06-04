@@ -8,6 +8,7 @@ import {
 	Signup,
 	User,
 	Cart,
+	Order,
 	Goods,
 	GoodsDetail,
 	GoodsRegister,
@@ -63,6 +64,7 @@ const MainRoutes: FC = (): JSX.Element => {
 				<Route path="/notice" element={<Notice />} />
 				<Route path="/notice/:id/detail" element={<NoticeDetail />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/order" element={<Order />} />
 				<Route path="/profile" element={<User />} />
 			</Route>
 			<Route path="*" element={<NotFound />} />

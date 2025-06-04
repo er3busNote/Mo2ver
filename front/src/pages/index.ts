@@ -4,6 +4,7 @@ import Login from './login/LoginPage';
 import Signup from './signup/SignupPage';
 import User from './user/UserPage';
 import Cart from './cart/CartPage';
+import Order from './order/OrderPage';
 import Goods from './goods/GoodsPage';
 import GoodsDetail from './goods/GoodsDetailPage';
 import GoodsRegister from './goods/GoodsRegisterPage';
@@ -29,6 +30,7 @@ export {
 	Signup,
 	User,
 	Cart,
+	Order,
 	Goods,
 	GoodsDetail,
 	GoodsRegister,
