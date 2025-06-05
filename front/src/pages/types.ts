@@ -36,4 +36,21 @@ interface RegisterFormValues {
 	discountEndDate: Dayjs;
 }
 
-export type { LoginFormValues, SignupFormValues, RegisterFormValues };
+interface OrderFormValues {
+	memo?: string;
+	coupon?: number;
+	couponNumber?: string;
+	point?: number;
+	card: string;
+	cardOwner?: string;
+	agreeReceipt: boolean;
+	agreeAll: boolean;
+	agreePurchase: boolean;
+}
+
+export type {
+	LoginFormValues,
+	SignupFormValues,
+	RegisterFormValues,
+	OrderFormValues,
+};

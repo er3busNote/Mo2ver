@@ -1,69 +1,88 @@
-import React, { FC } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
 	Box,
 	Button,
 	Card,
 	CardContent,
-	Checkbox,
-	FormControl,
-	FormControlLabel,
 	Grid,
-	InputLabel,
-	MenuItem,
-	Select,
-	TextField,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import RenderTextField from '@components/field/TextField';
+import RenderSelectField from '@components/field/SelectField';
+import RenderCheckBoxField from '@components/field/CheckBoxField';
+import { OrderFormValues } from '@pages/types';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 
 interface OrderProps {
 	title: string;
 	description: string;
 	steps: string[];
+	onSubmit: (
+		data: OrderFormValues,
+		event?: BaseSyntheticEvent<object, any, any> | undefined
+	) => void;
 }
 
 const OrderFormPC: FC<OrderProps> = ({
 	title,
 	description,
 	steps,
+	onSubmit,
 }): JSX.Element => {
+	const {
+		control,
+		handleSubmit,
+		formState: { isSubmitted, isValid },
+	} = useFormContext<OrderFormValues>();
+
 	const mainTitle: SxProps<Theme> = {
 		py: 0.5,
 		fontSize: { xs: '12px', sm: '13px', lg: '15px' },
 		fontWeight: 'bold',
 	};
-	const mainDescription: SxProps<Theme> = {
-		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-		fontWeight: 'bold',
-		color: '#b2b2b2',
-	};
 	const label: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
 	};
 	const info: SxProps<Theme> = {
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
 	};
 	const infoSub: SxProps<Theme> = {
 		px: 0.5,
 		py: 0.5,
-		fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#b2b2b2',
 	};
 	const modifyButton: SxProps<Theme> = {
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		height: '32px',
+	};
+	const applyButton: SxProps<Theme> = {
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		width: '120px',
+	};
+	const orderForm: SxProps<Theme> = {
+		'& .MuiFormControl-root': {
+			width: '100%',
+		},
 	};
 
 	return (
-		<Box sx={{ mb: 10 }}>
+		<Box
+			component="form"
+			onSubmit={handleSubmit(onSubmit)}
+			noValidate
+			sx={orderForm}
+		>
 			<AppSubStepHeader description={description} steps={steps} />
 			<Box sx={{ mx: 3, my: 2 }}>
 				<Grid container spacing={4}>
@@ -147,11 +166,18 @@ const OrderFormPC: FC<OrderProps> = ({
 										변경
 									</Button>
 								</Box>
-								<TextField
-									fullWidth
-									label="배송 메모"
-									placeholder="배송메모를 선택해 주세요."
-									sx={{ mt: 2 }}
+								<Controller
+									name="memo"
+									control={control}
+									render={({ field, fieldState, formState }) => (
+										<RenderTextField
+											type="text"
+											label="배송 메모를 입력해주세요"
+											field={field}
+											fieldState={fieldState}
+											formState={formState}
+										/>
+									)}
 								/>
 							</CardContent>
 						</Card>
@@ -163,18 +189,56 @@ const OrderFormPC: FC<OrderProps> = ({
 									쿠폰/포인트
 								</Typography>
 								<Box display="flex" alignItems="center" gap={1} mt={2}>
-									<TextField label="쿠폰" value="1,000" size="small" />
-									<Button variant="contained">쿠폰적용</Button>
+									<Controller
+										name="coupon"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="number"
+												label="쿠폰 잔액을 입력해주세요"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+									<Button variant="contained" sx={applyButton}>
+										쿠폰적용
+									</Button>
 								</Box>
 								<Box display="flex" alignItems="center" gap={1} mt={2}>
-									<TextField label="쿠폰 번호" fullWidth size="small" />
-									<Button variant="outlined" sx={{ width: '120px' }}>
+									<Controller
+										name="couponNumber"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="text"
+												label="쿠폰 번호를 입력해주세요"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+									<Button variant="outlined" sx={applyButton}>
 										번호확인
 									</Button>
 								</Box>
 								<Box display="flex" alignItems="center" gap={1} mt={2}>
-									<TextField label="포인트" fullWidth size="small" />
-									<Button variant="outlined" sx={{ width: '120px' }}>
+									<Controller
+										name="point"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="number"
+												label="포인트를 입력해주세요"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+									<Button variant="outlined" sx={applyButton}>
 										전액사용
 									</Button>
 								</Box>
@@ -224,7 +288,7 @@ const OrderFormPC: FC<OrderProps> = ({
 										<Typography sx={info}>총 결제금액</Typography>
 										<Typography sx={info}>19,500원</Typography>
 									</Box>
-									<Typography color="primary" mt={1}>
+									<Typography color="primary" mt={1} fontSize={14}>
 										700 포인트 적립예정
 									</Typography>
 								</Box>
@@ -238,28 +302,53 @@ const OrderFormPC: FC<OrderProps> = ({
 									결제 방법
 								</Typography>
 								<Box
+									mt={2}
 									display="flex"
 									flexDirection="column"
 									alignItems="flex-start"
 								>
-									<FormControl fullWidth sx={{ mt: 2 }}>
-										<InputLabel>은행 선택</InputLabel>
-										<Select value={'00은행'}>
-											<MenuItem value="00은행">
-												00은행: 000-00-0000 예금주명
-											</MenuItem>
-										</Select>
-									</FormControl>
-									<TextField
-										fullWidth
-										label="입금자명 (미입력시 주문자명)"
-										size="small"
-										sx={{ mt: 2 }}
+									<Controller
+										name="card"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderSelectField
+												label="은행 선택"
+												datas={[
+													{
+														value: '00은행',
+														label: '00은행: 000-00-0000 예금주명',
+													},
+												]}
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
 									/>
-									<FormControlLabel
-										control={<Checkbox />}
-										label="현금영수증 신청"
-										sx={{ mt: 1 }}
+									<Controller
+										name="cardOwner"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderTextField
+												type="text"
+												label="입금자명 (미입력시 주문자명)"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+									<Controller
+										name="agreeReceipt"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderCheckBoxField
+												label="현금영수증 신청"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
 									/>
 								</Box>
 							</CardContent>
@@ -273,16 +362,36 @@ const OrderFormPC: FC<OrderProps> = ({
 									flexDirection="column"
 									alignItems="flex-start"
 								>
-									<FormControlLabel control={<Checkbox />} label="전체 동의" />
-									<FormControlLabel
-										control={<Checkbox />}
-										label="구매조건 확인 및 결제진행에 동의"
+									<Controller
+										name="agreeAll"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderCheckBoxField
+												label="전체 동의"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+									<Controller
+										name="agreePurchase"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderCheckBoxField
+												label="구매조건 확인 및 결제진행에 동의"
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
 									/>
 								</Box>
 								<Button
 									variant="contained"
 									color="primary"
 									fullWidth
+									disabled={isSubmitted && !isValid}
 									sx={{ mt: 2 }}
 								>
 									결제하기

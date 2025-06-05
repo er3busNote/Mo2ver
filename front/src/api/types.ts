@@ -334,6 +334,11 @@ interface SearchRequestData {
 	searchGoodsRequest: SearchGoodsResuqestData;
 }
 
+// 10. Order Type
+interface OrderData {
+	orderId: string;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -420,6 +425,7 @@ export type {
 	CartPageData,
 	SearchGoodsResuqestData,
 	SearchRequestData,
+	OrderData,
 	PageData,
 	CodeData,
 	FileData,
