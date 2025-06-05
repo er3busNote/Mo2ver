@@ -111,7 +111,7 @@ const OrderFormPC: FC<OrderProps> = ({
 											01012345678
 										</Typography>
 										<Typography component="span" sx={label}>
-											user@inweb.me
+											user@test.com
 										</Typography>
 									</Box>
 									<Button variant="outlined" sx={modifyButton}>
@@ -140,8 +140,7 @@ const OrderFormPC: FC<OrderProps> = ({
 											01012345678
 										</Typography>
 										<Typography component="span" sx={label}>
-											서울특별시 서대문구 성산로7길 89-8 (연희동) 주식회사
-											야임웹 (03706)
+											서울특별시 서대문구
 										</Typography>
 									</Box>
 									<Button variant="outlined" sx={modifyButton}>
