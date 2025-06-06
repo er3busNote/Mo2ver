@@ -12,6 +12,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
+import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import { OrderFormValues } from '@pages/types';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
@@ -32,6 +33,18 @@ const OrderFormPC: FC<OrderProps> = ({
 	steps,
 	onSubmit,
 }): JSX.Element => {
+	const paymentOptions = {
+		CARD: '카드',
+		// VIRTUAL_ACCOUNT: '가상계좌',
+		// ACCOUNT_TRANSFER: '계좌이체',
+		// MOBILE: '휴대폰',
+		// TOSS_PAY: '토스페이',
+		// KAKAO_PAY: '카카오페이',
+		// SAMSUNG_PAY: '삼성페이',
+		// NAVER_PAY: '네이버페이',
+		// PAYCO: '페이코',
+	};
+
 	const {
 		control,
 		handleSubmit,
@@ -98,13 +111,16 @@ const OrderFormPC: FC<OrderProps> = ({
 									<img src="/images/soap.png" alt="상품 이미지" width={80} />
 									<Box display="flex" flexDirection="column" ml={2}>
 										<Typography component="span" sx={label}>
-											Daily Facial Soap
+											울트라 블랙 하이로더 샌들 / 257
 										</Typography>
 										<Typography component="span" sx={label}>
-											용량: 80ml - 1개
+											160,000원
 										</Typography>
 										<Typography component="span" sx={label}>
-											18,000원
+											쿠폰 할인 -24,000원
+										</Typography>
+										<Typography component="span" sx={label}>
+											121,600원
 										</Typography>
 									</Box>
 								</Box>
@@ -188,23 +204,43 @@ const OrderFormPC: FC<OrderProps> = ({
 								<Typography component="span" sx={mainTitle}>
 									쿠폰/포인트
 								</Typography>
-								<Box display="flex" alignItems="center" gap={1} mt={2}>
-									<Controller
-										name="coupon"
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="number"
-												label="쿠폰 잔액을 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-									<Button variant="contained" sx={applyButton}>
-										쿠폰적용
-									</Button>
+								<Box gap={2} display="flex" justifyContent="space-between">
+									<Box display="flex" alignItems="center" gap={1} mt={2}>
+										<Controller
+											name="coupon"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderTextField
+													type="number"
+													label="쿠폰 잔액을 입력해주세요"
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+										<Button variant="contained" sx={applyButton}>
+											쿠폰적용
+										</Button>
+									</Box>
+									<Box display="flex" alignItems="center" gap={1} mt={2}>
+										<Controller
+											name="point"
+											control={control}
+											render={({ field, fieldState, formState }) => (
+												<RenderTextField
+													type="number"
+													label="포인트를 입력해주세요"
+													field={field}
+													fieldState={fieldState}
+													formState={formState}
+												/>
+											)}
+										/>
+										<Button variant="outlined" sx={applyButton}>
+											전액사용
+										</Button>
+									</Box>
 								</Box>
 								<Box display="flex" alignItems="center" gap={1} mt={2}>
 									<Controller
@@ -222,24 +258,6 @@ const OrderFormPC: FC<OrderProps> = ({
 									/>
 									<Button variant="outlined" sx={applyButton}>
 										번호확인
-									</Button>
-								</Box>
-								<Box display="flex" alignItems="center" gap={1} mt={2}>
-									<Controller
-										name="point"
-										control={control}
-										render={({ field, fieldState, formState }) => (
-											<RenderTextField
-												type="number"
-												label="포인트를 입력해주세요"
-												field={field}
-												fieldState={fieldState}
-												formState={formState}
-											/>
-										)}
-									/>
-									<Button variant="outlined" sx={applyButton}>
-										전액사용
 									</Button>
 								</Box>
 								<Box mt={1}>
@@ -269,21 +287,22 @@ const OrderFormPC: FC<OrderProps> = ({
 									최종 결제금액
 								</Typography>
 								<Box mt={2}>
-									{[
-										['상품가격', '18,000원'],
-										['쿠폰 할인', '-1,000원'],
-										['포인트 사용', '-0원'],
-										['배송비', '+2,500원'],
-									].map(([label, value]) => (
-										<Box
-											display="flex"
-											justifyContent="space-between"
-											key={label}
-										>
-											<Typography sx={infoSub}>{label}</Typography>
-											<Typography sx={info}>{value}</Typography>
-										</Box>
-									))}
+									<Box display="flex" justifyContent="space-between">
+										<Typography sx={infoSub}>상품가격</Typography>
+										<Typography sx={info}>18,000원</Typography>
+									</Box>
+									<Box display="flex" justifyContent="space-between">
+										<Typography sx={infoSub}>쿠폰 할인</Typography>
+										<Typography sx={info}>-1,000원</Typography>
+									</Box>
+									<Box display="flex" justifyContent="space-between">
+										<Typography sx={infoSub}>포인트 사용</Typography>
+										<Typography sx={info}>-0원</Typography>
+									</Box>
+									<Box display="flex" justifyContent="space-between">
+										<Typography sx={infoSub}>배송비</Typography>
+										<Typography sx={info}>+2,500원</Typography>
+									</Box>
 									<Box display="flex" justifyContent="space-between" mt={1}>
 										<Typography sx={info}>총 결제금액</Typography>
 										<Typography sx={info}>19,500원</Typography>
@@ -298,6 +317,24 @@ const OrderFormPC: FC<OrderProps> = ({
 						{/* 결제 방법 */}
 						<Card variant="outlined" sx={{ mt: 2 }}>
 							<CardContent sx={{ pb: '12px !important' }}>
+								<Typography component="span" sx={mainTitle}>
+									결제 정보
+								</Typography>
+								<Box mt={2} mb={2}>
+									<Controller
+										name="paymentMethod"
+										control={control}
+										render={({ field, fieldState, formState }) => (
+											<RenderSelectButtonField
+												label="일반결제"
+												datas={paymentOptions}
+												field={field}
+												fieldState={fieldState}
+												formState={formState}
+											/>
+										)}
+									/>
+								</Box>
 								<Typography component="span" sx={mainTitle}>
 									결제 방법
 								</Typography>

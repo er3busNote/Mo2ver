@@ -255,7 +255,7 @@ const BannerImageFormMobile: FC<BannerImageProp> = ({
 			},
 		'label[id$="title-label"][data-shrink="true"], label[id$="bnnrImg-label"][data-shrink="true"], label[id$="cnntUrl-label"][data-shrink="true"]':
 			{
-				top: '3px',
+				top: '-1px',
 				ml: 1,
 			},
 	};

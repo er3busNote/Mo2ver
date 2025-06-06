@@ -11,7 +11,7 @@
 
 /* 모바일 기기용 스타일 */
 @media screen and (max-width: 768px) {
-  * {
+  html, body {
     overflow-x: hidden;
   }
 }

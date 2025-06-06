@@ -113,7 +113,7 @@ const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 			ml: 0.5,
 		},
 		'label[id$="title-label"][data-shrink="true"]': {
-			top: '3px',
+			top: '-1px',
 			ml: 1,
 		},
 	};

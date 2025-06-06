@@ -41,6 +41,7 @@ interface OrderFormValues {
 	coupon?: number;
 	couponNumber?: string;
 	point?: number;
+	paymentMethod: string;
 	card: string;
 	cardOwner?: string;
 	agreeReceipt: boolean;

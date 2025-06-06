@@ -10,8 +10,8 @@ import { TitleState } from '@store/types';
 import Api from '@api/index';
 import { OrderData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
-import OrderListPC from './form/OrderFormPC';
-import OrderListMobile from './form/OrderFormMobile';
+import OrderFormPC from './form/OrderFormPC';
+import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { OrderFormValues } from '@pages/types';
 
@@ -24,6 +24,7 @@ const orderSchema = yup
 		coupon: yup.number(),
 		couponNumber: yup.string(),
 		point: yup.number(),
+		paymentMethod: yup.string().required(),
 		card: yup.string().required(),
 		cardOwner: yup.string(),
 		agreeReceipt: yup.boolean().required(),
@@ -52,6 +53,7 @@ const orderValues: OrderFormValues = {
 	coupon: 0,
 	couponNumber: '',
 	point: 0,
+	paymentMethod: 'CARD',
 	card: '',
 	cardOwner: '',
 	agreeReceipt: false,
@@ -67,11 +69,12 @@ const OrderPC: FC<OrderProps> = ({
 	return (
 		<Box
 			sx={{
+				mb: '30px',
 				width: '940px',
 				display: 'inline-block',
 			}}
 		>
-			<OrderListPC
+			<OrderFormPC
 				title={title}
 				description={description}
 				steps={steps}
@@ -89,11 +92,12 @@ const OrderMobile: FC<OrderProps> = ({
 	return (
 		<Box
 			sx={{
+				mb: '60px',
 				width: '100%',
 				display: 'inline-block',
 			}}
 		>
-			<OrderListMobile
+			<OrderFormMobile
 				title={title}
 				description={description}
 				steps={steps}
