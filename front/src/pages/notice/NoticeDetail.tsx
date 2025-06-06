@@ -56,6 +56,7 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 		px: 3,
 		py: 1,
 		borderBottom: '1px #F0F0F0 solid',
+		'& img': { maxWidth: '100%' },
 	};
 	const fileHeader: SxProps<Theme> = {
 		py: 0.5,
