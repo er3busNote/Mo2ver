@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
                 .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**", "/search/**").permitAll()
                 .mvcMatchers(HttpMethod.PATCH, "/goods/**").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/cart/list", "/recommend/**").hasAnyRole("USER")  // 3.1) 장바구니, 추천 목록
+                .mvcMatchers(HttpMethod.GET, "/address/*", "/cart/list", "/recommend/**", "/order/**").hasAnyRole("USER")  // 3.1) 주소록, 장바구니, 추천, 주문 목록
                 .mvcMatchers(HttpMethod.PATCH, "/address/*").hasAnyRole("USER")                 // 3.2) 주소록
                 .mvcMatchers(HttpMethod.POST, "/address/*", "/cart/**", "/review/**", "/order/**", "/payment/**").hasAnyRole("USER")      // 3.3) 주소록, 장바구니, 리뷰, 주문, 결재 추가
                 .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**").hasAnyRole("USER")       // 3.4) 장바구니, 리뷰 수정

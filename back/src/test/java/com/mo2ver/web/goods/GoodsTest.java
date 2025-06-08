@@ -34,7 +34,7 @@ public class GoodsTest extends CsrfConfigTest {
     }
 
     @Test
-    @DisplayName("상품 리스트 정보 확인")
+    @DisplayName("상품 리스트 확인")
     public void findGoodsListTest() throws Exception {
 
         mockMvc.perform(get("/goods/list")

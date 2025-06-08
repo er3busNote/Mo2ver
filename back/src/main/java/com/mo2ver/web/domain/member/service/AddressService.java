@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.member.service;
 
 import com.mo2ver.web.domain.member.dto.AddressInfo;
+import com.mo2ver.web.domain.member.dto.response.AddressResponse;
 import com.mo2ver.web.domain.member.entity.Address;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.AddressRepository;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,13 @@ public class AddressService {
 
     private final MemberRepository memberRepository;
     private final AddressRepository addressRepository;
+
+    @Transactional
+    public List<AddressResponse> findAddresslist(Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        List<Address> listAddress = this.addressRepository.findByMember(member);
+        return listAddress.stream().map(AddressResponse::of).collect(Collectors.toList());
+    }
 
     @Transactional
     public Long saveAddress(AddressInfo addressInfo, Member currentUser) {

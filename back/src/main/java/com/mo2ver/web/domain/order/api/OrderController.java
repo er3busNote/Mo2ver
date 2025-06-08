@@ -4,18 +4,17 @@ import com.mo2ver.web.domain.inventory.service.InventoryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
+import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
 import com.mo2ver.web.domain.order.service.OrderService;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +24,15 @@ public class OrderController {
 
     private final OrderService orderService;
     private final InventoryService inventoryService;
+
+    @GetMapping("/info/{id}")
+    public ResponseEntity<List<OrderGoodsResponse>> infoOrder(
+            @PathVariable String id,
+            @CurrentUser Member currentUser
+    ) {
+        List<OrderGoodsResponse> listOrderGoodsResponse = orderService.findOrder(id);
+        return ResponseEntity.ok().body(listOrderGoodsResponse);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ResponseHandler> createOrder(

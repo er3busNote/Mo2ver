@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.member.api;
 
 import com.mo2ver.web.domain.member.dto.AddressInfo;
+import com.mo2ver.web.domain.member.dto.response.AddressResponse;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.service.AddressService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,6 +24,14 @@ import java.net.URI;
 public class AddressController {
 
     private final AddressService addressService;
+
+    @GetMapping("/list")
+    public ResponseEntity<List<AddressResponse>> listAddress(
+            @CurrentUser Member currentUser
+    ) {
+        List<AddressResponse> listAddressResponse = addressService.findAddresslist(currentUser);
+        return ResponseEntity.ok().body(listAddressResponse);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ResponseHandler> createAddress(

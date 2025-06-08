@@ -13,11 +13,27 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Arrays;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class OrderTest extends CsrfConfigTest {
+
+    @Test
+    @DisplayName("주문정보 상세 정보 확인")
+    public void findOrderInfoTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        String orderId = "89b1f308-cd03-4cd6-ba32-81d72c3a2e0d";
+        mockMvc.perform(get("/order/info/{orderId}", orderId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
     @Test
     @DisplayName("주문정보 저장 확인")

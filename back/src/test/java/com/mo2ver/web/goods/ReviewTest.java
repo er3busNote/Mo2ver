@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReviewTest extends CsrfConfigTest {
 
     @Test
-    @DisplayName("리뷰 리스트 정보 확인")
+    @DisplayName("리뷰 리스트 확인")
     public void findReviewListTest() throws Exception {
         String goodsCode = "1000000004";
         mockMvc.perform(get("/review/list/{goodsCode}", goodsCode)
