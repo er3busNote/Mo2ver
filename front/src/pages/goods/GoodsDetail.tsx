@@ -4,7 +4,7 @@ import {
 	GoodsDetailData,
 	CartData,
 	ReviewPageData,
-	ReviewRequestData,
+	ReviewInfoData,
 	ImageData,
 } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
@@ -42,8 +42,8 @@ interface GoodsDetailProps {
 	goodsData: GoodsDetailData;
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
-	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
-	onReviewMod: (reviewInfo: ReviewRequestData) => void;
+	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
+	onReviewMod: (reviewInfo: ReviewInfoData) => void;
 	onCartAdd: (cartData: CartData) => void;
 }
 

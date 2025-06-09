@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { NoticeRequestData, NoticeDetailData } from '@api/types';
+import { NoticeRequestData, NoticeInfoData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useNoticeDetail from '@hooks/notice/useNoticeDetail';
 import NoticeFormPC from './NoticeFormPC';
@@ -118,7 +118,7 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 		data: NoticeFormValues,
 		noticeForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const noticeFormData: NoticeDetailData = {
+		const noticeFormData: NoticeInfoData = {
 			title: data.title,
 			contents: data.contents,
 			noticeFiles: data.noticeFiles,

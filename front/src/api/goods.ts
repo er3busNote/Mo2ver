@@ -1,12 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import {
-	CSRFData,
-	GoodsPage,
-	GoodsSearchPage,
-	GoodsRegisterData,
-} from './types';
+import { CSRFData, GoodsPage, GoodsSearchPage, GoodsInfoData } from './types';
 
 const goods = (instance: AxiosInstance) => {
 	return {
@@ -40,10 +35,10 @@ const goods = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 상품 저장 API : <baseURL>/goods/create
 		create:
-			(goodsRegisterData: GoodsRegisterData, csrfData: CSRFData) =>
+			(goodsInfoData: GoodsInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('goods/create', goodsRegisterData, {
+					.post('goods/create', goodsInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -52,10 +47,10 @@ const goods = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 상품 수정 API : <baseURL>/goods/update
 		update:
-			(goodsRegisterData: GoodsRegisterData, csrfData: CSRFData) =>
+			(goodsInfoData: GoodsInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.patch('goods/update', goodsRegisterData, {
+					.patch('goods/update', goodsInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},

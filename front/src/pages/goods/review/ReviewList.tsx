@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { ReviewData, ReviewPageData, ReviewRequestData } from '@api/types';
+import { ReviewData, ReviewPageData, ReviewInfoData } from '@api/types';
 import ReviewCard from '@components/card/ReviewCard';
 import ReviewInput from '@components/input/ReviewInput';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -11,8 +11,8 @@ interface ReviewListProps {
 	goodsCode: string;
 	reviewPageData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
-	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
-	onReviewMod: (reviewInfo: ReviewRequestData) => void;
+	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
+	onReviewMod: (reviewInfo: ReviewInfoData) => void;
 }
 
 const ReviewList: FC<ReviewListProps> = ({

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { BannerRequestData, BannerImageData, CSRFData } from '@api/types';
+import { BannerRequestData, BannerImageInfoData, CSRFData } from '@api/types';
 
 interface BannerDetailProps {
 	banner: ActionCreatorsMapObject;
@@ -12,8 +12,8 @@ const useBannerImagesDetail = ({
 	banner,
 	bannerData,
 	csrfData,
-}: BannerDetailProps): BannerImageData | undefined => {
-	const [data, setData] = useState<BannerImageData>();
+}: BannerDetailProps): BannerImageInfoData | undefined => {
+	const [data, setData] = useState<BannerImageInfoData>();
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await banner.imagesDetail(bannerData, csrfData);

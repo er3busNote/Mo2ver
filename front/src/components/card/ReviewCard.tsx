@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useFieInfo from '@hooks/cmmn/useFileInfo';
-import { ReviewData, ReviewRequestData } from '@api/types';
+import { ReviewData, ReviewInfoData } from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
 import ReviewInput from '@components/input/ReviewInput';
 import {
@@ -36,8 +36,8 @@ interface ReviewCardProps {
 	member: ActionCreatorsMapObject;
 	file: ActionCreatorsMapObject;
 	reviewData: ReviewData;
-	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
-	onReplyModify: (reviewInfo: ReviewRequestData) => void;
+	onReplySubmit: (reviewInfo: ReviewInfoData) => void;
+	onReplyModify: (reviewInfo: ReviewInfoData) => void;
 	isRoot: boolean;
 	depth: number;
 }
@@ -119,7 +119,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	};
 
 	const handleReplyRatingSubmit = (rating: number) => {
-		const reviewInfo: ReviewRequestData = {
+		const reviewInfo: ReviewInfoData = {
 			reviewNo: reviewData.goodsReviewNo,
 			goodsCode: reviewData.goodsCode,
 			reviewImg: attachFile,
@@ -130,7 +130,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	};
 
 	const handleReplyContentsSubmit = () => {
-		const reviewInfo: ReviewRequestData = {
+		const reviewInfo: ReviewInfoData = {
 			reviewNo: reviewData.goodsReviewNo,
 			goodsCode: reviewData.goodsCode,
 			reviewImg: reviewData.imageAttachFile,
@@ -141,7 +141,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	};
 
 	const handleReplyFileAttachSubmit = (fileAttachCode: string) => {
-		const reviewInfo: ReviewRequestData = {
+		const reviewInfo: ReviewInfoData = {
 			reviewNo: reviewData.goodsReviewNo,
 			goodsCode: reviewData.goodsCode,
 			reviewImg: fileAttachCode,

@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { CSRFData, EventRequestData, EventDetailData, PageData } from './types';
+import { CSRFData, EventRequestData, EventInfoData, PageData } from './types';
 
 const event = (instance: AxiosInstance) => {
 	return {
@@ -39,10 +39,10 @@ const event = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 정보 추가 API : <baseURL>/event/create
 		create:
-			(eventDetailData: EventDetailData, csrfData: CSRFData) =>
+			(eventInfoData: EventInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('event/create', eventDetailData, {
+					.post('event/create', eventInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -51,10 +51,10 @@ const event = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 이벤트 정보 수정 API : <baseURL>/event/update
 		update:
-			(eventDetailData: EventDetailData, csrfData: CSRFData) =>
+			(eventInfoData: EventInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.patch('event/update', eventDetailData, {
+					.patch('event/update', eventInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},

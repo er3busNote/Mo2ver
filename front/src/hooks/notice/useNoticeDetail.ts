@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { NoticeRequestData, NoticeDetailData, CSRFData } from '@api/types';
+import { NoticeRequestData, NoticeInfoData, CSRFData } from '@api/types';
 
 interface NoticeDetailProps {
 	notice: ActionCreatorsMapObject;
@@ -12,8 +12,8 @@ const useNoticeDetail = ({
 	notice,
 	noticeData,
 	csrfData,
-}: NoticeDetailProps): NoticeDetailData | undefined => {
-	const [data, setData] = useState<NoticeDetailData>();
+}: NoticeDetailProps): NoticeInfoData | undefined => {
+	const [data, setData] = useState<NoticeInfoData>();
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await notice.detail(noticeData, csrfData);

@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { GoodsRegisterData } from '@api/types';
+import { GoodsInfoData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
@@ -343,7 +343,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 		data: RegisterFormValues,
 		registerForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const registerFormData: GoodsRegisterData = {
+		const registerFormData: GoodsInfoData = {
 			goodsName: data.name,
 			goodsBrand: data.brand,
 			goodsGender: data.gender,

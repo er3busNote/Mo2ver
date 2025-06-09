@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { BannerRequestData, BannerImageData } from '@api/types';
+import { BannerRequestData, BannerImageInfoData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
 import useBannerImagesDetail from '@hooks/banner/useBannerImagesDetail';
@@ -172,7 +172,7 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 		data: BannerImageFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>
 	) => {
-		const bannerFormData: BannerImageData = {
+		const bannerFormData: BannerImageInfoData = {
 			title: data.title,
 			startDate: data.startDate.format('YYYY-MM-DD'),
 			endDate: data.endDate.format('YYYY-MM-DD'),

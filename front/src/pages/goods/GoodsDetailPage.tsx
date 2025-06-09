@@ -9,7 +9,7 @@ import {
 	GoodsDetailData,
 	CartData,
 	ReviewPageData,
-	ReviewRequestData,
+	ReviewInfoData,
 } from '@api/types';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import useReviewPageList from '@hooks/review/useReviewPageList';
@@ -23,8 +23,8 @@ interface GoodsDetailProps {
 	goodsData: GoodsDetailData;
 	reviewData: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
-	onReviewAdd: (reviewInfo: ReviewRequestData) => void;
-	onReviewMod: (reviewInfo: ReviewRequestData) => void;
+	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
+	onReviewMod: (reviewInfo: ReviewInfoData) => void;
 	onCartAdd: (cartData: CartData) => void;
 }
 
@@ -122,12 +122,12 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const goodsData = useGoodsDetail({ goods, code });
 	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
 
-	const onReviewAdd = async (reviewInfo: ReviewRequestData) => {
+	const onReviewAdd = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
 		await review.create(reviewInfo, csrfData);
 		setReload(true);
 	};
-	const onReviewMod = async (reviewInfo: ReviewRequestData) => {
+	const onReviewMod = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
 		await review.update(reviewInfo, csrfData);
 		setReload(true);

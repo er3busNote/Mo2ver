@@ -63,7 +63,7 @@ interface GoodsDetailData extends GoodsData {
 	reviewCount: number;
 }
 
-interface GoodsRegisterData {
+interface GoodsInfoData {
 	goodsCode?: string;
 	goodsName: string;
 	goodsBrand: string;
@@ -139,7 +139,7 @@ interface ReviewData {
 	reviewResponseList: Array<ReviewData>;
 }
 
-interface ReviewRequestData {
+interface ReviewInfoData {
 	reviewNo?: number;
 	goodsCode: string;
 	upperReviewNo?: number | undefined;
@@ -182,7 +182,7 @@ interface BannerImageDetailData {
 	useyn: string;
 }
 
-interface BannerImageData {
+interface BannerImageInfoData {
 	bannerNo?: number;
 	title: string;
 	startDate: string;
@@ -202,7 +202,7 @@ interface BannerGoodsDetailData {
 	sortSequence: number;
 }
 
-interface BannerGoodsData {
+interface BannerGoodsInfoData {
 	bannerNo?: number;
 	title: string;
 	startDate: string;
@@ -262,7 +262,7 @@ interface EventDetailProductData {
 	sortSequence: number;
 }
 
-interface EventDetailData {
+interface EventInfoData {
 	eventNo?: number;
 	title: string;
 	startDate: string;
@@ -292,7 +292,7 @@ interface NoticePageData extends PageableData {
 	content: Array<NoticeData>;
 }
 
-interface NoticeDetailData {
+interface NoticeInfoData {
 	noticeNo?: number;
 	title: string;
 	contents: string;
@@ -337,6 +337,37 @@ interface SearchRequestData {
 // 10. Order Type
 interface OrderData {
 	orderId: string;
+}
+
+interface OrderGoodsInfoData {
+	goodsCode: string;
+	quantity: number;
+}
+
+interface OrderInfoData {
+	goodsOrders: Array<OrderGoodsInfoData>;
+}
+
+// 11. Payment Type
+interface PaymentInfoData {
+	orderId: string;
+}
+
+interface PaymentConfirmData {
+	paymentCode: string;
+	paymentKey: string;
+	orderId: string;
+	amount: number;
+}
+
+// 12. Address Type
+interface AddressInfoData {
+	addressNo?: number;
+	memberName: string;
+	cellPhoneNumber: string;
+	zipcode: string;
+	roadNameBasicAddress: string;
+	roadNameDetailAddress: string;
 }
 
 // 0. ETC Type
@@ -396,7 +427,7 @@ export type {
 	ImageData,
 	GoodsData,
 	GoodsDetailData,
-	GoodsRegisterData,
+	GoodsInfoData,
 	GoodsPage,
 	GoodsSearchPage,
 	CategoryData,
@@ -404,28 +435,32 @@ export type {
 	CategoryDataInfo,
 	CategoryDataGroup,
 	ReviewData,
-	ReviewRequestData,
+	ReviewInfoData,
 	ReviewPageData,
 	BannerData,
 	BannerRequestData,
 	BannerPageData,
-	BannerImageData,
-	BannerGoodsData,
+	BannerImageInfoData,
+	BannerGoodsInfoData,
 	EventData,
 	EventRequestData,
 	EventPageData,
 	EventProductData,
 	EventProductPageData,
-	EventDetailData,
+	EventInfoData,
 	NoticeData,
 	NoticeRequestData,
 	NoticePageData,
-	NoticeDetailData,
+	NoticeInfoData,
 	CartData,
 	CartPageData,
 	SearchGoodsResuqestData,
 	SearchRequestData,
 	OrderData,
+	OrderInfoData,
+	PaymentInfoData,
+	PaymentConfirmData,
+	AddressInfoData,
 	PageData,
 	CodeData,
 	FileData,

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { EventRequestData, EventDetailData, CSRFData } from '@api/types';
+import { EventRequestData, EventInfoData, CSRFData } from '@api/types';
 
 interface EventDetailProps {
 	event: ActionCreatorsMapObject;
@@ -12,8 +12,8 @@ const useEventDetail = ({
 	event,
 	eventData,
 	csrfData,
-}: EventDetailProps): EventDetailData | undefined => {
-	const [data, setData] = useState<EventDetailData>();
+}: EventDetailProps): EventInfoData | undefined => {
+	const [data, setData] = useState<EventInfoData>();
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await event.detail(eventData, csrfData);

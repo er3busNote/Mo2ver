@@ -1,12 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import {
-	CSRFData,
-	NoticeRequestData,
-	NoticeDetailData,
-	PageData,
-} from './types';
+import { CSRFData, NoticeRequestData, NoticeInfoData, PageData } from './types';
 
 const notice = (instance: AxiosInstance) => {
 	return {
@@ -36,10 +31,10 @@ const notice = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 공지사항 정보 추가 API : <baseURL>/notice/create
 		create:
-			(noticeDetailData: NoticeDetailData, csrfData: CSRFData) =>
+			(noticeInfoData: NoticeInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('notice/create', noticeDetailData, {
+					.post('notice/create', noticeInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -48,10 +43,10 @@ const notice = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 공지사항 정보 수정 API : <baseURL>/notice/update
 		update:
-			(noticeDetailData: NoticeDetailData, csrfData: CSRFData) =>
+			(noticeInfoData: NoticeInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.patch('notice/update', noticeDetailData, {
+					.patch('notice/update', noticeInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},

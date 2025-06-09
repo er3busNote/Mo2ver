@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { ReviewRequestData } from '@api/types';
+import { ReviewInfoData } from '@api/types';
 import { Box, Button, Divider, TextField, Rating } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';
@@ -13,7 +13,7 @@ import {
 interface ReviewInputProps {
 	goodsCode: string;
 	upperReviewNo?: number;
-	onReplySubmit: (reviewInfo: ReviewRequestData) => void;
+	onReplySubmit: (reviewInfo: ReviewInfoData) => void;
 }
 
 const ReviewInput: FC<ReviewInputProps> = ({
@@ -31,7 +31,7 @@ const ReviewInput: FC<ReviewInputProps> = ({
 	};
 
 	const handleReplySubmit = () => {
-		const reviewInfo: ReviewRequestData = {
+		const reviewInfo: ReviewInfoData = {
 			goodsCode: goodsCode,
 			upperReviewNo: upperReviewNo,
 			reviewImg: '',

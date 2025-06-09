@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { CSRFData, ReviewRequestData, PageData } from './types';
+import { CSRFData, ReviewInfoData, PageData } from './types';
 
 const review = (instance: AxiosInstance) => {
 	return {
@@ -15,10 +15,10 @@ const review = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 리뷰 추가 API : <baseURL>/review/create
 		create:
-			(reviewData: ReviewRequestData, csrfData: CSRFData) =>
+			(reviewInfoData: ReviewInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('review/create', reviewData, {
+					.post('review/create', reviewInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
@@ -27,10 +27,10 @@ const review = (instance: AxiosInstance) => {
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 리뷰 수정 API : <baseURL>/review/update
 		update:
-			(reviewData: ReviewRequestData, csrfData: CSRFData) =>
+			(reviewInfoData: ReviewInfoData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.put('review/update', reviewData, {
+					.put('review/update', reviewInfoData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
