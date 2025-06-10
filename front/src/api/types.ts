@@ -339,6 +339,11 @@ interface OrderData {
 	orderId: string;
 }
 
+interface OrderGoodsData extends GoodsData {
+	buyQuantity: number;
+	amount: number;
+}
+
 interface OrderGoodsInfoData {
 	goodsCode: string;
 	quantity: number;
@@ -349,6 +354,12 @@ interface OrderInfoData {
 }
 
 // 11. Payment Type
+interface PaymentData {
+	clientKey: string;
+	orderId: string;
+	amount: number;
+}
+
 interface PaymentInfoData {
 	orderId: string;
 }
@@ -361,6 +372,14 @@ interface PaymentConfirmData {
 }
 
 // 12. Address Type
+interface AddressData {
+	memberName: string;
+	cellPhoneNumber: string;
+	zipcode: string;
+	roadNameBasicAddress: string;
+	roadNameDetailAddress: string;
+}
+
 interface AddressInfoData {
 	addressNo?: number;
 	memberName: string;
@@ -457,9 +476,12 @@ export type {
 	SearchGoodsResuqestData,
 	SearchRequestData,
 	OrderData,
+	OrderGoodsData,
 	OrderInfoData,
+	PaymentData,
 	PaymentInfoData,
 	PaymentConfirmData,
+	AddressData,
 	AddressInfoData,
 	PageData,
 	CodeData,

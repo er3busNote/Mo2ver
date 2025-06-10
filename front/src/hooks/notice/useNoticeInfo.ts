@@ -13,8 +13,8 @@ const useNoticeInfo = ({ notice, code }: NoticeProps): NoticeData => {
 		subject: '',
 		contents: '',
 		noticeYesNo: '',
-		register: '',
-		registerDate: 0,
+		memberName: '',
+		registerDate: '',
 		noticeFileList: [],
 	});
 
