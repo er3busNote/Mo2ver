@@ -45,6 +45,7 @@ interface GoodsDetailProps {
 	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
 	onReviewMod: (reviewInfo: ReviewInfoData) => void;
 	onCartAdd: (cartData: CartData) => void;
+	onOrder: (code: string) => void;
 }
 
 const GoodsDetail: FC<GoodsDetailProps> = ({
@@ -57,6 +58,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	onReviewAdd,
 	onReviewMod,
 	onCartAdd,
+	onOrder,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
 	const reviewRef = useRef<HTMLDivElement | null>(null);
@@ -85,6 +87,10 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 			totalPrice: goodsData.salePrice,
 		};
 		onCartAdd(cartData);
+	};
+
+	const orderClick = () => {
+		onOrder(goodsData.goodsCode);
 	};
 
 	const attachFile = String(
@@ -556,7 +562,11 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 							>
 								장바구니
 							</ButtonGoods>
-							<ButtonGoods buttonType="buynow" variant="outlined">
+							<ButtonGoods
+								buttonType="buynow"
+								onClick={orderClick}
+								variant="outlined"
+							>
 								바로 구매
 							</ButtonGoods>
 						</Box>

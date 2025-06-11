@@ -66,6 +66,7 @@ interface CartListProps {
 	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
+	onOrder: (isCheck: boolean) => void;
 }
 
 const CartList: FC<CartDataProps> = ({
@@ -713,6 +714,7 @@ const CartListMobile: FC<CartListProps> = ({
 	file,
 	onCartUpdate,
 	onCartDelete,
+	onOrder,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
 
@@ -770,11 +772,17 @@ const CartListMobile: FC<CartListProps> = ({
 					<ButtonCart
 						buttonType="selectbuynow"
 						device="mobile"
+						onClick={() => onOrder(true)}
 						variant="outlined"
 					>
 						선택상품구매
 					</ButtonCart>
-					<ButtonCart buttonType="allbuynow" device="mobile" variant="outlined">
+					<ButtonCart
+						buttonType="allbuynow"
+						device="mobile"
+						onClick={() => onOrder(false)}
+						variant="outlined"
+					>
 						전체상품구매
 					</ButtonCart>
 				</Box>

@@ -477,6 +477,7 @@ export type {
 	SearchRequestData,
 	OrderData,
 	OrderGoodsData,
+	OrderGoodsInfoData,
 	OrderInfoData,
 	PaymentData,
 	PaymentInfoData,

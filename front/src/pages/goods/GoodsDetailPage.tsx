@@ -1,20 +1,24 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@store/types';
 import {
 	GoodsDetailData,
 	CartData,
+	OrderInfoData,
+	OrderGoodsInfoData,
 	ReviewPageData,
 	ReviewInfoData,
 } from '@api/types';
+import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import useReviewPageList from '@hooks/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
+import goToOrderForm from '@navigate/order/goToOrderForm';
 
 interface GoodsDetailProps {
 	title: string;
@@ -26,6 +30,7 @@ interface GoodsDetailProps {
 	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
 	onReviewMod: (reviewInfo: ReviewInfoData) => void;
 	onCartAdd: (cartData: CartData) => void;
+	onOrder: (code: string) => void;
 }
 
 interface GoodsDetailDispatchProps {
@@ -35,6 +40,7 @@ interface GoodsDetailDispatchProps {
 	goods: ActionCreatorsMapObject;
 	review: ActionCreatorsMapObject;
 	cart: ActionCreatorsMapObject;
+	order: ActionCreatorsMapObject;
 	file: ActionCreatorsMapObject;
 }
 
@@ -48,6 +54,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 	onReviewAdd,
 	onReviewMod,
 	onCartAdd,
+	onOrder,
 }): JSX.Element => {
 	return (
 		<Box
@@ -66,6 +73,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 				onReviewAdd={onReviewAdd}
 				onReviewMod={onReviewMod}
 				onCartAdd={onCartAdd}
+				onOrder={onOrder}
 			/>
 		</Box>
 	);
@@ -81,6 +89,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 	onReviewAdd,
 	onReviewMod,
 	onCartAdd,
+	onOrder,
 }): JSX.Element => {
 	return (
 		<Box
@@ -99,6 +108,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 				onReviewAdd={onReviewAdd}
 				onReviewMod={onReviewMod}
 				onCartAdd={onCartAdd}
+				onOrder={onOrder}
 			/>
 		</Box>
 	);
@@ -111,6 +121,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	goods,
 	review,
 	cart,
+	order,
 	file,
 }): JSX.Element => {
 	const theme = useTheme();
@@ -121,6 +132,10 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const code = id ?? '';
 	const goodsData = useGoodsDetail({ goods, code });
 	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const csrfData = useCSRFToken({ member });
 
 	const onReviewAdd = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
@@ -136,6 +151,24 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 		const csrfData = await member.csrf();
 		await cart.add(cartData, csrfData);
 	};
+	const orderClick = (code: string) => {
+		const orderGoodsInfoData: OrderGoodsInfoData = {
+			goodsCode: code,
+			quantity: 1,
+		};
+		const orderInfoData: OrderInfoData = {
+			goodsOrders: [orderGoodsInfoData],
+		};
+		goToOrderForm({
+			title,
+			description,
+			dispatch,
+			navigate,
+			order,
+			orderInfoData,
+			csrfData,
+		});
+	};
 	return (
 		<>
 			{isDesktop && (
@@ -149,6 +182,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					onReviewAdd={onReviewAdd}
 					onReviewMod={onReviewMod}
 					onCartAdd={cartAdd}
+					onOrder={orderClick}
 				/>
 			)}
 			{isMobile && (
@@ -162,6 +196,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 					onReviewAdd={onReviewAdd}
 					onReviewMod={onReviewMod}
 					onCartAdd={cartAdd}
+					onOrder={orderClick}
 				/>
 			)}
 		</>
@@ -178,6 +213,7 @@ const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	goods: bindActionCreators(Api.goods, dispatch),
 	review: bindActionCreators(Api.review, dispatch),
 	cart: bindActionCreators(Api.cart, dispatch),
+	order: bindActionCreators(Api.order, dispatch),
 	file: bindActionCreators(Api.file, dispatch),
 });
 

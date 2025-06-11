@@ -68,6 +68,7 @@ interface CartListProps {
 	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
+	onOrder: (isCheck: boolean) => void;
 }
 
 const CartList: FC<CartDataProps> = ({
@@ -718,6 +719,7 @@ const CartListPC: FC<CartListProps> = ({
 	file,
 	onCartUpdate,
 	onCartDelete,
+	onOrder,
 }): JSX.Element => {
 	const calculateTotalSupplyPrice = (cartData: Array<CartData>) =>
 		sumBy(cartData, (item) => item.supplyPrice ?? 0);
@@ -771,10 +773,20 @@ const CartListPC: FC<CartListProps> = ({
 						justifyContent: 'space-between',
 					}}
 				>
-					<ButtonCart buttonType="selectbuynow" device="pc" variant="outlined">
+					<ButtonCart
+						buttonType="selectbuynow"
+						device="pc"
+						onClick={() => onOrder(true)}
+						variant="outlined"
+					>
 						선택상품구매
 					</ButtonCart>
-					<ButtonCart buttonType="allbuynow" device="pc" variant="outlined">
+					<ButtonCart
+						buttonType="allbuynow"
+						device="pc"
+						onClick={() => onOrder(false)}
+						variant="outlined"
+					>
 						전체상품구매
 					</ButtonCart>
 				</Box>
