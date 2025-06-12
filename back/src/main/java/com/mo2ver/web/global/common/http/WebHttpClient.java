@@ -3,7 +3,6 @@ package com.mo2ver.web.global.common.http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,7 +49,6 @@ public class WebHttpClient {
     public static <T, B> Mono<T> post(String url, B body, Class<T> responseType) {
         return staticWebClient.post()
                 .uri(url)
-                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(responseType);
@@ -60,7 +58,6 @@ public class WebHttpClient {
         return staticWebClient.post()
                 .uri(url)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
-                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String.class);
