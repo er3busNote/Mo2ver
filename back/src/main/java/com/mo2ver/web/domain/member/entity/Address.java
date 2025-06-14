@@ -55,6 +55,9 @@ public class Address {
     @Column(name = "ROAD_NM_DTL_ADDR", columnDefinition = "VARCHAR(255) COMMENT '도로명상세주소'")
     private String roadNameDetailAddress;
 
+    @Column(name = "BSC_PLC_YN", columnDefinition = "CHAR(1) COMMENT '기본배송지여부'")
+    private Character basicPlaceYesNo;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -73,9 +76,10 @@ public class Address {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Address(AddressInfo addressInfo, Member currentUser) {
+    public Address(AddressInfo addressInfo, Member currentUser, Long count) {
         this.createOrUpdateAddress(addressInfo, currentUser);
         this.member = currentUser;
+        this.basicPlaceYesNo = createBasicPlaceYesNo(count);
         this.register = currentUser.getMemberNo();
     }
 
@@ -90,5 +94,10 @@ public class Address {
         this.roadNameBasicAddress = addressInfo.getRoadNameBasicAddress();
         this.roadNameDetailAddress = addressInfo.getRoadNameDetailAddress();
         this.updater = currentUser.getMemberNo();
+    }
+
+    private Character createBasicPlaceYesNo(Long count) {
+        if(count > 0) return 'N';
+        return 'Y';
     }
 }

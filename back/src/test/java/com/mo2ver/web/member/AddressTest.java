@@ -17,6 +17,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AddressTest extends CsrfConfigTest {
 
     @Test
+    @DisplayName("기본 배송지 상세 정보 확인")
+    public void findAddressInfoTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        mockMvc.perform(get("/address/info")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("주소록정보 리스트 확인")
     public void findAddressListTest() throws Exception {
 

@@ -25,6 +25,14 @@ public class AddressController {
 
     private final AddressService addressService;
 
+    @GetMapping("/info")
+    public ResponseEntity<AddressResponse> infoAddress(
+            @CurrentUser Member currentUser
+    ) {
+        AddressResponse addressResponse = addressService.findAddress(currentUser);
+        return ResponseEntity.ok().body(addressResponse);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<List<AddressResponse>> listAddress(
             @CurrentUser Member currentUser

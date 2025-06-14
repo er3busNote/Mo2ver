@@ -1,5 +1,8 @@
 package com.mo2ver.web.domain.member.api;
 
+import com.mo2ver.web.domain.member.dto.response.MemberResponse;
+import com.mo2ver.web.domain.member.entity.CurrentUser;
+import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.domain.member.dto.request.LoginRequest;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
@@ -51,6 +54,14 @@ public class MemberController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberValidator memberValidator;
+
+    @GetMapping("/info")
+    public ResponseEntity<MemberResponse> infoMember(
+            @CurrentUser Member currentUser
+    ) {
+        MemberResponse memberResponse = memberService.findMember(currentUser);
+        return ResponseEntity.ok().body(memberResponse);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authLogin(@RequestBody @Valid LoginRequest loginRequest) {
