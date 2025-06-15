@@ -5,6 +5,12 @@ import { CSRFData, AddressInfoData } from './types';
 
 const address = (instance: AxiosInstance) => {
 	return {
+		// 기본 배송지 상세정보 API : <baseURL>/address/info
+		info: () => (dispatch: Dispatch) =>
+			instance
+				.get('address/info')
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 주소록 리스트 API : <baseURL>/address/list
 		list: () => (dispatch: Dispatch) =>
 			instance

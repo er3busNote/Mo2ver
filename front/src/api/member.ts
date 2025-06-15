@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse } from './common/handler';
+import { handleResponse, handleError } from './common/handler';
 import {
 	loginSuccess,
 	loginFailure,
@@ -11,6 +11,12 @@ import { LoginData, SignUpData, TokenData, CSRFData } from './types';
 
 const member = (instance: AxiosInstance) => {
 	return {
+		// 회원 상세정보 API : <baseURL>/member/info
+		info: () => (dispatch: Dispatch) =>
+			instance
+				.get('member/info')
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 로그인 API : <baseURL>/member/login
 		login: (userData: LoginData, csrfData: CSRFData) => (dispatch: Dispatch) =>
 			instance
