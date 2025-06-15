@@ -1,4 +1,28 @@
 // 1. Member Type
+interface MemberData {
+	loginId: string;
+	memberName: string;
+	passwordChangeDate: string;
+	tempPasswordIssueDate: string;
+	loginFailCount: number;
+	loginFailDate: string;
+	memberConditionCode: string;
+	memberGradeCode: string;
+	cellPhoneNumber: string;
+	email: string;
+	emailReceptionYesNo: string;
+	snsReceptionYesNo: string;
+	joinDate: string;
+	lastOrderDate: string;
+	lastloginDate: string;
+	sleepYesNo: string;
+	sleepDate: string;
+	withdrawalYesNo: string;
+	withdrawalDate: string;
+	withdrawalReasonCode: string;
+	withdrawalReason: string;
+}
+
 interface LoginData {
 	username: string;
 	password: string;
@@ -438,6 +462,7 @@ interface FileData {
 }
 
 export type {
+	MemberData,
 	LoginData,
 	SignUpData,
 	TokenData,

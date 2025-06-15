@@ -8,15 +8,7 @@ interface NoticeProps {
 }
 
 const useNoticeInfo = ({ notice, code }: NoticeProps): NoticeData => {
-	const [data, setData] = useState<NoticeData>({
-		noticeManageNo: 0,
-		subject: '',
-		contents: '',
-		noticeYesNo: '',
-		memberName: '',
-		registerDate: '',
-		noticeFileList: [],
-	});
+	const [data, setData] = useState<NoticeData>(new Object() as NoticeData);
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await notice.info(code);

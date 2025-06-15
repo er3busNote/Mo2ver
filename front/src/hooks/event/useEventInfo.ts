@@ -8,16 +8,7 @@ interface EventProps {
 }
 
 const useEventInfo = ({ event, code }: EventProps): EventData => {
-	const [data, setData] = useState<EventData>({
-		eventManageNo: 0,
-		subject: '',
-		eventStartDate: 0,
-		eventEndDate: 0,
-		eventYesNo: '',
-		register: '',
-		registerDate: 0,
-		imageList: [],
-	});
+	const [data, setData] = useState<EventData>(new Object() as EventData);
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await event.info(code);
