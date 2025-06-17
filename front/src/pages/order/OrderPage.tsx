@@ -22,6 +22,7 @@ const steps = ['장바구니', '주문/결제', '주문완료'];
 const orderSchema = yup
 	.object()
 	.shape({
+		addressNo: yup.string().required(),
 		memo: yup.string(),
 		coupon: yup.number(),
 		couponNumber: yup.string(),
@@ -54,6 +55,7 @@ interface OrderDispatchProps {
 }
 
 const orderValues: OrderFormValues = {
+	addressNo: '',
 	memo: '',
 	coupon: 0,
 	couponNumber: '',

@@ -37,6 +37,7 @@ interface RegisterFormValues {
 }
 
 interface OrderFormValues {
+	addressNo: string;
 	memo?: string;
 	coupon?: number;
 	couponNumber?: string;

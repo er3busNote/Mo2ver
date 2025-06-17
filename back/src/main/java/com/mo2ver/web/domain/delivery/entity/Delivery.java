@@ -55,7 +55,7 @@ public class Delivery {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ADDR_TO_DLV"),
-            columnDefinition = "BIGINT(20) COMMENT '주소록번호'"
+            columnDefinition = "CHAR(10) COMMENT '주소록번호'"
     )
     private Address address;
 

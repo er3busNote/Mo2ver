@@ -27,7 +27,7 @@ public class AddressService {
         List<Address> listAddress = this.addressRepository.findByMember(member);
         return listAddress.stream().filter(address -> address.getBasicPlaceYesNo() == 'Y')
                 .findFirst().map(AddressResponse::of)
-                .orElseThrow(() -> new NotFoundException("기본 배송지정보가 존재하지 않습니다."));
+                .orElseGet(AddressResponse::from);
     }
 
     @Transactional
@@ -38,7 +38,7 @@ public class AddressService {
     }
 
     @Transactional
-    public Long saveAddress(AddressInfo addressInfo, Member currentUser) {
+    public String saveAddress(AddressInfo addressInfo, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Long count = this.addressRepository.countByMember(member);
         Address address = new Address(addressInfo, member, count);
@@ -56,8 +56,8 @@ public class AddressService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
 
-    private Address findAddressById(long id) {
-        return this.addressRepository.findById(id)
+    private Address findAddressById(String addressNo) {
+        return this.addressRepository.findById(addressNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주소록정보 입니다."));
     }
 }

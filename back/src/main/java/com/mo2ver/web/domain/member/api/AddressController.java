@@ -46,8 +46,8 @@ public class AddressController {
             @RequestBody @Valid AddressInfo addressInfo,
             @CurrentUser Member currentUser
     ) {
-        Long eventManageNo = addressService.saveAddress(addressInfo, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + eventManageNo))
+        String addressNo = addressService.saveAddress(addressInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + addressNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("주소록정보가 저장되었습니다")

@@ -17,19 +17,15 @@ public class PaymentGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(PAY_CD) FROM PAY";
-        String lastPaymentCd = null;
-        Payment newPayment = (Payment) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastPaymentCd = rs.getString(1);
+                String lastPaymentCd = rs.getString(1);
                 if (lastPaymentCd != null) {
-                    String paymentCd = generateNextId(lastPaymentCd);
-                    newPayment.setPaymentCode(paymentCd);
-                    return paymentCd;
+                    return generateNextId(lastPaymentCd);
                 }
             }
         } catch (SQLException e) {
@@ -44,7 +40,6 @@ public class PaymentGenerator implements IdentifierGenerator {
             }
         }
 
-        newPayment.setPaymentCode("P000000001");
         return "P000000001";
     }
 

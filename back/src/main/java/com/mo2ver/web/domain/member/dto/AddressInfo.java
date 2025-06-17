@@ -18,7 +18,7 @@ import javax.validation.groups.Default;
 public class AddressInfo {
 
     @NotNull(groups = Update.class)
-    private Long addressNo;
+    private String addressNo;
 
     @NotBlank(message = "수령인을 입력해주세요")
     @Size(min = 3, max = 50, message = "수령인은 3자 이상 50자 이하로 입력해야 합니다.")

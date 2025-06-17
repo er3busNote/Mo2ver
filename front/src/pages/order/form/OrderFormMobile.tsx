@@ -8,6 +8,7 @@ import {
 	Card,
 	CardContent,
 	Grid,
+	TextField,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -17,6 +18,7 @@ import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import { OrderFormValues } from '@pages/types';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
+import { every, isNil } from 'lodash';
 
 interface OrderProps {
 	title: string;
@@ -52,6 +54,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 
 	const {
 		control,
+		register,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
 	} = useFormContext<OrderFormValues>();
@@ -157,13 +160,13 @@ const OrderFormMobile: FC<OrderProps> = ({
 								alignItems="flex-start"
 							>
 								<Typography component="span" sx={label}>
-									홍길동
+									{memberData.memberName}
 								</Typography>
 								<Typography component="span" sx={label}>
-									01012345678
+									{memberData.cellPhoneNumber}
 								</Typography>
 								<Typography component="span" sx={label}>
-									user@test.com
+									{memberData.email}
 								</Typography>
 							</Box>
 						</CardContent>
@@ -180,22 +183,33 @@ const OrderFormMobile: FC<OrderProps> = ({
 									배송지 변경
 								</Button>
 							</Box>
-							<Box
-								display="flex"
-								flexDirection="column"
-								alignItems="flex-start"
-							>
+							{every(addressData, isNil) ? (
 								<Typography component="span" sx={label}>
-									홍길동
+									배송정보를 입력해주세요
 								</Typography>
-								<Typography component="span" sx={label}>
-									01012345678
-								</Typography>
-								<Typography component="span" sx={label}>
-									서울특별시 서대문구
-								</Typography>
-							</Box>
+							) : (
+								<Box
+									display="flex"
+									flexDirection="column"
+									alignItems="flex-start"
+								>
+									<Typography component="span" sx={label}>
+										{addressData.memberName}
+									</Typography>
+									<Typography component="span" sx={label}>
+										{addressData.cellPhoneNumber}
+									</Typography>
+									<Typography component="span" sx={label}>
+										{addressData.roadNameBasicAddress}
+									</Typography>
+								</Box>
+							)}
 							<Box mt={2}>
+								<TextField
+									type="hidden"
+									value={addressData.addressNo}
+									{...register('addressNo')}
+								/>
 								<Controller
 									name="memo"
 									control={control}

@@ -10,22 +10,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MemberGenerator implements IdentifierGenerator {
+public class AddressGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
         Connection connection = null;
-        String query = "SELECT MAX(MBR_NO) FROM MBR";
+        String query = "SELECT MAX(ADDR_NO) FROM ADDR";
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                String lastMemberNo = rs.getString(1);
-                if (lastMemberNo != null) {
-                    return generateNextId(lastMemberNo);
+                String lastAddressNo = rs.getString(1);
+                if (lastAddressNo != null) {
+                    return generateNextId(lastAddressNo);
                 }
             }
         } catch (SQLException e) {
@@ -40,11 +40,11 @@ public class MemberGenerator implements IdentifierGenerator {
             }
         }
 
-        return "M000000001";
+        return "A000000001";
     }
 
-    private String generateNextId(String lastMemberNo) {
-        Integer nextId = Integer.parseInt(lastMemberNo.substring(1)) + 1;
-        return 'M' + String.format("%09d", nextId);
+    private String generateNextId(String lastAddressNo) {
+        Integer nextId = Integer.parseInt(lastAddressNo.substring(1)) + 1;
+        return 'A' + String.format("%09d", nextId);
     }
 }

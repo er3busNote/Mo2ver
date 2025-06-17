@@ -80,7 +80,7 @@ public class AddressTest extends CsrfConfigTest {
 
     private AddressInfo getAddressInfo() {
         return AddressInfo.builder()
-                .addressNo(1L)
+                .addressNo("A000000002")
                 .memberName("배병주")
                 .cellPhoneNumber("01011111111")
                 .zipcode("11111")

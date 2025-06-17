@@ -45,7 +45,7 @@ public class DeliveryService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
 
-    private Address findAddressById(Member member, Long addressNo) {
+    private Address findAddressById(Member member, String addressNo) {
         return member.getAddresses().stream()
                 .filter(it -> it.getAddressNo().equals(addressNo))
                 .findFirst()

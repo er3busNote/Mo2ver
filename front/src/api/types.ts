@@ -397,6 +397,7 @@ interface PaymentConfirmData {
 
 // 12. Address Type
 interface AddressData {
+	addressNo: string;
 	memberName: string;
 	cellPhoneNumber: string;
 	zipcode: string;

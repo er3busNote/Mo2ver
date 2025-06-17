@@ -81,7 +81,7 @@ public class PaymentTest extends CsrfConfigTest {
                 .paymentCode("P000000001")
                 .paymentKey("5EnNZRJGvaBX7zk2yd8ydw26XvwXkLrx9POLqKQjmAw4b0e1")
                 .orderId(UUID.fromString("89b1f308-cd03-4cd6-ba32-81d72c3a2e0d"))
-                .addressNo(1L)
+                .addressNo("A000000002")
                 .amount(1000L)
                 .build();
     }

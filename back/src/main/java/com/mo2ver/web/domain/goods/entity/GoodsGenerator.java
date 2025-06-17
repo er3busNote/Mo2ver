@@ -19,19 +19,15 @@ public class GoodsGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(GD_CD) FROM GD";
-        String lastGoodsNo = null;
-        Goods newGoods = (Goods) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastGoodsNo = rs.getString(1);
+                String lastGoodsNo = rs.getString(1);
                 if (lastGoodsNo != null) {
-                    String goodsNo = generateNextId(lastGoodsNo);
-                    newGoods.setGoodsCode(goodsNo);
-                    return goodsNo;
+                    return generateNextId(lastGoodsNo);
                 }
             }
         } catch (SQLException e) {
@@ -46,9 +42,7 @@ public class GoodsGenerator implements IdentifierGenerator {
             }
         }
 
-        String firstGoodNo = String.valueOf(FIRST_GOODS_NO + 1);
-        newGoods.setGoodsCode(firstGoodNo);
-        return firstGoodNo;
+        return String.valueOf(FIRST_GOODS_NO + 1);
     }
 
     private String generateNextId(String lastGoodsNo) {

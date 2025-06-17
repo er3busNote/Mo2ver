@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @SuperBuilder
@@ -15,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class AddressRequest {
 
-    @NotNull(message = "배송지주소가 존재하지 않습니다")
-    @Range(min = 0)
-    private Long addressNo;
+    @NotBlank(message = "배송지주소가 존재하지 않습니다")
+    private String addressNo;
 }

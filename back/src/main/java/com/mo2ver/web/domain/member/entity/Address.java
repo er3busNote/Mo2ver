@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.member.entity;
 import com.mo2ver.web.domain.member.dto.AddressInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -16,17 +17,16 @@ import java.time.LocalDateTime;
                 @Index(name="FK_MBR_TO_ADDR", columnList="MBR_NO")
         }
 )
-@Getter
-@Setter
+@Getter @Setter
 @EqualsAndHashCode(of = "addressNo")
-@Builder @NoArgsConstructor
-@AllArgsConstructor
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Address {
 
     @Id
-    @Column(name = "ADDR_NO", columnDefinition = "BIGINT(20) COMMENT '주소록번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long addressNo;
+    @GeneratedValue(generator = "addressNo")
+    @GenericGenerator(name = "addressNo", strategy = "com.mo2ver.web.domain.member.entity.AddressGenerator")
+    @Column(name = "ADDR_NO", columnDefinition = "CHAR(10) COMMENT '주소록번호'")
+    private String addressNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

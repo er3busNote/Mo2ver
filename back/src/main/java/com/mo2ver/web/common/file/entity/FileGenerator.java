@@ -19,14 +19,13 @@ public class FileGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT COALESCE(MAX(FILE_CD), 0) FROM CMM_FILE";
-        Long lastFileNo = null;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                lastFileNo = rs.getLong(1);
+                Long lastFileNo = rs.getLong(1);
                 return generateNextId(lastFileNo);
             }
         } catch (SQLException e) {
