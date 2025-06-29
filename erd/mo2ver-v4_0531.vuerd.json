@@ -4,8 +4,8 @@
   "settings": {
     "width": 3500,
     "height": 3500,
-    "scrollTop": -1018.2895,
-    "scrollLeft": -1253.8451,
+    "scrollTop": -1691.6667,
+    "scrollLeft": -2137.3333,
     "zoomLevel": 0.82,
     "show": 431,
     "database": 4,
@@ -7261,7 +7261,7 @@
         "name": "ODR_ID",
         "comment": "주문번호",
         "dataType": "CHAR",
-        "default": "",
+        "default": "UUID",
         "options": 10,
         "ui": {
           "keys": 1,
@@ -7271,7 +7271,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1748075610052,
+          "updateAt": 1751195748644,
           "createAt": 1747666572877
         }
       },
@@ -8779,19 +8779,19 @@
         "id": "k0xQwpVIbYHEmOepKhpYT",
         "tableId": "83o9WJu4ngg0m65btPD6T",
         "name": "ADDR_NO",
-        "comment": "주소번호",
-        "dataType": "BIGINT",
-        "default": "AUTO_INCREMENT",
+        "comment": "주소록번호",
+        "dataType": "CHAR",
+        "default": "",
         "options": 10,
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 62,
           "widthDataType": 60,
-          "widthDefault": 102
+          "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1748665538749,
+          "updateAt": 1751195565725,
           "createAt": 1748660257026
         }
       },
@@ -9100,18 +9100,18 @@
         "tableId": "z5N3lxJHeaE1mnAcbW9zr",
         "name": "ADDR_NO",
         "comment": "배송지주소번호",
-        "dataType": "BIGINT",
-        "default": "AUTO_INCREMENT",
+        "dataType": "CHAR",
+        "default": "",
         "options": 8,
         "ui": {
           "keys": 2,
           "widthName": 60,
           "widthComment": 86,
           "widthDataType": 60,
-          "widthDefault": 102
+          "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1748664543690,
+          "updateAt": 1751195583949,
           "createAt": 1748664452687
         }
       },
@@ -10013,90 +10013,6 @@
           "createAt": 1748660315230
         }
       },
-      "tgLQS6a5eeSaLaUP1nm4g": {
-        "id": "tgLQS6a5eeSaLaUP1nm4g",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "83o9WJu4ngg0m65btPD6T",
-          "columnIds": [
-            "k0xQwpVIbYHEmOepKhpYT"
-          ],
-          "x": 2352.3656,
-          "y": 643.4723,
-          "direction": 8
-        },
-        "end": {
-          "tableId": "atoNPnkX_dgayO6fAEJrP",
-          "columnIds": [
-            "_rPRg9PQPR_ChepqIyMdA"
-          ],
-          "x": 1956.5772,
-          "y": 2332.2487,
-          "direction": 4
-        },
-        "meta": {
-          "updateAt": 1748661265629,
-          "createAt": 1748661265629
-        }
-      },
-      "RkXK2qw6yQBJF5fnm9nXk": {
-        "id": "RkXK2qw6yQBJF5fnm9nXk",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "83o9WJu4ngg0m65btPD6T",
-          "columnIds": [
-            "k0xQwpVIbYHEmOepKhpYT"
-          ],
-          "x": 3169.2549,
-          "y": 1833.8204,
-          "direction": 8
-        },
-        "end": {
-          "tableId": "z5N3lxJHeaE1mnAcbW9zr",
-          "columnIds": [
-            "U_g8HWTN8jWxQNKCFKBXW"
-          ],
-          "x": 2655.7617,
-          "y": 2438.5045,
-          "direction": 2
-        },
-        "meta": {
-          "updateAt": 1748661886936,
-          "createAt": 1748661886936
-        }
-      },
-      "Dff5yQvdsulmgUr2GukQk": {
-        "id": "Dff5yQvdsulmgUr2GukQk",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "83o9WJu4ngg0m65btPD6T",
-          "columnIds": [
-            "k0xQwpVIbYHEmOepKhpYT"
-          ],
-          "x": 3174.5626,
-          "y": 1745.3588,
-          "direction": 8
-        },
-        "end": {
-          "tableId": "z5N3lxJHeaE1mnAcbW9zr",
-          "columnIds": [
-            "QiEwFAYSB49GYQHTexhaY"
-          ],
-          "x": 2706.1464,
-          "y": 2375.043,
-          "direction": 2
-        },
-        "meta": {
-          "updateAt": 1748663983231,
-          "createAt": 1748663983231
-        }
-      },
       "Ecn-Oo3VR1cKBD7kjW6Xc": {
         "id": "Ecn-Oo3VR1cKBD7kjW6Xc",
         "identification": false,
@@ -10107,7 +10023,7 @@
           "columnIds": [
             "k0xQwpVIbYHEmOepKhpYT"
           ],
-          "x": 3012.6637,
+          "x": 2991.6637,
           "y": 1678.0514,
           "direction": 8
         },
@@ -10116,7 +10032,7 @@
           "columnIds": [
             "LCssNYd4eEQYt5HjfNbRL"
           ],
-          "x": 2604.33,
+          "x": 2562.33,
           "y": 2358.7231,
           "direction": 2
         },
@@ -10172,69 +10088,13 @@
           "columnIds": [
             "rIc3eEMCzrBGbOdbCifZi"
           ],
-          "x": 2385.33,
+          "x": 2364.33,
           "y": 2246.7231,
           "direction": 4
         },
         "meta": {
           "updateAt": 1748853446794,
           "createAt": 1748853446794
-        }
-      },
-      "IOGmf1VkMW41QaPTtw71w": {
-        "id": "IOGmf1VkMW41QaPTtw71w",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "cd11d987-3128-4b40-9e1c-ab72c2676311",
-          "columnIds": [
-            "96367620-77aa-4492-8b96-0a8085e8437e"
-          ],
-          "x": 1239.866,
-          "y": 1506.4109,
-          "direction": 4
-        },
-        "end": {
-          "tableId": "Vp_WdSJN5uCyY-L8kKkNK",
-          "columnIds": [
-            "agV_moAJmm32pebNrtKrQ"
-          ],
-          "x": 1077.1268,
-          "y": 1272.2682,
-          "direction": 8
-        },
-        "meta": {
-          "updateAt": 1748859894783,
-          "createAt": 1748859894783
-        }
-      },
-      "UiwmzNI5odrP__RugqByX": {
-        "id": "UiwmzNI5odrP__RugqByX",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "Vp_WdSJN5uCyY-L8kKkNK",
-          "columnIds": [
-            "chX1u-IRLBfxgrMHSvBxc"
-          ],
-          "x": 833.9904,
-          "y": 1123.9045999999998,
-          "direction": 1
-        },
-        "end": {
-          "tableId": "b7e933d7-0822-4585-a948-0f35e178618b",
-          "columnIds": [
-            "hhjJtxD9fLqj0-mlc9C2n"
-          ],
-          "x": 684.1737,
-          "y": 1183.8062,
-          "direction": 2
-        },
-        "meta": {
-          "updateAt": 1748860000269,
-          "createAt": 1748860000269
         }
       },
       "kBQ-XG4XoMu0zQhqCz21B": {
@@ -10299,7 +10159,7 @@
     "memoEntities": {
       "3hVkCQzibTeLWSV3FARlm": {
         "id": "3hVkCQzibTeLWSV3FARlm",
-        "value": "[스키마 히스토리 내역 정리]\n\n- 가장 메인이 되는 5개의 Entity에 대해서는 아래와 같은 일련번호를 부여함\nex) ① M000000001: 회원번호 / ② P000000001 : 결제번호 / ③ 1000000000 : 상품번호 / ④ D000000001 : 배송번호 / ⑤ O000000001 : 주문번호\n\n- 서로 성격이 \"같은\" Entity의 정보를 가져오고자 할때는 복합키를 사용함\nex) GD_PRC (복합키) - GD (ManyToOne) / GD_OPT (ManyToOne)\n   -> 옵션/속성에 따라 가격이 달라지는 경우\n\n- 서로 성격이 \"다른\" Entity의 정보를 가져오고자 할때는 복합키 대신, PK ID를 JOIN하여 구현함\nex) DLV_DTL - ODR_DTL(ManyToOne)\n   -> 주문상세정보의 주문갯수를 배송상세정보에 연관시켜 주어야 하는 경우\n\n- 결제관리의 ODR_ID와 배송관리의 ODR_ID는 OneToOne으로 통일함\n   -> 하나의 주문정보에 여러개의 결제내역과 배송내역이 포함되는 상황을 방지하기 위한 UNIQUE KEY 추가",
+        "value": "[스키마 히스토리 내역 정리]\n\n- 가장 메인이 되는 5개의 Entity에 대해서는 아래와 같은 일련번호를 부여함\nex) ① M000000001: 회원번호 / ② P000000001 : 결제번호 / ③ 1000000000 : 상품번호 / ④ D000000001 : 배송번호 / ⑤ O000000001 : 주문번호 / ⑥ A000000001 : 주소록번호\n\n- 서로 성격이 \"같은\" Entity의 정보를 가져오고자 할때는 복합키를 사용함\nex) GD_PRC (복합키) - GD (ManyToOne) / GD_OPT (ManyToOne)\n   -> 옵션/속성에 따라 가격이 달라지는 경우\n\n- 서로 성격이 \"다른\" Entity의 정보를 가져오고자 할때는 복합키 대신, PK ID를 JOIN하여 구현함\nex) DLV_DTL - ODR_DTL(ManyToOne)\n   -> 주문상세정보의 주문갯수를 배송상세정보에 연관시켜 주어야 하는 경우\n\n- 결제관리의 ODR_ID와 배송관리의 ODR_ID는 OneToOne으로 통일함\n   -> 하나의 주문정보에 여러개의 결제내역과 배송내역이 포함되는 상황을 방지하기 위한 UNIQUE KEY 추가",
         "ui": {
           "x": 1550.3156,
           "y": 938.7878,
@@ -10309,7 +10169,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1748882207149,
+          "updateAt": 1751195523468,
           "createAt": 1748860244857
         }
       }
