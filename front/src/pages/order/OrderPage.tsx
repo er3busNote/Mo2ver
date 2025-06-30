@@ -8,10 +8,11 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { MemberData, AddressData, OrderData } from '@api/types';
+import { MemberData, AddressData, OrderData, OrderGoodsData } from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
+import useOrderList from '@hooks/order/useOrderList';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -41,6 +42,7 @@ interface OrderProps {
 	description: string;
 	memberData: MemberData;
 	addressData: AddressData;
+	orderData: Array<OrderGoodsData>;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -52,6 +54,7 @@ interface OrderDispatchProps {
 	description: string;
 	member: ActionCreatorsMapObject;
 	address: ActionCreatorsMapObject;
+	order: ActionCreatorsMapObject;
 }
 
 const orderValues: OrderFormValues = {
@@ -73,6 +76,7 @@ const OrderPC: FC<OrderProps> = ({
 	description,
 	memberData,
 	addressData,
+	orderData,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -89,6 +93,7 @@ const OrderPC: FC<OrderProps> = ({
 				steps={steps}
 				memberData={memberData}
 				addressData={addressData}
+				orderData={orderData}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -100,6 +105,7 @@ const OrderMobile: FC<OrderProps> = ({
 	description,
 	memberData,
 	addressData,
+	orderData,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -116,6 +122,7 @@ const OrderMobile: FC<OrderProps> = ({
 				steps={steps}
 				memberData={memberData}
 				addressData={addressData}
+				orderData={orderData}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -127,6 +134,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	description,
 	member,
 	address,
+	order,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -134,9 +142,11 @@ const OrderPage: FC<OrderDispatchProps> = ({
 
 	const navigate = useNavigate();
 	const location = useLocation();
+	const orderId = location.state?.orderId;
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
 	const addressData = useAddressInfo({ address });
+	const orderData = useOrderList({ order, orderId });
 
 	const methods = useForm<OrderFormValues>({
 		mode: 'onChange',
@@ -163,6 +173,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					description={description}
 					memberData={memberData}
 					addressData={addressData}
+					orderData={orderData}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -172,6 +183,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					description={description}
 					memberData={memberData}
 					addressData={addressData}
+					orderData={orderData}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -187,6 +199,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
 	address: bindActionCreators(Api.address, dispatch),
+	order: bindActionCreators(Api.order, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPage);

@@ -1,6 +1,6 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { MemberData, AddressData } from '@api/types';
+import { MemberData, AddressData, OrderGoodsData } from '@api/types';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
 	Box,
@@ -26,6 +26,7 @@ interface OrderProps {
 	steps: string[];
 	memberData: MemberData;
 	addressData: AddressData;
+	orderData: Array<OrderGoodsData>;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -38,6 +39,7 @@ const OrderFormPC: FC<OrderProps> = ({
 	steps,
 	memberData,
 	addressData,
+	orderData,
 	onSubmit,
 }): JSX.Element => {
 	const paymentOptions = {
