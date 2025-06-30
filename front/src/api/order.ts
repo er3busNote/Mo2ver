@@ -21,7 +21,7 @@ const order = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => handleResponse(response, dispatch))
+					.then((response: AxiosResponse) => response)
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 	};
 };

@@ -2,7 +2,7 @@ import React, { FC, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -133,6 +133,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const navigate = useNavigate();
+	const location = useLocation();
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
 	const addressData = useAddressInfo({ address });

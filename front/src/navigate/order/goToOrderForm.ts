@@ -32,8 +32,9 @@ const goToOrderForm = async ({
 		prevTitle: title,
 		prevDescription: description,
 	});
-	const data = await order.create(orderInfoData, csrfData);
-	const state = { data };
+	const { headers } = await order.create(orderInfoData, csrfData);
+	const orderId = headers.location.replace('/create/', '');
+	const state = { orderId };
 	dispatch(changeNext(titleData));
 	dispatch(menuActive(path));
 	navigate(path, { state });
