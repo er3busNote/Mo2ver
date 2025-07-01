@@ -16,8 +16,10 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 import { GoodsData, GoodsPageData } from '@api/types';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get } from 'lodash';
 
 interface GoodsListProps {
@@ -54,6 +56,22 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 		});
 	};
 
+	const label: SxProps<Theme> = {
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		fontWeight: 'bold',
+	};
+
+	const brand: SxProps<Theme> = {
+		fontSize: { xs: '10px', sm: '11px', lg: '12px' },
+		fontWeight: 'bold',
+	};
+
+	const price: SxProps<Theme> = {
+		color: '#b2b2b2',
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		textDecoration: 'line-through',
+	};
+
 	return (
 		<Grid container spacing={3}>
 			{goodsData
@@ -78,22 +96,10 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 											loading="lazy"
 										/>
 										<CardContent>
-											<Typography
-												component="div"
-												sx={{
-													fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-													fontWeight: 'bold',
-												}}
-											>
+											<Typography component="div" sx={label}>
 												{data.goodsName}
 											</Typography>
-											<Typography
-												component="div"
-												sx={{
-													fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-													fontWeight: 'bold',
-												}}
-											>
+											<Typography component="div" sx={brand}>
 												{data.goodsBrand}
 											</Typography>
 											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -102,23 +108,10 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 													separator="›"
 													aria-label="breadcrumb"
 												>
-													<Typography
-														color="text.secondary"
-														sx={{
-															color: '#b2b2b2',
-															fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-															textDecoration: 'line-through',
-														}}
-													>
+													<Typography color="text.secondary" sx={price}>
 														{data.supplyPrice.toLocaleString()}원
 													</Typography>
-													<Typography
-														color="text.secondary"
-														sx={{
-															fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-															fontWeight: 'bold',
-														}}
-													>
+													<Typography color="text.secondary" sx={label}>
 														{data.salePrice.toLocaleString()}원
 													</Typography>
 												</Breadcrumbs>

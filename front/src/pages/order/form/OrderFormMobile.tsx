@@ -1,12 +1,19 @@
 import React, { FC, BaseSyntheticEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import { MemberData, AddressData, OrderGoodsData } from '@api/types';
+import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
 	Box,
 	Button,
 	Card,
+	CardMedia,
 	CardContent,
+	CardActionArea,
+	Breadcrumbs,
 	Grid,
 	TextField,
 	Typography,
@@ -16,14 +23,16 @@ import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
+import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { OrderFormValues } from '@pages/types';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
-import { every, isNil } from 'lodash';
+import { get, every, isNil } from 'lodash';
 
 interface OrderProps {
 	title: string;
 	description: string;
 	steps: string[];
+	file: ActionCreatorsMapObject;
 	memberData: MemberData;
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
@@ -37,6 +46,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	title,
 	description,
 	steps,
+	file,
 	memberData,
 	addressData,
 	orderData,
@@ -61,6 +71,18 @@ const OrderFormMobile: FC<OrderProps> = ({
 		formState: { isSubmitted, isValid },
 	} = useFormContext<OrderFormValues>();
 
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const goodsClick = (code: string) => {
+		goToGoodsDetail({
+			code,
+			title,
+			description,
+			dispatch,
+			navigate,
+		});
+	};
+
 	const mainTitle: SxProps<Theme> = {
 		py: 0.5,
 		fontSize: { xs: '12px', sm: '13px', lg: '15px' },
@@ -71,6 +93,15 @@ const OrderFormMobile: FC<OrderProps> = ({
 		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
+	};
+	const brand: SxProps<Theme> = {
+		fontSize: { xs: '10px', sm: '11px', lg: '12px' },
+		fontWeight: 'bold',
+	};
+	const price: SxProps<Theme> = {
+		color: '#b2b2b2',
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		textDecoration: 'line-through',
 	};
 	const info: SxProps<Theme> = {
 		py: 0.5,
@@ -126,21 +157,52 @@ const OrderFormMobile: FC<OrderProps> = ({
 							<Typography component="span" sx={mainTitle}>
 								상품 정보
 							</Typography>
-							<Box display="flex" mt={2}>
-								<Box display="flex" flexDirection="column" ml={2}>
-									<Typography component="span" sx={label}>
-										울트라 블랙 하이로더 샌들 / 257
-									</Typography>
-									<Typography component="span" sx={label}>
-										160,000원
-									</Typography>
-									<Typography component="span" sx={label}>
-										쿠폰 할인 -24,000원
-									</Typography>
-									<Typography component="span" sx={label}>
-										121,600원
-									</Typography>
-								</Box>
+							<Box display="flex" mt={2} gap={2} flexWrap="wrap">
+								{orderData.map((data: OrderGoodsData, index: number) => {
+									const attachFile = String(
+										get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
+									);
+									return (
+										<Card
+											key={index}
+											elevation={0}
+											onClick={() => goodsClick(data.goodsCode)}
+										>
+											<CardActionArea>
+												<CardMedia
+													component="img"
+													sx={{ display: 'inline', width: 80, height: 80 }}
+													image={useImageUrl({ file, attachFile })}
+													loading="lazy"
+												/>
+												<CardContent sx={{ p: 1 }}>
+													<Typography component="div" sx={label}>
+														{data.goodsName}
+													</Typography>
+													<Typography component="div" sx={brand}>
+														{data.goodsBrand}
+													</Typography>
+													<Box
+														sx={{ display: 'flex', justifyContent: 'center' }}
+													>
+														<Breadcrumbs
+															sx={{ pt: 1 }}
+															separator="›"
+															aria-label="breadcrumb"
+														>
+															<Typography color="text.secondary" sx={price}>
+																{data.supplyPrice.toLocaleString()}원
+															</Typography>
+															<Typography color="text.secondary" sx={label}>
+																{data.salePrice.toLocaleString()}원
+															</Typography>
+														</Breadcrumbs>
+													</Box>
+												</CardContent>
+											</CardActionArea>
+										</Card>
+									);
+								})}
 							</Box>
 						</CardContent>
 					</Card>

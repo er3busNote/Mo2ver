@@ -40,6 +40,7 @@ const orderSchema = yup
 interface OrderProps {
 	title: string;
 	description: string;
+	file: ActionCreatorsMapObject;
 	memberData: MemberData;
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
@@ -55,6 +56,7 @@ interface OrderDispatchProps {
 	member: ActionCreatorsMapObject;
 	address: ActionCreatorsMapObject;
 	order: ActionCreatorsMapObject;
+	file: ActionCreatorsMapObject;
 }
 
 const orderValues: OrderFormValues = {
@@ -74,6 +76,7 @@ const orderValues: OrderFormValues = {
 const OrderPC: FC<OrderProps> = ({
 	title,
 	description,
+	file,
 	memberData,
 	addressData,
 	orderData,
@@ -91,6 +94,7 @@ const OrderPC: FC<OrderProps> = ({
 				title={title}
 				description={description}
 				steps={steps}
+				file={file}
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
@@ -103,6 +107,7 @@ const OrderPC: FC<OrderProps> = ({
 const OrderMobile: FC<OrderProps> = ({
 	title,
 	description,
+	file,
 	memberData,
 	addressData,
 	orderData,
@@ -120,6 +125,7 @@ const OrderMobile: FC<OrderProps> = ({
 				title={title}
 				description={description}
 				steps={steps}
+				file={file}
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
@@ -135,6 +141,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	member,
 	address,
 	order,
+	file,
 }): JSX.Element => {
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
@@ -171,6 +178,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 				<OrderPC
 					title={title}
 					description={description}
+					file={file}
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
@@ -181,6 +189,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 				<OrderMobile
 					title={title}
 					description={description}
+					file={file}
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
@@ -200,6 +209,7 @@ const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
 	address: bindActionCreators(Api.address, dispatch),
 	order: bindActionCreators(Api.order, dispatch),
+	file: bindActionCreators(Api.file, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPage);
