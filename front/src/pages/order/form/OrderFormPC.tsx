@@ -1,4 +1,4 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -74,6 +74,15 @@ const OrderFormPC: FC<OrderProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [open, setOpen] = useState(false);
+
+	const replaceField = (addressData: AddressData) => {
+		console.log(addressData);
+	};
+
+	const openAddress = () => setOpen(true);
+	const closeAddress = () => setOpen(false);
+
 	const goodsClick = (code: string) => {
 		goToGoodsDetail({
 			code,
@@ -129,6 +138,19 @@ const OrderFormPC: FC<OrderProps> = ({
 		'& .MuiFormControl-root': {
 			width: '100%',
 		},
+	};
+	const inputHeader: SxProps<Theme> = {
+		px: 2,
+		py: 0,
+		color: '#fff',
+		fontSize: '1.0rem',
+		fontWeight: 'bold',
+		lineHeight: '38px',
+		bgcolor: '#363b74',
+	};
+	const inputBody: SxProps<Theme> = {
+		px: 4,
+		py: 1,
 	};
 
 	return (
@@ -256,9 +278,20 @@ const OrderFormPC: FC<OrderProps> = ({
 											</Typography>
 										</Box>
 									)}
-									<Button variant="outlined" sx={modifyButton}>
+									<Button
+										variant="outlined"
+										sx={modifyButton}
+										onClick={openAddress}
+									>
 										변경
 									</Button>
+									<DialogOrderPC
+										open={open}
+										replaceField={replaceField}
+										handleClose={closeAddress}
+										header={inputHeader}
+										base={inputBody}
+									/>
 								</Box>
 								<TextField
 									type="hidden"

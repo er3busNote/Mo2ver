@@ -1,4 +1,4 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -25,6 +25,7 @@ import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import { useIsMobile } from '@context/MobileContext';
 import { OrderFormValues } from '@pages/types';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get, every, isNil } from 'lodash';
@@ -74,6 +75,16 @@ const OrderFormMobile: FC<OrderProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
+	const [open, setOpen] = useState(false);
+
+	const replaceField = (addressData: AddressData) => {
+		console.log(addressData);
+	};
+
+	const openAddress = () => setOpen(true);
+	const closeAddress = () => setOpen(false);
+
 	const goodsClick = (code: string) => {
 		goToGoodsDetail({
 			code,
@@ -140,6 +151,19 @@ const OrderFormMobile: FC<OrderProps> = ({
 				top: { xs: '-1px', sm: '0px' },
 				ml: 2,
 			},
+	};
+	const inputHeader: SxProps<Theme> = {
+		px: 2,
+		py: 0.5,
+		color: '#fff',
+		fontSize: '0.9rem',
+		fontWeight: 'bold',
+		lineHeight: '38px',
+		bgcolor: '#363b74',
+	};
+	const inputBody: SxProps<Theme> = {
+		px: isMobile ? 0 : 2,
+		py: 1,
 	};
 
 	return (
@@ -244,9 +268,16 @@ const OrderFormMobile: FC<OrderProps> = ({
 								<Typography component="span" sx={mainTitle}>
 									배송 정보
 								</Typography>
-								<Button variant="text" sx={modifyButton}>
+								<Button variant="text" sx={modifyButton} onClick={openAddress}>
 									배송지 변경
 								</Button>
+								<DialogOrderMobile
+									open={open}
+									replaceField={replaceField}
+									handleClose={closeAddress}
+									header={inputHeader}
+									base={inputBody}
+								/>
 							</Box>
 							{every(addressData, isNil) ? (
 								<Typography component="span" sx={label}>
