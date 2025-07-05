@@ -9,15 +9,12 @@ import useGoodsSearchPageList from '@hooks/goods/useGoodsSearchPageList';
 import SearchInput from '@components/input/SearchInput';
 import ButtonDialog from '@components/button/ButtonDialog';
 import PageNavigator from '@components/pagination/PageNavigator';
+import DialogMobile from './cmmn/DialogMobile';
 import {
 	Box,
 	Grid,
 	Paper,
 	Checkbox,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
 	List,
 	ListItemButton,
 	ListItemIcon,
@@ -44,14 +41,12 @@ interface DialogProps {
 	goodsSaveData: Array<BannerGoodsDetailValues>;
 }
 
-const DialogGooodsMobile: FC<DialogProps> = ({
+const DialogGoodsMobile: FC<DialogProps> = ({
 	open,
 	goods,
 	category,
 	replaceField,
 	handleClose,
-	header,
-	base,
 	goodsSaveData,
 }): JSX.Element => {
 	const isMobile = useIsMobile();
@@ -272,172 +267,152 @@ const DialogGooodsMobile: FC<DialogProps> = ({
 		</Paper>
 	);
 	return (
-		<Dialog open={open} onClose={handleClose}>
-			<DialogTitle sx={header}>상품찾기</DialogTitle>
-			<DialogContent sx={{ pb: 0 }}>
-				<Box sx={base}>
-					<Box sx={{ pb: 0.5, display: 'flex', justifyContent: 'center' }}>
-						<Box sx={{ pt: 1, px: 0.5 }}>
-							<FormControl sx={selectForm}>
-								<InputLabel sx={selectLabel}>대분류</InputLabel>
-								<Select
-									label="대분류"
-									defaultValue=""
-									value={largeCategoryCode}
-									onChange={handleLargeCategoryChange}
-									sx={selectInput}
-								>
-									{largeCategoryData.map((data: CategoryData, i: number) => (
-										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryName}
-										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
-						</Box>
-						<Box sx={{ pt: 1, px: 0.5 }}>
-							<FormControl sx={selectForm}>
-								<InputLabel sx={selectLabel}>중분류</InputLabel>
-								<Select
-									label="중분류"
-									defaultValue=""
-									value={mediumCategoryCode}
-									onChange={handleMiddleCategoryChange}
-									sx={selectInput}
-									disabled={mediumCategoryData.length === 0}
-								>
-									{mediumCategoryData.map((data: CategoryData, i: number) => (
-										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryName}
-										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
-						</Box>
-						<Box sx={{ pt: 1, px: 0.5 }}>
-							<FormControl sx={selectForm}>
-								<InputLabel sx={selectLabel}>소분류</InputLabel>
-								<Select
-									label="소분류"
-									defaultValue=""
-									value={smallCategoryCode}
-									onChange={handleSmallCategoryChange}
-									sx={selectInput}
-									disabled={smallCategoryData.length === 0}
-								>
-									{smallCategoryData.map((data: CategoryData, i: number) => (
-										<MenuItem key={i} sx={menuText} value={data.categoryCode}>
-											{data.categoryName}
-										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
-						</Box>
-					</Box>
-					<Box
-						sx={{ pt: 0.5, pb: 1, display: 'flex', justifyContent: 'center' }}
-					>
-						<SearchInput
-							placeholder="상품명을 검색할 수 있어요!"
-							onChange={searchOnChange}
-						/>
-						<ButtonDialog
-							buttonType="search"
-							device="mobile"
-							variant="outlined"
-							onClick={() => searchClick(keyword)}
+		<DialogMobile
+			title={'상품찾기'}
+			open={open}
+			handleSelect={handleSelect}
+			handleClose={handleClose}
+		>
+			<Box sx={{ pb: 0.5, display: 'flex', justifyContent: 'center' }}>
+				<Box sx={{ pt: 1, px: 0.5 }}>
+					<FormControl sx={selectForm}>
+						<InputLabel sx={selectLabel}>대분류</InputLabel>
+						<Select
+							label="대분류"
+							defaultValue=""
+							value={largeCategoryCode}
+							onChange={handleLargeCategoryChange}
+							sx={selectInput}
 						>
-							검색
-						</ButtonDialog>
-					</Box>
+							{largeCategoryData.map((data: CategoryData, i: number) => (
+								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+									{data.categoryName}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Box>
+				<Box sx={{ pt: 1, px: 0.5 }}>
+					<FormControl sx={selectForm}>
+						<InputLabel sx={selectLabel}>중분류</InputLabel>
+						<Select
+							label="중분류"
+							defaultValue=""
+							value={mediumCategoryCode}
+							onChange={handleMiddleCategoryChange}
+							sx={selectInput}
+							disabled={mediumCategoryData.length === 0}
+						>
+							{mediumCategoryData.map((data: CategoryData, i: number) => (
+								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+									{data.categoryName}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Box>
+				<Box sx={{ pt: 1, px: 0.5 }}>
+					<FormControl sx={selectForm}>
+						<InputLabel sx={selectLabel}>소분류</InputLabel>
+						<Select
+							label="소분류"
+							defaultValue=""
+							value={smallCategoryCode}
+							onChange={handleSmallCategoryChange}
+							sx={selectInput}
+							disabled={smallCategoryData.length === 0}
+						>
+							{smallCategoryData.map((data: CategoryData, i: number) => (
+								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
+									{data.categoryName}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Box>
+			</Box>
+			<Box sx={{ pt: 0.5, pb: 1, display: 'flex', justifyContent: 'center' }}>
+				<SearchInput
+					placeholder="상품명을 검색할 수 있어요!"
+					onChange={searchOnChange}
+				/>
+				<ButtonDialog
+					buttonType="search"
+					device="mobile"
+					variant="outlined"
+					onClick={() => searchClick(keyword)}
+				>
+					검색
+				</ButtonDialog>
+			</Box>
+			<Grid
+				container
+				spacing={2}
+				justifyContent="center"
+				alignItems="center"
+				sx={{
+					display: isMobile ? 'grid' : 'flex',
+					width: isMobile ? '100%' : '316px',
+				}}
+			>
+				<Grid item>{customList(left)}</Grid>
+				<Grid item sx={{ pl: isMobile ? '4px !important' : '12px' }}>
 					<Grid
 						container
-						spacing={2}
-						justifyContent="center"
+						direction={isMobile ? 'row-reverse' : 'column'}
 						alignItems="center"
-						sx={{
-							display: isMobile ? 'grid' : 'flex',
-							width: isMobile ? '100%' : '316px',
-						}}
+						justifyContent="center"
 					>
-						<Grid item>{customList(left)}</Grid>
-						<Grid item sx={{ pl: isMobile ? '4px !important' : '12px' }}>
-							<Grid
-								container
-								direction={isMobile ? 'row-reverse' : 'column'}
-								alignItems="center"
-								justifyContent="center"
-							>
-								<ButtonDialog
-									buttonType="moveall"
-									device="mobile"
-									variant="outlined"
-									size="small"
-									onClick={handleAllRight}
-									disabled={left.length === 0}
-								>
-									≫
-								</ButtonDialog>
-								<ButtonDialog
-									buttonType="moveselected"
-									device="mobile"
-									variant="outlined"
-									size="small"
-									onClick={handleCheckedRight}
-									disabled={leftChecked.length === 0}
-								>
-									&gt;
-								</ButtonDialog>
-								<ButtonDialog
-									buttonType="moveselected"
-									device="mobile"
-									variant="outlined"
-									size="small"
-									onClick={handleCheckedLeft}
-									disabled={rightChecked.length === 0}
-								>
-									&lt;
-								</ButtonDialog>
-								<ButtonDialog
-									buttonType="moveall"
-									device="mobile"
-									variant="outlined"
-									size="small"
-									onClick={handleAllLeft}
-									disabled={right.length === 0}
-								>
-									≪
-								</ButtonDialog>
-							</Grid>
-						</Grid>
-						<Grid item>{customList(right)}</Grid>
+						<ButtonDialog
+							buttonType="moveall"
+							device="mobile"
+							variant="outlined"
+							size="small"
+							onClick={handleAllRight}
+							disabled={left.length === 0}
+						>
+							≫
+						</ButtonDialog>
+						<ButtonDialog
+							buttonType="moveselected"
+							device="mobile"
+							variant="outlined"
+							size="small"
+							onClick={handleCheckedRight}
+							disabled={leftChecked.length === 0}
+						>
+							&gt;
+						</ButtonDialog>
+						<ButtonDialog
+							buttonType="moveselected"
+							device="mobile"
+							variant="outlined"
+							size="small"
+							onClick={handleCheckedLeft}
+							disabled={rightChecked.length === 0}
+						>
+							&lt;
+						</ButtonDialog>
+						<ButtonDialog
+							buttonType="moveall"
+							device="mobile"
+							variant="outlined"
+							size="small"
+							onClick={handleAllLeft}
+							disabled={right.length === 0}
+						>
+							≪
+						</ButtonDialog>
 					</Grid>
-					<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-						{goodsData.totalPages && (
-							<PageNavigator count={goodsData.totalPages} setPage={setPage} />
-						)}
-					</Box>
-				</Box>
-			</DialogContent>
-			<DialogActions sx={{ justifyContent: 'center' }}>
-				<ButtonDialog
-					buttonType="select"
-					device="mobile"
-					variant="outlined"
-					onClick={handleSelect}
-				>
-					선택
-				</ButtonDialog>
-				<ButtonDialog
-					buttonType="cancel"
-					device="mobile"
-					variant="outlined"
-					onClick={handleClose}
-				>
-					취소
-				</ButtonDialog>
-			</DialogActions>
-		</Dialog>
+				</Grid>
+				<Grid item>{customList(right)}</Grid>
+			</Grid>
+			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+				{goodsData.totalPages && (
+					<PageNavigator count={goodsData.totalPages} setPage={setPage} />
+				)}
+			</Box>
+		</DialogMobile>
 	);
 };
 
@@ -446,4 +421,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	category: bindActionCreators(Api.category, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(DialogGooodsMobile);
+export default connect(null, mapDispatchToProps)(DialogGoodsMobile);

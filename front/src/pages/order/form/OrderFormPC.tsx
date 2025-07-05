@@ -139,19 +139,6 @@ const OrderFormPC: FC<OrderProps> = ({
 			width: '100%',
 		},
 	};
-	const inputHeader: SxProps<Theme> = {
-		px: 2,
-		py: 0,
-		color: '#fff',
-		fontSize: '1.0rem',
-		fontWeight: 'bold',
-		lineHeight: '38px',
-		bgcolor: '#363b74',
-	};
-	const inputBody: SxProps<Theme> = {
-		px: 4,
-		py: 1,
-	};
 
 	return (
 		<Box
@@ -289,8 +276,6 @@ const OrderFormPC: FC<OrderProps> = ({
 										open={open}
 										replaceField={replaceField}
 										handleClose={closeAddress}
-										header={inputHeader}
-										base={inputBody}
 									/>
 								</Box>
 								<TextField

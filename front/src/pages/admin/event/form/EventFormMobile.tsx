@@ -157,19 +157,7 @@ const EventFormMobile: FC<EventProp> = ({
 			ml: 1,
 		},
 	};
-	const inputHeader: SxProps<Theme> = {
-		px: 2,
-		py: 0.5,
-		color: '#fff',
-		fontSize: '0.9rem',
-		fontWeight: 'bold',
-		lineHeight: '38px',
-		bgcolor: '#363b74',
-	};
-	const inputBody: SxProps<Theme> = {
-		px: isMobile ? 0 : 2,
-		py: 1,
-	};
+
 	return (
 		<Box
 			component="form"
@@ -340,8 +328,6 @@ const EventFormMobile: FC<EventProp> = ({
 								open={open}
 								replaceField={replaceField}
 								handleClose={closeGoods}
-								header={inputHeader}
-								base={inputBody}
 								goodsSaveData={watch('goods')}
 							/>
 						</Grid>
