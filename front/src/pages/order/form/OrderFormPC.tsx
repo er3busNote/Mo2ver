@@ -19,7 +19,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import DialogOrderPC from '@components/dialog/DialogOrderPC';
+import DialogAddressPC from '@components/dialog/address/DialogAddressPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
@@ -272,7 +272,7 @@ const OrderFormPC: FC<OrderProps> = ({
 									>
 										변경
 									</Button>
-									<DialogOrderPC
+									<DialogAddressPC
 										open={open}
 										replaceField={replaceField}
 										handleClose={closeAddress}

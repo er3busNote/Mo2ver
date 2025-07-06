@@ -19,7 +19,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import DialogOrderMobile from '@components/dialog/DialogOrderMobile';
+import DialogAddressMobile from '@components/dialog/address/DialogAddressMobile';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
@@ -256,7 +256,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 								<Button variant="text" sx={modifyButton} onClick={openAddress}>
 									배송지 변경
 								</Button>
-								<DialogOrderMobile
+								<DialogAddressMobile
 									open={open}
 									replaceField={replaceField}
 									handleClose={closeAddress}

@@ -19,7 +19,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { HorizontalRule as HorizontalRuleIcon } from '@mui/icons-material';
-import DialogGoodsPC from '@components/dialog/DialogGoodsPC';
+import DialogGoodsPC from '@components/dialog/goods/DialogGoodsPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/file/UploadField';
