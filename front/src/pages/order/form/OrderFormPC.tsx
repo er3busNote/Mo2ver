@@ -15,7 +15,6 @@ import {
 	CardActionArea,
 	Breadcrumbs,
 	Grid,
-	TextField,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -243,7 +242,7 @@ const OrderFormPC: FC<OrderProps> = ({
 								<Typography component="span" sx={mainTitle}>
 									배송 정보
 								</Typography>
-								<Box display="flex" justifyContent="space-between" mt={1}>
+								<Box display="flex" justifyContent="space-between" m={1}>
 									{every(addressData, isNil) ? (
 										<Typography component="span" sx={label}>
 											배송정보를 입력해주세요
@@ -265,20 +264,29 @@ const OrderFormPC: FC<OrderProps> = ({
 											</Typography>
 										</Box>
 									)}
-									<Button
-										variant="outlined"
-										sx={modifyButton}
-										onClick={openAddress}
-									>
-										변경
-									</Button>
-									<DialogAddressPC
-										open={open}
-										replaceField={replaceField}
-										handleClose={closeAddress}
-									/>
+									<Box display="flex" gap={1}>
+										<Button
+											variant="outlined"
+											sx={modifyButton}
+											onClick={openAddress}
+										>
+											등록
+										</Button>
+										<Button
+											variant="outlined"
+											sx={modifyButton}
+											onClick={openAddress}
+										>
+											변경
+										</Button>
+										<DialogAddressPC
+											open={open}
+											replaceField={replaceField}
+											handleClose={closeAddress}
+										/>
+									</Box>
 								</Box>
-								<TextField
+								<input
 									type="hidden"
 									value={addressData.addressNo}
 									{...register('addressNo')}

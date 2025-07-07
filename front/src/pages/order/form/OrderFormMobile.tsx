@@ -15,7 +15,6 @@ import {
 	CardActionArea,
 	Breadcrumbs,
 	Grid,
-	TextField,
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
@@ -253,14 +252,27 @@ const OrderFormMobile: FC<OrderProps> = ({
 								<Typography component="span" sx={mainTitle}>
 									배송 정보
 								</Typography>
-								<Button variant="text" sx={modifyButton} onClick={openAddress}>
-									배송지 변경
-								</Button>
-								<DialogAddressMobile
-									open={open}
-									replaceField={replaceField}
-									handleClose={closeAddress}
-								/>
+								<Box display="flex" gap={1}>
+									<Button
+										variant="text"
+										sx={modifyButton}
+										onClick={openAddress}
+									>
+										배송지 등록
+									</Button>
+									<Button
+										variant="text"
+										sx={modifyButton}
+										onClick={openAddress}
+									>
+										배송지 변경
+									</Button>
+									<DialogAddressMobile
+										open={open}
+										replaceField={replaceField}
+										handleClose={closeAddress}
+									/>
+								</Box>
 							</Box>
 							{every(addressData, isNil) ? (
 								<Typography component="span" sx={label}>
@@ -284,7 +296,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 								</Box>
 							)}
 							<Box mt={2}>
-								<TextField
+								<input
 									type="hidden"
 									value={addressData.addressNo}
 									{...register('addressNo')}
