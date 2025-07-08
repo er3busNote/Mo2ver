@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import DialogAddressPC from '@components/dialog/address/DialogAddressPC';
+import DialogAddressRegisterPC from '@components/dialog/address/register/DialogAddressRegisterPC';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
@@ -73,14 +74,17 @@ const OrderFormPC: FC<OrderProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [open, setOpen] = useState(false);
+	const [openAddressRegister, setOpenAddressRegister] = useState(false);
+	const [openAddressModify, setOpenAddressModify] = useState(false);
 
 	const replaceField = (addressData: AddressData) => {
 		console.log(addressData);
 	};
 
-	const openAddress = () => setOpen(true);
-	const closeAddress = () => setOpen(false);
+	const openRegisterAddress = () => setOpenAddressRegister(true);
+	const closeRegisterAddress = () => setOpenAddressRegister(false);
+	const openModifyAddress = () => setOpenAddressModify(true);
+	const closeModifyAddress = () => setOpenAddressModify(false);
 
 	const goodsClick = (code: string) => {
 		goToGoodsDetail({
@@ -268,21 +272,26 @@ const OrderFormPC: FC<OrderProps> = ({
 										<Button
 											variant="outlined"
 											sx={modifyButton}
-											onClick={openAddress}
+											onClick={openRegisterAddress}
 										>
 											등록
 										</Button>
 										<Button
 											variant="outlined"
 											sx={modifyButton}
-											onClick={openAddress}
+											onClick={openModifyAddress}
 										>
 											변경
 										</Button>
-										<DialogAddressPC
-											open={open}
+										<DialogAddressRegisterPC
+											open={openAddressRegister}
 											replaceField={replaceField}
-											handleClose={closeAddress}
+											handleClose={closeRegisterAddress}
+										/>
+										<DialogAddressPC
+											open={openAddressModify}
+											replaceField={replaceField}
+											handleClose={closeModifyAddress}
 										/>
 									</Box>
 								</Box>

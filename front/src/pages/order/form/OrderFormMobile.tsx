@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import DialogAddressMobile from '@components/dialog/address/DialogAddressMobile';
+import DialogAddressRegisterMobile from '@components/dialog/address/register/DialogAddressRegisterMobile';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
@@ -73,14 +74,17 @@ const OrderFormMobile: FC<OrderProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [open, setOpen] = useState(false);
+	const [openAddressRegister, setOpenAddressRegister] = useState(false);
+	const [openAddressModify, setOpenAddressModify] = useState(false);
 
 	const replaceField = (addressData: AddressData) => {
 		console.log(addressData);
 	};
 
-	const openAddress = () => setOpen(true);
-	const closeAddress = () => setOpen(false);
+	const openRegisterAddress = () => setOpenAddressRegister(true);
+	const closeRegisterAddress = () => setOpenAddressRegister(false);
+	const openModifyAddress = () => setOpenAddressModify(true);
+	const closeModifyAddress = () => setOpenAddressModify(false);
 
 	const goodsClick = (code: string) => {
 		goToGoodsDetail({
@@ -256,21 +260,26 @@ const OrderFormMobile: FC<OrderProps> = ({
 									<Button
 										variant="text"
 										sx={modifyButton}
-										onClick={openAddress}
+										onClick={openRegisterAddress}
 									>
 										배송지 등록
 									</Button>
 									<Button
 										variant="text"
 										sx={modifyButton}
-										onClick={openAddress}
+										onClick={openModifyAddress}
 									>
 										배송지 변경
 									</Button>
-									<DialogAddressMobile
-										open={open}
+									<DialogAddressRegisterMobile
+										open={openAddressRegister}
 										replaceField={replaceField}
-										handleClose={closeAddress}
+										handleClose={closeRegisterAddress}
+									/>
+									<DialogAddressMobile
+										open={openAddressModify}
+										replaceField={replaceField}
+										handleClose={closeModifyAddress}
 									/>
 								</Box>
 							</Box>
