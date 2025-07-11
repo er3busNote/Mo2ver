@@ -88,7 +88,7 @@ const AddressPC: FC<DialogProps> = ({
 		<Dialog
 			open={open}
 			onClose={handleClose}
-			sx={{ '.MuiDialog-paper': { minWidth: '450px' } }}
+			sx={{ '.MuiDialog-paper': { minWidth: '400px' } }}
 		>
 			<DialogTitle sx={header}>{title}</DialogTitle>
 			<DialogContent sx={{ pb: 0 }}>

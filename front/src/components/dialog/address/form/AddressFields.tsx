@@ -28,9 +28,28 @@ const AddressFields: FC = (): JSX.Element => {
 		borderBlock: 'none',
 		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 	};
+	const addressForm: SxProps<Theme> = {
+		'input[type="text"]': {
+			py: { xs: 1.5, sm: 2 },
+		},
+		'.MuiFormControl-root': {
+			mt: 0.5,
+			overflowX: 'visible',
+		},
+		'label[id$="memberName-label"], label[id$="cellPhoneNumber-label"], label[id$="zipcode-label"], label[id$="roadNameBasicAddress-label"], label[id$="roadNameDetailAddress-label"]':
+			{
+				top: { xs: '-3px', sm: '0px' },
+				ml: { xs: 0.5, sm: 1 },
+			},
+		'label[id$="memberName-label"][data-shrink="true"], label[id$="cellPhoneNumber-label"][data-shrink="true"], label[id$="zipcode-label"][data-shrink="true"], label[id$="roadNameBasicAddress-label"][data-shrink="true"], label[id$="roadNameDetailAddress-label"][data-shrink="true"]':
+			{
+				top: { xs: '-1px', sm: '0px' },
+				ml: { xs: 1, sm: 2 },
+			},
+	};
 
 	return (
-		<Box mt={2}>
+		<Box mt={2} sx={addressForm}>
 			<TableContainer>
 				<Table size="small">
 					<TableBody>
