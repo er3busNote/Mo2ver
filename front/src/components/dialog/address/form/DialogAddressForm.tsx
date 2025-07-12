@@ -30,11 +30,11 @@ import { AddressFormValues } from './types';
 const addressSchema = yup
 	.object()
 	.shape({
-		memberName: yup.string().required(),
-		cellPhoneNumber: yup.string().required(),
-		zipcode: yup.string().required(),
-		roadNameBasicAddress: yup.string().required(),
-		roadNameDetailAddress: yup.string().required(),
+		memberName: yup.string().required('수령자를 입력해주세요'),
+		cellPhoneNumber: yup.string().required('핸드폰번호를 입력해주세요'),
+		zipcode: yup.string().required('우편번호를 입력해주세요'),
+		roadNameBasicAddress: yup.string().required('배송지주소를 입력해주세요'),
+		roadNameDetailAddress: yup.string().required('상세주소를 입력해주세요'),
 	})
 	.required();
 
@@ -201,6 +201,7 @@ const DialogAddressForm: FC<DialogDispatchProps> = ({
 			roadNameBasicAddress: data.roadNameBasicAddress,
 			roadNameDetailAddress: data.roadNameDetailAddress,
 		};
+		await address.create(orderFormData);
 		console.log(orderFormData);
 	};
 
