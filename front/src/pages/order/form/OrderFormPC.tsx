@@ -1,4 +1,10 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, {
+	FC,
+	useState,
+	BaseSyntheticEvent,
+	Dispatch,
+	SetStateAction,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -37,6 +43,7 @@ interface OrderProps {
 	memberData: MemberData;
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
+	setAddressReload: Dispatch<SetStateAction<boolean>>;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -51,6 +58,7 @@ const OrderFormPC: FC<OrderProps> = ({
 	memberData,
 	addressData,
 	orderData,
+	setAddressReload,
 	onSubmit,
 }): JSX.Element => {
 	const paymentOptions = {
@@ -77,8 +85,8 @@ const OrderFormPC: FC<OrderProps> = ({
 	const [openAddressRegister, setOpenAddressRegister] = useState(false);
 	const [openAddressModify, setOpenAddressModify] = useState(false);
 
-	const replaceField = (addressData: AddressData) => {
-		console.log(addressData);
+	const setField = () => {
+		setAddressReload(true);
 	};
 
 	const openRegisterAddress = () => setOpenAddressRegister(true);
@@ -106,6 +114,12 @@ const OrderFormPC: FC<OrderProps> = ({
 		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
 		fontWeight: 'bold',
 		color: '#000',
+	};
+	const error: SxProps<Theme> = {
+		py: 0.5,
+		fontSize: { xs: fontSize_xs, sm: fontSize_sm, lg: fontSize_lg },
+		fontWeight: 'bold',
+		color: '#d32f2f',
 	};
 	const brand: SxProps<Theme> = {
 		fontSize: { xs: '10px', sm: '11px', lg: '12px' },
@@ -248,7 +262,7 @@ const OrderFormPC: FC<OrderProps> = ({
 								</Typography>
 								<Box display="flex" justifyContent="space-between" m={1}>
 									{every(addressData, isNil) ? (
-										<Typography component="span" sx={label}>
+										<Typography component="span" sx={error}>
 											배송정보를 입력해주세요
 										</Typography>
 									) : (
@@ -285,11 +299,12 @@ const OrderFormPC: FC<OrderProps> = ({
 										</Button>
 										<DialogAddressForm
 											open={openAddressRegister}
+											setField={setField}
 											handleClose={closeRegisterAddress}
 										/>
 										<DialogAddressPC
 											open={openAddressModify}
-											replaceField={replaceField}
+											setField={setField}
 											handleClose={closeModifyAddress}
 										/>
 									</Box>

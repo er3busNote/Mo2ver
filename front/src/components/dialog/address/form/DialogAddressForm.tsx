@@ -48,6 +48,7 @@ interface DialogProps {
 interface DialogDispatchProps {
 	open: boolean;
 	address: ActionCreatorsMapObject;
+	setField: () => void;
 	handleClose: () => void;
 }
 
@@ -179,6 +180,7 @@ const AddressMobile: FC<DialogProps> = ({
 const DialogAddressForm: FC<DialogDispatchProps> = ({
 	open,
 	address,
+	setField,
 	handleClose,
 }): JSX.Element => {
 	const theme = useTheme();
@@ -203,6 +205,8 @@ const DialogAddressForm: FC<DialogDispatchProps> = ({
 		};
 		await address.create(orderFormData);
 		console.log(orderFormData);
+		setField();
+		handleClose();
 	};
 
 	return (

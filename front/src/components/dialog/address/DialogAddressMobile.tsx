@@ -20,20 +20,20 @@ import { SxProps, Theme } from '@mui/material/styles';
 interface DialogProps {
 	open: boolean;
 	address: ActionCreatorsMapObject;
-	replaceField: (addressData: AddressData) => void;
+	setField: () => void;
 	handleClose: () => void;
 }
 
 const DialogAddressMobile: FC<DialogProps> = ({
 	open,
 	address,
-	replaceField,
+	setField,
 	handleClose,
 }): JSX.Element => {
 	const addressData = useAddressList({ address });
 
 	const handleSelect = () => {
-		replaceField(new Object() as AddressData);
+		setField();
 		handleClose();
 	};
 

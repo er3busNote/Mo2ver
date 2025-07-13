@@ -1,4 +1,4 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC, BaseSyntheticEvent, Dispatch, SetStateAction } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -44,6 +44,7 @@ interface OrderProps {
 	memberData: MemberData;
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
+	setAddressReload: Dispatch<SetStateAction<boolean>>;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -80,6 +81,7 @@ const OrderPC: FC<OrderProps> = ({
 	memberData,
 	addressData,
 	orderData,
+	setAddressReload,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -98,6 +100,7 @@ const OrderPC: FC<OrderProps> = ({
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
+				setAddressReload={setAddressReload}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -111,6 +114,7 @@ const OrderMobile: FC<OrderProps> = ({
 	memberData,
 	addressData,
 	orderData,
+	setAddressReload,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -129,6 +133,7 @@ const OrderMobile: FC<OrderProps> = ({
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
+				setAddressReload={setAddressReload}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -152,7 +157,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const orderId = location.state?.orderId;
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
-	const addressData = useAddressInfo({ address });
+	const [addressData, setAddressReload] = useAddressInfo({ address });
 	const orderData = useOrderList({ order, orderId });
 
 	const methods = useForm<OrderFormValues>({
@@ -182,6 +187,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
+					setAddressReload={setAddressReload}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -193,6 +199,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
+					setAddressReload={setAddressReload}
 					onSubmit={submitForm}
 				/>
 			)}
