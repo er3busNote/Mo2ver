@@ -87,6 +87,10 @@ public class Address {
         this.createOrUpdateAddress(addressInfo, currentUser);
     }
 
+    public void update(Character basicPlaceYesNo) {
+        this.basicPlaceYesNo = basicPlaceYesNo;
+    }
+
     private void createOrUpdateAddress(AddressInfo addressInfo, Member currentUser) {
         this.memberName = addressInfo.getMemberName();
         this.cellPhoneNumber = addressInfo.getCellPhoneNumber();

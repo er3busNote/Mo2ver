@@ -78,6 +78,22 @@ public class AddressTest extends CsrfConfigTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("기본 배송지주소 수정 확인")
+    public void updateBasicAddressTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        String addressNo = "A000000002";
+
+        mockMvc.perform(patch("/address/update/{addressNo}", addressNo)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     private AddressInfo getAddressInfo() {
         return AddressInfo.builder()
                 .addressNo("A000000002")

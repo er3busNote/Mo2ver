@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +50,19 @@ public class AddressService {
     public void updateAddress(AddressInfo addressInfo, Member currentUser) {
         Address address = this.findAddressById(addressInfo.getAddressNo());
         address.update(addressInfo, currentUser);
+    }
+
+    @Transactional
+    public void updateBasicAddress(String addressNo, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        List<Address> listAddress = this.addressRepository.findByMember(member);
+        for(Address address : listAddress) {
+            if(Objects.equals(addressNo, address.getAddressNo())) {
+                address.update('Y');
+            } else {
+                address.update('N');
+            }
+        }
     }
 
     private Member findMemberById(String memberNo) {

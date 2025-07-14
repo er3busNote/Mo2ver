@@ -66,4 +66,17 @@ public class AddressController {
                         .message("주소록정보가 수정되었습니다")
                         .build());
     }
+
+    @PatchMapping("/update/{addressNo}")
+    public ResponseEntity<ResponseHandler> updateBasicAddress(
+            @PathVariable String addressNo,
+            @CurrentUser Member currentUser
+    ) {
+        addressService.updateBasicAddress(addressNo, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("기본 배송지주소가 수정되었습니다")
+                        .build());
+    }
 }
