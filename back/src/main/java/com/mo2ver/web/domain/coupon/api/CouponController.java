@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,12 +21,11 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/info/{couponCode}")
     public ResponseEntity<CouponResponse> infoCoupon(
-            @PathVariable String id,
-            @CurrentUser Member currentUser
+            @PathVariable String couponCode
     ) {
-        CouponResponse couponResponse = couponService.findCoupon(id);
+        CouponResponse couponResponse = couponService.findCoupon(couponCode);
         return ResponseEntity.ok().body(couponResponse);
     }
 
@@ -36,8 +34,8 @@ public class CouponController {
             @RequestBody @Valid CouponRequest couponRequest,
             @CurrentUser Member currentUser
     ) {
-        UUID couponId = couponService.saveCoupon(couponRequest, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + couponId))
+        String couponNo = couponService.saveCoupon(couponRequest, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + couponNo))
             .body(ResponseHandler.builder()
                     .status(HttpStatus.CREATED.value())
                     .message("쿠폰정보가 저장되었습니다")

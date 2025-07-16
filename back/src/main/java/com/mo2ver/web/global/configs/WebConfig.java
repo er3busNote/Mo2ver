@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.common.menu.converter.MenuTypeConverter;
+import com.mo2ver.web.domain.coupon.converter.CouponTypeConverter;
 import com.mo2ver.web.domain.goods.converter.CategoryTypeConverter;
 import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.common.setting.ImagesSetting;
@@ -55,6 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new MenuTypeConverter());
         registry.addConverter(new CategoryTypeConverter());
+        registry.addConverter(new CouponTypeConverter());
     }
 
     @Bean

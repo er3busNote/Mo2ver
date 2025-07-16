@@ -1,18 +1,20 @@
 package com.mo2ver.web.domain.coupon.entity;
 
+import com.mo2ver.web.domain.coupon.dto.request.CouponRequest;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.global.common.utils.DateUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Random;
 
 @Entity
 @Table(
@@ -24,17 +26,19 @@ import java.util.UUID;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "couponId")
+@EqualsAndHashCode(of = "couponNo")
 @Builder @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Coupon {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Type(type = "uuid-char")
-    @Column(name = "CPN_ID", columnDefinition = "CHAR(36) COMMENT '쿠폰번호'", updatable = false, nullable = false)
-    private UUID couponId;
+    @GeneratedValue(generator = "couponNo")
+    @GenericGenerator(name = "couponNo", strategy = "com.mo2ver.web.domain.member.entity.AddressGenerator")
+    @Column(name = "CPN_NO", columnDefinition = "CHAR(10) COMMENT '쿠폰번호'")
+    private String couponNo;
+
+    @Column(name = "CPN_CD", columnDefinition = "VARCHAR(30) COMMENT '쿠폰코드'", updatable = false, nullable = false)
+    private String couponCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -77,6 +81,9 @@ public class Coupon {
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")
     private Character useYesNo;
 
+    @OneToOne(mappedBy = "coupon", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private CouponDetail couponDetail;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -95,16 +102,47 @@ public class Coupon {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public Coupon(Goods goods, Member currentUser) {
+    @PrePersist
+    public void prePersist() {
+        if (this.couponCode == null) {
+            this.couponCode = this.generateCouponCode("CPN", 6);
+        }
+    }
+
+    public Coupon(CouponRequest couponRequest, Goods goods, Member currentUser) {
         this.createOrUpdateCoupon(currentUser);
         this.goods = goods;
         this.member = currentUser;
         this.issueDate = LocalDateTime.now();
         this.register = currentUser.getMemberNo();
         this.useYesNo = 'N';
+
+        this.couponDetail = this.createCouponDetail(couponRequest, currentUser);
     }
 
     private void createOrUpdateCoupon(Member currentUser) {
         this.updater = currentUser.getMemberNo();
+    }
+
+    private CouponDetail createCouponDetail(CouponRequest couponRequest, Member currentUser) {
+        return CouponDetail.of(this, couponRequest, currentUser);
+    }
+
+    public String generateCouponCode(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder code = new StringBuilder();
+        Random random = new SecureRandom(); // 예측 불가능하게
+
+        for (int i = 0; i < length; i++) {
+            code.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return code.toString();
+    }
+
+    public String generateCouponCode(String prefix, int length) {
+        String currentDate = DateUtil.getCurrentDate().substring(2, 8);
+        String randomPart = generateCouponCode(length);
+        return String.format("%s-%s-%s", prefix, currentDate, randomPart);
     }
 }

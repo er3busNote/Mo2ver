@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,16 +22,16 @@ public class CouponService {
     private final GoodsRepository goodsRepository;
     private final CouponRepository couponRepository;
 
-    public CouponResponse findCoupon(String uuid) {
-        Coupon coupon = this.findCouponById(uuid);
+    public CouponResponse findCoupon(String couponCode) {
+        Coupon coupon = this.findCouponByCode(couponCode);
         return CouponResponse.of(coupon);
     }
 
-    public UUID saveCoupon(CouponRequest couponRequest, Member currentUser) {
+    public String saveCoupon(CouponRequest couponRequest, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Goods goods = this.findGoodsById(couponRequest.getGoodsCode());
-        Coupon coupon = new Coupon(goods, member);
-        return this.couponRepository.save(coupon).getCouponId();
+        Coupon coupon = new Coupon(couponRequest, goods, member);
+        return this.couponRepository.save(coupon).getCouponNo();
     }
 
     private Member findMemberById(String memberNo) {
@@ -46,8 +44,8 @@ public class CouponService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
-    private Coupon findCouponById(String uuid) {
-        return this.couponRepository.findById(UUID.fromString(uuid))
+    private Coupon findCouponByCode(String couponCode) {
+        return this.couponRepository.findByCouponCode(couponCode)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 쿠폰번호 입니다."));
     }
 }
