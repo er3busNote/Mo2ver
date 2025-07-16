@@ -13,8 +13,7 @@ import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,7 +22,7 @@ public class CouponTest extends CsrfConfigTest {
     @Test
     @DisplayName("쿠폰정보 상세 정보 확인")
     public void findCouponInfoTest() throws Exception {
-        String couponCode = "CPN-250716-FQPPVA";
+        String couponCode = "CPN-250717-066EHK";
         mockMvc.perform(get("/coupon/info/{couponCode}", couponCode))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -42,6 +41,22 @@ public class CouponTest extends CsrfConfigTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(couponRequest)))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("쿠폰정보 회원코드 저장 확인")
+    public void createCouponTargetTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        String couponNo = "C000000001";
+
+        mockMvc.perform(put("/coupon/create/{couponNo}", couponNo)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }

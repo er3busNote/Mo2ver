@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +41,18 @@ public class CouponController {
                     .status(HttpStatus.CREATED.value())
                     .message("쿠폰정보가 저장되었습니다")
                     .build());
+    }
+
+    @PutMapping("/create/{couponNo}")
+    public ResponseEntity<ResponseHandler> createTargetCoupon(
+            @PathVariable String couponNo,
+            @CurrentUser Member currentUser
+    ) {
+        UUID couponId = couponService.saveTargetCoupon(couponNo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + couponId))
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.CREATED.value())
+                        .message("쿠폰정보를 가져왔습니다")
+                        .build());
     }
 }

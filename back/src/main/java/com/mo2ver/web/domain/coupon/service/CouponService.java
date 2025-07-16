@@ -3,7 +3,9 @@ package com.mo2ver.web.domain.coupon.service;
 import com.mo2ver.web.domain.coupon.dto.request.CouponRequest;
 import com.mo2ver.web.domain.coupon.dto.response.CouponResponse;
 import com.mo2ver.web.domain.coupon.entity.Coupon;
+import com.mo2ver.web.domain.coupon.entity.CouponMember;
 import com.mo2ver.web.domain.coupon.repository.CouponRepository;
+import com.mo2ver.web.domain.coupon.repository.CouponMemberRepository;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.repository.GoodsRepository;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,10 +25,11 @@ public class CouponService {
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
     private final CouponRepository couponRepository;
+    private final CouponMemberRepository couponMemberRepository;
 
     public CouponResponse findCoupon(String couponCode) {
-        Coupon coupon = this.findCouponByCode(couponCode);
-        return CouponResponse.of(coupon);
+        CouponMember couponMember = this.findCouponByCode(couponCode);
+        return CouponResponse.of(couponMember);
     }
 
     public String saveCoupon(CouponRequest couponRequest, Member currentUser) {
@@ -32,6 +37,13 @@ public class CouponService {
         Goods goods = this.findGoodsById(couponRequest.getGoodsCode());
         Coupon coupon = new Coupon(couponRequest, goods, member);
         return this.couponRepository.save(coupon).getCouponNo();
+    }
+
+    public UUID saveTargetCoupon(String couponNo, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        Coupon coupon = this.findCouponById(couponNo);
+        CouponMember couponMember = new CouponMember(coupon, member);
+        return this.couponMemberRepository.save(couponMember).getCouponId();
     }
 
     private Member findMemberById(String memberNo) {
@@ -44,8 +56,13 @@ public class CouponService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
-    private Coupon findCouponByCode(String couponCode) {
-        return this.couponRepository.findByCouponCode(couponCode)
+    private Coupon findCouponById(String couponNo) {
+        return this.couponRepository.findById(couponNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 쿠폰번호 입니다."));
+    }
+
+    private CouponMember findCouponByCode(String couponCode) {
+        return this.couponMemberRepository.findByCouponCode(couponCode)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 쿠폰코드 입니다."));
     }
 }
