@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class CouponService {
         return CouponResponse.of(couponMember);
     }
 
+    @Transactional
     public String saveCoupon(CouponRequest couponRequest, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Goods goods = this.findGoodsById(couponRequest.getGoodsCode());
@@ -39,10 +41,18 @@ public class CouponService {
         return this.couponRepository.save(coupon).getCouponNo();
     }
 
-    public UUID saveTargetCoupon(String couponNo, Member currentUser) {
+    @Transactional
+    public void updateCoupon(CouponRequest couponRequest, Member currentUser) {
+        Coupon coupon = this.findCouponById(couponRequest.getCouponNo());
+        coupon.update(couponRequest, currentUser);
+    }
+
+    @Transactional
+    public UUID saveCouponMember(String couponNo, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Coupon coupon = this.findCouponById(couponNo);
         CouponMember couponMember = new CouponMember(coupon, member);
+        coupon.update();    // 현재 발급한 갯수 증가
         return this.couponMemberRepository.save(couponMember).getCouponId();
     }
 

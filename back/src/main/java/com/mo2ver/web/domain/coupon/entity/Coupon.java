@@ -13,11 +13,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(
         name = "CPN",   // 쿠폰
         indexes={
+                @Index(name="FK_MBR_TO_CPN", columnList="MBR_NO"),
                 @Index(name="FK_GD_TO_CPN", columnList="GD_CD")
         }
 )
@@ -31,6 +33,16 @@ public class Coupon {
     @GenericGenerator(name = "couponNo", strategy = "com.mo2ver.web.domain.coupon.entity.CouponGenerator")
     @Column(name = "CPN_NO", columnDefinition = "CHAR(10) COMMENT '쿠폰번호'")
     private String couponNo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "MBR_NO",
+            nullable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(name = "FK_MBR_TO_CPN"),
+            columnDefinition = "CHAR(10) COMMENT '회원번호'"
+    )
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -61,6 +73,9 @@ public class Coupon {
     @Column(name = "ISSUE_QTY", columnDefinition = "INT(11) COMMENT '현재발급한수량'")
     private Integer issueQuantity;
 
+    @Column(name = "DEL_YN", columnDefinition = "CHAR(1) COMMENT '삭제유무'")
+    private Character delYesNo;
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -81,8 +96,18 @@ public class Coupon {
 
     public Coupon(CouponRequest couponRequest, Goods goods, Member currentUser) {
         this.createOrUpdateCoupon(couponRequest, currentUser);
+        this.member = currentUser;
         this.goods = goods;
+        this.delYesNo = 'N';
         this.register = currentUser.getMemberNo();
+    }
+
+    public void update(CouponRequest couponRequest, Member currentUser) {
+        this.createOrUpdateCoupon(couponRequest, currentUser);
+    }
+
+    public void update() {
+        this.issueQuantity = Optional.ofNullable(this.issueQuantity).orElse(0) + 1;
     }
 
     private void createOrUpdateCoupon(CouponRequest couponRequest, Member currentUser) {

@@ -46,6 +46,23 @@ public class CouponTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("쿠폰정보 수정 확인")
+    public void updateCouponTest() throws Exception {
+
+        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
+        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
+
+        CouponRequest couponRequest = this.getCouponRequestTest();
+
+        mockMvc.perform(patch("/coupon/update")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(couponRequest)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("쿠폰정보 회원코드 저장 확인")
     public void createCouponTargetTest() throws Exception {
 
@@ -63,6 +80,7 @@ public class CouponTest extends CsrfConfigTest {
 
     private CouponRequest getCouponRequestTest() {
         return CouponRequest.builder()
+                .couponNo("C000000001")
                 .goodsCode("1000000001")
                 .couponType(CouponType.AMOUNT)
                 .discountAmount(new BigDecimal(10000))

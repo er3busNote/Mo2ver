@@ -107,15 +107,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.DELETE, "/cart/**", "/review/**").hasAnyRole("USER")    // 3.5) 장바구니, 리뷰 삭제
                 .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/notice/**", "/category/**", "/coupon/**").hasAnyRole("MANAGER", "ADMIN")
-                .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/notice/**", "/category/**").hasAnyRole("MANAGER", "ADMIN")
+                .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/notice/**", "/category/**", "/coupon/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
                 .antMatchers("/ws/**").permitAll() // WebSocket 엔드포인트는 인증 없이 허용
                 .anyRequest()
                 .authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider, accessDeniedHandler));
     }

@@ -9,6 +9,7 @@ import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,15 +45,28 @@ public class CouponController {
     }
 
     @PutMapping("/create/{couponNo}")
-    public ResponseEntity<ResponseHandler> createTargetCoupon(
+    public ResponseEntity<ResponseHandler> createCouponMember(
             @PathVariable String couponNo,
             @CurrentUser Member currentUser
     ) {
-        UUID couponId = couponService.saveTargetCoupon(couponNo, currentUser);
+        UUID couponId = couponService.saveCouponMember(couponNo, currentUser);
         return ResponseEntity.created(URI.create("/create/" + couponId))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("쿠폰정보를 가져왔습니다")
+                        .build());
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<ResponseHandler> updateAddress(
+            @RequestBody @Validated(CouponRequest.Update.class) CouponRequest couponRequest,
+            @CurrentUser Member currentUser
+    ) {
+        couponService.updateCoupon(couponRequest, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("쿠폰정보가 수정되었습니다")
                         .build());
     }
 }
