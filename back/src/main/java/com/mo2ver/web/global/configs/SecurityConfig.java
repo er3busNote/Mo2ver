@@ -2,6 +2,9 @@ package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.domain.member.service.MemberService;
 import com.mo2ver.web.global.common.setting.CorsSetting;
+import com.mo2ver.web.global.configs.filter.AdminFilterChain;
+import com.mo2ver.web.global.configs.filter.MemberFilterChain;
+import com.mo2ver.web.global.configs.filter.NoneFilterChain;
 import com.mo2ver.web.global.jwt.JwtAccessDeniedHandler;
 import com.mo2ver.web.global.jwt.JwtAuthenticationEntryPoint;
 import com.mo2ver.web.global.jwt.JwtSecurityConfig;
@@ -13,7 +16,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -45,6 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final CorsSetting corsSetting;
+    private final NoneFilterChain noneFilterChain;
+    private final MemberFilterChain memberFilterChain;
+    private final AdminFilterChain adminFilterChain;
     private final TokenProvider tokenProvider;
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -91,28 +96,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private void configureCommon(HttpSecurity http) throws Exception {
         http
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // → CSRF같은 예외적인 경우에는 별도로 처리할 수 있음
                 .and()
                 .cors().configurationSource(corsConfigurationSource())  // → CORS Origin 세팅
                 .and()
-                .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/menu/**", "/images/**", "/file/**", "/member/**", "/category/**", "/goods/**", "/review/**", "/cart/**", "/banner/**", "/event/**", "/notice/**", "/search/**", "/coupon/**").permitAll()
-                .mvcMatchers(HttpMethod.PATCH, "/member/refresh").permitAll()               // 1) 인증
-                .mvcMatchers(HttpMethod.POST, "/code/**", "/images/**", "/member/**", "/category/**", "/goods/**", "/search/**").permitAll()
-                .mvcMatchers(HttpMethod.PATCH, "/goods/**").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/member/*", "/address/*", "/cart/list", "/recommend/**", "/order/**").hasAnyRole("USER")  // 3.1) 회원, 주소록, 장바구니, 추천, 주문 목록
-                .mvcMatchers(HttpMethod.PATCH, "/address/*").hasAnyRole("USER")                 // 3.2) 주소록
-                .mvcMatchers(HttpMethod.POST, "/address/*", "/cart/**", "/review/**", "/order/**", "/payment/**").hasAnyRole("USER")    // 3.3) 주소록, 장바구니, 리뷰, 주문, 결재 추가
-                .mvcMatchers(HttpMethod.PUT, "/cart/**", "/review/**", "/coupon/**").hasAnyRole("USER")       // 3.4) 장바구니, 리뷰 수정 및 쿠폰 생성
-                .mvcMatchers(HttpMethod.DELETE, "/cart/**", "/review/**").hasAnyRole("USER")    // 3.5) 장바구니, 리뷰 삭제
-                .mvcMatchers(HttpMethod.GET, "/banner/list").hasAnyRole("MANAGER", "ADMIN")
-                .mvcMatchers(HttpMethod.POST, "/banner/**", "/event/**", "/notice/**", "/category/**", "/coupon/**").hasAnyRole("MANAGER", "ADMIN")
-                .mvcMatchers(HttpMethod.PATCH, "/banner/**", "/event/**", "/notice/**", "/category/**", "/coupon/**").hasAnyRole("MANAGER", "ADMIN")
-                .mvcMatchers(HttpMethod.DELETE, "/category/**").hasAnyRole("MANAGER", "ADMIN")
-                .antMatchers("/ws/**").permitAll() // WebSocket 엔드포인트는 인증 없이 허용
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeRequests(authorize -> {
+                    noneFilterChain.configure(authorize);
+                    memberFilterChain.configure(authorize);
+                    adminFilterChain.configure(authorize);
+                    authorize
+                        .antMatchers("/ws/**").permitAll() // WebSocket 엔드포인트는 인증 없이 허용
+                        .anyRequest()
+                        .authenticated();
+                })
                 .exceptionHandling()
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                     .accessDeniedHandler(jwtAccessDeniedHandler)
