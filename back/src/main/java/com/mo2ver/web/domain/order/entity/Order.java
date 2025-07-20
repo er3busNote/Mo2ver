@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.order.entity;
 
+import com.mo2ver.web.domain.coupon.entity.CouponMember;
 import com.mo2ver.web.domain.delivery.entity.Delivery;
 import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -67,6 +69,9 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderCoupon> orderCoupons = new ArrayList<>();
+
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '주문금액'")
     private Long amount;
 
@@ -98,6 +103,14 @@ public class Order {
         this.totalPriceCalc();
     }
 
+    public void update(List<CouponMember> couponMembers) {
+        int oldFileSize = this.orderCoupons.size();
+        this.orderCoupons.addAll(this.updateOrderCoupons(couponMembers));
+        this.orderCoupons.subList(0, oldFileSize).clear();
+
+        this.totalPriceCalcByCoupon();
+    }
+
     private void createOrUpdateOrder(Member currentUser) {
         this.updater = currentUser.getMemberNo();
     }
@@ -106,6 +119,19 @@ public class Order {
         return orderInfos.stream()
                 .map(info -> OrderDetail.of(this, info, this.getGoodsInfo(goodsList, info.getGoodsCode()), currentUser))
                 .collect(Collectors.toList());
+    }
+
+    private List<OrderCoupon> updateOrderCoupons(List<CouponMember> couponMembers) {
+        return couponMembers.stream()
+                .map(this::createOrUpdateOrderCoupons)
+                .collect(Collectors.toList());
+    }
+
+    private OrderCoupon createOrUpdateOrderCoupons(CouponMember couponMember) {
+        return this.orderCoupons.stream()
+                .filter(it -> Objects.equals(it.getCouponMember().getCouponId(), couponMember.getCouponId()))
+                .findFirst()
+                .orElseGet(() -> OrderCoupon.of(this, couponMember));
     }
 
     private Goods getGoodsInfo(List<Goods> goodsList, String goodsCode) {
@@ -120,5 +146,9 @@ public class Order {
         for (OrderDetail orderDetail : this.orderDetails) {
             this.amount += orderDetail.getAmount();
         }
+    }
+
+    private void totalPriceCalcByCoupon() {
+        this.totalPriceCalc();
     }
 }

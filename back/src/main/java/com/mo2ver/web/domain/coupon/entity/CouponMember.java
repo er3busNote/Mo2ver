@@ -116,6 +116,10 @@ public class CouponMember {
         this.useYesNo = 'N';
     }
 
+    public void update(Order order) {
+        this.order = order;
+    }
+
     private void createOrUpdateCoupon(Member currentUser) {
         this.updater = currentUser.getMemberNo();
     }

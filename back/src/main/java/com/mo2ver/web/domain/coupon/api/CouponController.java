@@ -58,7 +58,7 @@ public class CouponController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<ResponseHandler> updateAddress(
+    public ResponseEntity<ResponseHandler> updateCoupon(
             @RequestBody @Validated(CouponRequest.Update.class) CouponRequest couponRequest,
             @CurrentUser Member currentUser
     ) {
