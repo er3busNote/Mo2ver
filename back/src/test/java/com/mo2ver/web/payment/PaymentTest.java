@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.util.UUID;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +36,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     private PaymentRequest getPaymentRequest() {
         return PaymentRequest.builder()
-                .orderId(UUID.fromString("444828a2-ef08-44e3-ab00-f1189cae99b3"))
+                .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
                 .build();
     }
 
@@ -80,7 +78,7 @@ public class PaymentTest extends CsrfConfigTest {
         return PaymentInfo.builder()
                 .paymentCode("P000000001")
                 .paymentKey("5EnNZRJGvaBX7zk2yd8ydw26XvwXkLrx9POLqKQjmAw4b0e1")
-                .orderId(UUID.fromString("89b1f308-cd03-4cd6-ba32-81d72c3a2e0d"))
+                .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
                 .addressNo("A000000002")
                 .amount(1000L)
                 .build();

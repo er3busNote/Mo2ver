@@ -6,6 +6,7 @@ import com.mo2ver.web.common.file.dto.FileAttachInfo;
 import com.mo2ver.web.common.file.dto.FileInfo;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.*;
+import com.mo2ver.web.global.common.uuid.UuidManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -18,7 +19,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -90,10 +90,10 @@ public class FileService {
     }
 
     private String getFilePath(Path uploadDirectory) {
-        return uploadDirectory.toString() + "/" + UUID.randomUUID();
+        return uploadDirectory.toString() + "/" + UuidManager.generateId();
     }
 
     private String getBucketPath() {
-        return DateUtil.getCurrentDate() + "/" + UUID.randomUUID();
+        return DateUtil.getCurrentDate() + "/" + UuidManager.generateId();
     }
 }

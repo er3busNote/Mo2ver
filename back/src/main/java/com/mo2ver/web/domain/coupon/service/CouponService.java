@@ -10,13 +10,17 @@ import com.mo2ver.web.domain.goods.entity.Goods;
 import com.mo2ver.web.domain.goods.repository.GoodsRepository;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
+import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.domain.order.repository.OrderRepository;
+import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,6 +29,7 @@ public class CouponService {
 
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
+    private final OrderRepository orderRepository;
     private final CouponRepository couponRepository;
     private final CouponMemberRepository couponMemberRepository;
 
@@ -48,12 +53,26 @@ public class CouponService {
     }
 
     @Transactional
-    public UUID saveCouponMember(String couponNo, Member currentUser) {
+    public String saveCouponMember(String couponNo, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Coupon coupon = this.findCouponById(couponNo);
         CouponMember couponMember = new CouponMember(coupon, member);
         coupon.update();    // 현재 발급한 갯수 증가
         return this.couponMemberRepository.save(couponMember).getCouponId();
+    }
+
+    @Transactional
+    private void useCouponMemberSync(PaymentInfo paymentInfo) {
+        Order order = this.findOrderById(paymentInfo.getOrderId());
+        List<CouponMember> couponMembers = this.couponMemberRepository.findByOrder(order);
+        for(CouponMember couponMember : couponMembers) {
+            couponMember.update();
+            this.couponMemberRepository.save(couponMember);
+        }
+    }
+
+    public Mono<Void> useCouponMember(PaymentInfo paymentInfo) {
+        return Mono.fromRunnable(() -> this.useCouponMemberSync(paymentInfo));
     }
 
     private Member findMemberById(String memberNo) {
@@ -64,6 +83,11 @@ public class CouponService {
     private Goods findGoodsById(String goodsCode) {
         return this.goodsRepository.findById(goodsCode)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
+    }
+
+    private Order findOrderById(String orderId) {
+        return this.orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
 
     private Coupon findCouponById(String couponNo) {

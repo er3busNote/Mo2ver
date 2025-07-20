@@ -27,7 +27,7 @@ public class OrderTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        String orderId = "89b1f308-cd03-4cd6-ba32-81d72c3a2e0d";
+        String orderId = "F5E24377C6D948F39A64C3DDA17E78A6";
         mockMvc.perform(get("/order/info/{orderId}", orderId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -80,9 +80,9 @@ public class OrderTest extends CsrfConfigTest {
 
     private OrderCouponRequest getOrderCouponRequestTest() {
         return OrderCouponRequest.builder()
-                .orderId("ec862eca-251f-4c4d-9b93-a7d247631c26")
+                .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
                 .couponCodes(Arrays.asList(
-                        "CPN-250720-T85VWC"
+                        "CPN-250720-X5129Y"
                 ))
                 .build();
     }

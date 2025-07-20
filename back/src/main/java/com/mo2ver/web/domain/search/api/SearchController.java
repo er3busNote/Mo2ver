@@ -8,6 +8,7 @@ import com.mo2ver.web.domain.search.dto.response.SearchGoodsResponse;
 import com.mo2ver.web.domain.search.service.SearchService;
 import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.cookie.CookieHelper;
+import com.mo2ver.web.global.common.uuid.UuidManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -49,7 +49,7 @@ public class SearchController {
         }
 
         if (clientId == null) {
-            String newClientId = UUID.randomUUID().toString();
+            String newClientId = UuidManager.generateUuid();
             ResponseCookie cookie = CookieHelper.createCookie(CLIENT_ID, newClientId, true);
             searchService.saveSearchForGuest(newClientId, keyword);
             return buildSearch(cookie, pageInfo, searchGoodsRequest);

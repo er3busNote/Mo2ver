@@ -43,7 +43,7 @@ public class Payment {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ODR_TO_PAY"),
-            columnDefinition = "CHAR(36) COMMENT '주문번호'"
+            columnDefinition = "CHAR(32) COMMENT '주문번호'"
     )
     private Order order;
 

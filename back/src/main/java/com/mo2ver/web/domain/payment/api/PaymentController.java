@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.payment.api;
 
+import com.mo2ver.web.domain.coupon.service.CouponService;
 import com.mo2ver.web.domain.delivery.service.DeliveryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -32,6 +33,7 @@ public class PaymentController {
 
     private final TossPaymentService tossPaymentService;
     private final DeliveryService deliveryService;
+    private final CouponService couponService;
     private final ErrorHandler errorHandler;
 
     @PostMapping("/start")
@@ -50,6 +52,7 @@ public class PaymentController {
     ) {
         return tossPaymentService.confirmPayment(paymentInfo, currentUser)
                 .then(deliveryService.saveDelivery(paymentInfo, currentUser))
+                .then(couponService.useCouponMember(paymentInfo))
                 .thenReturn(ResponseEntity.ok().body(ResponseHandler.builder()
                                 .status(HttpStatus.OK.value())
                                 .message("결재정보가 승인되었습니다")

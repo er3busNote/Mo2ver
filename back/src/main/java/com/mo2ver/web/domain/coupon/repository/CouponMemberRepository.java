@@ -10,9 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-public interface CouponMemberRepository extends JpaRepository<CouponMember, UUID> {
+public interface CouponMemberRepository extends JpaRepository<CouponMember, String> {
     Optional<CouponMember> findByCouponCode(String couponCode);
     List<CouponMember> findByOrder(Order order);
     List<CouponMember> findByCouponCodeInAndMember(List<String> couponCodes, Member member);
@@ -23,5 +22,9 @@ public interface CouponMemberRepository extends JpaRepository<CouponMember, UUID
 
     @Modifying
     @Query("UPDATE CouponMember cm SET cm.order = :order WHERE cm.couponId IN :couponIds")
-    void updateOrderByCouponIds(@Param("order") Order order, @Param("couponIds") List<UUID> couponIds);
+    void updateOrderByCouponIds(@Param("order") Order order, @Param("couponIds") List<String> couponIds);
+
+    @Modifying
+    @Query("UPDATE CouponMember cm SET cm.useYesNo = 'Y' WHERE cm.order = :order")
+    void updateUseYesNoByOrder(@Param("order") Order order);
 }

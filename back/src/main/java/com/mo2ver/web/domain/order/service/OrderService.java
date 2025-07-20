@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,13 +31,13 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CouponMemberRepository couponMemberRepository;
 
-    public List<OrderGoodsResponse> findOrder(String uuid) {
-        Order order = this.findOrderById(uuid);
+    public List<OrderGoodsResponse> findOrder(String orderId) {
+        Order order = this.findOrderById(orderId);
         return order.getOrderDetails().stream().map(OrderGoodsResponse::of).collect(Collectors.toList());
     }
 
     @Transactional
-    public UUID saveOrder(OrderRequest orderRequest, Member currentUser) {
+    public String saveOrder(OrderRequest orderRequest, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         List<Goods> goodsList = orderRequest.getGoodsOrders().stream().map(orderInfo -> this.findGoodsById(orderInfo.getGoodsCode())).collect(Collectors.toList());
         Order order = new Order(orderRequest, goodsList, member);
@@ -57,7 +56,7 @@ public class OrderService {
     @Transactional
     public void updateCouponMember(Order order) {
         List<CouponMember> couponMembers = order.getOrderCoupons().stream().map(OrderCoupon::getCouponMember).collect(Collectors.toList());
-        List<UUID> couponIds = couponMembers.stream().map(CouponMember::getCouponId).collect(Collectors.toList());
+        List<String> couponIds = couponMembers.stream().map(CouponMember::getCouponId).collect(Collectors.toList());
         this.couponMemberRepository.updateOrderClear(order);
         this.couponMemberRepository.updateOrderByCouponIds(order, couponIds);
     }
@@ -72,8 +71,8 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
-    private Order findOrderById(String uuid) {
-        return this.orderRepository.findById(UUID.fromString(uuid))
+    private Order findOrderById(String orderId) {
+        return this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
     

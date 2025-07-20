@@ -24,7 +24,6 @@ import reactor.core.publisher.Mono;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -76,14 +75,14 @@ public class TossPaymentService {
 
     @Transactional
     public void exitPayment(String orderId) {
-        Order order = this.findOrderById(UUID.fromString(orderId));
+        Order order = this.findOrderById(orderId);
         Payment payment = this.findPaymentByOrderId(order);
         if (PaymentStatus.READY.equals(payment.getPaymentStatus())) {
             payment.exit();
         }
     }
     
-    private Order findOrderById(UUID orderId) {
+    private Order findOrderById(String orderId) {
         return this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }

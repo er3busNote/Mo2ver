@@ -7,11 +7,10 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.OrderInfo;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
 import com.mo2ver.web.domain.payment.entity.Payment;
+import com.mo2ver.web.global.common.uuid.UuidManager;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -20,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -43,12 +41,16 @@ public class Order {
 //    @Column(name = "ODR_CD", columnDefinition = "CHAR(10) COMMENT '주문코드'")
 //    private String orderCode;
 
+//    @Id
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+//    @Type(type = "uuid-char")
+//    @Column(name = "ODR_ID", columnDefinition = "CHAR(36) COMMENT '주문번호'", updatable = false, nullable = false)
+//    private UUID orderId;
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Type(type = "uuid-char")
-    @Column(name = "ODR_ID", columnDefinition = "CHAR(36) COMMENT '주문번호'", updatable = false, nullable = false)
-    private UUID orderId;
+    @Column(name = "ODR_ID", columnDefinition = "CHAR(32) COMMENT '주문번호'", updatable = false, nullable = false)
+    private String orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -92,6 +94,11 @@ public class Order {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    @PrePersist
+    public void generateOrderId() {
+        if (this.orderId == null) this.orderId = UuidManager.generateId();
+    }
 
     public Order(OrderRequest orderRequest, List<Goods> goodsList, Member currentUser) {
         this.createOrUpdateOrder(currentUser);

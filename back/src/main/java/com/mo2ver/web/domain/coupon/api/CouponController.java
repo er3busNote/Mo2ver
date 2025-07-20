@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +48,7 @@ public class CouponController {
             @PathVariable String couponNo,
             @CurrentUser Member currentUser
     ) {
-        UUID couponId = couponService.saveCouponMember(couponNo, currentUser);
+        String couponId = couponService.saveCouponMember(couponNo, currentUser);
         return ResponseEntity.created(URI.create("/create/" + couponId))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())

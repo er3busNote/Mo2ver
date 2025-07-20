@@ -29,7 +29,7 @@ public class OrderCoupon {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ODR_TO_ODR_CPN"),
-            columnDefinition = "CHAR(36) COMMENT '주문번호'"
+            columnDefinition = "CHAR(32) COMMENT '주문번호'"
     )
     private Order order;
 
@@ -39,7 +39,7 @@ public class OrderCoupon {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_CPN_MBR_TO_ODR_CPN"),
-            columnDefinition = "CHAR(36) COMMENT '쿠폰번호'"
+            columnDefinition = "CHAR(32) COMMENT '쿠폰번호'"
     )
     private CouponMember couponMember;
 

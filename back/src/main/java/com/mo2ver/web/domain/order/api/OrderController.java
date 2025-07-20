@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class OrderController {
             @RequestBody @Valid OrderRequest orderRequest,
             @CurrentUser Member currentUser
     ) {
-        UUID orderId = orderService.saveOrder(orderRequest, currentUser);
+        String orderId = orderService.saveOrder(orderRequest, currentUser);
         inventoryService.validate(orderId);
         inventoryService.update(orderId);
         return ResponseEntity.created(URI.create("/create/" + orderId))

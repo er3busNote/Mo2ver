@@ -3,10 +3,9 @@ package com.mo2ver.web.domain.coupon.entity;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.global.common.utils.DateUtil;
+import com.mo2ver.web.global.common.uuid.UuidManager;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.UUID;
 
 @Entity
 @Table(
@@ -31,12 +29,16 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CouponMember {
 
+//    @Id
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+//    @Type(type = "uuid-char")
+//    @Column(name = "CPN_ID", columnDefinition = "CHAR(36) COMMENT '쿠폰번호'", updatable = false, nullable = false)
+//    private UUID couponId;
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Type(type = "uuid-char")
-    @Column(name = "CPN_ID", columnDefinition = "CHAR(36) COMMENT '쿠폰번호'", updatable = false, nullable = false)
-    private UUID couponId;
+    @Column(name = "CPN_ID", columnDefinition = "CHAR(32) COMMENT '쿠폰번호'", updatable = false, nullable = false)
+    private String couponId;
 
     @Column(name = "CPN_CD", columnDefinition = "VARCHAR(30) COMMENT '쿠폰코드'", updatable = false, nullable = false)
     private String couponCode;
@@ -56,7 +58,7 @@ public class CouponMember {
             name = "ODR_ID",
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ODR_TO_CPN_MBR"),
-            columnDefinition = "CHAR(36) COMMENT '주문번호'"
+            columnDefinition = "CHAR(32) COMMENT '주문번호'"
     )
     private Order order;
 
@@ -101,10 +103,9 @@ public class CouponMember {
     private LocalDateTime updateDate = LocalDateTime.now();
 
     @PrePersist
-    public void prePersist() {
-        if (this.couponCode == null) {
-            this.couponCode = this.generateCouponCode("CPN", 6);
-        }
+    public void generateCouponId() {
+        if (this.couponId == null) this.couponId = UuidManager.generateId();
+        if (this.couponCode == null) this.couponCode = this.generateCouponCode("CPN", 6);
     }
 
     public CouponMember(Coupon coupon, Member currentUser) {
@@ -118,6 +119,10 @@ public class CouponMember {
 
     public void update(Order order) {
         this.order = order;
+    }
+
+    public void update() {
+        this.useYesNo = 'Y';
     }
 
     private void createOrUpdateCoupon(Member currentUser) {
