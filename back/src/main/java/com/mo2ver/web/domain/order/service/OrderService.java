@@ -10,6 +10,7 @@ import com.mo2ver.web.domain.order.dto.request.OrderCouponRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
 import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
 import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.domain.order.entity.OrderCoupon;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -48,11 +49,17 @@ public class OrderService {
     public void updateOrderCoupon(OrderCouponRequest orderCouponRequest, Member currentUser) {
         Order order = this.findOrderById(orderCouponRequest.getOrderId());
         List<String> couponCodes = orderCouponRequest.getCouponCodes();
-        List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, order, currentUser);
+        List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, currentUser);
         order.update(couponMembers);
-        for(CouponMember couponMember : couponMembers) {
-            couponMember.update(order);
-        }
+        this.updateCouponMember(order);
+    }
+
+    @Transactional
+    public void updateCouponMember(Order order) {
+        List<CouponMember> couponMembers = order.getOrderCoupons().stream().map(OrderCoupon::getCouponMember).collect(Collectors.toList());
+        List<UUID> couponIds = couponMembers.stream().map(CouponMember::getCouponId).collect(Collectors.toList());
+        this.couponMemberRepository.updateOrderClear(order);
+        this.couponMemberRepository.updateOrderByCouponIds(order, couponIds);
     }
 
     private Member findMemberById(String memberNo) {
@@ -70,11 +77,7 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
     
-    private List<CouponMember> findCouponMemberByCouponCodes(List<String> couponCodes, Order order, Member currentUser) {
-        List<CouponMember> listCouponMember = this.couponMemberRepository.findByOrder(order);
-        for(CouponMember couponMember : listCouponMember) {
-            couponMember.setCoupon(null);
-        }
+    private List<CouponMember> findCouponMemberByCouponCodes(List<String> couponCodes, Member currentUser) {
         return this.couponMemberRepository.findByCouponCodeInAndMember(couponCodes, currentUser);
     }
 }
