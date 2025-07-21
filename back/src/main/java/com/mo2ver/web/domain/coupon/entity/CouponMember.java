@@ -72,13 +72,13 @@ public class CouponMember {
     )
     private Member member;
 
-    @Column(name = "ISSUE_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '발급일시'")
+    @Column(name = "ISSU_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '발급일시'")
     private LocalDateTime issueDate;
 
     @Column(name = "USE_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '사용일시'")
     private LocalDateTime useDate;
 
-    @Column(name = "EXPIRE_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '만료일시'")
+    @Column(name = "EXPR_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '만료일시'")
     private LocalDateTime expireDate;
 
     @Column(name = "USE_YN", columnDefinition = "CHAR(1) COMMENT '사용여부'")

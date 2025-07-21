@@ -70,7 +70,7 @@ public class Coupon {
     @Column(name = "TOT_QTY", columnDefinition = "INT(11) COMMENT '전체발급가능수량'")
     private Integer totalQuantity;
 
-    @Column(name = "ISSUE_QTY", columnDefinition = "INT(11) COMMENT '현재발급한수량'")
+    @Column(name = "ISSU_QTY", columnDefinition = "INT(11) COMMENT '현재발급한수량'")
     private Integer issueQuantity;
 
     @Column(name = "DEL_YN", columnDefinition = "CHAR(1) COMMENT '삭제유무'")

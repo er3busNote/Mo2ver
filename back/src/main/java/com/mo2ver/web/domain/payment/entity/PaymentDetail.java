@@ -75,7 +75,7 @@ public class PaymentDetail {
     @Column(name = "ESC", columnDefinition = "CHAR(1) COMMENT '에스크로사용여부'")
     private Character useEscrow;
 
-    @Column(name = "CARD_ISSUE_CD", columnDefinition = "CHAR(2) COMMENT '카드발급사 2자리코드'")
+    @Column(name = "CARD_ISSU_CD", columnDefinition = "CHAR(2) COMMENT '카드발급사 2자리코드'")
     private String cardIssuerCode;
 
     @Column(name = "CARD_ACQ_CD", columnDefinition = "CHAR(2) COMMENT '카드매입사 2자리코드'")
