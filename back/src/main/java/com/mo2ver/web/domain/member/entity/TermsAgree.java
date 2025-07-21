@@ -26,11 +26,11 @@ public class TermsAgree implements Serializable {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "TERMS_MNG_NO",
+            name = "TERMS_NO",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_TERMS_TO_TERMS_AGR"),
-            columnDefinition = "BIGINT(20) COMMENT '약관관리번호'"
+            columnDefinition = "CHAR(10) COMMENT '약관번호'"
     )
     private Terms terms;
 

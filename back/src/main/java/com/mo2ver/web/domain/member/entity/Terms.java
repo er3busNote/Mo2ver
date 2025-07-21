@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.member.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -12,14 +13,15 @@ import java.util.Date;
 @Entity
 @Table(name = "TERMS")      // 약관관리
 @Getter @Setter
-@EqualsAndHashCode(of = "termsManageNo")
+@EqualsAndHashCode(of = "termsNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Terms {
 
     @Id
-    @Column(name = "TERMS_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '약관관리번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private int termsManageNo;  // Long → int 형으로 변환 (ForeignKey 이슈)
+    @GeneratedValue(generator = "termsNo")
+    @GenericGenerator(name = "termsNo", strategy = "com.mo2ver.web.domain.member.entity.TermsGenerator")
+    @Column(name = "TERMS_NO", columnDefinition = "CHAR(10) COMMENT '약관번호'")
+    private String termsNo;
 
     @Column(name = "TERMS_TY_CD", columnDefinition = "CHAR(5) COMMENT '약관유형코드'")
     private String termsTypeCode;
