@@ -45,9 +45,9 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
         this.queryFactory = queryFactory;
     }
 
-    public Page<EventProductResponse> findById(Integer id, Pageable pageable) {
+    public Page<EventProductResponse> findById(String eventNo, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(event.eventManageNo.eq(Long.valueOf(id)));
+        builder.and(event.eventNo.eq(eventNo));
         builder.and(goodsImage.basicImageYesNo.eq('Y'));
 
         Expression<BigDecimal> salePrice = new CaseBuilder()
@@ -98,7 +98,7 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
 
     public EventImageInfo findEventDetail(EventRequest eventRequest) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(event.eventManageNo.eq(eventRequest.getEventManageNo()));
+        builder.and(event.eventNo.eq(eventRequest.getEventNo()));
 
         return queryFactory
                 .selectFrom(event)
@@ -107,9 +107,9 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                 .leftJoin(goods).on(eventProduct.productCode.eq(goods.goodsCode))
                 .leftJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
                 .where(builder)
-                .transform(groupBy(event.eventManageNo).list(
+                .transform(groupBy(event.eventNo).list(
                         new QEventImageInfo(
-                                event.eventManageNo,
+                                event.eventNo,
                                 event.subject,
                                 event.eventStartDate,
                                 event.eventEndDate,

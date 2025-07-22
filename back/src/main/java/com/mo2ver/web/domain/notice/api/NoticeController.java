@@ -30,7 +30,7 @@ public class NoticeController {
 
     @GetMapping("/info/{id}")
     public ResponseEntity<NoticeResponse> infoNotice(
-            @PathVariable Integer id,
+            @PathVariable String id,
             @CurrentUser Member currentUser
     ) {
         return ResponseEntity.ok().body(noticeService.findNotice(id));
@@ -41,7 +41,7 @@ public class NoticeController {
             @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "noticeManageNo");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "noticeNo");
         Page<NoticeResponse> pages = this.noticeService.findNoticelist(pageable, currentUser);
         return ResponseEntity.ok().body(pages);
     }
@@ -59,8 +59,8 @@ public class NoticeController {
             @RequestBody @Valid NoticeFileInfo noticeFileInfo,
             @CurrentUser Member currentUser
     ) {
-        Long noticeManageNo = noticeService.saveNotice(noticeFileInfo, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + noticeManageNo))
+        String noticeNo = noticeService.saveNotice(noticeFileInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + noticeNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("공지사항정보가 저장되었습니다")

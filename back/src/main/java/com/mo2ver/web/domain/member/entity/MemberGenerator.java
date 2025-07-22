@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class MemberGenerator implements IdentifierGenerator {
 
+    private final static String FIRST_MEMBER_NO = "MB00000001";
+
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
@@ -40,11 +42,11 @@ public class MemberGenerator implements IdentifierGenerator {
             }
         }
 
-        return "M000000001";
+        return FIRST_MEMBER_NO;
     }
 
     private String generateNextId(String lastMemberNo) {
-        Integer nextId = Integer.parseInt(lastMemberNo.substring(1)) + 1;
-        return 'M' + String.format("%09d", nextId);
+        Integer nextId = Integer.parseInt(lastMemberNo.substring(2)) + 1;
+        return "MB" + String.format("%08d", nextId);
     }
 }

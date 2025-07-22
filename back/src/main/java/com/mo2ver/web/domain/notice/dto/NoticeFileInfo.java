@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class NoticeFileInfo {
 
     @NotNull(groups = Update.class)
-    private Long noticeNo;
+    private String noticeNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
@@ -32,7 +32,7 @@ public class NoticeFileInfo {
     public interface Update extends Default {}
 
     @QueryProjection
-    public NoticeFileInfo(Long noticeNo, String title, String contents, List<FileInfo> fileInfoList) {
+    public NoticeFileInfo(String noticeNo, String title, String contents, List<FileInfo> fileInfoList) {
         this.noticeNo = noticeNo;
         this.title = title;
         this.contents = contents;

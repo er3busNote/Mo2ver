@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class NoticeRequest {
 
-    @NotNull(message = "공지사항관리번호가 존재하지 않습니다")
-    @Range(min = 1)
-    private Long noticeManageNo;
+    @NotNull(message = "공지사항번호가 존재하지 않습니다")
+    private String noticeNo;
 }

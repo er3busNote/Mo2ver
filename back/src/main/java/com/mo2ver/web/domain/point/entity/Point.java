@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.point.entity;
 import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -17,14 +18,15 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "pointManageNo")
+@EqualsAndHashCode(of = "pointNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Point {
 
     @Id
-    @Column(name = "PNT_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '포인트관리번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long pointManageNo;
+    @GeneratedValue(generator = "pointNo")
+    @GenericGenerator(name = "pointNo", strategy = "com.mo2ver.web.domain.point.entity.PointGenerator")
+    @Column(name = "PNT_NO", columnDefinition = "CHAR(10) COMMENT '포인트번호'")
+    private String pointNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

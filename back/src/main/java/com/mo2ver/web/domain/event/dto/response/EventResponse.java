@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventResponse {
 
-    private Long eventManageNo;
+    private String eventNo;
     private String subject;
     private Date eventStartDate;
     private Date eventEndDate;
@@ -27,7 +27,7 @@ public class EventResponse {
 
     public static EventResponse of(Event event) {
         return EventResponse.builder()
-                .eventManageNo(event.getEventManageNo())
+                .eventNo(event.getEventNo())
                 .subject(event.getSubject())
                 .eventStartDate(event.getEventStartDate())
                 .eventEndDate(event.getEventEndDate())

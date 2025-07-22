@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 public class Options {
 
     @Id
-    @Column(name = "GD_OPT_NO", columnDefinition = "BIGINT(20) COMMENT '상품옵션관리번호'")
+    @Column(name = "GD_OPT_NO", columnDefinition = "BIGINT(20) COMMENT '상품옵션번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsOptionNo;
 

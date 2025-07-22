@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "DP_BNNR_DTL", // 전시배너상세
         indexes={
-                @Index(name="FK_DP_BNNR_TO_DP_BNNR_DTL", columnList="BNNR_MNG_NO")
+                @Index(name="FK_DP_BNNR_TO_DP_BNNR_DTL", columnList="BNNR_NO")
         }
 )
 @Getter @Setter
@@ -24,17 +24,17 @@ import java.time.LocalDateTime;
 public class BannerDetail {
 
     @Id
-    @Column(name = "BNNR_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배너상세관리번호'")
+    @Column(name = "BNNR_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배너상세번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long bannerDetailId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "BNNR_MNG_NO",
+            name = "BNNR_NO",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_DP_BNNR_TO_DP_BNNR_DTL"),
-            columnDefinition = "BIGINT(20) COMMENT '배너관리번호'"
+            columnDefinition = "CHAR(10) COMMENT '배너번호'"
     )
     private Banner banner;
 

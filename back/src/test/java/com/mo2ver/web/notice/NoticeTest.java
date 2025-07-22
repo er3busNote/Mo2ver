@@ -35,9 +35,9 @@ public class NoticeTest extends CsrfConfigTest {
     @DisplayName("공지사항 상세 정보 확인")
     public void findNoticeInfoTest() throws Exception {
 
-        Integer noticeManageNo = 3;
+        String noticeNo = "NT00000001";
 
-        mockMvc.perform(get("/notice/info/{noticeManageNo}", noticeManageNo))
+        mockMvc.perform(get("/notice/info/{noticeNo}", noticeNo))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -61,7 +61,7 @@ public class NoticeTest extends CsrfConfigTest {
 
     private NoticeRequest getNoticeRequest() {
         return NoticeRequest.builder()
-                .noticeManageNo(1L)
+                .noticeNo("NT00000001")
                 .build();
     }
 
@@ -101,7 +101,7 @@ public class NoticeTest extends CsrfConfigTest {
 
     private NoticeFileInfo getNoticeFileInfo() {
         return NoticeFileInfo.builder()
-                .noticeNo(1L)
+                .noticeNo("NT00000001")
                 .title("테스트")
                 .contents("<p><img src=\"/api/file/image?id=SzqaURB7FhGUqJKWRSIevy0dRPET2x6YyT+/Dq/4IpNmzA+lqTU8phz6M0CxUxwu\"></p><p>테스트</p>")
                 .noticeFiles(Arrays.asList(

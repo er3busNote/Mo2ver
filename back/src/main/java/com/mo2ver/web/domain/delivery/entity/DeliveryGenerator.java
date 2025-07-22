@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class DeliveryGenerator implements IdentifierGenerator {
 
+    private final static String FIRST_DELIVERY_NO = "DV00000001";
+
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
@@ -40,11 +42,11 @@ public class DeliveryGenerator implements IdentifierGenerator {
             }
         }
 
-        return "D000000001";
+        return FIRST_DELIVERY_NO;
     }
 
     private String generateNextId(String lastDeliveryNo) {
-        Integer nextId = Integer.parseInt(lastDeliveryNo.substring(1)) + 1;
-        return 'D' + String.format("%09d", nextId);
+        Integer nextId = Integer.parseInt(lastDeliveryNo.substring(2)) + 1;
+        return "DV" + String.format("%08d", nextId);
     }
 }

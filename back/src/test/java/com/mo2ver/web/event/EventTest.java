@@ -42,9 +42,9 @@ public class EventTest extends CsrfConfigTest {
     @DisplayName("이벤트 상세 정보 확인")
     public void findEventInfoTest() throws Exception {
 
-        Integer eventManageNo = 25;
+        String eventNo = "EV00000001";
 
-        mockMvc.perform(get("/event/info/{eventManageNo}", eventManageNo))
+        mockMvc.perform(get("/event/info/{eventNo}", eventNo))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -56,9 +56,9 @@ public class EventTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        Integer eventManageNo = 25;
+        String eventNo = "EV00000001";
 
-        mockMvc.perform(get("/event/product/{eventManageNo}", eventManageNo)
+        mockMvc.perform(get("/event/product/{eventNo}", eventNo)
                         .param("page", "0")
                         .param("size", "12")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
@@ -86,7 +86,7 @@ public class EventTest extends CsrfConfigTest {
 
     private EventRequest getEventRequest() {
         return EventRequest.builder()
-                .eventManageNo(24L)
+                .eventNo("EV00000001")
                 .build();
     }
 
@@ -126,7 +126,7 @@ public class EventTest extends CsrfConfigTest {
 
     private EventImageInfo getEventImageInfo() {
         return EventImageInfo.builder()
-                .eventNo(24L)
+                .eventNo("EV00000001")
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())

@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class CouponGenerator implements IdentifierGenerator {
 
+    private final static String FIRST_COUPON_NO = "CP00000001";
+
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
@@ -40,11 +42,11 @@ public class CouponGenerator implements IdentifierGenerator {
             }
         }
 
-        return "C000000001";
+        return FIRST_COUPON_NO;
     }
 
     private String generateNextId(String lastCouponNo) {
-        Integer nextId = Integer.parseInt(lastCouponNo.substring(1)) + 1;
-        return 'C' + String.format("%09d", nextId);
+        Integer nextId = Integer.parseInt(lastCouponNo.substring(2)) + 1;
+        return "CP" + String.format("%08d", nextId);
     }
 }

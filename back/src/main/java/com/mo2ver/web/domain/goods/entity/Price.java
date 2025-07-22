@@ -41,7 +41,7 @@ public class Price implements Persistable<PriceId> {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_GD_OPT_TO_GD_PRC_GD_OPT_NO"),
-            columnDefinition = "BIGINT(20) COMMENT '상품옵션관리번호'"
+            columnDefinition = "BIGINT(20) COMMENT '상품옵션번호'"
     )
     private Options options;
 

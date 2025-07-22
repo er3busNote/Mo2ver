@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "NTC_FILE", // 공지사항파일관리
         indexes={
-                @Index(name="FK_NTC_TO_NTC_FILE", columnList="NTC_MNG_NO")
+                @Index(name="FK_NTC_TO_NTC_FILE", columnList="NTC_NO")
         }
 )
 @Getter @Setter
@@ -24,17 +24,17 @@ import java.time.LocalDateTime;
 public class NoticeFile {
 
     @Id
-    @Column(name = "NTC_FILE_NO", columnDefinition = "BIGINT(20) COMMENT '공지사항파일관리번호'")
+    @Column(name = "NTC_FILE_NO", columnDefinition = "BIGINT(20) COMMENT '공지사항파일번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long noticeFileNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "NTC_MNG_NO",
+            name = "NTC_NO",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_NTC_TO_NTC_FILE"),
-            columnDefinition = "BIGINT(20) COMMENT '공지사항관리번호'"
+            columnDefinition = "CHAR(10) COMMENT '공지사항번호'"
     )
     private Notice notice;
 

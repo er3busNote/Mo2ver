@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface NoticeRepositoryCustom {
-    Optional<NoticeResponse> findNoticeById(Integer id);
+    Optional<NoticeResponse> findNoticeById(String noticeNo);
     Page<NoticeResponse> findByAll(Pageable pageable, Member currentUser);
     NoticeFileInfo findNoticeDetail(NoticeRequest noticeRequest);
 }

@@ -6,6 +6,7 @@ import com.mo2ver.web.domain.notice.dto.NoticeFileInfo;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,16 +23,17 @@ import java.util.stream.Collectors;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "noticeManageNo")
+@EqualsAndHashCode(of = "noticeNo")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Notice {
 
     @Id
-    @Column(name = "NTC_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '공지사항관리번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long noticeManageNo;
+    @GeneratedValue(generator = "noticeNo")
+    @GenericGenerator(name = "noticeNo", strategy = "com.mo2ver.web.domain.notice.entity.NoticeGenerator")
+    @Column(name = "NTC_NO", columnDefinition = "CHAR(10) COMMENT '공지사항번호'")
+    private String noticeNo;
 
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;
@@ -110,7 +112,7 @@ public class Notice {
     private NoticeFile createOrUpdateNoticeFiles(FileAttachInfo file) {
         Integer attachFile = JasyptUtil.getDecryptor(file.getFileAttachCode());
         NoticeFile noticeFile = this.noticeFiles.stream()
-                .filter(it -> it.getNotice().getNoticeManageNo().equals(this.noticeManageNo) && it.getAttachFile().equals(attachFile))
+                .filter(it -> it.getNotice().getNoticeNo().equals(this.noticeNo) && it.getAttachFile().equals(attachFile))
                 .findFirst()
                 .orElseGet(() -> NoticeFile.from(this));
         if(attachFile != noticeFile.getAttachFile()) noticeFile.setAttachFile(attachFile);

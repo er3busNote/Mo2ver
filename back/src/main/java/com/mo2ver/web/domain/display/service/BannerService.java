@@ -79,31 +79,31 @@ public class BannerService {
     }
 
     @Transactional
-    public Long saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
+    public String saveGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
         Banner banner = new Banner(goodsDisplayInfo, currentUser);
-        return this.bannerRepository.save(banner).getBannerManageNo();
+        return this.bannerRepository.save(banner).getBannerNo();
     }
 
     @Transactional
     public void updateGoodsDisplay(GoodsDisplayInfo goodsDisplayInfo, Member currentUser) {
-        Banner banner = this.findBannerManageById(goodsDisplayInfo.getBannerNo());
+        Banner banner = this.findBannerById(goodsDisplayInfo.getBannerNo());
         banner.update(goodsDisplayInfo, currentUser);
     }
 
     @Transactional
-    public Long saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
+    public String saveImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
         Banner banner = new Banner(bannerImageInfo, currentUser);
-        return this.bannerRepository.save(banner).getBannerManageNo();
+        return this.bannerRepository.save(banner).getBannerNo();
     }
 
     @Transactional
     public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
-        Banner banner = this.findBannerManageById(bannerImageInfo.getBannerNo());
+        Banner banner = this.findBannerById(bannerImageInfo.getBannerNo());
         banner.update(bannerImageInfo, currentUser);
     }
 
     @Transactional
-    public Long saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
+    public String saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
         Banner banner = this.bannerRepository.save(Banner.of(bannerImageInfo, currentUser));
         List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
         for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
@@ -113,11 +113,11 @@ public class BannerService {
             FileInfo fileInfo = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
             this.bannerDetailRepository.save(BannerDetail.of(banner, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
         }
-        return banner.getBannerManageNo();
+        return banner.getBannerNo();
     }
 
-    private Banner findBannerManageById(long id) {
-        return this.bannerRepository.findById(id)
+    private Banner findBannerById(String bannerNo) {
+        return this.bannerRepository.findById(bannerNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 배너정보 입니다."));
     }
 }

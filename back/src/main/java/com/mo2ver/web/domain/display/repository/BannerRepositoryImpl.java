@@ -34,16 +34,16 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
 
     public BannerImageInfo findBannerDetail(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(banner.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(banner.bannerNo.eq(bannerInfo.getBannerNo()));
         builder.and(banner.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
                 .selectFrom(banner)
                 .leftJoin(banner.bannerDetails, bannerDetail)
                 .where(builder)
-                .transform(groupBy(banner.bannerManageNo).list(
+                .transform(groupBy(banner.bannerNo).list(
                         new QBannerImageInfo(
-                                banner.bannerManageNo,
+                                banner.bannerNo,
                                 banner.subject,
                                 banner.displayStartDate,
                                 banner.displayEndDate,
@@ -64,7 +64,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
 
     public GoodsDisplayInfo findBannerProduct(BannerInfo bannerInfo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(banner.bannerManageNo.eq(bannerInfo.getBannerManageNo()));
+        builder.and(banner.bannerNo.eq(bannerInfo.getBannerNo()));
         builder.and(banner.displayTemplateCode.eq(bannerInfo.getDisplayTemplateCode()));
 
         return queryFactory
@@ -73,9 +73,9 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .leftJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
                 .leftJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
                 .where(builder)
-                .transform(groupBy(banner.bannerManageNo).list(
+                .transform(groupBy(banner.bannerNo).list(
                         new QGoodsDisplayInfo(
-                                banner.bannerManageNo,
+                                banner.bannerNo,
                                 banner.subject,
                                 banner.displayStartDate,
                                 banner.displayEndDate,
@@ -108,7 +108,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .selectFrom(banner)
                 .innerJoin(banner.bannerDetails, bannerDetail)
                 .where(builder)
-                .orderBy(banner.bannerManageNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
+                .orderBy(banner.bannerNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
                 .transform(groupBy(banner.displayConditionCode).as(
                         list(new QBannerDetailResponse(
                                 banner.displayStartDate,
@@ -144,7 +144,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .innerJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
                 .innerJoin(goodsImage).on(goods.goodsCode.eq(goodsImage.goods.goodsCode))
                 .where(builder)
-                .orderBy(banner.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
+                .orderBy(banner.bannerNo.asc(), bannerProduct.sortSequence.asc())
                 .transform(groupBy(banner.displayConditionCode).as(
                         list(new QBannerProductResponse(
                                 banner.displayStartDate,
@@ -177,7 +177,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .innerJoin(banner.bannerProducts, bannerProduct)
                 .innerJoin(goods).on(bannerProduct.productCode.eq(goods.goodsCode))
                 .where(builder)
-                .orderBy(banner.bannerManageNo.asc(), bannerProduct.sortSequence.asc())
+                .orderBy(banner.bannerNo.asc(), bannerProduct.sortSequence.asc())
                 .transform(groupBy(banner.displayConditionCode).as(
                         list(goods.keyword))
                 )));

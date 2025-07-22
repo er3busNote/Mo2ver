@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class TermsGenerator implements IdentifierGenerator {
 
+    private final static String FIRST_TERMS_NO = "TM00000001";
+
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
@@ -40,11 +42,11 @@ public class TermsGenerator implements IdentifierGenerator {
             }
         }
 
-        return "T000000001";
+        return FIRST_TERMS_NO;
     }
 
     private String generateNextId(String lastTermsNo) {
-        Integer nextId = Integer.parseInt(lastTermsNo.substring(1)) + 1;
-        return 'T' + String.format("%09d", nextId);
+        Integer nextId = Integer.parseInt(lastTermsNo.substring(2)) + 1;
+        return "TM" + String.format("%08d", nextId);
     }
 }

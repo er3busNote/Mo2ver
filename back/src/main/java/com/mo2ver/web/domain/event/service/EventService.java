@@ -24,14 +24,14 @@ public class EventService {
     private final EventRepository eventRepository;
 
     @Transactional
-    public EventResponse findEvent(Integer id) {
-        Event event = this.findEventManageById(id.longValue());
+    public EventResponse findEvent(String eventNo) {
+        Event event = this.findEventById(eventNo);
         return EventResponse.of(event);
     }
 
     @Transactional
-    public Page<EventProductResponse> findEvent(Integer id, Pageable pageable) {
-        return this.eventRepository.findById(id, pageable);
+    public Page<EventProductResponse> findEvent(String eventNo, Pageable pageable) {
+        return this.eventRepository.findById(eventNo, pageable);
     }
 
     @Transactional
@@ -46,19 +46,19 @@ public class EventService {
     }
 
     @Transactional
-    public Long saveImageEvent(EventImageInfo eventImageInfo, Member currentUser) {
+    public String saveImageEvent(EventImageInfo eventImageInfo, Member currentUser) {
         Event event = new Event(eventImageInfo, currentUser);
-        return this.eventRepository.save(event).getEventManageNo();
+        return this.eventRepository.save(event).getEventNo();
     }
 
     @Transactional
     public void updateImageEvent(EventImageInfo eventImageInfo, Member currentUser) {
-        Event event = this.findEventManageById(eventImageInfo.getEventNo());
+        Event event = this.findEventById(eventImageInfo.getEventNo());
         event.update(eventImageInfo, currentUser);
     }
     
-    private Event findEventManageById(long id) {
-        return this.eventRepository.findById(id)
+    private Event findEventById(String eventNo) {
+        return this.eventRepository.findById(eventNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 이벤트정보 입니다."));
     }
 }

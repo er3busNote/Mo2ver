@@ -58,7 +58,7 @@ public class BannerTest extends CsrfConfigTest {
 
     private BannerInfo getBannerImagesInfo() {
         return BannerInfo.builder()
-                .bannerManageNo(22L)
+                .bannerNo("BN00000001")
                 .displayTemplateCode("BN")
                 .build();
     }
@@ -82,7 +82,7 @@ public class BannerTest extends CsrfConfigTest {
 
     private BannerInfo getBannerGoodsInfo() {
         return BannerInfo.builder()
-                .bannerManageNo(20L)
+                .bannerNo("BN00000002")
                 .displayTemplateCode("GD")
                 .build();
     }
@@ -150,7 +150,7 @@ public class BannerTest extends CsrfConfigTest {
 
     private BannerImageInfo getBannerImageInfo() {
         return BannerImageInfo.builder()
-                .bannerNo(31L)
+                .bannerNo("BN00000001")
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())
@@ -210,7 +210,7 @@ public class BannerTest extends CsrfConfigTest {
 
     private GoodsDisplayInfo getGoodsDisplayInfo() {
         return GoodsDisplayInfo.builder()
-                .bannerNo(32L)
+                .bannerNo("BN00000001")
                 .title("테스트")
                 .startDate(new Date())
                 .endDate(new Date())

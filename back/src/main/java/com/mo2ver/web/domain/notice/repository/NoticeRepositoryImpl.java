@@ -35,17 +35,17 @@ public class NoticeRepositoryImpl extends QuerydslRepositorySupport implements N
         this.queryFactory = queryFactory;
     }
 
-    public Optional<NoticeResponse> findNoticeById(Integer id) {
+    public Optional<NoticeResponse> findNoticeById(String noticeNo) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(notice.noticeManageNo.eq(id.longValue()));
+        builder.and(notice.noticeNo.eq(noticeNo));
 
         NoticeResponse result = queryFactory.selectFrom(notice)
                 .leftJoin(notice.noticeFiles, noticeFile)
                 .leftJoin(file).on(noticeFile.attachFile.eq(file.fileCode.intValue()))
                 .where(builder)
-                .transform(groupBy(notice.noticeManageNo).list(
+                .transform(groupBy(notice.noticeNo).list(
                         new QNoticeResponse(
-                                notice.noticeManageNo,
+                                notice.noticeNo,
                                 notice.subject,
                                 notice.noticeContents,
                                 notice.noticeYesNo,
@@ -69,24 +69,24 @@ public class NoticeRepositoryImpl extends QuerydslRepositorySupport implements N
             builder.and(notice.noticeYesNo.eq('Y'));
         }
 
-        List<Long> pagedIds = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable,
-                queryFactory.select(notice.noticeManageNo)
+        List<String> pagedIds = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable,
+                queryFactory.select(notice.noticeNo)
                         .from(notice)
                         .where(builder)
-                        .orderBy(notice.noticeManageNo.desc())
+                        .orderBy(notice.noticeNo.desc())
         ).fetch();
 
         if (pagedIds.isEmpty()) {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
 
-        Map<Long, NoticeResponse> noticeMap = queryFactory.selectFrom(notice)
+        Map<String, NoticeResponse> noticeMap = queryFactory.selectFrom(notice)
                 .leftJoin(notice.noticeFiles, noticeFile)
                 .leftJoin(file).on(noticeFile.attachFile.eq(file.fileCode.intValue()))
-                .where(notice.noticeManageNo.in(pagedIds))
-                .transform(groupBy(notice.noticeManageNo).as(
+                .where(notice.noticeNo.in(pagedIds))
+                .transform(groupBy(notice.noticeNo).as(
                         new QNoticeResponse(
-                                notice.noticeManageNo,
+                                notice.noticeNo,
                                 notice.subject,
                                 notice.noticeContents,
                                 notice.noticeYesNo,
@@ -118,15 +118,15 @@ public class NoticeRepositoryImpl extends QuerydslRepositorySupport implements N
 
     public NoticeFileInfo findNoticeDetail(NoticeRequest noticeRequest) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(notice.noticeManageNo.eq(noticeRequest.getNoticeManageNo()));
+        builder.and(notice.noticeNo.eq(noticeRequest.getNoticeNo()));
 
         return queryFactory.selectFrom(notice)
                 .leftJoin(notice.noticeFiles, noticeFile)
                 .leftJoin(file).on(noticeFile.attachFile.eq(file.fileCode.intValue()))
                 .where(builder)
-                .transform(groupBy(notice.noticeManageNo).list(
+                .transform(groupBy(notice.noticeNo).list(
                         new QNoticeFileInfo(
-                                notice.noticeManageNo,
+                                notice.noticeNo,
                                 notice.subject,
                                 notice.noticeContents,
                                 list(Projections.constructor(FileInfo.class,

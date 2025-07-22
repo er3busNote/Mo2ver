@@ -6,6 +6,7 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -19,14 +20,15 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "EVT")    // 이벤트 관리
 @Getter @Setter
-@EqualsAndHashCode(of = "eventManageNo")
+@EqualsAndHashCode(of = "eventNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Event {
 
     @Id
-    @Column(name = "EVT_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long eventManageNo;
+    @GeneratedValue(generator = "eventNo")
+    @GenericGenerator(name = "eventNo", strategy = "com.mo2ver.web.domain.event.entity.EventGenerator")
+    @Column(name = "EVT_NO", columnDefinition = "CHAR(10) COMMENT '이벤트번호'")
+    private String eventNo;
 
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;

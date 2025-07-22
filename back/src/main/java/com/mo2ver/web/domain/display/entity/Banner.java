@@ -8,6 +8,7 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -21,15 +22,16 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "DP_BNNR")    // 전시배너관리
 @Getter @Setter
-@EqualsAndHashCode(of = "bannerManageNo")
+@EqualsAndHashCode(of = "bannerNo")
 @Builder @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Banner {
 
     @Id
-    @Column(name = "BNNR_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '배너관리번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long bannerManageNo;
+    @GeneratedValue(generator = "deliveryCode")
+    @GenericGenerator(name = "deliveryCode", strategy = "com.mo2ver.web.domain.display.entity.BannerGenerator")
+    @Column(name = "BNNR_NO", columnDefinition = "CHAR(10) COMMENT '배너번호'")
+    private String bannerNo;
 
     @Column(name = "SUBJ", columnDefinition = "VARCHAR(255) COMMENT '제목'")
     private String subject;

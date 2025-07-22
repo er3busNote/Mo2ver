@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "EVT_PRD",   // 전시배너상품
         indexes={
-                @Index(name = "FK_EVT_TO_EVT_PRD", columnList = "EVT_MNG_NO")
+                @Index(name = "FK_EVT_TO_EVT_PRD", columnList = "EVT_NO")
         }
 )
 @Getter @Setter
@@ -23,17 +23,17 @@ import java.time.LocalDateTime;
 public class EventProduct {
 
     @Id
-    @Column(name = "EVT_PRD_ID", columnDefinition = "BIGINT(20) COMMENT '이벤트전시관리번호'")
+    @Column(name = "EVT_PRD_ID", columnDefinition = "BIGINT(20) COMMENT '이벤트전시번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long eventProductId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "EVT_MNG_NO",
+            name = "EVT_NO",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_PRD"),
-            columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
+            columnDefinition = "CHAR(10) COMMENT '이벤트번호'"
     )
     private Event event;
 

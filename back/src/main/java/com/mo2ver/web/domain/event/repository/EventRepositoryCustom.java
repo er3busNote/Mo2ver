@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EventRepositoryCustom {
-    Page<EventProductResponse> findById(Integer id, Pageable pageable);
+    Page<EventProductResponse> findById(String id, Pageable pageable);
     Page<Event> findByAll(Pageable pageable, Member currentUser);
     EventImageInfo findEventDetail(EventRequest eventRequest);
 }

@@ -28,7 +28,7 @@ import java.util.List;
 public class Review {
 
     @Id
-    @Column(name = "GD_REVW_NO", columnDefinition = "BIGINT(20) COMMENT '상품리뷰관리번호'")
+    @Column(name = "GD_REVW_NO", columnDefinition = "BIGINT(20) COMMENT '상품리뷰번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long goodsReviewNo;
 

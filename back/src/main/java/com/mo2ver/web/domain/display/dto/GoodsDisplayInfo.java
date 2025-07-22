@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class GoodsDisplayInfo {
 
     @NotNull(groups = Update.class)
-    private Long bannerNo;
+    private String bannerNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
@@ -55,7 +55,7 @@ public class GoodsDisplayInfo {
     public interface Update extends Default {}
 
     @QueryProjection
-    public GoodsDisplayInfo(Long bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<GoodsDisplayProductInfo> goods) {
+    public GoodsDisplayInfo(String bannerNo, String title, Date startDate, Date endDate, String position, String type, String code, Character useyn, List<GoodsDisplayProductInfo> goods) {
         this.bannerNo = bannerNo;
         this.title = title;
         this.startDate = startDate;

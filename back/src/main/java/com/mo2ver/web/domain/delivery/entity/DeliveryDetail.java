@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class DeliveryDetail {
 
     @Id
-    @Column(name = "DLV_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배송상세관리번호'")
+    @Column(name = "DLV_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배송상세번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long deliveryDetailId;
 
@@ -45,7 +45,7 @@ public class DeliveryDetail {
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_ODR_DTL_TO_DLV_DTL"),
-            columnDefinition = "BIGINT(20) COMMENT '주문상세관리번호'"
+            columnDefinition = "BIGINT(20) COMMENT '주문상세번호'"
     )
     private OrderDetail orderDetail;
 

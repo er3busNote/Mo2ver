@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class PaymentGenerator implements IdentifierGenerator {
 
+    private final static String FIRST_PAYMENT_NO = "PY00000001";
+
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
 
@@ -40,11 +42,11 @@ public class PaymentGenerator implements IdentifierGenerator {
             }
         }
 
-        return "P000000001";
+        return FIRST_PAYMENT_NO;
     }
 
     private String generateNextId(String lastPaymentNo) {
-        Integer nextId = Integer.parseInt(lastPaymentNo.substring(1)) + 1;
-        return 'P' + String.format("%09d", nextId);
+        Integer nextId = Integer.parseInt(lastPaymentNo.substring(2)) + 1;
+        return "PY" + String.format("%08d", nextId);
     }
 }

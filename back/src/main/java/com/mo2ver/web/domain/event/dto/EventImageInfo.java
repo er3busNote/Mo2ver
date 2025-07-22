@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class EventImageInfo {
 
     @NotNull(groups = Update.class)
-    private Long eventNo;
+    private String eventNo;
 
     @NotBlank(message = "제목이 존재하지 않습니다")
     private String title;
@@ -50,7 +50,7 @@ public class EventImageInfo {
     public interface Update extends Default {}
 
     @QueryProjection
-    public EventImageInfo(Long eventNo, String title, Date startDate, Date endDate, List<ImageInfo> images, Character useyn, List<EventImageProductInfo> goods) {
+    public EventImageInfo(String eventNo, String title, Date startDate, Date endDate, List<ImageInfo> images, Character useyn, List<EventImageProductInfo> goods) {
         this.eventNo = eventNo;
         this.title = title;
         this.startDate = startDate;

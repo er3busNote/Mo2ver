@@ -31,7 +31,7 @@ public class EventController {
 
     @GetMapping("/info/{id}")
     public ResponseEntity<EventResponse> infoEvent(
-            @PathVariable Integer id,
+            @PathVariable String id,
             @CurrentUser Member currentUser
     ) {
         return ResponseEntity.ok().body(eventService.findEvent(id));
@@ -39,11 +39,11 @@ public class EventController {
 
     @GetMapping("/product/{id}")
     public ResponseEntity<Page<EventProductResponse>> productEvent(
-            @PathVariable Integer id,
+            @PathVariable String id,
             @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventNo");
         Page<EventProductResponse> eventDetails = eventService.findEvent(id, pageable);
         return ResponseEntity.ok().body(eventDetails);
     }
@@ -53,7 +53,7 @@ public class EventController {
             @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventManageNo");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "eventNo");
         Page<EventResponse> pages = eventService.findEventlist(pageable, currentUser);
         return ResponseEntity.ok().body(pages);
     }
@@ -71,8 +71,8 @@ public class EventController {
             @RequestBody @Valid EventImageInfo eventImageInfo,
             @CurrentUser Member currentUser
     ) {
-        Long eventManageNo = eventService.saveImageEvent(eventImageInfo, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + eventManageNo))
+        String eventNo = eventService.saveImageEvent(eventImageInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + eventNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("이벤트정보가 저장되었습니다")

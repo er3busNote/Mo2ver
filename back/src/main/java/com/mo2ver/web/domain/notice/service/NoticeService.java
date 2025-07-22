@@ -25,8 +25,8 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     @Transactional
-    public NoticeResponse findNotice(Integer id) {
-        return this.findByNoticeId(id);
+    public NoticeResponse findNotice(String noticeNo) {
+        return this.findByNoticeId(noticeNo);
     }
 
     @Transactional
@@ -40,15 +40,15 @@ public class NoticeService {
     }
 
     @Transactional
-    public Long saveNotice(NoticeFileInfo noticeFileInfo, Member currentUser) {
+    public String saveNotice(NoticeFileInfo noticeFileInfo, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Notice notice = new Notice(noticeFileInfo, member);
-        return this.noticeRepository.save(notice).getNoticeManageNo();
+        return this.noticeRepository.save(notice).getNoticeNo();
     }
 
     @Transactional
     public void updateNotice(NoticeFileInfo noticeFileInfo, Member currentUser) {
-        Notice notice = this.findNoticeManageById(noticeFileInfo.getNoticeNo());
+        Notice notice = this.findNoticeById(noticeFileInfo.getNoticeNo());
         notice.update(noticeFileInfo, currentUser);
     }
 
@@ -57,13 +57,13 @@ public class NoticeService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 회원번호 입니다."));
     }
     
-    private Notice findNoticeManageById(long id) {
-        return this.noticeRepository.findById(id)
+    private Notice findNoticeById(String noticeNo) {
+        return this.noticeRepository.findById(noticeNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 공지사항정보 입니다."));
     }
 
-    private NoticeResponse findByNoticeId(Integer id) {
-        return this.noticeRepository.findNoticeById(id)
+    private NoticeResponse findByNoticeId(String noticeNo) {
+        return this.noticeRepository.findNoticeById(noticeNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 공지사항정보 입니다."));
     }
 }

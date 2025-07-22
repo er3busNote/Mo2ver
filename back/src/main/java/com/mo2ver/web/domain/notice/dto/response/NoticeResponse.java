@@ -17,7 +17,7 @@ public class NoticeResponse {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private Long noticeManageNo;
+    private String noticeNo;
     private String subject;
     private String contents;
     private Character noticeYesNo;
@@ -26,8 +26,8 @@ public class NoticeResponse {
     private List<FileAttachInfo> noticeFileList;
 
     @QueryProjection
-    public NoticeResponse(Long noticeManageNo, String subject, String contents, Character noticeYesNo, String memberName, LocalDateTime registerDate, List<FileInfo> fileInfoList) {
-        this.noticeManageNo = noticeManageNo;
+    public NoticeResponse(String noticeNo, String subject, String contents, Character noticeYesNo, String memberName, LocalDateTime registerDate, List<FileInfo> fileInfoList) {
+        this.noticeNo = noticeNo;
         this.subject = subject;
         this.contents = contents;
         this.noticeYesNo = noticeYesNo;

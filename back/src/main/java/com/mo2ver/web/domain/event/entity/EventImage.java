@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "EVT_IMG",    // 상품이미지
         indexes={
-                @Index(name="FK_EVT_TO_EVT_IMG", columnList="EVT_MNG_NO")
+                @Index(name="FK_EVT_TO_EVT_IMG", columnList="EVT_NO")
         }
 )
 @Getter @Setter
@@ -22,17 +22,17 @@ import java.time.LocalDateTime;
 public class EventImage {
 
     @Id
-    @Column(name = "EVT_IMG_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '이벤트이미지관리번호'")
+    @Column(name = "EVT_IMG_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '이벤트이미지번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
     private Long eventImageManageNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "EVT_MNG_NO",
+            name = "EVT_NO",
             nullable = false,
             updatable = false,
             foreignKey = @ForeignKey(name = "FK_EVT_TO_EVT_IMG"),
-            columnDefinition = "BIGINT(20) COMMENT '이벤트관리번호'"
+            columnDefinition = "CHAR(10) COMMENT '이벤트번호'"
     )
     private Event event;
 

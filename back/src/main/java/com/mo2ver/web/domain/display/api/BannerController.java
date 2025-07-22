@@ -45,7 +45,7 @@ public class BannerController {
             @Valid PageInfo pageInfo,
             @CurrentUser Member currentUser
     ) {
-        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "bannerManageNo");
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.DESC, "bannerNo");
         Page<BannerInfo> pages = bannerService.findBannerlist(pageable);
         return ResponseEntity.ok().body(pages);
     }
@@ -78,8 +78,8 @@ public class BannerController {
             @RequestBody @Valid GoodsDisplayInfo goodsDisplayInfo,
             @CurrentUser Member currentUser
     ) {
-        Long bannerManageNo = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
-        return ResponseEntity.created(URI.create("/goods/" + bannerManageNo))
+        String bannerNo = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
+        return ResponseEntity.created(URI.create("/goods/" + bannerNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("상품전시정보가 저장되었습니다")
@@ -104,8 +104,8 @@ public class BannerController {
             @RequestBody @Valid BannerImageInfo bannerImageInfo,
             @CurrentUser Member currentUser
     ) {
-        Long bannerManageNo = bannerService.saveImagesBanner(bannerImageInfo, currentUser);
-        return ResponseEntity.created(URI.create("/create/" + bannerManageNo))
+        String bannerNo = bannerService.saveImagesBanner(bannerImageInfo, currentUser);
+        return ResponseEntity.created(URI.create("/create/" + bannerNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("배너이미지정보가 저장되었습니다")
@@ -137,8 +137,8 @@ public class BannerController {
                     .build()));
         }
         try {
-            Long bannerManageNo = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
-            return ResponseEntity.created(URI.create("/upload/" + bannerManageNo))
+            String bannerNo = bannerService.saveImagesBanner(files, bannerImageInfo, currentUser);
+            return ResponseEntity.created(URI.create("/upload/" + bannerNo))
                     .body(ResponseHandler.builder()
                             .status(HttpStatus.CREATED.value())
                             .message("배너이미지정보가 저장되었습니다")

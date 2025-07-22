@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class EventRequest {
 
-    @NotNull(message = "이벤트관리번호가 존재하지 않습니다")
-    @Range(min = 1)
-    private Long eventManageNo;
+    @NotNull(message = "이벤트번호가 존재하지 않습니다")
+    private String eventNo;
 }

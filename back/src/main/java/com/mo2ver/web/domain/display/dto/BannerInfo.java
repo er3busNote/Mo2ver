@@ -14,9 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class BannerInfo {
 
-    @NotNull(message = "배너관리번호가 존재하지 않습니다")
-    @Range(min = 1)
-    private Long bannerManageNo;
+    @NotNull(message = "배너번호가 존재하지 않습니다")
+    private String bannerNo;
     private String subject;
     private Date displayStartDate;
     private Date displayEndDate;
@@ -29,7 +28,7 @@ public class BannerInfo {
 
     public static BannerInfo of(Banner banner) {
         return BannerInfo.builder()
-                .bannerManageNo(banner.getBannerManageNo())
+                .bannerNo(banner.getBannerNo())
                 .subject(banner.getSubject())
                 .displayStartDate(banner.getDisplayStartDate())
                 .displayEndDate(banner.getDisplayEndDate())
