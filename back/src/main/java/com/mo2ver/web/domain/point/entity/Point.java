@@ -9,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -38,14 +40,14 @@ public class Point {
     )
     private Member member;
 
-    @Column(name = "TOT_PNT", columnDefinition = "INT(11) COMMENT '현재보유포인트'")
-    private Integer totalPoint;
+    @Column(name = "PNT_GVN", columnDefinition = "INT(11) COMMENT '적립된포인트'")
+    private Integer pointGiven;
 
-    @Column(name = "AVL_PNT", columnDefinition = "INT(11) COMMENT '사용가능한포인트'")
-    private Integer availablePoint;
+    @Column(name = "EXPR_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '만료일시'")
+    private LocalDateTime expireDate;
 
-    @Column(name = "EXPR_PNT", columnDefinition = "INT(11) COMMENT '소멸된포인트'")
-    private Integer expirePoint;
+    @OneToMany(mappedBy = "point", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PointUse> pointUses = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -64,4 +66,12 @@ public class Point {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    private void sortPointUses() {
+        int index = 1;
+        for (PointUse pointUse: this.pointUses) {
+            pointUse.setDetailSequence(index++);
+        }
+    }
+
 }

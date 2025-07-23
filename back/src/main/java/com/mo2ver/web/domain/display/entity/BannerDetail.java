@@ -38,9 +38,6 @@ public class BannerDetail {
     )
     private Banner banner;
 
-    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
-    private Integer detailSequence;
-
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
     private Integer imageAttachFile;
 
@@ -99,7 +96,6 @@ public class BannerDetail {
     public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
         return BannerDetail.builder()
                 .banner(banner)
-                .detailSequence(index)
                 .imageAttachFile(imageAttachFile)
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())
                 .bannerContents(bannerImageDetailInfo.getTitle())

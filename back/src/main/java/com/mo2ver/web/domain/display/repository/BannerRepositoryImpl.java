@@ -108,7 +108,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .selectFrom(banner)
                 .innerJoin(banner.bannerDetails, bannerDetail)
                 .where(builder)
-                .orderBy(banner.bannerNo.asc(), bannerDetail.detailSequence.asc(), bannerDetail.sortSequence.asc())
+                .orderBy(banner.bannerNo.asc(), bannerDetail.sortSequence.asc())
                 .transform(groupBy(banner.displayConditionCode).as(
                         list(new QBannerDetailResponse(
                                 banner.displayStartDate,

@@ -191,7 +191,7 @@ public class Banner {
     private void sortBannerDetails() {
         int index = 1;
         for (BannerDetail bannerDetail: this.bannerDetails) {
-            bannerDetail.setDetailSequence(index++);
+            bannerDetail.setSortSequence(index++);
         }
     }
 
