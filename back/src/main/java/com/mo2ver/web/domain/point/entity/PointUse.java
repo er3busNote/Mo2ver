@@ -1,12 +1,12 @@
 package com.mo2ver.web.domain.point.entity;
 
-import com.mo2ver.web.domain.order.entity.Order;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @EqualsAndHashCode(of = {"pointTransaction", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class PointUse {
+public class PointUse implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

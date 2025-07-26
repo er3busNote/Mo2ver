@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "goodsImageManageNo")
+@EqualsAndHashCode(of = "goodsImageNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class GoodsImage {
 
     @Id
-    @Column(name = "GD_IMG_MNG_NO", columnDefinition = "BIGINT(20) COMMENT '상품이미지번호'")
+    @Column(name = "GD_IMG_NO", columnDefinition = "BIGINT(20) COMMENT '상품이미지번호'")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long goodsImageManageNo;
+    private Long goodsImageNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

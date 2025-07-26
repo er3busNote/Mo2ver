@@ -19,7 +19,6 @@ import java.util.Optional;
 @Table(
         name = "CPN",   // 쿠폰
         indexes={
-                @Index(name="FK_MBR_TO_CPN", columnList="MBR_NO"),
                 @Index(name="FK_GD_TO_CPN", columnList="GD_CD")
         }
 )
@@ -33,16 +32,6 @@ public class Coupon {
     @GenericGenerator(name = "couponNo", strategy = "com.mo2ver.web.domain.coupon.entity.CouponGenerator")
     @Column(name = "CPN_NO", columnDefinition = "CHAR(10) COMMENT '쿠폰번호'")
     private String couponNo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "MBR_NO",
-            nullable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(name = "FK_MBR_TO_CPN"),
-            columnDefinition = "CHAR(10) COMMENT '회원번호'"
-    )
-    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -96,7 +85,6 @@ public class Coupon {
 
     public Coupon(CouponRequest couponRequest, Goods goods, Member currentUser) {
         this.createOrUpdateCoupon(couponRequest, currentUser);
-        this.member = currentUser;
         this.goods = goods;
         this.delYesNo = 'N';
         this.register = currentUser.getMemberNo();
