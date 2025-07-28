@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.point.entity;
 
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.point.dto.request.PointRequest;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -44,7 +46,7 @@ public class Point {
     private Integer pointGiven;
 
     @Column(name = "EXPR_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '만료일시'")
-    private LocalDateTime expireDate;
+    private Date expireDate;
 
     @OneToMany(mappedBy = "point", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PointUse> pointUses = new ArrayList<>();
@@ -66,6 +68,18 @@ public class Point {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public Point(PointRequest pointRequest, Member currentUser) {
+        this.createOrUpdatePoint(pointRequest, currentUser);
+        this.member = currentUser;
+        this.pointGiven = pointRequest.getPointGiven();
+        this.expireDate = pointRequest.getExpireDate();
+        this.register = currentUser.getMemberNo();
+    }
+
+    private void createOrUpdatePoint(PointRequest pointRequest, Member currentUser) {
+        this.updater = currentUser.getMemberNo();
+    }
 
     private void sortPointUses() {
         int index = 1;

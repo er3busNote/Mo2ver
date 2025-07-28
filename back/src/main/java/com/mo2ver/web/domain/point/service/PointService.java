@@ -5,6 +5,7 @@ import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
+import com.mo2ver.web.domain.point.dto.request.PointRequest;
 import com.mo2ver.web.domain.point.entity.Point;
 import com.mo2ver.web.domain.point.repository.PointRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
@@ -21,6 +22,13 @@ public class PointService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final PointRepository pointRepository;
+
+    @Transactional
+    public String savePoint(PointRequest pointRequest, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
+        Point point = new Point(pointRequest, member);
+        return this.pointRepository.save(point).getPointNo();
+    }
 
     @Transactional
     private void usePointMemberSync(PaymentInfo paymentInfo) {

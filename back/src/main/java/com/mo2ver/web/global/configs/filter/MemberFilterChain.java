@@ -19,8 +19,8 @@ public class MemberFilterChain {
                         "/address/*", "/order/**"
                 ).hasRole("USER")
 
-                .mvcMatchers(HttpMethod.POST,   // 3.3) 주소록, 장바구니, 리뷰, 주문, 결재 추가
-                        "/address/*", "/cart/**", "/review/**", "/order/**", "/payment/**"
+                .mvcMatchers(HttpMethod.POST,   // 3.3) 주소록, 장바구니, 리뷰, 주문, 결재, 포인트 추가
+                        "/address/*", "/cart/**", "/review/**", "/order/**", "/payment/**", "point/*"
                 ).hasRole("USER")
 
                 .mvcMatchers(HttpMethod.PUT,    // 3.4) 장바구니, 리뷰 수정 및 쿠폰 생성

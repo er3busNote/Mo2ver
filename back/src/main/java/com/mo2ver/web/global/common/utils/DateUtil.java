@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -54,6 +55,19 @@ public class DateUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.now().format(formatter);
     }
+
+    /**
+     * 년/월/일로 특정 날짜 반환
+     * @param year 년도
+     * @param month 월
+     * @param date 일
+     * @return 특정 날짜
+     */
+    public static Date getDate(int year, int month, int date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month-1, date);
+        return new Date(calendar.getTimeInMillis());
+    }
     
     /**
      * 지정된 날짜와 시간을 UTC 형식으로 반환 (ISO 8601 표준 시간 포맷 사용)
@@ -77,6 +91,17 @@ public class DateUtil {
         return targetDate.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime().format(formatter);
+    }
+
+    /**
+     * 지정된 날짜와 시간을 LocalDateTime 으로 반환
+     * @param targetDate 날짜/시간 포멧
+     * @return 현재 날짜와 시간
+     */
+    public static LocalDateTime toLocalDateTime(Date targetDate) {
+       return targetDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     /**
