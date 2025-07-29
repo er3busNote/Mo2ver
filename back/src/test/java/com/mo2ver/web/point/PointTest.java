@@ -1,7 +1,6 @@
 package com.mo2ver.web.point;
 
 import com.mo2ver.web.auth.CsrfConfigTest;
-import com.mo2ver.web.domain.coupon.dto.request.CouponRequest;
 import com.mo2ver.web.domain.point.dto.request.PointRequest;
 import com.mo2ver.web.global.common.utils.DateUtil;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;

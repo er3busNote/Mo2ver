@@ -13,6 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,20 +45,29 @@ public class MemberTest extends CsrfConfigTest {
     @DisplayName("회원가입 등록 확인")
     public void signupTest() throws Exception {
         // Given (준비)
-        int numOfExecute = 10;
+        int start = 5;   // 시작 번호
+        int end = 15;    // 마지막 번호
+
+        List<Integer> numbers = IntStream.rangeClosed(start, end)
+                .boxed()   // int → Integer 변환
+                .collect(Collectors.toList());
 
         // When (실행)
-        for (int i = 0; i < numOfExecute ; i++) {
-            SignupRequest signUpRequest = SignupRequest.builder()
-                    .username("test" + Integer.toString(i+1))
-                    .password("test" + Integer.toString(i+1))
-                    .email("test" + Integer.toString(i+1) + "@test.com")
-                    .build();
+        for (Integer num : numbers) {
+            SignupRequest signUpRequest = this.getSignupRequest(num);
             this.memberService.signup(signUpRequest);
         }
 
         // Then (검증)
         Member memberNo = this.memberService.memberNoForUpdate();
         assertThat(memberNo.getMemberNo()).isEqualTo("M000000013");
+    }
+
+    private SignupRequest getSignupRequest(int num) {
+        return SignupRequest.builder()
+                .username("test" + num+1)
+                .password("test" + num+1)
+                .email("test" + num+1 + "@test.com")
+                .build();
     }
 }
