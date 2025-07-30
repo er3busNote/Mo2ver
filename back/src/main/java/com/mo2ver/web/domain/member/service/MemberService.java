@@ -3,7 +3,6 @@ package com.mo2ver.web.domain.member.service;
 import com.mo2ver.web.domain.member.dto.response.MemberResponse;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.member.type.MemberRole;
 import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
-import java.util.Collections;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
 
 @Service
 @RequiredArgsConstructor
@@ -48,14 +41,7 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public void signup(SignupRequest signupRequest) {
-        Member newMember = Member.builder()
-                .loginId(signupRequest.getUsername())
-                .memberName("ANONYMOUS")
-                .password(signupRequest.getPassword())
-                .cellPhoneNumber("010XXXXXXXX")
-                .email(signupRequest.getEmail())
-                .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
-                .build();
+        Member newMember = Member.of(signupRequest);
         this.saveAuth(newMember);
     }
 

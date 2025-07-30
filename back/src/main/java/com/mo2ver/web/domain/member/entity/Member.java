@@ -1,5 +1,6 @@
 package com.mo2ver.web.domain.member.entity;
 
+import com.mo2ver.web.domain.member.dto.request.SignupRequest;
 import com.mo2ver.web.domain.member.type.MemberRole;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,10 +10,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(
@@ -21,7 +23,7 @@ import java.util.Set;
                 @Index(name="UK_LOGIN_ID", columnList="LOGIN_ID", unique = true)
         }
 )
-@Getter @Setter
+@Getter @Setter @ToString
 @EqualsAndHashCode(of = "memberNo")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Member {
@@ -141,4 +143,15 @@ public class Member {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    public static Member of(SignupRequest signupRequest) {
+        return Member.builder()
+                .loginId(signupRequest.getUsername())
+                .memberName("ANONYMOUS")
+                .password(signupRequest.getPassword())
+                .cellPhoneNumber("010XXXXXXXX")
+                .email(signupRequest.getEmail())
+                .roles(Stream.of(MemberRole.USER).collect(collectingAndThen(toSet(), Collections::unmodifiableSet)))
+                .build();
+    }
 }

@@ -10,11 +10,13 @@ import com.mo2ver.web.domain.point.entity.Point;
 import com.mo2ver.web.domain.point.repository.PointRepository;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PointService {
@@ -31,13 +33,16 @@ public class PointService {
     }
 
     @Transactional
-    private void usePointMemberSync(PaymentInfo paymentInfo) {
+    public void usePointMemberSync(PaymentInfo paymentInfo, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
         Order order = this.findOrderById(paymentInfo.getOrderId());
 
+        log.info(member.toString());
+        log.info(order.toString());
     }
 
-    public Mono<Void> usePointMember(PaymentInfo paymentInfo) {
-        return Mono.fromRunnable(() -> this.usePointMemberSync(paymentInfo));
+    public Mono<Void> usePointMember(PaymentInfo paymentInfo, Member currentUser) {
+        return Mono.fromRunnable(() -> this.usePointMemberSync(paymentInfo, currentUser));
     }
 
     private Member findMemberById(String memberNo) {

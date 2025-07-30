@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
                 @Index(name="FK_MBR_TO_ODR", columnList="MBR_NO")
         }
 )
-@Getter @Setter
+@Getter @Setter @ToString
 @EqualsAndHashCode(of = "orderId")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

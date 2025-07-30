@@ -1,6 +1,6 @@
 package com.mo2ver.web.common;
 
-import com.mo2ver.web.auth.CsrfConfigTest;
+import com.mo2ver.web.global.auth.CsrfConfigTest;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

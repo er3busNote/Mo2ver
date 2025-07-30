@@ -55,7 +55,7 @@ public class PaymentController {
         return tossPaymentService.confirmPayment(paymentInfo, currentUser)
                 .then(deliveryService.saveDelivery(paymentInfo, currentUser))
                 .then(couponService.useCouponMember(paymentInfo))
-                .then(pointService.usePointMember(paymentInfo))
+                .then(pointService.usePointMember(paymentInfo, currentUser))
                 .thenReturn(ResponseEntity.ok().body(ResponseHandler.builder()
                                 .status(HttpStatus.OK.value())
                                 .message("결재정보가 승인되었습니다")
