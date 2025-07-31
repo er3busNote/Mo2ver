@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class MemberAdapter extends User {
 
-    public Member member;   // @CurrentUser의 @AuthenticationPrincipal에서, private로 하게 되면 member를 가져올 수 없음 → public으로 변경
+    public Member member;
 
     public MemberAdapter(Member member) {
         super(member.getLoginId(), member.getPassword(), authorities(member.getRoles()));

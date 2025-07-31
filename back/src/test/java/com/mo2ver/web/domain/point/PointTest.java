@@ -1,6 +1,7 @@
 package com.mo2ver.web.domain.point;
 
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.member.service.MemberAdapter;
 import com.mo2ver.web.global.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.point.dto.request.PointRequest;
@@ -53,11 +54,12 @@ public class PointTest extends CsrfConfigTest {
 
     @Test
     @DisplayName("포인트 사용내역 확인")
-    @WithMockMember(memberNo = "M000000002", loginId = "bbj", role = "ROLE_USER")
+    @WithMockMember(loginId = "bbj")
     public void usePointTest() throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member currentUser = (Member) authentication.getPrincipal();
+        MemberAdapter userDetails = (MemberAdapter) authentication.getPrincipal();
+        Member currentUser = userDetails.getAuth();
 
         PaymentInfo paymentInfo = this.getPaymentInfo();
 

@@ -11,7 +11,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockMemberSecurityContextFactory.class)
 public @interface WithMockMember {
-    String memberNo() default "M000000002";
     String loginId() default "bbj";
-    String role() default "ROLE_USER";
 }
