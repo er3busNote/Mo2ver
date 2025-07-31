@@ -5,6 +5,7 @@ import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
+import com.mo2ver.web.domain.point.dto.PointInfo;
 import com.mo2ver.web.domain.point.dto.request.PointRequest;
 import com.mo2ver.web.domain.point.entity.Point;
 import com.mo2ver.web.domain.point.repository.PointRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -36,9 +38,11 @@ public class PointService {
     public void usePointMemberSync(PaymentInfo paymentInfo, Member currentUser) {
         Member member = this.findMemberById(currentUser.getMemberNo());
         Order order = this.findOrderById(paymentInfo.getOrderId());
+        List<PointInfo> pointInfos = this.pointRepository.findPointDetail(member);
 
         log.info(member.toString());
         log.info(order.toString());
+        log.info(pointInfos.toString());
     }
 
     public Mono<Void> usePointMember(PaymentInfo paymentInfo, Member currentUser) {
@@ -55,8 +59,8 @@ public class PointService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문번호 입니다."));
     }
 
-    private Point findPointById(Long pointManageNo) {
-        return this.pointRepository.findById(pointManageNo)
+    private Point findPointById(String pointNo) {
+        return this.pointRepository.findById(pointNo)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 포인트정보 입니다."));
     }
 }
