@@ -122,7 +122,7 @@ const EventFormPage: FC<EventDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const [eventNo, setEventNo] = useState<number>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType = location.state?.eventManageNo ? 'Update' : 'Create';
+	const componentType = location.state?.eventNo ? 'Update' : 'Create';
 
 	const methods = useForm<EventFormValues>({
 		mode: 'onChange',
@@ -131,9 +131,9 @@ const EventFormPage: FC<EventDispatchProps> = ({
 	});
 
 	if (componentType === 'Update') {
-		const eventManageNo = location.state?.eventManageNo;
+		const eventNo = location.state?.eventNo;
 		const eventData: EventRequestData = {
-			eventManageNo: eventManageNo,
+			eventNo: eventNo,
 		};
 		const eventInfo = useEventDetail({
 			event,

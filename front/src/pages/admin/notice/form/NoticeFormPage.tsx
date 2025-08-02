@@ -84,7 +84,7 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const [noticeNo, setNoticeNo] = useState<number>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType = location.state?.noticeManageNo ? 'Update' : 'Create';
+	const componentType = location.state?.noticeNo ? 'Update' : 'Create';
 
 	const methods = useForm<NoticeFormValues>({
 		mode: 'onChange',
@@ -93,9 +93,9 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 	});
 
 	if (componentType === 'Update') {
-		const noticeManageNo = location.state?.noticeManageNo;
+		const noticeNo = location.state?.noticeNo;
 		const noticeData: NoticeRequestData = {
-			noticeManageNo: noticeManageNo,
+			noticeNo: noticeNo,
 		};
 		const noticeInfo = useNoticeDetail({
 			notice,

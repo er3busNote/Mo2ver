@@ -129,7 +129,7 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 		csrfData,
 	});
 	const componentType =
-		location.state?.bannerManageNo && location.state?.displayTemplateCode
+		location.state?.bannerNo && location.state?.displayTemplateCode
 			? 'Update'
 			: 'Create';
 
@@ -140,10 +140,10 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 	});
 
 	if (componentType === 'Update') {
-		const bannerManageNo = location.state?.bannerManageNo;
+		const bannerNo = location.state?.bannerNo;
 		const displayTemplateCode = location.state?.displayTemplateCode;
 		const bannerData: BannerRequestData = {
-			bannerManageNo: bannerManageNo,
+			bannerNo: bannerNo,
 			displayTemplateCode: displayTemplateCode,
 		};
 		const imagesInfo = useBannerImagesDetail({

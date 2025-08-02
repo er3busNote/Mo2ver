@@ -11,7 +11,7 @@ type EventParams = {
 	description: string;
 	dispatch: Dispatch<AnyAction>;
 	navigate: NavigateFunction;
-	eventManageNo?: number;
+	eventNo?: number;
 };
 
 const goToEventForm = ({
@@ -19,10 +19,10 @@ const goToEventForm = ({
 	description,
 	dispatch,
 	navigate,
-	eventManageNo,
+	eventNo,
 }: EventParams) => {
 	const titleData = createTitleData({ title, description });
-	const state = !isUndefined(eventManageNo) ? { eventManageNo } : undefined;
+	const state = !isUndefined(eventNo) ? { eventNo } : undefined;
 	dispatch(changeNext(titleData));
 	dispatch(menuActive(path));
 

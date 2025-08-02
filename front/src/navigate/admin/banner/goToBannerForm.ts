@@ -16,7 +16,7 @@ type BannerParams = {
 	description: string;
 	dispatch: Dispatch<AnyAction>;
 	navigate: NavigateFunction;
-	bannerManageNo?: number;
+	bannerNo?: number;
 	displayTemplateCode?: string;
 };
 
@@ -26,7 +26,7 @@ const goToBannerForm = ({
 	description,
 	dispatch,
 	navigate,
-	bannerManageNo,
+	bannerNo,
 	displayTemplateCode,
 }: BannerParams) => {
 	const titleData = createTitleData({ title, description });
@@ -37,11 +37,8 @@ const goToBannerForm = ({
 		dispatch(changeNext(titleData));
 		dispatch(menuActive(path));
 
-		const state = every(
-			[bannerManageNo, displayTemplateCode],
-			negate(isUndefined)
-		)
-			? { bannerManageNo, displayTemplateCode }
+		const state = every([bannerNo, displayTemplateCode], negate(isUndefined))
+			? { bannerNo, displayTemplateCode }
 			: undefined;
 
 		navigate(path, { state });

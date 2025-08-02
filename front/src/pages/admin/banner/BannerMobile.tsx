@@ -61,14 +61,14 @@ const BannerMobile: FC<BannerProps> = ({
 		});
 	};
 
-	const updateClick = (bannerManageNo: number, type: string) => {
+	const updateClick = (bannerNo: number, type: string) => {
 		goToBannerForm({
 			type,
 			title,
 			description,
 			dispatch,
 			navigate,
-			bannerManageNo,
+			bannerNo,
 			displayTemplateCode: type,
 		});
 	};
@@ -286,17 +286,14 @@ const BannerMobile: FC<BannerProps> = ({
 							bannerPageData.content.map((data: BannerData, index: number) => (
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
-										{data.bannerManageNo}
+										{data.bannerNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										<Link
 											component="button"
 											variant="body2"
 											onClick={() =>
-												updateClick(
-													data.bannerManageNo,
-													data.displayTemplateCode
-												)
+												updateClick(data.bannerNo, data.displayTemplateCode)
 											}
 										>
 											{data.subject}

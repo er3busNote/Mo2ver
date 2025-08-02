@@ -133,7 +133,7 @@ const NoticeList: FC<NoticeListProps> = ({
 													component="button"
 													variant="body2"
 													underline="none"
-													onClick={() => noticeClick(data.noticeManageNo)}
+													onClick={() => noticeClick(data.noticeNo)}
 												>
 													{data.subject}
 												</Link>

@@ -178,7 +178,7 @@ interface ReviewPageData extends PageableData {
 
 // 5. Banner Type
 interface BannerData {
-	bannerManageNo: number;
+	bannerNo: number;
 	subject: string;
 	displayStartDate: number;
 	displayEndDate: number;
@@ -190,7 +190,7 @@ interface BannerData {
 }
 
 interface BannerRequestData {
-	bannerManageNo: number;
+	bannerNo: number;
 	displayTemplateCode: string;
 }
 
@@ -240,7 +240,7 @@ interface BannerGoodsInfoData {
 
 // 6. Event Type
 interface EventData {
-	eventManageNo: number;
+	eventNo: number;
 	subject: string;
 	eventStartDate: number;
 	eventEndDate: number;
@@ -251,7 +251,7 @@ interface EventData {
 }
 
 interface EventRequestData {
-	eventManageNo: number;
+	eventNo: number;
 }
 
 interface EventPageData extends PageableData {
@@ -299,7 +299,7 @@ interface EventInfoData {
 
 // 7. Notice Type
 interface NoticeData {
-	noticeManageNo: number;
+	noticeNo: number;
 	subject: string;
 	contents: string;
 	noticeYesNo: string;
@@ -309,7 +309,7 @@ interface NoticeData {
 }
 
 interface NoticeRequestData {
-	noticeManageNo: number;
+	noticeNo: number;
 }
 
 interface NoticePageData extends PageableData {

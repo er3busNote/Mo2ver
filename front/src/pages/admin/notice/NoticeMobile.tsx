@@ -54,8 +54,8 @@ const NoticeMobile: FC<NoticeProps> = ({
 		goToNoticeForm({ title, description, dispatch, navigate });
 	};
 
-	const updateClick = (noticeManageNo: number) => {
-		goToNoticeForm({ title, description, dispatch, navigate, noticeManageNo });
+	const updateClick = (noticeNo: number) => {
+		goToNoticeForm({ title, description, dispatch, navigate, noticeNo });
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -265,13 +265,13 @@ const NoticeMobile: FC<NoticeProps> = ({
 							noticePageData.content.map((data: NoticeData, index: number) => (
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
-										{data.noticeManageNo}
+										{data.noticeNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										<Link
 											component="button"
 											variant="body2"
-											onClick={() => updateClick(data.noticeManageNo)}
+											onClick={() => updateClick(data.noticeNo)}
 										>
 											{data.subject}
 										</Link>

@@ -11,7 +11,7 @@ type NoticeParams = {
 	description: string;
 	dispatch: Dispatch<AnyAction>;
 	navigate: NavigateFunction;
-	noticeManageNo?: number;
+	noticeNo?: number;
 };
 
 const goToNoticeForm = ({
@@ -19,10 +19,10 @@ const goToNoticeForm = ({
 	description,
 	dispatch,
 	navigate,
-	noticeManageNo,
+	noticeNo,
 }: NoticeParams) => {
 	const titleData = createTitleData({ title, description });
-	const state = !isUndefined(noticeManageNo) ? { noticeManageNo } : undefined;
+	const state = !isUndefined(noticeNo) ? { noticeNo } : undefined;
 	dispatch(changeNext(titleData));
 	dispatch(menuActive(path));
 	navigate(path, { state });

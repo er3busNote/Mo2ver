@@ -58,8 +58,8 @@ const EventPC: FC<EventProps> = ({
 		goToEventForm({ title, description, dispatch, navigate });
 	};
 
-	const updateClick = (eventManageNo: number) => {
-		goToEventForm({ title, description, dispatch, navigate, eventManageNo });
+	const updateClick = (eventNo: number) => {
+		goToEventForm({ title, description, dispatch, navigate, eventNo });
 	};
 
 	const handleKeywordChange = (event: SelectChangeEvent) => {
@@ -262,13 +262,13 @@ const EventPC: FC<EventProps> = ({
 							eventPageData.content.map((data: EventData, index: number) => (
 								<TableRow key={index}>
 									<TableCell sx={dataTd} align="center">
-										{data.eventManageNo}
+										{data.eventNo}
 									</TableCell>
 									<TableCell sx={dataTd} align="center">
 										<Link
 											component="button"
 											variant="body2"
-											onClick={() => updateClick(data.eventManageNo)}
+											onClick={() => updateClick(data.eventNo)}
 										>
 											{data.subject}
 										</Link>

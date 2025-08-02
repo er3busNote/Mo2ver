@@ -66,7 +66,7 @@ const EventGrid: FC<EventGridProps> = ({
 								<Card
 									elevation={0}
 									sx={{ border: '2px #f0f0f0f0 solid' }}
-									onClick={() => eventClick(data.eventManageNo.toString())}
+									onClick={() => eventClick(data.eventNo.toString())}
 								>
 									<CardActionArea sx={{ display: 'flex' }}>
 										<Box sx={{ display: 'flex', flexDirection: 'column' }}>
