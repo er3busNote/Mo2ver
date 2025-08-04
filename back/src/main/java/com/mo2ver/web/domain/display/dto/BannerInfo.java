@@ -2,7 +2,6 @@ package com.mo2ver.web.domain.display.dto;
 
 import com.mo2ver.web.domain.display.entity.Banner;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
