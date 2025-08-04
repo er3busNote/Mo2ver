@@ -22,7 +22,7 @@ public class CouponTest extends CsrfConfigTest {
     @Test
     @DisplayName("쿠폰정보 상세 정보 확인")
     public void findCouponInfoTest() throws Exception {
-        String couponCode = "CPN-250717-066EHK";
+        String couponCode = "CPN-250805-L0YDBV";
         mockMvc.perform(get("/coupon/info/{couponCode}", couponCode))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -69,7 +69,7 @@ public class CouponTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        String couponNo = "C000000001";
+        String couponNo = "CP00000002";
 
         mockMvc.perform(put("/coupon/create/{couponNo}", couponNo)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
@@ -80,7 +80,7 @@ public class CouponTest extends CsrfConfigTest {
 
     private CouponRequest getCouponRequestTest() {
         return CouponRequest.builder()
-                .couponNo("C000000001")
+                .couponNo("CP00000001")
                 .goodsCode("1000000001")
                 .couponType(CouponType.AMOUNT)
                 .discountAmount(new BigDecimal(10000))

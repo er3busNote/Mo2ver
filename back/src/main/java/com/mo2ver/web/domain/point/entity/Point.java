@@ -10,9 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(
@@ -42,14 +40,11 @@ public class Point {
     )
     private Member member;
 
-    @Column(name = "PNT_GVN", columnDefinition = "INT(11) COMMENT '적립된포인트'")
-    private Integer pointGiven;
+    @Column(name = "PNT_AMT", columnDefinition = "INT(11) COMMENT '포인트금액'")
+    private Integer pointAmount;
 
     @Column(name = "EXPR_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '만료일시'")
     private Date expireDate;
-
-    @OneToMany(mappedBy = "point", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PointUse> pointUses = new ArrayList<>();
 
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
@@ -72,7 +67,7 @@ public class Point {
     public Point(PointRequest pointRequest, Member currentUser) {
         this.createOrUpdatePoint(pointRequest, currentUser);
         this.member = currentUser;
-        this.pointGiven = pointRequest.getPointGiven();
+        this.pointAmount = pointRequest.getPointAmount();
         this.expireDate = pointRequest.getExpireDate();
         this.register = currentUser.getMemberNo();
     }
@@ -80,12 +75,4 @@ public class Point {
     private void createOrUpdatePoint(PointRequest pointRequest, Member currentUser) {
         this.updater = currentUser.getMemberNo();
     }
-
-    private void sortPointUses() {
-        int index = 1;
-        for (PointUse pointUse: this.pointUses) {
-            pointUse.setDetailSequence(index++);
-        }
-    }
-
 }

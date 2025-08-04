@@ -47,7 +47,7 @@ public class PointTest extends CsrfConfigTest {
     private PointRequest getPointRequestTest() {
         return PointRequest.builder()
                 .pointNo("PT00000001")
-                .pointGiven(1000)
+                .pointAmount(1000)
                 .expireDate(DateUtil.getDate(2025, 8, 11))
                 .build();
     }

@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.util.List;
 
 import static com.mo2ver.web.domain.point.entity.QPoint.point;
-import static com.mo2ver.web.domain.point.entity.QPointUse.pointUse;
+import static com.mo2ver.web.domain.order.entity.QOrderPoint.orderPoint;
 import static com.querydsl.core.group.GroupBy.groupBy;
 
 public class PointRepositoryImpl  extends QuerydslRepositorySupport implements PointRepositoryCustom {
@@ -40,10 +40,10 @@ public class PointRepositoryImpl  extends QuerydslRepositorySupport implements P
                 .transform(groupBy(point.pointNo).list(
                         new QPointInfo(
                                 point.pointNo,
-                                point.pointGiven,
-                                JPAExpressions.select(pointUse.useAmount.sum())
-                                        .from(pointUse)
-                                        .where(pointUse.point.eq(point))
+                                point.pointAmount,
+                                JPAExpressions.select(orderPoint.useAmount.sum())
+                                        .from(orderPoint)
+                                        .where(orderPoint.point.eq(point))
                         )
                 ));
     }

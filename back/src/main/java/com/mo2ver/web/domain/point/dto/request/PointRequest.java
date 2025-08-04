@@ -20,7 +20,7 @@ public class PointRequest {
     private String pointNo;
 
     @NotNull(message="적립된포인트를 입력해 주세요.")
-    private Integer pointGiven;
+    private Integer pointAmount;
 
     @NotNull(message = "만료될시점이 존재하지 않습니다")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

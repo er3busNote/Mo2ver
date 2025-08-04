@@ -115,6 +115,8 @@ public class Order {
         this.orderCoupons.addAll(this.updateOrderCoupons(couponMembers));
         this.orderCoupons.subList(0, oldFileSize).clear();
 
+        this.sortOrderCoupon();
+
         this.totalPriceCalcByCoupon();
     }
 
@@ -146,6 +148,13 @@ public class Order {
                 .filter(it -> it.getGoodsCode().equals(goodsCode))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
+    }
+
+    private void sortOrderCoupon() {
+        int index = 1;
+        for (OrderCoupon orderCoupon : this.orderCoupons) {
+            orderCoupon.setDetailSequence(index++);
+        }
     }
 
     private void totalPriceCalc() {

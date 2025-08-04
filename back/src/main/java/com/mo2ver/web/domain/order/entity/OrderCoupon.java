@@ -4,6 +4,7 @@ import com.mo2ver.web.domain.coupon.entity.CouponMember;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(
@@ -14,15 +15,11 @@ import javax.persistence.*;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "orderCouponId")
+@EqualsAndHashCode(of = {"order", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class OrderCoupon {
+public class OrderCoupon implements Serializable {
 
     @Id
-    @Column(name = "ODR_CPN_ID", columnDefinition = "BIGINT(20) COMMENT '주문쿠폰번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long orderCouponId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "ODR_ID",
@@ -32,6 +29,10 @@ public class OrderCoupon {
             columnDefinition = "CHAR(32) COMMENT '주문번호'"
     )
     private Order order;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

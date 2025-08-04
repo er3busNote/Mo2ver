@@ -82,7 +82,8 @@ public class OrderTest extends CsrfConfigTest {
         return OrderCouponRequest.builder()
                 .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
                 .couponCodes(Arrays.asList(
-                        "CPN-250720-X5129Y"
+                        "CPN-250805-L0YDBV",
+                        "CPN-250805-NRUK0M"
                 ))
                 .build();
     }
