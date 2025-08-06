@@ -2,7 +2,6 @@ package com.mo2ver.web.domain.delivery.entity;
 
 import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
 import com.mo2ver.web.domain.member.entity.Member;
-import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.entity.OrderDetail;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,8 +16,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "DLV_DTL", // 배송상세
         indexes={
-                @Index(name="FK_DLV_TO_DLV_DTL", columnList="DLV_CD"),
-                @Index(name="FK_ODR_TO_CPN_MBR", columnList="ODR_ID")
+                @Index(name="FK_DLV_TO_DLV_DTL", columnList="DLV_CD")
         }
 )
 @Getter @Setter
@@ -40,15 +38,6 @@ public class DeliveryDetail implements Serializable {
     @Id
     @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
     private Integer detailSequence;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "ODR_ID",
-            updatable = false,
-            foreignKey = @ForeignKey(name = "FK_ODR_TO_CPN_MBR"),
-            columnDefinition = "CHAR(32) COMMENT '주문번호'"
-    )
-    private Order order;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DLV_STS", columnDefinition = "CHAR(10) COMMENT '배송상태'")
@@ -76,7 +65,6 @@ public class DeliveryDetail implements Serializable {
         return DeliveryDetail.builder()
                 .delivery(delivery)
                 .detailSequence(orderDetail.getDetailSequence())
-                .order(orderDetail.getOrder())
                 .deliveryStatus(deliveryStatus)
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

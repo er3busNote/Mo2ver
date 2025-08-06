@@ -10,12 +10,12 @@ public class PointInfo {
 
     private String pointNo;
     private Integer pointGiven;
-    private Long pointUseSum;
+    private Integer pointUseSum;
 
     @QueryProjection
-    public PointInfo(String pointNo, Integer pointGiven, Long pointUseSum) {
+    public PointInfo(String pointNo, Integer pointGiven, Integer pointUseSum) {
         this.pointNo = pointNo;
         this.pointGiven = pointGiven;
-        this.pointUseSum = Optional.ofNullable(pointUseSum).orElse(0L);
+        this.pointUseSum = Optional.ofNullable(pointUseSum).orElse(0);
     }
 }
