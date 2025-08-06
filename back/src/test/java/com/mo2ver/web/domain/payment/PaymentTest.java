@@ -36,7 +36,7 @@ public class PaymentTest extends CsrfConfigTest {
 
     private PaymentRequest getPaymentRequest() {
         return PaymentRequest.builder()
-                .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
+                .orderId("A353751FCC3141749A04C6C045C6F3F0")
                 .build();
     }
 
@@ -76,9 +76,9 @@ public class PaymentTest extends CsrfConfigTest {
 
     private PaymentInfo getPaymentInfo() {
         return PaymentInfo.builder()
-                .paymentCode("P000000001")
+                .paymentCode("P000000002")
                 .paymentKey("5EnNZRJGvaBX7zk2yd8ydw26XvwXkLrx9POLqKQjmAw4b0e1")
-                .orderId("F5E24377C6D948F39A64C3DDA17E78A6")
+                .orderId("A353751FCC3141749A04C6C045C6F3F0")
                 .addressNo("A000000002")
                 .amount(1000L)
                 .build();

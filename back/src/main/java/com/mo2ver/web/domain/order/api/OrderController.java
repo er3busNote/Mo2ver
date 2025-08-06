@@ -4,9 +4,11 @@ import com.mo2ver.web.domain.inventory.service.InventoryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.request.OrderCouponRequest;
+import com.mo2ver.web.domain.order.dto.request.OrderPointRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
 import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
 import com.mo2ver.web.domain.order.service.OrderService;
+import com.mo2ver.web.domain.point.service.PointService;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final PointService pointService;
     private final InventoryService inventoryService;
 
     @GetMapping("/info/{id}")
@@ -60,6 +63,20 @@ public class OrderController {
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("쿠폰정보가 저장되었습니다")
+                        .build());
+    }
+
+    @PatchMapping("/update/point")
+    public ResponseEntity<ResponseHandler> updatePointOrder(
+            @RequestBody @Validated(OrderPointRequest.Update.class) OrderPointRequest orderPointRequest,
+            @CurrentUser Member currentUser
+    ) {
+        pointService.validate(orderPointRequest, currentUser);
+        orderService.updateOrderPoint(orderPointRequest, currentUser);
+        return ResponseEntity.ok()
+                .body(ResponseHandler.builder()
+                        .status(HttpStatus.CREATED.value())
+                        .message("포인트정보가 저장되었습니다")
                         .build());
     }
 

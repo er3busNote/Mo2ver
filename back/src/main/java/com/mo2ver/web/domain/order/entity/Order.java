@@ -74,6 +74,9 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderCoupon> orderCoupons = new ArrayList<>();
 
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderPoint> orderPoints = new ArrayList<>();
+
     @Column(name = "AMT", columnDefinition = "INT(11) COMMENT '주문금액'")
     private Long amount;
 
@@ -107,6 +110,7 @@ public class Order {
 
         this.orderDetails.addAll(this.createOrderDetail(orderRequest.getGoodsOrders(), goodsList, currentUser));
 
+        this.sortOrderDetail();
         this.totalPriceCalc();
     }
 
@@ -116,7 +120,6 @@ public class Order {
         this.orderCoupons.subList(0, oldFileSize).clear();
 
         this.sortOrderCoupon();
-
         this.totalPriceCalcByCoupon();
     }
 
@@ -150,10 +153,24 @@ public class Order {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품코드 입니다."));
     }
 
+    private void sortOrderDetail() {
+        int index = 1;
+        for (OrderDetail orderDetail : this.orderDetails) {
+            orderDetail.setDetailSequence(index++);
+        }
+    }
+
     private void sortOrderCoupon() {
         int index = 1;
         for (OrderCoupon orderCoupon : this.orderCoupons) {
             orderCoupon.setDetailSequence(index++);
+        }
+    }
+
+    private void sortOrderPoint() {
+        int index = 1;
+        for (OrderPoint orderPoint : this.orderPoints) {
+            orderPoint.setDetailSequence(index++);
         }
     }
 

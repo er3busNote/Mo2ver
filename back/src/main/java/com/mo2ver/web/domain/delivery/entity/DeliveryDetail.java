@@ -2,6 +2,7 @@ package com.mo2ver.web.domain.delivery.entity;
 
 import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
 import com.mo2ver.web.domain.member.entity.Member;
+import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.entity.OrderDetail;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,19 +18,15 @@ import java.time.LocalDateTime;
         name = "DLV_DTL", // 배송상세
         indexes={
                 @Index(name="FK_DLV_TO_DLV_DTL", columnList="DLV_CD"),
-                @Index(name="FK_ODR_DTL_TO_DLV_DTL", columnList="ODR_DTL_ID")
+                @Index(name="FK_ODR_TO_CPN_MBR", columnList="ODR_ID")
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "deliveryDetailId")
+@EqualsAndHashCode(of = {"delivery", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class DeliveryDetail {
+public class DeliveryDetail implements Serializable {
 
     @Id
-    @Column(name = "DLV_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배송상세번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long deliveryDetailId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "DLV_CD",
@@ -39,15 +37,18 @@ public class DeliveryDetail {
     )
     private Delivery delivery;
 
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "ODR_DTL_ID",
-            nullable = false,
+            name = "ODR_ID",
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_ODR_DTL_TO_DLV_DTL"),
-            columnDefinition = "BIGINT(20) COMMENT '주문상세번호'"
+            foreignKey = @ForeignKey(name = "FK_ODR_TO_CPN_MBR"),
+            columnDefinition = "CHAR(32) COMMENT '주문번호'"
     )
-    private OrderDetail orderDetail;
+    private Order order;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DLV_STS", columnDefinition = "CHAR(10) COMMENT '배송상태'")
@@ -74,7 +75,8 @@ public class DeliveryDetail {
     public static DeliveryDetail of(Delivery delivery, OrderDetail orderDetail, DeliveryStatus deliveryStatus, Member currentUser) {
         return DeliveryDetail.builder()
                 .delivery(delivery)
-                .orderDetail(orderDetail)
+                .detailSequence(orderDetail.getDetailSequence())
+                .order(orderDetail.getOrder())
                 .deliveryStatus(deliveryStatus)
                 .register(currentUser.getMemberNo())
                 .updater(currentUser.getMemberNo())

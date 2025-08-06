@@ -44,5 +44,5 @@ public class OrderPoint implements Serializable {
     private Point point;
 
     @Column(name = "USE_AMT", columnDefinition = "INT(11) COMMENT '포인트사용금액'")
-    private Long useAmount;
+    private Integer useAmount;
 }

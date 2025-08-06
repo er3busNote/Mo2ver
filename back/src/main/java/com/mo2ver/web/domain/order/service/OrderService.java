@@ -7,6 +7,7 @@ import com.mo2ver.web.domain.goods.repository.GoodsRepository;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.order.dto.request.OrderCouponRequest;
+import com.mo2ver.web.domain.order.dto.request.OrderPointRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
 import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
 import com.mo2ver.web.domain.order.entity.Order;
@@ -51,6 +52,12 @@ public class OrderService {
         List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, currentUser);
         order.update(couponMembers);
         this.updateCouponMember(order);
+    }
+
+    @Transactional
+    public void updateOrderPoint(OrderPointRequest orderPointRequest, Member currentUser) {
+        Order order = this.findOrderById(orderPointRequest.getOrderId());
+        Integer pointAmount = orderPointRequest.getPointAmount();
     }
 
     @Transactional

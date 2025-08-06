@@ -2,7 +2,9 @@ package com.mo2ver.web.domain.point.service;
 
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
+import com.mo2ver.web.domain.order.dto.request.OrderPointRequest;
 import com.mo2ver.web.domain.order.entity.Order;
+import com.mo2ver.web.domain.order.entity.OrderPoint;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
 import com.mo2ver.web.domain.point.dto.PointInfo;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -35,13 +38,30 @@ public class PointService {
     }
 
     @Transactional
+    public void validate(OrderPointRequest orderPointRequest, Member currentUser) {
+        Integer pointAmount = orderPointRequest.getPointAmount();
+        this.validatePoint(pointAmount, currentUser);
+    }
+
+    @Transactional
     public void usePointMemberSync(PaymentInfo paymentInfo, Member currentUser) {
-        Member member = this.findMemberById(currentUser.getMemberNo());
         Order order = this.findOrderById(paymentInfo.getOrderId());
+        Integer pointAmount = order.getOrderPoints().stream()
+                .map(OrderPoint::getUseAmount)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+        this.validatePoint(pointAmount, currentUser);
+
+        log.info(order.toString());
+    }
+
+    @Transactional
+    private void validatePoint(Integer pointAmount, Member currentUser) {
+        Member member = this.findMemberById(currentUser.getMemberNo());
         List<PointInfo> pointInfos = this.pointRepository.findPointDetail(member);
 
         log.info(member.toString());
-        log.info(order.toString());
         log.info(pointInfos.toString());
     }
 
