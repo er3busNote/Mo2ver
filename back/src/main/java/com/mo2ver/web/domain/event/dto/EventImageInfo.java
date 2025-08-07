@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -50,13 +51,13 @@ public class EventImageInfo {
     public interface Update extends Default {}
 
     @QueryProjection
-    public EventImageInfo(String eventNo, String title, Date startDate, Date endDate, List<ImageInfo> images, Character useyn, List<EventImageProductInfo> goods) {
+    public EventImageInfo(String eventNo, String title, Date startDate, Date endDate, Integer displayImage, Integer eventImage, Character useyn, List<EventImageProductInfo> goods) {
         this.eventNo = eventNo;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.displayFile = images.stream().filter(it -> it.getBasicImageYesNo() == 'Y').findFirst().map(ImageInfo::from).orElse("");
-        this.eventFile = images.stream().filter(it -> it.getBasicImageYesNo() == 'N').findFirst().map(ImageInfo::from).orElse("");
+        this.displayFile = Optional.ofNullable(displayImage).map(ImageInfo::from).orElse("");
+        this.eventFile = Optional.ofNullable(eventImage).map(ImageInfo::from).orElse("");
         this.useyn = useyn;
         this.goods = goods.stream().filter(ObjectUtil::nonAllFieldsNull).collect(Collectors.toList());
     }

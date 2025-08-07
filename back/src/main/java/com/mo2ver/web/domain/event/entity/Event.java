@@ -12,9 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -83,8 +81,8 @@ public class Event {
         this.createOrUpdateEvent(eventImageInfo, currentUser);
 
         int oldImageSize = this.eventImages.size();
-        this.eventImages.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y'));
-        this.eventImages.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N'));
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y', currentUser));
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N', currentUser));
         this.eventImages.subList(0, oldImageSize).clear();
 
         int oldProductSize = this.eventProducts.size();
@@ -92,7 +90,6 @@ public class Event {
         this.eventProducts.subList(0, oldProductSize).clear();
 
         this.sortEventImages();
-        this.sortEventProducts();
     }
 
     private void createOrUpdateEvent(EventImageInfo eventImageInfo, Member currentUser) {
@@ -113,14 +110,12 @@ public class Event {
                 .collect(Collectors.toList());
     }
 
-    private EventImage updateEventImage(String attachFile, Character basicImageYesNo) {
-        EventImage eventImage = this.eventImages.stream()
-                .filter(it -> it.getBasicImageYesNo() == basicImageYesNo)
+    private EventImage updateEventImage(String attachFile, Character basicImageYesNo, Member currentUser) {
+        Integer attachFileId = JasyptUtil.getDecryptor(attachFile);
+        return this.eventImages.stream()
+                .filter(it -> it.getBasicImageYesNo() == basicImageYesNo && Objects.equals(it.getGoodsImageAttachFile(), attachFileId))
                 .findFirst()
-                .orElseGet(() -> EventImage.from(this));
-        eventImage.setGoodsImageAttachFile(JasyptUtil.getDecryptor(attachFile));
-        if(basicImageYesNo != eventImage.getBasicImageYesNo()) eventImage.setBasicImageYesNo(basicImageYesNo);
-        return eventImage;
+                .orElseGet(() -> EventImage.of(this, attachFileId, basicImageYesNo, currentUser));
     }
 
     private List<EventProduct> updateEventProducts(List<EventImageProductInfo> eventImageProducts) {
@@ -131,13 +126,24 @@ public class Event {
 
     private EventProduct createOrUpdateEventProduct(EventImageProductInfo eventImageProductInfo) {
         EventProduct eventProduct = this.eventProducts.stream()
-                .filter(it -> it.getDetailSequence().equals(eventImageProductInfo.getId()))
+                .filter(it -> it.getProductCode().equals(eventImageProductInfo.getGoodsCode()))
                 .findFirst()
-                .orElseGet(() -> EventProduct.from(this));
+                .orElseGet(() -> EventProduct.from(this, generateNextDetailSequence()));
+        if (eventProduct.getProductCode() != null && eventProduct.getSortSequence() != null) return eventProduct;
         eventProduct.setProductCode(eventImageProductInfo.getGoodsCode());
         eventProduct.setProductName(eventImageProductInfo.getGoodsName());
+        eventProduct.setSortSequence(eventImageProductInfo.getSortSequence());
         eventProduct.setUpdater(this.updater);
         return eventProduct;
+    }
+
+    private Integer generateNextDetailSequence() {
+        return this.eventProducts.stream()
+                .map(EventProduct::getDetailSequence)
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder())
+                .map(i -> i + 1)
+                .orElse(1);
     }
 
     private void sortEventImages() {
@@ -150,9 +156,7 @@ public class Event {
     private void sortEventProducts() {
         int index = 1;
         for (EventProduct eventProduct: this.eventProducts) {
-            eventProduct.setDetailSequence(index);
-            eventProduct.setSortSequence(index);
-            index++;
+            eventProduct.setDetailSequence(index++);
         }
     }
 }

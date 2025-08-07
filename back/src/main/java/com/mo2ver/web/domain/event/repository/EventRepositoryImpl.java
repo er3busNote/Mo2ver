@@ -1,11 +1,8 @@
 package com.mo2ver.web.domain.event.repository;
 
+import com.mo2ver.web.domain.event.dto.*;
 import com.mo2ver.web.domain.event.dto.response.EventProductResponse;
 import com.mo2ver.web.domain.event.entity.Event;
-import com.mo2ver.web.domain.event.dto.EventImageInfo;
-import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
-import com.mo2ver.web.domain.event.dto.ImageInfo;
-import com.mo2ver.web.domain.event.dto.QEventImageInfo;
 import com.mo2ver.web.domain.event.dto.request.EventRequest;
 import com.mo2ver.web.domain.event.dto.response.QEventProductResponse;
 import com.mo2ver.web.domain.member.entity.Member;
@@ -16,6 +13,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -102,7 +100,6 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
 
         return queryFactory
                 .selectFrom(event)
-                .leftJoin(event.eventImages, eventImage)
                 .leftJoin(event.eventProducts, eventProduct)
                 .leftJoin(goods).on(eventProduct.productCode.eq(goods.goodsCode))
                 .leftJoin(price).on(goods.goodsCode.eq(price.goods.goodsCode))
@@ -113,11 +110,14 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                                 event.subject,
                                 event.eventStartDate,
                                 event.eventEndDate,
-                                list(Projections.constructor(ImageInfo.class,
-                                        Expressions.constant(""),
-                                        eventImage.goodsImageAttachFile,
-                                        eventImage.basicImageYesNo
-                                )),
+                                JPAExpressions.select(eventImage.goodsImageAttachFile)
+                                        .from(eventImage)
+                                        .where(eventImage.event.eq(event))
+                                        .where(eventImage.basicImageYesNo.eq('Y')),
+                                JPAExpressions.select(eventImage.goodsImageAttachFile)
+                                        .from(eventImage)
+                                        .where(eventImage.event.eq(event))
+                                        .where(eventImage.basicImageYesNo.eq('N')),
                                 event.eventYesNo,
                                 list(Projections.constructor(EventImageProductInfo.class,
                                         eventProduct.detailSequence,

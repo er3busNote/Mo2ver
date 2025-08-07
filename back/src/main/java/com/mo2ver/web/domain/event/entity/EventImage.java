@@ -61,14 +61,6 @@ public class EventImage implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventImage from(Event event) {
-        return EventImage.builder()
-                .event(event)
-                .register(event.getRegister())
-                .updater(event.getUpdater())
-                .build();
-    }
-
     public static EventImage of(Event event, Integer goodsImageAttachFile, Character basicImageYesNo, Member currentUser) {
         return EventImage.builder()
                 .event(event)
