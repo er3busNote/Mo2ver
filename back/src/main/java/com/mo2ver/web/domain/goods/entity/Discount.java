@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,15 +21,11 @@ import java.time.ZoneId;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "goodsPriceId")
+@EqualsAndHashCode(of = {"goods", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Discount {
+public class Discount implements Serializable {
 
     @Id
-    @Column(name = "GD_PRC_ID", columnDefinition = "BIGINT(20) COMMENT '상품가격ID'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long goodsPriceId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "GD_CD",
@@ -38,6 +35,10 @@ public class Discount {
             columnDefinition = "CHAR(10) COMMENT '상품코드'"
     )
     private Goods goods;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @Column(name = "STRT_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '시작일시'")
     private LocalDateTime startDate;

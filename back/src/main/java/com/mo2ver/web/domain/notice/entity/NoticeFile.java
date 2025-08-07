@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,17 +18,13 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "noticeFileNo")
+@EqualsAndHashCode(of = {"notice", "detailSequence"})
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class NoticeFile {
+public class NoticeFile implements Serializable {
 
     @Id
-    @Column(name = "NTC_FILE_NO", columnDefinition = "BIGINT(20) COMMENT '공지사항파일번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long noticeFileNo;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "NTC_NO",
@@ -37,6 +34,10 @@ public class NoticeFile {
             columnDefinition = "CHAR(10) COMMENT '공지사항번호'"
     )
     private Notice notice;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @Column(name = "ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '첨부파일'")
     private Integer attachFile;

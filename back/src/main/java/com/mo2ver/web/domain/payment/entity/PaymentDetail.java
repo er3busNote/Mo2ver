@@ -3,6 +3,7 @@ package com.mo2ver.web.domain.payment.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,15 +14,11 @@ import java.util.Date;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "paymentDetailId")
+@EqualsAndHashCode(of = {"payment", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class PaymentDetail {
+public class PaymentDetail implements Serializable {
 
     @Id
-    @Column(name = "PAY_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '결제상세번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long paymentDetailId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "PAY_CD",
@@ -31,6 +28,10 @@ public class PaymentDetail {
             columnDefinition = "CHAR(10) COMMENT '결재코드'"
     )
     private Payment payment;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     // 결제 승인 건
     @Column(name = "LST_TRN_KEY", columnDefinition = "VARCHAR(64) COMMENT '마지막거래키'")

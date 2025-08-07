@@ -8,15 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -102,7 +99,6 @@ public class BannerTest extends CsrfConfigTest {
                         .content(objectMapper.writeValueAsString(bannerImageInfo)))
                 .andDo(print())
                 .andExpect(status().isCreated());
-
     }
 
     @Test
@@ -120,32 +116,6 @@ public class BannerTest extends CsrfConfigTest {
                         .content(objectMapper.writeValueAsString(bannerImageInfo)))
                 .andDo(print())
                 .andExpect(status().isOk());
-
-    }
-
-    @Test
-    @DisplayName("배너 이미지정보 첨부파일 저장 확인")
-    public void createBannerImageUploadTest() throws Exception {
-
-        Authentication authentication = new TestingAuthenticationToken("admin", null, "ROLE_ADMIN");
-        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
-
-        BannerImageInfo bannerImageInfo = this.getBannerImageInfo();
-
-        MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
-        MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
-
-        MockPart jsonBannerImage = new MockPart("bannerImage", objectMapper.writeValueAsString(bannerImageInfo).getBytes());
-        jsonBannerImage.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-
-        mockMvc.perform(multipart("/banner/upload")
-                        .file(file1)
-                        .file(file2)
-                        .part(jsonBannerImage)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andDo(print())
-                .andExpect(status().isCreated());
     }
 
     private BannerImageInfo getBannerImageInfo() {

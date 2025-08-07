@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,15 +20,11 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "bannerDetailId")
+@EqualsAndHashCode(of = {"banner", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class BannerDetail {
+public class BannerDetail implements Serializable {
 
     @Id
-    @Column(name = "BNNR_DTL_ID", columnDefinition = "BIGINT(20) COMMENT '배너상세번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long bannerDetailId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "BNNR_NO",
@@ -37,6 +34,10 @@ public class BannerDetail {
             columnDefinition = "CHAR(10) COMMENT '배너번호'"
     )
     private Banner banner;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @Column(name = "IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '이미지첨부파일'")
     private Integer imageAttachFile;

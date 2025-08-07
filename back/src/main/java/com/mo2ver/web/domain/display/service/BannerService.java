@@ -1,11 +1,7 @@
 package com.mo2ver.web.domain.display.service;
 
-import com.mo2ver.web.common.file.dto.FileInfo;
-import com.mo2ver.web.common.file.service.FileService;
 import com.mo2ver.web.domain.display.entity.Banner;
-import com.mo2ver.web.domain.display.repository.BannerDetailRepository;
 import com.mo2ver.web.domain.display.repository.BannerRepository;
-import com.mo2ver.web.domain.display.entity.BannerDetail;
 import com.mo2ver.web.domain.display.dto.*;
 import com.mo2ver.web.domain.display.dto.response.BannerDetailResponse;
 import com.mo2ver.web.domain.display.dto.response.BannerProductResponse;
@@ -17,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -30,11 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BannerService {
 
-    private static final String BANNER_DIRECTORY = "banner";
-
-    private final FileService fileService;
     private final BannerRepository bannerRepository;
-    private final BannerDetailRepository bannerDetailRepository;
 
     @Transactional
     public Page<BannerInfo> findBannerlist(Pageable pageable) {
@@ -100,20 +91,6 @@ public class BannerService {
     public void updateImagesBanner(BannerImageInfo bannerImageInfo, Member currentUser) {
         Banner banner = this.findBannerById(bannerImageInfo.getBannerNo());
         banner.update(bannerImageInfo, currentUser);
-    }
-
-    @Transactional
-    public String saveImagesBanner(List<MultipartFile> files, BannerImageInfo bannerImageInfo, Member currentUser) throws Exception {
-        Banner banner = this.bannerRepository.save(Banner.of(bannerImageInfo, currentUser));
-        List<BannerImageDetailInfo> listBannerImageDetailInfo = bannerImageInfo.getBnnrImg();
-        for (int i = 0; i < listBannerImageDetailInfo.size(); i++) {
-            BannerImageDetailInfo bannerImageDetailInfo = listBannerImageDetailInfo.get(i);
-            log.info("bannerImageInfo => {}", bannerImageDetailInfo.getTitle());
-            MultipartFile file = files.get(i);
-            FileInfo fileInfo = this.fileService.saveFile(file, BANNER_DIRECTORY, currentUser);
-            this.bannerDetailRepository.save(BannerDetail.of(banner, bannerImageDetailInfo, fileInfo.getFileCode(), i+1, currentUser));
-        }
-        return banner.getBannerNo();
     }
 
     private Banner findBannerById(String bannerNo) {

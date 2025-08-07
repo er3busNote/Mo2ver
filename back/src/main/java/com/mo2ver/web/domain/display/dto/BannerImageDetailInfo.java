@@ -9,13 +9,13 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class BannerImageDetailInfo {
 
-    private Long id;
+    private Integer id;
     private String title;
     private String cnntUrl;
     private String file;
     private Character useyn;
 
-    public BannerImageDetailInfo(Long id, String title, String cnntUrl, Integer attachFile, Character useyn) {
+    public BannerImageDetailInfo(Integer id, String title, String cnntUrl, Integer attachFile, Character useyn) {
         this.id = id;
         this.title = title;
         this.cnntUrl = cnntUrl;

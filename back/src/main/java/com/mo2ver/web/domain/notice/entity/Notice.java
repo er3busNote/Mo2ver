@@ -124,7 +124,9 @@ public class Notice {
     private void sortNoticeFiles() {
         int index = 1;
         for (NoticeFile noticeFile: this.noticeFiles) {
-            noticeFile.setSortSequence(index++);
+            noticeFile.setDetailSequence(index);
+            noticeFile.setSortSequence(index);
+            index++;
         }
     }
 }

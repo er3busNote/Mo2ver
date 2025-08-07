@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,15 +19,11 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "eventProductId")
+@EqualsAndHashCode(of = {"event", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class EventProduct {
+public class EventProduct implements Serializable {
 
     @Id
-    @Column(name = "EVT_PRD_ID", columnDefinition = "BIGINT(20) COMMENT '이벤트전시번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long eventProductId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "EVT_NO",
@@ -36,6 +33,10 @@ public class EventProduct {
             columnDefinition = "CHAR(10) COMMENT '이벤트번호'"
     )
     private Event event;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @Column(name = "PRD_CD", columnDefinition = "CHAR(10) COMMENT '상품코드'")
     private String productCode;

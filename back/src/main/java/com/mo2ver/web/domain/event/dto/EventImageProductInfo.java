@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class EventImageProductInfo {
 
-    private Long id;
+    private Integer id;
     private String goodsCode;
     private String goodsName;
     private BigDecimal supplyPrice;

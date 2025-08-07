@@ -8,8 +8,7 @@ import javax.persistence.Column;
 import java.io.Serializable;
 
 @EqualsAndHashCode(of = {"goodsCode", "goodsOptionNo"})
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 public class PriceId implements Serializable {
     @Column(name = "GD_CD")
     protected String goodsCode;

@@ -128,6 +128,7 @@ public class Goods {
         }
         this.goodsImages.addAll(this.createGoodsImages(goodsImageAttachRequest.getGoodsImg(), currentUser));
 
+        this.sortGoodsDiscounts();
         this.sortGoodsImages();
     }
 
@@ -146,6 +147,7 @@ public class Goods {
         this.goodsImages.addAll(this.updateGoodsImages(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode(), currentUser));
         this.goodsImages.subList(0, oldImageSize).clear();
 
+        this.sortGoodsDiscounts();
         this.sortGoodsImages();
     }
 
@@ -216,12 +218,21 @@ public class Goods {
         return goodsImage;
     }
 
+    private void sortGoodsDiscounts() {
+        int index = 1;
+        for (Discount discount : this.goodsDiscounts) {
+            discount.setDetailSequence(index++);
+        }
+    }
+
     private void sortGoodsImages() {
         int index = 1;
         for (GoodsImage goodsImage : this.goodsImages) {
             if(index == 1) goodsImage.setBasicImageYesNo('Y');
             else goodsImage.setBasicImageYesNo('N');
-            goodsImage.setSortSequence(index++);
+            goodsImage.setDetailSequence(index);
+            goodsImage.setSortSequence(index);
+            index++;
         }
     }
 

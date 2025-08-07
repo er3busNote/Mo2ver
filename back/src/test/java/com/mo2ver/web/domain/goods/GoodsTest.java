@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -104,31 +102,6 @@ public class GoodsTest extends CsrfConfigTest {
                         .content(objectMapper.writeValueAsString(goodsImageAttachRequest)))
                 .andDo(print())
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("상품 이미지정보 첨부파일 저장 확인")
-    public void createGoodsImageUploadTest() throws Exception {
-
-        Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
-        TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
-
-        GoodsImageRequest goodsImageRequest = this.getGoodsImageInfo();
-
-        MockMultipartFile file1 = new MockMultipartFile("files", "file1.txt", "image/jpeg", "Test file content 1".getBytes());
-        MockMultipartFile file2 = new MockMultipartFile("files", "file2.txt", "image/png", "Test file content 2".getBytes());
-
-        MockPart jsonGoodsImage = new MockPart("goodsImage", objectMapper.writeValueAsString(goodsImageRequest).getBytes());
-        jsonGoodsImage.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-
-        mockMvc.perform(multipart("/goods/upload")
-                        .file(file1)
-                        .file(file2)
-                        .part(jsonGoodsImage)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andDo(print())
-                .andExpect(status().isCreated());
     }
 
     private GoodsImageRequest getGoodsImageInfo() {

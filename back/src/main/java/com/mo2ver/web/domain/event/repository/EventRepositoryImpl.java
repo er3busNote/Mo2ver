@@ -120,7 +120,7 @@ public class EventRepositoryImpl extends QuerydslRepositorySupport implements Ev
                                 )),
                                 event.eventYesNo,
                                 list(Projections.constructor(EventImageProductInfo.class,
-                                        eventProduct.eventProductId,
+                                        eventProduct.detailSequence,
                                         eventProduct.productCode,
                                         eventProduct.productName,
                                         price.supplyPrice,

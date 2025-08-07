@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class GoodsDisplayProductInfo {
 
-    private Long id;
+    private Integer id;
     private String goodsCode;
     private String goodsName;
     private BigDecimal supplyPrice;

@@ -75,6 +75,7 @@ public class Event {
 
         this.eventProducts.addAll(this.createEventProducts(eventImageInfo.getGoods(), currentUser));
 
+        this.sortEventImages();
         this.sortEventProducts();
     }
 
@@ -90,6 +91,7 @@ public class Event {
         this.eventProducts.addAll(this.updateEventProducts(eventImageInfo.getGoods()));
         this.eventProducts.subList(0, oldProductSize).clear();
 
+        this.sortEventImages();
         this.sortEventProducts();
     }
 
@@ -129,7 +131,7 @@ public class Event {
 
     private EventProduct createOrUpdateEventProduct(EventImageProductInfo eventImageProductInfo) {
         EventProduct eventProduct = this.eventProducts.stream()
-                .filter(it -> it.getEventProductId().equals(eventImageProductInfo.getId()))
+                .filter(it -> it.getDetailSequence().equals(eventImageProductInfo.getId()))
                 .findFirst()
                 .orElseGet(() -> EventProduct.from(this));
         eventProduct.setProductCode(eventImageProductInfo.getGoodsCode());
@@ -138,10 +140,19 @@ public class Event {
         return eventProduct;
     }
 
+    private void sortEventImages() {
+        int index = 1;
+        for (EventImage eventImage : this.eventImages) {
+            eventImage.setDetailSequence(index++);
+        }
+    }
+
     private void sortEventProducts() {
         int index = 1;
         for (EventProduct eventProduct: this.eventProducts) {
-            eventProduct.setSortSequence(index++);
+            eventProduct.setDetailSequence(index);
+            eventProduct.setSortSequence(index);
+            index++;
         }
     }
 }

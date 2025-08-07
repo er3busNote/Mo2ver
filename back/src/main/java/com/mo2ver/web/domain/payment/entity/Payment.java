@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -54,6 +56,9 @@ public class Payment {
     @Column(name = "PAY_STS", columnDefinition = "CHAR(10) COMMENT '결재상태'")
     private PaymentStatus paymentStatus;
 
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentDetail> paymentDetails = new ArrayList<>();
+
     @Column(name = "REGR", nullable = false, columnDefinition = "VARCHAR(30) COMMENT '등록자'")
     @NotBlank
     private String register;
@@ -88,6 +93,8 @@ public class Payment {
         this.createOrUpdatePayment(paymentInfo, currentUser);
         this.paymentKey = paymentInfo.getPaymentKey();
         this.paymentStatus = PaymentStatus.CONFIRM;
+
+        this.sortPaymentDetails();
     }
 
     public void cancel(PaymentInfo paymentInfo, Member currentUser) {
@@ -97,5 +104,12 @@ public class Payment {
 
     private void createOrUpdatePayment(PaymentInfo paymentInfo, Member currentUser) {
         this.updater = currentUser.getMemberNo();
+    }
+
+    private void sortPaymentDetails() {
+        int index = 1;
+        for (PaymentDetail paymentDetail : this.paymentDetails) {
+            paymentDetail.setDetailSequence(index++);
+        }
     }
 }

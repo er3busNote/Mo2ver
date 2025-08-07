@@ -159,7 +159,7 @@ public class Banner {
 
     private BannerProduct createOrUpdateBannerProduct(GoodsDisplayProductInfo goodsDisplayProductInfo) {
         BannerProduct bannerProduct = this.bannerProducts.stream()
-                .filter(it -> it.getBannerProductId().equals(goodsDisplayProductInfo.getId()))
+                .filter(it -> it.getDetailSequence().equals(goodsDisplayProductInfo.getId()))
                 .findFirst()
                 .orElseGet(() -> BannerProduct.from(this));
         bannerProduct.setProductCode(goodsDisplayProductInfo.getGoodsCode());
@@ -170,7 +170,7 @@ public class Banner {
 
     private BannerDetail createOrUpdateBannerDetail(BannerImageDetailInfo bannerImageDetailInfo) {
         BannerDetail bannerDetail = this.bannerDetails.stream()
-                .filter(it -> it.getBannerDetailId().equals(bannerImageDetailInfo.getId()))
+                .filter(it -> it.getDetailSequence().equals(bannerImageDetailInfo.getId()))
                 .findFirst()
                 .orElseGet(() -> BannerDetail.from(this));
         bannerDetail.setBannerContents(bannerImageDetailInfo.getTitle());
@@ -184,14 +184,18 @@ public class Banner {
     private void sortBannerProducts() {
         int index = 1;
         for (BannerProduct bannerProduct: this.bannerProducts) {
-            bannerProduct.setSortSequence(index++);
+            bannerProduct.setDetailSequence(index);
+            bannerProduct.setSortSequence(index);
+            index++;
         }
     }
 
     private void sortBannerDetails() {
         int index = 1;
         for (BannerDetail bannerDetail: this.bannerDetails) {
-            bannerDetail.setSortSequence(index++);
+            bannerDetail.setDetailSequence(index);
+            bannerDetail.setSortSequence(index);
+            index++;
         }
     }
 

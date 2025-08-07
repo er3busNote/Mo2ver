@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,15 +18,11 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = "eventImageNo")
+@EqualsAndHashCode(of = {"event", "detailSequence"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class EventImage {
+public class EventImage implements Serializable {
 
     @Id
-    @Column(name = "EVT_IMG_NO", columnDefinition = "BIGINT(20) COMMENT '이벤트이미지번호'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 (AUTO_INCREMENT)
-    private Long eventImageNo;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "EVT_NO",
@@ -35,6 +32,10 @@ public class EventImage {
             columnDefinition = "CHAR(10) COMMENT '이벤트번호'"
     )
     private Event event;
+
+    @Id
+    @Column(name= "DTL_SEQ", columnDefinition = "INT(11) COMMENT '상세순서'")
+    private Integer detailSequence;
 
     @Column(name = "GD_IMG_ATT_FILE", columnDefinition = "BIGINT(20) COMMENT '상품이미지첨부파일'")
     private Integer goodsImageAttachFile;
