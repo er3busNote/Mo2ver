@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Entity
 @Table(name = "EVT")    // 이벤트 관리
@@ -68,10 +69,10 @@ public class Event {
         this.createOrUpdateEvent(eventImageInfo, currentUser);
         this.register = currentUser.getMemberNo();
 
-        this.eventImages.add(this.createEventImage(eventImageInfo.getDisplayFile(), 'Y', currentUser));
-        this.eventImages.add(this.createEventImage(eventImageInfo.getEventFile(), 'N', currentUser));
+        this.eventImages.add(this.createEventImage(eventImageInfo.getDisplayFile(), 'Y'));
+        this.eventImages.add(this.createEventImage(eventImageInfo.getEventFile(), 'N'));
 
-        this.eventProducts.addAll(this.createEventProducts(eventImageInfo.getGoods(), currentUser));
+        this.eventProducts.addAll(this.createEventProducts(eventImageInfo.getGoods()));
 
         this.sortEventImages();
         this.sortEventProducts();
@@ -81,8 +82,8 @@ public class Event {
         this.createOrUpdateEvent(eventImageInfo, currentUser);
 
         int oldImageSize = this.eventImages.size();
-        this.eventImages.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y', currentUser));
-        this.eventImages.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N', currentUser));
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getDisplayFile(), 'Y'));
+        this.eventImages.add(this.updateEventImage(eventImageInfo.getEventFile(), 'N'));
         this.eventImages.subList(0, oldImageSize).clear();
 
         int oldProductSize = this.eventProducts.size();
@@ -100,36 +101,36 @@ public class Event {
         this.updater = currentUser.getMemberNo();
     }
 
-    private EventImage createEventImage(String attachFile, Character basicImageYesNo, Member currentUser) {
-        return EventImage.of(this, JasyptUtil.getDecryptor(attachFile), basicImageYesNo, currentUser);
+    private EventImage createEventImage(String attachFile, Character basicImageYesNo) {
+        return EventImage.of(this, JasyptUtil.getDecryptor(attachFile), basicImageYesNo);
     }
 
-    private List<EventProduct> createEventProducts(List<EventImageProductInfo> eventImageProducts, Member currentUser) {
+    private List<EventProduct> createEventProducts(List<EventImageProductInfo> eventImageProducts) {
         return eventImageProducts.stream()
-                .map(info -> EventProduct.of(this, info, currentUser))
+                .map(info -> EventProduct.of(this, info))
                 .collect(Collectors.toList());
     }
 
-    private EventImage updateEventImage(String attachFile, Character basicImageYesNo, Member currentUser) {
+    private EventImage updateEventImage(String attachFile, Character basicImageYesNo) {
         Integer attachFileId = JasyptUtil.getDecryptor(attachFile);
         return this.eventImages.stream()
                 .filter(it -> it.getBasicImageYesNo() == basicImageYesNo && Objects.equals(it.getGoodsImageAttachFile(), attachFileId))
                 .findFirst()
-                .orElseGet(() -> EventImage.of(this, attachFileId, basicImageYesNo, currentUser));
+                .orElseGet(() -> EventImage.of(this, attachFileId, basicImageYesNo));
     }
 
     private List<EventProduct> updateEventProducts(List<EventImageProductInfo> eventImageProducts) {
-        return eventImageProducts.stream()
-                .map(this::createOrUpdateEventProduct)
+        return IntStream.range(0, eventImageProducts.size())
+                .mapToObj(i -> this.createOrUpdateEventProduct(eventImageProducts.get(i), i))
                 .collect(Collectors.toList());
     }
 
-    private EventProduct createOrUpdateEventProduct(EventImageProductInfo eventImageProductInfo) {
+    private EventProduct createOrUpdateEventProduct(EventImageProductInfo eventImageProductInfo, Integer index) {
         EventProduct eventProduct = this.eventProducts.stream()
-                .filter(it -> it.getProductCode().equals(eventImageProductInfo.getGoodsCode()))
+                .filter(it -> it.getProductCode().equals(eventImageProductInfo.getGoodsCode()) && Objects.equals(it.getSortSequence(), eventImageProductInfo.getSortSequence()))
                 .findFirst()
-                .orElseGet(() -> EventProduct.from(this, generateNextDetailSequence()));
-        if (eventProduct.getProductCode() != null && eventProduct.getSortSequence() != null) return eventProduct;
+                .orElseGet(() -> EventProduct.from(this));
+        eventProduct.setDetailSequence(generateNextDetailSequence() + index);
         eventProduct.setProductCode(eventImageProductInfo.getGoodsCode());
         eventProduct.setProductName(eventImageProductInfo.getGoodsName());
         eventProduct.setSortSequence(eventImageProductInfo.getSortSequence());

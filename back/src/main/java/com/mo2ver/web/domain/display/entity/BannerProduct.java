@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.display.entity;
 
 import com.mo2ver.web.domain.display.dto.GoodsDisplayProductInfo;
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -68,19 +67,19 @@ public class BannerProduct implements Serializable {
     public static BannerProduct from(Banner banner) {
         return BannerProduct.builder()
                 .banner(banner)
-                .register(banner.getRegister())
+                .register(banner.getUpdater())
                 .updater(banner.getUpdater())
                 .build();
     }
 
-    public static BannerProduct of(Banner banner, GoodsDisplayProductInfo goodsDisplayProductInfo, Member currentUser) {
+    public static BannerProduct of(Banner banner, GoodsDisplayProductInfo goodsDisplayProductInfo) {
         return BannerProduct.builder()
                 .banner(banner)
                 .productCode(goodsDisplayProductInfo.getGoodsCode())
                 .productName(goodsDisplayProductInfo.getGoodsName())
                 .sortSequence(goodsDisplayProductInfo.getSortSequence())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(banner.getUpdater())
+                .updater(banner.getUpdater())
                 .build();
     }
 }

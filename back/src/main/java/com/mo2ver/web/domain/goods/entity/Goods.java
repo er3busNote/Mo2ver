@@ -122,11 +122,11 @@ public class Goods {
         this.member = currentUser;
         this.register = currentUser.getMemberNo();
 
-        this.goodsPrices.addAll(this.createGoodsPrices(goodsImageAttachRequest, options, currentUser));
+        this.goodsPrices.addAll(this.createGoodsPrices(goodsImageAttachRequest, options));
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
-            this.goodsDiscounts.addAll(this.createGoodsDiscounts(goodsImageAttachRequest, currentUser));
+            this.goodsDiscounts.addAll(this.createGoodsDiscounts(goodsImageAttachRequest));
         }
-        this.goodsImages.addAll(this.createGoodsImages(goodsImageAttachRequest.getGoodsImg(), currentUser));
+        this.goodsImages.addAll(this.createGoodsImages(goodsImageAttachRequest.getGoodsImg()));
 
         this.sortGoodsDiscounts();
         this.sortGoodsImages();
@@ -136,15 +136,15 @@ public class Goods {
         this.createOrUpdateGoods(goodsImageAttachRequest, currentUser);
 
         int oldPriceSize = this.goodsPrices.size();
-        this.goodsPrices.addAll(this.updateGoodsPrices(goodsImageAttachRequest, options, currentUser));
+        this.goodsPrices.addAll(this.updateGoodsPrices(goodsImageAttachRequest, options));
         this.goodsPrices.subList(0, oldPriceSize).clear();
         if('Y' == goodsImageAttachRequest.getSalePeriodYesNo()){
             int oldDiscountSize = this.goodsDiscounts.size();
-            this.goodsDiscounts.addAll(this.updateGoodsDiscounts(goodsImageAttachRequest, currentUser));
+            this.goodsDiscounts.addAll(this.updateGoodsDiscounts(goodsImageAttachRequest));
             this.goodsDiscounts.subList(0, oldDiscountSize).clear();
         }
         int oldImageSize = this.goodsImages.size();
-        this.goodsImages.addAll(this.updateGoodsImages(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode(), currentUser));
+        this.goodsImages.addAll(this.updateGoodsImages(goodsImageAttachRequest.getGoodsImg(), goodsImageAttachRequest.getGoodsCode()));
         this.goodsImages.subList(0, oldImageSize).clear();
 
         this.sortGoodsDiscounts();
@@ -168,31 +168,31 @@ public class Goods {
         this.updater = currentUser.getMemberNo();
     }
 
-    private List<Price> createGoodsPrices(GoodsImageRequest goodsImageRequest, Options options, Member currentUser) {
-        return Collections.singletonList(Price.of(this, options, goodsImageRequest, currentUser));
+    private List<Price> createGoodsPrices(GoodsImageRequest goodsImageRequest, Options options) {
+        return Collections.singletonList(Price.of(this, options, goodsImageRequest));
     }
 
-    private List<Discount> createGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
-        return Collections.singletonList(Discount.of(this, goodsImageRequest, currentUser));
+    private List<Discount> createGoodsDiscounts(GoodsImageRequest goodsImageRequest) {
+        return Collections.singletonList(Discount.of(this, goodsImageRequest));
     }
 
-    private List<GoodsImage> createGoodsImages(List<FileAttachInfo> listFileAttachInfo, Member currentUser) {
+    private List<GoodsImage> createGoodsImages(List<FileAttachInfo> listFileAttachInfo) {
         return listFileAttachInfo.stream()
-                .map(info -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser))
+                .map(info -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension()))
                 .collect(Collectors.toList());
     }
 
-    private List<Price> updateGoodsPrices(GoodsImageRequest goodsImageRequest, Options options, Member currentUser) {
+    private List<Price> updateGoodsPrices(GoodsImageRequest goodsImageRequest, Options options) {
         return this.goodsPrices.stream()
-                .map(it -> it.getOptions().equals(options) ? Price.of(this, it, options, goodsImageRequest, currentUser) : it)
+                .map(it -> it.getOptions().equals(options) ? Price.of(this, it, options, goodsImageRequest) : it)
                 .collect(Collectors.toList());
     }
 
-    private List<Discount> updateGoodsDiscounts(GoodsImageRequest goodsImageRequest, Member currentUser) {
+    private List<Discount> updateGoodsDiscounts(GoodsImageRequest goodsImageRequest) {
         Discount discount = this.goodsDiscounts.stream()
                 .filter(it -> it.getGoods().getGoodsCode().equals(goodsImageRequest.getGoodsCode()))
                 .findFirst()
-                .orElseGet(() -> Discount.of(this, goodsImageRequest, currentUser));
+                .orElseGet(() -> Discount.of(this, goodsImageRequest));
         discount.setStartDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         discount.setEndDate(goodsImageRequest.getDiscountEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         discount.setDiscountPrice(goodsImageRequest.getDiscountPrice());
@@ -203,17 +203,17 @@ public class Goods {
         return Collections.singletonList(discount);
     }
 
-    private List<GoodsImage> updateGoodsImages(List<FileAttachInfo> listFileAttachInfo, String goodsCode, Member currentUser) {
+    private List<GoodsImage> updateGoodsImages(List<FileAttachInfo> listFileAttachInfo, String goodsCode) {
         return listFileAttachInfo.stream()
-                .map(info -> this.updateGoodsImage(info, goodsCode, currentUser))
+                .map(info -> this.updateGoodsImage(info, goodsCode))
                 .collect(Collectors.toList());
     }
 
-    private GoodsImage updateGoodsImage(FileAttachInfo info, String goodsCode, Member currentUser) {
+    private GoodsImage updateGoodsImage(FileAttachInfo info, String goodsCode) {
         GoodsImage goodsImage = this.goodsImages.stream()
                 .filter(it -> it.getGoodsImageAttachFile().equals(JasyptUtil.getDecryptor(info.getFileAttachCode())) && it.getGoods().getGoodsCode().equals(goodsCode))
                 .findFirst()
-                .orElseGet(() -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension(), currentUser));
+                .orElseGet(() -> GoodsImage.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), info.getFileExtension()));
         goodsImage.setUpdater(this.updater);
         return goodsImage;
     }

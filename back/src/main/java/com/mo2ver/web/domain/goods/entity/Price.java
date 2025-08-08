@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.goods.entity;
 
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -101,17 +100,17 @@ public class Price implements Persistable<PriceId> {
         return priceId == null || goods == null || options == null;
     }
 
-    public static Price of(Goods goods, Options options, GoodsImageRequest goodsImageRequest, Member currentUser) {
+    public static Price of(Goods goods, Options options, GoodsImageRequest goodsImageRequest) {
         PriceId priceId = new PriceId(goods.getGoodsCode(), options.getGoodsOptionNo());
-        return Price.of(priceId, goods, options, goodsImageRequest, currentUser);
+        return Price.of(priceId, goods, options, goodsImageRequest);
     }
 
-    public static Price of(Goods goods, Price price, Options options, GoodsImageRequest goodsImageRequest, Member currentUser) {
+    public static Price of(Goods goods, Price price, Options options, GoodsImageRequest goodsImageRequest) {
         PriceId priceId = price == null || price.isNew() ? new PriceId(goods.getGoodsCode(), options.getGoodsOptionNo()) : Objects.requireNonNull(price).getPriceId();
-        return Price.of(priceId, goods, options, goodsImageRequest, currentUser);
+        return Price.of(priceId, goods, options, goodsImageRequest);
     }
 
-    public static Price of(PriceId priceId, Goods goods, Options options, GoodsImageRequest goodsImageRequest, Member currentUser) {
+    public static Price of(PriceId priceId, Goods goods, Options options, GoodsImageRequest goodsImageRequest) {
         return Price.builder()
                 .priceId(priceId)
                 .goods(goods)
@@ -125,8 +124,8 @@ public class Price implements Persistable<PriceId> {
                 .saleStartDate(goodsImageRequest.getSaleStartDate())
                 .saleEndDate(goodsImageRequest.getSaleEndDate())
                 .saleConditionCode("10")
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(goods.getUpdater())
+                .updater(goods.getUpdater())
                 .build();
     }
 }

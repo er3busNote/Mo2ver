@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.delivery.entity;
 
 import com.mo2ver.web.domain.delivery.type.DeliveryStatus;
-import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.OrderDetail;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,13 +60,13 @@ public class DeliveryDetail implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static DeliveryDetail of(Delivery delivery, OrderDetail orderDetail, DeliveryStatus deliveryStatus, Member currentUser) {
+    public static DeliveryDetail of(Delivery delivery, OrderDetail orderDetail, DeliveryStatus deliveryStatus) {
         return DeliveryDetail.builder()
                 .delivery(delivery)
                 .detailSequence(orderDetail.getDetailSequence())
                 .deliveryStatus(deliveryStatus)
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(delivery.getUpdater())
+                .updater(delivery.getUpdater())
                 .build();
     }
 }

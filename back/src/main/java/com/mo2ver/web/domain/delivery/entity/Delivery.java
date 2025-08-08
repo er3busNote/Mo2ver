@@ -86,16 +86,16 @@ public class Delivery {
         this.address = address;
         this.register = currentUser.getMemberNo();
 
-        this.deliveryDetails.addAll(this.createDeliveryDetail(order.getOrderDetails(), currentUser));
+        this.deliveryDetails.addAll(this.createDeliveryDetail(order.getOrderDetails()));
     }
 
     private void createOrUpdateDelivery(Member currentUser) {
         this.updater = currentUser.getMemberNo();
     }
 
-    private List<DeliveryDetail> createDeliveryDetail(List<OrderDetail> orderDetails, Member currentUser) {
+    private List<DeliveryDetail> createDeliveryDetail(List<OrderDetail> orderDetails) {
         return orderDetails.stream()
-                .map(info -> DeliveryDetail.of(this, info, DeliveryStatus.READY, currentUser))
+                .map(info -> DeliveryDetail.of(this, info, DeliveryStatus.READY))
                 .collect(Collectors.toList());
     }
 }

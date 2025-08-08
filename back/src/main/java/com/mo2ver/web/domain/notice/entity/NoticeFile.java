@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.notice.entity;
 
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -69,18 +68,18 @@ public class NoticeFile implements Serializable {
     public static NoticeFile from(Notice notice) {
         return NoticeFile.builder()
                 .notice(notice)
-                .register(notice.getRegister())
+                .register(notice.getUpdater())
                 .updater(notice.getUpdater())
                 .build();
     }
 
-    public static NoticeFile of(Notice notice, Integer attachFile, Character useYesNo, Member currentUser) {
+    public static NoticeFile of(Notice notice, Integer attachFile, Character useYesNo) {
         return NoticeFile.builder()
                 .notice(notice)
                 .attachFile(attachFile)
                 .useYesNo(useYesNo)
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(notice.getUpdater())
+                .updater(notice.getUpdater())
                 .build();
     }
 }

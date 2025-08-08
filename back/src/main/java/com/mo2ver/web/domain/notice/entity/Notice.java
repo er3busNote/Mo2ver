@@ -75,7 +75,7 @@ public class Notice {
         this.member = currentUser;
         this.register = currentUser.getMemberNo();
 
-        this.noticeFiles.addAll(this.createNoticeFiles(noticeFileInfo.getNoticeFiles(), currentUser));
+        this.noticeFiles.addAll(this.createNoticeFiles(noticeFileInfo.getNoticeFiles()));
 
         this.sortNoticeFiles();
     }
@@ -97,9 +97,9 @@ public class Notice {
         this.updater = currentUser.getMemberNo();
     }
 
-    private List<NoticeFile> createNoticeFiles(List<FileAttachInfo> files, Member currentUser) {
+    private List<NoticeFile> createNoticeFiles(List<FileAttachInfo> files) {
         return files.stream()
-                .map(info -> NoticeFile.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), 'Y', currentUser))
+                .map(info -> NoticeFile.of(this, JasyptUtil.getDecryptor(info.getFileAttachCode()), 'Y'))
                 .collect(Collectors.toList());
     }
 

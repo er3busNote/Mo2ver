@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.goods.entity;
 
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -70,27 +69,14 @@ public class GoodsImage implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, String fileExtension, Member currentUser) {
+    public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, String fileExtension) {
         return GoodsImage.builder()
                 .goods(goods)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .goodsImageExtension(fileExtension)
                 .useYesNo('Y')
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
-                .build();
-    }
-
-    public static GoodsImage of(Goods goods, Integer goodsImageAttachFile, Character basicImageYesNo, String fileExtension, Integer index, Member currentUser) {
-        return GoodsImage.builder()
-                .goods(goods)
-                .goodsImageAttachFile(goodsImageAttachFile)
-                .goodsImageExtension(fileExtension)
-                .basicImageYesNo(basicImageYesNo)
-                .sortSequence(index)
-                .useYesNo('Y')
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(goods.getUpdater())
+                .updater(goods.getUpdater())
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.display.entity;
 
 import com.mo2ver.web.domain.display.dto.BannerImageDetailInfo;
-import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.global.common.utils.JasyptUtil;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -72,38 +71,27 @@ public class BannerDetail implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static BannerDetail from(Banner banner) {
+    public static BannerDetail from(Banner banner, Integer imageAttachFile, BannerImageDetailInfo bannerImageDetailInfo) {
         return BannerDetail.builder()
                 .banner(banner)
-                .sortSequence(1)
+                .bannerContents(bannerImageDetailInfo.getTitle())
+                .connectUrl(bannerImageDetailInfo.getCnntUrl())
+                .useYesNo(bannerImageDetailInfo.getUseyn())
+                .imageAttachFile(imageAttachFile)
                 .register(banner.getRegister())
                 .updater(banner.getUpdater())
                 .build();
     }
 
-    public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Member currentUser) {
+    public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo) {
         return BannerDetail.builder()
                 .banner(banner)
                 .imageAttachFile(JasyptUtil.getDecryptor(bannerImageDetailInfo.getFile()))
                 .connectUrl(bannerImageDetailInfo.getCnntUrl())
                 .bannerContents(bannerImageDetailInfo.getTitle())
-                .sortSequence(1)
                 .useYesNo(bannerImageDetailInfo.getUseyn())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
-                .build();
-    }
-
-    public static BannerDetail of(Banner banner, BannerImageDetailInfo bannerImageDetailInfo, Integer imageAttachFile, Integer index, Member currentUser) {
-        return BannerDetail.builder()
-                .banner(banner)
-                .imageAttachFile(imageAttachFile)
-                .connectUrl(bannerImageDetailInfo.getCnntUrl())
-                .bannerContents(bannerImageDetailInfo.getTitle())
-                .sortSequence(1)
-                .useYesNo(bannerImageDetailInfo.getUseyn())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(banner.getUpdater())
+                .updater(banner.getUpdater())
                 .build();
     }
 }

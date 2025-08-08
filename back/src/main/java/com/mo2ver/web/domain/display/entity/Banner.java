@@ -14,10 +14,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Entity
 @Table(name = "DP_BNNR")    // 전시배너관리
@@ -80,7 +79,7 @@ public class Banner {
         this.displayTemplateCode = goodsDisplayInfo.getType();
         this.register = currentUser.getMemberNo();
 
-        this.bannerProducts.addAll(this.createBannerProducts(goodsDisplayInfo.getGoods(), currentUser));
+        this.bannerProducts.addAll(this.createBannerProducts(goodsDisplayInfo.getGoods()));
 
         this.sortBannerProducts();
     }
@@ -90,7 +89,7 @@ public class Banner {
         this.displayTemplateCode = bannerImageInfo.getType();
         this.register = currentUser.getMemberNo();
 
-        this.bannerDetails.addAll(this.createBannerDetails(bannerImageInfo.getBnnrImg(), currentUser));
+        this.bannerDetails.addAll(this.createBannerDetails(bannerImageInfo.getBnnrImg()));
 
         this.sortBannerDetails();
     }
@@ -101,8 +100,6 @@ public class Banner {
         int oldSize = this.bannerProducts.size();
         this.bannerProducts.addAll(this.updateBannerProducts(goodsDisplayInfo.getGoods()));
         this.bannerProducts.subList(0, oldSize).clear();
-
-        this.sortBannerProducts();
     }
 
     public void update(BannerImageInfo bannerImageInfo, Member currentUser) {
@@ -133,21 +130,21 @@ public class Banner {
         this.updater = currentUser.getMemberNo();
     }
 
-    private List<BannerProduct> createBannerProducts(List<GoodsDisplayProductInfo> bannerGoodsProducts, Member currentUser) {
+    private List<BannerProduct> createBannerProducts(List<GoodsDisplayProductInfo> bannerGoodsProducts) {
         return bannerGoodsProducts.stream()
-                .map(info -> BannerProduct.of(this, info, currentUser))
+                .map(info -> BannerProduct.of(this, info))
                 .collect(Collectors.toList());
     }
 
-    private List<BannerDetail> createBannerDetails(List<BannerImageDetailInfo> bannerImageDetails, Member currentUser) {
+    private List<BannerDetail> createBannerDetails(List<BannerImageDetailInfo> bannerImageDetails) {
         return bannerImageDetails.stream()
-                .map(info -> BannerDetail.of(this, info, currentUser))
+                .map(info -> BannerDetail.of(this, info))
                 .collect(Collectors.toList());
     }
 
     private List<BannerProduct> updateBannerProducts(List<GoodsDisplayProductInfo> bannerGoodsProducts) {
-        return bannerGoodsProducts.stream()
-                .map(this::createOrUpdateBannerProduct)
+        return IntStream.range(0, bannerGoodsProducts.size())
+                .mapToObj(i -> this.createOrUpdateBannerProduct(bannerGoodsProducts.get(i), i))
                 .collect(Collectors.toList());
     }
 
@@ -157,36 +154,40 @@ public class Banner {
                 .collect(Collectors.toList());
     }
 
-    private BannerProduct createOrUpdateBannerProduct(GoodsDisplayProductInfo goodsDisplayProductInfo) {
+    private BannerProduct createOrUpdateBannerProduct(GoodsDisplayProductInfo goodsDisplayProductInfo, Integer index) {
         BannerProduct bannerProduct = this.bannerProducts.stream()
-                .filter(it -> it.getDetailSequence().equals(goodsDisplayProductInfo.getId()))
+                .filter(it -> it.getProductCode().equals(goodsDisplayProductInfo.getGoodsCode()) && Objects.equals(it.getSortSequence(), goodsDisplayProductInfo.getSortSequence()))
                 .findFirst()
                 .orElseGet(() -> BannerProduct.from(this));
+        bannerProduct.setDetailSequence(generateNextDetailSequence() + index);
         bannerProduct.setProductCode(goodsDisplayProductInfo.getGoodsCode());
         bannerProduct.setProductName(goodsDisplayProductInfo.getGoodsName());
+        bannerProduct.setSortSequence(goodsDisplayProductInfo.getSortSequence());
         bannerProduct.setUpdater(this.updater);
         return bannerProduct;
     }
 
     private BannerDetail createOrUpdateBannerDetail(BannerImageDetailInfo bannerImageDetailInfo) {
-        BannerDetail bannerDetail = this.bannerDetails.stream()
-                .filter(it -> it.getDetailSequence().equals(bannerImageDetailInfo.getId()))
+        Integer attachFileId = JasyptUtil.getDecryptor(bannerImageDetailInfo.getFile());
+        return this.bannerDetails.stream()
+                .filter(it -> Objects.equals(it.getImageAttachFile(), attachFileId))
                 .findFirst()
-                .orElseGet(() -> BannerDetail.from(this));
-        bannerDetail.setBannerContents(bannerImageDetailInfo.getTitle());
-        bannerDetail.setConnectUrl(bannerImageDetailInfo.getCnntUrl());
-        bannerDetail.setImageAttachFile(JasyptUtil.getDecryptor(bannerImageDetailInfo.getFile()));
-        bannerDetail.setUseYesNo(bannerImageDetailInfo.getUseyn());
-        bannerDetail.setUpdater(this.updater);
-        return bannerDetail;
+                .orElseGet(() -> BannerDetail.from(this, attachFileId, bannerImageDetailInfo));
+    }
+
+    private Integer generateNextDetailSequence() {
+        return this.bannerProducts.stream()
+                .map(BannerProduct::getDetailSequence)
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder())
+                .map(i -> i + 1)
+                .orElse(1);
     }
 
     private void sortBannerProducts() {
         int index = 1;
         for (BannerProduct bannerProduct: this.bannerProducts) {
-            bannerProduct.setDetailSequence(index);
-            bannerProduct.setSortSequence(index);
-            index++;
+            bannerProduct.setDetailSequence(index++);
         }
     }
 

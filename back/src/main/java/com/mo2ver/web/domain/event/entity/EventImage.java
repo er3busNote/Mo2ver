@@ -1,6 +1,5 @@
 package com.mo2ver.web.domain.event.entity;
 
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -61,13 +60,13 @@ public class EventImage implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventImage of(Event event, Integer goodsImageAttachFile, Character basicImageYesNo, Member currentUser) {
+    public static EventImage of(Event event, Integer goodsImageAttachFile, Character basicImageYesNo) {
         return EventImage.builder()
                 .event(event)
                 .goodsImageAttachFile(goodsImageAttachFile)
                 .basicImageYesNo(basicImageYesNo)
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(event.getUpdater())
+                .updater(event.getUpdater())
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.goods.entity;
 
 import com.mo2ver.web.domain.goods.dto.request.GoodsImageRequest;
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -76,7 +75,7 @@ public class Discount implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static Discount of(Goods goods, GoodsImageRequest goodsImageRequest, Member currentUser) {
+    public static Discount of(Goods goods, GoodsImageRequest goodsImageRequest) {
         return Discount.builder()
                 .goods(goods)
                 .startDate(goodsImageRequest.getDiscountStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
@@ -85,8 +84,8 @@ public class Discount implements Serializable {
                 .rateYesNo(goodsImageRequest.getRateYesNo())
                 .maxLimitYesNo(goodsImageRequest.getMaxLimitYesNo())
                 .maxLimitAmount(goodsImageRequest.getMaxLimitAmount())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(goods.getUpdater())
+                .updater(goods.getUpdater())
                 .build();
     }
 }

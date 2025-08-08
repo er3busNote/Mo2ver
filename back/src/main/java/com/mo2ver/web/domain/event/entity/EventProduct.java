@@ -1,7 +1,6 @@
 package com.mo2ver.web.domain.event.entity;
 
 import com.mo2ver.web.domain.event.dto.EventImageProductInfo;
-import com.mo2ver.web.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -69,23 +68,22 @@ public class EventProduct implements Serializable {
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    public static EventProduct from(Event event, Integer detailSequence) {
+    public static EventProduct from(Event event) {
         return EventProduct.builder()
                 .event(event)
-                .detailSequence(detailSequence)
-                .register(event.getRegister())
+                .register(event.getUpdater())
                 .updater(event.getUpdater())
                 .build();
     }
 
-    public static EventProduct of(Event event, EventImageProductInfo eventImageProductInfo, Member currentUser) {
+    public static EventProduct of(Event event, EventImageProductInfo eventImageProductInfo) {
         return EventProduct.builder()
                 .event(event)
                 .productCode(eventImageProductInfo.getGoodsCode())
                 .productName(eventImageProductInfo.getGoodsName())
                 .sortSequence(eventImageProductInfo.getSortSequence())
-                .register(currentUser.getMemberNo())
-                .updater(currentUser.getMemberNo())
+                .register(event.getUpdater())
+                .updater(event.getUpdater())
                 .build();
     }
 }
