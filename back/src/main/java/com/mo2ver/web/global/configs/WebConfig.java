@@ -3,6 +3,7 @@ package com.mo2ver.web.global.configs;
 import com.mo2ver.web.common.menu.converter.MenuTypeConverter;
 import com.mo2ver.web.domain.coupon.converter.CouponTypeConverter;
 import com.mo2ver.web.domain.goods.converter.CategoryTypeConverter;
+import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.common.setting.ImagesSetting;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -33,7 +33,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CorsSetting corsSetting;
     private final ImagesSetting imagesSetting;
-    private final Environment environment;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -52,6 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + imagesSetting.getFilepath() + "/")
                 .setCachePeriod(60 * 60 * 24 * 365);
     }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new MenuTypeConverter());
@@ -75,7 +75,7 @@ public class WebConfig implements WebMvcConfigurer {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
             protected void postProcessContext(Context context) {    // HTTP → HTTPS Rewrite
-                if (Arrays.asList(environment.getActiveProfiles()).contains("production") && isSSLApplied(context)) {    // SSL이 적용되었는지 확인
+                if (ProfileHelper.isProduction() && isSSLApplied(context)) {    // SSL이 적용되었는지 확인
                     SecurityConstraint securityConstraint = new SecurityConstraint();
                     securityConstraint.setUserConstraint("CONFIDENTIAL");
                     SecurityCollection collection = new SecurityCollection();

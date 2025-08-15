@@ -104,6 +104,10 @@ toss-payment:
   client-key: test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm # 클라이언트 키, SDK에 사용하세요
   secret-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6 # 시크릿 키, API에 사용하세요
 
+slack:
+  webhook:
+    url: https://hooks.slack.com/services/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
+
 sentry:
   dsn:
   send-default-pii: true     # 사용자 정보 포함

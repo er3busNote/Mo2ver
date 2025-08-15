@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -49,6 +50,10 @@ public class FileUtil {
             return fileName.substring(0, lastDotIndex);
         }
         return fileName;
+    }
+
+    public static boolean isExistFile(String filePath) {
+        return Files.exists(Paths.get(filePath));
     }
 
     private static void createDirectory(String uploadDirectory) {

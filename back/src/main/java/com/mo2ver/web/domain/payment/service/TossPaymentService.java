@@ -11,18 +11,17 @@ import com.mo2ver.web.domain.payment.entity.Payment;
 import com.mo2ver.web.domain.payment.repository.PaymentRepository;
 import com.mo2ver.web.domain.payment.type.PaymentStatus;
 import com.mo2ver.web.global.common.http.WebHttpClient;
+import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.common.setting.TossPaymentSetting;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import com.mo2ver.web.global.error.exception.TossPaymentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Slf4j
@@ -33,7 +32,6 @@ public class TossPaymentService {
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final TossPaymentSetting tossPaymentSetting;
-    private final Environment environment;
 
     @Transactional
     public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
@@ -48,7 +46,7 @@ public class TossPaymentService {
     public Mono<Void> confirmPayment(PaymentInfo paymentInfo, Member currentUser) {
         Order order = this.findOrderById(paymentInfo.getOrderId());
         Payment payment = this.findPaymentByOrderId(order);
-        if(Arrays.asList(environment.getActiveProfiles()).contains("test")){
+        if(ProfileHelper.isTest()){
             return Mono.fromRunnable(() -> payment.confirm(paymentInfo, currentUser));
         } else {
             String url = tossPaymentSetting.getUrlPath() + "/payments/confirm";

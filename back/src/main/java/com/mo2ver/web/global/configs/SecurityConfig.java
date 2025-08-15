@@ -1,6 +1,7 @@
 package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.domain.member.service.MemberService;
+import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.configs.filter.AdminFilterChain;
 import com.mo2ver.web.global.configs.filter.MemberFilterChain;
@@ -15,7 +16,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -54,12 +54,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final Environment environment;
     private final ApplicationContext applicationContext;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        if (Arrays.asList(environment.getActiveProfiles()).contains("production") && getServerPorts().contains(443)) {  // → HTTPS 서버 실 배포 시
+        if (ProfileHelper.isProduction() && getServerPorts().contains(443)) {  // → HTTPS 서버 실 배포 시
             configureForHTTPS(http);    // → CSRF Enabled
         } else {
             configureForHTTP(http);     // → CSRF Disabled

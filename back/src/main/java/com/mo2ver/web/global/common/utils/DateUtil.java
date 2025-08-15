@@ -1,5 +1,6 @@
 package com.mo2ver.web.global.common.utils;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -82,6 +83,17 @@ public class DateUtil {
     }
 
     /**
+     * 지정된 날짜와 시간을 LocalDate로 변환
+     * @param targetDate 날짜 포멧
+     * @return 현재 날짜
+     */
+    public static LocalDate toLocalDate(Date targetDate) {
+        return Instant.ofEpochMilli(targetDate.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    /**
      * 지정된 날짜와 시간을 로컬 타임존 기준으로 반환
      * @param targetDate 날짜/시간 포멧
      * @return 현재 날짜와 시간
@@ -115,6 +127,16 @@ public class DateUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+        return ChronoUnit.DAYS.between(startDate, endDate);
+    }
+
+    /**
+     * 두 날짜 간의 일 수 차이 계산
+     * @param endDate 종료 날짜
+     * @return 두 날짜의 차이 값
+     */
+    public static long daysBetween(LocalDate endDate) {
+        LocalDate startDate = LocalDate.now();
         return ChronoUnit.DAYS.between(startDate, endDate);
     }
 

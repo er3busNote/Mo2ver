@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.mo2ver.web.global.common.profile.ProfileHelper;
+import com.mo2ver.web.global.common.slack.SlackNotifier;
 import com.mo2ver.web.global.error.dto.ErrorFieldInfo;
 import com.mo2ver.web.global.error.dto.ErrorFieldTypeInfo;
 import com.mo2ver.web.global.error.dto.ErrorInfo;
 import com.mo2ver.web.global.error.dto.response.ErrorResponse;
 import com.mo2ver.web.global.error.dto.response.ErrorHandler;
 import com.mo2ver.web.global.error.type.ErrorCode;
+import io.sentry.Sentry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -43,8 +46,11 @@ public class ErrorExceptionController {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleRuntimeException(RuntimeException e) {
+        if (ProfileHelper.isProduction()) {
+            SlackNotifier.sendErrorAlert(e, Sentry.captureException(e));
+        }
         return errorHandler.buildError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorInfo.builder()
-                //.errors(e.getStackTrace())
+                //.errors(e.fillInStackTrace())
                 .message(e.getMessage())
                 .build());
     }

@@ -9,15 +9,14 @@ import com.mo2ver.web.domain.payment.dto.response.http.IamportResponse;
 import com.mo2ver.web.domain.payment.entity.Payment;
 import com.mo2ver.web.domain.payment.repository.PaymentRepository;
 import com.mo2ver.web.global.common.http.WebHttpClient;
+import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -30,13 +29,12 @@ public class IamportService {
 
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
-    private final Environment environment;
 
     @Transactional
     public Mono<Void> confirmPayment(PaymentInfo paymentInfo, Member currentUser) {
         Order order = this.findOrderById(paymentInfo.getOrderId());
         Payment payment = this.findPaymentByOrderId(order);
-        if(Arrays.asList(environment.getActiveProfiles()).contains("test")){
+        if(ProfileHelper.isTest()){
             return Mono.fromRunnable(() -> payment.confirm(paymentInfo, currentUser));
         } else {
             return getAccessToken()
