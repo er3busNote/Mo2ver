@@ -1,7 +1,6 @@
 package com.mo2ver.web.global.configs;
 
 import com.mo2ver.web.domain.member.service.MemberService;
-import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.configs.filter.AdminFilterChain;
 import com.mo2ver.web.global.configs.filter.MemberFilterChain;
@@ -58,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        if (ProfileHelper.isProduction() && getServerPorts().contains(443)) {  // → HTTPS 서버 실 배포 시
+        if (getServerPorts().contains(443)) {  // → HTTPS 서버 실 배포 시
             configureForHTTPS(http);    // → CSRF Enabled
         } else {
             configureForHTTP(http);     // → CSRF Disabled

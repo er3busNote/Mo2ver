@@ -3,7 +3,6 @@ package com.mo2ver.web.global.configs;
 import com.mo2ver.web.common.menu.converter.MenuTypeConverter;
 import com.mo2ver.web.domain.coupon.converter.CouponTypeConverter;
 import com.mo2ver.web.domain.goods.converter.CategoryTypeConverter;
-import com.mo2ver.web.global.common.profile.ProfileHelper;
 import com.mo2ver.web.global.common.setting.CorsSetting;
 import com.mo2ver.web.global.common.setting.ImagesSetting;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
             protected void postProcessContext(Context context) {    // HTTP → HTTPS Rewrite
-                if (ProfileHelper.isProduction() && isSSLApplied(context)) {    // SSL이 적용되었는지 확인
+                if (isSSLApplied(context)) {    // SSL이 적용되었는지 확인
                     SecurityConstraint securityConstraint = new SecurityConstraint();
                     securityConstraint.setUserConstraint("CONFIDENTIAL");
                     SecurityCollection collection = new SecurityCollection();

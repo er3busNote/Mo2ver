@@ -16,16 +16,21 @@ import java.time.LocalDate;
 @Slf4j
 public class SslCertificateService {
 
-    @Value("${server.ssl.certificate}")
+    @Value("${server.ssl.certificate:#{null}}")
     private String certificatePath;
 
     public void checkCertificate() {
-        try {
-            if (!FileUtil.isExistFile(certificatePath)) {
-                log.error("SSL 인증서 파일을 찾을 수 없습니다: {}", certificatePath);
-                return;
-            }
+        if (certificatePath == null) {
+            log.warn("SSL certificate path가 설정되지 않았습니다. 체크를 건너뜁니다.");
+            return;
+        }
 
+        if (!FileUtil.isExistFile(certificatePath)) {
+            log.error("SSL 인증서 파일을 찾을 수 없습니다: {}", certificatePath);
+            return;
+        }
+
+        try {
             X509Certificate cert = loadCertificate(certificatePath);
             LocalDate expireDate = DateUtil.toLocalDate(cert.getNotAfter());
 
