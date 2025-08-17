@@ -36,8 +36,6 @@ interface DialogProps {
 	category: ActionCreatorsMapObject;
 	replaceField: (productData: readonly GoodsData[]) => void;
 	handleClose: () => void;
-	header: SxProps<Theme>;
-	base: SxProps<Theme>;
 	goodsSaveData: Array<BannerGoodsDetailValues>;
 }
 
