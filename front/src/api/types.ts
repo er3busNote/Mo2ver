@@ -377,6 +377,16 @@ interface OrderInfoData {
 	goodsOrders: Array<OrderGoodsInfoData>;
 }
 
+interface OrderCouponData {
+	orderId: string;
+	couponCodes: Array<string>;
+}
+
+interface OrderPointData {
+	orderId: string;
+	pointAmount: number;
+}
+
 // 11. Payment Type
 interface PaymentData {
 	clientKey: string;
@@ -505,6 +515,8 @@ export type {
 	OrderGoodsData,
 	OrderGoodsInfoData,
 	OrderInfoData,
+	OrderCouponData,
+	OrderPointData,
 	PaymentData,
 	PaymentInfoData,
 	PaymentConfirmData,
