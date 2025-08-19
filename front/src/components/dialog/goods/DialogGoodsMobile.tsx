@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { toastMessage } from '@store/index';
 import Api from '@api/index';
 import { GoodsData, CategoryData } from '@api/types';
 import useCategoryInfo from '@hooks/category/useCategoryInfo';
@@ -27,7 +28,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerGoodsDetailValues } from '@pages/admin/types';
 import { useIsMobile } from '@context/MobileContext';
-import { not, intersect, union } from '@utils/set';
+import { not, intersect, intersectBy, union } from '@utils/set';
 import { some, indexOf, includes } from 'lodash';
 
 interface DialogProps {
@@ -47,6 +48,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 	handleClose,
 	goodsSaveData,
 }): JSX.Element => {
+	const dispatch = useDispatch();
 	const isMobile = useIsMobile();
 	const [keyword, setKeyword] = useState('');
 	const [goodsName, setGoodsName] = useState<string>('');
@@ -165,6 +167,15 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 		setLeft([]);
 	};
 	const handleCheckedRight = () => {
+		const duplicates = intersectBy(right, leftChecked, 'goodsCode');
+		if (duplicates.length > 0) {
+			dispatch(
+				toastMessage({
+					message: '중복된 값이 존재합니다',
+					type: 'info',
+				})
+			);
+		}
 		setRight(union(right, leftChecked, 'goodsCode'));
 		setLeft(not(left, leftChecked));
 		setChecked(not(checked, leftChecked));
