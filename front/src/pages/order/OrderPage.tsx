@@ -158,7 +158,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
 	const [addressData, setAddressReload] = useAddressInfo({ address });
-	const orderData = useOrderList({ order, orderId });
+	const [orderData, setReload] = useOrderList({ order, orderId });
 
 	const methods = useForm<OrderFormValues>({
 		mode: 'onChange',
