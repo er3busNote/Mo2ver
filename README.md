@@ -16,7 +16,7 @@
 ![Infra & Concept](./images/INFRA&CONCEPT_v3.PNG)
 
 ## Init Setting
-- [Spring Data JPA](https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.7.3&packaging=jar&jvmVersion=1.8&groupId=com.mo2ver&artifactId=master&name=master&description=Mo2ver%20project%20for%20Spring%20Boot&packageName=com.mo2ver.master&dependencies=data-jpa,validation,security,mail,devtools,mariadb,lombok)
+- [Spring Data JPA](https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.7.3&packaging=jar&jvmVersion=1.8&groupId=com.mo2ver&artifactId=mo2ver&name=mo2ver&description=Mo2ver%20project%20for%20Spring%20Boot&packageName=com.mo2ver.web&dependencies=data-jpa,validation,security,mail,devtools,mariadb,lombok)
 - [Spring Batch](https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.7.3&packaging=jar&jvmVersion=1.8&groupId=com.mo2ver&artifactId=batch&name=batch&description=Mo2ver%20project%20for%20Spring%20Batch&packageName=com.mo2ver.batch&dependencies=batch,mariadb,lombok) for **`Data Migration`**
 
 ## Compatible
