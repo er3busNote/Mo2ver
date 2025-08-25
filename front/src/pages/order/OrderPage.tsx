@@ -8,7 +8,14 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { MemberData, AddressData, OrderData, OrderGoodsData } from '@api/types';
+import {
+	MemberData,
+	AddressData,
+	OrderData,
+	OrderCouponData,
+	OrderPointData,
+	OrderGoodsData,
+} from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
@@ -166,6 +173,16 @@ const OrderPage: FC<OrderDispatchProps> = ({
 		resolver: yupResolver(orderSchema),
 	});
 
+	const onCouponApply = async (orderCouponData: OrderCouponData) => {
+		const csrfData = await member.csrf();
+		await order.updateCoupon(orderCouponData, csrfData);
+		setReload(true);
+	};
+	const onPointApply = async (orderPointData: OrderPointData) => {
+		const csrfData = await member.csrf();
+		await order.updatePoint(orderPointData, csrfData);
+		setReload(true);
+	};
 	const submitForm = async (
 		data: OrderFormValues,
 		orderForm?: BaseSyntheticEvent<object, any, any>
