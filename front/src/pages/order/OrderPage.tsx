@@ -8,7 +8,14 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@store/types';
 import Api from '@api/index';
-import { MemberData, AddressData, OrderData, OrderGoodsData } from '@api/types';
+import {
+	MemberData,
+	AddressData,
+	OrderData,
+	OrderCouponData,
+	OrderPointData,
+	OrderGoodsData,
+} from '@api/types';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
@@ -45,6 +52,8 @@ interface OrderProps {
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
 	setAddressReload: Dispatch<SetStateAction<boolean>>;
+	onCouponApply: (orderCouponData: OrderCouponData) => void;
+	onPointApply: (orderPointData: OrderPointData) => void;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
@@ -82,6 +91,8 @@ const OrderPC: FC<OrderProps> = ({
 	addressData,
 	orderData,
 	setAddressReload,
+	onCouponApply,
+	onPointApply,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -101,6 +112,8 @@ const OrderPC: FC<OrderProps> = ({
 				addressData={addressData}
 				orderData={orderData}
 				setAddressReload={setAddressReload}
+				onCouponApply={onCouponApply}
+				onPointApply={onPointApply}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -115,6 +128,8 @@ const OrderMobile: FC<OrderProps> = ({
 	addressData,
 	orderData,
 	setAddressReload,
+	onCouponApply,
+	onPointApply,
 	onSubmit,
 }): JSX.Element => {
 	return (
@@ -134,6 +149,8 @@ const OrderMobile: FC<OrderProps> = ({
 				addressData={addressData}
 				orderData={orderData}
 				setAddressReload={setAddressReload}
+				onCouponApply={onCouponApply}
+				onPointApply={onPointApply}
 				onSubmit={onSubmit}
 			/>
 		</Box>
@@ -166,6 +183,16 @@ const OrderPage: FC<OrderDispatchProps> = ({
 		resolver: yupResolver(orderSchema),
 	});
 
+	const onCouponApply = async (orderCouponData: OrderCouponData) => {
+		const csrfData = await member.csrf();
+		await order.updateCoupon(orderCouponData, csrfData);
+		setReload(true);
+	};
+	const onPointApply = async (orderPointData: OrderPointData) => {
+		const csrfData = await member.csrf();
+		await order.updatePoint(orderPointData, csrfData);
+		setReload(true);
+	};
 	const submitForm = async (
 		data: OrderFormValues,
 		orderForm?: BaseSyntheticEvent<object, any, any>
@@ -188,6 +215,8 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					addressData={addressData}
 					orderData={orderData}
 					setAddressReload={setAddressReload}
+					onCouponApply={onCouponApply}
+					onPointApply={onPointApply}
 					onSubmit={submitForm}
 				/>
 			)}
@@ -200,6 +229,8 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					addressData={addressData}
 					orderData={orderData}
 					setAddressReload={setAddressReload}
+					onCouponApply={onCouponApply}
+					onPointApply={onPointApply}
 					onSubmit={submitForm}
 				/>
 			)}

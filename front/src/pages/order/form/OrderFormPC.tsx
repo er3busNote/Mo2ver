@@ -9,7 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { MemberData, AddressData, OrderGoodsData } from '@api/types';
+import {
+	MemberData,
+	AddressData,
+	OrderCouponData,
+	OrderPointData,
+	OrderGoodsData,
+} from '@api/types';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
@@ -44,6 +50,8 @@ interface OrderProps {
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;
 	setAddressReload: Dispatch<SetStateAction<boolean>>;
+	onCouponApply: (orderCouponData: OrderCouponData) => void;
+	onPointApply: (orderPointData: OrderPointData) => void;
 	onSubmit: (
 		data: OrderFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
