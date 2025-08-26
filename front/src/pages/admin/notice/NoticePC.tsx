@@ -23,7 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { HorizontalRule as HorizontalRuleIcon } from '@mui/icons-material';
-import { NoticeData, NoticePageData } from '@api/types';
+import { NoticeData, NoticePageData } from '@/types/api';
 import goToNoticeForm from '@navigate/admin/notice/goToNoticeForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';

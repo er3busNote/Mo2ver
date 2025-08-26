@@ -17,7 +17,7 @@ import {
 	menuLotate,
 	toastClose,
 } from '@store/index';
-import { TitleState, ToastState } from '@store/types';
+import { TitleState, ToastState } from '@/types/api';
 import Api from '@api/index';
 import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
 import AdminHeader from './AdminHeader';

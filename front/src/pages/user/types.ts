@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
+import { GoodsPageData, SearchGoodsResuqestData } from '@/types/api';
 
 type Position = 'relative' | 'absolute' | 'fixed';
 type DetailType = 'Delivery' | 'Register';

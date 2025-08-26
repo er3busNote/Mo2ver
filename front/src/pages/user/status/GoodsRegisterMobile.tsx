@@ -1,7 +1,7 @@
 import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { GoodsData, SearchGoodsResuqestData } from '@api/types';
+import { GoodsData, SearchGoodsResuqestData } from '@/types/api';
 import SearchInput from '@components/input/SearchInput';
 import ButtonGoods from '@components/button/ButtonGoods';
 import PageNavigator from '@components/pagination/PageNavigator';

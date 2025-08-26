@@ -13,6 +13,7 @@
       "@pages/*": ["pages/*"],
       "@store/*": ["store/*"],
       "@utils/*": ["utils/*"],
+      "@/types/*": ["types/*"],
     },
     "target": "es2021",
     "module": "commonjs",
@@ -37,7 +38,6 @@
   },
   "include": [
     "src/**/*",
-    "src/utils/custom.d.ts",
     "vite.config.ts",
   ],
   "exclude": [

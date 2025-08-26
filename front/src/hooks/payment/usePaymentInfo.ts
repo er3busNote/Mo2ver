@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PaymentData, PaymentInfoData, CSRFData } from '@api/types';
+import { PaymentData, PaymentInfoData, CSRFData } from '@/types/api';
 
 interface PaymentProps {
 	payment: ActionCreatorsMapObject;

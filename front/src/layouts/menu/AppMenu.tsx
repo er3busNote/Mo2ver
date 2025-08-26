@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { SubMenuInfo } from '@store/types';
+import { SubMenuInfo } from '@/types/api';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import goToMenu from '@navigate/menu/goToMenu';
 import MenuDivider from '@components/divider/MenuDivider';

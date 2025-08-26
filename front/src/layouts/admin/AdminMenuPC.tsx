@@ -15,7 +15,7 @@ import {
 } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { menuActive } from '@store/index';
-import { TitleState, SubMenuInfo, MenuState } from '@store/types';
+import { TitleState, SubMenuInfo, MenuState } from '@/types/api';
 import {
 	Box,
 	Grow,

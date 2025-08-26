@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Box, Paper, MenuList, MenuItem, ListItemText } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { CategoryData, CategoryDataInfo } from '@api/types';
+import { CategoryData, CategoryDataInfo } from '@/types/api';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { menuWidthSize, submenuWidthSize } from '@utils/style';
 import { has } from 'lodash';

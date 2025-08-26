@@ -1,6 +1,6 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsData } from '@api/types';
+import { GoodsData } from '@/types/api';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
 import useRecommendRankList from '@hooks/recommend/useRecommendRankList';
 import {

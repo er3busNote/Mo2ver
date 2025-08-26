@@ -1,4 +1,4 @@
-import { CodeData } from '@api/types';
+import { CodeData } from '@/types/api';
 import { isEmpty, has } from 'lodash';
 
 const keyMap = {

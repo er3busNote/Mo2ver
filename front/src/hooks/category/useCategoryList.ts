@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CategoryData } from '@api/types';
+import { CategoryData } from '@/types/api';
 
 interface CategoryListProps {
 	category: ActionCreatorsMapObject;

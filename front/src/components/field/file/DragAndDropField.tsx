@@ -14,7 +14,7 @@ import {
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { FileData } from '@api/types';
+import { FileData } from '@/types/api';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useFileInfo from '@hooks/cmmn/useFileInfo';

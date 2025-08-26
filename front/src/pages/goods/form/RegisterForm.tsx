@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { FileData, CategoryData } from '@api/types';
+import { FileData, CategoryData } from '@/types/api';
 import useCategoryInfo from '@hooks/category/useCategoryInfo';
 import useImageUrl from '@hooks/useImageUrl';
 import ButtonGoods from '@components/button/ButtonGoods';

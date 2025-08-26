@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { ReviewData, ReviewPageData, ReviewInfoData } from '@api/types';
+import { ReviewData, ReviewPageData, ReviewInfoData } from '@/types/api';
 import ReviewCard from '@components/card/ReviewCard';
 import ReviewInput from '@components/input/ReviewInput';
 import PageNavigator from '@components/pagination/PageNavigator';

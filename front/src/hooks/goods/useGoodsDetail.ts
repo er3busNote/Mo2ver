@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsDetailData } from '@api/types';
+import { GoodsDetailData } from '@/types/api';
 
 interface GoodsProps {
 	code: string;

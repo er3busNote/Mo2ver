@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, NoticePageData } from '@api/types';
+import { PageData, NoticePageData } from '@/types/api';
 
 interface NoticeListProps {
 	notice: ActionCreatorsMapObject;

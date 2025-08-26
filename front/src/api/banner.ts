@@ -7,7 +7,7 @@ import {
 	BannerImageInfoData,
 	BannerRequestData,
 	PageData,
-} from './types';
+} from '../types/api';
 
 const banner = (instance: AxiosInstance) => {
 	return {

@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { toastMessage } from '@store/index';
 import Api from '@api/index';
-import { GoodsData, CategoryData } from '@api/types';
+import { GoodsData, CategoryData } from '@/types/api';
 import useCategoryInfo from '@hooks/category/useCategoryInfo';
 import useGoodsSearchPageList from '@hooks/goods/useGoodsSearchPageList';
 import SearchInput from '@components/input/SearchInput';

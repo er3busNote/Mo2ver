@@ -16,7 +16,7 @@ import {
 	menuLotate,
 	toastClose,
 } from '@store/index';
-import { TitleState, ToastState } from '@store/types';
+import { TitleState, ToastState } from '@/types/api';
 import Api from '@api/index';
 import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
 import useGoodsRankList from '@hooks/goods/useGoodsRankList';
@@ -41,7 +41,7 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '@utils/theme';
-import { GoodsData, CategoryDataGroup } from '@api/types';
+import { GoodsData, CategoryDataGroup } from '@/types/api';
 import { useIsDesktop } from '@context/MobileContext';
 
 const mdTheme = createTheme(contentTheme);

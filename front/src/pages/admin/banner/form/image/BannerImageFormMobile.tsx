@@ -13,7 +13,7 @@ import {
 	useFormContext,
 	useFieldArray,
 } from 'react-hook-form';
-import { CodeData } from '@api/types';
+import { CodeData } from '@/types/api';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,

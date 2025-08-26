@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@store/types';
+import { TitleState } from '@/types/api';
 import Api from '@api/index';
 import {
 	MemberData,
@@ -15,7 +15,7 @@ import {
 	OrderCouponData,
 	OrderPointData,
 	OrderGoodsData,
-} from '@api/types';
+} from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';

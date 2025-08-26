@@ -6,7 +6,7 @@ import {
 	OrderInfoData,
 	OrderCouponData,
 	OrderPointData,
-} from './types';
+} from '../types/api';
 
 const order = (instance: AxiosInstance) => {
 	return {

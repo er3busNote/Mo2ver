@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { TitleState } from '@store/types';
+import { TitleState } from '@/types/api';
 import { Box, IconButton, Typography, Breadcrumbs } from '@mui/material';
 import { Home as HomeIcon } from '@mui/icons-material';
 import Title from '@components/Title';

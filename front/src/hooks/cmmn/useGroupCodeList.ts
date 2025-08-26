@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { CodeData, CSRFData } from '@api/types';
+import { CodeData, CSRFData } from '@/types/api';
 
 interface GroupCodeProps {
 	code: ActionCreatorsMapObject;

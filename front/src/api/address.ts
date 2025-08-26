@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { CSRFData, AddressInfoData } from './types';
+import { CSRFData, AddressInfoData } from '../types/api';
 
 const address = (instance: AxiosInstance) => {
 	return {

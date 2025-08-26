@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, ReviewPageData } from '@api/types';
+import { PageData, ReviewPageData } from '@/types/api';
 
 interface ReviewListProps {
 	code: string;

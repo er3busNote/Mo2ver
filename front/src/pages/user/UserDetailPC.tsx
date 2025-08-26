@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import UserSubHeaderPC from './cmmn/UserSubHeaderPC';
 import CartDeliveryPC from './status/CartDeliveryPC';
 import GoodsRegisterPC from './status/GoodsRegisterPC';
-import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
+import { GoodsPageData, SearchGoodsResuqestData } from '@/types/api';
 import {
 	Box,
 	Paper,

@@ -11,7 +11,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { AddressInfoData } from '@api/types';
+import { AddressInfoData } from '@/types/api';
 import {
 	Box,
 	Dialog,

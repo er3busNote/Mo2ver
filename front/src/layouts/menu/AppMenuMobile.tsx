@@ -1,7 +1,7 @@
 import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { MenuState, SubMenuInfo } from '@store/types';
+import { MenuState, SubMenuInfo } from '@/types/api';
 import AppMenu from './AppMenu';
 import {
 	Box,
@@ -23,7 +23,7 @@ import {
 	ExpandMore as ExpandMore,
 } from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '@api/types';
+import { CategoryData, CategoryDataGroup } from '@/types/api';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { useIsDesktop } from '@context/MobileContext';
 import { has } from 'lodash';

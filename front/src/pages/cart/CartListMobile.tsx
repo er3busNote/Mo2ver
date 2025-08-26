@@ -10,7 +10,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { CartData, CartPageData } from '@api/types';
+import { CartData, CartPageData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import NumberInput from '@components/input/NumberInput';

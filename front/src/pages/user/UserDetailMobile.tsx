@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import UserSubHeaderMobile from './cmmn/UserSubHeaderMobile';
 import CartDeliveryMobile from './status/CartDeliveryMobile';
 import GoodsRegisterMobile from './status/GoodsRegisterMobile';
-import { GoodsPageData, SearchGoodsResuqestData } from '@api/types';
+import { GoodsPageData, SearchGoodsResuqestData } from '@/types/api';
 import {
 	Box,
 	Grid,

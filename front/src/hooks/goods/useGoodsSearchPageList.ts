@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsSearchPage, GoodsPageData } from '@api/types';
+import { GoodsSearchPage, GoodsPageData } from '@/types/api';
 
 interface GoodsSearchProps {
 	goodsName: string;

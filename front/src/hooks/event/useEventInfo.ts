@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { EventData } from '@api/types';
+import { EventData } from '@/types/api';
 
 interface EventProps {
 	code: string;

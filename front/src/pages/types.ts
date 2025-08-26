@@ -1,4 +1,4 @@
-import { FileData } from '@api/types';
+import { FileData } from '@/types/api';
 import { Dayjs } from 'dayjs';
 
 interface LoginFormValues {

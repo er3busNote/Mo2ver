@@ -15,7 +15,7 @@ import {
 	OrderCouponData,
 	OrderPointData,
 	OrderGoodsData,
-} from '@api/types';
+} from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {

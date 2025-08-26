@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { ReviewInfoData } from '@api/types';
+import { ReviewInfoData } from '@/types/api';
 import { Box, Button, Divider, TextField, Rating } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';

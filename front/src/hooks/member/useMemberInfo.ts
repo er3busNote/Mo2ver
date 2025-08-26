@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { MemberData } from '@api/types';
+import { MemberData } from '@/types/api';
 
 interface MemberProps {
 	member: ActionCreatorsMapObject;

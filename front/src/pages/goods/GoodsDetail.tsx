@@ -6,7 +6,7 @@ import {
 	ReviewPageData,
 	ReviewInfoData,
 	ImageData,
-} from '@api/types';
+} from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
 import ReviewList from './review/ReviewList';

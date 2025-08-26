@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsData } from '@api/types';
+import { GoodsData } from '@/types/api';
 
 interface GoodsRankListProps {
 	count: number;

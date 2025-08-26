@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PageData, EventPageData } from '@api/types';
+import { PageData, EventPageData } from '@/types/api';
 
 interface EventListProps {
 	event: ActionCreatorsMapObject;

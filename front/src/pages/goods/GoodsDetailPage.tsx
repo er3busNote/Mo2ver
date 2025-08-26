@@ -4,7 +4,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@store/types';
+import { TitleState } from '@/types/api';
 import {
 	GoodsDetailData,
 	CartData,
@@ -12,7 +12,7 @@ import {
 	OrderGoodsInfoData,
 	ReviewPageData,
 	ReviewInfoData,
-} from '@api/types';
+} from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import useReviewPageList from '@hooks/review/useReviewPageList';

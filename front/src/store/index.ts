@@ -8,10 +8,10 @@ import {
 	SubMenuInfo,
 	ToastInfo,
 	ToastState,
-} from './types';
+} from '@/types/store';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { TokenData } from '@api/types';
+import { TokenData } from '@/types/api';
 
 // 1.1. 인증 관련 State
 const memberinitialState: MemberState = {

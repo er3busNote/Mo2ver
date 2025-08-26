@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '@store/types';
+import { SubMenuInfo, MenuState } from '@/types/api';
 import AppMenu from './AppMenu';
 import AppMenuItem from './AppMenuItem';
 import AppMenuSubItem from './AppMenuSubItem';
@@ -20,7 +20,7 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '@api/types';
+import { CategoryData, CategoryDataGroup } from '@/types/api';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { divideArray } from '@utils/divide';
 import { submenuWidthSize } from '@utils/style';

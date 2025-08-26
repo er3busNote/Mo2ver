@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { CSRFData } from './types';
+import { CSRFData } from '../types/api';
 import { urlFormat } from '../utils/format';
 
 const image = (instance: AxiosInstance) => {

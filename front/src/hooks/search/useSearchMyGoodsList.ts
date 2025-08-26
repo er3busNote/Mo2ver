@@ -11,7 +11,7 @@ import {
 	SearchGoodsResuqestData,
 	PageData,
 	CSRFData,
-} from '@api/types';
+} from '@/types/api';
 
 interface GoodsSearchProps {
 	search: ActionCreatorsMapObject;

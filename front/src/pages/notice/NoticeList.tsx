@@ -15,7 +15,7 @@ import {
 	useTheme,
 	useMediaQuery,
 } from '@mui/material';
-import { NoticeData, NoticePageData } from '@api/types';
+import { NoticeData, NoticePageData } from '@/types/api';
 import { SxProps, Theme } from '@mui/material/styles';
 import { AttachFile as AttachFileIcon } from '@mui/icons-material';
 import goToNoticeDetail from '@navigate/notice/goToNoticeDetail';

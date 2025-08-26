@@ -17,7 +17,7 @@ import {
 	Skeleton,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { GoodsData, GoodsPageData } from '@api/types';
+import { GoodsData, GoodsPageData } from '@/types/api';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get } from 'lodash';

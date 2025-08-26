@@ -15,7 +15,7 @@ import {
 	useTheme,
 	useMediaQuery,
 } from '@mui/material';
-import { NoticeData, FileData } from '@api/types';
+import { NoticeData, FileData } from '@/types/api';
 import { SxProps, Theme } from '@mui/material/styles';
 import { DownloadOutlined as DownloadOutlinedIcon } from '@mui/icons-material';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';

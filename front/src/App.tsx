@@ -11,7 +11,7 @@ import { CookiesProvider } from 'react-cookie';
 import { SnackbarProvider } from 'notistack';
 import { MobileProvider } from '@context/MobileContext';
 import persistedReducer, { RootState } from './store';
-import { MemberState } from './store/types';
+import { MemberState } from './types/api';
 import {
 	setAccessToken,
 	removeAccessToken,

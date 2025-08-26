@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { FileData, CSRFData } from '@api/types';
+import { FileData, CSRFData } from '@/types/api';
 
 interface FileProps {
 	file: ActionCreatorsMapObject;

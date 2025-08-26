@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { GoodsPage, GoodsPageData } from '@api/types';
+import { GoodsPage, GoodsPageData } from '@/types/api';
 
 interface GoodsListProps {
 	categoryCode: string;

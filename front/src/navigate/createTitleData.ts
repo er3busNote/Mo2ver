@@ -1,4 +1,4 @@
-import { TitleInfo } from '@store/types';
+import { TitleInfo } from '@/types/api';
 
 type TitleDataParams = {
 	title: string;

@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useFieInfo from '@hooks/cmmn/useFileInfo';
-import { ReviewData, ReviewInfoData } from '@api/types';
+import { ReviewData, ReviewInfoData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import ReviewInput from '@components/input/ReviewInput';
 import {

@@ -7,7 +7,7 @@ import {
 	logoutSuccess,
 	toastMessage,
 } from '../store/index';
-import { LoginData, SignUpData, TokenData, CSRFData } from './types';
+import { LoginData, SignUpData, TokenData, CSRFData } from '../types/api';
 
 const member = (instance: AxiosInstance) => {
 	return {

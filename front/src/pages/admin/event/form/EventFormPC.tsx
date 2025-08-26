@@ -2,7 +2,7 @@ import React, { FC, useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { GoodsData } from '@api/types';
+import { GoodsData } from '@/types/api';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,

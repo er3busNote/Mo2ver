@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { NoticeData } from '@api/types';
+import { NoticeData } from '@/types/api';
 
 interface NoticeProps {
 	code: string;

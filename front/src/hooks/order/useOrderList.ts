@@ -6,7 +6,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { OrderGoodsData } from '@api/types';
+import { OrderGoodsData } from '@/types/api';
 
 interface OrderListProps {
 	order: ActionCreatorsMapObject;

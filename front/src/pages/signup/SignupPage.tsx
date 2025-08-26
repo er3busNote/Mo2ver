@@ -7,7 +7,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { SignUpData } from '@api/types';
+import { SignUpData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import SignupForm from './SignupForm';
 import { SignupFormValues } from '@pages/types';

@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from './common/handler';
-import { CSRFData, SearchRequestData, PageData } from './types';
+import { CSRFData, SearchRequestData, PageData } from '../types/api';
 
 const search = (instance: AxiosInstance) => {
 	return {

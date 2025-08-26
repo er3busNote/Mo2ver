@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { TitleState } from '@store/types';
+import { TitleState } from '@/types/api';
 import {
 	CartData,
 	CartPageData,
 	OrderInfoData,
 	OrderGoodsInfoData,
-} from '@api/types';
+} from '@/types/api';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useCartPageList from '@hooks/cart/useCartPageList';

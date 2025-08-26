@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { SubMenuInfo } from '@store/types';
+import { SubMenuInfo } from '@/types/api';
 
 interface GroupMenuProps {
 	menu: ActionCreatorsMapObject;

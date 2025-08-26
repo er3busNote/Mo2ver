@@ -8,7 +8,7 @@ import axios, {
 } from 'axios';
 import { store } from '@App';
 import { loginSuccess, logoutSuccess } from '@store/index';
-import { TokenData, TokenRequestData } from '@api/types';
+import { TokenData, TokenRequestData } from '@/types/api';
 import { getAccessToken, isAuthenticated } from '@utils/jwttoken';
 
 const API_MEMBER_REFRESH_TOKEN = 'member/refresh';

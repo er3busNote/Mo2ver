@@ -28,7 +28,7 @@ import {
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
-import { EventData, EventProductData, EventProductPageData } from '@api/types';
+import { EventData, EventProductData, EventProductPageData } from '@/types/api';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { isEmpty, get } from 'lodash';

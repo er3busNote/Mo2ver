@@ -18,7 +18,7 @@ import {
 	AccountCircleOutlined as AccountCircleOutlinedIcon,
 	Restore as RestoreIcon,
 } from '@mui/icons-material';
-import { GoodsData, CategoryDataGroup } from '@api/types';
+import { GoodsData, CategoryDataGroup } from '@/types/api';
 import goToMenu from '@navigate/menu/goToMenu';
 import { isAdmin } from '@utils/jwttoken';
 import { useIsMobile } from '@context/MobileContext';

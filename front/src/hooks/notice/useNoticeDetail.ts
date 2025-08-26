@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { NoticeRequestData, NoticeInfoData, CSRFData } from '@api/types';
+import { NoticeRequestData, NoticeInfoData, CSRFData } from '@/types/api';
 
 interface NoticeDetailProps {
 	notice: ActionCreatorsMapObject;

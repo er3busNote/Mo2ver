@@ -15,7 +15,7 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import { EventData, EventPageData } from '@api/types';
+import { EventData, EventPageData } from '@/types/api';
 import goToEventDetail from '@navigate/event/goToEventDetail';
 import moment from 'moment';
 import { get } from 'lodash';

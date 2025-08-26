@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { AddressData } from '@api/types';
+import { AddressData } from '@/types/api';
 
 interface AddressListProps {
 	address: ActionCreatorsMapObject;

@@ -3,7 +3,7 @@ import { Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import createTitleData from '@navigate/createTitleData';
-import { CSRFData, OrderInfoData } from '@api/types';
+import { CSRFData, OrderInfoData } from '@/types/api';
 
 const path = '/order';
 

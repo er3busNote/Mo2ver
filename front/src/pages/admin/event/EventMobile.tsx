@@ -23,7 +23,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { EventData, EventPageData } from '@api/types';
+import { EventData, EventPageData } from '@/types/api';
 import goToEventForm from '@navigate/admin/event/goToEventForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
