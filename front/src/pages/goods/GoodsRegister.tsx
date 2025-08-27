@@ -3,7 +3,7 @@ import { ActionCreatorsMapObject } from 'redux';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import RegisterForm from './form/RegisterForm';
 import { Box } from '@mui/material';
-import { RegisterFormValues } from '@pages/types';
+import { RegisterFormValues } from '@/types/form';
 
 interface GoodsRegisterProps {
 	description: string;

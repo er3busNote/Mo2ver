@@ -26,7 +26,7 @@ import RenderSelectChipField from '@components/field/SelectChipField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import RenderFileField from '@components/field/file/FileField';
 import HorizontalScroll from '@components/HorizontalScroll';
-import { RegisterFormValues } from '@pages/types';
+import { RegisterFormValues } from '@/types/form';
 import {
 	HorizontalRule as HorizontalRuleIcon,
 	InsertPhotoOutlined as InsertPhotoOutlinedIcon,

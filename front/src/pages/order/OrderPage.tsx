@@ -1,4 +1,4 @@
-import React, { FC, BaseSyntheticEvent, Dispatch, SetStateAction } from 'react';
+import React, { FC, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -6,16 +6,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import {
-	MemberData,
-	AddressData,
-	OrderData,
-	OrderCouponData,
-	OrderPointData,
-	OrderGoodsData,
-} from '@/types/api';
+import { OrderData, OrderCouponData, OrderPointData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
@@ -23,7 +16,8 @@ import useOrderList from '@hooks/order/useOrderList';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { OrderFormValues } from '@pages/types';
+import { OrderProps } from '@/types/order/form';
+import { OrderFormValues } from '@/types/form';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];
 
@@ -43,22 +37,6 @@ const orderSchema = yup
 		agreePurchase: yup.boolean().required(),
 	})
 	.required();
-
-interface OrderProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	memberData: MemberData;
-	addressData: AddressData;
-	orderData: Array<OrderGoodsData>;
-	setAddressReload: Dispatch<SetStateAction<boolean>>;
-	onCouponApply: (orderCouponData: OrderCouponData) => void;
-	onPointApply: (orderPointData: OrderPointData) => void;
-	onSubmit: (
-		data: OrderFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-}
 
 interface OrderDispatchProps {
 	title: string;
@@ -83,7 +61,7 @@ const orderValues: OrderFormValues = {
 	agreePurchase: false,
 };
 
-const OrderPC: FC<OrderProps> = ({
+const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,
@@ -120,7 +98,7 @@ const OrderPC: FC<OrderProps> = ({
 	);
 };
 
-const OrderMobile: FC<OrderProps> = ({
+const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,

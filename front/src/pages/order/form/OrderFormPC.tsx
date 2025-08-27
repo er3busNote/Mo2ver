@@ -1,21 +1,8 @@
-import React, {
-	FC,
-	useState,
-	BaseSyntheticEvent,
-	Dispatch,
-	SetStateAction,
-} from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import {
-	MemberData,
-	AddressData,
-	OrderCouponData,
-	OrderPointData,
-	OrderGoodsData,
-} from '@/types/api';
+import { OrderGoodsData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
@@ -37,26 +24,10 @@ import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
-import { OrderFormValues } from '@pages/types';
+import { OrderFormValues } from '@/types/form';
+import { OrderProps } from '@/types/order/form';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get, every, isNil } from 'lodash';
-
-interface OrderProps {
-	title: string;
-	description: string;
-	steps: string[];
-	file: ActionCreatorsMapObject;
-	memberData: MemberData;
-	addressData: AddressData;
-	orderData: Array<OrderGoodsData>;
-	setAddressReload: Dispatch<SetStateAction<boolean>>;
-	onCouponApply: (orderCouponData: OrderCouponData) => void;
-	onPointApply: (orderPointData: OrderPointData) => void;
-	onSubmit: (
-		data: OrderFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-}
 
 const OrderFormPC: FC<OrderProps> = ({
 	title,

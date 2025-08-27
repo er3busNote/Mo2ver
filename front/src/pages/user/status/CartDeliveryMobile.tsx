@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, ReactNode } from 'react';
+import React, { FC, useState, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import SearchInput from '@components/input/SearchInput';
@@ -43,18 +43,11 @@ import {
 } from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { IMAGE_INFO } from '@utils/init';
-import { CartDeliveryProps } from '../types';
-
-interface TabPanelProps {
-	children?: ReactNode;
-	index: number;
-	value: number;
-}
-
-interface UserOrderDetailProps {
-	title: string;
-	description: string;
-}
+import {
+	TabPanelProps,
+	UserOrderDetailProps,
+	CartDeliveryProps,
+} from '@/types/user/status';
 
 const TabPanel: FC<TabPanelProps> = ({
 	children,

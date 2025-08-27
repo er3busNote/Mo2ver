@@ -13,7 +13,7 @@ import useCSRFToken from '@hooks/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { RegisterFormValues } from '@pages/types';
+import { RegisterFormValues } from '@/types/form';
 import { useIsMobile } from '@context/MobileContext';
 import dayjs, { Dayjs } from 'dayjs';
 

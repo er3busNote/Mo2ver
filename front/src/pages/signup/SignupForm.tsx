@@ -15,7 +15,7 @@ import {
 	ArrowCircleLeft as ArrowCircleLeftIcon,
 } from '@mui/icons-material';
 import RenderTextField from '@components/field/TextField';
-import { SignupFormValues } from '@pages/types';
+import { SignupFormValues } from '@/types/form';
 
 interface SignupProp {
 	onSubmit: (

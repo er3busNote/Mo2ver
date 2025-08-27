@@ -1,24 +1,15 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import { GoodsPageData, SearchGoodsResuqestData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useSearchMyGoodsList from '@hooks/search/useSearchMyGoodsList';
 import UserDetailPC from './UserDetailPC';
 import UserDetailMobile from './UserDetailMobile';
 import { Box, Paper, useTheme, useMediaQuery } from '@mui/material';
-
-interface UserProps {
-	title: string;
-	description: string;
-	member: ActionCreatorsMapObject;
-	goodsData: GoodsPageData;
-	setGoodsPage: Dispatch<SetStateAction<number>>;
-	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
-}
+import { UserProps } from '@/types/user/status';
 
 interface UserDispatchProps {
 	title: string;

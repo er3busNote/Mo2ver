@@ -11,7 +11,7 @@ import Api from '@api/index';
 import { LoginData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import LoginForm from './LoginForm';
-import { LoginFormValues } from '@pages/types';
+import { LoginFormValues } from '@/types/form';
 
 const loginSchema = yup
 	.object({

@@ -1,11 +1,9 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import UserSubHeaderPC from './cmmn/UserSubHeaderPC';
 import CartDeliveryPC from './status/CartDeliveryPC';
 import GoodsRegisterPC from './status/GoodsRegisterPC';
-import { GoodsPageData, SearchGoodsResuqestData } from '@/types/api';
 import {
 	Box,
 	Paper,
@@ -26,7 +24,12 @@ import {
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
-import { Position, DetailType, DetailBoxProps } from './types';
+import {
+	Position,
+	DetailType,
+	DetailBoxProps,
+	UserProps,
+} from '@/types/user/status';
 
 const DETAIL: DetailType[] = ['Delivery', 'Register'];
 const DetailInfo: Record<DetailType, FC<Omit<DetailBoxProps, 'type'>>> = {
@@ -34,16 +37,7 @@ const DetailInfo: Record<DetailType, FC<Omit<DetailBoxProps, 'type'>>> = {
 	Register: GoodsRegisterPC as FC<Omit<DetailBoxProps, 'type'>>,
 };
 
-interface UserDetailProps {
-	title: string;
-	description: string;
-	member: ActionCreatorsMapObject;
-	goodsData: GoodsPageData;
-	setGoodsPage: Dispatch<SetStateAction<number>>;
-	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
-}
-
-const UserDetailPC: FC<UserDetailProps> = ({
+const UserDetailPC: FC<UserProps> = ({
 	title,
 	description,
 	member,

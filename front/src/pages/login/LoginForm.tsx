@@ -15,7 +15,7 @@ import {
 	ArrowCircleRight as ArrowCircleRightIcon,
 } from '@mui/icons-material';
 import RenderTextField from '@components/field/TextField';
-import { LoginFormValues } from '@pages/types';
+import { LoginFormValues } from '@/types/form';
 
 interface LoginProp {
 	onSubmit: (

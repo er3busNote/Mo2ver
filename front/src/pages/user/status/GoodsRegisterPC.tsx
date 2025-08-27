@@ -35,7 +35,7 @@ import {
 	RequestPageOutlined as RequestPageOutlinedIcon,
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
-import { GoodsRegisterProps } from '../types';
+import { GoodsRegisterProps } from '@/types/user/status';
 import { fontSize_sm, fontSize_lg } from '@utils/style';
 import dayjs, { Dayjs } from 'dayjs';
 

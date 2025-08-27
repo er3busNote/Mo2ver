@@ -2,7 +2,7 @@ import React, { FC, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Chip, Tab, Tabs, IconButton, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { DetailType } from '../types';
+import { DetailType } from '@/types/user/status';
 
 interface UserSubHeaderProps {
 	tab: string;

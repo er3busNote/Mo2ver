@@ -10,7 +10,7 @@ import Api from '@api/index';
 import { SignUpData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import SignupForm from './SignupForm';
-import { SignupFormValues } from '@pages/types';
+import { SignupFormValues } from '@/types/form';
 import { isEmail, isPassword } from '@utils/validation';
 
 const signupSchema = yup
