@@ -1,9 +1,9 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import {
 	CartData,
 	CartPageData,
@@ -17,20 +17,10 @@ import CartListPC from './CartListPC';
 import CartListMobile from './CartListMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import goToOrderForm from '@navigate/order/goToOrderForm';
+import { CartProps } from '@/types/cart/main';
 import { map, filter } from 'lodash';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];
-
-interface CartProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	setPage: Dispatch<SetStateAction<number>>;
-	cartPageData: CartPageData;
-	onCartUpdate: (cartData: CartData) => void;
-	onCartDelete: (goodsCode: string) => void;
-	onOrder: (isCheck: boolean) => void;
-}
 
 interface CartDispatchProps {
 	title: string;

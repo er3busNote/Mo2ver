@@ -4,7 +4,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import {
 	GoodsDetailData,
 	CartData,

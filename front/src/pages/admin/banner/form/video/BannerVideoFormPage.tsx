@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';

@@ -1,4 +1,4 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -28,19 +28,11 @@ import {
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
-import { EventData, EventProductData, EventProductPageData } from '@/types/api';
+import { EventProductData } from '@/types/api';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
+import { EventDetailProps } from '@/types/event/main';
 import { isEmpty, get } from 'lodash';
-
-interface EventDetailProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	eventData: EventData;
-	eventProductData: EventProductPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
 
 interface GoodsProps {
 	title: string;

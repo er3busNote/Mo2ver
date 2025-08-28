@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { FileData } from '@/types/api';
 import useBannerDisplayList from '@hooks/banner/useBannerDisplayList';

@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -15,18 +15,11 @@ import {
 	Typography,
 	Skeleton,
 } from '@mui/material';
-import { EventData, EventPageData } from '@/types/api';
+import { EventData } from '@/types/api';
 import goToEventDetail from '@navigate/event/goToEventDetail';
+import { EventProps } from '@/types/event/main';
 import moment from 'moment';
 import { get } from 'lodash';
-
-interface EventListProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	eventData: EventPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
 
 interface EventGridProps {
 	title: string;
@@ -125,7 +118,7 @@ const EventGrid: FC<EventGridProps> = ({
 	);
 };
 
-const EventList: FC<EventListProps> = ({
+const EventList: FC<EventProps> = ({
 	title,
 	description,
 	file,

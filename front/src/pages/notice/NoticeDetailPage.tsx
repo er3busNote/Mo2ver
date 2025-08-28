@@ -4,19 +4,12 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
-import { NoticeData } from '@/types/api';
+import { TitleState } from '@/types/store';
 import useNoticeInfo from '@hooks/notice/useNoticeInfo';
 import NoticeDetail from './NoticeDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { NoticeDetailProps } from '@/types/notice/main';
 import { downloadFile } from '@utils/file';
-
-interface NoticeDetailProps {
-	title: string;
-	description: string;
-	noticeData: NoticeData;
-	onDonwloadFile: (attachFile: string, filename: string) => void;
-}
 
 interface NoticeDetailDispatchProps {
 	title: string;

@@ -1,31 +1,15 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
-import { EventData, EventProductPageData } from '@/types/api';
+import { TitleState } from '@/types/store';
 import useEventInfo from '@hooks/event/useEventInfo';
 import useEventProductPageList from '@hooks/event/useEventProductPageList';
 import EventDetail from './EventDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-
-interface EventDetailProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	eventData: EventData;
-	eventProductData: EventProductPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
-
-interface EventDetailDispatchProps {
-	title: string;
-	description: string;
-	event: ActionCreatorsMapObject;
-	file: ActionCreatorsMapObject;
-}
+import { EventDetailProps, EventDispatchProps } from '@/types/event/main';
 
 const EventDetailPC: FC<EventDetailProps> = ({
 	title,
@@ -81,7 +65,7 @@ const EventDetailMobile: FC<EventDetailProps> = ({
 	);
 };
 
-const EventDetailPage: FC<EventDetailDispatchProps> = ({
+const EventDetailPage: FC<EventDispatchProps> = ({
 	title,
 	description,
 	event,

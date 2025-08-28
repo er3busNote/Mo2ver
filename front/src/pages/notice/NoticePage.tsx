@@ -1,20 +1,13 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
-import { NoticePageData } from '@/types/api';
+import { TitleState } from '@/types/store';
 import useNoticePageList from '@hooks/notice/useNoticePageList';
 import NoticeList from './NoticeList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-
-interface NoticeProps {
-	title: string;
-	description: string;
-	noticeData: NoticePageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
+import { NoticeProps } from '@/types/notice/main';
 
 interface NoticeDispatchProps {
 	title: string;

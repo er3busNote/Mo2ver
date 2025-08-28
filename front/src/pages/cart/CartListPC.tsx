@@ -4,13 +4,10 @@ import React, {
 	FocusEvent,
 	PointerEvent,
 	KeyboardEvent,
-	Dispatch,
-	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import { CartData, CartPageData } from '@/types/api';
+import { CartData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import NumberInput from '@components/input/NumberInput';
@@ -36,40 +33,12 @@ import { red, pink } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import {
+	CartDataProps,
+	CartTotalProps,
+	CartListProps,
+} from '@/types/cart/main';
 import { sumBy } from 'lodash';
-
-interface CartDataProps {
-	title: string;
-	description: string;
-	cartData: Array<CartData>;
-	file: ActionCreatorsMapObject;
-	onCartUpdate: (cartData: CartData) => void;
-	onCartDelete: (goodsCode: string) => void;
-}
-
-interface CartTotalProps {
-	totalSalePrice: number; // 총 상품가격 (할인된 가격)
-	totalSupplyPrice: number; // 총 공급가격
-	deliveryPrice: number; // 배송비
-	totalCount: number; // 총 주문 상풍수
-	totalOptionCount: number; // 총 주문 옵션 상품수
-	//totalCalcPrice: number; // 총 결제 예상 금액
-	productMileage: number; // 상품 마일리지
-	membershipMileage: number; // 멤버십 마일리지
-	//totalCalcMileage: number; // 총 적립 마일리지
-}
-
-interface CartListProps {
-	title: string;
-	description: string;
-	steps: string[];
-	setPage: Dispatch<SetStateAction<number>>;
-	cartPageData: CartPageData;
-	file: ActionCreatorsMapObject;
-	onCartUpdate: (cartData: CartData) => void;
-	onCartDelete: (goodsCode: string) => void;
-	onOrder: (isCheck: boolean) => void;
-}
 
 const CartList: FC<CartDataProps> = ({
 	title,

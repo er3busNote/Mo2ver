@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import AppSubHeader from '@layouts/AppSubHeader';
@@ -15,19 +15,13 @@ import {
 	useTheme,
 	useMediaQuery,
 } from '@mui/material';
-import { NoticeData, NoticePageData } from '@/types/api';
+import { NoticeData } from '@/types/api';
 import { SxProps, Theme } from '@mui/material/styles';
 import { AttachFile as AttachFileIcon } from '@mui/icons-material';
 import goToNoticeDetail from '@navigate/notice/goToNoticeDetail';
+import { NoticeProps } from '@/types/notice/main';
 
-interface NoticeListProps {
-	title: string;
-	description: string;
-	noticeData: NoticePageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
-
-const NoticeList: FC<NoticeListProps> = ({
+const NoticeList: FC<NoticeProps> = ({
 	title,
 	description,
 	noticeData,

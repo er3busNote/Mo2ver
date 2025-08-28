@@ -1,28 +1,13 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
-import { EventPageData } from '@/types/api';
+import { TitleState } from '@/types/store';
 import useEventPageList from '@hooks/event/useEventPageList';
 import EventList from './EventList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-
-interface EventProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	eventData: EventPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
-
-interface EventDispatchProps {
-	title: string;
-	description: string;
-	event: ActionCreatorsMapObject;
-	file: ActionCreatorsMapObject;
-}
+import { EventProps, EventDispatchProps } from '@/types/event/main';
 
 const EventPC: FC<EventProps> = ({
 	title,

@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { GoodsInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';

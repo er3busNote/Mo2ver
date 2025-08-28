@@ -4,7 +4,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import { TitleState } from '@/types/api';
+import { TitleState } from '@/types/store';
 import { GoodsPageData } from '@/types/api';
 import useCategoryPageList from '@hooks/category/useCategoryPageList';
 import useSearchGoodsList from '@hooks/search/useSearchGoodsList';
