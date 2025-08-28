@@ -1,4 +1,4 @@
-import React, { FC, BaseSyntheticEvent } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -17,6 +17,7 @@ import RenderTextField from '@components/field/TextField';
 import RenderTextEditorField from '@components/field/TextEditorField';
 import RenderDragAndDropField from '@components/field/file/DragAndDropField';
 import { NoticeFormValues } from '@/types/admin/form';
+import { NoticeProp } from '@/types/admin/notice';
 import goToNotice from '@navigate/admin/notice/goToNotice';
 
 const fontSize_sm = '13px';
@@ -24,15 +25,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface NoticeProp {
-	title: string;
-	description: string;
-	onSubmit: (
-		data: NoticeFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => void;
-}
 
 const NoticeFormPC: FC<NoticeProp> = ({
 	title,
