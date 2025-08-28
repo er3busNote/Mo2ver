@@ -31,7 +31,7 @@ import { Stars as StarsIcon } from '@mui/icons-material';
 import { EventProductData } from '@/types/api';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
-import { EventDetailProps } from '@/types/event/main';
+import { EventDetailProps } from '@/types/event';
 import { isEmpty, get } from 'lodash';
 
 interface GoodsProps {

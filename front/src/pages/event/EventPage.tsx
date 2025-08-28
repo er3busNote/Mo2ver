@@ -7,7 +7,7 @@ import { TitleState } from '@/types/store';
 import useEventPageList from '@hooks/event/useEventPageList';
 import EventList from './EventList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { EventProps, EventDispatchProps } from '@/types/event/main';
+import { EventProps, EventDispatchProps } from '@/types/event';
 
 const EventPC: FC<EventProps> = ({
 	title,

@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { EventData } from '@/types/api';
 import goToEventDetail from '@navigate/event/goToEventDetail';
-import { EventProps } from '@/types/event/main';
+import { EventProps } from '@/types/event';
 import moment from 'moment';
 import { get } from 'lodash';
 

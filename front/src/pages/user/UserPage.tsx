@@ -9,7 +9,7 @@ import useSearchMyGoodsList from '@hooks/search/useSearchMyGoodsList';
 import UserDetailPC from './UserDetailPC';
 import UserDetailMobile from './UserDetailMobile';
 import { Box, Paper, useTheme, useMediaQuery } from '@mui/material';
-import { UserProps } from '@/types/user/status';
+import { UserProps } from '@/types/user';
 
 interface UserDispatchProps {
 	title: string;

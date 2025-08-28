@@ -47,7 +47,7 @@ import {
 	TabPanelProps,
 	UserOrderDetailProps,
 	CartDeliveryProps,
-} from '@/types/user/status';
+} from '@/types/user';
 
 const TabPanel: FC<TabPanelProps> = ({
 	children,

@@ -22,7 +22,7 @@ import { HorizontalRule as HorizontalRuleIcon } from '@mui/icons-material';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import { BannerVideoFormValues } from '@pages/admin/types';
+import { BannerVideoFormValues } from '@/types/admin/form';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';

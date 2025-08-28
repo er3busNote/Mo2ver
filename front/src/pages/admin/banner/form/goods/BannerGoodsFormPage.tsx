@@ -15,7 +15,7 @@ import useBannerGoodsDetail from '@hooks/banner/useBannerGoodsDetail';
 import BannerGoodsFormPC from './BannerGoodsFormPC';
 import BannerGoodsFormMobile from './BannerGoodsFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { BannerGoodsFormValues } from '@pages/admin/types';
+import { BannerGoodsFormValues } from '@/types/admin/form';
 import dayjs, { Dayjs } from 'dayjs';
 
 const bannerGoodsSchema = yup

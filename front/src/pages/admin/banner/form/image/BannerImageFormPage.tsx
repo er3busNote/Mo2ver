@@ -15,7 +15,7 @@ import useBannerImagesDetail from '@hooks/banner/useBannerImagesDetail';
 import BannerImageFormPC from './BannerImageFormPC';
 import BannerImageFormMobile from './BannerImageFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { BannerImageFormValues } from '@pages/admin/types';
+import { BannerImageFormValues } from '@/types/admin/form';
 import dayjs, { Dayjs } from 'dayjs';
 
 const bannerImageSchema = yup

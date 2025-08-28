@@ -23,7 +23,7 @@ import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/file/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import { BannerImageFormValues } from '@pages/admin/types';
+import { BannerImageFormValues } from '@/types/admin/form';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';

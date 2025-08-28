@@ -14,7 +14,7 @@ import useEventDetail from '@hooks/event/useEventDetail';
 import EventFormPC from './EventFormPC';
 import EventFormMobile from './EventFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { EventFormValues } from '../../types';
+import { EventFormValues } from '../../../../types/admin/form';
 import dayjs, { Dayjs } from 'dayjs';
 
 const eventSchema = yup

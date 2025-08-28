@@ -25,7 +25,7 @@ import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { OrderFormValues } from '@/types/form';
-import { OrderProps } from '@/types/order/form';
+import { OrderProps } from '@/types/order';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get, every, isNil } from 'lodash';
 

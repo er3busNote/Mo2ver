@@ -33,7 +33,7 @@ import RenderDatePickerField from '@components/field/DatePickerField';
 import {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,
-} from '@pages/admin/types';
+} from '@/types/admin/form';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';

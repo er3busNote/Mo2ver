@@ -8,7 +8,7 @@ import { TitleState } from '@/types/store';
 import useNoticeInfo from '@hooks/notice/useNoticeInfo';
 import NoticeDetail from './NoticeDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { NoticeDetailProps } from '@/types/notice/main';
+import { NoticeDetailProps } from '@/types/notice';
 import { downloadFile } from '@utils/file';
 
 interface NoticeDetailDispatchProps {

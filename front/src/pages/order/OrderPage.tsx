@@ -16,7 +16,7 @@ import useOrderList from '@hooks/order/useOrderList';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { OrderProps } from '@/types/order/form';
+import { OrderProps } from '@/types/order';
 import { OrderFormValues } from '@/types/form';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];

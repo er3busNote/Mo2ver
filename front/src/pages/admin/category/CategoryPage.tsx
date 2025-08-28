@@ -11,7 +11,7 @@ import useCategoryList from '@hooks/category/useCategoryList';
 import CategoryPC from './CategoryPC';
 import CategoryMobile from './CategoryMobile';
 import { useTheme, useMediaQuery } from '@mui/material';
-import { CategoryFormValues } from '../types';
+import { CategoryFormValues } from '../../../types/admin/form';
 
 const schema = yup
 	.object()

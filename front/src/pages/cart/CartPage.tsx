@@ -17,7 +17,7 @@ import CartListPC from './CartListPC';
 import CartListMobile from './CartListMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import goToOrderForm from '@navigate/order/goToOrderForm';
-import { CartProps } from '@/types/cart/main';
+import { CartProps } from '@/types/cart';
 import { map, filter } from 'lodash';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];

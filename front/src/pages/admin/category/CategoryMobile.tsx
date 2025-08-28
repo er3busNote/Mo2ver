@@ -10,7 +10,7 @@ import {
 } from '@mui/x-tree-view/TreeItem';
 import CategoryForm from './CategoryForm';
 import { CategoryData } from '@/types/api';
-import { CategoryFormValues } from '@pages/admin/types';
+import { CategoryFormValues } from '@/types/admin/form';
 import { has, filter } from 'lodash';
 
 interface CategoryProps {

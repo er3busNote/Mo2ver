@@ -19,7 +19,7 @@ import { FileData } from '@/types/api';
 import { SxProps, Theme } from '@mui/material/styles';
 import { DownloadOutlined as DownloadOutlinedIcon } from '@mui/icons-material';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
-import { NoticeDetailProps } from '@/types/notice/main';
+import { NoticeDetailProps } from '@/types/notice';
 import { isEmpty } from 'lodash';
 
 const NoticeDetail: FC<NoticeDetailProps> = ({

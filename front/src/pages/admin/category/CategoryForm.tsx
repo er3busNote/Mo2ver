@@ -12,7 +12,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
 import RenderRadioField from '@components/field/RadioField';
-import { CategoryFormValues } from '@pages/admin/types';
+import { CategoryFormValues } from '@/types/admin/form';
 import {
 	fontSize_xs,
 	fontSize_sm,

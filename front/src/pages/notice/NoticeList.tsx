@@ -19,7 +19,7 @@ import { NoticeData } from '@/types/api';
 import { SxProps, Theme } from '@mui/material/styles';
 import { AttachFile as AttachFileIcon } from '@mui/icons-material';
 import goToNoticeDetail from '@navigate/notice/goToNoticeDetail';
-import { NoticeProps } from '@/types/notice/main';
+import { NoticeProps } from '@/types/notice';
 
 const NoticeList: FC<NoticeProps> = ({
 	title,

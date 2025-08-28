@@ -23,7 +23,7 @@ import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/file/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
-import { EventFormValues, EventDetailValues } from '@pages/admin/types';
+import { EventFormValues, EventDetailValues } from '@/types/admin/form';
 import goToEvent from '@navigate/admin/event/goToEvent';
 import { useIsMobile } from '@context/MobileContext';
 import dayjs from 'dayjs';

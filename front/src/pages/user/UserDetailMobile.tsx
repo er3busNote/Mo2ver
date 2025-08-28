@@ -34,7 +34,7 @@ import {
 	DetailType,
 	DetailBoxProps,
 	UserProps,
-} from '@/types/user/status';
+} from '@/types/user';
 import { without } from 'lodash';
 
 const DETAIL: DetailType[] = ['Delivery', 'Register'];

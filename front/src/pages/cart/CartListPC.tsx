@@ -37,7 +37,7 @@ import {
 	CartDataProps,
 	CartTotalProps,
 	CartListProps,
-} from '@/types/cart/main';
+} from '@/types/cart';
 import { sumBy } from 'lodash';
 
 const CartList: FC<CartDataProps> = ({

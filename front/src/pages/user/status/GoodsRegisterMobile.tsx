@@ -45,7 +45,7 @@ import {
 	ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
-import { GoodsRegisterProps } from '@/types/user/status';
+import { GoodsRegisterProps } from '@/types/user';
 import dayjs, { Dayjs } from 'dayjs';
 
 const UserRegisterDetail: FC<

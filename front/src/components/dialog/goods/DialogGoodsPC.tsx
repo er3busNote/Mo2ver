@@ -26,7 +26,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { BannerGoodsDetailValues } from '@pages/admin/types';
+import { BannerGoodsDetailValues } from '@/types/admin/form';
 import { not, intersect, intersectBy, union } from '@utils/set';
 import { some, indexOf, includes } from 'lodash';
 

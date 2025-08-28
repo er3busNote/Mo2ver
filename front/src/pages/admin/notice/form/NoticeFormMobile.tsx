@@ -16,7 +16,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
 import RenderTextEditorField from '@components/field/TextEditorField';
 import RenderDragAndDropField from '@components/field/file/DragAndDropField';
-import { NoticeFormValues } from '@pages/admin/types';
+import { NoticeFormValues } from '@/types/admin/form';
 import goToNotice from '@navigate/admin/notice/goToNotice';
 
 const tableBorder = '1px solid #d2d2d2';

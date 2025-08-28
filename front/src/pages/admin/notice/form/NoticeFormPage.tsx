@@ -14,7 +14,7 @@ import useNoticeDetail from '@hooks/notice/useNoticeDetail';
 import NoticeFormPC from './NoticeFormPC';
 import NoticeFormMobile from './NoticeFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { NoticeFormValues } from '../../types';
+import { NoticeFormValues } from '../../../../types/admin/form';
 
 const noticeSchema = yup
 	.object()

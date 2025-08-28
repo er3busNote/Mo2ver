@@ -12,7 +12,7 @@ import useGroupCodeList from '@hooks/cmmn/useGroupCodeList';
 import BannerVideoFormPC from './BannerVideoFormPC';
 import BannerVideoFormMobile from './BannerVideoFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { BannerVideoFormValues } from '@pages/admin/types';
+import { BannerVideoFormValues } from '@/types/admin/form';
 import dayjs, { Dayjs } from 'dayjs';
 
 const bannerVideoSchema = yup

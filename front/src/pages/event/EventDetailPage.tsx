@@ -9,7 +9,7 @@ import useEventInfo from '@hooks/event/useEventInfo';
 import useEventProductPageList from '@hooks/event/useEventProductPageList';
 import EventDetail from './EventDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { EventDetailProps, EventDispatchProps } from '@/types/event/main';
+import { EventDetailProps, EventDispatchProps } from '@/types/event';
 
 const EventDetailPC: FC<EventDetailProps> = ({
 	title,

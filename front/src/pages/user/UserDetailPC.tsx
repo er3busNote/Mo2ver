@@ -29,7 +29,7 @@ import {
 	DetailType,
 	DetailBoxProps,
 	UserProps,
-} from '@/types/user/status';
+} from '@/types/user';
 
 const DETAIL: DetailType[] = ['Delivery', 'Register'];
 const DetailInfo: Record<DetailType, FC<Omit<DetailBoxProps, 'type'>>> = {

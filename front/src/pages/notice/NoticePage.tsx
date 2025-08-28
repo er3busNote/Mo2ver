@@ -7,7 +7,7 @@ import { TitleState } from '@/types/store';
 import useNoticePageList from '@hooks/notice/useNoticePageList';
 import NoticeList from './NoticeList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { NoticeProps } from '@/types/notice/main';
+import { NoticeProps } from '@/types/notice';
 
 interface NoticeDispatchProps {
 	title: string;
