@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Box, Paper, SvgIcon, Collapse, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
@@ -10,16 +10,8 @@ import {
 } from '@mui/x-tree-view/TreeItem';
 import CategoryForm from './CategoryForm';
 import { CategoryData } from '@/types/api';
-import { CategoryFormValues } from '@/types/admin/form';
+import { CategoryProps } from '@/types/admin/category';
 import { has, filter } from 'lodash';
-
-interface CategoryProps {
-	onSubmit: (
-		data: CategoryFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
-	) => void;
-	categoryData: Array<CategoryData>;
-}
 
 interface CategoryDataInfo {
 	[key: string]: Array<CategoryData>;
