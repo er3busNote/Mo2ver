@@ -1,4 +1,4 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ButtonBase from '@components/button/ButtonBase';
@@ -23,20 +23,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { BannerData, BannerPageData } from '@/types/api';
+import { BannerData } from '@/types/api';
+import { BannerProps } from '@/types/admin/banner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface BannerProps {
-	title: string;
-	description: string;
-	setPage: Dispatch<SetStateAction<number>>;
-	bannerPageData: BannerPageData;
-}
 
 const BannerMobile: FC<BannerProps> = ({
 	title,

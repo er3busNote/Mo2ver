@@ -1,15 +1,8 @@
-import React, {
-	FC,
-	useRef,
-	useState,
-	useEffect,
-	BaseSyntheticEvent,
-} from 'react';
+import React, { FC, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
 import { GoodsData } from '@/types/api';
-import { CodeData } from '@/types/api';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
@@ -34,6 +27,7 @@ import {
 	BannerGoodsFormValues,
 	BannerGoodsDetailValues,
 } from '@/types/admin/form';
+import { BannerGoodsProp } from '@/types/admin/banner';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
@@ -44,17 +38,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface BannerGoodsProp {
-	title: string;
-	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	type: 'Create' | 'Update';
-	onSubmit: (
-		data: BannerGoodsFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => void;
-}
 
 const BannerGoodsFormPC: FC<BannerGoodsProp> = ({
 	title,

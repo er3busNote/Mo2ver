@@ -1,8 +1,7 @@
-import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import React, { FC, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { CodeData } from '@/types/api';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
@@ -22,6 +21,7 @@ import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import { BannerVideoFormValues } from '@/types/admin/form';
+import { BannerVideoProp } from '@/types/admin/banner';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
@@ -29,16 +29,6 @@ import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface BannerVideoProp {
-	title: string;
-	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	onSubmit: (
-		data: BannerVideoFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => void;
-}
 
 const BannerVideoFormMobile: FC<BannerVideoProp> = ({
 	title,

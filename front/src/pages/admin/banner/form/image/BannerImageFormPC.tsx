@@ -1,8 +1,7 @@
-import React, { FC, useRef, useEffect, BaseSyntheticEvent } from 'react';
+import React, { FC, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
-import { CodeData } from '@/types/api';
 import ButtonBase from '@components/button/ButtonBase';
 import {
 	Box,
@@ -24,6 +23,7 @@ import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/file/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import { BannerImageFormValues } from '@/types/admin/form';
+import { BannerImageProp } from '@/types/admin/banner';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
 import { renameKeys } from '@utils/code';
@@ -34,17 +34,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface BannerImageProp {
-	title: string;
-	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
-	type: 'Create' | 'Update';
-	onSubmit: (
-		data: BannerImageFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => void;
-}
 
 const BannerImageFormPC: FC<BannerImageProp> = ({
 	title,
