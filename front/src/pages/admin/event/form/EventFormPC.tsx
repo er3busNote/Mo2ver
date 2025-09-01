@@ -1,4 +1,4 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form';
@@ -25,6 +25,7 @@ import RenderSelectField from '@components/field/SelectField';
 import RenderUploadField from '@components/field/file/UploadField';
 import RenderDatePickerField from '@components/field/DatePickerField';
 import { EventFormValues, EventDetailValues } from '@/types/admin/form';
+import { EventProp } from '@/types/admin/event';
 import goToEvent from '@navigate/admin/event/goToEvent';
 import dayjs from 'dayjs';
 
@@ -33,15 +34,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface EventProp {
-	title: string;
-	description: string;
-	onSubmit: (
-		data: EventFormValues,
-		event?: BaseSyntheticEvent<object, any, any>
-	) => void;
-}
 
 const EventFormPC: FC<EventProp> = ({
 	title,

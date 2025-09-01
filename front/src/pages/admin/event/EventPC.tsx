@@ -1,4 +1,4 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ButtonBase from '@components/button/ButtonBase';
@@ -23,7 +23,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { HorizontalRule as HorizontalRuleIcon } from '@mui/icons-material';
-import { EventData, EventPageData } from '@/types/api';
+import { EventData } from '@/types/api';
+import { EventProps } from '@/types/admin/event';
 import goToEventForm from '@navigate/admin/event/goToEventForm';
 import moment from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
@@ -33,13 +34,6 @@ const fontSize_lg = '14px';
 
 const tableBorder = '1px solid #d2d2d2';
 const tableBorderHeader = '3px solid #333';
-
-interface EventProps {
-	title: string;
-	description: string;
-	setPage: Dispatch<SetStateAction<number>>;
-	eventPageData: EventPageData;
-}
 
 const EventPC: FC<EventProps> = ({
 	title,
