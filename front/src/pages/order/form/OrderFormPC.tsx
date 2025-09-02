@@ -24,6 +24,7 @@ import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';
 import RenderCheckBoxField from '@components/field/CheckBoxField';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
+import { PAYMENT_OPTIONS } from '@/constants/payment';
 import { OrderFormValues } from '@/types/form';
 import { OrderProps } from '@/types/order';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
@@ -40,18 +41,6 @@ const OrderFormPC: FC<OrderProps> = ({
 	setAddressReload,
 	onSubmit,
 }): JSX.Element => {
-	const paymentOptions = {
-		CARD: '카드',
-		// VIRTUAL_ACCOUNT: '가상계좌',
-		// ACCOUNT_TRANSFER: '계좌이체',
-		// MOBILE: '휴대폰',
-		// TOSS_PAY: '토스페이',
-		// KAKAO_PAY: '카카오페이',
-		// SAMSUNG_PAY: '삼성페이',
-		// NAVER_PAY: '네이버페이',
-		// PAYCO: '페이코',
-	};
-
 	const {
 		control,
 		register,
@@ -438,7 +427,7 @@ const OrderFormPC: FC<OrderProps> = ({
 										render={({ field, fieldState, formState }) => (
 											<RenderSelectButtonField
 												label="일반결제"
-												datas={paymentOptions}
+												datas={PAYMENT_OPTIONS}
 												field={field}
 												fieldState={fieldState}
 												formState={formState}

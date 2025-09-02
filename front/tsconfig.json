@@ -13,6 +13,7 @@
       "@pages/*": ["pages/*"],
       "@store/*": ["store/*"],
       "@utils/*": ["utils/*"],
+      "@/constants/*": ["constants/*"],
       "@/types/*": ["types/*"],
     },
     "target": "es2021",
