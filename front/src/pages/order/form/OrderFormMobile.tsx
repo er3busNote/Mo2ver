@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { OrderGoodsData } from '@/types/api';
+import { OrderGoodsData, OrderCouponData, OrderPointData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
@@ -39,6 +39,8 @@ const OrderFormMobile: FC<OrderProps> = ({
 	addressData,
 	orderData,
 	setAddressReload,
+	onCouponApply,
+	onPointApply,
 	onSubmit,
 }): JSX.Element => {
 	const {
@@ -70,6 +72,22 @@ const OrderFormMobile: FC<OrderProps> = ({
 			dispatch,
 			navigate,
 		});
+	};
+
+	const couponApply = () => {
+		const orderCouponData: OrderCouponData = {
+			orderId: '',
+			couponCodes: [],
+		};
+		onCouponApply(orderCouponData);
+	};
+
+	const pointApply = () => {
+		const orderPointData: OrderPointData = {
+			orderId: '',
+			pointAmount: 0,
+		};
+		onPointApply(orderPointData);
 	};
 
 	const mainTitle: SxProps<Theme> = {
@@ -347,7 +365,11 @@ const OrderFormMobile: FC<OrderProps> = ({
 										/>
 									)}
 								/>
-								<Button variant="outlined" sx={applyButton}>
+								<Button
+									variant="outlined"
+									sx={applyButton}
+									onClick={pointApply}
+								>
 									전액사용
 								</Button>
 							</Box>
@@ -365,7 +387,11 @@ const OrderFormMobile: FC<OrderProps> = ({
 										/>
 									)}
 								/>
-								<Button variant="outlined" sx={applyButton}>
+								<Button
+									variant="outlined"
+									sx={applyButton}
+									onClick={couponApply}
+								>
 									번호확인
 								</Button>
 							</Box>
