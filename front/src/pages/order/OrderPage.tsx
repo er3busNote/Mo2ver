@@ -65,6 +65,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,
+	orderId,
 	memberData,
 	addressData,
 	orderData,
@@ -86,6 +87,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 				description={description}
 				steps={steps}
 				file={file}
+				orderId={orderId}
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
@@ -102,6 +104,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,
+	orderId,
 	memberData,
 	addressData,
 	orderData,
@@ -123,6 +126,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 				description={description}
 				steps={steps}
 				file={file}
+				orderId={orderId}
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
@@ -176,7 +180,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 		orderForm?: BaseSyntheticEvent<object, any, any>
 	) => {
 		const orderFormData: OrderData = {
-			orderId: '',
+			orderId: orderId,
 		};
 		if (orderForm) orderForm.preventDefault(); // 새로고침 방지
 		navigate('/profile');
@@ -189,6 +193,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					title={title}
 					description={description}
 					file={file}
+					orderId={orderId}
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
@@ -203,6 +208,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					title={title}
 					description={description}
 					file={file}
+					orderId={orderId}
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}

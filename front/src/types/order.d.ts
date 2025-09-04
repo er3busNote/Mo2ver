@@ -13,6 +13,7 @@ interface OrderProps {
 	description: string;
 	steps: string[];
 	file: ActionCreatorsMapObject;
+	orderId: string;
 	memberData: MemberData;
 	addressData: AddressData;
 	orderData: Array<OrderGoodsData>;

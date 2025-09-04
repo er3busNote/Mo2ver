@@ -35,6 +35,7 @@ const OrderFormPC: FC<OrderProps> = ({
 	description,
 	steps,
 	file,
+	orderId,
 	memberData,
 	addressData,
 	orderData,
@@ -76,7 +77,7 @@ const OrderFormPC: FC<OrderProps> = ({
 
 	const couponApply = () => {
 		const orderCouponData: OrderCouponData = {
-			orderId: '',
+			orderId: orderId,
 			couponCodes: [],
 		};
 		onCouponApply(orderCouponData);
@@ -84,7 +85,7 @@ const OrderFormPC: FC<OrderProps> = ({
 
 	const pointApply = () => {
 		const orderPointData: OrderPointData = {
-			orderId: '',
+			orderId: orderId,
 			pointAmount: 0,
 		};
 		onPointApply(orderPointData);
