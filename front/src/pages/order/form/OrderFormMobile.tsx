@@ -279,6 +279,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 									/>
 									<DialogAddressMobile
 										open={openAddressModify}
+										addressNo={addressData.addressNo}
 										setField={setField}
 										handleClose={closeModifyAddress}
 									/>

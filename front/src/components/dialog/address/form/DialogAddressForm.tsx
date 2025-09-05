@@ -81,7 +81,7 @@ const AddressPC: FC<DialogProps> = ({
 		bgcolor: '#363b74',
 	};
 	const base: SxProps<Theme> = {
-		px: 4,
+		px: 1,
 		py: 1,
 	};
 
@@ -142,7 +142,7 @@ const AddressMobile: FC<DialogProps> = ({
 		bgcolor: '#363b74',
 	};
 	const base: SxProps<Theme> = {
-		px: isMobile ? 0 : 2,
+		px: isMobile ? 0 : 0.5,
 		py: 1,
 	};
 

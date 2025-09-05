@@ -291,6 +291,7 @@ const OrderFormPC: FC<OrderProps> = ({
 										/>
 										<DialogAddressPC
 											open={openAddressModify}
+											addressNo={addressData.addressNo}
 											setField={setField}
 											handleClose={closeModifyAddress}
 										/>

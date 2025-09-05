@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import useAddressList from '@hooks/address/useAddressList';
 import PageNavigator from '@components/pagination/PageNavigator';
 import DialogMobile from '../cmmn/DialogMobile';
 import {
+	Radio,
 	Table,
 	TableHead,
 	TableBody,
@@ -20,6 +21,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 interface DialogProps {
 	open: boolean;
 	address: ActionCreatorsMapObject;
+	addressNo: string;
 	setField: () => void;
 	handleClose: () => void;
 }
@@ -27,14 +29,24 @@ interface DialogProps {
 const DialogAddressMobile: FC<DialogProps> = ({
 	open,
 	address,
+	addressNo,
 	setField,
 	handleClose,
 }): JSX.Element => {
+	const [addressNoSel, setAddressNo] = useState<string>();
 	const addressData = useAddressList({ address });
+
+	useEffect(() => {
+		setAddressNo(addressNo);
+	}, [addressNo]);
 
 	const handleSelect = () => {
 		setField();
 		handleClose();
+	};
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setAddressNo(event.target.value);
 	};
 
 	const thHeader: SxProps<Theme> = {
@@ -63,6 +75,9 @@ const DialogAddressMobile: FC<DialogProps> = ({
 					<TableHead>
 						<TableRow>
 							<TableCell sx={thHeader} align="center">
+								선택
+							</TableCell>
+							<TableCell sx={thHeader} align="center">
 								담당자
 							</TableCell>
 							<TableCell sx={thHeader} align="center">
@@ -74,6 +89,14 @@ const DialogAddressMobile: FC<DialogProps> = ({
 						{addressData &&
 							addressData.map((data: AddressData, index: number) => (
 								<TableRow key={index} sx={rowItem}>
+									<TableCell align="center">
+										<Radio
+											size="small"
+											checked={addressNoSel === data.addressNo}
+											onChange={handleChange}
+											value={data.addressNo}
+										/>
+									</TableCell>
 									<TableCell align="center">{data.memberName}</TableCell>
 									<TableCell align="center">{data.cellPhoneNumber}</TableCell>
 								</TableRow>
