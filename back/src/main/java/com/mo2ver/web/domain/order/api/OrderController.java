@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,12 +59,23 @@ public class OrderController {
             @RequestBody @Validated(OrderCouponRequest.Update.class) OrderCouponRequest orderCouponRequest,
             @CurrentUser Member currentUser
     ) {
-        orderService.updateOrderCoupon(orderCouponRequest, currentUser);
-        return ResponseEntity.ok()
-                .body(ResponseHandler.builder()
-                        .status(HttpStatus.CREATED.value())
-                        .message("쿠폰정보가 저장되었습니다")
-                        .build());
+        return Optional.ofNullable(orderCouponRequest.getCouponAmount())
+                .map(amount -> {
+                    orderService.applyOrderCoupon(orderCouponRequest, currentUser);
+                    return ResponseEntity.ok()
+                            .body(ResponseHandler.builder()
+                                    .status(HttpStatus.OK.value())
+                                    .message("쿠폰정보가 적용되었습니다")
+                                    .build());
+                })
+                .orElseGet(() -> {
+                    orderService.updateOrderCoupon(orderCouponRequest, currentUser);
+                    return ResponseEntity.ok()
+                            .body(ResponseHandler.builder()
+                                    .status(HttpStatus.CREATED.value())
+                                    .message("쿠폰정보가 저장되었습니다")
+                                    .build());
+                });
     }
 
     @PatchMapping("/update/point")

@@ -114,6 +114,10 @@ public class Order {
         this.totalPriceCalc();
     }
 
+    public void update(CouponMember couponMember) {
+
+    }
+
     public void update(List<CouponMember> couponMembers) {
         int oldFileSize = this.orderCoupons.size();
         this.orderCoupons.addAll(this.updateOrderCoupons(couponMembers));

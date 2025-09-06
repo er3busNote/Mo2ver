@@ -44,6 +44,9 @@ public class OrderCoupon implements Serializable {
     )
     private CouponMember couponMember;
 
+    @Column(name = "USE_AMT", columnDefinition = "INT(11) COMMENT '쿠폰사용금액'")
+    private Integer useAmount;
+
     public static OrderCoupon of(Order order, CouponMember couponMember) {
         return OrderCoupon.builder()
                 .order(order)

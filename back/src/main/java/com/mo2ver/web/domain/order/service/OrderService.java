@@ -55,6 +55,17 @@ public class OrderService {
     }
 
     @Transactional
+    public void applyOrderCoupon(OrderCouponRequest orderCouponRequest, Member currentUser) {
+        Order order = this.findOrderById(orderCouponRequest.getOrderId());
+        List<String> couponCodes = orderCouponRequest.getCouponCodes();
+        List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, currentUser);
+        for (CouponMember couponMember : couponMembers) {
+            order.update(couponMember);
+            this.applyCouponMember(order);
+        }
+    }
+
+    @Transactional
     public void updateOrderPoint(OrderPointRequest orderPointRequest, Member currentUser) {
         Order order = this.findOrderById(orderPointRequest.getOrderId());
         Integer pointAmount = orderPointRequest.getPointAmount();
@@ -66,6 +77,11 @@ public class OrderService {
         List<String> couponIds = couponMembers.stream().map(CouponMember::getCouponId).collect(Collectors.toList());
         this.couponMemberRepository.updateOrderClear(order);
         this.couponMemberRepository.updateOrderByCouponIds(order, couponIds);
+    }
+
+    @Transactional
+    public void applyCouponMember(Order order) {
+
     }
 
     private Member findMemberById(String memberNo) {
