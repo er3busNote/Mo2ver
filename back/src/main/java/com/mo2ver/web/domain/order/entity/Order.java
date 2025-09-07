@@ -111,11 +111,17 @@ public class Order {
         this.orderDetails.addAll(this.createOrderDetail(orderRequest.getGoodsOrders(), goodsList, currentUser));
 
         this.sortOrderDetail();
+
         this.totalPriceCalc();
     }
 
-    public void update(CouponMember couponMember) {
+    public void update(CouponMember couponMember, int discountAmount) {
+        OrderCoupon orderCoupon = this.createOrUpdateOrderCoupons(couponMember);
+        orderCoupon.setUseAmount(discountAmount);
 
+        this.totalPriceCalc();
+        this.totalPriceCalcByCoupon();
+        this.totalPriceCalcByPoint();
     }
 
     public void update(List<CouponMember> couponMembers) {
@@ -124,7 +130,6 @@ public class Order {
         this.orderCoupons.subList(0, oldFileSize).clear();
 
         this.sortOrderCoupon();
-        this.totalPriceCalcByCoupon();
     }
 
     private void createOrUpdateOrder(Member currentUser) {
@@ -186,6 +191,14 @@ public class Order {
     }
 
     private void totalPriceCalcByCoupon() {
-        this.totalPriceCalc();
+        for (OrderCoupon orderCoupon : this.orderCoupons) {
+            this.amount -= orderCoupon.getUseAmount();
+        }
+    }
+
+    private void totalPriceCalcByPoint() {
+        for (OrderPoint orderPoint : this.orderPoints) {
+            this.amount -= orderPoint.getUseAmount();
+        }
     }
 }

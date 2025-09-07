@@ -48,8 +48,9 @@ public class OrderService {
     @Transactional
     public void updateOrderCoupon(OrderCouponRequest orderCouponRequest, Member currentUser) {
         Order order = this.findOrderById(orderCouponRequest.getOrderId());
-        List<String> couponCodes = orderCouponRequest.getCouponCodes();
-        List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, currentUser);
+        Integer totalAmount = orderCouponRequest.getTotalAmount();
+        List<CouponMember> couponMembers = this.getCouponMembers(orderCouponRequest, currentUser);
+        this.validate(totalAmount, couponMembers);
         order.update(couponMembers);
         this.updateCouponMember(order);
     }
@@ -57,11 +58,19 @@ public class OrderService {
     @Transactional
     public void applyOrderCoupon(OrderCouponRequest orderCouponRequest, Member currentUser) {
         Order order = this.findOrderById(orderCouponRequest.getOrderId());
-        List<String> couponCodes = orderCouponRequest.getCouponCodes();
-        List<CouponMember> couponMembers = this.findCouponMemberByCouponCodes(couponCodes, currentUser);
+        Integer totalAmount = orderCouponRequest.getTotalAmount();
+        Integer amount = orderCouponRequest.getCouponAmount();
+        List<CouponMember> couponMembers = this.getCouponMembers(orderCouponRequest, currentUser);
+        this.validate(totalAmount, couponMembers);
         for (CouponMember couponMember : couponMembers) {
-            order.update(couponMember);
-            this.applyCouponMember(order);
+            int discountAmount = couponMember.getCoupon().getDiscountAmount().intValue();
+            if(amount > discountAmount) {
+                amount -= discountAmount;
+                order.update(couponMember, discountAmount);
+            } else {
+                order.update(couponMember, amount);
+                amount = 0;
+            }
         }
     }
 
@@ -80,8 +89,18 @@ public class OrderService {
     }
 
     @Transactional
-    public void applyCouponMember(Order order) {
+    private List<CouponMember> getCouponMembers(OrderCouponRequest orderCouponRequest, Member currentUser) {
+        List<String> couponCodes = orderCouponRequest.getCouponCodes();
+        return this.findCouponMemberByCouponCodes(couponCodes, currentUser);
+    }
 
+    private void validate(Integer totalAmount, List<CouponMember> couponMembers) {
+        for (CouponMember couponMember : couponMembers) {
+            int minOrderAmount = couponMember.getCoupon().getMinOrderAmount().intValue();
+            if (totalAmount < minOrderAmount) {
+                throw new IllegalArgumentException("해당 쿠폰은 최소 주문 금액이 " + minOrderAmount + "원 이상이어야 합니다.");
+            }
+        }
     }
 
     private Member findMemberById(String memberNo) {
