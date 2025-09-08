@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -192,13 +193,13 @@ public class Order {
 
     private void totalPriceCalcByCoupon() {
         for (OrderCoupon orderCoupon : this.orderCoupons) {
-            this.amount -= orderCoupon.getUseAmount();
+            this.amount -= Optional.ofNullable(orderCoupon.getUseAmount()).orElse(0);
         }
     }
 
     private void totalPriceCalcByPoint() {
         for (OrderPoint orderPoint : this.orderPoints) {
-            this.amount -= orderPoint.getUseAmount();
+            this.amount -= Optional.ofNullable(orderPoint.getUseAmount()).orElse(0);
         }
     }
 }

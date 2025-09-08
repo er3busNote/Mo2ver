@@ -85,6 +85,8 @@ public class OrderTest extends CsrfConfigTest {
                         "CPN-250805-L0YDBV",
                         "CPN-250805-NRUK0M"
                 ))
+                .totalAmount(15000)
+                .couponAmount(1000)
                 .build();
     }
         
