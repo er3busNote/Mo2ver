@@ -76,17 +76,16 @@ public class MemberController {
 
             ResponseCookie refreshTokenCookie = CookieHelper.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
 
-            return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
+            return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                     .body(tokenInfo);
 
         } catch (BadCredentialsException e) {
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ResponseHandler.builder()
-                            .status(HttpStatus.UNAUTHORIZED.value())
-                            .message("아이디 또는 비밀번호가 틀렸습니다.")
-                            .build());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseHandler.builder()
+                        .status(HttpStatus.UNAUTHORIZED.value())
+                        .message("아이디 또는 비밀번호가 틀렸습니다.")
+                        .build());
         }
     }
 
@@ -97,8 +96,7 @@ public class MemberController {
     ) {
         // Refresh Token - Expired
         if (!tokenProvider.validateToken(refreshToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ResponseHandler.builder()
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseHandler.builder()
                             .status(HttpStatus.FORBIDDEN.value())
                             .message("Refresh Token이 유효하지 않습니다.")
                             .build());
