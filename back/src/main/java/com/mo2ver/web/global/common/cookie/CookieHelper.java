@@ -15,7 +15,7 @@ public class CookieHelper {
 
     private final JwtSetting jwtSetting;
 
-    private static long jwtRefreshtokenValidationSecond;
+    protected static long jwtRefreshtokenValidationSecond;
 
     @PostConstruct
     public void init() {
@@ -28,7 +28,7 @@ public class CookieHelper {
                 .secure(true)
                 .sameSite("None")
                 .path("/")
-                .maxAge(jwtRefreshtokenValidationSecond)     // Refresh Token 만료시간과 동일하게 유지
+                //.maxAge(jwtRefreshtokenValidationSecond)     // Refresh Token 만료시간과 동일하게 유지
                 .build();
     }
 

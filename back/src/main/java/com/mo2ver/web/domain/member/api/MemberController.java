@@ -76,7 +76,7 @@ public class MemberController {
 
             ResponseCookie refreshTokenCookie = CookieHelper.createCookie(JWT_REFRESH_TOKEN, tokenInfo.getRefreshtoken(), true);
 
-            return ResponseEntity.ok()
+            return ResponseEntity.created(URI.create("/login/" + authentication.isAuthenticated()))
                     .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                     .body(tokenInfo);
 
