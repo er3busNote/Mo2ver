@@ -75,10 +75,21 @@ const OrderFormPC: FC<OrderProps> = ({
 		});
 	};
 
+	const couponUpdate = () => {
+		const orderCouponData: OrderCouponData = {
+			orderId: orderId,
+			couponCodes: [],
+			totalAmount: 0,
+		};
+		onCouponApply(orderCouponData);
+	};
+
 	const couponApply = () => {
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
 			couponCodes: [],
+			totalAmount: 0,
+			couponAmount: 0,
 		};
 		onCouponApply(orderCouponData);
 	};
@@ -339,7 +350,11 @@ const OrderFormPC: FC<OrderProps> = ({
 												/>
 											)}
 										/>
-										<Button variant="contained" sx={applyButton}>
+										<Button
+											variant="contained"
+											sx={applyButton}
+											onClick={couponApply}
+										>
 											쿠폰적용
 										</Button>
 									</Box>
@@ -383,7 +398,7 @@ const OrderFormPC: FC<OrderProps> = ({
 									<Button
 										variant="outlined"
 										sx={applyButton}
-										onClick={couponApply}
+										onClick={couponUpdate}
 									>
 										번호확인
 									</Button>

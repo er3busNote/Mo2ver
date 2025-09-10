@@ -380,6 +380,8 @@ interface OrderInfoData {
 interface OrderCouponData {
 	orderId: string;
 	couponCodes: Array<string>;
+	totalAmount: number;
+	couponAmount?: number;
 }
 
 interface OrderPointData {
