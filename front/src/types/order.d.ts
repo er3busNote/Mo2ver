@@ -5,7 +5,7 @@ import {
 	AddressData,
 	OrderCouponData,
 	OrderPointData,
-	OrderGoodsData,
+	OrderInfoData,
 } from '@/types/api';
 
 interface OrderProps {
@@ -16,7 +16,7 @@ interface OrderProps {
 	orderId: string;
 	memberData: MemberData;
 	addressData: AddressData;
-	orderData: Array<OrderGoodsData>;
+	orderData: OrderInfoData;
 	setAddressReload: Dispatch<SetStateAction<boolean>>;
 	onCouponApply: (orderCouponData: OrderCouponData) => void;
 	onPointApply: (orderPointData: OrderPointData) => void;

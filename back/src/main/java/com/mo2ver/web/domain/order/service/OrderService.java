@@ -9,7 +9,7 @@ import com.mo2ver.web.domain.member.repository.MemberRepository;
 import com.mo2ver.web.domain.order.dto.request.OrderCouponRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderPointRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
-import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
+import com.mo2ver.web.domain.order.dto.response.OrderResponse;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.entity.OrderCoupon;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
@@ -32,9 +32,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CouponMemberRepository couponMemberRepository;
 
-    public List<OrderGoodsResponse> findOrder(String orderId) {
+    public OrderResponse findOrder(String orderId) {
         Order order = this.findOrderById(orderId);
-        return order.getOrderDetails().stream().map(OrderGoodsResponse::of).collect(Collectors.toList());
+        return OrderResponse.of(order);
     }
 
     @Transactional

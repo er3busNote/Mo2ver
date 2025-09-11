@@ -29,12 +29,7 @@ import {
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
-import {
-	Position,
-	DetailType,
-	DetailBoxProps,
-	UserProps,
-} from '@/types/user';
+import { Position, DetailType, DetailBoxProps, UserProps } from '@/types/user';
 import { without } from 'lodash';
 
 const DETAIL: DetailType[] = ['Delivery', 'Register'];

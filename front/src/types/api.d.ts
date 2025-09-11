@@ -363,6 +363,11 @@ interface OrderData {
 	orderId: string;
 }
 
+interface OrderInfoData {
+	totalAmount: number;
+	goods: Array<OrderGoodsData>;
+}
+
 interface OrderGoodsData extends GoodsData {
 	buyQuantity: number;
 	amount: number;
@@ -514,6 +519,7 @@ export type {
 	SearchGoodsResuqestData,
 	SearchRequestData,
 	OrderData,
+	OrderInfoData,
 	OrderGoodsData,
 	OrderGoodsInfoData,
 	OrderInfoData,

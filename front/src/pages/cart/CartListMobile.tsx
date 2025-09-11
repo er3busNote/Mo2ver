@@ -31,11 +31,7 @@ import { pink } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
-import {
-	CartDataProps,
-	CartTotalProps,
-	CartListProps,
-} from '@/types/cart';
+import { CartDataProps, CartTotalProps, CartListProps } from '@/types/cart';
 import { sumBy } from 'lodash';
 
 const CartList: FC<CartDataProps> = ({

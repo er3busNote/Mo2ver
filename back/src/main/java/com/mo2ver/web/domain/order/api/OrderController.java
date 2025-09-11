@@ -6,7 +6,7 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.dto.request.OrderCouponRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderPointRequest;
 import com.mo2ver.web.domain.order.dto.request.OrderRequest;
-import com.mo2ver.web.domain.order.dto.response.OrderGoodsResponse;
+import com.mo2ver.web.domain.order.dto.response.OrderResponse;
 import com.mo2ver.web.domain.order.service.OrderService;
 import com.mo2ver.web.domain.point.service.PointService;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,12 +30,12 @@ public class OrderController {
     private final InventoryService inventoryService;
 
     @GetMapping("/info/{id}")
-    public ResponseEntity<List<OrderGoodsResponse>> infoOrder(
+    public ResponseEntity<OrderResponse> infoOrder(
             @PathVariable String id,
             @CurrentUser Member currentUser
     ) {
-        List<OrderGoodsResponse> listOrderGoodsResponse = orderService.findOrder(id);
-        return ResponseEntity.ok().body(listOrderGoodsResponse);
+        OrderResponse orderResponse = orderService.findOrder(id);
+        return ResponseEntity.ok().body(orderResponse);
     }
 
     @PostMapping("/create")

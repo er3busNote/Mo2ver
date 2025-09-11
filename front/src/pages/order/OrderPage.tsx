@@ -12,7 +12,7 @@ import { OrderData, OrderCouponData, OrderPointData } from '@/types/api';
 import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
-import useOrderList from '@hooks/order/useOrderList';
+import useOrderInfo from '@hooks/order/useOrderInfo';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -157,7 +157,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
 	const [addressData, setAddressReload] = useAddressInfo({ address });
-	const [orderData, setReload] = useOrderList({ order, orderId });
+	const [orderData, setReload] = useOrderInfo({ order, orderId });
 
 	const methods = useForm<OrderFormValues>({
 		mode: 'onChange',

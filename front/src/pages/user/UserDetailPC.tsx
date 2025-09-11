@@ -24,12 +24,7 @@ import {
 } from '@mui/icons-material';
 import goToGoodsForm from '@navigate/goods/goToGoodsForm';
 import { useTransition, animated, UseTransitionProps } from 'react-spring';
-import {
-	Position,
-	DetailType,
-	DetailBoxProps,
-	UserProps,
-} from '@/types/user';
+import { Position, DetailType, DetailBoxProps, UserProps } from '@/types/user';
 
 const DETAIL: DetailType[] = ['Delivery', 'Register'];
 const DetailInfo: Record<DetailType, FC<Omit<DetailBoxProps, 'type'>>> = {

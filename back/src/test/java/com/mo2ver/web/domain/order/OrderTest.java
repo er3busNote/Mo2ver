@@ -27,7 +27,7 @@ public class OrderTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        String orderId = "F5E24377C6D948F39A64C3DDA17E78A6";
+        String orderId = "A353751FCC3141749A04C6C045C6F3F0";
         mockMvc.perform(get("/order/info/{orderId}", orderId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
                         .contentType(MediaType.APPLICATION_JSON))

@@ -79,7 +79,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
 			couponCodes: [],
-			totalAmount: 0,
+			totalAmount: orderData.totalAmount,
 		};
 		onCouponApply(orderCouponData);
 	};
@@ -88,7 +88,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
 			couponCodes: [],
-			totalAmount: 0,
+			totalAmount: orderData.totalAmount,
 			couponAmount: 0,
 		};
 		onCouponApply(orderCouponData);
@@ -183,7 +183,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 								상품 정보
 							</Typography>
 							<Box display="flex" mt={2} gap={2} flexWrap="wrap">
-								{orderData.map((data: OrderGoodsData, index: number) => {
+								{orderData.goods.map((data: OrderGoodsData, index: number) => {
 									const attachFile = String(
 										get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
 									);

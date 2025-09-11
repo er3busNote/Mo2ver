@@ -1,4 +1,4 @@
-package com.mo2ver.web.domain.order.dto.response;
+package com.mo2ver.web.domain.order.dto;
 
 import com.mo2ver.web.domain.goods.dto.response.GoodsResponse;
 import com.mo2ver.web.domain.order.entity.OrderDetail;
@@ -12,14 +12,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderGoodsResponse extends GoodsResponse {
+public class OrderGoodsInfo extends GoodsResponse {
 
     private Integer buyQuantity;
     private Long amount;
 
-    public static OrderGoodsResponse of(OrderDetail orderDetail) {
+    public static OrderGoodsInfo of(OrderDetail orderDetail) {
         GoodsResponse goodsResponse = GoodsResponse.of(orderDetail.getGoods());
-        return OrderGoodsResponse.builder()
+        return OrderGoodsInfo.builder()
                 .goodsCode(goodsResponse.getGoodsCode())
                 .goodsName(goodsResponse.getGoodsName())
                 .goodsBrand(goodsResponse.getGoodsBrand())

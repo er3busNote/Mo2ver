@@ -6,22 +6,21 @@ import {
 	SetStateAction,
 } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { OrderGoodsData } from '@/types/api';
+import { OrderInfoData } from '@/types/api';
 
-interface OrderListProps {
+interface OrderInfoProps {
 	order: ActionCreatorsMapObject;
 	orderId: string;
 }
 
-const useOrderList = ({
+const useOrderInfo = ({
 	order,
 	orderId,
-}: OrderListProps): [
-	Array<OrderGoodsData>,
-	Dispatch<SetStateAction<boolean>>
-] => {
+}: OrderInfoProps): [OrderInfoData, Dispatch<SetStateAction<boolean>>] => {
 	const [reload, setReload] = useState(false);
-	const [data, setData] = useState<Array<OrderGoodsData>>([]);
+	const [data, setData] = useState<OrderInfoData>(
+		new Object() as OrderInfoData
+	);
 
 	const fetchAndSetData = useCallback(async () => {
 		const data = await order.info(orderId);
@@ -36,4 +35,4 @@ const useOrderList = ({
 	return [data, setReload];
 };
 
-export default useOrderList;
+export default useOrderInfo;
