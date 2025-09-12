@@ -49,6 +49,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 		register,
 		handleSubmit,
 		formState: { isSubmitted, isValid },
+		watch,
 	} = useFormContext<OrderFormValues>();
 
 	const dispatch = useDispatch();
@@ -78,7 +79,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	const couponUpdate = () => {
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
-			couponCodes: [],
+			couponCodes: [watch('couponNumber') || ''],
 			totalAmount: orderData.totalAmount,
 		};
 		onCouponApply(orderCouponData);
@@ -87,9 +88,9 @@ const OrderFormMobile: FC<OrderProps> = ({
 	const couponApply = () => {
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
-			couponCodes: [],
+			couponCodes: [watch('couponNumber') || ''],
 			totalAmount: orderData.totalAmount,
-			couponAmount: 0,
+			couponAmount: watch('coupon'),
 		};
 		onCouponApply(orderCouponData);
 	};
@@ -97,7 +98,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	const pointApply = () => {
 		const orderPointData: OrderPointData = {
 			orderId: orderId,
-			pointAmount: 0,
+			pointAmount: watch('point') || 0,
 		};
 		onPointApply(orderPointData);
 	};
