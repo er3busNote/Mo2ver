@@ -1,22 +1,22 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import { PaymentData, PaymentInfoData, CSRFData } from '@/types/api';
+import { PaymentData, CSRFData } from '@/types/api';
 
 interface PaymentProps {
 	payment: ActionCreatorsMapObject;
-	paymentInfoData: PaymentInfoData;
+	orderId: string;
 	csrfData: CSRFData;
 }
 
 const usePaymentInfo = ({
 	payment,
-	paymentInfoData,
+	orderId,
 	csrfData,
 }: PaymentProps): PaymentData => {
 	const [data, setData] = useState<PaymentData>(new Object() as PaymentData);
 
 	const fetchAndSetData = useCallback(async () => {
-		const data = await payment.start(paymentInfoData, csrfData);
+		const data = await payment.start(orderId, csrfData);
 		setData(data);
 	}, [csrfData.csrfToken]);
 

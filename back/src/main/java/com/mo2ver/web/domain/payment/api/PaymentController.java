@@ -5,7 +5,6 @@ import com.mo2ver.web.domain.delivery.service.DeliveryService;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
-import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
 import com.mo2ver.web.domain.payment.service.TossPaymentService;
 import com.mo2ver.web.domain.point.service.PointService;
@@ -19,10 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -38,12 +34,12 @@ public class PaymentController {
     private final PointService pointService;
     private final ErrorHandler errorHandler;
 
-    @PostMapping("/start")
+    @PostMapping("/start/{id}")
     public ResponseEntity<PaymentResponse> createPayment(
-            @RequestBody @Valid PaymentRequest paymentRequest,
+            @PathVariable String id,
             @CurrentUser Member currentUser
     ) {
-        PaymentResponse paymentResponse = tossPaymentService.savePayment(paymentRequest, currentUser);
+        PaymentResponse paymentResponse = tossPaymentService.savePayment(id, currentUser);
         return ResponseEntity.ok().body(paymentResponse);
     }
 

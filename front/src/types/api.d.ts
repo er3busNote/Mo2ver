@@ -398,11 +398,6 @@ interface OrderPointData {
 interface PaymentData {
 	clientKey: string;
 	orderId: string;
-	amount: number;
-}
-
-interface PaymentInfoData {
-	orderId: string;
 }
 
 interface PaymentConfirmData {
@@ -526,7 +521,6 @@ export type {
 	OrderCouponData,
 	OrderPointData,
 	PaymentData,
-	PaymentInfoData,
 	PaymentConfirmData,
 	AddressData,
 	AddressInfoData,

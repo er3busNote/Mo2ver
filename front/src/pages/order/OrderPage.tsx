@@ -13,6 +13,7 @@ import useCSRFToken from '@hooks/useCSRFToken';
 import useMemberInfo from '@hooks/member/useMemberInfo';
 import useAddressInfo from '@hooks/address/useAddressInfo';
 import useOrderInfo from '@hooks/order/useOrderInfo';
+import usePaymentInfo from '@hooks/payment/usePaymentInfo';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -44,6 +45,7 @@ interface OrderDispatchProps {
 	member: ActionCreatorsMapObject;
 	address: ActionCreatorsMapObject;
 	order: ActionCreatorsMapObject;
+	payment: ActionCreatorsMapObject;
 	file: ActionCreatorsMapObject;
 }
 
@@ -145,6 +147,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	member,
 	address,
 	order,
+	payment,
 	file,
 }): JSX.Element => {
 	const theme = useTheme();
@@ -156,8 +159,9 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const orderId = location.state?.orderId;
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
+	const paymentData = usePaymentInfo({ payment, orderId, csrfData });
 	const [addressData, setAddressReload] = useAddressInfo({ address });
-	const [orderData, setReload] = useOrderInfo({ order, orderId });
+	const [orderData, setReload] = useOrderInfo({ order, orderId }); // 쿠폰 및 포인트 적용 시, 최종금액이 바뀔수 있음
 
 	const methods = useForm<OrderFormValues>({
 		mode: 'onChange',
@@ -231,6 +235,7 @@ const mapDispatchToProps = (dispatch: DispatchAction) => ({
 	member: bindActionCreators(Api.member, dispatch),
 	address: bindActionCreators(Api.address, dispatch),
 	order: bindActionCreators(Api.order, dispatch),
+	payment: bindActionCreators(Api.payment, dispatch),
 	file: bindActionCreators(Api.file, dispatch),
 });
 

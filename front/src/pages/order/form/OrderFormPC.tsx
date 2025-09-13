@@ -175,7 +175,7 @@ const OrderFormPC: FC<OrderProps> = ({
 									주문 상품 정보
 								</Typography>
 								<Box display="flex" mt={2} gap={2} flexWrap="wrap">
-									{orderData.goods.map(
+									{orderData?.goods?.map(
 										(data: OrderGoodsData, index: number) => {
 											const attachFile = String(
 												get(data, ['imageList', 0, 'goodsImageAttachFile'], '')

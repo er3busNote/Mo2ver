@@ -2,7 +2,6 @@ package com.mo2ver.web.domain.payment;
 
 import com.mo2ver.web.global.auth.CsrfConfigTest;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
-import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.global.jwt.dto.TokenInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,20 +23,12 @@ public class PaymentTest extends CsrfConfigTest {
         Authentication authentication = new TestingAuthenticationToken("bbj", null, "ROLE_USER");
         TokenInfo tokenInfo = tokenProvider.createToken(authentication);  // 로그인
 
-        PaymentRequest paymentRequest = getPaymentRequest();
+        String orderId = "A353751FCC3141749A04C6C045C6F3F0";
 
-        mockMvc.perform(post("/payment/start")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(paymentRequest)))
+        mockMvc.perform(post("/payment/start/{id}", orderId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccesstoken()))
                 .andDo(print())
                 .andExpect(status().isOk());
-    }
-
-    private PaymentRequest getPaymentRequest() {
-        return PaymentRequest.builder()
-                .orderId("A353751FCC3141749A04C6C045C6F3F0")
-                .build();
     }
 
     @Test

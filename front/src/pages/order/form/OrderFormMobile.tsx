@@ -184,51 +184,53 @@ const OrderFormMobile: FC<OrderProps> = ({
 								상품 정보
 							</Typography>
 							<Box display="flex" mt={2} gap={2} flexWrap="wrap">
-								{orderData.goods.map((data: OrderGoodsData, index: number) => {
-									const attachFile = String(
-										get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
-									);
-									return (
-										<Card
-											key={index}
-											elevation={0}
-											onClick={() => goodsClick(data.goodsCode)}
-										>
-											<CardActionArea>
-												<CardMedia
-													component="img"
-													sx={{ display: 'inline', width: 80, height: 80 }}
-													image={useImageUrl({ file, attachFile })}
-													loading="lazy"
-												/>
-												<CardContent sx={{ p: 1 }}>
-													<Typography component="div" sx={label}>
-														{data.goodsName}
-													</Typography>
-													<Typography component="div" sx={brand}>
-														{data.goodsBrand}
-													</Typography>
-													<Box
-														sx={{ display: 'flex', justifyContent: 'center' }}
-													>
-														<Breadcrumbs
-															sx={{ pt: 1 }}
-															separator="›"
-															aria-label="breadcrumb"
+								{orderData?.goods?.map(
+									(data: OrderGoodsData, index: number) => {
+										const attachFile = String(
+											get(data, ['imageList', 0, 'goodsImageAttachFile'], '')
+										);
+										return (
+											<Card
+												key={index}
+												elevation={0}
+												onClick={() => goodsClick(data.goodsCode)}
+											>
+												<CardActionArea>
+													<CardMedia
+														component="img"
+														sx={{ display: 'inline', width: 80, height: 80 }}
+														image={useImageUrl({ file, attachFile })}
+														loading="lazy"
+													/>
+													<CardContent sx={{ p: 1 }}>
+														<Typography component="div" sx={label}>
+															{data.goodsName}
+														</Typography>
+														<Typography component="div" sx={brand}>
+															{data.goodsBrand}
+														</Typography>
+														<Box
+															sx={{ display: 'flex', justifyContent: 'center' }}
 														>
-															<Typography color="text.secondary" sx={price}>
-																{data.supplyPrice.toLocaleString()}원
-															</Typography>
-															<Typography color="text.secondary" sx={label}>
-																{data.salePrice.toLocaleString()}원
-															</Typography>
-														</Breadcrumbs>
-													</Box>
-												</CardContent>
-											</CardActionArea>
-										</Card>
-									);
-								})}
+															<Breadcrumbs
+																sx={{ pt: 1 }}
+																separator="›"
+																aria-label="breadcrumb"
+															>
+																<Typography color="text.secondary" sx={price}>
+																	{data.supplyPrice.toLocaleString()}원
+																</Typography>
+																<Typography color="text.secondary" sx={label}>
+																	{data.salePrice.toLocaleString()}원
+																</Typography>
+															</Breadcrumbs>
+														</Box>
+													</CardContent>
+												</CardActionArea>
+											</Card>
+										);
+									}
+								)}
 							</Box>
 						</CardContent>
 					</Card>

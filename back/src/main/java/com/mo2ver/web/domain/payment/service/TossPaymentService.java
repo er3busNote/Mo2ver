@@ -4,7 +4,6 @@ import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.order.entity.Order;
 import com.mo2ver.web.domain.order.repository.OrderRepository;
 import com.mo2ver.web.domain.payment.dto.PaymentInfo;
-import com.mo2ver.web.domain.payment.dto.request.PaymentRequest;
 import com.mo2ver.web.domain.payment.dto.request.http.TossPaymentRequest;
 import com.mo2ver.web.domain.payment.dto.response.PaymentResponse;
 import com.mo2ver.web.domain.payment.entity.Payment;
@@ -34,12 +33,15 @@ public class TossPaymentService {
     private final TossPaymentSetting tossPaymentSetting;
 
     @Transactional
-    public PaymentResponse savePayment(PaymentRequest paymentRequest, Member currentUser) {
-        Order order = this.findOrderById(paymentRequest.getOrderId());
-        Payment payment = new Payment(PaymentInfo.of(order), order, currentUser);
-        this.paymentRepository.save(payment);
+    public PaymentResponse savePayment(String orderId, Member currentUser) {
+        Order order = this.findOrderById(orderId);
+        Payment payment = paymentRepository.findByOrder(order)
+                .orElseGet(() -> {
+                    Payment newPayment = new Payment(PaymentInfo.of(order), order, currentUser);
+                    return this.paymentRepository.save(newPayment);
+                });
         String clientKey = tossPaymentSetting.getClientKey();
-        return PaymentResponse.of(clientKey, payment.getOrder().getOrderId().toString(), payment.getAmount());
+        return PaymentResponse.of(clientKey, payment.getOrder().getOrderId());
     }
 
     @Transactional

@@ -10,13 +10,11 @@ public class PaymentResponse {
 
     private String clientKey;
     private String orderId;
-    private Long amount;
 
-    public static PaymentResponse of(String clientKey, String orderId, Long amount) {
+    public static PaymentResponse of(String clientKey, String orderId) {
         return PaymentResponse.builder()
                 .clientKey(clientKey)
                 .orderId(orderId)
-                .amount(amount)
                 .build();
     }
 }
