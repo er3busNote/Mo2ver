@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse, handleError } from './common/handler';
-import { CSRFData, CartData } from '../types/api';
+import { handleResponse, handleError } from '@handler/api';
+import { CSRFData, CartData } from '@/types/api';
 
 const cart = (instance: AxiosInstance) => {
 	return {

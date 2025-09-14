@@ -1,12 +1,12 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse, handleError } from './common/handler';
+import { handleResponse, handleError } from '@handler/api';
 import {
 	CSRFData,
 	OrderInfoData,
 	OrderCouponData,
 	OrderPointData,
-} from '../types/api';
+} from '@/types/api';
 
 const order = (instance: AxiosInstance) => {
 	return {

@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse, handleError } from './common/handler';
-import { CSRFData, PaymentConfirmData } from '../types/api';
+import { handleResponse, handleError } from '@handler/api';
+import { CSRFData, PaymentConfirmData } from '@/types/api';
 
 const payment = (instance: AxiosInstance) => {
 	return {

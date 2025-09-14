@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse, handleError } from './common/handler';
+import { handleResponse, handleError } from '@handler/api';
 
 const menu = (instance: AxiosInstance) => {
 	return {

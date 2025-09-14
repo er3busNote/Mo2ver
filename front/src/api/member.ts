@@ -1,13 +1,13 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
-import { handleResponse, handleError } from './common/handler';
+import { handleResponse, handleError } from '@handler/api';
 import {
 	loginSuccess,
 	loginFailure,
 	logoutSuccess,
 	toastMessage,
-} from '../store/index';
-import { LoginData, SignUpData, TokenData, CSRFData } from '../types/api';
+} from '@store/index';
+import { LoginData, SignUpData, TokenData, CSRFData } from '@/types/api';
 
 const member = (instance: AxiosInstance) => {
 	return {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setInterceptors } from './common/interceptors';
+import { setInterceptors } from './cmmn/interceptors';
 import code from './code';
 import menu from './menu';
 import member from './member';
