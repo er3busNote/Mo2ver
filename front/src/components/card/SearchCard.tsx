@@ -2,7 +2,7 @@ import React, { FC, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
-import useSearchGoodsList from '@hooks/search/useSearchGoodsDebounceList';
+import useSearchGoodsList from '@services/search/useSearchGoodsDebounceList';
 import { Paper, InputBase, IconButton } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';

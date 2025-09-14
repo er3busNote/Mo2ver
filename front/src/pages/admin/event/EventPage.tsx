@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import useEventPageList from '@hooks/event/useEventPageList';
+import useEventPageList from '@services/event/useEventPageList';
 import EventPC from './EventPC';
 import EventMobile from './EventMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';

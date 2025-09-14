@@ -5,7 +5,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import useNoticeInfo from '@hooks/notice/useNoticeInfo';
+import useNoticeInfo from '@services/notice/useNoticeInfo';
 import NoticeDetail from './NoticeDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { NoticeDetailProps } from '@/types/notice';

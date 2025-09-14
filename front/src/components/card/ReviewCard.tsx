@@ -10,10 +10,10 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@hooks/useCSRFToken';
-import useFieInfo from '@hooks/cmmn/useFileInfo';
+import useCSRFToken from '@services/useCSRFToken';
+import useFieInfo from '@services/cmmn/useFileInfo';
 import { ReviewData, ReviewInfoData } from '@/types/api';
-import useImageUrl from '@hooks/useImageUrl';
+import useImageUrl from '@services/useImageUrl';
 import ReviewInput from '@components/input/ReviewInput';
 import {
 	Box,

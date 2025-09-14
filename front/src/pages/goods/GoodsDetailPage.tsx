@@ -13,9 +13,9 @@ import {
 	ReviewPageData,
 	ReviewInfoData,
 } from '@/types/api';
-import useCSRFToken from '@hooks/useCSRFToken';
-import useGoodsDetail from '@hooks/goods/useGoodsDetail';
-import useReviewPageList from '@hooks/review/useReviewPageList';
+import useCSRFToken from '@services/useCSRFToken';
+import useGoodsDetail from '@services/goods/useGoodsDetail';
+import useReviewPageList from '@services/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import goToOrderForm from '@navigate/order/goToOrderForm';

@@ -5,6 +5,7 @@
       "@App": ["App.tsx"],
       "@api/*": ["api/*"],
       "@assets": ["assets/*"],
+      "@services/*": ["services/*"],
       "@components/*": ["components/*"],
       "@context/*": ["context/*"],
       "@hooks/*": ["hooks/*"],

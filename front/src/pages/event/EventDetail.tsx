@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import useImageUrl from '@hooks/useImageUrl';
+import useImageUrl from '@services/useImageUrl';
 import EventSubHeader from './cmmn/EventSubHeader';
 import ButtonTag from '@components/button/ButtonTag';
 import ButtonGoods from '@components/button/ButtonGoods';

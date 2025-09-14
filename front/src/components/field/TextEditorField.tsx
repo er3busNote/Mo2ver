@@ -8,9 +8,9 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@hooks/useCSRFToken';
-import useFileInfo from '@hooks/cmmn/useFileInfo';
-import useImageUrl from '@hooks/useImageUrl';
+import useCSRFToken from '@services/useCSRFToken';
+import useFileInfo from '@services/cmmn/useFileInfo';
+import useImageUrl from '@services/useImageUrl';
 import { Box, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import {

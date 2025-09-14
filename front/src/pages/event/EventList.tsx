@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import useImageUrl from '@hooks/useImageUrl';
+import useImageUrl from '@services/useImageUrl';
 import AppSubHeader from '@layouts/AppSubHeader';
 import PageNavigator from '@components/pagination/PageNavigator';
 import {

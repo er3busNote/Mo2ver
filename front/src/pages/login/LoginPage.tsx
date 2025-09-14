@@ -6,10 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
-import { MemberState } from '@/types/api';
+import { MemberState } from '@/types/store';
 import Api from '@api/index';
 import { LoginData } from '@/types/api';
-import useCSRFToken from '@hooks/useCSRFToken';
+import useCSRFToken from '@services/useCSRFToken';
 import LoginForm from './LoginForm';
 import { LoginFormValues } from '@/types/form';
 

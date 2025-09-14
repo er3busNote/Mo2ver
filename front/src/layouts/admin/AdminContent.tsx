@@ -19,7 +19,7 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@/types/store';
 import Api from '@api/index';
-import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
+import useGroupMenuList from '@services/cmmn/useGroupMenuList';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';

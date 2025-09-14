@@ -11,8 +11,8 @@ import {
 	OrderGoodsInfoData,
 } from '@/types/api';
 import Api from '@api/index';
-import useCSRFToken from '@hooks/useCSRFToken';
-import useCartPageList from '@hooks/cart/useCartPageList';
+import useCSRFToken from '@services/useCSRFToken';
+import useCartPageList from '@services/cart/useCartPageList';
 import CartListPC from './CartListPC';
 import CartListMobile from './CartListMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';

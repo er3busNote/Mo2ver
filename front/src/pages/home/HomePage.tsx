@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { FileData } from '@/types/api';
-import useBannerDisplayList from '@hooks/banner/useBannerDisplayList';
+import useBannerDisplayList from '@services/banner/useBannerDisplayList';
 import { Box, Divider, useTheme, useMediaQuery } from '@mui/material';
 import BannerPC from './banner/BannerPC';
 import BannerMobile from './banner/BannerMobile';

@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { AddressData } from '@/types/api';
-import useAddressList from '@hooks/address/useAddressList';
+import useAddressList from '@services/address/useAddressList';
 import PageNavigator from '@components/pagination/PageNavigator';
 import DialogMobile from '../cmmn/DialogMobile';
 import {

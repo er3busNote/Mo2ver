@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import useNoticePageList from '@hooks/notice/useNoticePageList';
+import useNoticePageList from '@services/notice/useNoticePageList';
 import NoticeList from './NoticeList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { NoticeProps } from '@/types/notice';

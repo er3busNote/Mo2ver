@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { SignUpData } from '@/types/api';
-import useCSRFToken from '@hooks/useCSRFToken';
+import useCSRFToken from '@services/useCSRFToken';
 import SignupForm from './SignupForm';
 import { SignupFormValues } from '@/types/form';
 import { isEmail, isPassword } from '@utils/validation';

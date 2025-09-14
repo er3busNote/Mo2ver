@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import useBannerPageList from '@hooks/banner/useBannerPageList';
+import useBannerPageList from '@services/banner/useBannerPageList';
 import BannerPC from './BannerPC';
 import BannerMobile from './BannerMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';

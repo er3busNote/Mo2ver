@@ -18,9 +18,9 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@/types/store';
 import Api from '@api/index';
-import useGroupMenuList from '@hooks/cmmn/useGroupMenuList';
-import useGoodsRankList from '@hooks/goods/useGoodsRankList';
-import useCategoryGroupList from '@hooks/category/useCategoryGroupList';
+import useGroupMenuList from '@services/cmmn/useGroupMenuList';
+import useGoodsRankList from '@services/goods/useGoodsRankList';
+import useCategoryGroupList from '@services/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
 //import AppHeaderBar from './AppHeaderBar';
 import AppHeaderMenu from './menu/AppHeaderMenu';
