@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { Button } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 
 interface ButtonDialogProps {
 	type?: 'button' | 'submit' | 'reset'; // HTML 기본 type 속성

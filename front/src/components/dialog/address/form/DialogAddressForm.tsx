@@ -22,7 +22,7 @@ import {
 	useMediaQuery,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 import ButtonDialog from '@components/button/ButtonDialog';
 import AddressFields from './AddressFields';
 import { AddressFormValues } from './types';

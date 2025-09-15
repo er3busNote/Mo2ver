@@ -32,7 +32,7 @@ import {
 import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 import { isEmpty, get, find } from 'lodash';
 
 interface GoodsDetailProps {

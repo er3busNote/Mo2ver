@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 
 interface DialogProps {
 	title: string;

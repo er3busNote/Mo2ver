@@ -7,7 +7,7 @@ import {
 	LinearProgress,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 
 const ratingCounts: Record<number, number> = {
 	5: 13,

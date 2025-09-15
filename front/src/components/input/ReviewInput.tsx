@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { ReviewInfoData } from '@/types/api';
 import { Box, Button, Divider, TextField, Rating } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 import {
 	fontSize_xs,
 	fontSize_sm,

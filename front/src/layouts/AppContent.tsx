@@ -42,7 +42,7 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { contentTheme } from '@utils/theme';
 import { GoodsData, CategoryDataGroup } from '@/types/api';
-import { useIsDesktop } from '@context/MobileContext';
+import { useIsDesktop } from '@providers/MobileProvider';
 
 const mdTheme = createTheme(contentTheme);
 

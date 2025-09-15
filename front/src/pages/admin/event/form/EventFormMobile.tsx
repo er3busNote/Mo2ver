@@ -26,7 +26,7 @@ import RenderDatePickerField from '@components/field/DatePickerField';
 import { EventFormValues, EventDetailValues } from '@/types/admin/form';
 import { EventProp } from '@/types/admin/event';
 import goToEvent from '@navigate/admin/event/goToEvent';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 import dayjs from 'dayjs';
 
 const tableBorder = '1px solid #d2d2d2';

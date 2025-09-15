@@ -14,7 +14,7 @@ import useGoodsDetail from '@services/goods/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { RegisterFormValues } from '@/types/form';
-import { useIsMobile } from '@context/MobileContext';
+import { useIsMobile } from '@providers/MobileProvider';
 import dayjs, { Dayjs } from 'dayjs';
 
 const steps = ['상품등록', '등록완료'];
