@@ -1,5 +1,10 @@
-import { BaseSyntheticEvent, Dispatch, SetStateAction } from 'react';
+import { BaseSyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
+import {
+	QueryObserverResult,
+	RefetchOptions,
+	Error,
+} from '@tanstack/react-query';
 import {
 	MemberData,
 	AddressData,
@@ -15,9 +20,11 @@ interface OrderProps {
 	file: ActionCreatorsMapObject;
 	orderId: string;
 	memberData: MemberData;
-	addressData: AddressData;
+	addressData?: AddressData;
 	orderData: OrderInfoData;
-	setAddressReload: Dispatch<SetStateAction<boolean>>;
+	onAddressRefetch: (
+		options?: RefetchOptions | undefined
+	) => Promise<QueryObserverResult<AddressData, Error>>;
 	onCouponApply: (orderCouponData: OrderCouponData) => void;
 	onPointApply: (orderPointData: OrderPointData) => void;
 	onSubmit: (

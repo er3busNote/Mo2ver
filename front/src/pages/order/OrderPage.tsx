@@ -11,7 +11,7 @@ import Api from '@api/index';
 import { OrderData, OrderCouponData, OrderPointData } from '@/types/api';
 import useCSRFToken from '@services/useCSRFToken';
 import useMemberInfo from '@services/member/useMemberInfo';
-import useAddressInfo from '@services/address/useAddressInfo';
+import useAddressInfo from '@hooks/address/query/useAddressInfo';
 import useOrderInfo from '@services/order/useOrderInfo';
 import usePaymentInfo from '@services/payment/usePaymentInfo';
 import OrderFormPC from './form/OrderFormPC';
@@ -71,7 +71,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 	memberData,
 	addressData,
 	orderData,
-	setAddressReload,
+	onAddressRefetch,
 	onCouponApply,
 	onPointApply,
 	onSubmit,
@@ -93,7 +93,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
-				setAddressReload={setAddressReload}
+				onAddressRefetch={onAddressRefetch}
 				onCouponApply={onCouponApply}
 				onPointApply={onPointApply}
 				onSubmit={onSubmit}
@@ -110,7 +110,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 	memberData,
 	addressData,
 	orderData,
-	setAddressReload,
+	onAddressRefetch,
 	onCouponApply,
 	onPointApply,
 	onSubmit,
@@ -132,7 +132,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 				memberData={memberData}
 				addressData={addressData}
 				orderData={orderData}
-				setAddressReload={setAddressReload}
+				onAddressRefetch={onAddressRefetch}
 				onCouponApply={onCouponApply}
 				onPointApply={onPointApply}
 				onSubmit={onSubmit}
@@ -160,7 +160,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const csrfData = useCSRFToken({ member });
 	const memberData = useMemberInfo({ member });
 	const paymentData = usePaymentInfo({ payment, orderId, csrfData });
-	const [addressData, setAddressReload] = useAddressInfo({ address });
+	const { data: addressData, refetch } = useAddressInfo({ address });
 	const [orderData, setReload] = useOrderInfo({ order, orderId }); // 쿠폰 및 포인트 적용 시, 최종금액이 바뀔수 있음
 
 	const methods = useForm<OrderFormValues>({
@@ -201,7 +201,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
-					setAddressReload={setAddressReload}
+					onAddressRefetch={refetch}
 					onCouponApply={onCouponApply}
 					onPointApply={onPointApply}
 					onSubmit={submitForm}
@@ -216,7 +216,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					memberData={memberData}
 					addressData={addressData}
 					orderData={orderData}
-					setAddressReload={setAddressReload}
+					onAddressRefetch={refetch}
 					onCouponApply={onCouponApply}
 					onPointApply={onPointApply}
 					onSubmit={submitForm}

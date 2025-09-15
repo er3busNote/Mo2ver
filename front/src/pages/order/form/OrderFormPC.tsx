@@ -39,7 +39,7 @@ const OrderFormPC: FC<OrderProps> = ({
 	memberData,
 	addressData,
 	orderData,
-	setAddressReload,
+	onAddressRefetch,
 	onCouponApply,
 	onPointApply,
 	onSubmit,
@@ -58,7 +58,7 @@ const OrderFormPC: FC<OrderProps> = ({
 	const [openAddressModify, setOpenAddressModify] = useState(false);
 
 	const setField = () => {
-		setAddressReload(true);
+		onAddressRefetch();
 	};
 
 	const openRegisterAddress = () => setOpenAddressRegister(true);
@@ -276,13 +276,13 @@ const OrderFormPC: FC<OrderProps> = ({
 											alignItems="flex-start"
 										>
 											<Typography component="span" sx={label}>
-												{addressData.memberName}
+												{addressData?.memberName}
 											</Typography>
 											<Typography component="span" sx={label}>
-												{addressData.cellPhoneNumber}
+												{addressData?.cellPhoneNumber}
 											</Typography>
 											<Typography component="span" sx={label}>
-												{addressData.roadNameBasicAddress}
+												{addressData?.roadNameBasicAddress}
 											</Typography>
 										</Box>
 									)}
@@ -308,7 +308,7 @@ const OrderFormPC: FC<OrderProps> = ({
 										/>
 										<DialogAddressPC
 											open={openAddressModify}
-											addressNo={addressData.addressNo}
+											addressNo={addressData?.addressNo ?? ''}
 											setField={setField}
 											handleClose={closeModifyAddress}
 										/>
@@ -316,7 +316,7 @@ const OrderFormPC: FC<OrderProps> = ({
 								</Box>
 								<input
 									type="hidden"
-									value={addressData.addressNo}
+									value={addressData?.addressNo}
 									{...register('addressNo')}
 								/>
 								<Controller

@@ -4,8 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { AddressData } from '@/types/api';
-import useAddressList from '@services/address/useAddressList';
-import PageNavigator from '@components/pagination/PageNavigator';
+import useAddressList from '@hooks/address/query/useAddressList';
 import DialogMobile from '../cmmn/DialogMobile';
 import {
 	Radio,
@@ -34,7 +33,7 @@ const DialogAddressMobile: FC<DialogProps> = ({
 	handleClose,
 }): JSX.Element => {
 	const [addressNoSel, setAddressNo] = useState<string>();
-	const addressData = useAddressList({ address });
+	const { data: addressData } = useAddressList({ address });
 
 	useEffect(() => {
 		setAddressNo(addressNo);
@@ -86,21 +85,20 @@ const DialogAddressMobile: FC<DialogProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{addressData &&
-							addressData.map((data: AddressData, index: number) => (
-								<TableRow key={index} sx={rowItem}>
-									<TableCell align="center">
-										<Radio
-											size="small"
-											checked={addressNoSel === data.addressNo}
-											onChange={handleChange}
-											value={data.addressNo}
-										/>
-									</TableCell>
-									<TableCell align="center">{data.memberName}</TableCell>
-									<TableCell align="center">{data.cellPhoneNumber}</TableCell>
-								</TableRow>
-							))}
+						{addressData?.map((data: AddressData, index: number) => (
+							<TableRow key={index} sx={rowItem}>
+								<TableCell align="center">
+									<Radio
+										size="small"
+										checked={addressNoSel === data.addressNo}
+										onChange={handleChange}
+										value={data.addressNo}
+									/>
+								</TableCell>
+								<TableCell align="center">{data.memberName}</TableCell>
+								<TableCell align="center">{data.cellPhoneNumber}</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</TableContainer>

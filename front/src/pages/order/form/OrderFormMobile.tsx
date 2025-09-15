@@ -39,7 +39,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	memberData,
 	addressData,
 	orderData,
-	setAddressReload,
+	onAddressRefetch,
 	onCouponApply,
 	onPointApply,
 	onSubmit,
@@ -58,7 +58,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	const [openAddressModify, setOpenAddressModify] = useState(false);
 
 	const setField = () => {
-		setAddressReload(true);
+		onAddressRefetch();
 	};
 
 	const openRegisterAddress = () => setOpenAddressRegister(true);
@@ -293,7 +293,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 									/>
 									<DialogAddressMobile
 										open={openAddressModify}
-										addressNo={addressData.addressNo}
+										addressNo={addressData?.addressNo || ''}
 										setField={setField}
 										handleClose={closeModifyAddress}
 									/>
@@ -310,20 +310,20 @@ const OrderFormMobile: FC<OrderProps> = ({
 									alignItems="flex-start"
 								>
 									<Typography component="span" sx={label}>
-										{addressData.memberName}
+										{addressData?.memberName}
 									</Typography>
 									<Typography component="span" sx={label}>
-										{addressData.cellPhoneNumber}
+										{addressData?.cellPhoneNumber}
 									</Typography>
 									<Typography component="span" sx={label}>
-										{addressData.roadNameBasicAddress}
+										{addressData?.roadNameBasicAddress}
 									</Typography>
 								</Box>
 							)}
 							<Box mt={2}>
 								<input
 									type="hidden"
-									value={addressData.addressNo}
+									value={addressData?.addressNo}
 									{...register('addressNo')}
 								/>
 								<Controller
