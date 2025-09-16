@@ -24,7 +24,7 @@ import {
 	Rating,
 } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
-import { useIsMobile, useIsDesktop } from '@providers/MobileProvider';
+import { useIsMobile, useIsDesktop } from '@context/MobileContext';
 import { isEmpty } from 'lodash';
 import { REVIEW_INFO as IMAGE_INFO } from '@utils/init';
 

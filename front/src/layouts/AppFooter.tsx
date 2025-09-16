@@ -21,7 +21,7 @@ import {
 import { GoodsData, CategoryDataGroup } from '@/types/api';
 import goToMenu from '@navigate/menu/goToMenu';
 import { isAdmin } from '@utils/jwttoken';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 
 interface AppFooterProps {
 	width: number;

@@ -12,7 +12,7 @@ import BannerMobile from './banner/BannerMobile';
 import PopularPC from './popular/PopularPC';
 import PopularMobile from './popular/PopularMobile';
 import HorizontalScroll from '@components/HorizontalScroll';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 
 const files: Array<FileData> = [];
 

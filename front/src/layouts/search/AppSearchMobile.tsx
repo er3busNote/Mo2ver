@@ -17,7 +17,7 @@ import {
 	ListItemButton,
 } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 import SearchCard from '@components/card/SearchCard';
 import SearchDivider from '@components/divider/SearchDivider';
 import MainIcon from '@components/MainIcon';

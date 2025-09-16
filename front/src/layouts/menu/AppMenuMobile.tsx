@@ -25,7 +25,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import { CategoryData, CategoryDataGroup } from '@/types/api';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
-import { useIsDesktop } from '@providers/MobileProvider';
+import { useIsDesktop } from '@context/MobileContext';
 import { has } from 'lodash';
 
 interface AppMenuProps {

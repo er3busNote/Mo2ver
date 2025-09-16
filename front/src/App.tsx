@@ -9,8 +9,8 @@ import {
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
 import { SnackbarProvider } from 'notistack';
-import { MobileProvider } from '@providers/MobileProvider';
 import QueryProvider from '@providers/QueryProvider';
+import MobileProvider from '@providers/MobileProvider';
 import persistedReducer, { RootState } from './store';
 import { MemberState } from '@/types/store';
 import {

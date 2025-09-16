@@ -29,7 +29,7 @@ import {
 import { BannerGoodsProp } from '@/types/admin/banner';
 import goToBanner from '@navigate/admin/banner/goToBanner';
 import goToBannerForm from '@navigate/admin/banner/goToBannerForm';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 import { renameKeys } from '@utils/code';
 import dayjs from 'dayjs';
 

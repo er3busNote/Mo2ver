@@ -7,7 +7,7 @@ import { Paper, InputBase, IconButton } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
 import goToGoodsSearch from '@navigate/goods/goToGoodsSearch';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 
 interface SearchCardProps {
 	title: string;

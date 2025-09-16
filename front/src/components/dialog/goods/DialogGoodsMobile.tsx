@@ -27,7 +27,7 @@ import {
 import { SxProps, Theme } from '@mui/material/styles';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerGoodsDetailValues } from '@/types/admin/form';
-import { useIsMobile } from '@providers/MobileProvider';
+import { useIsMobile } from '@context/MobileContext';
 import { not, intersect, intersectBy, union } from '@utils/set';
 import { some, indexOf, includes } from 'lodash';
 

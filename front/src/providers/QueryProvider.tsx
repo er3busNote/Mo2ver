@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -9,7 +9,7 @@ import Loading from '@components/backdrop/Loading';
 const queryClient = new QueryClient();
 
 interface QueryProviderProps {
-	children?: ReactElement;
+	children: ReactNode;
 }
 
 const LoadingOverlay: FC = () => {

@@ -7,6 +7,7 @@
       "@assets": ["assets/*"],
       "@services/*": ["services/*"],
       "@components/*": ["components/*"],
+      "@context/*": ["context/*"],
       "@handler/*": ["handler/*"],
       "@hooks/*": ["hooks/*"],
       "@layouts/*": ["layouts/*"],
