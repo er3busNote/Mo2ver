@@ -1,6 +1,6 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { isEmpty } from 'lodash';
-import { ROLE_MAP } from '@/constants/auth';
+import { AUTH_ROLE } from '@/constants/auth';
 
 const JWT_ACCESS_TOKEN = 'accessToken';
 const JWT_REFRESH_TOKEN_EXPIRATION = 'refreshTokenExpiration';
@@ -42,7 +42,7 @@ const getRolesFromToken = (token: string): string[] => {
 		if (!decoded?.auth) return [];
 		return decoded?.auth
 			.split(',')
-			.map((role) => ROLE_MAP[role as keyof typeof ROLE_MAP])
+			.map((role) => AUTH_ROLE[role as keyof typeof AUTH_ROLE])
 			.filter(Boolean);
 	} catch (err) {
 		console.error('JWT decoding error:', err);
