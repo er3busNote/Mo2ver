@@ -9,7 +9,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useFileInfo from '@services/cmmn/useFileInfo';
+import useFileInfo from '@hooks/cmmn/query/useFileInfo';
 import DialogImage from '@components/dialog/DialogImage';
 import { Box, IconButton, FormHelperText } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';

@@ -9,8 +9,8 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useFileInfo from '@services/cmmn/useFileInfo';
-import useImageUrl from '@services/useImageUrl';
+import useFileInfo from '@hooks/cmmn/query/useFileInfo';
+import useImageUrl from '@hooks/useImageUrl';
 import { Box, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import {

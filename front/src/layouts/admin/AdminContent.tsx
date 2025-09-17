@@ -19,7 +19,7 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@/types/store';
 import Api from '@api/index';
-import useGroupMenuList from '@services/cmmn/useGroupMenuList';
+import useGroupMenuList from '@hooks/cmmn/query/useGroupMenuList';
 import AdminHeader from './AdminHeader';
 import AdminMenuPC from './AdminMenuPC';
 import AdminMenuMobile from './AdminMenuMobile';
@@ -136,10 +136,10 @@ const AdminContent: FC<LayoutDefaultProps> = ({
 	const dispatch = useDispatch();
 	const [menuOpen, setMenuOpen] = useState<boolean>(true);
 	const [index, setIndex] = useState<number>(0);
-	const menuData = useGroupMenuList({ menuType: 1, menu });
+	const { data: menuData } = useGroupMenuList({ menuType: 1, menu });
 
 	useEffect(() => {
-		dispatch(menuLotate(menuData)); // 메뉴 변경 : user → admin
+		dispatch(menuLotate(menuData ?? [])); // 메뉴 변경 : user → admin
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				const idx = event.state.idx;

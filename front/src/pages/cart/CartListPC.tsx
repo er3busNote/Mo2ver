@@ -8,7 +8,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { CartData } from '@/types/api';
-import useImageUrl from '@services/useImageUrl';
+import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import NumberInput from '@components/input/NumberInput';
 import ButtonCart from '@components/button/ButtonCart';

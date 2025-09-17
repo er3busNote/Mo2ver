@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import useImageUrl from '@services/useImageUrl';
+import useImageUrl from '@hooks/useImageUrl';
 import { CardMedia, Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface CarouselDialogProps {

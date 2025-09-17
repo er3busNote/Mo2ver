@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, SyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import useImageUrl from '@services/useImageUrl';
+import useImageUrl from '@hooks/useImageUrl';
 import ButtonTag from '@components/button/ButtonTag';
 import {
 	Box,

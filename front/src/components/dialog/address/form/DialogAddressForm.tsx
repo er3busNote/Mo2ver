@@ -204,7 +204,6 @@ const DialogAddressForm: FC<DialogDispatchProps> = ({
 			roadNameDetailAddress: data.roadNameDetailAddress,
 		};
 		await address.create(orderFormData);
-		console.log(orderFormData);
 		setField();
 		handleClose();
 	};

@@ -5,7 +5,7 @@ import { BannerRequestData, BannerImageInfoData, CSRFData } from '@/types/api';
 interface BannerDetailProps {
 	banner: ActionCreatorsMapObject;
 	bannerData: BannerRequestData;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 const useBannerImagesDetail = ({
@@ -18,7 +18,7 @@ const useBannerImagesDetail = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await banner.imagesDetail(bannerData, csrfData);
 		setData(data);
-	}, [csrfData.csrfToken]);
+	}, [csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

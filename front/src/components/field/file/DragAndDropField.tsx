@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import { FileData } from '@/types/api';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useFileInfo from '@services/cmmn/useFileInfo';
+import useFileInfo from '@hooks/cmmn/query/useFileInfo';
 import {
 	Box,
 	Typography,

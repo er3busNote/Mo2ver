@@ -39,7 +39,6 @@ const member = (instance: AxiosInstance) => {
 					dispatch(loginSuccess(tokenData));
 				})
 				.catch((error: AxiosError) => {
-					console.log(error.response);
 					const { status, data } = error.response as AxiosResponse;
 					if (status === 400) {
 						dispatch(

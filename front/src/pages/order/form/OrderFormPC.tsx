@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import { OrderGoodsData, OrderCouponData, OrderPointData } from '@/types/api';
-import useImageUrl from '@services/useImageUrl';
+import useImageUrl from '@hooks/useImageUrl';
 import AppSubStepHeader from '@layouts/AppSubStepHeader';
 import {
 	Box,

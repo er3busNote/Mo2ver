@@ -18,7 +18,7 @@ import {
 } from '@store/index';
 import { TitleState, ToastState } from '@/types/store';
 import Api from '@api/index';
-import useGroupMenuList from '@services/cmmn/useGroupMenuList';
+import useGroupMenuList from '@hooks/cmmn/query/useGroupMenuList';
 import useGoodsRankList from '@services/goods/useGoodsRankList';
 import useCategoryGroupList from '@services/category/useCategoryGroupList';
 import AppHeader from './AppHeader';
@@ -207,12 +207,12 @@ const AppContent: FC<LayoutDefaultProps> = ({
 
 	const dispatch = useDispatch();
 	const [index, setIndex] = useState<number>(0);
-	const menuData = useGroupMenuList({ menuType: 0, menu });
+	const { data: menuData } = useGroupMenuList({ menuType: 0, menu });
 	const goodsRankData = useGoodsRankList({ count: 10, goods });
 	const categoryData = useCategoryGroupList({ category });
 
 	useEffect(() => {
-		dispatch(menuLotate(menuData)); // 메뉴 변경 : admin → user
+		dispatch(menuLotate(menuData ?? [])); // 메뉴 변경 : admin → user
 		const handlePopstate = (event: PopStateEvent) => {
 			if (event.state) {
 				const idx = event.state.idx;

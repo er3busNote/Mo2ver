@@ -2,7 +2,7 @@ import React, { FC, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
-import { MenuState, SubMenuInfo } from '@/types/api';
+import { MenuState, SubMenuInfo } from '@/types/store';
 import { CategoryData, CategoryDataGroup } from '@/types/api';
 import AppMenu from './AppMenu';
 import AppMenuItem from './AppMenuItem';

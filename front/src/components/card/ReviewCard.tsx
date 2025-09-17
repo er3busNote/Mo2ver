@@ -11,9 +11,9 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useFieInfo from '@services/cmmn/useFileInfo';
+import useFieInfo from '@hooks/cmmn/query/useFileInfo';
 import { ReviewData, ReviewInfoData } from '@/types/api';
-import useImageUrl from '@services/useImageUrl';
+import useImageUrl from '@hooks/useImageUrl';
 import ReviewInput from '@components/input/ReviewInput';
 import {
 	Box,

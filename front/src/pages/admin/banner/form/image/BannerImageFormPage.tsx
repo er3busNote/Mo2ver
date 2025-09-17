@@ -10,7 +10,7 @@ import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { BannerRequestData, BannerImageInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useGroupCodeList from '@services/cmmn/useGroupCodeList';
+import useGroupCodeList from '@hooks/cmmn/query/useGroupCodeList';
 import useBannerImagesDetail from '@services/banner/useBannerImagesDetail';
 import BannerImageFormPC from './BannerImageFormPC';
 import BannerImageFormMobile from './BannerImageFormMobile';
@@ -121,13 +121,13 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { data: csrfData } = useCSRFToken({ member });
-	const [bannerNo, setBannerNo] = useState<number>();
-	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const groupCodeData = useGroupCodeList({
+	const { data: groupCodeData } = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,
 	});
+	const [bannerNo, setBannerNo] = useState<number>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType =
 		location.state?.bannerNo && location.state?.displayTemplateCode
 			? 'Update'
@@ -185,8 +185,6 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 		if (componentType === 'Update') {
 			bannerFormData.bannerNo = bannerNo;
 		}
-		console.log(bannerFormData);
-		console.log(csrfData);
 		if (componentType === 'Create')
 			await banner.imagesCreate(bannerFormData, csrfData);
 		if (componentType === 'Update')

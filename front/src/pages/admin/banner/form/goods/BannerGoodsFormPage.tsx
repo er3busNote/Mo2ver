@@ -10,7 +10,7 @@ import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { BannerRequestData, BannerGoodsInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useGroupCodeList from '@services/cmmn/useGroupCodeList';
+import useGroupCodeList from '@hooks/cmmn/query/useGroupCodeList';
 import useBannerGoodsDetail from '@services/banner/useBannerGoodsDetail';
 import BannerGoodsFormPC from './BannerGoodsFormPC';
 import BannerGoodsFormMobile from './BannerGoodsFormMobile';
@@ -125,13 +125,13 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { data: csrfData } = useCSRFToken({ member });
-	const [bannerNo, setBannerNo] = useState<number>();
-	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const groupCodeData = useGroupCodeList({
+	const { data: groupCodeData } = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,
 	});
+	const [bannerNo, setBannerNo] = useState<number>();
+	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType =
 		location.state?.bannerNo && location.state?.displayTemplateCode
 			? 'Update'

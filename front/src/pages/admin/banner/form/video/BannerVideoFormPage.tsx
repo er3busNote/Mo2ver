@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useGroupCodeList from '@services/cmmn/useGroupCodeList';
+import useGroupCodeList from '@hooks/cmmn/query/useGroupCodeList';
 import BannerVideoFormPC from './BannerVideoFormPC';
 import BannerVideoFormMobile from './BannerVideoFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -102,7 +102,7 @@ const BannerVideoFormPage: FC<BannerDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const { data: csrfData } = useCSRFToken({ member });
-	const groupCodeData = useGroupCodeList({
+	const { data: groupCodeData } = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,

@@ -152,7 +152,7 @@ public class MemberController {
         }
     }
 
-    @GetMapping("csrf-token")
+    @GetMapping("/csrf-token")
     public ResponseEntity<?> csrfToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {

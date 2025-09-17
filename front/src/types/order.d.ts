@@ -1,10 +1,6 @@
 import { BaseSyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
-import {
-	QueryObserverResult,
-	RefetchOptions,
-	Error,
-} from '@tanstack/react-query';
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import {
 	MemberData,
 	AddressData,
