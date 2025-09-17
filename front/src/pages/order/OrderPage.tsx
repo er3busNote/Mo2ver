@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { OrderData, OrderCouponData, OrderPointData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
-import useMemberInfo from '@services/member/useMemberInfo';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
+import useMemberInfo from '@hooks/member/query/useMemberInfo';
 import useAddressInfo from '@hooks/address/query/useAddressInfo';
 import useOrderInfo from '@services/order/useOrderInfo';
 import usePaymentInfo from '@services/payment/usePaymentInfo';
@@ -157,8 +157,8 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const orderId = location.state?.orderId;
-	const csrfData = useCSRFToken({ member });
-	const memberData = useMemberInfo({ member });
+	const { data: csrfData } = useCSRFToken({ member });
+	const { data: memberData } = useMemberInfo({ member });
 	const paymentData = usePaymentInfo({ payment, orderId, csrfData });
 	const { data: addressData, refetch } = useAddressInfo({ address });
 	const [orderData, setReload] = useOrderInfo({ order, orderId }); // 쿠폰 및 포인트 적용 시, 최종금액이 바뀔수 있음

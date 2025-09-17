@@ -7,11 +7,11 @@ import { TitleState } from '@/types/store';
 import {
 	CartData,
 	CartPageData,
-	OrderInfoData,
+	OrderRequestData,
 	OrderGoodsInfoData,
 } from '@/types/api';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useCartPageList from '@services/cart/useCartPageList';
 import CartListPC from './CartListPC';
 import CartListMobile from './CartListMobile';
@@ -109,7 +109,7 @@ const CartPage: FC<CartDispatchProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const [cartPageData, setPage, setTotalPrice] = useCartPageList({ cart });
 	const cartUpdate = async (cartData: CartData) => {
 		const data = (await cart.update(cartData, csrfData)) as CartPageData;
@@ -129,7 +129,7 @@ const CartPage: FC<CartDispatchProps> = ({
 				quantity: item.amount,
 			})
 		);
-		const orderInfoData: OrderInfoData = {
+		const orderRequestData: OrderRequestData = {
 			goodsOrders: orderGoodsInfoData,
 		};
 		goToOrderForm({
@@ -138,7 +138,7 @@ const CartPage: FC<CartDispatchProps> = ({
 			dispatch,
 			navigate,
 			order,
-			orderInfoData,
+			orderRequestData,
 			csrfData,
 		});
 	};

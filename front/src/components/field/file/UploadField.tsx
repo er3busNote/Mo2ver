@@ -8,7 +8,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useFileInfo from '@services/cmmn/useFileInfo';
 import DialogImage from '@components/dialog/DialogImage';
 import { Box, IconButton, FormHelperText } from '@mui/material';
@@ -45,7 +45,7 @@ const RenderUploadField: FC<RenderFileFieldProps> = ({
 	member,
 	file,
 }) => {
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	const [open, setOpen] = useState<boolean>(false);
 	useEffect(() => {

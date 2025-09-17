@@ -6,7 +6,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useCategoryList from '@services/category/useCategoryList';
 import CategoryPC from './CategoryPC';
 import CategoryMobile from './CategoryMobile';
@@ -45,7 +45,7 @@ const CategoryPage: FC<CategoryDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const categoryData = useCategoryList({ category });
 	const submitForm = (
 		data: CategoryFormValues,

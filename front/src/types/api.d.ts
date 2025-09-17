@@ -378,7 +378,7 @@ interface OrderGoodsInfoData {
 	quantity: number;
 }
 
-interface OrderInfoData {
+interface OrderRequestData {
 	goodsOrders: Array<OrderGoodsInfoData>;
 }
 
@@ -517,7 +517,7 @@ export type {
 	OrderInfoData,
 	OrderGoodsData,
 	OrderGoodsInfoData,
-	OrderInfoData,
+	OrderRequestData,
 	OrderCouponData,
 	OrderPointData,
 	PaymentData,

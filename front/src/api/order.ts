@@ -3,7 +3,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from '@handler/api';
 import {
 	CSRFData,
-	OrderInfoData,
+	OrderRequestData,
 	OrderCouponData,
 	OrderPointData,
 } from '@/types/api';
@@ -18,10 +18,10 @@ const order = (instance: AxiosInstance) => {
 				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 주문 저장 API : <baseURL>/order/create
 		create:
-			(orderInfoData: OrderInfoData, csrfData: CSRFData) =>
+			(orderRequestData: OrderRequestData, csrfData: CSRFData) =>
 			(dispatch: Dispatch) =>
 				instance
-					.post('order/create', orderInfoData, {
+					.post('order/create', orderRequestData, {
 						headers: {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},

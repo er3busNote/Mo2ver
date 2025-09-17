@@ -5,7 +5,7 @@ import { CodeData, CSRFData } from '@/types/api';
 interface GroupCodeProps {
 	code: ActionCreatorsMapObject;
 	groupCodelist: Array<string>;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 const useGroupCodeList = ({
@@ -18,7 +18,7 @@ const useGroupCodeList = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await code.list(groupCodelist, csrfData);
 		setData(data);
-	}, [csrfData.csrfToken]);
+	}, [csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

@@ -5,7 +5,7 @@ import { NoticeRequestData, NoticeInfoData, CSRFData } from '@/types/api';
 interface NoticeDetailProps {
 	notice: ActionCreatorsMapObject;
 	noticeData: NoticeRequestData;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 const useNoticeDetail = ({
@@ -18,7 +18,7 @@ const useNoticeDetail = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await notice.detail(noticeData, csrfData);
 		setData(data);
-	}, [csrfData.csrfToken]);
+	}, [csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

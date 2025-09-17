@@ -8,7 +8,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { SignUpData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import SignupForm from './SignupForm';
 import { SignupFormValues } from '@/types/form';
 import { isEmail, isPassword } from '@utils/validation';
@@ -53,7 +53,7 @@ interface SignupDispatchProps {
 const SignupPage: FC<SignupDispatchProps> = ({ member }): JSX.Element => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const redirectTo = (location.state as LocationState)?.from || '/';
 
 	const methods = useForm<SignupFormValues>({

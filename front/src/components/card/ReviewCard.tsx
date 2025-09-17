@@ -10,7 +10,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useFieInfo from '@services/cmmn/useFileInfo';
 import { ReviewData, ReviewInfoData } from '@/types/api';
 import useImageUrl from '@services/useImageUrl';
@@ -54,7 +54,7 @@ const ReviewCard: FC<ReviewCardProps> = ({
 	const isMobile = useIsMobile();
 	const isDesktop = useIsDesktop();
 
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const { data: dataFiles, setFiles } = useFieInfo({ file, csrfData });
 
 	const textRef = useRef<HTMLDivElement>(null);

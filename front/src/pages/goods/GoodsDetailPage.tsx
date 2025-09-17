@@ -8,12 +8,12 @@ import { TitleState } from '@/types/store';
 import {
 	GoodsDetailData,
 	CartData,
-	OrderInfoData,
+	OrderRequestData,
 	OrderGoodsInfoData,
 	ReviewPageData,
 	ReviewInfoData,
 } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useGoodsDetail from '@services/goods/useGoodsDetail';
 import useReviewPageList from '@services/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
@@ -135,7 +135,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 
 	const onReviewAdd = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
@@ -156,7 +156,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 			goodsCode: code,
 			quantity: 1,
 		};
-		const orderInfoData: OrderInfoData = {
+		const orderRequestData: OrderRequestData = {
 			goodsOrders: [orderGoodsInfoData],
 		};
 		goToOrderForm({
@@ -165,7 +165,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 			dispatch,
 			navigate,
 			order,
-			orderInfoData,
+			orderRequestData,
 			csrfData,
 		});
 	};

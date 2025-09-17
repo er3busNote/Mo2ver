@@ -19,7 +19,7 @@ interface OrderProps {
 	steps: string[];
 	file: ActionCreatorsMapObject;
 	orderId: string;
-	memberData: MemberData;
+	memberData?: MemberData;
 	addressData?: AddressData;
 	orderData: OrderInfoData;
 	onAddressRefetch: (

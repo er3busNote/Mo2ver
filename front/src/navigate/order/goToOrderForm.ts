@@ -3,7 +3,7 @@ import { Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import createTitleData from '@navigate/createTitleData';
-import { CSRFData, OrderInfoData } from '@/types/api';
+import { CSRFData, OrderRequestData } from '@/types/api';
 
 const path = '/order';
 
@@ -13,8 +13,8 @@ type OrderParams = {
 	dispatch: Dispatch<AnyAction>;
 	navigate: NavigateFunction;
 	order: ActionCreatorsMapObject;
-	orderInfoData: OrderInfoData;
-	csrfData: CSRFData;
+	orderRequestData: OrderRequestData;
+	csrfData?: CSRFData;
 };
 
 const goToOrderForm = async ({
@@ -23,7 +23,7 @@ const goToOrderForm = async ({
 	dispatch,
 	navigate,
 	order,
-	orderInfoData,
+	orderRequestData,
 	csrfData,
 }: OrderParams) => {
 	const titleData = createTitleData({
@@ -32,7 +32,7 @@ const goToOrderForm = async ({
 		prevTitle: title,
 		prevDescription: description,
 	});
-	const { headers } = await order.create(orderInfoData, csrfData);
+	const { headers } = await order.create(orderRequestData, csrfData);
 	const orderId = headers.location.replace('/create/', '');
 	const state = { orderId };
 	dispatch(changeNext(titleData));

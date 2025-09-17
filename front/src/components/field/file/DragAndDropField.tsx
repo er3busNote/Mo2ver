@@ -16,7 +16,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { FileData } from '@/types/api';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useFileInfo from '@services/cmmn/useFileInfo';
 import {
 	Box,
@@ -61,7 +61,7 @@ const RenderDragAndDropField: FC<RenderFileFieldProps> = ({
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {

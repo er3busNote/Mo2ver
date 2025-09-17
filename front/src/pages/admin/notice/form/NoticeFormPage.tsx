@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { NoticeRequestData, NoticeInfoData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useNoticeDetail from '@services/notice/useNoticeDetail';
 import NoticeFormPC from './NoticeFormPC';
 import NoticeFormMobile from './NoticeFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { NoticeFormValues } from '../../../../types/admin/form';
+import { NoticeFormValues } from '@/types/admin/form';
 
 const noticeSchema = yup
 	.object()
@@ -81,7 +81,7 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const [noticeNo, setNoticeNo] = useState<number>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType = location.state?.noticeNo ? 'Update' : 'Create';

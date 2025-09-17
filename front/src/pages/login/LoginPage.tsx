@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { MemberState } from '@/types/store';
 import Api from '@api/index';
 import { LoginData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import LoginForm from './LoginForm';
 import { LoginFormValues } from '@/types/form';
 
@@ -39,7 +39,7 @@ interface LoginDispatchProps {
 const LoginPage: FC<LoginDispatchProps> = ({ member }): JSX.Element => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const redirectTo = (location.state as LocationState)?.from || '/';
 
 	const methods = useForm<LoginFormValues>({

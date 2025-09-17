@@ -10,7 +10,7 @@ import { FileData, CSRFData } from '@/types/api';
 
 interface FileProps {
 	file: ActionCreatorsMapObject;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 interface FileResultProps {
@@ -32,7 +32,7 @@ const useFileInfo = ({ file, csrfData }: FileProps): FileResultProps => {
 			const data = await file.upload(formData, csrfData);
 			setData(data);
 		}
-	}, [files, csrfData.csrfToken]);
+	}, [files, csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

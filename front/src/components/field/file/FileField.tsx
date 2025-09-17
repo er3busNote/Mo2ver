@@ -9,7 +9,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { FileData } from '@/types/api';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useFileInfo from '@services/cmmn/useFileInfo';
 import { Autocomplete, ButtonBase, TextField } from '@mui/material';
 import { styled, SxProps, Theme } from '@mui/material/styles';
@@ -41,7 +41,7 @@ const RenderFileField: FC<RenderFileFieldProps> = ({
 	member,
 	file,
 }) => {
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	useEffect(() => {
 		if (dataFiles && dataFiles.length > 0 && dataFiles[0].fileSize > 0) {

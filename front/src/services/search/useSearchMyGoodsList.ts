@@ -15,7 +15,7 @@ import {
 
 interface GoodsSearchProps {
 	search: ActionCreatorsMapObject;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 interface GoodsSearchResultProps {
@@ -49,7 +49,7 @@ const useSearchMyGoodsList = ({
 			pageData
 		);
 		setData(data);
-	}, [page, searchData, csrfData.csrfToken]);
+	}, [page, searchData, csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

@@ -5,7 +5,7 @@ import { EventRequestData, EventInfoData, CSRFData } from '@/types/api';
 interface EventDetailProps {
 	event: ActionCreatorsMapObject;
 	eventData: EventRequestData;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 const useEventDetail = ({
@@ -18,7 +18,7 @@ const useEventDetail = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await event.detail(eventData, csrfData);
 		setData(data);
-	}, [csrfData.csrfToken]);
+	}, [csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();

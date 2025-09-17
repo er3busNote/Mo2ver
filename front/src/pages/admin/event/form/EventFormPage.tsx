@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { EventRequestData, EventInfoData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useEventDetail from '@services/event/useEventDetail';
 import EventFormPC from './EventFormPC';
 import EventFormMobile from './EventFormMobile';
@@ -119,7 +119,7 @@ const EventFormPage: FC<EventDispatchProps> = ({
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const [eventNo, setEventNo] = useState<number>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType = location.state?.eventNo ? 'Update' : 'Create';

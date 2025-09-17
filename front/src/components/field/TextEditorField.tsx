@@ -8,7 +8,7 @@ import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useFileInfo from '@services/cmmn/useFileInfo';
 import useImageUrl from '@services/useImageUrl';
 import { Box, useTheme } from '@mui/material';
@@ -38,7 +38,7 @@ const RenderTextEditorField: FC<RenderTextFieldProps> = ({
 }) => {
 	const theme = useTheme();
 
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const { data: dataFiles, setFiles } = useFileInfo({ file, csrfData });
 	const [imageUrl, setImageUrl] = useState<string>('');
 	useEffect(() => {

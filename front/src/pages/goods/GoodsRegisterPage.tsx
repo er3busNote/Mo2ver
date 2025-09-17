@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { GoodsInfoData } from '@/types/api';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useGoodsDetail from '@services/goods/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -296,7 +296,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const [goodsCode, setGoodsCode] = useState<string>();
 	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 	const componentType = location.state?.goodsCode ? 'Update' : 'Create';

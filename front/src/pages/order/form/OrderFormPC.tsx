@@ -242,13 +242,13 @@ const OrderFormPC: FC<OrderProps> = ({
 										alignItems="flex-start"
 									>
 										<Typography component="span" sx={label}>
-											{memberData.memberName}
+											{memberData?.memberName}
 										</Typography>
 										<Typography component="span" sx={label}>
-											{memberData.cellPhoneNumber}
+											{memberData?.cellPhoneNumber}
 										</Typography>
 										<Typography component="span" sx={label}>
-											{memberData.email}
+											{memberData?.email}
 										</Typography>
 									</Box>
 									<Button variant="outlined" sx={modifyButton}>

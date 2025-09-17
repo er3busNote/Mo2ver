@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import useCSRFToken from '@services/useCSRFToken';
+import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useSearchMyGoodsList from '@services/search/useSearchMyGoodsList';
 import UserDetailPC from './UserDetailPC';
 import UserDetailMobile from './UserDetailMobile';
@@ -96,7 +96,7 @@ const UserPage: FC<UserDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const csrfData = useCSRFToken({ member });
+	const { data: csrfData } = useCSRFToken({ member });
 	const {
 		data: goodsData,
 		setPage: setGoodsPage,

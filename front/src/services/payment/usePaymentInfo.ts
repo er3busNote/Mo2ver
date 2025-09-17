@@ -5,7 +5,7 @@ import { PaymentData, CSRFData } from '@/types/api';
 interface PaymentProps {
 	payment: ActionCreatorsMapObject;
 	orderId: string;
-	csrfData: CSRFData;
+	csrfData?: CSRFData;
 }
 
 const usePaymentInfo = ({
@@ -18,7 +18,7 @@ const usePaymentInfo = ({
 	const fetchAndSetData = useCallback(async () => {
 		const data = await payment.start(orderId, csrfData);
 		setData(data);
-	}, [csrfData.csrfToken]);
+	}, [csrfData?.csrfToken]);
 
 	useEffect(() => {
 		fetchAndSetData();
