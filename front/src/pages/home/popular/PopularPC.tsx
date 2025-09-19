@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect, SyntheticEvent } from 'react';
-import { ActionCreatorsMapObject } from 'redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import useImageUrl from '@hooks/useImageUrl';
@@ -23,18 +22,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { PopularProps } from '@/types/home';
 import { get, slice, map } from 'lodash';
 import { IMAGE_INFO as SLIDE_INFO, KEYWORD_INFO } from '@utils/init';
 
 const groupSize = 6;
 const subGroupSize = 3;
-
-interface PopularProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	bannerDisplayData: Record<string, Record<string, Array<object>>>;
-}
 
 interface CarouselFadeProps {
 	url: string;
@@ -71,7 +64,7 @@ const PopularPC: FC<PopularProps> = ({
 	const content = SLIDE_INFO[displayIndex];
 	const slideLength = SLIDE_INFO.length;
 
-	const bannerDisplayMenu = Object.keys(bannerDisplayData);
+	const bannerDisplayMenu = Object.keys(bannerDisplayData || {});
 	const bannerLength = bannerDisplayMenu.length;
 	const numSlides = bannerLength > 0 ? bannerLength : slideLength;
 	const bannerDisplayKey = bannerDisplayMenu[displayIndex];

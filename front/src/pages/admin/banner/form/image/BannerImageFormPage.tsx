@@ -11,7 +11,7 @@ import Api from '@api/index';
 import { BannerRequestData, BannerImageInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/query/useGroupCodeList';
-import useBannerImagesDetail from '@services/banner/useBannerImagesDetail';
+import useBannerImagesDetail from '@hooks/banner/query/useBannerImagesDetail';
 import BannerImageFormPC from './BannerImageFormPC';
 import BannerImageFormMobile from './BannerImageFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -146,7 +146,7 @@ const BannerImageFormPage: FC<BannerDispatchProps> = ({
 			bannerNo: bannerNo,
 			displayTemplateCode: displayTemplateCode,
 		};
-		const imagesInfo = useBannerImagesDetail({
+		const { data: imagesInfo } = useBannerImagesDetail({
 			banner,
 			bannerData,
 			csrfData,

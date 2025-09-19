@@ -11,7 +11,7 @@ import Api from '@api/index';
 import { BannerRequestData, BannerGoodsInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useGroupCodeList from '@hooks/cmmn/query/useGroupCodeList';
-import useBannerGoodsDetail from '@services/banner/useBannerGoodsDetail';
+import useBannerGoodsDetail from '@hooks/banner/query/useBannerGoodsDetail';
 import BannerGoodsFormPC from './BannerGoodsFormPC';
 import BannerGoodsFormMobile from './BannerGoodsFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -150,7 +150,7 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 			bannerNo: bannerNo,
 			displayTemplateCode: displayTemplateCode,
 		};
-		const goodsInfo = useBannerGoodsDetail({
+		const { data: goodsInfo } = useBannerGoodsDetail({
 			banner,
 			bannerData,
 			csrfData,

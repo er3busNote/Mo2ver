@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { FileData } from '@/types/api';
-import useBannerDisplayList from '@services/banner/useBannerDisplayList';
+import useBannerDisplayList from '@hooks/banner/query/useBannerDisplayList';
 import { Box, Divider, useTheme, useMediaQuery } from '@mui/material';
 import BannerPC from './banner/BannerPC';
 import BannerMobile from './banner/BannerMobile';
@@ -13,15 +13,9 @@ import PopularPC from './popular/PopularPC';
 import PopularMobile from './popular/PopularMobile';
 import HorizontalScroll from '@components/HorizontalScroll';
 import { useIsMobile } from '@context/MobileContext';
+import { HomeProps } from '@/types/home';
 
 const files: Array<FileData> = [];
-
-interface HomeProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	bannerDisplayData: Record<string, Record<string, Array<object>>>;
-}
 
 interface HomeDispatchProps {
 	title: string;
@@ -160,7 +154,7 @@ const HomePage: FC<HomeDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const bannerDisplayData = useBannerDisplayList({ banner });
+	const { data: bannerDisplayData } = useBannerDisplayList({ banner });
 	return (
 		<Box sx={{ width: '100%', position: 'absolute' }}>
 			{isDesktop && (

@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import useBannerPageList from '@services/banner/useBannerPageList';
+import useBannerPageList from '@hooks/banner/query/useBannerPageList';
 import BannerPC from './BannerPC';
 import BannerMobile from './BannerMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -24,7 +24,7 @@ const BannerPage: FC<BannerDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const [bannerPageData, setPage] = useBannerPageList({ banner });
+	const { data: bannerPageData, setPage } = useBannerPageList({ banner });
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{isDesktop && (

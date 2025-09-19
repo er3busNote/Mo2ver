@@ -276,39 +276,38 @@ const BannerMobile: FC<BannerProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{bannerPageData.content &&
-							bannerPageData.content.map((data: BannerData, index: number) => (
-								<TableRow key={index}>
-									<TableCell sx={dataTd} align="center">
-										{data.bannerNo}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										<Link
-											component="button"
-											variant="body2"
-											onClick={() =>
-												updateClick(data.bannerNo, data.displayTemplateCode)
-											}
-										>
-											{data.subject}
-										</Link>
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
-										{moment(data.displayEndDate).format('YYYY-MM-DD')}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										마감
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{data.displayYesNo}
-									</TableCell>
-								</TableRow>
-							))}
+						{bannerPageData?.content.map((data: BannerData, index: number) => (
+							<TableRow key={index}>
+								<TableCell sx={dataTd} align="center">
+									{data.bannerNo}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									<Link
+										component="button"
+										variant="body2"
+										onClick={() =>
+											updateClick(data.bannerNo, data.displayTemplateCode)
+										}
+									>
+										{data.subject}
+									</Link>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{moment(data.displayStartDate).format('YYYY-MM-DD')} ~{' '}
+									{moment(data.displayEndDate).format('YYYY-MM-DD')}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									마감
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.displayYesNo}
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							{bannerPageData.totalElements && (
+							{bannerPageData?.totalElements && (
 								<TablePageNavigator
 									size={bannerPageData.size}
 									totalElements={bannerPageData.totalElements}

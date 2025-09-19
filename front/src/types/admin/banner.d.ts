@@ -10,7 +10,7 @@ interface BannerProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	bannerPageData: BannerPageData;
+	bannerPageData?: BannerPageData;
 }
 
 interface BannerImageProp {
