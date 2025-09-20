@@ -12,7 +12,7 @@ const useAddressList = ({ address }: AddressProps) => {
 	return useQuery<Array<AddressData>>({
 		queryKey: ['addressList'],
 		queryFn: () => service.getAddressList(),
-		staleTime: 1000 * 60,
+		staleTime: 60 * 1000,
 	});
 };
 

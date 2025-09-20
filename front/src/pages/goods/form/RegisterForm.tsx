@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FileData, CategoryData } from '@/types/api';
-import useCategoryInfo from '@services/category/useCategoryInfo';
+import useCategoryInfo from '@hooks/category/query/useCategoryInfo';
 import useImageUrl from '@hooks/useImageUrl';
 import ButtonGoods from '@components/button/ButtonGoods';
 import {
@@ -58,13 +58,16 @@ const RegisterForm: FC<RegisterProp> = ({
 	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
 	const [buyLimitYesNo, setBuyLimitYesNo] = useState<string>('');
 	const [salePeriodYesNo, setSalePeriodYesNo] = useState<string>('');
-	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
-	const mediumCategoryData = useCategoryInfo({
+	const { data: largeCategoryData } = useCategoryInfo({
+		category,
+		categoryLevel: 1,
+	});
+	const { data: mediumCategoryData } = useCategoryInfo({
 		category,
 		categoryLevel: 2,
 		categoryInfo: largeCategoryCode,
 	});
-	const smallCategoryData = useCategoryInfo({
+	const { data: smallCategoryData } = useCategoryInfo({
 		category,
 		categoryLevel: 3,
 		categoryInfo: mediumCategoryCode,
@@ -377,12 +380,12 @@ const RegisterForm: FC<RegisterProp> = ({
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
 													label="대분류"
-													datas={largeCategoryData.map(
-														(data: CategoryData) => ({
+													datas={
+														largeCategoryData?.map((data: CategoryData) => ({
 															value: data.categoryCode,
 															label: data.categoryName,
-														})
-													)}
+														})) || []
+													}
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
@@ -402,12 +405,12 @@ const RegisterForm: FC<RegisterProp> = ({
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
 													label="중분류"
-													datas={mediumCategoryData.map(
-														(data: CategoryData) => ({
+													datas={
+														mediumCategoryData?.map((data: CategoryData) => ({
 															value: data.categoryCode,
 															label: data.categoryName,
-														})
-													)}
+														})) || []
+													}
 													field={field}
 													fieldState={fieldState}
 													formState={formState}
@@ -427,12 +430,12 @@ const RegisterForm: FC<RegisterProp> = ({
 											render={({ field, fieldState, formState }) => (
 												<RenderSelectField
 													label="소분류"
-													datas={smallCategoryData.map(
-														(data: CategoryData) => ({
+													datas={
+														smallCategoryData?.map((data: CategoryData) => ({
 															value: data.categoryCode,
 															label: data.categoryName,
-														})
-													)}
+														})) || []
+													}
 													field={field}
 													fieldState={fieldState}
 													formState={formState}

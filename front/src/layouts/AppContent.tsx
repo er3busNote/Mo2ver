@@ -19,8 +19,8 @@ import {
 import { TitleState, ToastState } from '@/types/store';
 import Api from '@api/index';
 import useGroupMenuList from '@hooks/cmmn/query/useGroupMenuList';
-import useGoodsRankList from '@services/goods/useGoodsRankList';
-import useCategoryGroupList from '@services/category/useCategoryGroupList';
+import useGoodsRankList from '@hooks/goods/query/useGoodsRankList';
+import useCategoryGroupList from '@hooks/category/query/useCategoryGroupList';
 import AppHeader from './AppHeader';
 //import AppHeaderBar from './AppHeaderBar';
 import AppHeaderMenu from './menu/AppHeaderMenu';
@@ -54,8 +54,8 @@ interface AppProps {
 	member: ActionCreatorsMapObject;
 	search: ActionCreatorsMapObject;
 	recommend: ActionCreatorsMapObject;
-	goodsRankData: Array<GoodsData>;
-	categoryData: CategoryDataGroup;
+	goodsRankData?: Array<GoodsData>;
+	categoryData?: CategoryDataGroup;
 }
 
 interface LayoutDefaultProps {
@@ -208,8 +208,8 @@ const AppContent: FC<LayoutDefaultProps> = ({
 	const dispatch = useDispatch();
 	const [index, setIndex] = useState<number>(0);
 	const { data: menuData } = useGroupMenuList({ menuType: 0, menu });
-	const goodsRankData = useGoodsRankList({ count: 10, goods });
-	const categoryData = useCategoryGroupList({ category });
+	const { data: goodsRankData } = useGoodsRankList({ count: 10, goods });
+	const { data: categoryData } = useCategoryGroupList({ category });
 
 	useEffect(() => {
 		dispatch(menuLotate(menuData ?? [])); // 메뉴 변경 : admin → user

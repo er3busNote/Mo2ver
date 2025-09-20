@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { SubMenuInfo, MenuState } from '@/types/store';
+import { MenuState } from '@/types/store';
 import AppMenu from './AppMenu';
 import AppMenuItem from './AppMenuItem';
 import AppMenuSubItem from './AppMenuSubItem';
@@ -20,7 +20,8 @@ import {
 	createTheme,
 	ThemeProvider,
 } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '@/types/api';
+import { CategoryData } from '@/types/api';
+import { MenuProps } from '@/types/menu';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { divideArray } from '@utils/divide';
 import { submenuWidthSize } from '@utils/style';
@@ -30,23 +31,16 @@ const menuFontSize = '15px';
 
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
-interface AppMenuProps {
-	title: string;
-	description: string;
-	categoryData: CategoryDataGroup;
-	menus?: Array<SubMenuInfo>;
-}
-
-const AppDetail: FC<AppMenuProps> = ({
+const AppDetail: FC<MenuProps> = ({
 	title,
 	description,
 	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoryData = categoryData.largeCategoryData;
-	const middleCategoryData = categoryData.middleCategoryData;
-	const smallCategoryData = categoryData.smallCategoryData;
+	const largeCategoryData = categoryData?.largeCategoryData;
+	const middleCategoryData = categoryData?.middleCategoryData;
+	const smallCategoryData = categoryData?.smallCategoryData;
 	const [hover, setHover] = useState<string>('');
 
 	// 중 카테고리 → 3등분
@@ -110,7 +104,7 @@ const AppDetail: FC<AppMenuProps> = ({
 					<Box sx={{ width: submenuWidthSize }}>
 						<ThemeProvider theme={darkTheme}>
 							<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-								{largeCategoryData.map((data: CategoryData, index: number) => (
+								{largeCategoryData?.map((data: CategoryData, index: number) => (
 									<AppMenuItem
 										key={index}
 										setHover={setHover}
@@ -137,7 +131,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	);
 };
 
-const AppMenuHomePC: FC<AppMenuProps> = ({
+const AppMenuHomePC: FC<MenuProps> = ({
 	title,
 	description,
 	categoryData,

@@ -12,7 +12,7 @@ const useCSRFToken = ({ member }: MemberProps) => {
 	return useQuery<CSRFData>({
 		queryKey: ['csrfToken'],
 		queryFn: () => service.getCSRFToken(),
-		staleTime: 1000 * 60,
+		staleTime: 60 * 1000,
 	});
 };
 

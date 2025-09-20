@@ -1,5 +1,4 @@
 import React, { FC, useState, ChangeEvent } from 'react';
-import { ActionCreatorsMapObject } from 'redux';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { GoodsData } from '@/types/api';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
@@ -21,22 +20,11 @@ import { useIsMobile } from '@context/MobileContext';
 import SearchCard from '@components/card/SearchCard';
 import SearchDivider from '@components/divider/SearchDivider';
 import MainIcon from '@components/MainIcon';
+import { SearchProps, SearchItemsProps } from '@/types/search';
 import { fontSize_sm } from '@utils/style';
 import { isEmpty } from 'lodash';
 
-interface AppSearchProps {
-	title: string;
-	description: string;
-	search: ActionCreatorsMapObject;
-	recommend: ActionCreatorsMapObject;
-	goodsRankData: Array<GoodsData>;
-}
-
-interface AppSearchItemsProps {
-	goodsRankData: Array<GoodsData>;
-}
-
-const AppSearchItemsPC: FC<AppSearchItemsProps> = ({
+const AppSearchItemsPC: FC<SearchItemsProps> = ({
 	goodsRankData,
 }): JSX.Element => {
 	const [open, setOpen] = useState(false);
@@ -79,7 +67,7 @@ const AppSearchItemsPC: FC<AppSearchItemsProps> = ({
 			<Box>
 				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
 					{open &&
-						goodsRankData.map((data: GoodsData, index: number) => (
+						goodsRankData?.map((data: GoodsData, index: number) => (
 							<MenuItem
 								key={index}
 								dense
@@ -135,7 +123,7 @@ const AppSearchItemsPC: FC<AppSearchItemsProps> = ({
 	);
 };
 
-const AppSearchMobile: FC<AppSearchProps> = ({
+const AppSearchMobile: FC<SearchProps> = ({
 	title,
 	description,
 	search,

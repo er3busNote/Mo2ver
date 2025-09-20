@@ -27,11 +27,11 @@ import { styled, SxProps, Theme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import { Error as ErrorIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import SearchCard from '@components/card/SearchCard';
+import { SearchItemsMobileProps } from '@/types/search';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { isEmpty } from 'lodash';
 
 const drawerSearchLimit = 600;
 const drawerSearchWidth = 250;
@@ -56,20 +56,8 @@ interface SearchProps {
 	header: SxProps<Theme>;
 }
 
-interface SearchGoodsProps {
-	base: SxProps<Theme>;
-	header: SxProps<Theme>;
-	goodsData: Array<GoodsData>;
-}
-
-interface AppSearchItemsMobileProps {
-	title: string;
-	description: string;
-	search: ActionCreatorsMapObject;
-	recommend: ActionCreatorsMapObject;
-	openSearch: boolean;
-	setSearchOpen: Dispatch<SetStateAction<boolean>>;
-	goodsRankData: Array<GoodsData>;
+interface SearchGoodsProps extends SearchProps {
+	goodsData?: Array<GoodsData>;
 }
 
 const SearchRecent: FC<SearchProps> = ({ base, header }): JSX.Element => {
@@ -129,42 +117,41 @@ const SearchPopular: FC<SearchGoodsProps> = ({
 			</Typography>
 			<Box>
 				<MenuList sx={{ px: 0.5, pt: 0.2, pb: 0.2 }}>
-					{goodsData &&
-						goodsData.map((data: GoodsData, index: number) => (
-							<MenuItem key={index} dense>
-								<Box
-									sx={{
-										px: 1,
-										py: 1,
-										width: '100%',
-										borderBottom: '1px solid #EAEAEA',
-									}}
-								>
-									<Breadcrumbs separator="" aria-label="breadcrumb">
-										<ListItemText
-											primaryTypographyProps={{
-												style: { fontSize: 14, fontWeight: 500 },
-											}}
-											primary={index + 1}
-										/>
-										<ListItemText
-											primaryTypographyProps={{
-												sx: {
-													fontSize: 14,
-													fontWeight: 'bold',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-													textOverflow: 'ellipsis',
-													maxWidth: 150,
-													display: 'block',
-												},
-											}}
-											primary={data.goodsName}
-										/>
-									</Breadcrumbs>
-								</Box>
-							</MenuItem>
-						))}
+					{goodsData?.map((data: GoodsData, index: number) => (
+						<MenuItem key={index} dense>
+							<Box
+								sx={{
+									px: 1,
+									py: 1,
+									width: '100%',
+									borderBottom: '1px solid #EAEAEA',
+								}}
+							>
+								<Breadcrumbs separator="" aria-label="breadcrumb">
+									<ListItemText
+										primaryTypographyProps={{
+											style: { fontSize: 14, fontWeight: 500 },
+										}}
+										primary={index + 1}
+									/>
+									<ListItemText
+										primaryTypographyProps={{
+											sx: {
+												fontSize: 14,
+												fontWeight: 'bold',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+												textOverflow: 'ellipsis',
+												maxWidth: 150,
+												display: 'block',
+											},
+										}}
+										primary={data.goodsName}
+									/>
+								</Breadcrumbs>
+							</Box>
+						</MenuItem>
+					))}
 				</MenuList>
 			</Box>
 		</Paper>
@@ -184,8 +171,7 @@ const SearchRecommend: FC<SearchGoodsProps> = ({
 			<Box sx={{ p: 2 }}>
 				{isAuthenticated() &&
 					!isAdmin() &&
-					!isEmpty(goodsData) &&
-					goodsData.map((data: GoodsData, index: number) => (
+					goodsData?.map((data: GoodsData, index: number) => (
 						<RecommendButton key={index} variant="outlined">
 							{data.goodsName}
 						</RecommendButton>
@@ -195,7 +181,7 @@ const SearchRecommend: FC<SearchGoodsProps> = ({
 	);
 };
 
-const AppSearchItemsMobile: FC<AppSearchItemsMobileProps> = ({
+const AppSearchItemsMobile: FC<SearchItemsMobileProps> = ({
 	title,
 	description,
 	search,

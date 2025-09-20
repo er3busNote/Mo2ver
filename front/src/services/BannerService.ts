@@ -33,6 +33,6 @@ export default class BannerService {
 
 	getBannerPageList = async (page: number): Promise<BannerPageData> => {
 		const pageData: PageData = { page, size: 12 };
-		return this.banner.list(pageData);
+		return await this.banner.list(pageData);
 	};
 }

@@ -44,7 +44,7 @@ interface AppFooterMenuProps {
 	width: number;
 	title: string;
 	description: string;
-	categoryData: CategoryDataGroup;
+	categoryData?: CategoryDataGroup;
 }
 
 interface StyledTreeItemProps extends TreeItemProps {
@@ -131,9 +131,9 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoryData = categoryData.largeCategoryData;
-	const middleCategoryData = categoryData.middleCategoryData;
-	const smallCategoryData = categoryData.smallCategoryData;
+	const largeCategoryData = categoryData?.largeCategoryData;
+	const middleCategoryData = categoryData?.middleCategoryData;
+	const smallCategoryData = categoryData?.smallCategoryData;
 
 	const [expanded, setExpanded] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string>('');
@@ -228,7 +228,7 @@ const AppFooterMenu: FC<AppFooterMenuProps> = ({
 					onNodeToggle={handleToggle}
 					onNodeSelect={handleSelect}
 				>
-					{largeCategoryData.map((ldata: CategoryData, index: number) => {
+					{largeCategoryData?.map((ldata: CategoryData, index: number) => {
 						return (
 							<StyledTreeItem
 								key={index}

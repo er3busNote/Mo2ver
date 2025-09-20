@@ -5,12 +5,8 @@ import { Box, Paper } from '@mui/material';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import CategoryForm from './CategoryForm';
 import { CategoryData } from '@/types/api';
-import { CategoryProps } from '@/types/admin/category';
+import { CategoryProps, CategoryDataInfo } from '@/types/admin/category';
 import { has, filter } from 'lodash';
-
-interface CategoryDataInfo {
-	[key: string]: Array<CategoryData>;
-}
 
 const CategoryMobile: FC<CategoryProps> = ({
 	onSubmit,
@@ -23,7 +19,6 @@ const CategoryMobile: FC<CategoryProps> = ({
 		useState<CategoryDataInfo>();
 	const [smallCategoyData, setSmallCategoyData] = useState<CategoryDataInfo>();
 
-	// → Transform Tree from DB Format to JSON Format in JAVASCRIPT
 	const treeCategoryData = () => {
 		// 대 카테고리
 		const largeCategoyData = filter(categoryData, {
@@ -34,7 +29,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 		// 중/소 카테고리
 		const middleCategoyData = new Object() as CategoryDataInfo;
 		const smallCategoyData = new Object() as CategoryDataInfo;
-		categoryData.forEach((data) => {
+		categoryData?.forEach((data) => {
 			if (data.categoryLevel === 2) {
 				if (!has(middleCategoyData, data.upperCategoryCode)) {
 					middleCategoyData[data.upperCategoryCode] = new Array<CategoryData>();
@@ -50,7 +45,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 		setMiddleCategoyData(middleCategoyData);
 		setSmallCategoyData(smallCategoyData);
 	};
-	useEffect(treeCategoryData, [categoryData]); // categoryData가 변경될 때만 실행..!
+	useEffect(treeCategoryData, [categoryData]);
 
 	return (
 		<Box>
@@ -82,7 +77,7 @@ const CategoryMobile: FC<CategoryProps> = ({
 							}}
 						>
 							<StyledTreeItem nodeId="ALL" labelText="모든 카테고리">
-								{largeCategoyData.map((ldata: CategoryData, l: number) => (
+								{largeCategoyData?.map((ldata: CategoryData, l: number) => (
 									<StyledTreeItem
 										key={l}
 										nodeId={ldata.categoryCode}

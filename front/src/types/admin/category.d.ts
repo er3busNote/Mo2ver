@@ -7,7 +7,11 @@ interface CategoryProps {
 		data: CategoryFormValues,
 		event?: BaseSyntheticEvent<object, any, any> | undefined
 	) => void;
-	categoryData: Array<CategoryData>;
+	categoryData?: Array<CategoryData>;
 }
 
-export type { CategoryProps };
+interface CategoryDataInfo {
+	[key: string]: Array<CategoryData>;
+}
+
+export type { CategoryProps, CategoryDataInfo };

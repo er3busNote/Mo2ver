@@ -35,7 +35,7 @@ const darkTheme = createTheme({ palette: { mode: 'dark' } });
 interface AppMenuProps {
 	title: string;
 	description: string;
-	categoryData: CategoryDataGroup;
+	categoryData?: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
 
@@ -46,9 +46,9 @@ const AppDetail: FC<AppMenuProps> = ({
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoryData = categoryData.largeCategoryData;
-	const middleCategoryData = categoryData.middleCategoryData;
-	const smallCategoryData = categoryData.smallCategoryData;
+	const largeCategoryData = categoryData?.largeCategoryData;
+	const middleCategoryData = categoryData?.middleCategoryData;
+	const smallCategoryData = categoryData?.smallCategoryData;
 	const [hover, setHover] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -151,7 +151,7 @@ const AppDetail: FC<AppMenuProps> = ({
 						>
 							<ThemeProvider theme={darkTheme}>
 								<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-									{largeCategoryData.map(
+									{largeCategoryData?.map(
 										(data: CategoryData, index: number) => (
 											<AppMenuItem
 												key={index}

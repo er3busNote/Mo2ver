@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
@@ -6,32 +6,18 @@ import { connect, useDispatch } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
 import {
-	GoodsDetailData,
 	CartData,
 	OrderRequestData,
 	OrderGoodsInfoData,
-	ReviewPageData,
 	ReviewInfoData,
 } from '@/types/api';
+import { GoodsDetailProps } from '@/types/goods';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useGoodsDetail from '@services/goods/useGoodsDetail';
+import useGoodsDetail from '@hooks/goods/query/useGoodsDetail';
 import useReviewPageList from '@services/review/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import goToOrderForm from '@navigate/order/goToOrderForm';
-
-interface GoodsDetailProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	goodsData: GoodsDetailData;
-	reviewData: ReviewPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
-	onReviewMod: (reviewInfo: ReviewInfoData) => void;
-	onCartAdd: (cartData: CartData) => void;
-	onOrder: (code: string) => void;
-}
 
 interface GoodsDetailDispatchProps {
 	title: string;
@@ -68,7 +54,7 @@ const GoodsDetailPC: FC<GoodsDetailProps> = ({
 				description={description}
 				file={file}
 				goodsData={goodsData}
-				reviewPageData={reviewData}
+				reviewData={reviewData}
 				setPage={setPage}
 				onReviewAdd={onReviewAdd}
 				onReviewMod={onReviewMod}
@@ -130,7 +116,7 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 
 	const { id } = useParams();
 	const code = id ?? '';
-	const goodsData = useGoodsDetail({ goods, code });
+	const { data: goodsData } = useGoodsDetail({ goods, code });
 	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
 
 	const dispatch = useDispatch();

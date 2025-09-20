@@ -12,7 +12,7 @@ const useMemberInfo = ({ member }: MemberProps) => {
 	return useQuery<MemberData>({
 		queryKey: ['memberInfo'],
 		queryFn: () => service.getMemberInfo(),
-		staleTime: 1000 * 60,
+		staleTime: 60 * 1000,
 	});
 };
 

@@ -1,7 +1,7 @@
 import React, { FC, useState, MouseEvent, TouchEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import { MenuState, SubMenuInfo } from '@/types/store';
+import { MenuState } from '@/types/store';
 import AppMenu from './AppMenu';
 import {
 	Box,
@@ -23,17 +23,11 @@ import {
 	ExpandMore as ExpandMore,
 } from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { CategoryData, CategoryDataGroup } from '@/types/api';
+import { CategoryData } from '@/types/api';
+import { MenuProps } from '@/types/menu';
 import goToGoodsCategory from '@navigate/goods/goToGoodsCategory';
 import { useIsDesktop } from '@context/MobileContext';
 import { has } from 'lodash';
-
-interface AppMenuProps {
-	title: string;
-	description: string;
-	categoryData: CategoryDataGroup;
-	menus?: Array<SubMenuInfo>;
-}
 
 interface AppMenuItemProps {
 	largeCategory: CategoryData;
@@ -131,15 +125,15 @@ const AppMenuItem: FC<AppMenuItemProps> = ({
 	);
 };
 
-const AppDetail: FC<AppMenuProps> = ({
+const AppDetail: FC<MenuProps> = ({
 	title,
 	description,
 	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoryData = categoryData.largeCategoryData;
-	const middleCategoryData = categoryData.middleCategoryData;
+	const largeCategoryData = categoryData?.largeCategoryData;
+	const middleCategoryData = categoryData?.middleCategoryData;
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -235,7 +229,7 @@ const AppDetail: FC<AppMenuProps> = ({
 						component="nav"
 					>
 						<MenuList sx={{ pl: { xs: 0, sm: 0 }, py: 0.2 }}>
-							{largeCategoryData.map((data: CategoryData, index: number) => (
+							{largeCategoryData?.map((data: CategoryData, index: number) => (
 								<AppMenuItem
 									key={index}
 									largeCategory={data}
@@ -251,7 +245,7 @@ const AppDetail: FC<AppMenuProps> = ({
 	);
 };
 
-const AppMenuMobile: FC<AppMenuProps> = ({
+const AppMenuMobile: FC<MenuProps> = ({
 	title,
 	description,
 	categoryData,

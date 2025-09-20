@@ -1,6 +1,5 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import useImageUrl from '@hooks/useImageUrl';
 import AppSubHeader from '@layouts/AppSubHeader';
@@ -17,25 +16,11 @@ import {
 	Skeleton,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import { GoodsData, GoodsPageData } from '@/types/api';
+import { GoodsData } from '@/types/api';
+import { GoodsProps, GoodsGridProps } from '@/types/goods';
 import goToGoodsDetail from '@navigate/goods/goToGoodsDetail';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { get } from 'lodash';
-
-interface GoodsListProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	goodsData: GoodsPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
-
-interface GoodsGridProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	goodsData: Array<GoodsData>;
-}
 
 const GoodsGrid: FC<GoodsGridProps> = ({
 	title,
@@ -144,7 +129,7 @@ const GoodsGrid: FC<GoodsGridProps> = ({
 	);
 };
 
-const GoodsList: FC<GoodsListProps> = ({
+const GoodsList: FC<GoodsProps> = ({
 	title,
 	description,
 	file,
@@ -159,11 +144,11 @@ const GoodsList: FC<GoodsListProps> = ({
 					file={file}
 					title={title}
 					description={description}
-					goodsData={goodsData.content}
+					goodsData={goodsData?.content}
 				/>
 			</Box>
 			<Box sx={{ mb: 10, display: 'flex', justifyContent: 'center' }}>
-				<PageNavigator count={goodsData.totalPages} setPage={setPage} />
+				<PageNavigator count={goodsData?.totalPages || 0} setPage={setPage} />
 			</Box>
 		</Box>
 	);

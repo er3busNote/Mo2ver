@@ -7,7 +7,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useCategoryList from '@services/category/useCategoryList';
+import useCategoryList from '@hooks/category/query/useCategoryList';
 import CategoryPC from './CategoryPC';
 import CategoryMobile from './CategoryMobile';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -46,7 +46,7 @@ const CategoryPage: FC<CategoryDispatchProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const { data: csrfData } = useCSRFToken({ member });
-	const categoryData = useCategoryList({ category });
+	const { data: categoryData } = useCategoryList({ category });
 	const submitForm = (
 		data: CategoryFormValues,
 		eventForm?: BaseSyntheticEvent<object, any, any>

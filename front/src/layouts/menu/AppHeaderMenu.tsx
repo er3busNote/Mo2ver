@@ -4,6 +4,7 @@ import { connect, useDispatch } from 'react-redux';
 import { ActionCreatorsMapObject } from 'redux';
 import { MenuState, SubMenuInfo } from '@/types/store';
 import { CategoryData, CategoryDataGroup } from '@/types/api';
+import { MenuProps } from '@/types/menu';
 import AppMenu from './AppMenu';
 import AppMenuItem from './AppMenuItem';
 import AppMenuSubItem from './AppMenuSubItem';
@@ -40,26 +41,20 @@ interface AppHeaderMenuProps {
 	title: string;
 	description: string;
 	search: ActionCreatorsMapObject;
-	categoryData: CategoryDataGroup;
+	categoryData?: CategoryDataGroup;
 	menus?: Array<SubMenuInfo>;
 }
 
-interface AppHeaderDetailProps {
-	title: string;
-	description: string;
-	categoryData: CategoryDataGroup;
-}
-
-const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
+const AppHeaderDetail: FC<MenuProps> = ({
 	title,
 	description,
 	categoryData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const largeCategoryData = categoryData.largeCategoryData;
-	const middleCategoryData = categoryData.middleCategoryData;
-	const smallCategoryData = categoryData.smallCategoryData;
+	const largeCategoryData = categoryData?.largeCategoryData;
+	const middleCategoryData = categoryData?.middleCategoryData;
+	const smallCategoryData = categoryData?.smallCategoryData;
 	const [hover, setHover] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -162,7 +157,7 @@ const AppHeaderDetail: FC<AppHeaderDetailProps> = ({
 						>
 							<ThemeProvider theme={darkTheme}>
 								<MenuList sx={{ px: 0, pt: 0.2, pb: 0.2 }}>
-									{largeCategoryData.map((data: any, index: number) => (
+									{largeCategoryData?.map((data: any, index: number) => (
 										<AppMenuItem
 											key={index}
 											setHover={setHover}

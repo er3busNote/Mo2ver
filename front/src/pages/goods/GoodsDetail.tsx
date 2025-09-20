@@ -1,12 +1,5 @@
-import React, { FC, useRef, MouseEvent, Dispatch, SetStateAction } from 'react';
-import { ActionCreatorsMapObject } from 'redux';
-import {
-	GoodsDetailData,
-	CartData,
-	ReviewPageData,
-	ReviewInfoData,
-	ImageData,
-} from '@/types/api';
+import React, { FC, useRef, MouseEvent } from 'react';
+import { CartData, ImageData } from '@/types/api';
 import useImageUrl from '@hooks/useImageUrl';
 import GoodsSubHeader from './cmmn/GoodsSubHeader';
 import ReviewList from './review/ReviewList';
@@ -33,27 +26,15 @@ import { red } from '@mui/material/colors';
 import { SxProps, Theme } from '@mui/material/styles';
 import { Stars as StarsIcon } from '@mui/icons-material';
 import { useIsMobile } from '@context/MobileContext';
+import { GoodsDetailProps } from '@/types/goods';
 import { isEmpty, get, find } from 'lodash';
-
-interface GoodsDetailProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	goodsData: GoodsDetailData;
-	reviewPageData: ReviewPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
-	onReviewMod: (reviewInfo: ReviewInfoData) => void;
-	onCartAdd: (cartData: CartData) => void;
-	onOrder: (code: string) => void;
-}
 
 const GoodsDetail: FC<GoodsDetailProps> = ({
 	title,
 	description,
 	file,
 	goodsData,
-	reviewPageData,
+	reviewData,
 	setPage,
 	onReviewAdd,
 	onReviewMod,
@@ -74,28 +55,30 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 	};
 
 	const addCartClick = () => {
-		const cartData: CartData = {
-			goodsCode: goodsData.goodsCode,
-			goodsName: goodsData.goodsName,
-			goodsBrand: goodsData.goodsBrand,
-			goodsGender: goodsData.goodsGender,
-			goodsYear: goodsData.goodsYear,
-			supplyPrice: goodsData.supplyPrice,
-			salePrice: goodsData.salePrice,
-			image: get(goodsData, ['imageList', 0], new Object() as ImageData),
-			amount: 1,
-			totalPrice: goodsData.salePrice,
-		};
-		onCartAdd(cartData);
+		if (!isEmpty(goodsData)) {
+			const cartData: CartData = {
+				goodsCode: goodsData.goodsCode,
+				goodsName: goodsData.goodsName,
+				goodsBrand: goodsData.goodsBrand,
+				goodsGender: goodsData.goodsGender,
+				goodsYear: goodsData.goodsYear,
+				supplyPrice: goodsData.supplyPrice,
+				salePrice: goodsData.salePrice,
+				image: get(goodsData, ['imageList', 0], new Object() as ImageData),
+				amount: 1,
+				totalPrice: goodsData?.salePrice,
+			};
+			onCartAdd(cartData);
+		}
 	};
 
 	const orderClick = () => {
-		onOrder(goodsData.goodsCode);
+		if (!isEmpty(goodsData)) onOrder(goodsData.goodsCode);
 	};
 
 	const attachFile = String(
 		get(
-			find(goodsData.imageList, { basicImageYesNo: 'Y' }),
+			find(goodsData?.imageList, { basicImageYesNo: 'Y' }),
 			'goodsImageAttachFile',
 			''
 		)
@@ -230,7 +213,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 			<GoodsSubHeader
 				title={title}
 				description={description}
-				subtitle={goodsData.goodsName}
+				subtitle={goodsData?.goodsName || ''}
 			/>
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={6} lg={6}>
@@ -399,7 +382,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 													>
 														<Rating
 															name="read-only"
-															value={goodsData.averageRating}
+															value={goodsData?.averageRating}
 															sx={infoRating}
 															readOnly
 														/>
@@ -409,7 +392,7 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 															underline="none"
 															onClick={reviewFocus}
 														>
-															후기 {goodsData.reviewCount.toLocaleString()} 개
+															후기 {goodsData?.reviewCount.toLocaleString()} 개
 															보기 ▼
 														</Link>
 													</Breadcrumbs>
@@ -418,9 +401,9 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 										</TableBody>
 									</Table>
 								</TableContainer>
-								{!isEmpty(goodsData.keywordList) && (
+								{!isEmpty(goodsData?.keywordList) && (
 									<Box sx={infoHashTag}>
-										{goodsData.keywordList.map(
+										{goodsData?.keywordList.map(
 											(keyword: string, index: number) => (
 												<ButtonTag
 													key={index}
@@ -579,8 +562,8 @@ const GoodsDetail: FC<GoodsDetailProps> = ({
 				</Box>
 				<Box sx={reviewCard}>
 					<ReviewList
-						goodsCode={goodsData.goodsCode}
-						reviewPageData={reviewPageData}
+						goodsCode={goodsData?.goodsCode || ''}
+						reviewPageData={reviewData}
 						setPage={setPage}
 						onReviewAdd={onReviewAdd}
 						onReviewMod={onReviewMod}

@@ -5,8 +5,8 @@ import { connect, useDispatch } from 'react-redux';
 import { toastMessage } from '@store/index';
 import Api from '@api/index';
 import { GoodsData, CategoryData } from '@/types/api';
-import useCategoryInfo from '@services/category/useCategoryInfo';
-import useGoodsSearchPageList from '@services/goods/useGoodsSearchPageList';
+import useCategoryInfo from '@hooks/category/query/useCategoryInfo';
+import useGoodsSearchPageList from '@hooks/goods/query/useGoodsSearchPageList';
 import SearchInput from '@components/input/SearchInput';
 import ButtonDialog from '@components/button/ButtonDialog';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -29,7 +29,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { BannerGoodsDetailValues } from '@/types/admin/form';
 import { useIsMobile } from '@context/MobileContext';
 import { not, intersect, intersectBy, union } from '@utils/set';
-import { some, indexOf, includes } from 'lodash';
+import { get, some, indexOf, includes } from 'lodash';
 
 interface DialogProps {
 	open: boolean;
@@ -55,18 +55,21 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
 	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
 	const [smallCategoryCode, setSmallCategoryCode] = useState<string>('');
-	const largeCategoryData = useCategoryInfo({ category, categoryLevel: 1 });
-	const mediumCategoryData = useCategoryInfo({
+	const { data: largeCategoryData } = useCategoryInfo({
+		category,
+		categoryLevel: 1,
+	});
+	const { data: mediumCategoryData } = useCategoryInfo({
 		category,
 		categoryLevel: 2,
 		categoryInfo: largeCategoryCode,
 	});
-	const smallCategoryData = useCategoryInfo({
+	const { data: smallCategoryData } = useCategoryInfo({
 		category,
 		categoryLevel: 3,
 		categoryInfo: mediumCategoryCode,
 	});
-	const [goodsData, setPage] = useGoodsSearchPageList({
+	const { data: goodsData, setPage } = useGoodsSearchPageList({
 		goods,
 		goodsName,
 		largeCategoryCode,
@@ -74,7 +77,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 		smallCategoryCode,
 	});
 	const [left, setLeft] = useState<readonly GoodsData[]>(
-		goodsData.content ?? []
+		goodsData?.content ?? []
 	);
 	const [right, setRight] = useState<readonly GoodsData[]>([]);
 	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
@@ -83,7 +86,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 	const rightChecked = intersect(checked, right);
 
 	useEffect(() => {
-		setLeft(goodsData.content ?? []);
+		setLeft(goodsData?.content ?? []);
 		setRight(
 			goodsSaveData
 				? union(
@@ -112,9 +115,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 				(data: CategoryData) => data.categoryCode === mediumCategoryCode
 			)
 		) {
-			setMediumCategoryCode(
-				mediumCategoryData.length > 0 ? mediumCategoryData[0].categoryCode : ''
-			);
+			setMediumCategoryCode(get(mediumCategoryData, '[0].categoryCode', ''));
 		}
 		if (
 			!some(
@@ -122,9 +123,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 				(data: CategoryData) => data.categoryCode === smallCategoryCode
 			)
 		) {
-			setSmallCategoryCode(
-				smallCategoryData.length > 0 ? smallCategoryData[0].categoryCode : ''
-			);
+			setSmallCategoryCode(get(smallCategoryData, '[0].categoryCode', ''));
 		}
 	}, [
 		mediumCategoryData,
@@ -293,7 +292,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 							onChange={handleLargeCategoryChange}
 							sx={selectInput}
 						>
-							{largeCategoryData.map((data: CategoryData, i: number) => (
+							{largeCategoryData?.map((data: CategoryData, i: number) => (
 								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
 									{data.categoryName}
 								</MenuItem>
@@ -310,9 +309,9 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 							value={mediumCategoryCode}
 							onChange={handleMiddleCategoryChange}
 							sx={selectInput}
-							disabled={mediumCategoryData.length === 0}
+							disabled={(mediumCategoryData ?? []).length === 0}
 						>
-							{mediumCategoryData.map((data: CategoryData, i: number) => (
+							{mediumCategoryData?.map((data: CategoryData, i: number) => (
 								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
 									{data.categoryName}
 								</MenuItem>
@@ -329,9 +328,9 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 							value={smallCategoryCode}
 							onChange={handleSmallCategoryChange}
 							sx={selectInput}
-							disabled={smallCategoryData.length === 0}
+							disabled={(smallCategoryData ?? []).length === 0}
 						>
-							{smallCategoryData.map((data: CategoryData, i: number) => (
+							{smallCategoryData?.map((data: CategoryData, i: number) => (
 								<MenuItem key={i} sx={menuText} value={data.categoryCode}>
 									{data.categoryName}
 								</MenuItem>
@@ -417,7 +416,7 @@ const DialogGoodsMobile: FC<DialogProps> = ({
 				<Grid item>{customList(right)}</Grid>
 			</Grid>
 			<Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-				{goodsData.totalPages && (
+				{goodsData?.totalPages && (
 					<PageNavigator count={goodsData.totalPages} setPage={setPage} />
 				)}
 			</Box>

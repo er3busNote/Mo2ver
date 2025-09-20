@@ -11,7 +11,7 @@ const useBannerDisplayList = ({ banner }: BannerProps) => {
 	return useQuery<Record<string, Record<string, Array<object>>>>({
 		queryKey: ['bannerDiaplayList'],
 		queryFn: () => service.getBannerDisplay(),
-		staleTime: 1000 * 60,
+		staleTime: 60 * 1000,
 	});
 };
 

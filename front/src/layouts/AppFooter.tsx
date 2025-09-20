@@ -29,8 +29,8 @@ interface AppFooterProps {
 	description: string;
 	search: ActionCreatorsMapObject;
 	recommend: ActionCreatorsMapObject;
-	goodsRankData: Array<GoodsData>;
-	categoryData: CategoryDataGroup;
+	goodsRankData?: Array<GoodsData>;
+	categoryData?: CategoryDataGroup;
 }
 
 const AppFooter: FC<AppFooterProps> = ({

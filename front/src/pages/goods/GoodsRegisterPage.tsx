@@ -10,7 +10,7 @@ import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { GoodsInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useGoodsDetail from '@services/goods/useGoodsDetail';
+import useGoodsDetail from '@hooks/goods/query/useGoodsDetail';
 import GoodsRegister from './GoodsRegister';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { RegisterFormValues } from '@/types/form';
@@ -309,7 +309,7 @@ const GoodsRegisterPage: FC<GoodsRegisterDispatchProps> = ({
 
 	if (componentType === 'Update') {
 		const code = location.state?.goodsCode;
-		const goodsInfo = useGoodsDetail({ goods, code });
+		const { data: goodsInfo } = useGoodsDetail({ goods, code });
 		if (goodsInfo && goodsInfo.goodsCode && !isDataLoaded) {
 			const { reset } = methods;
 			reset({

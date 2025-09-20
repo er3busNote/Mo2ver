@@ -12,8 +12,8 @@ interface AppMenuSubItemProps {
 	title: string;
 	description: string;
 	divideData: Array<Array<CategoryData>>;
-	middleCategoryData: CategoryDataInfo;
-	smallCategoryData: CategoryDataInfo;
+	middleCategoryData?: CategoryDataInfo;
+	smallCategoryData?: CategoryDataInfo;
 	hover: string;
 }
 

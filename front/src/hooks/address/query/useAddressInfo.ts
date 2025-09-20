@@ -12,7 +12,7 @@ const useAddressInfo = ({ address }: AddressProps) => {
 	return useQuery<AddressData>({
 		queryKey: ['addressInfo'],
 		queryFn: () => service.getAddressInfo(),
-		staleTime: 1000 * 60,
+		staleTime: 60 * 1000,
 		refetchOnWindowFocus: false,
 	});
 };

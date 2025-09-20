@@ -1,24 +1,16 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import { GoodsPageData } from '@/types/api';
-import useCategoryPageList from '@services/category/useCategoryPageList';
+import { GoodsProps } from '@/types/goods';
+import useGoodsPageList from '@hooks/goods/query/useGoodsPageList';
 import useSearchGoodsList from '@services/search/useSearchGoodsList';
 import GoodsList from './GoodsList';
 import NotFound from '../NotFound';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
-
-interface GoodsProps {
-	title: string;
-	description: string;
-	file: ActionCreatorsMapObject;
-	goodsData: GoodsPageData;
-	setPage: Dispatch<SetStateAction<number>>;
-}
 
 interface GoodsDispatchProps {
 	title: string;
@@ -121,7 +113,7 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 }): JSX.Element => {
 	const { code, type, keyword } = useParams();
 	if (type && code) {
-		const [goodsData, setPage] = useCategoryPageList({
+		const { data: goodsData, setPage } = useGoodsPageList({
 			goods,
 			categoryCode: code,
 			categoryType: type,
