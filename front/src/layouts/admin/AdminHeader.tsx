@@ -13,7 +13,7 @@ import {
 	AccountCircle as AccountCircleIcon,
 	Menu as MenuIcon,
 } from '@mui/icons-material';
-import MainIcon from '@components/MainIcon';
+import MainIcon from '@components/icon/MainIcon';
 import { fontSize_xs, fontSize_sm } from '@utils/style';
 
 interface AdminHeaderProps {

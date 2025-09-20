@@ -17,7 +17,7 @@ import {
 import { ClickAwayListener } from '@mui/base';
 import SearchCard from '@components/card/SearchCard';
 import SearchDivider from '@components/divider/SearchDivider';
-import MainIcon from '@components/MainIcon';
+import MainIcon from '@components/icon/MainIcon';
 import { SearchProps, SearchItemsProps } from '@/types/search';
 import { fontSize_sm } from '@utils/style';
 import { isEmpty } from 'lodash';

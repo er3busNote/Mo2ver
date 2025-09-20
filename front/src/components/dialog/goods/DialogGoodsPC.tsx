@@ -1,12 +1,10 @@
-import React, { FC, useState, useEffect, ChangeEvent } from 'react';
+import React, { FC } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { toastMessage } from '@store/index';
 import Api from '@api/index';
 import { GoodsData, CategoryData } from '@/types/api';
-import useCategoryInfo from '@hooks/category/query/useCategoryInfo';
-import useGoodsSearchPageList from '@hooks/goods/query/useGoodsSearchPageList';
+import useDialogGoodsSelection from '@hooks/useDialogGoodsSelection';
 import SearchInput from '@components/input/SearchInput';
 import ButtonDialog from '@components/button/ButtonDialog';
 import PageNavigator from '@components/pagination/PageNavigator';
@@ -25,10 +23,20 @@ import {
 	FormControl,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import {
+	handleCategoryChange,
+	handleSearchClick,
+	handleSearchOnChange,
+	handleToggle,
+	handleAllRight,
+	handleCheckedRight,
+	handleCheckedLeft,
+	handleAllLeft,
+	handleSelect,
+} from '@handler/dialog';
 import { BannerGoodsDetailValues } from '@/types/admin/form';
-import { not, intersect, intersectBy, union } from '@utils/set';
-import { get, some, indexOf, includes } from 'lodash';
+import { includes } from 'lodash';
 
 interface DialogProps {
 	open: boolean;
@@ -48,149 +56,62 @@ const DialogGoodsPC: FC<DialogProps> = ({
 	goodsSaveData,
 }): JSX.Element => {
 	const dispatch = useDispatch();
-	const [keyword, setKeyword] = useState('');
-	const [goodsName, setGoodsName] = useState<string>('');
-	const [largeCategoryCode, setLargeCategoryCode] = useState<string>('');
-	const [mediumCategoryCode, setMediumCategoryCode] = useState<string>('');
-	const [smallCategoryCode, setSmallCategoryCode] = useState<string>('');
-	const { data: largeCategoryData } = useCategoryInfo({
-		category,
-		categoryLevel: 1,
-	});
-	const { data: mediumCategoryData } = useCategoryInfo({
-		category,
-		categoryLevel: 2,
-		categoryInfo: largeCategoryCode,
-	});
-	const { data: smallCategoryData } = useCategoryInfo({
-		category,
-		categoryLevel: 3,
-		categoryInfo: mediumCategoryCode,
-	});
-	const { data: goodsData, setPage } = useGoodsSearchPageList({
-		goods,
-		goodsName,
+	const {
+		keyword,
+		setKeyword,
+		setGoodsName,
 		largeCategoryCode,
+		setLargeCategoryCode,
 		mediumCategoryCode,
+		setMediumCategoryCode,
 		smallCategoryCode,
-	});
-	const [left, setLeft] = useState<readonly GoodsData[]>(
-		goodsData?.content ?? []
-	);
-	const [right, setRight] = useState<readonly GoodsData[]>([]);
-	const [checked, setChecked] = useState<readonly GoodsData[]>([]);
-
-	const leftChecked = intersect(checked, left);
-	const rightChecked = intersect(checked, right);
-
-	useEffect(() => {
-		setLeft(goodsData?.content ?? []);
-		setRight(
-			goodsSaveData
-				? union(
-						right,
-						goodsSaveData.map((item: BannerGoodsDetailValues) => ({
-							goodsCode: item.goodsCode,
-							goodsName: item.goodsName,
-							goodsBrand: '',
-							goodsGender: '',
-							goodsYear: '',
-							supplyPrice: 0,
-							salePrice: item.salePrice,
-							imageList: [],
-							keywordList: [],
-						})),
-						'goodsCode'
-				  )
-				: []
-		);
-	}, [goodsData, goodsSaveData]);
-
-	useEffect(() => {
-		if (
-			!some(
-				mediumCategoryData,
-				(data: CategoryData) => data.categoryCode === mediumCategoryCode
-			)
-		) {
-			setMediumCategoryCode(get(mediumCategoryData, '[0].categoryCode', ''));
-		}
-		if (
-			!some(
-				smallCategoryData,
-				(data: CategoryData) => data.categoryCode === smallCategoryCode
-			)
-		) {
-			setSmallCategoryCode(get(smallCategoryData, '[0].categoryCode', ''));
-		}
-	}, [
+		setSmallCategoryCode,
+		largeCategoryData,
 		mediumCategoryData,
-		mediumCategoryCode,
 		smallCategoryData,
-		smallCategoryCode,
-	]);
+		goodsData,
+		setPage,
+		left,
+		right,
+		checked,
+		setLeft,
+		setRight,
+		setChecked,
+		leftChecked,
+		rightChecked,
+	} = useDialogGoodsSelection({ category, goods, goodsSaveData });
 
-	const handleLargeCategoryChange = (event: SelectChangeEvent) => {
-		setLargeCategoryCode(event.target.value as string);
-	};
-	const handleMiddleCategoryChange = (event: SelectChangeEvent) => {
-		setMediumCategoryCode(event.target.value as string);
-	};
-	const handleSmallCategoryChange = (event: SelectChangeEvent) => {
-		setSmallCategoryCode(event.target.value as string);
-	};
+	const onLargeCategoryChange = handleCategoryChange(setLargeCategoryCode);
+	const onMiddleCategoryChange = handleCategoryChange(setMediumCategoryCode);
+	const onSmallCategoryChange = handleCategoryChange(setSmallCategoryCode);
 
-	const searchClick = (goodsName: string) => {
-		setGoodsName(goodsName);
-	};
-	const searchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setKeyword(event.currentTarget.value as string);
-	};
+	const searchClick = handleSearchClick(setGoodsName);
+	const searchOnChange = handleSearchOnChange(setKeyword);
 
-	const handleToggle = (value: GoodsData) => () => {
-		const currentIndex = indexOf(checked, value);
-		const newChecked = [...checked];
+	const onToggle = handleToggle(checked, setChecked);
+	const onAllRight = handleAllRight(right, left, setRight, setLeft);
+	const onCheckedRight = handleCheckedRight(
+		right,
+		left,
+		checked,
+		leftChecked,
+		setRight,
+		setLeft,
+		setChecked,
+		dispatch
+	);
+	const onCheckedLeft = handleCheckedLeft(
+		left,
+		right,
+		checked,
+		rightChecked,
+		setLeft,
+		setRight,
+		setChecked
+	);
+	const onAllLeft = handleAllLeft(left, right, setLeft, setRight);
 
-		if (currentIndex === -1) {
-			newChecked.push(value);
-		} else {
-			newChecked.splice(currentIndex, 1);
-		}
-
-		setChecked(newChecked);
-	};
-	const handleAllRight = () => {
-		setRight(union(right, left, 'goodsCode'));
-		setLeft([]);
-	};
-	const handleCheckedRight = () => {
-		const duplicates = intersectBy(right, leftChecked, 'goodsCode');
-		if (duplicates.length > 0) {
-			dispatch(
-				toastMessage({
-					message: '중복된 값이 존재합니다',
-					type: 'info',
-				})
-			);
-		}
-		setRight(union(right, leftChecked, 'goodsCode'));
-		setLeft(not(left, leftChecked));
-		setChecked(not(checked, leftChecked));
-	};
-	const handleCheckedLeft = () => {
-		setLeft(union(left, rightChecked, 'goodsCode'));
-		setRight(not(right, rightChecked));
-		setChecked(not(checked, rightChecked));
-	};
-	const handleAllLeft = () => {
-		setLeft(union(left, right, 'goodsCode'));
-		setRight([]);
-	};
-
-	const handleSelect = () => {
-		replaceField(right);
-		handleClose();
-	};
+	const onSelect = handleSelect(right, replaceField, handleClose);
 
 	const selectForm: SxProps<Theme> = {
 		width: 120,
@@ -224,7 +145,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 						<ListItemButton
 							key={index}
 							role="listitem"
-							onClick={handleToggle(value)}
+							onClick={onToggle(value)}
 							sx={{ py: 0 }}
 						>
 							<ListItemIcon>
@@ -260,7 +181,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 		<DialogPC
 			title={'상품찾기'}
 			open={open}
-			handleSelect={handleSelect}
+			handleSelect={onSelect}
 			handleClose={handleClose}
 		>
 			<Box sx={{ pt: 1, pb: 0.5, display: 'flex', justifyContent: 'center' }}>
@@ -271,7 +192,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							label="대분류"
 							defaultValue=""
 							value={largeCategoryCode}
-							onChange={handleLargeCategoryChange}
+							onChange={onLargeCategoryChange}
 							sx={selectInput}
 						>
 							{largeCategoryData?.map((data: CategoryData, i: number) => (
@@ -289,7 +210,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							label="중분류"
 							defaultValue=""
 							value={mediumCategoryCode}
-							onChange={handleMiddleCategoryChange}
+							onChange={onMiddleCategoryChange}
 							sx={selectInput}
 							disabled={(mediumCategoryData ?? []).length === 0}
 						>
@@ -308,7 +229,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							label="소분류"
 							defaultValue=""
 							value={smallCategoryCode}
-							onChange={handleSmallCategoryChange}
+							onChange={onSmallCategoryChange}
 							sx={selectInput}
 							disabled={(smallCategoryData ?? []).length === 0}
 						>
@@ -344,7 +265,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							device="pc"
 							variant="outlined"
 							size="small"
-							onClick={handleAllRight}
+							onClick={onAllRight}
 							disabled={left.length === 0}
 						>
 							≫
@@ -354,7 +275,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							device="pc"
 							variant="outlined"
 							size="small"
-							onClick={handleCheckedRight}
+							onClick={onCheckedRight}
 							disabled={leftChecked.length === 0}
 						>
 							&gt;
@@ -364,7 +285,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							device="pc"
 							variant="outlined"
 							size="small"
-							onClick={handleCheckedLeft}
+							onClick={onCheckedLeft}
 							disabled={rightChecked.length === 0}
 						>
 							&lt;
@@ -374,7 +295,7 @@ const DialogGoodsPC: FC<DialogProps> = ({
 							device="pc"
 							variant="outlined"
 							size="small"
-							onClick={handleAllLeft}
+							onClick={onAllLeft}
 							disabled={right.length === 0}
 						>
 							≪
