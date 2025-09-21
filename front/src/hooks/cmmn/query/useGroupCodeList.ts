@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { ActionCreatorsMapObject } from 'redux';
 import { CodeData, CSRFData } from '@/types/api';
 import CodeService from '@services/CodeService';
@@ -19,7 +19,7 @@ const useGroupCodeList = ({
 		queryKey: ['groupCodeList', groupCodelist, csrfData?.csrfToken],
 		queryFn: () => service.getCodeList(groupCodelist, csrfData),
 		enabled: groupCodelist.length > 0,
-		staleTime: 5 * 60 * 1000,
+		placeholderData: keepPreviousData,
 	});
 };
 

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { ActionCreatorsMapObject } from 'redux';
 import { CategoryData } from '@/types/api';
 import CategoryService from '@services/CategoryService';
@@ -19,6 +19,7 @@ const useCategoryInfo = ({
 		queryKey: ['categoryInfo', categoryLevel, categoryInfo],
 		queryFn: () => service.getCategoryInfo(categoryLevel, categoryInfo),
 		staleTime: 60 * 1000,
+		placeholderData: keepPreviousData,
 	});
 };
 

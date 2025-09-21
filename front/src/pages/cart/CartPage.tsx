@@ -12,7 +12,7 @@ import {
 } from '@/types/api';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useCartPageList from '@services/cart/useCartPageList';
+import useCartPageList from '@hooks/cart/query/useCartPageList';
 import CartListPC from './CartListPC';
 import CartListMobile from './CartListMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -110,7 +110,11 @@ const CartPage: FC<CartDispatchProps> = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { data: csrfData } = useCSRFToken({ member });
-	const [cartPageData, setPage, setTotalPrice] = useCartPageList({ cart });
+	const {
+		data: cartPageData,
+		setPage,
+		setTotalPrice,
+	} = useCartPageList({ cart });
 	const cartUpdate = async (cartData: CartData) => {
 		const data = (await cart.update(cartData, csrfData)) as CartPageData;
 		setTotalPrice(data.cartTotal);
@@ -120,7 +124,7 @@ const CartPage: FC<CartDispatchProps> = ({
 		setTotalPrice(data.cartTotal);
 	};
 	const orderClick = (isCheck: boolean) => {
-		let cartList = cartPageData.cartList;
+		let cartList = cartPageData?.cartList;
 		if (isCheck) cartList = filter(cartList, { check: true });
 		const orderGoodsInfoData: Array<OrderGoodsInfoData> = map(
 			cartList,

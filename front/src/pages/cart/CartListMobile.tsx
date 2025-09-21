@@ -689,12 +689,12 @@ const CartListMobile: FC<CartListProps> = ({
 	const calculateTotalOptionCount = (cartData: Array<CartData>) =>
 		sumBy(cartData, (item) => item.amount ?? 0);
 
-	const totalSalePrice = cartPageData.cartTotal ?? 0;
-	const totalSupplyPrice = cartPageData.cartList
+	const totalSalePrice = cartPageData?.cartTotal ?? 0;
+	const totalSupplyPrice = cartPageData?.cartList
 		? calculateTotalSupplyPrice(cartPageData.cartList)
 		: 0;
-	const totalCount = cartPageData.cartList ? cartPageData.cartList.length : 0;
-	const totalOptionCount = cartPageData.cartList
+	const totalCount = cartPageData?.cartList ? cartPageData.cartList.length : 0;
+	const totalOptionCount = cartPageData?.cartList
 		? calculateTotalOptionCount(cartPageData.cartList)
 		: 0;
 
@@ -706,7 +706,7 @@ const CartListMobile: FC<CartListProps> = ({
 					title={title}
 					description={description}
 					file={file}
-					cartData={cartPageData.cartList}
+					cartData={cartPageData?.cartList}
 					onCartUpdate={onCartUpdate}
 					onCartDelete={onCartDelete}
 				/>

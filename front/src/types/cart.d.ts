@@ -7,7 +7,7 @@ interface CartProps {
 	description: string;
 	file: ActionCreatorsMapObject;
 	setPage: Dispatch<SetStateAction<number>>;
-	cartPageData: CartPageData;
+	cartPageData?: CartPageData;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
 	onOrder: (isCheck: boolean) => void;
@@ -16,7 +16,7 @@ interface CartProps {
 interface CartDataProps {
 	title: string;
 	description: string;
-	cartData: Array<CartData>;
+	cartData?: Array<CartData>;
 	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
@@ -39,7 +39,7 @@ interface CartListProps {
 	description: string;
 	steps: string[];
 	setPage: Dispatch<SetStateAction<number>>;
-	cartPageData: CartPageData;
+	cartPageData?: CartPageData;
 	file: ActionCreatorsMapObject;
 	onCartUpdate: (cartData: CartData) => void;
 	onCartDelete: (goodsCode: string) => void;
