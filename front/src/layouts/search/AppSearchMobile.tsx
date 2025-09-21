@@ -2,7 +2,7 @@ import React, { FC, useState, ChangeEvent } from 'react';
 import AppSearchItemsMobile from './AppSearchItemsMobile';
 import { GoodsData } from '@/types/api';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useRecommendRankList from '@services/recommend/useRecommendRankList';
+import useRecommendRankList from '@hooks/recommend/query/useRecommendRankList';
 import {
 	Box,
 	Grid,
@@ -134,7 +134,7 @@ const AppSearchMobile: FC<SearchProps> = ({
 	const [open, setOpen] = useState(false);
 	const [openSearch, setSearchOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-	const recommendRankData = useRecommendRankList({
+	const { data: recommendRankData } = useRecommendRankList({
 		count: 5,
 		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
@@ -290,8 +290,7 @@ const AppSearchMobile: FC<SearchProps> = ({
 										</Typography>
 									</Grid>
 								) : (
-									recommendRankData &&
-									recommendRankData.map((data: GoodsData, index: number) => (
+									recommendRankData?.map((data: GoodsData, index: number) => (
 										<Grid key={index} item sx={{ display: 'flex' }}>
 											<Typography
 												color="#999"

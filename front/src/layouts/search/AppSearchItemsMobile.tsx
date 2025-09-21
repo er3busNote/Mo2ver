@@ -1,15 +1,7 @@
-import React, {
-	FC,
-	useRef,
-	useState,
-	Dispatch,
-	SetStateAction,
-	FocusEvent,
-} from 'react';
-import { ActionCreatorsMapObject } from 'redux';
+import React, { FC, useRef, useState, FocusEvent } from 'react';
 import { GoodsData } from '@/types/api';
 import { isAuthenticated, isAdmin } from '@utils/jwttoken';
-import useRecommendRankList from '@services/recommend/useRecommendRankList';
+import useRecommendRankList from '@hooks/recommend/query/useRecommendRankList';
 import {
 	Box,
 	Paper,
@@ -192,7 +184,7 @@ const AppSearchItemsMobile: FC<SearchItemsMobileProps> = ({
 }): JSX.Element => {
 	const cardRef = useRef<HTMLDivElement>(null);
 	const [focus, setFocus] = useState(false);
-	const recommendRankData = useRecommendRankList({
+	const { data: recommendRankData } = useRecommendRankList({
 		count: 5,
 		isAuthenticated: isAuthenticated() && !isAdmin(),
 		recommend,
