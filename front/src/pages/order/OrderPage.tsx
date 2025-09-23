@@ -13,7 +13,7 @@ import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useMemberInfo from '@hooks/member/query/useMemberInfo';
 import useAddressInfo from '@hooks/address/query/useAddressInfo';
 import useOrderInfo from '@services/order/useOrderInfo';
-import usePaymentInfo from '@services/payment/usePaymentInfo';
+import usePaymentInfo from '@hooks/payment/query/usePaymentInfo';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -159,7 +159,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 	const orderId = location.state?.orderId;
 	const { data: csrfData } = useCSRFToken({ member });
 	const { data: memberData } = useMemberInfo({ member });
-	const paymentData = usePaymentInfo({ payment, orderId, csrfData });
+	const { data: paymentData } = usePaymentInfo({ payment, orderId, csrfData });
 	const { data: addressData, refetch } = useAddressInfo({ address });
 	const [orderData, setReload] = useOrderInfo({ order, orderId }); // 쿠폰 및 포인트 적용 시, 최종금액이 바뀔수 있음
 
