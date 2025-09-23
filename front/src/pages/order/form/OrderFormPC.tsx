@@ -80,7 +80,7 @@ const OrderFormPC: FC<OrderProps> = ({
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
 			couponCodes: [watch('couponNumber') ?? ''],
-			totalAmount: orderData.totalAmount,
+			totalAmount: orderData?.totalAmount ?? 0,
 		};
 		onCouponApply(orderCouponData);
 	};
@@ -89,7 +89,7 @@ const OrderFormPC: FC<OrderProps> = ({
 		const orderCouponData: OrderCouponData = {
 			orderId: orderId,
 			couponCodes: [watch('couponNumber') ?? ''],
-			totalAmount: orderData.totalAmount,
+			totalAmount: orderData?.totalAmount ?? 0,
 			couponAmount: watch('coupon'),
 		};
 		onCouponApply(orderCouponData);

@@ -17,7 +17,7 @@ interface OrderProps {
 	orderId: string;
 	memberData?: MemberData;
 	addressData?: AddressData;
-	orderData: OrderInfoData;
+	orderData?: OrderInfoData;
 	onAddressRefetch: (
 		options?: RefetchOptions | undefined
 	) => Promise<QueryObserverResult<AddressData, Error>>;
