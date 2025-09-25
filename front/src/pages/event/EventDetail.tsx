@@ -38,7 +38,7 @@ interface GoodsProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	goodsData: Array<EventProductData>;
+	goodsData?: Array<EventProductData>;
 }
 
 const GoodsGrid: FC<GoodsProps> = ({
@@ -62,82 +62,81 @@ const GoodsGrid: FC<GoodsProps> = ({
 
 	return (
 		<Grid container spacing={3}>
-			{goodsData &&
-				goodsData.map((data: EventProductData, index: number) => {
-					const attachFile = data.goodsImageAttachFile;
-					return (
-						<Grid key={index} item xs={6} md={3} lg={3}>
-							<Card
-								elevation={0}
-								sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
-								onClick={() => goodsClick(data.goodsCode)}
-							>
-								<CardActionArea>
-									<CardMedia
-										component="img"
-										height="140"
-										image={useImageUrl({ file, attachFile })}
-									/>
-									<CardContent>
-										<Typography
-											component="div"
-											sx={{
-												fontSize: {
-													xs: fontSize_xs,
-													sm: fontSize_sm,
-													lg: fontSize_lg,
-												},
-												fontWeight: 'bold',
-											}}
+			{goodsData?.map((data: EventProductData, index: number) => {
+				const attachFile = data.goodsImageAttachFile;
+				return (
+					<Grid key={index} item xs={6} md={3} lg={3}>
+						<Card
+							elevation={0}
+							sx={{ maxWidth: 345, border: '2px #f0f0f0f0 solid' }}
+							onClick={() => goodsClick(data.goodsCode)}
+						>
+							<CardActionArea>
+								<CardMedia
+									component="img"
+									height="140"
+									image={useImageUrl({ file, attachFile })}
+								/>
+								<CardContent>
+									<Typography
+										component="div"
+										sx={{
+											fontSize: {
+												xs: fontSize_xs,
+												sm: fontSize_sm,
+												lg: fontSize_lg,
+											},
+											fontWeight: 'bold',
+										}}
+									>
+										{data.goodsName}
+									</Typography>
+									<Typography
+										component="div"
+										sx={{
+											fontSize: { xs: '10px', sm: '11px', lg: '12px' },
+											fontWeight: 'bold',
+										}}
+									>
+										{data.goodsBrand}
+									</Typography>
+									<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+										<Breadcrumbs
+											sx={{ pt: 1 }}
+											separator="›"
+											aria-label="breadcrumb"
 										>
-											{data.goodsName}
-										</Typography>
-										<Typography
-											component="div"
-											sx={{
-												fontSize: { xs: '10px', sm: '11px', lg: '12px' },
-												fontWeight: 'bold',
-											}}
-										>
-											{data.goodsBrand}
-										</Typography>
-										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-											<Breadcrumbs
-												sx={{ pt: 1 }}
-												separator="›"
-												aria-label="breadcrumb"
+											<Typography
+												color="text.secondary"
+												sx={{
+													color: '#b2b2b2',
+													fontSize: { xs: '11px', sm: '12px', lg: '13px' },
+													textDecoration: 'line-through',
+												}}
 											>
-												<Typography
-													color="text.secondary"
-													sx={{
-														color: '#b2b2b2',
-														fontSize: { xs: '11px', sm: '12px', lg: '13px' },
-														textDecoration: 'line-through',
-													}}
-												>
-													{data.supplyPrice.toLocaleString()}원
-												</Typography>
-												<Typography
-													color="text.secondary"
-													sx={{
-														fontSize: {
-															xs: fontSize_xs,
-															sm: fontSize_sm,
-															lg: fontSize_lg,
-														},
-														fontWeight: 'bold',
-													}}
-												>
-													{data.salePrice.toLocaleString()}원
-												</Typography>
-											</Breadcrumbs>
-										</Box>
-									</CardContent>
-								</CardActionArea>
-							</Card>
-						</Grid>
-					);
-				})}
+												{data.supplyPrice.toLocaleString()}원
+											</Typography>
+											<Typography
+												color="text.secondary"
+												sx={{
+													fontSize: {
+														xs: fontSize_xs,
+														sm: fontSize_sm,
+														lg: fontSize_lg,
+													},
+													fontWeight: 'bold',
+												}}
+											>
+												{data.salePrice.toLocaleString()}원
+											</Typography>
+										</Breadcrumbs>
+									</Box>
+								</CardContent>
+							</CardActionArea>
+						</Card>
+					</Grid>
+				);
+			})}
 		</Grid>
 	);
 };
@@ -279,277 +278,276 @@ const GoodsRow: FC<GoodsProps> = ({
 		<TableContainer>
 			<Table size="small">
 				<TableBody>
-					{goodsData &&
-						goodsData.map((data: EventProductData, index: number) => {
-							const attachFile = data.goodsImageAttachFile;
-							return (
-								<TableRow key={index} sx={rowItem}>
-									<TableCell sx={cardBox}>
-										<Card
-											elevation={0}
-											onClick={() => goodsClick(data.goodsCode)}
-										>
-											<CardActionArea>
-												<CardMedia
-													component="img"
-													image={useImageUrl({ file, attachFile })}
-													sx={{
-														height: {
-															xs: '200px',
-															sm: '200px',
-															md: '230px',
-															lg: '230px',
-														},
-													}}
-													alt="green iguana"
-												/>
-											</CardActionArea>
-										</Card>
-									</TableCell>
-									<TableCell sx={productBox}>
-										<Box sx={subItem}>
-											<Box sx={{ py: 1 }}>
-												<Typography component="span" sx={titleInfo}>
-													Product Info
-												</Typography>
-												<Typography component="span" sx={descriptionInfo}>
-													제품정보
-												</Typography>
-											</Box>
-											<Box>
-												<Table size="small">
-													<TableBody>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Breadcrumbs
-																	sx={infoBreadcrumbs}
-																	aria-label="breadcrumb"
-																>
-																	<Typography component="span" sx={label}>
-																		브랜드
-																	</Typography>
-																	<Typography component="span" sx={label}>
-																		품번
-																	</Typography>
-																</Breadcrumbs>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																{data ? (
-																	<Breadcrumbs
-																		sx={infoBreadcrumbs}
-																		aria-label="breadcrumb"
-																	>
-																		<Typography component="span" sx={info}>
-																			{data.goodsBrand}
-																		</Typography>
-																		<Typography component="span" sx={info}>
-																			{data.goodsCode}
-																		</Typography>
-																	</Breadcrumbs>
-																) : (
-																	<Skeleton animation="wave" />
-																)}
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Breadcrumbs
-																	sx={infoBreadcrumbs}
-																	aria-label="breadcrumb"
-																>
-																	<Typography component="span" sx={label}>
-																		등록연도
-																	</Typography>
-																	<Typography component="span" sx={label}>
-																		성별
-																	</Typography>
-																</Breadcrumbs>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																{data ? (
-																	<Breadcrumbs
-																		sx={infoBreadcrumbs}
-																		aria-label="breadcrumb"
-																	>
-																		<Typography component="span" sx={info}>
-																			{data.goodsYear}
-																		</Typography>
-																		<Typography component="span" sx={info}>
-																			{data.goodsGender}
-																		</Typography>
-																	</Breadcrumbs>
-																) : (
-																	<Skeleton animation="wave" />
-																)}
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Typography component="span" sx={label}>
-																	조회수(1개월)
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																<Typography component="span" sx={info}>
-																	52.4만 회 이상
-																</Typography>
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Typography component="span" sx={label}>
-																	누적판매(1년)
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																<Box>
-																	<Typography component="span" sx={info}>
-																		1.7만개 이상
-																	</Typography>
-																	<Typography component="span" sx={infoSub}>
-																		(결제완료-반품)
-																	</Typography>
-																</Box>
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Typography component="span" sx={label}>
-																	좋아요
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																<Box>
-																	<StarsIcon sx={infoLikeIcon} />
-																	<Typography component="span" sx={infoLike}>
-																		30,174
-																	</Typography>
-																</Box>
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={labelCell}>
-																<Typography component="span" sx={label}>
-																	구매 후기
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																<Breadcrumbs
-																	sx={infoBreadcrumbs}
-																	aria-label="breadcrumb"
-																>
-																	<Rating
-																		name="read-only"
-																		value={4.8}
-																		sx={infoRating}
-																		readOnly
-																	/>
-																	<Link sx={infoShow} href="/" underline="none">
-																		후기 2,415개 보기
-																	</Link>
-																</Breadcrumbs>
-															</TableCell>
-														</TableRow>
-													</TableBody>
-												</Table>
-												{!isEmpty(data.keywordList) && (
-													<Box sx={infoHashTag}>
-														{data.keywordList.map(
-															(keyword: string, index: number) => (
-																<ButtonTag
-																	key={index}
-																	buttonType="detail"
-																	variant="outlined"
-																>
-																	#{keyword}
-																</ButtonTag>
-															)
-														)}
-													</Box>
-												)}
-											</Box>
-										</Box>
-									</TableCell>
-									<TableCell sx={priceBox}>
-										<Box sx={subItem}>
-											<Box sx={{ py: 1 }}>
-												<Typography component="span" sx={titleInfo}>
-													Price Info
-												</Typography>
-												<Typography component="span" sx={descriptionInfo}>
-													가격정보
-												</Typography>
-											</Box>
-											<Box>
-												<Table size="small">
-													<TableBody>
-														<TableRow>
-															<TableCell sx={priceCell}>
-																<Typography component="span" sx={label}>
-																	판매가
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																{data ? (
-																	<Typography
-																		component="span"
-																		sx={infoOriginPrice}
-																	>
-																		{data.supplyPrice.toLocaleString()}원
-																	</Typography>
-																) : (
-																	<Skeleton animation="wave" />
-																)}
-															</TableCell>
-														</TableRow>
-														<TableRow>
-															<TableCell sx={priceCell}>
-																<Typography component="span" sx={label}>
-																	할인가
-																</Typography>
-															</TableCell>
-															<TableCell sx={infoCell}>
-																{/* <Breadcrumbs
-																	sx={infoBreadcrumbs}
-																	separator="~"
-																	aria-label="breadcrumb"
-																>
-																	<Typography component="span" sx={infoDiscountPrice}>
-																		48,105
-																	</Typography>
-																	<Typography component="span" sx={infoDiscountPrice}>
-																		59,390원
-																	</Typography>
-																</Breadcrumbs> */}
-																{data ? (
-																	<Typography
-																		component="span"
-																		sx={infoDiscountPrice}
-																	>
-																		{data.salePrice.toLocaleString()}원
-																	</Typography>
-																) : (
-																	<Skeleton animation="wave" />
-																)}
-															</TableCell>
-														</TableRow>
-													</TableBody>
-												</Table>
-											</Box>
+					{goodsData?.map((data: EventProductData, index: number) => {
+						const attachFile = data.goodsImageAttachFile;
+						return (
+							<TableRow key={index} sx={rowItem}>
+								<TableCell sx={cardBox}>
+									<Card
+										elevation={0}
+										onClick={() => goodsClick(data.goodsCode)}
+									>
+										<CardActionArea>
+											<CardMedia
+												component="img"
+												image={useImageUrl({ file, attachFile })}
+												sx={{
+													height: {
+														xs: '200px',
+														sm: '200px',
+														md: '230px',
+														lg: '230px',
+													},
+												}}
+												alt="green iguana"
+											/>
+										</CardActionArea>
+									</Card>
+								</TableCell>
+								<TableCell sx={productBox}>
+									<Box sx={subItem}>
+										<Box sx={{ py: 1 }}>
+											<Typography component="span" sx={titleInfo}>
+												Product Info
+											</Typography>
+											<Typography component="span" sx={descriptionInfo}>
+												제품정보
+											</Typography>
 										</Box>
 										<Box>
-											<ButtonGoods
-												buttonType="buynow"
-												variant="outlined"
-												isEvent={true}
-											>
-												바로 구매
-											</ButtonGoods>
+											<Table size="small">
+												<TableBody>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Breadcrumbs
+																sx={infoBreadcrumbs}
+																aria-label="breadcrumb"
+															>
+																<Typography component="span" sx={label}>
+																	브랜드
+																</Typography>
+																<Typography component="span" sx={label}>
+																	품번
+																</Typography>
+															</Breadcrumbs>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															{data ? (
+																<Breadcrumbs
+																	sx={infoBreadcrumbs}
+																	aria-label="breadcrumb"
+																>
+																	<Typography component="span" sx={info}>
+																		{data.goodsBrand}
+																	</Typography>
+																	<Typography component="span" sx={info}>
+																		{data.goodsCode}
+																	</Typography>
+																</Breadcrumbs>
+															) : (
+																<Skeleton animation="wave" />
+															)}
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Breadcrumbs
+																sx={infoBreadcrumbs}
+																aria-label="breadcrumb"
+															>
+																<Typography component="span" sx={label}>
+																	등록연도
+																</Typography>
+																<Typography component="span" sx={label}>
+																	성별
+																</Typography>
+															</Breadcrumbs>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															{data ? (
+																<Breadcrumbs
+																	sx={infoBreadcrumbs}
+																	aria-label="breadcrumb"
+																>
+																	<Typography component="span" sx={info}>
+																		{data.goodsYear}
+																	</Typography>
+																	<Typography component="span" sx={info}>
+																		{data.goodsGender}
+																	</Typography>
+																</Breadcrumbs>
+															) : (
+																<Skeleton animation="wave" />
+															)}
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Typography component="span" sx={label}>
+																조회수(1개월)
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															<Typography component="span" sx={info}>
+																52.4만 회 이상
+															</Typography>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Typography component="span" sx={label}>
+																누적판매(1년)
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															<Box>
+																<Typography component="span" sx={info}>
+																	1.7만개 이상
+																</Typography>
+																<Typography component="span" sx={infoSub}>
+																	(결제완료-반품)
+																</Typography>
+															</Box>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Typography component="span" sx={label}>
+																좋아요
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															<Box>
+																<StarsIcon sx={infoLikeIcon} />
+																<Typography component="span" sx={infoLike}>
+																	30,174
+																</Typography>
+															</Box>
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={labelCell}>
+															<Typography component="span" sx={label}>
+																구매 후기
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															<Breadcrumbs
+																sx={infoBreadcrumbs}
+																aria-label="breadcrumb"
+															>
+																<Rating
+																	name="read-only"
+																	value={4.8}
+																	sx={infoRating}
+																	readOnly
+																/>
+																<Link sx={infoShow} href="/" underline="none">
+																	후기 2,415개 보기
+																</Link>
+															</Breadcrumbs>
+														</TableCell>
+													</TableRow>
+												</TableBody>
+											</Table>
+											{!isEmpty(data.keywordList) && (
+												<Box sx={infoHashTag}>
+													{data.keywordList.map(
+														(keyword: string, index: number) => (
+															<ButtonTag
+																key={index}
+																buttonType="detail"
+																variant="outlined"
+															>
+																#{keyword}
+															</ButtonTag>
+														)
+													)}
+												</Box>
+											)}
 										</Box>
-									</TableCell>
-								</TableRow>
-							);
-						})}
+									</Box>
+								</TableCell>
+								<TableCell sx={priceBox}>
+									<Box sx={subItem}>
+										<Box sx={{ py: 1 }}>
+											<Typography component="span" sx={titleInfo}>
+												Price Info
+											</Typography>
+											<Typography component="span" sx={descriptionInfo}>
+												가격정보
+											</Typography>
+										</Box>
+										<Box>
+											<Table size="small">
+												<TableBody>
+													<TableRow>
+														<TableCell sx={priceCell}>
+															<Typography component="span" sx={label}>
+																판매가
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															{data ? (
+																<Typography
+																	component="span"
+																	sx={infoOriginPrice}
+																>
+																	{data.supplyPrice.toLocaleString()}원
+																</Typography>
+															) : (
+																<Skeleton animation="wave" />
+															)}
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell sx={priceCell}>
+															<Typography component="span" sx={label}>
+																할인가
+															</Typography>
+														</TableCell>
+														<TableCell sx={infoCell}>
+															{/* <Breadcrumbs
+																sx={infoBreadcrumbs}
+																separator="~"
+																aria-label="breadcrumb"
+															>
+																<Typography component="span" sx={infoDiscountPrice}>
+																	48,105
+																</Typography>
+																<Typography component="span" sx={infoDiscountPrice}>
+																	59,390원
+																</Typography>
+															</Breadcrumbs> */}
+															{data ? (
+																<Typography
+																	component="span"
+																	sx={infoDiscountPrice}
+																>
+																	{data.salePrice.toLocaleString()}원
+																</Typography>
+															) : (
+																<Skeleton animation="wave" />
+															)}
+														</TableCell>
+													</TableRow>
+												</TableBody>
+											</Table>
+										</Box>
+									</Box>
+									<Box>
+										<ButtonGoods
+											buttonType="buynow"
+											variant="outlined"
+											isEvent={true}
+										>
+											바로 구매
+										</ButtonGoods>
+									</Box>
+								</TableCell>
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</Table>
 		</TableContainer>
@@ -574,7 +572,7 @@ const EventDetail: FC<EventDetailProps> = ({
 			<EventSubHeader
 				title={title}
 				description={description}
-				subtitle={eventData.subject}
+				subtitle={eventData?.subject ?? ''}
 				change={false}
 				branch={branch}
 				setSwitch={setSwitch}
@@ -604,19 +602,19 @@ const EventDetail: FC<EventDetailProps> = ({
 							file={file}
 							title={title}
 							description={description}
-							goodsData={eventProductData.content}
+							goodsData={eventProductData?.content}
 						/>
 					) : (
 						<GoodsRow
 							file={file}
 							title={title}
 							description={description}
-							goodsData={eventProductData.content}
+							goodsData={eventProductData?.content}
 						/>
 					)}
 				</Box>
 				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					{eventProductData.totalPages && (
+					{eventProductData?.totalPages && (
 						<PageNavigator
 							count={eventProductData.totalPages}
 							setPage={setPage}

@@ -25,7 +25,7 @@ interface EventGridProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	eventData: Array<EventData>;
+	eventData?: Array<EventData>;
 }
 
 const EventGrid: FC<EventGridProps> = ({
@@ -133,11 +133,11 @@ const EventList: FC<EventProps> = ({
 					file={file}
 					title={title}
 					description={description}
-					eventData={eventData.content}
+					eventData={eventData?.content}
 				/>
 			</Box>
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				{eventData.totalPages && (
+				{eventData?.totalPages && (
 					<PageNavigator count={eventData.totalPages} setPage={setPage} />
 				)}
 			</Box>

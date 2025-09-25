@@ -15,7 +15,7 @@ interface EventProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	eventPageData: EventPageData;
+	eventPageData?: EventPageData;
 }
 
 export type { EventProp, EventProps };

@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
-import useEventPageList from '@services/event/useEventPageList';
+import useEventPageList from '@hooks/event/query/useEventPageList';
 import EventPC from './EventPC';
 import EventMobile from './EventMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -24,7 +24,7 @@ const EventPage: FC<EventDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const [eventPageData, setPage] = useEventPageList({ event });
+	const { data: eventPageData, setPage } = useEventPageList({ event });
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{isDesktop && (

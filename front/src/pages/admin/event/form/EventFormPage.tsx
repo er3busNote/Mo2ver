@@ -10,7 +10,7 @@ import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { EventRequestData, EventInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useEventDetail from '@services/event/useEventDetail';
+import useEventDetail from '@hooks/event/query/useEventDetail';
 import EventFormPC from './EventFormPC';
 import EventFormMobile from './EventFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -135,7 +135,7 @@ const EventFormPage: FC<EventDispatchProps> = ({
 		const eventData: EventRequestData = {
 			eventNo: eventNo,
 		};
-		const eventInfo = useEventDetail({
+		const { data: eventInfo } = useEventDetail({
 			event,
 			eventData,
 			csrfData,

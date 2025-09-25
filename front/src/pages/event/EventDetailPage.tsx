@@ -5,8 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import useEventInfo from '@services/event/useEventInfo';
-import useEventProductPageList from '@services/event/useEventProductPageList';
+import useEventInfo from '@hooks/event/query/useEventInfo';
+import useEventProductPageList from '@hooks/event/query/useEventProductPageList';
 import EventDetail from './EventDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { EventDetailProps, EventDispatchProps } from '@/types/event';
@@ -77,8 +77,11 @@ const EventDetailPage: FC<EventDispatchProps> = ({
 
 	const { id } = useParams();
 	const code = id ?? '';
-	const eventData = useEventInfo({ event, code });
-	const [eventProductData, setPage] = useEventProductPageList({ event, code });
+	const { data: eventData } = useEventInfo({ event, code });
+	const { data: eventProductData, setPage } = useEventProductPageList({
+		event,
+		code,
+	});
 
 	return (
 		<>

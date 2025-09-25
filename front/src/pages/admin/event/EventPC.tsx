@@ -252,46 +252,45 @@ const EventPC: FC<EventProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{eventPageData.content &&
-							eventPageData.content.map((data: EventData, index: number) => (
-								<TableRow key={index}>
-									<TableCell sx={dataTd} align="center">
-										{data.eventNo}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										<Link
-											component="button"
-											variant="body2"
-											onClick={() => updateClick(data.eventNo)}
-										>
-											{data.subject}
-										</Link>
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.eventStartDate).format('YYYY-MM-DD')} ~{' '}
-										{moment(data.eventEndDate).format('YYYY-MM-DD')}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										마감
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{data.eventYesNo}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										Y
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{data.register}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{moment(data.registerDate).format('YYYY-MM-DD')}
-									</TableCell>
-								</TableRow>
-							))}
+						{eventPageData?.content.map((data: EventData, index: number) => (
+							<TableRow key={index}>
+								<TableCell sx={dataTd} align="center">
+									{data.eventNo}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									<Link
+										component="button"
+										variant="body2"
+										onClick={() => updateClick(data.eventNo)}
+									>
+										{data.subject}
+									</Link>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{moment(data.eventStartDate).format('YYYY-MM-DD')} ~{' '}
+									{moment(data.eventEndDate).format('YYYY-MM-DD')}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									마감
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.eventYesNo}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									Y
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.register}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{moment(data.registerDate).format('YYYY-MM-DD')}
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							{eventPageData.totalElements && (
+							{eventPageData?.totalElements && (
 								<TablePageNavigator
 									size={eventPageData.size}
 									totalElements={eventPageData.totalElements}

@@ -6,7 +6,7 @@ interface EventProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	eventData: EventPageData;
+	eventData?: EventPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 
@@ -14,8 +14,8 @@ interface EventDetailProps {
 	title: string;
 	description: string;
 	file: ActionCreatorsMapObject;
-	eventData: EventData;
-	eventProductData: EventProductPageData;
+	eventData?: EventData;
+	eventProductData?: EventProductPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 
