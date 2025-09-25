@@ -1,8 +1,8 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Dispatch } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -119,23 +119,38 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 	banner,
 }): JSX.Element => {
 	const theme = useTheme();
+	const location = useLocation();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const navigate = useNavigate();
-	const location = useLocation();
 	const { data: csrfData } = useCSRFToken({ member });
 	const { data: groupCodeData } = useGroupCodeList({
 		code,
 		groupCodelist: ['BN001', 'BN002', 'BN003'],
 		csrfData,
 	});
-	const [bannerNo, setBannerNo] = useState<number>();
-	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType =
+
+	const [componentType, setComponentType] = useState<'Create' | 'Update'>(
 		location.state?.bannerNo && location.state?.displayTemplateCode
 			? 'Update'
-			: 'Create';
+			: 'Create'
+	);
+	const [bannerNo, setBannerNo] = useState<number>();
+	const [bannerData, setBannerData] = useState<BannerRequestData>(
+		new Object() as BannerRequestData
+	);
+	const {
+		data: goodsInfo,
+		isLoading,
+		refetch: onBannerRefetch,
+		create,
+		update,
+	} = useBannerGoodsDetail({
+		banner,
+		bannerData,
+		setBannerData,
+		csrfData,
+	});
 
 	const methods = useForm<BannerGoodsFormValues>({
 		mode: 'onChange',
@@ -143,19 +158,8 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 		resolver: yupResolver(bannerGoodsSchema),
 	});
 
-	if (componentType === 'Update') {
-		const bannerNo = location.state?.bannerNo;
-		const displayTemplateCode = location.state?.displayTemplateCode;
-		const bannerData: BannerRequestData = {
-			bannerNo: bannerNo,
-			displayTemplateCode: displayTemplateCode,
-		};
-		const { data: goodsInfo } = useBannerGoodsDetail({
-			banner,
-			bannerData,
-			csrfData,
-		});
-		if (goodsInfo && !isDataLoaded) {
+	useEffect(() => {
+		if (goodsInfo && !isLoading) {
 			const { reset } = methods;
 			reset({
 				title: goodsInfo.title,
@@ -167,10 +171,25 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 				useyn: goodsInfo.useyn,
 				goods: goodsInfo.goods,
 			});
-			if (goodsInfo.bannerNo) setBannerNo(goodsInfo.bannerNo);
-			setIsDataLoaded(true);
+			if (goodsInfo.bannerNo) {
+				setBannerNo(goodsInfo.bannerNo);
+				setComponentType('Update');
+			}
 		}
-	}
+	}, [bannerData, isLoading]);
+
+	useEffect(() => {
+		if (componentType === 'Update') {
+			const bannerNo = location.state?.bannerNo;
+			const displayTemplateCode = location.state?.displayTemplateCode;
+			const bannerData: BannerRequestData = {
+				bannerNo: bannerNo,
+				displayTemplateCode: displayTemplateCode,
+			};
+			setBannerData(bannerData);
+			onBannerRefetch();
+		}
+	}, []);
 
 	const submitForm = async (
 		data: BannerGoodsFormValues,
@@ -189,18 +208,15 @@ const BannerGoodsFormPage: FC<BannerDispatchProps> = ({
 		if (componentType === 'Update') {
 			bannerFormData.bannerNo = bannerNo;
 		}
-		if (componentType === 'Create')
-			await banner.goodsCreate(bannerFormData, csrfData);
-		if (componentType === 'Update')
-			await banner.goodsUpdate(bannerFormData, csrfData);
+		if (componentType === 'Create') await create(bannerFormData);
+		if (componentType === 'Update') await update(bannerFormData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/banner');
 	};
 
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{(componentType === 'Create' ||
-				(componentType === 'Update' && isDataLoaded && groupCodeData)) && (
+				(componentType === 'Update' && !isLoading && groupCodeData)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
 						<BannerGoodsFormPC

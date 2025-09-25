@@ -1,8 +1,8 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -114,15 +114,31 @@ const EventFormPage: FC<EventDispatchProps> = ({
 	event,
 }): JSX.Element => {
 	const theme = useTheme();
+	const location = useLocation();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const navigate = useNavigate();
-	const location = useLocation();
 	const { data: csrfData } = useCSRFToken({ member });
+
+	const [componentType, setComponentType] = useState<'Create' | 'Update'>(
+		location.state?.eventNo ? 'Update' : 'Create'
+	);
 	const [eventNo, setEventNo] = useState<number>();
-	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType = location.state?.eventNo ? 'Update' : 'Create';
+	const [eventData, setEventData] = useState<EventRequestData>(
+		new Object() as EventRequestData
+	);
+	const {
+		data: eventInfo,
+		isLoading,
+		refetch: onEventRefetch,
+		create,
+		update,
+	} = useEventDetail({
+		event,
+		eventData,
+		setEventData,
+		csrfData,
+	});
 
 	const methods = useForm<EventFormValues>({
 		mode: 'onChange',
@@ -130,17 +146,8 @@ const EventFormPage: FC<EventDispatchProps> = ({
 		resolver: yupResolver(eventSchema),
 	});
 
-	if (componentType === 'Update') {
-		const eventNo = location.state?.eventNo;
-		const eventData: EventRequestData = {
-			eventNo: eventNo,
-		};
-		const { data: eventInfo } = useEventDetail({
-			event,
-			eventData,
-			csrfData,
-		});
-		if (eventInfo && !isDataLoaded) {
+	useEffect(() => {
+		if (eventInfo && !isLoading) {
 			const { reset } = methods;
 			reset({
 				title: eventInfo.title,
@@ -151,10 +158,23 @@ const EventFormPage: FC<EventDispatchProps> = ({
 				useyn: eventInfo.useyn,
 				goods: eventInfo.goods,
 			});
-			if (eventInfo.eventNo) setEventNo(eventInfo.eventNo);
-			setIsDataLoaded(true);
+			if (eventInfo.eventNo) {
+				setEventNo(eventInfo.eventNo);
+				setComponentType('Update');
+			}
 		}
-	}
+	}, [eventData, isLoading]);
+
+	useEffect(() => {
+		if (componentType === 'Update') {
+			const eventNo = location.state?.eventNo;
+			const eventData: EventRequestData = {
+				eventNo: eventNo,
+			};
+			setEventData(eventData);
+			onEventRefetch();
+		}
+	}, []);
 
 	const submitForm = async (
 		data: EventFormValues,
@@ -172,16 +192,15 @@ const EventFormPage: FC<EventDispatchProps> = ({
 		if (componentType === 'Update') {
 			eventFormData.eventNo = eventNo;
 		}
-		if (componentType === 'Create') await event.create(eventFormData, csrfData);
-		if (componentType === 'Update') await event.update(eventFormData, csrfData);
+		if (componentType === 'Create') await create(eventFormData);
+		if (componentType === 'Update') await update(eventFormData);
 		if (eventForm) eventForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/event');
 	};
 
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{(componentType === 'Create' ||
-				(componentType === 'Update' && isDataLoaded)) && (
+				(componentType === 'Update' && !isLoading)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
 						<EventFormPC

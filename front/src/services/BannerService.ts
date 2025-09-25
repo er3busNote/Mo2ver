@@ -7,6 +7,7 @@ import {
 	BannerPageData,
 	CSRFData,
 } from '@/types/api';
+import { isEmpty, has } from 'lodash';
 
 export default class BannerService {
 	constructor(private banner: ActionCreatorsMapObject) {}
@@ -21,6 +22,12 @@ export default class BannerService {
 		bannerData: BannerRequestData,
 		csrfData?: CSRFData
 	): Promise<BannerGoodsInfoData> => {
+		if (
+			isEmpty(bannerData) ||
+			!has(bannerData, 'bannerNo') ||
+			!has(bannerData, 'displayTemplateCode')
+		)
+			throw new Error('No banner data');
 		return await this.banner.goodsDetail(bannerData, csrfData);
 	};
 
@@ -28,6 +35,12 @@ export default class BannerService {
 		bannerData: BannerRequestData,
 		csrfData?: CSRFData
 	): Promise<BannerImageInfoData> => {
+		if (
+			isEmpty(bannerData) ||
+			!has(bannerData, 'bannerNo') ||
+			!has(bannerData, 'displayTemplateCode')
+		)
+			throw new Error('No banner data');
 		return await this.banner.imagesDetail(bannerData, csrfData);
 	};
 

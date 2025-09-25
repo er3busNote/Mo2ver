@@ -8,6 +8,7 @@ import {
 	PageData,
 	CSRFData,
 } from '@/types/api';
+import { isEmpty, has } from 'lodash';
 
 export default class EventService {
 	constructor(private event: ActionCreatorsMapObject) {}
@@ -16,6 +17,8 @@ export default class EventService {
 		eventData: EventRequestData,
 		csrfData?: CSRFData
 	): Promise<EventInfoData> => {
+		if (isEmpty(eventData) || !has(eventData, 'eventNo'))
+			throw new Error('No event data');
 		return await this.event.detail(eventData, csrfData);
 	};
 

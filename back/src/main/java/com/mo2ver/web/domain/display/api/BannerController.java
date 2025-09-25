@@ -69,7 +69,7 @@ public class BannerController {
             @CurrentUser Member currentUser
     ) {
         String bannerNo = bannerService.saveGoodsDisplay(goodsDisplayInfo, currentUser);
-        return ResponseEntity.created(URI.create("/goods/" + bannerNo))
+        return ResponseEntity.created(URI.create("/create/" + bannerNo))
                 .body(ResponseHandler.builder()
                         .status(HttpStatus.CREATED.value())
                         .message("상품전시정보가 저장되었습니다")
