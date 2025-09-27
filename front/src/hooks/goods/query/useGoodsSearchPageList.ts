@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { ActionCreatorsMapObject } from 'redux';
 import { GoodsPageData } from '@/types/api';
 import GoodsService from '@services/GoodsService';
@@ -45,6 +45,7 @@ const useGoodsSearchPageList = ({
 				smallCategoryCode
 			),
 		staleTime: 5 * 60 * 1000,
+		placeholderData: keepPreviousData,
 	});
 
 	return { data, setPage };

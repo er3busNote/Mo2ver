@@ -17,8 +17,7 @@ export default class EventService {
 		eventData: EventRequestData,
 		csrfData?: CSRFData
 	): Promise<EventInfoData> => {
-		if (isEmpty(eventData) || !has(eventData, 'eventNo'))
-			throw new Error('No event data');
+		this.#validate(eventData);
 		return await this.event.detail(eventData, csrfData);
 	};
 
@@ -37,5 +36,14 @@ export default class EventService {
 	): Promise<EventProductPageData> => {
 		const pageData: PageData = { page, size: 12 };
 		return await this.event.product(code, pageData);
+	};
+
+	/**
+	 * 이벤트 식별코드 유효성 검사
+	 * @param eventData 이벤트 식별코드
+	 */
+	#validate = (eventData: EventRequestData) => {
+		if (isEmpty(eventData) || !has(eventData, 'eventNo'))
+			throw new Error('No event data');
 	};
 }

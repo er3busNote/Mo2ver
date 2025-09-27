@@ -8,12 +8,16 @@ import {
 } from '@utils/jwttoken';
 
 const handleResponse = (response: AxiosResponse, dispatch: Dispatch) => {
-	dispatch(tokenSuccess(response.data));
-	return response.data;
+	const { status, headers, data } = response;
+	if (status === 201) {
+		data.createId = headers.location.replace('/create/', '');
+	}
+	dispatch(tokenSuccess(data));
+	return data;
 };
 
 const handleError = (error: AxiosError, dispatch: Dispatch) => {
-	const { status } = error.response as AxiosResponse;
+	const { status, data } = error.response as AxiosResponse;
 	if (status === 403) {
 		if (isAuthenticated()) {
 			const accessToken = getAccessToken();
@@ -28,7 +32,7 @@ const handleError = (error: AxiosError, dispatch: Dispatch) => {
 	} else {
 		dispatch(toastMessage({ message: error.message, type: 'error' }));
 	}
-	return error.response?.data;
+	return data;
 };
 
 export { handleResponse, handleError };

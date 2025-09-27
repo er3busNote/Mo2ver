@@ -190,7 +190,7 @@ interface BannerData {
 }
 
 interface BannerRequestData {
-	bannerNo: number;
+	bannerNo: string;
 	displayTemplateCode: string;
 }
 
@@ -251,7 +251,7 @@ interface EventData {
 }
 
 interface EventRequestData {
-	eventNo: number;
+	eventNo: string;
 }
 
 interface EventPageData extends PageableData {

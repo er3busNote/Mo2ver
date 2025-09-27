@@ -22,12 +22,7 @@ export default class BannerService {
 		bannerData: BannerRequestData,
 		csrfData?: CSRFData
 	): Promise<BannerGoodsInfoData> => {
-		if (
-			isEmpty(bannerData) ||
-			!has(bannerData, 'bannerNo') ||
-			!has(bannerData, 'displayTemplateCode')
-		)
-			throw new Error('No banner data');
+		this.#validate(bannerData);
 		return await this.banner.goodsDetail(bannerData, csrfData);
 	};
 
@@ -35,17 +30,25 @@ export default class BannerService {
 		bannerData: BannerRequestData,
 		csrfData?: CSRFData
 	): Promise<BannerImageInfoData> => {
-		if (
-			isEmpty(bannerData) ||
-			!has(bannerData, 'bannerNo') ||
-			!has(bannerData, 'displayTemplateCode')
-		)
-			throw new Error('No banner data');
+		this.#validate(bannerData);
 		return await this.banner.imagesDetail(bannerData, csrfData);
 	};
 
 	getBannerPageList = async (page: number): Promise<BannerPageData> => {
 		const pageData: PageData = { page, size: 12 };
 		return await this.banner.list(pageData);
+	};
+
+	/**
+	 * 배너 식별코드 유효성 검사
+	 * @param bannerData 배너 식별코드
+	 */
+	#validate = (bannerData: BannerRequestData) => {
+		if (
+			isEmpty(bannerData) ||
+			!has(bannerData, 'bannerNo') ||
+			!has(bannerData, 'displayTemplateCode')
+		)
+			throw new Error('No banner data');
 	};
 }

@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { ActionCreatorsMapObject } from 'redux';
 import { BannerPageData } from '@/types/api';
 import BannerService from '@services/BannerService';
@@ -22,7 +22,7 @@ const useBannerPageList = ({
 	const { data } = useQuery<BannerPageData>({
 		queryKey: ['bannerPageList', page],
 		queryFn: () => service.getBannerPageList(page),
-		staleTime: 5 * 60 * 1000,
+		placeholderData: keepPreviousData,
 	});
 
 	return { data, setPage };

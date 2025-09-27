@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-import { AxiosResponse } from 'axios';
 import {
 	useQuery,
 	useMutation,
@@ -8,7 +7,9 @@ import {
 } from '@tanstack/react-query';
 import { ActionCreatorsMapObject } from 'redux';
 import { BannerRequestData, BannerGoodsInfoData, CSRFData } from '@/types/api';
+import { CreateResponse } from '@/types/handler';
 import BannerService from '@services/BannerService';
+import { isEmpty, has } from 'lodash';
 
 interface BannerDetailProps {
 	banner: ActionCreatorsMapObject;
@@ -37,14 +38,18 @@ const useBannerGoodsDetail = ({
 	const query = useQuery<BannerGoodsInfoData>({
 		queryKey: ['bannerGoodsDetail', bannerData, csrfData?.csrfToken],
 		queryFn: () => service.getBannerGoodsDetail(bannerData, csrfData),
+		enabled:
+			!isEmpty(bannerData) &&
+			has(bannerData, 'bannerNo') &&
+			has(bannerData, 'displayTemplateCode'),
 		staleTime: 0,
 		refetchOnMount: 'always',
 	});
 	const create = useMutation({
 		mutationFn: (bannerFormData: BannerGoodsInfoData) =>
 			banner.goodsCreate(bannerFormData, csrfData),
-		onSuccess: (response: AxiosResponse) => {
-			const bannerNo = response?.headers.location.replace('/create/', '');
+		onSuccess: (response: CreateResponse) => {
+			const bannerNo = response?.createId;
 			const bannerData: BannerRequestData = {
 				bannerNo: bannerNo,
 				displayTemplateCode: 'GD',
