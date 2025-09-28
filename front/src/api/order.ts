@@ -26,7 +26,7 @@ const order = (instance: AxiosInstance) => {
 							'X-XSRF-TOKEN': csrfData?.csrfToken,
 						},
 					})
-					.then((response: AxiosResponse) => response)
+					.then((response: AxiosResponse) => handleResponse(response, dispatch))
 					.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 주문 쿠폰 정보 수정 API : <baseURL>/order/update/coupon
 		updateCoupon:

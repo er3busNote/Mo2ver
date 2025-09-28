@@ -45,6 +45,7 @@ const useBannerGoodsDetail = ({
 		staleTime: 0,
 		refetchOnMount: 'always',
 	});
+
 	const create = useMutation({
 		mutationFn: (bannerFormData: BannerGoodsInfoData) =>
 			banner.goodsCreate(bannerFormData, csrfData),
@@ -58,11 +59,13 @@ const useBannerGoodsDetail = ({
 			query.refetch();
 		},
 	});
+
 	const update = useMutation({
 		mutationFn: (bannerFormData: BannerGoodsInfoData) =>
 			banner.goodsUpdate(bannerFormData, csrfData),
 		onSuccess: () => query.refetch(),
 	});
+
 	return {
 		data: query.data,
 		isLoading: query.isLoading,

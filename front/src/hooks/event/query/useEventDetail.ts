@@ -42,6 +42,7 @@ const useEventDetail = ({
 		staleTime: 0,
 		refetchOnMount: 'always',
 	});
+
 	const create = useMutation({
 		mutationFn: (eventFormData: EventInfoData) =>
 			event.create(eventFormData, csrfData),
@@ -52,11 +53,13 @@ const useEventDetail = ({
 			query.refetch();
 		},
 	});
+
 	const update = useMutation({
 		mutationFn: (eventFormData: EventInfoData) =>
 			event.update(eventFormData, csrfData),
 		onSuccess: () => query.refetch(),
 	});
+
 	return {
 		data: query.data,
 		isLoading: query.isLoading,

@@ -44,6 +44,7 @@ const useBannerImagesDetail = ({
 			has(bannerData, 'displayTemplateCode'),
 		refetchOnMount: 'always',
 	});
+
 	const create = useMutation({
 		mutationFn: (bannerFormData: BannerImageInfoData) =>
 			banner.imagesCreate(bannerFormData, csrfData),
@@ -57,11 +58,13 @@ const useBannerImagesDetail = ({
 			query.refetch();
 		},
 	});
+
 	const update = useMutation({
 		mutationFn: (bannerFormData: BannerImageInfoData) =>
 			banner.imagesUpdate(bannerFormData, csrfData),
 		onSuccess: () => query.refetch(),
 	});
+
 	return {
 		data: query.data,
 		isLoading: query.isLoading,

@@ -4,6 +4,7 @@ import { ActionCreatorsMapObject } from 'redux';
 import { changeNext, menuActive } from '@store/index';
 import createTitleData from '@navigate/createTitleData';
 import { CSRFData, OrderRequestData } from '@/types/api';
+import { CreateResponse } from '@/types/handler';
 
 const path = '/order';
 
@@ -32,8 +33,11 @@ const goToOrderForm = async ({
 		prevTitle: title,
 		prevDescription: description,
 	});
-	const { headers } = await order.create(orderRequestData, csrfData);
-	const orderId = headers.location.replace('/create/', '');
+	const response: CreateResponse = await order.create(
+		orderRequestData,
+		csrfData
+	);
+	const orderId = response?.createId;
 	const state = { orderId };
 	dispatch(changeNext(titleData));
 	dispatch(menuActive(path));
