@@ -13,7 +13,7 @@ interface GoodsSearchProps {
 }
 
 interface GoodsListResultProps {
-	data: GoodsPageData | undefined;
+	data?: GoodsPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 

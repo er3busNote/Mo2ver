@@ -19,10 +19,10 @@ interface EventDetailProps {
 }
 
 interface EventDetailResultProps {
-	data: EventInfoData | undefined;
+	data?: EventInfoData;
 	isLoading: boolean;
 	refetch: (
-		options?: RefetchOptions | undefined
+		options?: RefetchOptions
 	) => Promise<QueryObserverResult<EventInfoData, Error>>;
 	create: (eventFormData: EventInfoData) => void;
 	update: (eventFormData: EventInfoData) => void;

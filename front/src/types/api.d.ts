@@ -166,7 +166,7 @@ interface ReviewData {
 interface ReviewInfoData {
 	reviewNo?: number;
 	goodsCode: string;
-	upperReviewNo?: number | undefined;
+	upperReviewNo?: number;
 	reviewImg?: string;
 	reviewContents: string;
 	rating: number;

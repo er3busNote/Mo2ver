@@ -19,10 +19,10 @@ interface BannerDetailProps {
 }
 
 interface BannerDetailResultProps {
-	data: BannerGoodsInfoData | undefined;
+	data?: BannerGoodsInfoData;
 	isLoading: boolean;
 	refetch: (
-		options?: RefetchOptions | undefined
+		options?: RefetchOptions
 	) => Promise<QueryObserverResult<BannerGoodsInfoData, Error>>;
 	create: (bannerFormData: BannerGoodsInfoData) => void;
 	update: (bannerFormData: BannerGoodsInfoData) => void;

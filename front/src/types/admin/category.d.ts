@@ -5,7 +5,7 @@ import { CategoryFormValues } from '@/types/admin/form';
 interface CategoryProps {
 	onSubmit: (
 		data: CategoryFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
+		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 	categoryData?: Array<CategoryData>;
 }

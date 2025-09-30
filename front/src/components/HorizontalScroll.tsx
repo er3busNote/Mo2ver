@@ -23,7 +23,7 @@ interface HorizontalScrollProps {
 	slidesPerView: number;
 	spaceBetween: number;
 	file: ActionCreatorsMapObject;
-	files: Array<FileData> | undefined;
+	files?: Array<FileData>;
 	type?: 'deault' | 'display';
 	size?: 'deault' | 'small';
 }

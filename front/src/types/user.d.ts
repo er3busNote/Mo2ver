@@ -23,7 +23,7 @@ interface UserProps {
 	title: string;
 	description: string;
 	member: ActionCreatorsMapObject;
-	goodsData: GoodsPageData;
+	goodsData?: GoodsPageData;
 	setGoodsPage: Dispatch<SetStateAction<number>>;
 	setSearchGoodsData: Dispatch<SetStateAction<SearchGoodsResuqestData>>;
 }

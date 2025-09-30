@@ -9,7 +9,7 @@ interface CartListProps {
 }
 
 interface CartListResultProps {
-	data: CartPageData | undefined;
+	data?: CartPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	setTotalPrice: Dispatch<SetStateAction<number>>;
 }

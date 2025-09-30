@@ -14,7 +14,7 @@ interface GoodsRegisterProps {
 	file: ActionCreatorsMapObject;
 	onSubmit: (
 		data: RegisterFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
+		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 

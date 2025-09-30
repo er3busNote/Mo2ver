@@ -7,7 +7,7 @@ import Api from '@api/index';
 import { TitleState } from '@/types/store';
 import { GoodsProps } from '@/types/goods';
 import useGoodsPageList from '@hooks/goods/query/useGoodsPageList';
-import useSearchGoodsList from '@services/search/useSearchGoodsList';
+import useSearchGoodsList from '@hooks/search/query/useSearchGoodsList';
 import GoodsList from './GoodsList';
 import NotFound from '../NotFound';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -128,7 +128,7 @@ const GoodsPage: FC<GoodsDispatchProps> = ({
 			/>
 		);
 	} else if (keyword) {
-		const [goodsData, setPage] = useSearchGoodsList({
+		const { data: goodsData, setPage } = useSearchGoodsList({
 			search,
 			keyword,
 		});

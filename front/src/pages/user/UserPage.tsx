@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useSearchMyGoodsList from '@services/search/useSearchMyGoodsList';
+import useSearchMyGoodsList from '@hooks/search/query/useSearchMyGoodsList';
 import UserDetailPC from './UserDetailPC';
 import UserDetailMobile from './UserDetailMobile';
 import { Box, Paper, useTheme, useMediaQuery } from '@mui/material';

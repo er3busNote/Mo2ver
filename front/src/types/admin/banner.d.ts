@@ -16,7 +16,7 @@ interface BannerProps {
 interface BannerImageProp {
 	title: string;
 	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	groupCodeData?: Record<string, Array<CodeData>>;
 	type: 'Create' | 'Update';
 	onSubmit: (
 		data: BannerImageFormValues,
@@ -27,7 +27,7 @@ interface BannerImageProp {
 interface BannerVideoProp {
 	title: string;
 	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	groupCodeData?: Record<string, Array<CodeData>>;
 	onSubmit: (
 		data: BannerVideoFormValues,
 		event?: BaseSyntheticEvent<object, any, any>
@@ -37,7 +37,7 @@ interface BannerVideoProp {
 interface BannerGoodsProp {
 	title: string;
 	description: string;
-	groupCodeData: Record<string, Array<CodeData>> | undefined;
+	groupCodeData?: Record<string, Array<CodeData>>;
 	type: 'Create' | 'Update';
 	onSubmit: (
 		data: BannerGoodsFormValues,

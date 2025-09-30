@@ -56,7 +56,7 @@ interface LayoutDefaultProps {
 	title: string;
 	description: string;
 	open: boolean;
-	type: 'success' | 'info' | 'warning' | 'error' | undefined;
+	type?: 'success' | 'info' | 'warning' | 'error';
 	message: string;
 	children?: ReactElement;
 	member: ActionCreatorsMapObject;

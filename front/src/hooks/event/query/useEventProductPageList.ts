@@ -10,7 +10,7 @@ interface EventProductListProps {
 }
 
 interface EventProductListResultProps {
-	data: EventProductPageData | undefined;
+	data?: EventProductPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 

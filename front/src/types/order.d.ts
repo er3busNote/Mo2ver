@@ -19,13 +19,13 @@ interface OrderProps {
 	addressData?: AddressData;
 	orderData?: OrderInfoData;
 	onAddressRefetch: (
-		options?: RefetchOptions | undefined
+		options?: RefetchOptions
 	) => Promise<QueryObserverResult<AddressData, Error>>;
 	onCouponApply: (orderCouponData: OrderCouponData) => void;
 	onPointApply: (orderPointData: OrderPointData) => void;
 	onSubmit: (
 		data: OrderFormValues,
-		event?: BaseSyntheticEvent<object, any, any> | undefined
+		event?: BaseSyntheticEvent<object, any, any>
 	) => void;
 }
 

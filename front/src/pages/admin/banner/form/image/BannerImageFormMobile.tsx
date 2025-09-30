@@ -42,7 +42,7 @@ const tableBorderHeader = '3px solid #333';
 
 interface ModalProps {
 	index: number;
-	control: Control<BannerImageFormValues> | undefined;
+	control?: Control<BannerImageFormValues>;
 	open: boolean;
 	handleClose: () => void;
 	style: SxProps<Theme>;

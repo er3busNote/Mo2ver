@@ -9,7 +9,7 @@ interface EventListProps {
 }
 
 interface EventListResultProps {
-	data: EventPageData | undefined;
+	data?: EventPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 

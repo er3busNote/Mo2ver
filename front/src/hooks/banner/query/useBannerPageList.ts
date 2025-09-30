@@ -9,7 +9,7 @@ interface BannerListProps {
 }
 
 interface BannerListResultProps {
-	data: BannerPageData | undefined;
+	data?: BannerPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 

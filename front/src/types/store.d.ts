@@ -43,7 +43,7 @@ interface MenuState {
 }
 
 interface ToastInfo {
-	type: 'success' | 'info' | 'warning' | 'error' | undefined;
+	type?: 'success' | 'info' | 'warning' | 'error';
 	message: string;
 }
 
