@@ -4,7 +4,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import useNoticePageList from '@services/notice/useNoticePageList';
+import useNoticePageList from '@hooks/notice/query/useNoticePageList';
 import NoticeList from './NoticeList';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { NoticeProps } from '@/types/notice';
@@ -70,7 +70,7 @@ const NoticePage: FC<NoticeDispatchProps> = ({
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const [noticeData, setPage] = useNoticePageList({ notice });
+	const { data: noticeData, setPage } = useNoticePageList({ notice });
 
 	return (
 		<>

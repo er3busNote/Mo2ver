@@ -15,7 +15,7 @@ interface NoticeProps {
 	title: string;
 	description: string;
 	setPage: Dispatch<SetStateAction<number>>;
-	noticePageData: NoticePageData;
+	noticePageData?: NoticePageData;
 }
 
 export type { NoticeProp, NoticeProps };

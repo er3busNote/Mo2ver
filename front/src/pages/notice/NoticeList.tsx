@@ -27,16 +27,13 @@ const NoticeList: FC<NoticeProps> = ({
 	noticeData,
 	setPage,
 }): JSX.Element => {
-	const {
-		content,
-		totalElements,
-		totalPages,
-		//pageable: { pageNumber, pageSize },
-	} = noticeData;
 	const theme = useTheme();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
-	const pageNumber = noticeData.pageable?.pageNumber ?? 0;
-	const pageSize = noticeData.pageable?.pageSize ?? 12;
+	const content = noticeData?.content ?? [];
+	const totalElements = noticeData?.totalElements ?? 0;
+	const totalPages = noticeData?.totalPages ?? 0;
+	const pageNumber = noticeData?.pageable?.pageNumber ?? 0;
+	const pageSize = noticeData?.pageable?.pageSize ?? 12;
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 

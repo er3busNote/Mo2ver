@@ -255,30 +255,29 @@ const NoticeMobile: FC<NoticeProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{noticePageData.content &&
-							noticePageData.content.map((data: NoticeData, index: number) => (
-								<TableRow key={index}>
-									<TableCell sx={dataTd} align="center">
-										{data.noticeNo}
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										<Link
-											component="button"
-											variant="body2"
-											onClick={() => updateClick(data.noticeNo)}
-										>
-											{data.subject}
-										</Link>
-									</TableCell>
-									<TableCell sx={dataTd} align="center">
-										{data.noticeYesNo}
-									</TableCell>
-								</TableRow>
-							))}
+						{noticePageData?.content.map((data: NoticeData, index: number) => (
+							<TableRow key={index}>
+								<TableCell sx={dataTd} align="center">
+									{data.noticeNo}
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									<Link
+										component="button"
+										variant="body2"
+										onClick={() => updateClick(data.noticeNo)}
+									>
+										{data.subject}
+									</Link>
+								</TableCell>
+								<TableCell sx={dataTd} align="center">
+									{data.noticeYesNo}
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							{noticePageData.totalElements && (
+							{noticePageData?.totalElements && (
 								<TablePageNavigator
 									size={noticePageData.size}
 									totalElements={noticePageData.totalElements}

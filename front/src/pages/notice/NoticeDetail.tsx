@@ -90,14 +90,14 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 			<AppSubHeader title={title} description={description} />
 			<Box sx={noticeBox}>
 				<Box sx={noticeHeader}>
-					<Box>{noticeData.subject}</Box>
-					<Box sx={registerDate}>{noticeData.registerDate}</Box>
+					<Box>{noticeData?.subject}</Box>
+					<Box sx={registerDate}>{noticeData?.registerDate}</Box>
 				</Box>
 				<Box
 					sx={contents}
-					dangerouslySetInnerHTML={{ __html: noticeData.contents }}
+					dangerouslySetInnerHTML={{ __html: noticeData?.contents || '' }}
 				/>
-				{!isEmpty(noticeData.noticeFileList) && (
+				{!isEmpty(noticeData?.noticeFileList) && (
 					<TableContainer>
 						<Table>
 							<TableBody>
@@ -106,47 +106,45 @@ const NoticeDetail: FC<NoticeDetailProps> = ({
 									{isDesktop && <TableCell sx={fileHeader}>첨부파일</TableCell>}
 									<TableCell sx={fileBody}>
 										<List sx={fileList}>
-											{noticeData.noticeFileList &&
-												noticeData.noticeFileList.map(
-													(fileData: FileData, index: number) => (
-														<ListItem
-															key={index}
-															secondaryAction={
-																<IconButton
-																	onClick={() =>
-																		onDonwloadFile(
-																			fileData.fileAttachCode,
-																			fileData.fileName
-																		)
-																	}
-																>
-																	<DownloadOutlinedIcon fontSize="small" />
-																</IconButton>
-															}
-															disablePadding
-														>
-															<ListItemText
-																primary={
-																	<Typography
-																		sx={fileItem}
-																		variant="caption"
-																		noWrap
-																	>
-																		{fileData.fileName}{' '}
-																		<Typography
-																			sx={fileSize}
-																			component="span"
-																			color="text.secondary"
-																		>
-																			({(fileData.fileSize / 1024).toFixed(2)}{' '}
-																			KB)
-																		</Typography>
-																	</Typography>
+											{noticeData?.noticeFileList.map(
+												(fileData: FileData, index: number) => (
+													<ListItem
+														key={index}
+														secondaryAction={
+															<IconButton
+																onClick={() =>
+																	onDonwloadFile(
+																		fileData.fileAttachCode,
+																		fileData.fileName
+																	)
 																}
-															/>
-														</ListItem>
-													)
-												)}
+															>
+																<DownloadOutlinedIcon fontSize="small" />
+															</IconButton>
+														}
+														disablePadding
+													>
+														<ListItemText
+															primary={
+																<Typography
+																	sx={fileItem}
+																	variant="caption"
+																	noWrap
+																>
+																	{fileData.fileName}{' '}
+																	<Typography
+																		sx={fileSize}
+																		component="span"
+																		color="text.secondary"
+																	>
+																		({(fileData.fileSize / 1024).toFixed(2)} KB)
+																	</Typography>
+																</Typography>
+															}
+														/>
+													</ListItem>
+												)
+											)}
 										</List>
 									</TableCell>
 								</TableRow>

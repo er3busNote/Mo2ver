@@ -4,14 +4,14 @@ import { NoticeData, NoticePageData } from '@/types/api';
 interface NoticeProps {
 	title: string;
 	description: string;
-	noticeData: NoticePageData;
+	noticeData?: NoticePageData;
 	setPage: Dispatch<SetStateAction<number>>;
 }
 
 interface NoticeDetailProps {
 	title: string;
 	description: string;
-	noticeData: NoticeData;
+	noticeData?: NoticeData;
 	onDonwloadFile: (attachFile: string, filename: string) => void;
 }
 

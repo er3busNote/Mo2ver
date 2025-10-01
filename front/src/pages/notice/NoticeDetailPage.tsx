@@ -5,7 +5,7 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 import Api from '@api/index';
 import { TitleState } from '@/types/store';
-import useNoticeInfo from '@services/notice/useNoticeInfo';
+import useNoticeInfo from '@hooks/notice/query/useNoticeInfo';
 import NoticeDetail from './NoticeDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { NoticeDetailProps } from '@/types/notice';
@@ -76,7 +76,7 @@ const NoticeDetailPage: FC<NoticeDetailDispatchProps> = ({
 
 	const { id } = useParams();
 	const code = id ?? '';
-	const noticeData = useNoticeInfo({ notice, code });
+	const { data: noticeData } = useNoticeInfo({ notice, code });
 
 	const onDonwloadFile = async (attachFile: string, filename: string) => {
 		const blob = await file.download(attachFile);

@@ -10,7 +10,7 @@ import { TitleState } from '@/types/store';
 import Api from '@api/index';
 import { NoticeRequestData, NoticeInfoData } from '@/types/api';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
-import useNoticeDetail from '@services/notice/useNoticeDetail';
+import useNoticeDetail from '@hooks/notice/query/useNoticeDetail';
 import NoticeFormPC from './NoticeFormPC';
 import NoticeFormMobile from './NoticeFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -97,7 +97,7 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 		const noticeData: NoticeRequestData = {
 			noticeNo: noticeNo,
 		};
-		const noticeInfo = useNoticeDetail({
+		const { data: noticeInfo } = useNoticeDetail({
 			notice,
 			noticeData,
 			csrfData,
