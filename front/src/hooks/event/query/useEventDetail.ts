@@ -9,7 +9,7 @@ import { ActionCreatorsMapObject } from 'redux';
 import { EventRequestData, EventInfoData, CSRFData } from '@/types/api';
 import { CreateResponse } from '@/types/handler';
 import EventService from '@services/EventService';
-import { isEmpty, has } from 'lodash';
+import { isEmpty, get } from 'lodash';
 
 interface EventDetailProps {
 	event: ActionCreatorsMapObject;
@@ -38,7 +38,7 @@ const useEventDetail = ({
 	const query = useQuery<EventInfoData>({
 		queryKey: ['eventDetail', eventData, csrfData?.csrfToken],
 		queryFn: () => service.getEventDetail(eventData, csrfData),
-		enabled: !isEmpty(eventData) && has(eventData, 'eventNo'),
+		enabled: isEmpty(get(eventData, 'eventNo', '')),
 		staleTime: 0,
 		refetchOnMount: 'always',
 	});

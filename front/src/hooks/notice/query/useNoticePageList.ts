@@ -22,7 +22,6 @@ const useNoticePageList = ({
 	const { data } = useQuery<NoticePageData>({
 		queryKey: ['noticeList', page],
 		queryFn: () => service.getNoticePageList(page),
-		staleTime: 5 * 60 * 1000,
 		placeholderData: keepPreviousData,
 	});
 

@@ -1,8 +1,8 @@
-import React, { FC, useState, BaseSyntheticEvent } from 'react';
+import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Dispatch as DispatchAction } from '@reduxjs/toolkit';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -76,15 +76,32 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 	notice,
 }): JSX.Element => {
 	const theme = useTheme();
+	const location = useLocation();
 	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const navigate = useNavigate();
-	const location = useLocation();
 	const { data: csrfData } = useCSRFToken({ member });
+
+	const [componentType, setComponentType] = useState<'Create' | 'Update'>(
+		location.state?.noticeNo ? 'Update' : 'Create'
+	);
+
 	const [noticeNo, setNoticeNo] = useState<number>();
-	const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
-	const componentType = location.state?.noticeNo ? 'Update' : 'Create';
+	const [noticeData, setNoticeData] = useState<NoticeRequestData>(
+		new Object() as NoticeRequestData
+	);
+	const {
+		data: noticeInfo,
+		isLoading,
+		refetch: onNoticeRefetch,
+		create,
+		update,
+	} = useNoticeDetail({
+		notice,
+		noticeData,
+		setNoticeData,
+		csrfData,
+	});
 
 	const methods = useForm<NoticeFormValues>({
 		mode: 'onChange',
@@ -92,27 +109,31 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 		resolver: yupResolver(noticeSchema),
 	});
 
-	if (componentType === 'Update') {
-		const noticeNo = location.state?.noticeNo;
-		const noticeData: NoticeRequestData = {
-			noticeNo: noticeNo,
-		};
-		const { data: noticeInfo } = useNoticeDetail({
-			notice,
-			noticeData,
-			csrfData,
-		});
-		if (noticeInfo && !isDataLoaded) {
+	useEffect(() => {
+		if (noticeInfo && !isLoading) {
 			const { reset } = methods;
 			reset({
 				title: noticeInfo.title,
 				contents: noticeInfo.contents,
 				noticeFiles: noticeInfo.noticeFiles,
 			});
-			if (noticeInfo.noticeNo) setNoticeNo(noticeInfo.noticeNo);
-			setIsDataLoaded(true);
+			if (noticeInfo.noticeNo) {
+				setNoticeNo(noticeInfo.noticeNo);
+				setComponentType('Update');
+			}
 		}
-	}
+	}, [noticeData, isLoading]);
+
+	useEffect(() => {
+		if (componentType === 'Update') {
+			const noticeNo = location.state?.noticeNo;
+			const noticeData: NoticeRequestData = {
+				noticeNo: noticeNo,
+			};
+			setNoticeData(noticeData);
+			onNoticeRefetch();
+		}
+	}, []);
 
 	const submitForm = async (
 		data: NoticeFormValues,
@@ -126,18 +147,15 @@ const NoticeFormPage: FC<NoticeDispatchProps> = ({
 		if (componentType === 'Update') {
 			noticeFormData.noticeNo = noticeNo;
 		}
-		if (componentType === 'Create')
-			await notice.create(noticeFormData, csrfData);
-		if (componentType === 'Update')
-			await notice.update(noticeFormData, csrfData);
+		if (componentType === 'Create') await create(noticeFormData);
+		if (componentType === 'Update') await update(noticeFormData);
 		if (noticeForm) noticeForm.preventDefault(); // 새로고침 방지
-		navigate('/admin/notice');
 	};
 
 	return (
 		<Box sx={{ py: 2, pl: 4, pr: 4, mb: 10 }}>
 			{(componentType === 'Create' ||
-				(componentType === 'Update' && isDataLoaded)) && (
+				(componentType === 'Update' && !isLoading)) && (
 				<FormProvider {...methods}>
 					{isDesktop && (
 						<NoticeFormPC

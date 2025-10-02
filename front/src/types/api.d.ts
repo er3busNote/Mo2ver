@@ -309,7 +309,7 @@ interface NoticeData {
 }
 
 interface NoticeRequestData {
-	noticeNo: number;
+	noticeNo: string;
 }
 
 interface NoticePageData extends PageableData {
