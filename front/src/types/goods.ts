@@ -29,7 +29,7 @@ interface GoodsDetailProps {
 	description: string;
 	file: ActionCreatorsMapObject;
 	goodsData?: GoodsDetailData;
-	reviewData: ReviewPageData;
+	reviewData?: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
 	onReviewMod: (reviewInfo: ReviewInfoData) => void;

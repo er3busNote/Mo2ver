@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash';
 
 interface ReviewListProps {
 	goodsCode: string;
-	reviewPageData: ReviewPageData;
+	reviewPageData?: ReviewPageData;
 	setPage: Dispatch<SetStateAction<number>>;
 	onReviewAdd: (reviewInfo: ReviewInfoData) => void;
 	onReviewMod: (reviewInfo: ReviewInfoData) => void;
@@ -33,23 +33,22 @@ const ReviewList: FC<ReviewListProps> = ({
 				goodsCode={goodsCode}
 				onReplySubmit={onReviewAdd}
 			></ReviewInput>
-			{!isEmpty(reviewPageData.content) && (
+			{!isEmpty(reviewPageData?.content) && (
 				<Box sx={infoCard}>
-					{reviewPageData.content &&
-						reviewPageData.content.map(
-							(reviewData: ReviewData, index: number) => (
-								<ReviewCard
-									key={index}
-									reviewData={reviewData}
-									onReplySubmit={onReviewAdd}
-									onReplyModify={onReviewMod}
-									isRoot={true}
-									depth={0}
-								></ReviewCard>
-							)
-						)}
+					{reviewPageData?.content.map(
+						(reviewData: ReviewData, index: number) => (
+							<ReviewCard
+								key={index}
+								reviewData={reviewData}
+								onReplySubmit={onReviewAdd}
+								onReplyModify={onReviewMod}
+								isRoot={true}
+								depth={0}
+							></ReviewCard>
+						)
+					)}
 					<Box mb={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-						{reviewPageData.totalPages && (
+						{reviewPageData?.totalPages && (
 							<PageNavigator
 								count={reviewPageData.totalPages}
 								setPage={setPage}

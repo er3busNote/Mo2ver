@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(
@@ -126,7 +127,10 @@ public class Review {
                 .goodsReviewNo(goodsReviewRequest.getUpperReviewNo())
                 .goods(goods)
                 .member(currentUser)
-                .imageAttachFile(JasyptUtil.getDecryptor(goodsReviewRequest.getReviewImg()))
+                .imageAttachFile(Optional.ofNullable(goodsReviewRequest.getReviewImg())
+                        .filter(img -> !img.trim().isEmpty())
+                        .map(JasyptUtil::getDecryptor)
+                        .orElse(null))
                 .reviewContents(goodsReviewRequest.getReviewContents())
                 .rating(goodsReviewRequest.getRating())
                 .register(currentUser.getMemberNo())

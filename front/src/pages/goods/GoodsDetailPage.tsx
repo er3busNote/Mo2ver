@@ -14,7 +14,7 @@ import {
 import { GoodsDetailProps } from '@/types/goods';
 import useCSRFToken from '@hooks/member/query/useCSRFToken';
 import useGoodsDetail from '@hooks/goods/query/useGoodsDetail';
-import useReviewPageList from '@services/review/useReviewPageList';
+import useReviewPageList from '@hooks/review/query/useReviewPageList';
 import GoodsDetail from './GoodsDetail';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import goToOrderForm from '@navigate/order/goToOrderForm';
@@ -89,7 +89,7 @@ const GoodsDetailMobile: FC<GoodsDetailProps> = ({
 				description={description}
 				file={file}
 				goodsData={goodsData}
-				reviewPageData={reviewData}
+				reviewData={reviewData}
 				setPage={setPage}
 				onReviewAdd={onReviewAdd}
 				onReviewMod={onReviewMod}
@@ -117,7 +117,11 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const { id } = useParams();
 	const code = id ?? '';
 	const { data: goodsData } = useGoodsDetail({ goods, code });
-	const [reviewData, setPage, setReload] = useReviewPageList({ review, code });
+	const {
+		data: reviewData,
+		setPage,
+		refetch: onReviewPageRefetch,
+	} = useReviewPageList({ review, code });
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -126,12 +130,12 @@ const GoodsDetailPage: FC<GoodsDetailDispatchProps> = ({
 	const onReviewAdd = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
 		await review.create(reviewInfo, csrfData);
-		setReload(true);
+		onReviewPageRefetch();
 	};
 	const onReviewMod = async (reviewInfo: ReviewInfoData) => {
 		const csrfData = await member.csrf();
 		await review.update(reviewInfo, csrfData);
-		setReload(true);
+		onReviewPageRefetch();
 	};
 	const cartAdd = async (cartData: CartData) => {
 		const csrfData = await member.csrf();
