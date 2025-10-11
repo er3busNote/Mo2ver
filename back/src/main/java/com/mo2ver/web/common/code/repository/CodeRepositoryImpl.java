@@ -30,7 +30,7 @@ public class CodeRepositoryImpl implements CodeRepositoryCustom {
                 .orderBy(groupCode.sortSequence.asc(), code.sortSequence.asc())
                 .transform(groupBy(groupCode.commonGroupCode).as(
                         list(Projections.constructor(CodeResponse.class,
-                                code.commonCode,
+                                code.codeId.commonCode,
                                 code.commonCodeName,
                                 code.description,
                                 code.sortSequence
@@ -50,7 +50,7 @@ public class CodeRepositoryImpl implements CodeRepositoryCustom {
                                 groupCode.commonGroupCode,
                                 groupCode.commonCodeGroupName,
                                 list(Projections.constructor(CodeResponse.class,
-                                        code.commonCode,
+                                        code.codeId.commonCode,
                                         code.commonCodeName,
                                         code.description,
                                         code.sortSequence

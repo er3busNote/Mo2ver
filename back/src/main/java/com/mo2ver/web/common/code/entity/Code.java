@@ -3,10 +3,10 @@ package com.mo2ver.web.common.code.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,14 +17,13 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@EqualsAndHashCode(of = {"commonCode", "groupCode"})
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Code implements Serializable {
+public class Code implements Persistable<CodeId> {
 
-    @Id
-    @Column(name = "CMM_CD", columnDefinition = "CHAR(5) COMMENT '공통코드'")
-    private String commonCode;
+    @EmbeddedId
+    private CodeId codeId;
 
+    @MapsId("groupCode")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "CMM_GRP_CD",
@@ -64,4 +63,15 @@ public class Code implements Serializable {
     @Column(name = "UPD_DT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '수정일시'")
     @UpdateTimestamp    // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    @Override
+    public CodeId getId() {
+        return codeId;
+    }
+
+    // 새로운 엔티티 판단 전략 재정의
+    @Override
+    public boolean isNew() {
+        return codeId == null || groupCode == null;
+    }
 }

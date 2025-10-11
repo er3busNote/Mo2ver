@@ -210,7 +210,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                             return queryFactory
                                     .select(code.commonCodeName)
                                     .from(code)
-                                    .where(code.commonCode.eq(commonCode))
+                                    .where(code.codeId.commonCode.eq(commonCode))
                                     .fetchOne();
                         },
                         Map.Entry::getValue, // Value는 변경 없이 유지

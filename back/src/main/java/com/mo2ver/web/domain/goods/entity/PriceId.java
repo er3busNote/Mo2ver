@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor @AllArgsConstructor
 public class PriceId implements Serializable {
     @Column(name = "GD_CD")
-    protected String goodsCode;
+    private String goodsCode;
     @Column(name = "GD_OPT_NO")
-    protected Long goodsOptionNo;
+    private Long goodsOptionNo;
 }

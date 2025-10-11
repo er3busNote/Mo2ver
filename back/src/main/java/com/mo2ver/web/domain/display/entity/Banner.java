@@ -27,8 +27,8 @@ import java.util.stream.IntStream;
 public class Banner {
 
     @Id
-    @GeneratedValue(generator = "deliveryCode")
-    @GenericGenerator(name = "deliveryCode", strategy = "com.mo2ver.web.domain.display.entity.BannerGenerator")
+    @GeneratedValue(generator = "bannerNo")
+    @GenericGenerator(name = "bannerNo", strategy = "com.mo2ver.web.domain.display.entity.BannerGenerator")
     @Column(name = "BNNR_NO", columnDefinition = "CHAR(10) COMMENT '배너번호'")
     private String bannerNo;
 
