@@ -7,7 +7,7 @@
             "request": "launch",
             "command": "yarn start",
             "serverReadyAction": {
-                "pattern": "- Local:.+(https?://.+)",
+                "pattern": "Local:\\s*(https?://localhost:\\d+)",
                 "uriFormat": "%s",
                 "action": "debugWithChrome"
             }
@@ -25,11 +25,5 @@
                 "file:///*": "${webRoot}/*"
             }
         },
-    ],
-    "compounds": [
-        {
-            "name": "Vite: Start & Debug",
-            "configurations": ["Start Vite Dev Server", "Attach Chrome (Vite)"]
-        }
     ]
 }
