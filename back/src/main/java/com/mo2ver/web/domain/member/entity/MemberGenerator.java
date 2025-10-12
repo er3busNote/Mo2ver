@@ -19,6 +19,7 @@ public class MemberGenerator implements IdentifierGenerator {
 
         Connection connection = null;
         String query = "SELECT MAX(MBR_NO) FROM MBR";
+        Member newMember = (Member) obj;
         try {
             connection = session.getJdbcConnectionAccess().obtainConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -27,7 +28,10 @@ public class MemberGenerator implements IdentifierGenerator {
             if (rs.next()) {
                 String lastMemberNo = rs.getString(1);
                 if (lastMemberNo != null) {
-                    return generateNextId(lastMemberNo);
+                    String memberNo = generateNextId(lastMemberNo);
+                    newMember.setRegister(memberNo);
+                    newMember.setUpdater(memberNo);
+                    return memberNo;
                 }
             }
         } catch (SQLException e) {
@@ -42,6 +46,8 @@ public class MemberGenerator implements IdentifierGenerator {
             }
         }
 
+        newMember.setRegister(FIRST_MEMBER_NO);
+        newMember.setUpdater(FIRST_MEMBER_NO);
         return FIRST_MEMBER_NO;
     }
 

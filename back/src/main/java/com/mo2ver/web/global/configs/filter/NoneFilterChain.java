@@ -16,6 +16,8 @@ public class NoneFilterChain {
                         "/notice/**", "/search/**", "/coupon/**"
                 ).permitAll()
 
+                .mvcMatchers(HttpMethod.GET, "/init/**").permitAll()    // 0) POST → GET : URI에서 직접 접근해서 처리
+
                 .mvcMatchers(HttpMethod.PATCH,   // 1) 인증
                         "/member/refresh"
                 ).permitAll()

@@ -2,6 +2,7 @@ package com.mo2ver.web.global.jwt;
 
 import com.mo2ver.web.global.common.cookie.CookieHelper;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,13 +32,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final AccessDeniedHandler accessDeniedHandler;
 
     @Override
-    public void doFilterInternal(HttpServletRequest httpServletRequest,
-                                 HttpServletResponse httpServletResponse,
-                                 FilterChain filterChain) throws IOException, ServletException {
+    public void doFilterInternal(@NotNull HttpServletRequest request,
+                                 @NotNull HttpServletResponse response,
+                                 @NotNull FilterChain filterChain) throws IOException, ServletException {
 
         // TODO 전처리
-        String accessToken = resolveToken(httpServletRequest);
-        String refreshToken = CookieHelper.resolveTokenFromCookie(httpServletRequest, REFRESH_TOKEN);
+        String accessToken = resolveToken(request);
+        String refreshToken = CookieHelper.resolveTokenFromCookie(request, REFRESH_TOKEN);
 
         if (validateToken(accessToken)) {
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
@@ -52,12 +53,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Authorization 헤더가 존재하는데, Refresh Token이 유효하지 않은 경우 → AccessDeniedHandler쪽으로 예외처리를 전파시킴
         if (!isAuthenticated() && StringUtils.hasText(accessToken) && !validateToken(refreshToken)) {
-            accessDeniedHandler.handle(httpServletRequest, httpServletResponse, new AccessDeniedException("Refresh Token이 올바르지 않습니다."));
+            accessDeniedHandler.handle(request, response, new AccessDeniedException("Refresh Token이 올바르지 않습니다."));
             return;
         }
 
         // 인증된 경우, 필터 체인 계속 진행
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        filterChain.doFilter(request, response);
         // TODO 후처리
     }
 

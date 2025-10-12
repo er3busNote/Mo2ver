@@ -55,16 +55,16 @@ public class Member {
     @NotBlank
     private String password;
 
-    @Column(name = "PWD_CHG_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '비밀번호변경일시'")
+    @Column(name = "PWD_CHG_DT", updatable = false, columnDefinition = "TIMESTAMP COMMENT '비밀번호변경일시'")
     private LocalDateTime passwordChangeDate;
 
-    @Column(name = "TMP_PWD_ISSU_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '임시비밀번호발급일시'")
+    @Column(name = "TMP_PWD_ISSU_DT", updatable = false, columnDefinition = "TIMESTAMP COMMENT '임시비밀번호발급일시'")
     private LocalDateTime tempPasswordIssueDate;
 
     @Column(name= "LOGIN_FAIL_CNT", columnDefinition = "INT(11) COMMENT '로그인실패횟수'")
     private Integer loginFailCount;
 
-    @Column(name = "LOGIN_FAIL_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '로그인실패일시'")
+    @Column(name = "LOGIN_FAIL_DT", updatable = false, columnDefinition = "TIMESTAMP COMMENT '로그인실패일시'")
     private LocalDateTime loginFailDate;
 
     @Column(name = "MBR_CND_CD", columnDefinition = "CHAR(5) COMMENT '회원상태코드'")
@@ -99,13 +99,15 @@ public class Member {
     @Column(name = "SMS_RCP_YN", columnDefinition = "CHAR(1) COMMENT '문자수신여부'")
     private Character snsReceptionYesNo;
 
+    @Builder.Default
     @Column(name = "JOIN_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '가입일시'")
-    private LocalDateTime joinDate;
+    @CreationTimestamp  // INSERT 시 자동으로 값을 채워줌
+    private LocalDateTime joinDate = LocalDateTime.now();
 
-    @Column(name = "LAST_ORD_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '최종주문일시'")
+    @Column(name = "LAST_ORD_DT", updatable = false, columnDefinition = "TIMESTAMP COMMENT '최종주문일시'")
     private LocalDateTime lastOrderDate;
 
-    @Column(name = "LAST_LOGIN_DT", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT current_timestamp() COMMENT '최종로그인일시'")
+    @Column(name = "LAST_LOGIN_DT", updatable = false, columnDefinition = "TIMESTAMP COMMENT '최종로그인일시'")
     private LocalDateTime lastloginDate;
 
     @Column(name = "SLEEP_YN", columnDefinition = "CHAR(1) COMMENT '휴먼여부'")

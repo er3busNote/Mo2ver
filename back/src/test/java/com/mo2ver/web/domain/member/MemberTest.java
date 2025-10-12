@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,20 +56,32 @@ public class MemberTest extends CsrfConfigTest {
 
         // When (실행)
         for (Integer num : numbers) {
-            SignupRequest signUpRequest = this.getSignupRequest(num);
-            this.memberService.signup(signUpRequest);
+            SignupRequest signupRequest = this.getSignupRequest(num);
+            if(nonSignupUser(signupRequest)) {
+                this.memberService.signup(signupRequest);
+            }
         }
 
         // Then (검증)
         Member memberNo = this.memberService.memberNoForUpdate();
-        assertThat(memberNo.getMemberNo()).isEqualTo("M000000013");
+        assertThat(memberNo.getMemberNo()).isEqualTo("MB00000011");
+    }
+
+    private boolean nonSignupUser(SignupRequest signupRequest) {
+        UserDetailsService userDetailsService = (UserDetailsService) memberService;
+        try {
+            userDetailsService.loadUserByUsername(signupRequest.getUsername());
+        } catch (UsernameNotFoundException e) {
+            return true;
+        }
+        return false;
     }
 
     private SignupRequest getSignupRequest(int num) {
         return SignupRequest.builder()
-                .username("test" + num+1)
-                .password("test" + num+1)
-                .email("test" + num+1 + "@test.com")
+                .username("test" + (num+1))
+                .password("test" + (num+1))
+                .email("test" + (num+1) + "@test.com")
                 .build();
     }
 }

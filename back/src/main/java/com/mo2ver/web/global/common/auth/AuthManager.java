@@ -18,4 +18,8 @@ public class AuthManager {
     public static boolean isManager(Set<MemberRole> roles) {
         return roles.stream().anyMatch(role -> role == MemberRole.MANAGER || role == MemberRole.ADMIN);
     }
+
+    public static boolean isAdmin(Set<MemberRole> roles) {
+        return roles.contains(MemberRole.ADMIN);
+    }
 }
