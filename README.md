@@ -37,9 +37,9 @@ Under construction of demo website.
 | :-----: | :-----: | :-----: | :-----: |
 | ![Home Page 01](./images/HOME_PC_01.PNG) | ![Home Page 02](./images/HOME_PC_02.PNG) | ![Home Page 03](./images/HOME_MOBILE_01.PNG) | ![Home Page 04](./images/GOODS_SEARCH_MOBILE_01.PNG) |
 
-- **대시보드** (PC) : 반응형 PC 대시보드 화면 (<ins>**개발 中**</ins>)
+- **대시보드** (PC) : 반응형 PC 대시보드 화면
 - **카테고리** (PC) : 반응형 PC 카테고리 화면
-- **대시보드 M** (MOBILE) : 반응형 Mobile 대시보드 화면 (<ins>**개발 中**</ins>)
+- **대시보드 M** (MOBILE) : 반응형 Mobile 대시보드 화면
 - **검색 M** (MOBILE) : 반응형 Mobile 검색 화면 (<ins>**개발 中**</ins>)
 
 | 상품 상세 | 상품 등록 | 장바구니 | 장바구니 M |
