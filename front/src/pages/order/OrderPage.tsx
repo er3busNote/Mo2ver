@@ -14,11 +14,13 @@ import useMemberInfo from '@hooks/member/query/useMemberInfo';
 import useAddressInfo from '@hooks/address/query/useAddressInfo';
 import useOrderInfo from '@hooks/order/query/useOrderInfo';
 import usePaymentInfo from '@hooks/payment/query/usePaymentInfo';
+import useTossPaymentWidget from '@hooks/payment/ui/useTossPaymentWidget';
 import OrderFormPC from './form/OrderFormPC';
 import OrderFormMobile from './form/OrderFormMobile';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { OrderProps } from '@/types/order';
 import { OrderFormValues } from '@/types/form';
+import { AmountData } from '@/types/payment';
 
 const steps = ['장바구니', '주문/결제', '주문완료'];
 
@@ -167,6 +169,12 @@ const OrderPage: FC<OrderDispatchProps> = ({
 		order,
 		orderId,
 	}); // 쿠폰 및 포인트 적용 시, 최종금액이 바뀔수 있음
+	const { paymentMethodRef, agreementRef, setAmount, handlePayment } =
+		useTossPaymentWidget({
+			orderId,
+			clientKey: paymentData?.clientKey || '',
+			memberData,
+		});
 
 	const methods = useForm<OrderFormValues>({
 		mode: 'onChange',
@@ -191,6 +199,13 @@ const OrderPage: FC<OrderDispatchProps> = ({
 		const orderFormData: OrderData = {
 			orderId: orderId,
 		};
+
+		const amountData: AmountData = {
+			currency: 'KRW',
+			value: 50000,
+		};
+		setAmount(amountData);
+		handlePayment();
 		if (orderForm) orderForm.preventDefault(); // 새로고침 방지
 		navigate('/profile');
 	};
@@ -227,6 +242,8 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					onSubmit={submitForm}
 				/>
 			)}
+			<Box id="payment-method" ref={paymentMethodRef}></Box>
+			<Box id="agreement" ref={agreementRef}></Box>
 		</FormProvider>
 	);
 };
