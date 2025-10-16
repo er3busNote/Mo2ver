@@ -316,7 +316,7 @@ const OrderFormPC: FC<OrderProps> = ({
 								</Box>
 								<input
 									type="hidden"
-									value={addressData?.addressNo}
+									value={addressData?.addressNo ?? ''}
 									{...register('addressNo')}
 								/>
 								<Controller

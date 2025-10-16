@@ -3,6 +3,7 @@ import {
 	QueryClient,
 	QueryClientProvider,
 	useQueryClient,
+	useIsFetching,
 } from '@tanstack/react-query';
 import Loading from '@components/backdrop/Loading';
 
@@ -13,17 +14,8 @@ interface QueryProviderProps {
 }
 
 const LoadingOverlay: FC = () => {
-	const client = useQueryClient();
-	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		const unsub = client.getQueryCache().subscribe(() => {
-			setLoading(client.isFetching() > 0);
-		});
-		return () => unsub();
-	}, [client]);
-
-	return <Loading open={loading} message="데이터를 불러오는 중..." />;
+	const isFetching = useIsFetching();
+	return <Loading open={isFetching > 0} message="데이터를 불러오는 중..." />;
 };
 
 const QueryProvider: FC<QueryProviderProps> = ({ children }) => {

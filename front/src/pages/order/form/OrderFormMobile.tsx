@@ -323,7 +323,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 							<Box mt={2}>
 								<input
 									type="hidden"
-									value={addressData?.addressNo}
+									value={addressData?.addressNo ?? ''}
 									{...register('addressNo')}
 								/>
 								<Controller

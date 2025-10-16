@@ -38,22 +38,13 @@ const useTossPaymentWidget = ({
 					customerKey: ANONYMOUS, // 실서비스에선 고유 사용자 키 사용
 				});
 
-				await Promise.all([
-					widgetsInstance.renderPaymentMethods({
-						selector: '#payment-method',
-						variantKey: 'DEFAULT',
-					}),
-					widgetsInstance.renderAgreement({
-						selector: '#agreement',
-						variantKey: 'AGREEMENT',
-					}),
-				]);
-
 				setWidgets(widgetsInstance);
 			} catch (err) {
 				console.error('Toss SDK 초기화 실패', err);
 			}
 		};
+
+		if (!clientKey) return;
 
 		initialize();
 	}, [clientKey]);
@@ -61,6 +52,17 @@ const useTossPaymentWidget = ({
 	const setAmount = async (amount: AmountData) => {
 		if (!widgets) return;
 		await widgets.setAmount(amount);
+
+		await Promise.all([
+			widgets.renderPaymentMethods({
+				selector: '#payment-method',
+				variantKey: 'DEFAULT',
+			}),
+			widgets.renderAgreement({
+				selector: '#agreement',
+				variantKey: 'AGREEMENT',
+			}),
+		]);
 	};
 
 	const handlePayment = async () => {
