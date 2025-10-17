@@ -1,8 +1,7 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode } from 'react';
 import {
 	QueryClient,
 	QueryClientProvider,
-	useQueryClient,
 	useIsFetching,
 } from '@tanstack/react-query';
 import Loading from '@components/backdrop/Loading';

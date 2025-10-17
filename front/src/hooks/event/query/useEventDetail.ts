@@ -38,7 +38,7 @@ const useEventDetail = ({
 	const query = useQuery<EventInfoData>({
 		queryKey: ['eventDetail', eventData, csrfData?.csrfToken],
 		queryFn: () => service.getEventDetail(eventData, csrfData),
-		enabled: isEmpty(get(eventData, 'eventNo', '')),
+		enabled: !isEmpty(get(eventData, 'eventNo', '')),
 		staleTime: 0,
 		refetchOnMount: 'always',
 	});
