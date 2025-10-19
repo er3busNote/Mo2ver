@@ -45,6 +45,20 @@ public class AddressTest extends CsrfConfigTest {
     }
 
     @Test
+    @DisplayName("주소 검색 API 확인")
+    public void searchAddressTest() throws Exception {
+
+        String keyword = "서울특별시";
+
+        mockMvc.perform(get("/address/search")
+                        .param("page", "1")
+                        .param("size", "10")
+                        .param("keyword", keyword))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("주소록정보 저장 확인")
     public void createAddressTest() throws Exception {
 

@@ -24,18 +24,17 @@ public class WebHttpClient {
         staticWebClient = webClient;
     }
 
-    public static String get(String url, MultiValueMap<String, String> param) {
+    public static <T> T get(String url, MultiValueMap<String, String> param, Class<T> responseType) {
         String apiUrl = UriComponentsBuilder.fromUriString(url)
                 .queryParams(param)
                 .build()
                 .toUriString();
 
-        Mono<String> response = staticWebClient.get()
+        return staticWebClient.get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToMono(String.class);
-
-        return response.block(); // 동기식 호출
+                .bodyToMono(responseType)
+                .block(); // 동기식 호출
     }
 
     public static <T> Mono<T> get(String url, String authHeader, Class<T> responseType) {

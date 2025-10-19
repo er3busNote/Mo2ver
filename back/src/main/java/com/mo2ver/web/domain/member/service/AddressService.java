@@ -1,14 +1,21 @@
 package com.mo2ver.web.domain.member.service;
 
+import com.mo2ver.web.domain.member.dto.response.http.Juso;
+import com.mo2ver.web.domain.member.dto.response.http.JusoResponse;
 import com.mo2ver.web.domain.member.dto.AddressInfo;
 import com.mo2ver.web.domain.member.dto.response.AddressResponse;
 import com.mo2ver.web.domain.member.entity.Address;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.repository.AddressRepository;
 import com.mo2ver.web.domain.member.repository.MemberRepository;
+import com.mo2ver.web.global.common.dto.PageInfo;
+import com.mo2ver.web.global.common.http.WebHttpClient;
+import com.mo2ver.web.global.common.setting.AddressSetting;
 import com.mo2ver.web.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,6 +28,7 @@ public class AddressService {
 
     private final MemberRepository memberRepository;
     private final AddressRepository addressRepository;
+    private final AddressSetting addressSetting;
 
     @Transactional
     public AddressResponse findAddress(Member currentUser) {
@@ -36,6 +44,19 @@ public class AddressService {
         Member member = this.findMemberById(currentUser.getMemberNo());
         List<Address> listAddress = this.addressRepository.findByMember(member);
         return listAddress.stream().map(AddressResponse::of).collect(Collectors.toList());
+    }
+
+    public List<Juso> searchAddress(String keyword, PageInfo pageInfo) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("currentPage", Integer.toString(pageInfo.getPage()));
+        params.add("countPerPage", Integer.toString(pageInfo.getSize()));
+        params.add("keyword", keyword);
+        params.add("confmKey", addressSetting.getConfmKey());
+        params.add("resultType", "json");
+
+        String url = addressSetting.getBaseUrl();
+        JusoResponse response = WebHttpClient.get(url, params, JusoResponse.class);
+        return response.getResults().getJuso();
     }
 
     @Transactional

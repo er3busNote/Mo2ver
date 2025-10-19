@@ -2,9 +2,11 @@ package com.mo2ver.web.domain.member.api;
 
 import com.mo2ver.web.domain.member.dto.AddressInfo;
 import com.mo2ver.web.domain.member.dto.response.AddressResponse;
+import com.mo2ver.web.domain.member.dto.response.http.Juso;
 import com.mo2ver.web.domain.member.entity.CurrentUser;
 import com.mo2ver.web.domain.member.entity.Member;
 import com.mo2ver.web.domain.member.service.AddressService;
+import com.mo2ver.web.global.common.dto.PageInfo;
 import com.mo2ver.web.global.common.dto.response.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,15 @@ public class AddressController {
     ) {
         List<AddressResponse> listAddressResponse = addressService.findAddresslist(currentUser);
         return ResponseEntity.ok().body(listAddressResponse);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Juso>> searchAddress(
+            @RequestParam String keyword,
+            @Valid PageInfo pageInfo
+    ) {
+        List<Juso> listJuso = addressService.searchAddress(keyword, pageInfo);
+        return ResponseEntity.ok().body(listJuso);
     }
 
     @PostMapping("/create")

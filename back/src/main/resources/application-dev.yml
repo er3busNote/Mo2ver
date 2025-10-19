@@ -104,6 +104,10 @@ toss-payment:
   client-key: test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm # 클라이언트 키, SDK에 사용하세요
   secret-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6 # 시크릿 키, API에 사용하세요
 
+address-api:
+  base-url: https://business.juso.go.kr/addrlink/addrLinkApi.do
+  confm-key: YOUR_API_KEY_HERE
+
 slack:
   webhook:
     url: https://hooks.slack.com/services/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
