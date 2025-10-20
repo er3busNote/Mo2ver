@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { Dispatch } from '@reduxjs/toolkit';
 import { handleResponse, handleError } from '@handler/api';
-import { CSRFData, AddressInfoData } from '@/types/api';
+import { CSRFData, AddressInfoData, PageData } from '@/types/api';
 
 const address = (instance: AxiosInstance) => {
 	return {
@@ -15,6 +15,14 @@ const address = (instance: AxiosInstance) => {
 		list: () => (dispatch: Dispatch) =>
 			instance
 				.get('address/list')
+				.then((response: AxiosResponse) => handleResponse(response, dispatch))
+				.catch((error: AxiosError) => handleError(error, dispatch)),
+		// 주소록 검색 API : <baseURL>/address/search
+		search: (keyword: string, pageData: PageData) => (dispatch: Dispatch) =>
+			instance
+				.get(
+					`address/search?page=${pageData.page}&size=${pageData.size}&keyword=${keyword}`
+				)
 				.then((response: AxiosResponse) => handleResponse(response, dispatch))
 				.catch((error: AxiosError) => handleError(error, dispatch)),
 		// 주소록 저장 API : <baseURL>/address/create
