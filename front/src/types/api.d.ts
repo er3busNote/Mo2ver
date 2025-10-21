@@ -426,6 +426,19 @@ interface AddressInfoData {
 	roadNameDetailAddress: string;
 }
 
+interface JusoData {
+	roadAddr: string;
+	roadAddrPart1: string;
+	roadAddrPart2: string;
+	jibunAddr: string;
+	engAddr: string;
+	zipNo: string;
+	admCd: string;
+	rdMgtSn: string;
+	bdMgtSn: string;
+	detBdNmList: string;
+}
+
 // 0. ETC Type
 interface PageData {
 	page: number;
@@ -524,6 +537,7 @@ export type {
 	PaymentConfirmData,
 	AddressData,
 	AddressInfoData,
+	JusoData,
 	PageData,
 	CodeData,
 	FileData,

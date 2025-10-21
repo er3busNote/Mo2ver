@@ -1,5 +1,5 @@
 import { ActionCreatorsMapObject } from 'redux';
-import { AddressData } from '@/types/api';
+import { AddressData, JusoData, PageData } from '@/types/api';
 
 export default class AddressService {
 	constructor(private address: ActionCreatorsMapObject) {}
@@ -10,5 +10,9 @@ export default class AddressService {
 
 	getAddressList = async (): Promise<Array<AddressData>> => {
 		return await this.address.list();
+	};
+
+	getAddressSearch = async (keyword: string, pageData: PageData): Promise<Array<JusoData>> => {
+		return await this.address.search(keyword, pageData);
 	};
 }
