@@ -12,7 +12,11 @@ export default class AddressService {
 		return await this.address.list();
 	};
 
-	getAddressSearch = async (keyword: string, pageData: PageData): Promise<Array<JusoData>> => {
+	getAddressSearch = async (
+		page: number,
+		keyword: string
+	): Promise<Array<JusoData>> => {
+		const pageData: PageData = { page, size: 12 };
 		return await this.address.search(keyword, pageData);
 	};
 }
