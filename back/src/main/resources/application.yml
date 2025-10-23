@@ -173,7 +173,7 @@ toss-payment:
 
 address-api:
   base-url: https://business.juso.go.kr/addrlink/addrLinkApi.do
-  confm-key: YOUR_API_KEY_HERE
+  confm-key: ${juso.apikey}
 
 slack:
   webhook:
