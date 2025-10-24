@@ -17,8 +17,8 @@ import {
 	Typography,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import DialogAddressForm from '@components/dialog/address/form/DialogAddressForm';
-import DialogAddressMobile from '@components/dialog/address/DialogAddressMobile';
+import DialogAddressForm from '@components/dialog/address/create/form/DialogAddressForm';
+import DialogAddressMobile from '@components/dialog/address/create/DialogAddressMobile';
 import RenderTextField from '@components/field/TextField';
 import RenderSelectField from '@components/field/SelectField';
 import RenderSelectButtonField from '@components/field/SelectButtonField';

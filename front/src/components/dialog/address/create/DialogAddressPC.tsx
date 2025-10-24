@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Api from '@api/index';
 import { AddressData } from '@/types/api';
 import useAddressList from '@hooks/address/query/useAddressList';
-import DialogPC from '../cmmn/DialogPC';
+import DialogPC from '../../cmmn/DialogPC';
 import {
 	Radio,
 	Table,
