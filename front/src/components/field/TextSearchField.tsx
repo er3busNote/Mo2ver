@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
 	UseFormStateReturn,
 } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import {
@@ -14,7 +15,7 @@ import {
 	fontSize_lg,
 } from '@utils/style';
 
-interface RenderTextFieldProps {
+interface RenderTextSearchFieldProps {
 	field: ControllerRenderProps<any, any>;
 	fieldState: ControllerFieldState;
 	formState: UseFormStateReturn<any>;
@@ -24,15 +25,32 @@ interface RenderTextFieldProps {
 	readonly?: boolean;
 }
 
-const RenderTextField: FC<RenderTextFieldProps> = ({
-	field: { onChange, value, name },
+const RenderTextSearchField: FC<RenderTextSearchFieldProps> = ({
+	field: { onChange, name },
 	fieldState: { error },
 	type,
 	label,
 	multiline,
-	readonly = false,
+	readonly = true,
 }) => {
+	const [open, setOpen] = useState<boolean>(false);
+	const [selectedValue, setSelectedValue] = useState<string>('');
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (value: string) => {
+		setOpen(false);
+		if (value) setSelectedValue(value);
+	};
+
 	const textInput: SxProps<Theme> = {
+		'.MuiInputBase-adornedEnd': {
+			pt: 0,
+			pb: 0,
+			pr: 0,
+		},
 		'.MuiInputLabel-shrink': {
 			ml: { xs: 1, sm: 0.5 },
 			mt: { xs: 1, sm: 0.5 },
@@ -47,13 +65,13 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 			label={label}
 			type={type}
 			name={name}
-			value={value}
+			value={selectedValue}
 			onChange={onChange}
 			sx={textInput}
 			autoComplete={name}
 			helperText={error?.message}
 			multiline={multiline}
-			inputProps={{
+			InputProps={{
 				sx: {
 					py: { xs: 1.8, sm: 2 },
 					fontSize: {
@@ -65,6 +83,15 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 					backgroundColor: readonly ? grey[200] : 'transparent',
 				},
 				readOnly: readonly,
+				endAdornment: (
+					<InputAdornment position="end">
+						<IconButton onClick={handleOpen}>
+							<SearchIcon />
+						</IconButton>
+					</InputAdornment>
+				),
+			}}
+			inputProps={{
 				...(type === 'number' && { pattern: '[0-9]*' }),
 			}}
 			InputLabelProps={{
@@ -83,4 +110,4 @@ const RenderTextField: FC<RenderTextFieldProps> = ({
 	);
 };
 
-export default RenderTextField;
+export default RenderTextSearchField;

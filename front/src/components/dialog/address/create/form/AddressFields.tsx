@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
+import RenderTextSearchField from '@components/field/TextSearchField';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
 import { AddressFormValues } from './types';
 
@@ -104,7 +105,7 @@ const AddressFields: FC = (): JSX.Element => {
 									name="zipcode"
 									control={control}
 									render={({ field, fieldState, formState }) => (
-										<RenderTextField
+										<RenderTextSearchField
 											type="text"
 											label="우편번호를 입력해주세요"
 											field={field}
@@ -127,6 +128,7 @@ const AddressFields: FC = (): JSX.Element => {
 										<RenderTextField
 											type="text"
 											label="배송지주소를 입력해주세요"
+											readonly={true}
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
@@ -147,6 +149,7 @@ const AddressFields: FC = (): JSX.Element => {
 										<RenderTextField
 											type="text"
 											label="상세주소를 입력해주세요"
+											readonly={true}
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
