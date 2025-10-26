@@ -12,7 +12,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import RenderTextField from '@components/field/TextField';
 import RenderTextSearchField from '@components/field/TextSearchField';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
-import { AddressFormValues } from './types';
+import { AddressFormValues } from '@/types/form';
 
 const tableBorder = '1px solid #d2d2d2';
 

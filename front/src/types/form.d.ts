@@ -50,9 +50,18 @@ interface OrderFormValues {
 	agreePurchase: boolean;
 }
 
+interface AddressFormValues {
+	memberName: string;
+	cellPhoneNumber: string;
+	zipcode: string;
+	roadNameBasicAddress: string;
+	roadNameDetailAddress: string;
+}
+
 export type {
 	LoginFormValues,
 	SignupFormValues,
 	RegisterFormValues,
 	OrderFormValues,
+	AddressFormValues,
 };
