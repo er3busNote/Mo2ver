@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
 	ControllerRenderProps,
 	ControllerFieldState,
@@ -23,28 +23,18 @@ interface RenderTextSearchFieldProps {
 	label: string;
 	multiline?: boolean;
 	readonly?: boolean;
+	handleOpen: () => void;
 }
 
 const RenderTextSearchField: FC<RenderTextSearchFieldProps> = ({
-	field: { onChange, name },
+	field: { onChange, value, name },
 	fieldState: { error },
 	type,
 	label,
 	multiline,
 	readonly = true,
+	handleOpen,
 }) => {
-	const [open, setOpen] = useState<boolean>(false);
-	const [selectedValue, setSelectedValue] = useState<string>('');
-
-	const handleOpen = () => {
-		setOpen(true);
-	};
-
-	const handleClose = (value: string) => {
-		setOpen(false);
-		if (value) setSelectedValue(value);
-	};
-
 	const textInput: SxProps<Theme> = {
 		'.MuiInputBase-adornedEnd': {
 			pt: 0,
@@ -65,7 +55,7 @@ const RenderTextSearchField: FC<RenderTextSearchFieldProps> = ({
 			label={label}
 			type={type}
 			name={name}
-			value={selectedValue}
+			value={value}
 			onChange={onChange}
 			sx={textInput}
 			autoComplete={name}

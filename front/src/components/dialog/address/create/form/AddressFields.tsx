@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
 	Box,
@@ -17,7 +17,18 @@ import { AddressFormValues } from '@/types/form';
 const tableBorder = '1px solid #d2d2d2';
 
 const AddressFields: FC = (): JSX.Element => {
+	const [open, setOpen] = useState<boolean>(false);
+	const [selectedValue, setSelectedValue] = useState<string>('');
 	const { control } = useFormContext<AddressFormValues>();
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (value: string) => {
+		setOpen(false);
+		if (value) setSelectedValue(value);
+	};
 
 	const dataTh: SxProps<Theme> = {
 		p: 0,
@@ -108,6 +119,7 @@ const AddressFields: FC = (): JSX.Element => {
 										<RenderTextSearchField
 											type="text"
 											label="우편번호를 입력해주세요"
+											handleOpen={handleOpen}
 											field={field}
 											fieldState={fieldState}
 											formState={formState}
