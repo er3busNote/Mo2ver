@@ -1,11 +1,8 @@
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
-import Api from '@api/index';
+import { ActionCreatorsMapObject } from 'redux';
 import { AddressData } from '@/types/api';
 import useAddressList from '@hooks/address/query/useAddressList';
-import DialogPC from '../../cmmn/DialogPC';
+import DialogPC from '@components/dialog/cmmn/DialogPC';
 import {
 	Radio,
 	Table,
@@ -118,8 +115,4 @@ const DialogAddressPC: FC<DialogProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	address: bindActionCreators(Api.address, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(DialogAddressPC);
+export default DialogAddressPC;

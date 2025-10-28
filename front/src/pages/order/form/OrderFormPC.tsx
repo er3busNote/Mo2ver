@@ -28,13 +28,14 @@ import { PAYMENT_OPTIONS } from '@/constants/payment';
 import { OrderFormValues } from '@/types/form';
 import { OrderProps } from '@/types/order';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
-import { get, every, isNil } from 'lodash';
+import { get, every, isNil, add } from 'lodash';
 
 const OrderFormPC: FC<OrderProps> = ({
 	title,
 	description,
 	steps,
 	file,
+	address,
 	orderId,
 	memberData,
 	addressData,
@@ -308,6 +309,7 @@ const OrderFormPC: FC<OrderProps> = ({
 										/>
 										<DialogAddressPC
 											open={openAddressModify}
+											address={address}
 											addressNo={addressData?.addressNo ?? ''}
 											setField={setField}
 											handleClose={closeModifyAddress}

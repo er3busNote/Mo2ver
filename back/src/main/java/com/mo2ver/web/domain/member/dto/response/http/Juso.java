@@ -11,7 +11,7 @@ public class Juso {
     private String engAddr;
     private String zipNo;
     private String admCd;
-    private String rdMgtSn;
+    private String rnMgtSn;
     private String bdMgtSn;
     private String detBdNmList;
 }

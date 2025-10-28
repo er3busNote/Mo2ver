@@ -69,6 +69,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,
+	address,
 	orderId,
 	memberData,
 	addressData,
@@ -91,6 +92,7 @@ const OrderPC: FC<Omit<OrderProps, 'steps'>> = ({
 				description={description}
 				steps={steps}
 				file={file}
+				address={address}
 				orderId={orderId}
 				memberData={memberData}
 				addressData={addressData}
@@ -108,6 +110,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 	title,
 	description,
 	file,
+	address,
 	orderId,
 	memberData,
 	addressData,
@@ -130,6 +133,7 @@ const OrderMobile: FC<Omit<OrderProps, 'steps'>> = ({
 				description={description}
 				steps={steps}
 				file={file}
+				address={address}
 				orderId={orderId}
 				memberData={memberData}
 				addressData={addressData}
@@ -217,6 +221,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					title={title}
 					description={description}
 					file={file}
+					address={address}
 					orderId={orderId}
 					memberData={memberData}
 					addressData={addressData}
@@ -232,6 +237,7 @@ const OrderPage: FC<OrderDispatchProps> = ({
 					title={title}
 					description={description}
 					file={file}
+					address={address}
 					orderId={orderId}
 					memberData={memberData}
 					addressData={addressData}

@@ -12,7 +12,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 interface DialogProps {
 	title: string;
 	open: boolean;
-	handleSelect: () => void;
+	handleSelect?: () => void;
 	handleClose: () => void;
 	children?: ReactNode;
 }
@@ -49,14 +49,16 @@ const DialogPC: FC<DialogProps> = ({
 				<Box sx={base}>{children}</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
-				<ButtonDialog
-					buttonType="select"
-					device="pc"
-					variant="outlined"
-					onClick={handleSelect}
-				>
-					선택
-				</ButtonDialog>
+				{handleSelect && (
+					<ButtonDialog
+						buttonType="select"
+						device="pc"
+						variant="outlined"
+						onClick={handleSelect}
+					>
+						선택
+					</ButtonDialog>
+				)}
 				<ButtonDialog
 					buttonType="cancel"
 					device="pc"

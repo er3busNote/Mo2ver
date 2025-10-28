@@ -35,6 +35,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 	description,
 	steps,
 	file,
+	address,
 	orderId,
 	memberData,
 	addressData,
@@ -293,6 +294,7 @@ const OrderFormMobile: FC<OrderProps> = ({
 									/>
 									<DialogAddressMobile
 										open={openAddressModify}
+										address={address}
 										addressNo={addressData?.addressNo || ''}
 										setField={setField}
 										handleClose={closeModifyAddress}

@@ -25,7 +25,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@context/MobileContext';
 import ButtonDialog from '@components/button/ButtonDialog';
 import AddressFields from './AddressFields';
-import { AddressFormValues } from './types';
+import { AddressFormValues } from '@/types/form';
 
 const addressSchema = yup
 	.object()
@@ -41,6 +41,7 @@ const addressSchema = yup
 interface DialogProps {
 	title: string;
 	open: boolean;
+	address: ActionCreatorsMapObject;
 	handleClose: () => void;
 	onSubmit: SubmitHandler<AddressFormValues>;
 }
@@ -63,6 +64,7 @@ const addressValues: AddressFormValues = {
 const AddressPC: FC<DialogProps> = ({
 	title,
 	open,
+	address,
 	handleClose,
 	onSubmit,
 }): JSX.Element => {
@@ -94,7 +96,7 @@ const AddressPC: FC<DialogProps> = ({
 			<DialogTitle sx={header}>{title}</DialogTitle>
 			<DialogContent sx={{ pb: 0 }}>
 				<Box sx={base}>
-					<AddressFields />
+					<AddressFields address={address} />
 				</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
@@ -123,6 +125,7 @@ const AddressPC: FC<DialogProps> = ({
 const AddressMobile: FC<DialogProps> = ({
 	title,
 	open,
+	address,
 	handleClose,
 	onSubmit,
 }): JSX.Element => {
@@ -151,7 +154,7 @@ const AddressMobile: FC<DialogProps> = ({
 			<DialogTitle sx={header}>{title}</DialogTitle>
 			<DialogContent sx={{ pb: 0 }}>
 				<Box sx={base}>
-					<AddressFields />
+					<AddressFields address={address} />
 				</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
@@ -214,6 +217,7 @@ const DialogAddressForm: FC<DialogDispatchProps> = ({
 				<AddressPC
 					title={'주소록'}
 					open={open}
+					address={address}
 					handleClose={handleClose}
 					onSubmit={submitForm}
 				/>
@@ -222,6 +226,7 @@ const DialogAddressForm: FC<DialogDispatchProps> = ({
 				<AddressMobile
 					title={'주소록'}
 					open={open}
+					address={address}
 					handleClose={handleClose}
 					onSubmit={submitForm}
 				/>

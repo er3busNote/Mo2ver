@@ -13,7 +13,7 @@ import { useIsMobile } from '@context/MobileContext';
 interface DialogProps {
 	title: string;
 	open: boolean;
-	handleSelect: () => void;
+	handleSelect?: () => void;
 	handleClose: () => void;
 	children?: ReactNode;
 }
@@ -48,14 +48,16 @@ const DialogMobile: FC<DialogProps> = ({
 				<Box sx={base}>{children}</Box>
 			</DialogContent>
 			<DialogActions sx={{ justifyContent: 'center' }}>
-				<ButtonDialog
-					buttonType="select"
-					device="mobile"
-					variant="outlined"
-					onClick={handleSelect}
-				>
-					선택
-				</ButtonDialog>
+				{handleSelect && (
+					<ButtonDialog
+						buttonType="select"
+						device="mobile"
+						variant="outlined"
+						onClick={handleSelect}
+					>
+						선택
+					</ButtonDialog>
+				)}
 				<ButtonDialog
 					buttonType="cancel"
 					device="mobile"

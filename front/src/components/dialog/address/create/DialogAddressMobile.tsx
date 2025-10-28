@@ -1,11 +1,8 @@
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
-import { Dispatch } from '@reduxjs/toolkit';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
-import { connect } from 'react-redux';
-import Api from '@api/index';
+import { ActionCreatorsMapObject } from 'redux';
 import { AddressData } from '@/types/api';
 import useAddressList from '@hooks/address/query/useAddressList';
-import DialogMobile from '../../cmmn/DialogMobile';
+import DialogMobile from '@components/dialog/cmmn/DialogMobile';
 import {
 	Radio,
 	Table,
@@ -106,8 +103,4 @@ const DialogAddressMobile: FC<DialogProps> = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	address: bindActionCreators(Api.address, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(DialogAddressMobile);
+export default DialogAddressMobile;

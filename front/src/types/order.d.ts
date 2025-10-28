@@ -14,6 +14,7 @@ interface OrderProps {
 	description: string;
 	steps: string[];
 	file: ActionCreatorsMapObject;
+	address: ActionCreatorsMapObject;
 	orderId: string;
 	memberData?: MemberData;
 	addressData?: AddressData;

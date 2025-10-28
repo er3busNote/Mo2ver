@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { ActionCreatorsMapObject } from 'redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
 	Box,
@@ -7,8 +8,12 @@ import {
 	TableRow,
 	TableCell,
 	TableContainer,
+	useTheme,
+	useMediaQuery,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import DialogSearchPC from '@components/dialog/address/search/DialogSearchPC';
+import DialogSearchMobile from '@components/dialog/address/search/DialogSearchMobile';
 import RenderTextField from '@components/field/TextField';
 import RenderTextSearchField from '@components/field/TextSearchField';
 import { fontSize_xs, fontSize_sm, fontSize_lg } from '@utils/style';
@@ -16,7 +21,15 @@ import { AddressFormValues } from '@/types/form';
 
 const tableBorder = '1px solid #d2d2d2';
 
-const AddressFields: FC = (): JSX.Element => {
+interface AddressFieldsProps {
+	address: ActionCreatorsMapObject;
+}
+
+const AddressFields: FC<AddressFieldsProps> = ({ address }): JSX.Element => {
+	const theme = useTheme();
+	const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 	const [open, setOpen] = useState<boolean>(false);
 	const [selectedValue, setSelectedValue] = useState<string>('');
 	const { control } = useFormContext<AddressFormValues>();
@@ -25,9 +38,8 @@ const AddressFields: FC = (): JSX.Element => {
 		setOpen(true);
 	};
 
-	const handleClose = (value: string) => {
+	const handleClose = () => {
 		setOpen(false);
-		if (value) setSelectedValue(value);
 	};
 
 	const dataTh: SxProps<Theme> = {
@@ -173,6 +185,22 @@ const AddressFields: FC = (): JSX.Element => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{isDesktop && (
+				<DialogSearchPC
+					open={open}
+					address={address}
+					setSelectedValue={setSelectedValue}
+					handleClose={handleClose}
+				/>
+			)}
+			{isMobile && (
+				<DialogSearchMobile
+					open={open}
+					address={address}
+					setSelectedValue={setSelectedValue}
+					handleClose={handleClose}
+				/>
+			)}
 		</Box>
 	);
 };

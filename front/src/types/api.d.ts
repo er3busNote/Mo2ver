@@ -434,7 +434,7 @@ interface JusoData {
 	engAddr: string;
 	zipNo: string;
 	admCd: string;
-	rdMgtSn: string;
+	rnMgtSn: string;
 	bdMgtSn: string;
 	detBdNmList: string;
 }
