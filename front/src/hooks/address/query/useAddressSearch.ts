@@ -26,8 +26,8 @@ const useAddressSearch = ({
 		queryKey: ['addressSearch'],
 		queryFn: () => service.getAddressSearch(page, keyword),
 		enabled: !isEmpty(keyword),
+		staleTime: 5 * 60 * 1000,
 		placeholderData: keepPreviousData,
-		staleTime: 0,
 	});
 
 	return { data, setPage };

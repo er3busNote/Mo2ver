@@ -3,7 +3,10 @@ import { ActionCreatorsMapObject } from 'redux';
 import { JusoData } from '@/types/api';
 import useAddressSearch from '@hooks/address/query/useAddressSearch';
 import DialogMobile from '@components/dialog/cmmn/DialogMobile';
+import SearchInput from '@components/input/SearchInput';
+import ButtonDialog from '@components/button/ButtonDialog';
 import {
+	Box,
 	Table,
 	TableHead,
 	TableBody,
@@ -12,6 +15,7 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import { handleSearchOnChange } from '@handler/dialog';
 
 interface DialogProps {
 	open: boolean;
@@ -27,7 +31,17 @@ const DialogSearchMobile: FC<DialogProps> = ({
 	handleClose,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState<string>('');
-	const { data: addressData } = useAddressSearch({ address, keyword });
+	const [addressName, setAddressName] = useState<string>('');
+	const { data: addressData } = useAddressSearch({
+		address,
+		keyword: addressName,
+	});
+
+	const searchOnChange = handleSearchOnChange(setKeyword);
+
+	const searchClick = () => {
+		setAddressName(keyword);
+	};
 
 	const handleSelect = (value: string) => {
 		setSelectedValue(value);
@@ -50,6 +64,20 @@ const DialogSearchMobile: FC<DialogProps> = ({
 
 	return (
 		<DialogMobile title={'주소록'} open={open} handleClose={handleClose}>
+			<Box sx={{ pt: 0.5, pb: 1, display: 'flex', justifyContent: 'center' }}>
+				<SearchInput
+					placeholder="주소를 검색할 수 있어요!"
+					onChange={searchOnChange}
+				/>
+				<ButtonDialog
+					buttonType="search"
+					device="mobile"
+					variant="outlined"
+					onClick={searchClick}
+				>
+					검색
+				</ButtonDialog>
+			</Box>
 			<TableContainer>
 				<Table size="small">
 					<TableHead>
@@ -66,13 +94,14 @@ const DialogSearchMobile: FC<DialogProps> = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{addressData?.map((data: JusoData, index: number) => (
-							<TableRow key={index} sx={rowItem}>
-								<TableCell align="center">{data.admCd}</TableCell>
-								<TableCell align="center">{data.zipNo}</TableCell>
-								<TableCell align="center">{data.roadAddrPart1}</TableCell>
-							</TableRow>
-						))}
+						{addressData &&
+							addressData?.map((data: JusoData, index: number) => (
+								<TableRow key={index} sx={rowItem}>
+									<TableCell align="center">{data.admCd}</TableCell>
+									<TableCell align="center">{data.zipNo}</TableCell>
+									<TableCell align="center">{data.roadAddrPart1}</TableCell>
+								</TableRow>
+							))}
 					</TableBody>
 				</Table>
 			</TableContainer>

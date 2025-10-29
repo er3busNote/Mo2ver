@@ -18,12 +18,12 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	Select,
 	MenuItem,
 	InputLabel,
 	FormControl,
 } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import Select from '@mui/material/Select';
 import {
 	handleCategoryChange,
 	handleSearchClick,
