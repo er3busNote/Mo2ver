@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { Controller, useFormContext } from 'react-hook-form';
+import { JusoData } from '@/types/api';
 import {
 	Box,
 	Table,
@@ -33,6 +34,10 @@ const AddressFields: FC<AddressFieldsProps> = ({ address }): JSX.Element => {
 	const [open, setOpen] = useState<boolean>(false);
 	const [selectedValue, setSelectedValue] = useState<string>('');
 	const { control } = useFormContext<AddressFormValues>();
+
+	const updateClick = (data: JusoData) => {
+		handleClose();
+	};
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -189,7 +194,7 @@ const AddressFields: FC<AddressFieldsProps> = ({ address }): JSX.Element => {
 				<DialogSearchPC
 					open={open}
 					address={address}
-					setSelectedValue={setSelectedValue}
+					updateClick={updateClick}
 					handleClose={handleClose}
 				/>
 			)}
@@ -197,7 +202,7 @@ const AddressFields: FC<AddressFieldsProps> = ({ address }): JSX.Element => {
 				<DialogSearchMobile
 					open={open}
 					address={address}
-					setSelectedValue={setSelectedValue}
+					updateClick={updateClick}
 					handleClose={handleClose}
 				/>
 			)}

@@ -1,4 +1,4 @@
-import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { ActionCreatorsMapObject } from 'redux';
 import { JusoData } from '@/types/api';
 import useAddressSearch from '@hooks/address/query/useAddressSearch';
@@ -7,6 +7,7 @@ import SearchInput from '@components/input/SearchInput';
 import ButtonDialog from '@components/button/ButtonDialog';
 import {
 	Box,
+	Link,
 	Table,
 	TableHead,
 	TableBody,
@@ -20,14 +21,14 @@ import { handleSearchOnChange } from '@handler/dialog';
 interface DialogProps {
 	open: boolean;
 	address: ActionCreatorsMapObject;
-	setSelectedValue: Dispatch<SetStateAction<string>>;
+	updateClick: (data: JusoData) => void;
 	handleClose: () => void;
 }
 
 const DialogSearchMobile: FC<DialogProps> = ({
 	open,
 	address,
-	setSelectedValue,
+	updateClick,
 	handleClose,
 }): JSX.Element => {
 	const [keyword, setKeyword] = useState<string>('');
@@ -41,11 +42,6 @@ const DialogSearchMobile: FC<DialogProps> = ({
 
 	const searchClick = () => {
 		setAddressName(keyword);
-	};
-
-	const handleSelect = (value: string) => {
-		setSelectedValue(value);
-		handleClose();
 	};
 
 	const thHeader: SxProps<Theme> = {
@@ -97,7 +93,15 @@ const DialogSearchMobile: FC<DialogProps> = ({
 						{addressData &&
 							addressData?.map((data: JusoData, index: number) => (
 								<TableRow key={index} sx={rowItem}>
-									<TableCell align="center">{data.admCd}</TableCell>
+									<TableCell align="center">
+										<Link
+											component="button"
+											variant="body2"
+											onClick={() => updateClick(data)}
+										>
+											{data.admCd}
+										</Link>
+									</TableCell>
 									<TableCell align="center">{data.zipNo}</TableCell>
 									<TableCell align="center">{data.roadAddrPart1}</TableCell>
 								</TableRow>
